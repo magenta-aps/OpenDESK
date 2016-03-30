@@ -1,0 +1,51 @@
+<md-dialog class="dialog-large" aria-label="Note edit dialog">
+    <form name="form">
+        <md-toolbar layout>
+            <div class="md-toolbar-tools">
+                <h2 ng-hide="vmNote.editMode">{{ 'NOTE.CREATE_NOTE' | translate }}</h2>
+                <h2 ng-show="vmNote.editMode">{{ 'NOTE.EDIT_NOTE' | translate }}</h2>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content layout="column">
+
+            <md-input-container flex>
+                <label>{{ 'NOTE.TITLE' | translate }} *</label>
+                <input type="text" name="title" ng-model="vmNote.title" required md-autofocus>
+                <opene-error form="form" field="form.title"></opene-error>
+            </md-input-container>
+
+            <md-chips ng-model="vmNote.concernedParties" md-autocomplete-snap md-require-match="true">
+                <md-autocomplete md-selected-item="vmNote.selectedItem" md-search-text="vmNote.searchText" md-items="item in vmNote.querySearch(vmNote.searchText)" md-item-text="item.displayName" md-no-cache="true" md-icon="" placeholder="{{ 'NOTE.CONCERNED_PARTIES'| translate }}">
+                    <span md-highlight-text="ctrl.searchText">{{item.displayName}}</span>
+                </md-autocomplete>
+                <md-chip-template>
+                    <span>
+                        <strong>{{$chip.displayName}}</strong>
+                    </span>
+                </md-chip-template>
+            </md-chips>
+
+            <md-input-container>
+                <label>{{ 'NOTE.CONTENT' | translate }} *</label>
+                <textarea name="content" ng-model="vmNote.content" rows="10" required md-maxlength="1000"></textarea>
+                <opene-error form="form" field="form.content"></opene-error>
+            </md-input-container>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button class="md-primary" ng-click="vmNote.updateNote()" ng-disabled="form.$invalid" ng-if="vmNote.editMode">
+                {{ 'COMMON.SAVE' | translate }}
+            </md-button>
+            <md-button class="md-primary" ng-click="vmNote.deleteNote($event)" ng-if="vmNote.editMode">
+                {{ 'COMMON.DELETE' | translate }}
+            </md-button>
+            <md-button class="md-primary" ng-click="vmNote.addNote()" ng-disabled="form.$invalid" ng-if="!vmNote.editMode">
+                {{ 'NOTE.ADD_NOTE' | translate }}
+            </md-button>
+            <md-button ng-click="vmNote.cancel()">
+                {{ 'COMMON.CANCEL' | translate }}
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

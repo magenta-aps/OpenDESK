@@ -1,0 +1,1 @@
+angular.module('earkApp.cases.members', [ 'ngMaterial']);

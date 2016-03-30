@@ -1,0 +1,1 @@
+angular.module('earkApp.users', [ 'ngMaterial', 'pascalprecht.translate']);

@@ -1,0 +1,1 @@
+angular.module('earkApp.administration', [ 'ngMaterial', 'pascalprecht.translate']);

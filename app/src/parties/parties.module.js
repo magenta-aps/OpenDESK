@@ -1,0 +1,1 @@
+angular.module('earkApp.cases.parties', [ 'ngMaterial', 'pascalprecht.translate']);

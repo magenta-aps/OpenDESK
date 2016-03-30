@@ -1,0 +1,32 @@
+<md-dialog class="dialog-large" aria-label="">
+    <form name="uploadForm" novalidate>
+
+        <md-toolbar layout="row">
+            <div class="md-toolbar-tools">
+                <h2>{{ 'CASE.PRINT_CASE' | translate }} "{{dlg.case["cm:title"].value}}"</h2>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <md-checkbox ng-model="dlg.caseDetails" aria-label="Details" ng-change="dlg.onSelectionChanged()">
+                {{"CASE.CASE_DETAILS" | translate}}
+            </md-checkbox>
+            <md-checkbox ng-model="dlg.caseHistoryLog" aria-label="History" ng-change="dlg.onSelectionChanged()">
+                {{"CASE.CASE_HISTORY_LOG" | translate}}
+            </md-checkbox>
+            <md-checkbox ng-model="dlg.comments" aria-label="Comments" ng-change="dlg.onSelectionChanged()">
+                {{"CASE.COMMENTS" | translate}}
+            </md-checkbox>
+            <ng-include src="'app/src/cases/view/selectCaseDocuments.html'"></ng-include>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button class="md-primary" ng-click="dlg.print()" ng-disabled="dlg.formDisabled">
+                {{ 'CASE.PRINT_CASE' | translate }}
+            </md-button>
+            <md-button ng-click="dlg.cancel()">
+                {{ 'COMMON.CANCEL' | translate }}
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

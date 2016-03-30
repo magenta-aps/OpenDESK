@@ -1,0 +1,1 @@
+angular.module('earkApp.search', [ 'ngMaterial', 'pascalprecht.translate']);
