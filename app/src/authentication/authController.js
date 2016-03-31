@@ -1,4 +1,3 @@
-
 angular
     .module('earkApp')
     .controller('AuthController', AuthController);
@@ -11,29 +10,28 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     vm.logout = logout;
     vm.loggedin = loggedin;
     vm.getUserInfo = getUserInfo;
-    vm.errorMsg = loginErrorMessage ? loginErrorMessage: "";
+    vm.errorMsg = loginErrorMessage ? loginErrorMessage : "";
     vm.showForgotDialog = showForgotDialog;
     vm.updateValidator = updateValidator;
-    
-    if($stateParams.nosso !== "true" && !authService.isAuthenticated()){
-        authService.ssoLogin().then(function(response){
-            if(response.status == 401){
+
+    /*if ( !authService.isAuthenticated()) {
+        authService.login().then(function (response) {
+            if (response.status == 401) {
                 return;
             }
-            if(response.userName) {
+            if (response.userName) {
                 userService.getPerson(response.userName).then(function (response) {
                     vm.user = response;
                     restoreLocation();
                 });
             }
-        });    
-    }
+        });
+    }*/
 
     function login(credentials) {
-        authService.login(credentials.username, credentials.password).then(function(response) {
-
+        authService.login(credentials.username, credentials.password).then(function (response) {
             // Logged in
-            if(response.userName) {
+            if (response.userName) {
                 userService.getPerson(credentials.username).then(function (response) {
                     vm.user = response;
                     restoreLocation();
@@ -41,26 +39,26 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
             }
 
             // If incorrect values            
-            if(response.status == 403) {
+            if (response.status == 403) {
                 vm.form.password.$setValidity("loginFailure", false);
-            } else if(response.status == 500) {
+            } else if (response.status == 500) {
                 vm.form.password.$setValidity("loginError", false);
             }
 
         });
     }
-    
-    function restoreLocation(){
+
+    function restoreLocation() {
         var retainedLocation = sessionService.getRetainedLocation();
-        if(!retainedLocation || retainedLocation === undefined){
-            $state.go('dashboard');                        
-        }else{
+        if (!retainedLocation || retainedLocation === undefined) {
+            $state.go('dashboard');
+        } else {
             $window.location = retainedLocation;
         }
     }
 
     function logout() {
-        authService.logout().then(function(response) {
+        authService.logout().then(function (response) {
             delete vm.user;
             $state.go('login');
         });
@@ -70,8 +68,8 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
         return authService.loggedin();
     }
 
-    function updateValidator () {
-        if(vm.form.password.$error.loginFailure)
+    function updateValidator() {
+        if (vm.form.password.$error.loginFailure)
             vm.form.password.$setValidity("loginFailure", true);
     }
 
@@ -79,30 +77,29 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
         var dlg = this;
         dlg.emailSent = false;
 
-        dlg.cancel = function() {
+        dlg.cancel = function () {
             return $mdDialog.cancel();
         };
 
-        dlg.updateValidators = function() {
-            if(dlg.form.email.$error.emailNotExists)
+        dlg.updateValidators = function () {
+            if (dlg.form.email.$error.emailNotExists)
                 dlg.form.email.$setValidity("emailNotExists", true);
         };
 
-        dlg.forgotPassword = function() {
-            if(!dlg.email) return;
+        dlg.forgotPassword = function () {
+            if (!dlg.email) return;
 
             authService.changePassword(dlg.email).then(
-                
                 function success(response) {
                     dlg.emailSent = true;
-                }, 
-                
+                },
+
                 function onError(response) {
                     // If email doesn't exist in system
-                    if( response.status !== 200 )
+                    if (response.status !== 200)
                         dlg.form.email.$setValidity("emailNotExists", false);
                 }
-            ); 
+            );
         };
     };
 

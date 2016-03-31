@@ -1,1 +1,0 @@
-angular.module('earkApp.groups', [ 'ngMaterial', 'pascalprecht.translate']);

@@ -1,1 +1,0 @@
-angular.module('earkApp.notes', [ 'ngMaterial', 'pascalprecht.translate']);

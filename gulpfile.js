@@ -95,19 +95,19 @@ gulp.task('watch', function() {
 gulp.task('build', ['scripts', 'css']);
 
 gulp.task('dev', ['build', 'watch'], function() {
-    createWebserver(environment.test);
+    createWebserver();
 });
 
 gulp.task('testv', ['build', 'watch'], function() {
-    createWebserver(environment.testv);
+    createWebserver();
 });
 
 gulp.task('demo', ['build', 'watch'], function() {
-    createWebserver(environment.demo);
+    createWebserver();
 });
 
 gulp.task('local', ['build', 'watch'], function() {
-    createWebserver(environment.local);
+    createWebserver();
 });
 
 /* Tests */
