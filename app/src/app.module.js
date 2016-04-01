@@ -80,9 +80,22 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
             authorize: ['authService', function (authService) {
             }]
         }
-    }).state('dashboard', {
+    }).state('appboard', {
         parent: 'site',
         url: '/',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/dashboard/view/appboard.html',
+                controller: 'DashboardController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    }).state('dashboard', {
+        parent: 'site',
+        url: '/dashboard',
         views: {
             'content@': {
                 templateUrl: 'app/src/dashboard/view/dashboard.html',
