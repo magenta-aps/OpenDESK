@@ -1,7 +1,4 @@
-
-angular
-        .module('earkApp.groups')
-        .controller('GroupController', GroupController);
+//angular.module('openDeskApp.groups').controller('GroupController', GroupController);
 
 /*
  * Main Controller for the Groups module
@@ -29,21 +26,21 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
         vm.groupType = vm.groupTypeFilter[2];
         loadList();
     }
-    
+
     function loadList() {
         vm.groups.length = [];
-        groupService.listGroupsByType(vm.groupType.value).then(function(response) {
+        groupService.listGroupsByType(vm.groupType.value).then(function (response) {
             vm.groups = response.data;
-        }, function(error) {
+        }, function (error) {
             console.log(error);
         });
     }
-    
-    function initGroupTypeFilter () {
+
+    function initGroupTypeFilter() {
         return [{
             name: $translate.instant('GROUP.FLT_ALL'),
             value: 'ALL'
-        },{
+        }, {
             name: $translate.instant('GROUP.FLT_SYS'),
             value: 'SYS'
         }, {
@@ -62,17 +59,17 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
     // Display the group view and load it with one group object
     function showGroup(group_shortName) {
         groupService.getGroup(group_shortName).then(
-                function(response) {
-                    vm.group = response.data;
-                },
-                function(error) {
-                    console.log(error);
-                });
+            function (response) {
+                vm.group = response.data;
+            },
+            function (error) {
+                console.log(error);
+            });
     }
-    
+
     // Return an array of user and group objects belonging to this group
     function listMembers(group_shortName) {
-        groupService.getGroupMembers(group_shortName).then(function(response) {
+        groupService.getGroupMembers(group_shortName).then(function (response) {
             vm.groups = response.data;
         });
     }
@@ -82,17 +79,17 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
         var group_shortName = $stateParams.shortName;
         console.log("Adding following users to the group: ", group_shortName, candidates);
         var groups = [], users = [];
-        candidates.forEach(function(member) {
+        candidates.forEach(function (member) {
             if (member.type === "user")
                 users.push(member.userName);
             if (member.type === "group")
                 groups.push(member.shortName);
         });
         var members = {groups: groups, users: users};
-        groupService.addGroupMembers(group_shortName, members).then(function(response) {
+        groupService.addGroupMembers(group_shortName, members).then(function (response) {
             console.log('Adding users to group');
             if (isEmpty(response))
-                //TODO Output notice here and/or go to view???
+            //TODO Output notice here and/or go to view???
                 console.log("Member(s) were successfully added to group (" + group_shortName + ").");
             else
                 vm.groups = response.data;
@@ -102,22 +99,22 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
     // Remove member from group
     function removeMemberFromGroup(group_shortName, authType, memberName, ev) {
         var confirmDel = $mdDialog.confirm()
-                .title('Remove member')
-                .textContent('Remove ' + memberName + ' from ' + group_shortName + ' group?')
-                .ariaLabel('Delete group')
-                .targetEvent(ev)
-                .ok('Delete')
-                .cancel('Cancel');
-        $mdDialog.show(confirmDel).then(function() {
+            .title('Remove member')
+            .textContent('Remove ' + memberName + ' from ' + group_shortName + ' group?')
+            .ariaLabel('Delete group')
+            .targetEvent(ev)
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDel).then(function () {
             if (authType === "GROUP")
                 memberName = authType + "_" + memberName;
-            groupService.removeMemberFromGroup(group_shortName, memberName).then(function(response) {
+            groupService.removeMemberFromGroup(group_shortName, memberName).then(function (response) {
                 if (isEmpty(response))
-                    //TODO Output notice here and/or go to view???
+                //TODO Output notice here and/or go to view???
                     console.log(memberName + " was successfully removed from group (" + group_shortName + ").");
                 listMembers(group_shortName);
             });
-        }, function() {
+        }, function () {
             console.log('Cancelled');
         });
     }
@@ -139,24 +136,24 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
 
     function deleteGroup(shortName, ev) {
         var confirmDel = $mdDialog.confirm()
-                .title('Delete group')
-                .textContent('Delete ' + shortName + '?')
-                .ariaLabel('Delete group')
-                .targetEvent(ev)
-                .ok('Delete')
-                .cancel('Cancel');
-        $mdDialog.show(confirmDel).then(function() {
-            groupService.deleteGroup(shortName).then(function(response) {
+            .title('Delete group')
+            .textContent('Delete ' + shortName + '?')
+            .ariaLabel('Delete group')
+            .targetEvent(ev)
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDel).then(function () {
+            groupService.deleteGroup(shortName).then(function (response) {
                 vm.group = response;
                 //TODO goto view
             });
             console.log('Deleted');
-        }, function() {
+        }, function () {
             console.log('Cancelled');
         });
     }
-    
-    function showCSVUploadDialog(){
+
+    function showCSVUploadDialog() {
 
         return $mdDialog.show({
             controller: groupsUploadCSVDialogController,
@@ -165,28 +162,28 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
             targetEvent: null,
             clickOutsideToClose: true,
             focusOnOpen: false
-        }).then(function(){
+        }).then(function () {
             loadList();
         });
     }
-    
+
     function groupsUploadCSVDialogController($scope, $translate, $mdDialog) {
 
-        $scope.cancel = function() {
+        $scope.cancel = function () {
             $mdDialog.cancel();
         };
 
-        $scope.upload = function(ev){
+        $scope.upload = function (ev) {
             $mdDialog.hide();
-            groupService.uploadGroupsCSVFile($scope.fileToUpload).then(function(response){
-                var failedUsers=[], msg, dlgTitle;
+            groupService.uploadGroupsCSVFile($scope.fileToUpload).then(function (response) {
+                var failedUsers = [], msg, dlgTitle;
                 dlgTitle = $translate.instant('COMMON.SUCCESS');
                 msg = $translate.instant('GROUP.UPLOAD_GROUPS_SUCCESS');
-                if(response.STATUS == "FAILED"){
+                if (response.STATUS == "FAILED") {
                     msg = response.message;
                     dlgTitle = $translate.instant('COMMON.ERROR');
                 }
-                
+
                 $mdDialog.show(
                     $mdDialog.alert()
                         .parent(angular.element(document.querySelector('body')))
@@ -200,7 +197,7 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
             });
         };
     }
-    
+
 
     /**
      * Test if an object is empty ECMAScript 5+ compliant
@@ -255,19 +252,19 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
 
         function getToastPosition() {
             return Object.keys(gdc.toastPosition)
-                    .filter(function(pos) {
-                        return gdc.toastPosition[pos];
-                    })
-                    .join(' ');
+                .filter(function (pos) {
+                    return gdc.toastPosition[pos];
+                })
+                .join(' ');
         }
 
         function notifyUserSaved(cuSuccess) {
             $mdToast.show(
-                    $mdToast.simple()
+                $mdToast.simple()
                     .content(cuSuccess.message)
                     .position(gdc.getToastPosition())
                     .hideDelay(3000)
-                    );
+            );
             getAllSystemUsers();
         }
     }

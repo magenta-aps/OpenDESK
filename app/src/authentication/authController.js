@@ -1,6 +1,6 @@
 
 angular
-    .module('earkApp')
+    .module('openDeskApp')
     .controller('AuthController', AuthController);
 
 function AuthController($state, $stateParams, authService, userService, $mdDialog, sessionService, $window) {

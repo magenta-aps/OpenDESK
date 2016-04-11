@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.sequentialReview.tasks', ['earkApp.tasks.common'])
+        .module('openDeskApp.sequentialReview.tasks', ['openDeskApp.tasks.common'])
         .config(config);
     
     function config(taskFormConfigServiceProvider){

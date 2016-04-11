@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .provider('caseDocumentActionsService', CaseDocumentActionsServiceProvider);
 
 function CaseDocumentActionsServiceProvider() {

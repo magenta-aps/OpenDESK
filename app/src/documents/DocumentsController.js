@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .controller('DocumentsController', DocumentsController);
 
 function DocumentsController($state, $mdDialog, fileUtilsService, caseDocumentFileDialogService, documentPreviewService) {

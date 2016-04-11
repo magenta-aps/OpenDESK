@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('taskTitle', taskTitleFactory);
     
     function taskTitleFactory($injector){

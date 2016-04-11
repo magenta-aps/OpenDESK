@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .controller('CaseDocumentsController', CaseDocumentsController);
 
 function CaseDocumentsController($controller, $stateParams, caseDocumentsService) {

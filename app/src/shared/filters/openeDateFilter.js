@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('openeDate', openeDateFilterFactory);
     
     function openeDateFilterFactory(dateFilter){

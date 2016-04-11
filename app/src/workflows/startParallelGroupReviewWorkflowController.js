@@ -1,6 +1,6 @@
     
     angular
-        .module('earkApp.workflows')
+        .module('openDeskApp.workflows')
         .controller('StartParallelGroupReviewWorkflowController', StartParallelGroupReviewWorkflowController);
     
     function StartParallelGroupReviewWorkflowController($controller, groupService, workflowDef) {

@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('alfrescoUploadService', AlfrescoUploadService);
 
     function AlfrescoUploadService($http, notificationUtilsService) {

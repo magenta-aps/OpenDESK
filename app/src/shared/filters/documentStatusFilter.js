@@ -1,6 +1,6 @@
     
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('docStatus', docStatusFilterFactory);
     
     function docStatusFilterFactory($translate){

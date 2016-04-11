@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.activitiParallelReview.tasks', ['earkApp.tasks.common'])
+        .module('openDeskApp.activitiParallelReview.tasks', ['openDeskApp.tasks.common'])
         .config(config);
     
     function config(taskFormConfigServiceProvider){

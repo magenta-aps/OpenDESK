@@ -1,5 +1,5 @@
 angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('alfrescoDownloadService', AlfrescoDownloadService);
 
 function AlfrescoDownloadService(alfrescoNodeUtils, ALFRESCO_URI) {

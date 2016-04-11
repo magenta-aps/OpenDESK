@@ -1,5 +1,5 @@
     angular
-        .module('earkApp.adhoc.tasks')
+        .module('openDeskApp.adhoc.tasks')
         .filter('wf:adhocTaskTitle', wfAdhocTaskTitleFilterFactory);
     
     function wfAdhocTaskTitleFilterFactory($translate){

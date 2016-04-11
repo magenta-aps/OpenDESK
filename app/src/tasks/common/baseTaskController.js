@@ -1,6 +1,6 @@
     
     angular
-        .module('earkApp.tasks.common')
+        .module('openDeskApp.tasks.common')
         .controller('baseTaskController', BaseTaskController);
     
     function BaseTaskController(taskService, $stateParams, $location, documentPreviewService, sessionService, workflowService, $translate, $mdDialog, notificationUtilsService, ALFRESCO_URI) {
@@ -27,7 +27,7 @@
             return taskService.getTaskDetails(vm.taskId).then(function(result){
                 vm.task = result;
                 vm.taskProperties = angular.extend({}, result.properties);
-                vm.workflowInstanceDiagramUrl = ALFRESCO_URI.webClientServiceProxy + '/api/openesdh/workflow/instance/' + vm.task.workflowInstance.id + '/diagram?nocache=' + new Date().getTime();
+                vm.workflowInstanceDiagramUrl = ALFRESCO_URI.webClientServiceProxy + '/api/opendesk/workflow/instance/' + vm.task.workflowInstance.id + '/diagram?nocache=' + new Date().getTime();
             });
         }
         

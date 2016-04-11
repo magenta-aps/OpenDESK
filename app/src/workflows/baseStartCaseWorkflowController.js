@@ -1,6 +1,6 @@
     
     angular
-        .module('earkApp.workflows')
+        .module('openDeskApp.workflows')
         .controller('BaseStartCaseWorkflowController', BaseStartCaseWorkflowController);
     
     function BaseStartCaseWorkflowController($mdDialog, $stateParams, caseDocumentsService, notificationUtilsService, $translate, $controller) {

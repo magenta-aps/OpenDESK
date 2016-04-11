@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.workflows')
+        .module('openDeskApp.workflows')
         .controller('StartSingleRecipientWorkflowController', StartSingleRecipientWorkflowController);
     
     function StartSingleRecipientWorkflowController($controller, userService, workflowDef) {

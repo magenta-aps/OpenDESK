@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('caseDocumentDetailsService', CaseDocumentDetailsService);
 
     function CaseDocumentDetailsService($http, httpUtils, alfrescoUploadService, alfrescoDownloadService, alfrescoNodeUtils, fileUtilsService) {
@@ -20,7 +20,7 @@
         
         function getCaseDocument(documentNodeRef){
              var requestConfig = { 
-                 url: "/api/openesdh/documentInfo/" + alfrescoNodeUtils.processNodeRef(documentNodeRef).uri,
+                 url: "/api/opendesk/documentInfo/" + alfrescoNodeUtils.processNodeRef(documentNodeRef).uri,
                  method: "GET"
              };
              
@@ -57,7 +57,7 @@
         
         function getDocumentAttachments(mainDocVersionRef, page, pageSize){
             var requestConfig = { 
-                url: "/api/openesdh/case/document/version/attachments?nodeRef=" + mainDocVersionRef,
+                url: "/api/opendesk/case/document/version/attachments?nodeRef=" + mainDocVersionRef,
                 method: "GET"
             };
             httpUtils.setXrangeHeader(requestConfig, page, pageSize);
@@ -89,14 +89,14 @@
         }
         
         function updateDocumentProperties(document){
-            var url = "/api/openesdh/case/document/properties";
+            var url = "/api/opendesk/case/document/properties";
             return $http.post(url, document).then(function(response){
                 return response;
             });
         }
 
         function changeDocumentStatus(documentNodeRef, status) {
-            return $http.post('/api/openesdh/documents/' + alfrescoNodeUtils.processNodeRef(documentNodeRef).uri + '/status', {status: status}).then(function (response) {
+            return $http.post('/api/opendesk/documents/' + alfrescoNodeUtils.processNodeRef(documentNodeRef).uri + '/status', {status: status}).then(function (response) {
                 return response.data;
             });
         }

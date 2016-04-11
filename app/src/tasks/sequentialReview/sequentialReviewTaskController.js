@@ -1,5 +1,5 @@
    
-    angular.module('earkApp.sequentialReview.tasks')
+    angular.module('openDeskApp.sequentialReview.tasks')
         .controller('sequentialReviewTaskController', sequentialReviewTaskController);
     
     function sequentialReviewTaskController($controller) {

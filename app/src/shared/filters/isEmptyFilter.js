@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('isEmpty', isEmptyFilterFactory);
 
     function isEmptyFilterFactory() {

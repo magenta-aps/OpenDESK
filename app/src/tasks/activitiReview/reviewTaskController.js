@@ -1,5 +1,5 @@
    
-    angular.module('earkApp.activitiReview.tasks')
+    angular.module('openDeskApp.activitiReview.tasks')
         .controller('reviewTaskController', reviewTaskController);
     
     function reviewTaskController($controller, taskService, sessionService, notificationUtilsService, $translate) {

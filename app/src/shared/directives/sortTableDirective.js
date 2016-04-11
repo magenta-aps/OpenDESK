@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .directive('sortTable', sortTable);
 
     function sortTable($compile){

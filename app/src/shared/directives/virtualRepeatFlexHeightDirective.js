@@ -1,6 +1,6 @@
 
 angular
-    .module('earkApp')
+    .module('openDeskApp')
     .directive('flexHeight', flexHeight);
 
 function flexHeight(){

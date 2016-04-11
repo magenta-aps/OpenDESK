@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.files')
+        .module('openDeskApp.files')
         .factory('filesService', FilesService);
 
 function FilesService($http, fileUtilsService, alfrescoNodeUtils) {
@@ -20,7 +20,7 @@ function FilesService($http, fileUtilsService, alfrescoNodeUtils) {
      * @returns {*}
      */
     function getUserFiles() {
-        return $http.get('/api/openesdh/files')
+        return $http.get('/api/opendesk/files')
                 .then(_fileListResponse);
     }
 
@@ -29,7 +29,7 @@ function FilesService($http, fileUtilsService, alfrescoNodeUtils) {
      * @returns {*}
      */
     function getGroupFiles() {
-        return $http.get('/api/openesdh/files/group')
+        return $http.get('/api/opendesk/files/group')
                 .then(_fileListResponse);
     }
 
@@ -43,7 +43,7 @@ function FilesService($http, fileUtilsService, alfrescoNodeUtils) {
     }
 
     function getFileInfo(nodeRef) {
-        return $http.get('/api/openesdh/file/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri)
+        return $http.get('/api/opendesk/file/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri)
                 .then(function(response) {
                     return response;
                 });
@@ -65,7 +65,7 @@ function FilesService($http, fileUtilsService, alfrescoNodeUtils) {
         angular.forEach(files, function(file) {
             formData.append('file', file);
         });
-        return $http.post('/api/openesdh/files', formData, {
+        return $http.post('/api/opendesk/files', formData, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         }).then(function(response) {
@@ -74,14 +74,14 @@ function FilesService($http, fileUtilsService, alfrescoNodeUtils) {
     }
 
     function deleteFile(nodeRef) {
-        return $http.delete('/api/openesdh/file/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri)
+        return $http.delete('/api/opendesk/file/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri)
                 .then(function(response) {
                     return response;
                 });
     }
 
     function moveFile(nodeRef, newOwner, comment) {
-        return $http.put('/api/openesdh/file/assign',
+        return $http.put('/api/opendesk/file/assign',
                 null, {params: {
                         nodeRef: nodeRef,
                         owner: newOwner,
@@ -93,7 +93,7 @@ function FilesService($http, fileUtilsService, alfrescoNodeUtils) {
     }
 
     function addFileToCase(caseId, nodeRef, documentProperties) {
-        return $http.put('/api/openesdh/case/' + caseId + '/addFile', null,
+        return $http.put('/api/opendesk/case/' + caseId + '/addFile', null,
                 {params: angular.extend(documentProperties, {nodeRef: nodeRef})})
                 .then(function(response) {
                     return response;

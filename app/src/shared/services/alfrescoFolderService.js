@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('alfrescoFolderService', alfrescoFolderService);
 
     function alfrescoFolderService($http, alfrescoNodeUtils) {

@@ -1,11 +1,11 @@
 
-    angular.module('earkApp.tasks', [
+    angular.module('openDeskApp.tasks', [
         'ngMaterial', 
-        'earkApp.tasks.common',
-        'earkApp.adhoc.tasks',
-        'earkApp.activitiReview.tasks',
-        'earkApp.activitiParallelReview.tasks',
-        'earkApp.sequentialReview.tasks'
+        'openDeskApp.tasks.common',
+        'openDeskApp.adhoc.tasks',
+        'openDeskApp.activitiReview.tasks',
+        'openDeskApp.activitiParallelReview.tasks',
+        'openDeskApp.sequentialReview.tasks'
     ]).config(config);
     
     function config(dashboardServiceProvider, modulesMenuServiceProvider){

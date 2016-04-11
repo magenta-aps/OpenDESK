@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('searchService', searchService);
 
     function searchService($http) {
@@ -14,11 +14,11 @@
 
         //<editor-fold desc="liveSearch results">
         service.liveSearchCaseDocs = function (term) {
-            return $http.get('/openesdh/live-search-caseDocs?t=' + term);
+            return $http.get('/opendesk/live-search-caseDocs?t=' + term);
         };
 
         service.liveSearchCases = function (term) {
-            return $http.get('/openesdh/live-search-cases?t='+ term);
+            return $http.get('/opendesk/live-search-cases?t='+ term);
         };
         //</editor-fold>
 

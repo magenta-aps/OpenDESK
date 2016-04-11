@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.dashboard')
+        .module('openDeskApp.dashboard')
         .controller('DashboardController', DashboardController);
 
     function DashboardController($scope, authService, dashboardService) {

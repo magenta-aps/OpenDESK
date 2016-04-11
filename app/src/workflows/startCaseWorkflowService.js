@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.workflows')
+        .module('openDeskApp.workflows')
         .provider('startCaseWorkflowService', StartCaseWorkflowServiceProvider);
 
     function StartCaseWorkflowServiceProvider(){

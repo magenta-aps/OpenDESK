@@ -1,1 +1,1 @@
-angular.module('earkApp.header', [ 'ngMaterial' ]);
+angular.module('openDeskApp.header', [ 'ngMaterial' ]);

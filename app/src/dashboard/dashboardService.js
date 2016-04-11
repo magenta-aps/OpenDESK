@@ -1,5 +1,5 @@
     angular
-        .module('earkApp.dashboard')
+        .module('openDeskApp.dashboard')
         .provider('dashboardService', dashboardServiceProvider);
     
     function dashboardServiceProvider(){

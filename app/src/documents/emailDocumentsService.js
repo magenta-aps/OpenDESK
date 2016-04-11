@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('emailDocumentsService', EmailDocumentsService);
 
 function EmailDocumentsService($mdDialog, caseDocumentsService, caseService,

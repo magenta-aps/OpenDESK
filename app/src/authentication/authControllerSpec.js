@@ -3,7 +3,7 @@ describe('AuthController', function() {
     var controller;
     var httpBackend;
 
-    beforeEach(module('earkApp'));
+    beforeEach(module('openDeskApp'));
 
     beforeEach(inject(function($rootScope, $controller, $httpBackend) {
         scope = $rootScope;

@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.common.directives')
+        .module('openDeskApp.common.directives')
         .directive('informItemSelectedThenClear', informItemSelectedThenClear);
     
     function informItemSelectedThenClear(){

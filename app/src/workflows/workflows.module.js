@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.workflows', ['ngMaterial'])
+        .module('openDeskApp.workflows', ['ngMaterial'])
         .config(config);
 
 function config($provide, startCaseWorkflowServiceProvider) {

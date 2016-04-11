@@ -1,1 +1,0 @@
-angular.module('earkApp.office', ['ngMaterial','ui.router']);

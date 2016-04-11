@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('documentService', documentService);
 
     function documentService($http) {

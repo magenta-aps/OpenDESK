@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .directive('toggleClass', toggleClassDirective);
 
     function toggleClassDirective() {

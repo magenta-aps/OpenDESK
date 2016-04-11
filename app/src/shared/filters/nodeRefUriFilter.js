@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('nodeRefUri', nodeRefUriFilterFactory);
     
     function nodeRefUriFilterFactory(alfrescoNodeUtils){

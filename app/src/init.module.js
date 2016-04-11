@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.init', ['ngMaterial'])
+        .module('openDeskApp.init', ['ngMaterial'])
         .constant('USER_ROLES', {
             admin: 'admin',
             user: 'user'
@@ -9,13 +9,13 @@ angular
             apiProxy: '/alfresco/api/',
             serviceApiProxy: '/api/',
             serviceSlingshotProxy: '/slingshot/',
-            webClientServiceProxy: '/alfresco/wcs'
+            webClientServiceProxy: '/alfresco/service'
         })
         .constant('PATTERNS', {
             fileName: /^[a-zA-Z0-9_\-,!@#$%^&()=+ ]+$/,
             phone: /^[+]?[0-9\- ]+$/
         })
         .constant('APP_CONFIG', {
-            appName: 'OpenESDH',
+            appName: 'OpenDesk',
             logoSrc: './app/assets/images/logo-light.svg'
         });

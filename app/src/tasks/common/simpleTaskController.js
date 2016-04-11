@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.tasks.common')
+        .module('openDeskApp.tasks.common')
         .controller('simpleTaskController', simpleTaskController);
     
     function simpleTaskController($controller) {

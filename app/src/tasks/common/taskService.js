@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.tasks.common')
+        .module('openDeskApp.tasks.common')
         .factory('taskService', TaskService);
 
     function TaskService($http, $translate, sessionService) {
@@ -18,13 +18,13 @@
             if(!sessionService.isAdmin()){
                 return this.getCurrentUserWorkflowTasks();
             }
-            return $http.get("/api/openesdh/workflow/tasks").then(function (response) {
+            return $http.get("/api/opendesk/workflow/tasks").then(function (response) {
                 return response.data.tasks;
             });
         }
         
         function getCaseTasks(caseId){
-            return $http.get("/api/openesdh/case/" + caseId + "/tasks").then(function (response) {
+            return $http.get("/api/opendesk/case/" + caseId + "/tasks").then(function (response) {
                 return response.data;
             });
         }
@@ -38,7 +38,7 @@
         }
         
         function getTaskDetails(taskId){
-            var url = "/api/openesdh/workflow/task/" + taskId + "/details";
+            var url = "/api/opendesk/workflow/task/" + taskId + "/details";
             return $http.get(url).then(function(response){
                return response.data; 
             });

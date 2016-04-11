@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('fileUtilsService', fileUtilsService);
 
     function fileUtilsService() {
@@ -12,7 +12,7 @@
         };
 
         /**
-         * Copied and adapted from Alfresco share for use in openESDH. The next 3 functions that is.
+         * Copied and adapted from Alfresco share for use in opendesk. The next 3 functions that is.
          */
         function getFileIconByMimetype  (mimetype, p_iconSize) {
             var extns =

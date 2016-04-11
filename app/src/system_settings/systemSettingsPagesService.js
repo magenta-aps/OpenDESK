@@ -1,6 +1,4 @@
-angular
-        .module('earkApp.systemsettings')
-        .provider('systemSettingsPagesService', SystemSettingsPagesServiceProvider);
+angular.module('openDeskApp.systemsettings').provider('systemSettingsPagesService', SystemSettingsPagesServiceProvider);
 
 function SystemSettingsPagesServiceProvider() {
     var pages = [];
@@ -23,7 +21,7 @@ function SystemSettingsPagesServiceProvider() {
         });
         return this;
     }
-    
+
     function addModulePage(labelKey, sref, icon) {
         modulesPages.push({
             labelKey: labelKey,
@@ -43,8 +41,8 @@ function SystemSettingsPagesServiceProvider() {
         function getPages() {
             return pages;
         }
-        
-        function getModulesPages(){
+
+        function getModulesPages() {
             return modulesPages;
         }
     }

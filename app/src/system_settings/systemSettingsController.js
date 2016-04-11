@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.systemsettings')
+        .module('openDeskApp.systemsettings')
         .controller('SystemSettingsController', SystemSettingsCtrl);
 
 function SystemSettingsCtrl(systemSettingsPagesService, authService) {

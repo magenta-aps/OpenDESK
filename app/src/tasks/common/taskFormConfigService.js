@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.tasks.common')
+        .module('openDeskApp.tasks.common')
         .provider('taskFormConfigService', TaskFormConfigServiceProvider);
 
     function TaskFormConfigServiceProvider(){

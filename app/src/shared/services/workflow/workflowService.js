@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('workflowService', WorkflowService);
 
     function WorkflowService($http) {
@@ -29,7 +29,7 @@
          * }
          */
         function startWorkflow(workflow){
-           var url = "/api/openesdh/workflow/start";
+           var url = "/api/opendesk/workflow/start";
            return $http.post(url, workflow).then(function(result){
                return result.data;
            });

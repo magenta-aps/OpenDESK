@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('serverVersionService', ServerVersionService);
 
     function ServerVersionService($http) {
@@ -9,7 +9,7 @@
         };
 
         function getGitDetails() {
-            return $http.get("/api/openesdh/getversion").then(function (response) {
+            return $http.get("/api/opendesk/getversion").then(function (response) {
                 return {
                     gitCommitId: response.data.scmCommitId,
                     gitBranch: response.data.scmBranchName

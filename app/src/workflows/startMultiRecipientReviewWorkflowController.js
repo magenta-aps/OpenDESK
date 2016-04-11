@@ -1,6 +1,6 @@
     
     angular
-        .module('earkApp.workflows')
+        .module('openDeskApp.workflows')
         .controller('StartMultiRecipientReviewWorkflowController', StartMultiRecipientReviewWorkflowController);
     
     function StartMultiRecipientReviewWorkflowController($controller, userService, workflowDef) {

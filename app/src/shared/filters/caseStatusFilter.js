@@ -1,6 +1,6 @@
     
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('caseStatus', caseStatusFilterFactory);
     
     function caseStatusFilterFactory($translate){

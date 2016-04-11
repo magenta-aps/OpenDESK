@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .controller('GenericWizardController', GenericWizardController);
 
     function GenericWizardController($mdDialog) {

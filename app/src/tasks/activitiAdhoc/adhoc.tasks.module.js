@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.adhoc.tasks', ['earkApp.tasks.common'])
+        .module('openDeskApp.adhoc.tasks', ['openDeskApp.tasks.common'])
         .config(config);
     
     function config(taskFormConfigServiceProvider){

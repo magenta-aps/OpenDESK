@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('documentPreviewService', DocumentPreviewService);
 
     function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService, sessionService, $http, $sce, ALFRESCO_URI) {
@@ -268,7 +268,7 @@
                     force = "c=force";
                     
                     if(nodeRefAsLink.indexOf("versionStore") > -1){
-                        return "/api/openesdh/case/document/" + nodeRefAsLink + "/thumbnail";
+                        return "/api/opendesk/case/document/" + nodeRefAsLink + "/thumbnail";
                     }
                     
                     var lastModified = this._getLastThumbnailModification(item);

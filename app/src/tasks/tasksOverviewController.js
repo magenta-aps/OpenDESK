@@ -1,5 +1,5 @@
     angular
-        .module('earkApp.tasks')
+        .module('openDeskApp.tasks')
         .controller('tasksOverviewController', TasksOverviewController);
 
     function TasksOverviewController($filter, $translate, taskService) {

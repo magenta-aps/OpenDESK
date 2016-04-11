@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp')
+        .module('openDeskApp')
         .controller('AuthoritySelectorController', AuthoritySelectorController);
 
 function AuthoritySelectorController(userService) {

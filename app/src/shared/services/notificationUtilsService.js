@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('notificationUtilsService', notificationUtilsService);
 
     function notificationUtilsService($mdToast, $translate) {

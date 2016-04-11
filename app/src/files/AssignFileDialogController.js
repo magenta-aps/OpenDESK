@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.files')
+        .module('openDeskApp.files')
         .controller('AssignFileDialogController', AssignFileDialogController);
 
 function AssignFileDialogController($mdDialog, $translate, filesService, notificationUtilsService, file) {

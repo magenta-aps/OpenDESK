@@ -1,1 +1,1 @@
-angular.module('earkApp.core', []);
+angular.module('openDeskApp.core', []);

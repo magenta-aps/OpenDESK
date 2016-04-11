@@ -1,5 +1,5 @@
 angular
-        .module('earkApp')
+        .module('openDeskApp')
         .config(config)
         .factory('httpTicketInterceptor', httpTicketInterceptor)
         .factory('authService', authService);
@@ -31,15 +31,15 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
     
     function prefixAlfrescoServiceUrl(url){
-        if(url.indexOf("/api/") == 0 || url.indexOf("/openesdh/") == 0 || url.indexOf("/slingshot/") == 0 
-                || url == "/touch" || url == "/dk-openesdh-case-email"){
+        if(url.indexOf("/api/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
+                || url == "/touch"){
             return ALFRESCO_URI.webClientServiceProxy + url;
         }
         return url;
     }
-    
+
     function response(response) {        
-        if (response.status == 401 && typeof $window._openESDHSessionExpired === 'undefined') {
+        if (response.status == 401 && typeof $window._openDeskSessionExpired === 'undefined') {
             sessionExpired();
         }
         return response || $q.when(response);
@@ -54,10 +54,10 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
 
     function sessionExpired() {
-        if (typeof $window._openESDHSessionExpired !== 'undefined')
+        if (typeof $window._openDeskSessionExpired !== 'undefined')
             return;
 
-        $window._openESDHSessionExpired = true;
+        $window._openDeskSessionExpired = true;
         sessionService.setUserInfo(null);
         var $mdDialog = $injector.get('$mdDialog'),
                 notificationUtilsService = $injector.get('notificationUtilsService');
@@ -65,7 +65,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
         sessionService.retainCurrentLocation();
         $window.location = "/#/login";
         notificationUtilsService.notify($translate.instant('LOGIN.SESSION_TIMEOUT'));
-        delete $window._openESDHSessionExpired;
+        delete $window._openDeskSessionExpired;
     }
 }
 
@@ -121,7 +121,7 @@ function authService($http, $window, $state, sessionService, userService, oePara
 
         
         if (userInfo){
-            return $http.post('/api/openesdh/logout').then(function(response) {
+            return $http.post('/api/opendesk/logout').then(function(response) {
               sessionService.setUserInfo(null);
               sessionService.clearRetainedLocation();
               oeParametersService.clearOEParameters();
@@ -142,7 +142,7 @@ function authService($http, $window, $state, sessionService, userService, oePara
      * @returns {*}
      */
     function changePassword(email) {
-        return $http.post("/api/openesdh/reset-user-password", {email: email}).then(function(response) {
+        return $http.post("/api/opendesk/reset-user-password", {email: email}).then(function(response) {
             return response;
         });
     }
@@ -176,24 +176,19 @@ function authService($http, $window, $state, sessionService, userService, oePara
     }
 
     function revalidateUser() {
-        return $http.get('/api/openesdh/currentUser').then(function(response) {
+        return $http.get('/api/opendesk/currentUser').then(function(response) {
             return addUserAndParamsToSession(response.data.userName);
         });
     }
 
     function addUserAndParamsToSession(username) {
         return userService.getPerson(username).then(function(user) {
-            delete $window._openESDHSessionExpired;
-            
-            return userService.getCapabilities().then(function(capabilities){
-               angular.merge(user.capabilities, capabilities);
-               var userInfo = sessionService.getUserInfo();
-               userInfo['user'] = user;
-               sessionService.setUserInfo(userInfo);
-               oeParametersService.loadParameters();
-               return user;
-            });
-            
+            delete $window._openDeskSessionExpired;
+            var userInfo = sessionService.getUserInfo();
+            userInfo['user'] = user;
+            sessionService.setUserInfo(userInfo);
+            oeParametersService.loadParameters();
+            return user;
         });
     }
 }

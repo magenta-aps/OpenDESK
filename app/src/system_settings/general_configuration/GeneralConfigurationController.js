@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.systemsettings')
+        .module('openDeskApp.systemsettings')
         .controller('GeneralConfigurationController', GeneralConfigurationController);
 
 function GeneralConfigurationController($mdDialog, $translate, $state, notificationUtilsService,

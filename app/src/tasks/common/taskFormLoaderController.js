@@ -1,5 +1,5 @@
 
-    angular.module('earkApp.tasks.common')
+    angular.module('openDeskApp.tasks.common')
         .controller('taskFormLoaderController', taskFormLoaderController);
     
     function taskFormLoaderController($stateParams, taskFormConfigService, $controller) {

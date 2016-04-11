@@ -1,1 +1,1 @@
-angular.module('earkApp.dashboard', [ 'ngMaterial' ]);
+angular.module('openDeskApp.dashboard', [ 'ngMaterial' ]);

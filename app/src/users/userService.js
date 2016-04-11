@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('userService', userService);
 
 function userService($http) {
@@ -23,7 +23,7 @@ function userService($http) {
     };
     
     function getCurrentUser() {
-        return $http.get('/api/openesdh/currentUser').then(function(response) {
+        return $http.get('/api/opendesk/currentUser').then(function(response) {
             return response.data;
         });
     }
@@ -50,7 +50,7 @@ function userService($http) {
      * gets all authorities
      */
     function getAuthorities() {
-        return $http.get('/api/openesdh/authorities').then(function(response) {
+        return $http.get('/api/opendesk/authorities').then(function(response) {
             var items = response.data;
             //TODO: remove this temp fix:
             if (items.data && items.data.items){
@@ -79,7 +79,7 @@ function userService($http) {
     }
     
     function setEmailFeedDisabled(userObj){
-        return $http.put('/api/openesdh/users/' + userObj.userName + '/emailfeeddisabled/' + userObj.emailFeedDisabled).then(function(response){
+        return $http.put('/api/opendesk/users/' + userObj.userName + '/emailfeeddisabled/' + userObj.emailFeedDisabled).then(function(response){
             return response.data;
         });
     }
@@ -120,7 +120,7 @@ function userService($http) {
     }
     
     function getCurrentUserCaseOwnersGroups(){
-        var url = '/api/openesdh/user/case/owners/groups';
+        var url = '/api/opendesk/user/case/owners/groups';
         return $http.get(url).then(function(result) {
             return result.data;
         });
@@ -132,7 +132,7 @@ function userService($http) {
         formData.append("filedata", file);
         formData.append("filename", file.name);
 
-        return $http.post("/api/openesdh/users/upload", formData,  {
+        return $http.post("/api/opendesk/users/upload", formData,  {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         }).then(function(response){
@@ -142,7 +142,7 @@ function userService($http) {
     }
     
     function getCapabilities(){
-        return $http.get('/api/openesdh/capabilities').then(function(response) {
+        return $http.get('/api/opendesk/capabilities').then(function(response) {
             return response.data;
         });
     }

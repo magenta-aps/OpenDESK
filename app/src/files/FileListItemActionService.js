@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.files')
+        .module('openDeskApp.files')
         .provider('fileListItemActionService', FileListItemActionServiceProvider);
 
 function FileListItemActionServiceProvider() {

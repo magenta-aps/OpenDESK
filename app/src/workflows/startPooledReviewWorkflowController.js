@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.workflows')
+        .module('openDeskApp.workflows')
         .controller('StartPooledReviewWorkflowController', StartPooledReviewWorkflowController);
     
     function StartPooledReviewWorkflowController($controller, groupService, workflowDef) {

@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.users')
+        .module('openDeskApp.users')
         .controller('UsersController', UsersController);
 
     /**

@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.files')
+        .module('openDeskApp.files')
         .controller('FileCommentsDialogController', FileCommentsDialogController);
 
 function FileCommentsDialogController($mdDialog, file) {

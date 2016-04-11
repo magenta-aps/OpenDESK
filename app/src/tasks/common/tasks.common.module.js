@@ -1,1 +1,1 @@
-angular.module('earkApp.tasks.common', []);
+angular.module('openDeskApp.tasks.common', []);

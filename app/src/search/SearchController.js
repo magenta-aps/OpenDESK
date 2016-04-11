@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.search')
+        .module('openDeskApp.search')
         .controller('SearchController', SearchController);
 
     /**
@@ -38,7 +38,7 @@
                 pageSize: 25,
                 query: "",
                 repo: true,
-                rootNode: "openesdh://cases/home",
+                rootNode: "opendesk://cases/home",
                 site: "",
                 sort: "",
                 spellcheck: true,
