@@ -10,7 +10,7 @@ var environment = {
         proxy: 'http://test.openesdh.dk'
     },
     demo: {
-        proxy: 'http://demo.openesdh.dk'
+        proxy: 'http://178.62.194.129:8080'
     },
     local: {
         proxy: 'http://localhost:8080'
@@ -113,7 +113,7 @@ gulp.task('watch', function() {
 gulp.task('build', ['scripts', 'css']);
 
 gulp.task('test', ['build', 'watch'], function() {
-    createWebserver(environment.testv);
+    createWebserver(environment.test);
 });
 
 gulp.task('demo', ['build', 'watch'], function() {

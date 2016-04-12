@@ -108,6 +108,7 @@ function authService($http, $window, $state, sessionService, userService, oePara
             username: username,
             password: password
         }).then(function(response) {
+            userInfo.ticket = response.data.data.ticket;
             sessionService.setUserInfo(userInfo);
             return addUserAndParamsToSession(username);
         }, function(reason) {
@@ -121,7 +122,7 @@ function authService($http, $window, $state, sessionService, userService, oePara
 
         
         if (userInfo){
-            return $http.post('/api/opendesk/logout').then(function(response) {
+            return $http.delete('/api/login/ticket/' + userInfo.ticket, {alf_ticket:userInfo.ticket}).then(function(response) {
               sessionService.setUserInfo(null);
               sessionService.clearRetainedLocation();
               oeParametersService.clearOEParameters();
