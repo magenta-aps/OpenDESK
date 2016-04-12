@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('caseDocumentFileDialogService', CaseDocumentFileDialogService);
 
     function CaseDocumentFileDialogService($mdDialog, $q, caseDocumentsService, caseDocumentDetailsService) {

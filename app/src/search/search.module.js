@@ -1,1 +1,1 @@
-angular.module('earkApp.search', [ 'ngMaterial', 'pascalprecht.translate']);
+angular.module('openDeskApp.search', [ 'ngMaterial', 'pascalprecht.translate']);

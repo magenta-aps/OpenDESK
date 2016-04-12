@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('sessionService', sessionService);
 
     function sessionService($window) {

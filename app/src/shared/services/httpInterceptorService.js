@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .config(config)
         .factory('httpInterceptor', httpInterceptor);
 

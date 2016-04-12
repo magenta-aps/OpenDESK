@@ -1,5 +1,5 @@
     angular
-        .module('earkApp.systemsettings')
+        .module('openDeskApp.systemsettings')
         .controller('TenantsModulesController', TenantsModulesController);
     
     function TenantsModulesController(tenantsService, $mdDialog, $translate, notificationUtilsService){

@@ -1,4 +1,4 @@
-angular.module('earkApp.common.directives.filter')
+angular.module('openDeskApp.common.directives.filter')
     .directive('openeListFilter', ListFilterDirective)
     .directive('openeColumnFilter', ColumnFilterDirective);
 

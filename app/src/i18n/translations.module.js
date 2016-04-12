@@ -1,8 +1,8 @@
 angular
-        .module('earkApp.translations.init', []);
+        .module('openDeskApp.translations.init', []);
 
 angular
-        .module('earkApp.translations', ['pascalprecht.translate'])
+        .module('openDeskApp.translations', ['pascalprecht.translate'])
         .factory('availableLanguages', AvailableLanguages)
         .config(config);
 

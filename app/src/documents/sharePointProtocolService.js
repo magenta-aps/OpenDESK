@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('sharePointProtocolService', SharePointProtocolService);
 
 function SharePointProtocolService(fileUtilsService) {

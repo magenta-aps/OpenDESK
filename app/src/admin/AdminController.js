@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.administration')
+        .module('openDeskApp.administration')
         .controller('AdminController', AdminController);
 
     /**

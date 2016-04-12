@@ -1,6 +1,6 @@
 
     angular
-            .module('earkApp.systemsettings')
+            .module('openDeskApp.systemsettings')
             .factory('tenantsService', tenantsService);
     
     function tenantsService($http){
@@ -24,30 +24,30 @@
         }
         
         function getTenantsInfo(){
-            return $http.get('/api/openesdh/tenants').then(function(response){
+            return $http.get('/api/opendesk/tenants').then(function(response){
                 return response.data;
             });
         }
         
         function saveTenantInfo(tenant){
-            return $http.post('/api/openesdh/tenant/update', tenant).then(function(response){
+            return $http.post('/api/opendesk/tenant/update', tenant).then(function(response){
                 return response.data;
             });
         }
         
         function getOpeneModules(){
-            return $http.get('/api/openesdh/modules').then(function(response){
+            return $http.get('/api/opendesk/modules').then(function(response){
                 return response.data;
             });
         }
         
         function deleteTenantModules(tenant){
-            return $http.delete('/api/openesdh/tenant/' + tenant + '/modules');
+            return $http.delete('/api/opendesk/tenant/' + tenant + '/modules');
         }
         
         function createTenant(tenant){
             //replace windows path
             tenant.tenantContentStoreRoot = tenant.tenantContentStoreRoot.replace(/\\/g, "/");
-            return $http.post('/api/openesdh/tenant', tenant);
+            return $http.post('/api/opendesk/tenant', tenant);
         }
     }

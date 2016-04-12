@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('documentAttachmentEditInSharePointService', DocumentAttachmentEditInSharePointService);
 
 function DocumentAttachmentEditInSharePointService($http, caseDocumentDetailsService, sharePointProtocolService) {
@@ -9,7 +9,7 @@ function DocumentAttachmentEditInSharePointService($http, caseDocumentDetailsSer
     return service;
 
     function executeDocAttachmentAction(attachment, onSuccess, onError) {
-        $http.get('/api/openesdh/document/attachment/edit/spp?nodeRefId=' + attachment.nodeRef).then(function(response) {
+        $http.get('/api/opendesk/document/attachment/edit/spp?nodeRefId=' + attachment.nodeRef).then(function(response) {
             var attachmentData = response.data;
             if (attachmentData.isLocked) {
                 //onSuccess refreshes page to lock buttons

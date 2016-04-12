@@ -1,5 +1,5 @@
 angular
-    .module('earkApp', [
+    .module('openDeskApp', [
         'ngSanitize',
         'ngMaterial',
         'ngMessages',
@@ -10,24 +10,26 @@ angular
         'pdf',
         'swfobject',
         'isteven-multi-select',
-        'earkApp.init',
-        'earkApp.translations.init',
-        'earkApp.header',
-        'earkApp.dashboard',
-        'earkApp.cases',
-        'earkApp.files',
-        'earkApp.documents',
-        'earkApp.administration',
-        'earkApp.users',
-        'earkApp.systemsettings',
-        'earkApp.search',
-        'earkApp.common.directives',
-        'earkApp.common.directives.filter',
+        'openDeskApp.init',
+        //'openDeskApp.projects',
+        'openDeskApp.translations.init',
+        'openDeskApp.header',
+        'openDeskApp.dashboard',
+        //'openDeskApp.files',
+        //'openDeskApp.tasks',
+        'openDeskApp.documents',
+        'openDeskApp.administration',
+        //'openDeskApp.groups',
+        'openDeskApp.users',
+        //'openDeskApp.workflows',
+        'openDeskApp.systemsettings',
+        'openDeskApp.search',
+        'openDeskApp.common.directives',
+        'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
-        'earkApp.activities',
-        /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //opene-modules
-        /*LAST*/ 'earkApp.translations'])// TRANSLATIONS IS ALWAYS LAST!
+        /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
+        /*LAST*/ 'openDeskApp.translations'])// TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
         angular.element(window.document)[0].title = APP_CONFIG.appName;
@@ -67,12 +69,9 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
 
     $mdIconProvider.icon('md-calendar', 'app/assets/img/icons/today.svg');
 
-/*
     $urlRouterProvider
-        .when('/cases/case/:caseId', '/cases/case/:caseId/info')
         .when('/admin/system-settings', '/admin/system-settings/general-configuration')
         .otherwise('/');
-*/
 
     $stateProvider.state('site', {
         abstract: true,
@@ -80,22 +79,9 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
             authorize: ['authService', function (authService) {
             }]
         }
-    }).state('appboard', {
-        parent: 'site',
-        url: '/',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/dashboard/view/appboard.html',
-                controller: 'DashboardController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
     }).state('dashboard', {
         parent: 'site',
-        url: '/dashboard',
+        url: '/',
         views: {
             'content@': {
                 templateUrl: 'app/src/dashboard/view/dashboard.html',
@@ -105,98 +91,6 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
         },
         data: {
             authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('cases', {
-        parent: 'site',
-        url: '/cases',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/cases/view/cases.html',
-                controller: 'CaseListController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('case', {
-        parent: 'site',
-        url: '/cases/case/:caseId',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/cases/view/case.html',
-                controller: 'CaseController',
-                controllerAs: 'caseCtrl'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 0
-        }
-    }).state('case.info', {
-        url: '/info',
-        views: {
-            'caseInfo': {
-                templateUrl: 'app/src/cases/view/case_info.html',
-                controller: 'CaseInfoController',
-                controllerAs: 'civm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 0
-        }
-    }).state('case.notes', {
-        url: '/notes',
-        views: {
-            'caseNotes': {
-                templateUrl: 'app/src/notes/view/caseNotes.html',
-                controller: 'NoteController',
-                controllerAs: 'caseNotes'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 1
-        }
-    }).state('case.members', {
-        url: '/members',
-        views: {
-            'caseMembers': {
-                templateUrl: 'app/src/case_members/view/caseMembers.html',
-                controller: 'CaseMembersController',
-                controllerAs: 'cmc'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 2
-        }
-    }).state('case.parties', {
-        url: '/parties',
-        views: {
-            'caseParties': {
-                templateUrl: 'app/src/parties/view/caseParties.html',
-                controller: 'CasePartiesController',
-                controllerAs: 'cmCPC'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 3
-        }
-    }).state('case.history', {
-        url: '/history',
-        views: {
-            'caseHistory': {
-                templateUrl: 'app/src/history/view/caseHistory.html',
-                controller: 'CaseHistoryController',
-                controllerAs: 'historyCtrl'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 4
         }
     }).state('case.tasks', {
         url: '/tasks',
@@ -360,35 +254,11 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
                 controllerAs: 'vm'
             }
         }
-    }).state('administration.systemsettings.tenantsmodules', {
-        url: '/tenantsmodules',
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/system_settings/tenant/view/tenantsModules.html',
-                controller: 'TenantsModulesController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
     }).state('search', {
         url: '/search/:searchTerm',
         views: {
             'content@': {
                 templateUrl: 'app/src/search/view/search.html'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('activities', {
-        url: '/activities',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/activities/view/activities.html',
-                controller: 'activitiesController',
-                controllerAs: 'actCtrl'
             }
         },
         data: {

@@ -1,6 +1,6 @@
 
 angular
-    .module('earkApp')
+    .module('openDeskApp')
     .directive('openeAutocomplete', autocomplete);
 
 function autocomplete(){

@@ -1,6 +1,6 @@
 
     angular
-            .module('earkApp.systemsettings')
+            .module('openDeskApp.systemsettings')
             .factory('documentCategoryService', documentCategoryService);
 
     function documentCategoryService($http) {
@@ -13,12 +13,12 @@
         return service;
 
         function getDocumentCategories() {
-            return $http.get('/api/openesdh/document/categories')
+            return $http.get('/api/opendesk/document/categories')
                     .then(onSuccess);
         }
 
         function getDocumentCategory(nodeRefId) {
-            return $http.get('/api/openesdh/document/category',
+            return $http.get('/api/opendesk/document/category',
                     {
                         params: {
                             nodeRefId: nodeRefId
@@ -27,7 +27,7 @@
         }
 
         function saveDocumentCategory(documentCategory) {
-            return $http.post('/api/openesdh/document/category', null,
+            return $http.post('/api/opendesk/document/category', null,
                     {
                         params: {
                             nodeRefId: documentCategory.nodeRef,
@@ -38,7 +38,7 @@
         }
 
         function deleteDocumentCategory(nodeRefId) {
-            return $http.delete('/api/openesdh/document/category',
+            return $http.delete('/api/opendesk/document/category',
                     {params: {
                             nodeRefId: nodeRefId
                         }

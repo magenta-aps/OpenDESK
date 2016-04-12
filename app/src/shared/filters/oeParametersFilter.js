@@ -1,5 +1,5 @@
 angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('oeParam', oeParametersFilterFactory);
 
 function oeParametersFilterFactory(oeParametersService) {

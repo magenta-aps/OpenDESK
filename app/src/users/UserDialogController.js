@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.users')
+        .module('openDeskApp.users')
         .controller('UserDialogController', UserDialogController);
 
 function UserDialogController($scope, $mdDialog, $mdToast, $translate, $injector, $timeout, notificationUtilsService, userService, user) {

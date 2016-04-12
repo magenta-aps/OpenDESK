@@ -1,6 +1,6 @@
 
 angular
-    .module('earkApp')
+    .module('openDeskApp')
     .directive('appFooter', function() {
         return {
             restrict: 'E',

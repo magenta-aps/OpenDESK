@@ -1,5 +1,5 @@
 
-    angular.module('earkApp.common.directives.filter')
+    angular.module('openDeskApp.common.directives.filter')
         .directive('openeFilterSearch', FilterSearchDirective);
 
     /**

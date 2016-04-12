@@ -1,5 +1,5 @@
     angular
-        .module('earkApp.header')
+        .module('openDeskApp.header')
         .provider('modulesMenuService', modulesMenuServiceProvider);
     
     function modulesMenuServiceProvider(){

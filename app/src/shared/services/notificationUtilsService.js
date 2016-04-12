@@ -1,41 +1,42 @@
-angular
-    .module('earkApp')
-    .factory('notificationUtilsService', notificationUtilsService);
 
-function notificationUtilsService($mdToast, $translate) {
-    var service = {
-        notify: notify,
-        alert: alert
-    };
+    angular
+        .module('openDeskApp')
+        .factory('notificationUtilsService', notificationUtilsService);
 
-    var defaultToastPosition = "top right";
-    var defaultAlertToastPosition = "top right";
+    function notificationUtilsService($mdToast, $translate) {
+        var service = {
+            notify: notify,
+            alert: alert
+        };
 
-    return service;
+        var defaultToastPosition = "top right";
+        var defaultAlertToastPosition = "top right";
 
-    function notify(message, toastPosition) {
-        if (typeof toastPosition === 'undefined') {
-            toastPosition = defaultToastPosition;
+        return service;
+
+        function notify(message, toastPosition) {
+            if (typeof toastPosition === 'undefined') {
+                toastPosition = defaultToastPosition;
+            }
+            $mdToast.show(
+                $mdToast.simple()
+                    .content(message)
+                    .position(toastPosition)
+                    .hideDelay(3000)
+            );
         }
-        $mdToast.show(
-            $mdToast.simple()
-                .content(message)
-                .position(toastPosition)
-                .hideDelay(3000)
-        );
-    }
 
-    function alert(message, toastPosition) {
-        if (typeof toastPosition === 'undefined') {
-            toastPosition = defaultAlertToastPosition;
+        function alert(message, toastPosition) {
+            if (typeof toastPosition === 'undefined') {
+                toastPosition = defaultAlertToastPosition;
+            }
+            $mdToast.show(
+                $mdToast.simple()
+                    .content(message)
+                    .action($translate.instant('COMMON.OK'))
+                    .highlightAction(true)
+                    .position(toastPosition)
+                    .hideDelay(0)
+            );
         }
-        $mdToast.show(
-            $mdToast.simple()
-                .content(message)
-                .action($translate.instant('COMMON.OK'))
-                .highlightAction(true)
-                .position(toastPosition)
-                .hideDelay(0)
-        );
     }
-}

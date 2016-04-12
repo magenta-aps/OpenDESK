@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.translations.init')
+        .module('openDeskApp.translations.init')
         .provider('languageFiles', LanguageFilesProvider);
 
 function LanguageFilesProvider() {

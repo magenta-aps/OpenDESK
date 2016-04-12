@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.documents', ['ngMaterial', 'pascalprecht.translate'])
+        .module('openDeskApp.documents', ['ngMaterial', 'pascalprecht.translate'])
         .config(config);
 
 function config(caseDocumentActionsServiceProvider, dashboardServiceProvider, documentEditActionsServiceProvider,

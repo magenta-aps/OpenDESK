@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .filter('workflowTaskPriority', workflowTaskPriorityFilterFactory);
     
     function workflowTaskPriorityFilterFactory($translate){

@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.systemsettings')
+        .module('openDeskApp.systemsettings')
         .controller('DocumentCategoriesController', DocumentCategoriesController);
 
     function DocumentCategoriesController($scope, $mdDialog, $translate,

@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('preferenceService', preferenceService);
 
 function preferenceService($http, $q, sessionService) {

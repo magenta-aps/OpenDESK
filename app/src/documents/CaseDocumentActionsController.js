@@ -1,5 +1,5 @@
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .controller('CaseDocumentActionsController', CaseDocumentActionsController);
 
 function CaseDocumentActionsController($injector, $q, caseDocumentActionsService) {

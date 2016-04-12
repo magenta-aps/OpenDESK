@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('documentEditInSharePointService', DocumentEditInSharePointService);
 
 function DocumentEditInSharePointService($http, sharePointProtocolService) {
@@ -14,7 +14,7 @@ function DocumentEditInSharePointService($http, sharePointProtocolService) {
             'nodeRefId': doc.nodeRef,
             'no-cache': new Date().getTime()
         };
-        $http.get('/api/openesdh/document/edit/spp', { params: params }).then(function(response) {
+        $http.get('/api/opendesk/document/edit/spp', { params: params }).then(function(response) {
             var document = response.data;
             if (document.isLocked) {
                 //onSuccess refreshes page to lock buttons

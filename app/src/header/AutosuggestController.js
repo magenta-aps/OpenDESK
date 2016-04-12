@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.search')
+        .module('openDeskApp.search')
         .controller('AutosuggestController', AutosuggestController);
 
     /**

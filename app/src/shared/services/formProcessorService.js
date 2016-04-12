@@ -1,5 +1,5 @@
     angular
-        .module('earkApp')
+        .module('openDeskApp')
         .factory('formProcessorService', formProcessorService);
 
     function formProcessorService($http, alfrescoNodeUtils) {

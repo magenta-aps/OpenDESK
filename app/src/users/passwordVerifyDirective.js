@@ -1,6 +1,6 @@
 
 angular
-    .module('earkApp.users')
+    .module('openDeskApp.users')
     .directive("openeEquals", equals);
 
     /**
@@ -12,7 +12,7 @@ angular
             require: 'ngModel',
             link: function (scope, elem, attrs, model) {
                 if (!attrs.openeEquals) {
-                    console.error('Opene-equals expects a model as an argument!');
+                    console.error('OpenDesk-equals expects a model as an argument!');
                     return;
                 }
                 scope.$watch(attrs.openeEquals, function (value) {

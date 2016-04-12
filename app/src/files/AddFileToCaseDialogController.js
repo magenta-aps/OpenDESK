@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.files')
+        .module('openDeskApp.files')
         .controller('AddFileToCaseDialogController', AddFileToCaseDialogController);
 
 function AddFileToCaseDialogController($mdDialog, $scope, $translate,

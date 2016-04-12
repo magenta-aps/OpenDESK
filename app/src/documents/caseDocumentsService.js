@@ -1,6 +1,6 @@
 
     angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .factory('caseDocumentsService', CaseDocumentsService);
 
     function CaseDocumentsService($http, httpUtils, alfrescoUploadService) {
@@ -16,7 +16,7 @@
         
         function getDocumentsByCaseId(caseId, page, pageSize){
              var requestConfig = { 
-                 url: "/api/openesdh/casedocumentssearch?caseId=" + caseId,
+                 url: "/api/opendesk/casedocumentssearch?caseId=" + caseId,
                  method: "GET"
              };
              
@@ -32,7 +32,7 @@
         
         function getDocumentsFolderNodeRef(caseId){
             var requestConfig = { 
-                    url: "/api/openesdh/case/" + caseId + "/docfolder/noderef",
+                    url: "/api/opendesk/case/" + caseId + "/docfolder/noderef",
                     method: "GET"
                 };
             return $http(requestConfig).then(function(response){
@@ -42,7 +42,7 @@
         
         function getDocumentsFolderNodeRefByCaseRef(nodeRef){
             var requestConfig = { 
-                    url: "/api/openesdh/case/" + nodeRef + "/docfolder/noderef",
+                    url: "/api/opendesk/case/" + nodeRef + "/docfolder/noderef",
                     method: "GET"
                 };
             return $http(requestConfig).then(function(response){
@@ -70,7 +70,7 @@
         
         function getCaseDocumentsWithAttachments(caseId){
             var requestConfig = { 
-                url: "/api/openesdh/case/" + caseId + "/documents/attachments",
+                url: "/api/opendesk/case/" + caseId + "/documents/attachments",
                 method: "GET"
             };
             return $http(requestConfig).then(function(response){
@@ -79,7 +79,7 @@
         }
         
         function getCaseDocumentConstraints(){
-            return $http.get("/api/openesdh/case/document/constraints").then(function(response){
+            return $http.get("/api/opendesk/case/document/constraints").then(function(response){
                return response.data; 
             });
         }

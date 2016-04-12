@@ -1,5 +1,5 @@
 
-    angular.module('earkApp.common.directives')
+    angular.module('openDeskApp.common.directives')
         .directive('openeGroupUserDialog', openeGroupUserDialog);
 
     function openeGroupUserDialog($mdDialog, userService, groupService) {

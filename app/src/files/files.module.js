@@ -1,4 +1,4 @@
-angular.module('earkApp.files', ['ngMaterial'])
+angular.module('openDeskApp.files', ['ngMaterial'])
         .config(config);
 
 function config(modulesMenuServiceProvider) {

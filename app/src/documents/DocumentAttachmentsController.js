@@ -1,6 +1,6 @@
 
 angular
-        .module('earkApp.documents')
+        .module('openDeskApp.documents')
         .controller('DocumentAttachmentsController', DocumentAttachmentsController);
 
 function DocumentAttachmentsController($scope, $injector, $state, $stateParams, caseDocumentDetailsService,

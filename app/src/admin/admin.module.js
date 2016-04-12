@@ -1,1 +1,1 @@
-angular.module('earkApp.administration', [ 'ngMaterial', 'pascalprecht.translate']);
+angular.module('openDeskApp.administration', [ 'ngMaterial', 'pascalprecht.translate']);

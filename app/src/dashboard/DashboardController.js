@@ -1,8 +1,9 @@
-angular
-    .module('earkApp.dashboard')
-    .controller('DashboardController', DashboardController);
 
-function DashboardController(dashboardService) {
-    var vm = this;
-    vm.dashlets = dashboardService.getDashlets();
-}
+    angular
+        .module('openDeskApp.dashboard')
+        .controller('DashboardController', DashboardController);
+
+    function DashboardController($scope, authService, dashboardService) {
+        var vm = this;
+        vm.dashlets = dashboardService.getDashlets();
+    }
