@@ -19,7 +19,7 @@ angular
         //'openDeskApp.tasks',
         'openDeskApp.documents',
         'openDeskApp.administration',
-        //'openDeskApp.groups',
+        'openDeskApp.groups',
         'openDeskApp.users',
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',

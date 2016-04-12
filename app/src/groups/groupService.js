@@ -1,4 +1,4 @@
-//angular.module('openDeskApp.projects.groups').factory('groupService', GroupService);
+angular.module('openDeskApp.groups').factory('groupService', GroupService);
 
 function GroupService(ALFRESCO_URI, $http, $q) {
     var GROUP_PROXY_URI = ALFRESCO_URI.serviceApiProxy + 'groups/';
@@ -37,7 +37,10 @@ function GroupService(ALFRESCO_URI, $http, $q) {
             skipCount: null,
             maxItems: null
         };
-        return $http.get(ALFRESCO_URI.serviceApiProxy + 'groups/list/' + type, params)
+        if (type == 'ALL')
+            return listAllSystemGroups();
+        else
+            return $http.get(ALFRESCO_URI.serviceApiProxy + 'groups/list/' + type, params)
             .then(successOrReject);
     }
 

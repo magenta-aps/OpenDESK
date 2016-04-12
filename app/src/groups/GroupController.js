@@ -1,4 +1,4 @@
-//angular.module('openDeskApp.groups').controller('GroupController', GroupController);
+angular.module('openDeskApp.groups').controller('GroupController', GroupController);
 
 /*
  * Main Controller for the Groups module
@@ -23,12 +23,13 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
         console.log("re-listing groups");
     } else {
         vm.groupTypeFilter = initGroupTypeFilter();
-        vm.groupType = vm.groupTypeFilter[2];
+        vm.groupType = vm.groupTypeFilter[0];
         loadList();
     }
 
     function loadList() {
         vm.groups.length = [];
+        if (vm.groupType.value = 'ALL')
         groupService.listGroupsByType(vm.groupType.value).then(function (response) {
             vm.groups = response.data;
         }, function (error) {
@@ -43,15 +44,6 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
         }, {
             name: $translate.instant('GROUP.FLT_SYS'),
             value: 'SYS'
-        }, {
-            name: $translate.instant('GROUP.FLT_OPENE'),
-            value: 'OE'
-        }, {
-            name: $translate.instant('GROUP.FLT_SIMPLE'),
-            value: 'SIMPLE'
-        }, {
-            name: $translate.instant('GROUP.FLT_STAFF'),
-            value: 'STAFF'
         }];
     }
 
@@ -236,7 +228,7 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
             gdc.groupData = angular.copy(u);
             var createSuccess = (gdc.groupExists) ? groupService.updateGroup(gdc.groupData.shortName, gdc.groupData.displayName) : groupService.createGroup(gdc.groupData.shortName, gdc.groupData.displayName);
             console.log("Group created and returned:" + createSuccess);
-            debugger;
+            //debugger;
             $mdDialog.cancel();
             notifyUserSaved(createSuccess);
             loadList();
