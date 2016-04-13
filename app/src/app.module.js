@@ -28,6 +28,7 @@ angular
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
+        'openDeskApp.documentation',
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations'])// TRANSLATIONS IS ALWAYS LAST!
     .config(config)
@@ -92,27 +93,13 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-    }).state('case.tasks', {
-        url: '/tasks',
-        views: {
-            'caseTasks': {
-                templateUrl: 'app/src/tasks/view/tasksDisplay.html',
-                controller: 'CaseTasksController',
-                controllerAs: 'tasksCtrl'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 5
-        }
-    }).state('docDetails', {
-        parent: 'site',
-        url: '/cases/case/:caseId/doc/:storeType/:storeId/:id',
+    }).state('documentation', {
+        url: '/documentation',
         views: {
             'content@': {
-                controller: 'CaseDocumentDetailsController',
-                templateUrl: 'app/src/documents/view/document.html',
-                controllerAs: 'docCtrl'
+                templateUrl: 'app/src/documentation/view/documentation.html',
+                controller: 'DocumentationController',
+                controllerAs: 'vm'
             }
         },
         data: {
@@ -130,151 +117,6 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
         },
         data: {
             authorizedRoles: []
-        }
-    }).state('tasks', {
-        parent: 'site',
-        url: '/tasks',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/tasks/view/tasks.html',
-                controller: 'tasksOverviewController',
-                controllerAs: 'tasksCtrl'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('workflowtask', {
-        parent: 'site',
-        url: '/tasks/task/:taskName/:taskId',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/tasks/common/view/taskContainer.html',
-                controller: 'taskFormLoaderController',
-                controllerAs: 'ctrl'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('administration', {
-        parent: 'site',
-        url: '/admin',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/admin/view/admin.html',
-                controller: 'AdminController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.admin],
-            selectedTab: 0
-        }
-    }).state('administration.users', {
-        url: '/users',
-        data: {
-            authorizedRoles: [USER_ROLES.admin],
-            selectedTab: 0
-        },
-        views: {
-            'users': {
-                templateUrl: 'app/src/users/view/users.html'
-            }
-        }
-    }).state('administration.groups', {
-        url: '/groups',
-        data: {
-            authorizedRoles: [USER_ROLES.admin],
-            selectedTab: 1
-        },
-        views: {
-            'groups': {
-                templateUrl: 'app/src/groups/view/groups.html'
-            }
-        }
-    }).state('administration.group', {
-        url: '/group/:shortName',
-        data: {
-            authorizedRoles: [USER_ROLES.admin],
-            searchContext: 'GROUPS',
-            selectedTab: 1
-        },
-        views: {
-            'groups': {
-                templateUrl: 'app/src/groups/view/group.html'
-            }
-        }
-    }).state('administration.systemsettings', {
-        url: '/system-settings',
-        data: {
-            authorizedRoles: [USER_ROLES.admin],
-            selectedTab: 4
-        },
-        views: {
-            'systemsettings': {
-                templateUrl: 'app/src/system_settings/menu/system_settings.html',
-                controller: 'SystemSettingsController',
-                controllerAs: 'vm'
-            }
-        }
-    }).state('administration.systemsettings.general', {
-        url: '/general-configuration',
-        data: {
-            authorizedRoles: [USER_ROLES.admin]
-        },
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/system_settings/general_configuration/view/generalConfiguration.html',
-                controller: 'GeneralConfigurationController',
-                controllerAs: 'vm'
-            }
-        }
-    }).state('administration.systemsettings.doctypes', {
-        url: '/document-types',
-        data: {
-            authorizedRoles: [USER_ROLES.admin]
-        },
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/system_settings/document_types/view/documentTypes.html',
-                controller: 'DocumentTypesController',
-                controllerAs: 'vm'
-            }
-        }
-    }).state('administration.systemsettings.doccategories', {
-        url: '/document-categories',
-        data: {
-            authorizedRoles: [USER_ROLES.admin]
-        },
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/system_settings/document_categories/view/documentCategories.html',
-                controller: 'DocumentCategoriesController',
-                controllerAs: 'vm'
-            }
-        }
-    }).state('search', {
-        url: '/search/:searchTerm',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/search/view/search.html'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('files', {
-        url: '/files',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/files/view/files.html',
-                controller: 'FilesController',
-                controllerAs: 'filesVm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
         }
     });
 }
