@@ -1,19 +1,12 @@
-<md-toolbar id="global-toolbar" class="global-tools">
+<md-toolbar>
 
-    <div class="global-tools__links">
-        <a class="md-button global-tools__link" ng-class="{active: toState == 'dashboard'}" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
-        <span ng-controller="ModulesMenuController as menu">
-            <span ng-repeat="item in menu.items | orderBy: 'order'">
-                <ng-include src="item.templateUrl"></ng-include>
-            </span>
-        </span>
-    </div>
+    <a class="md-button" ui-sref="dashboard"><i class="material-icons">menu</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
     
     <md-menu ng-controller="AuthController as vm"
              class="global-tools__user"
              md-position-mode="target-right target">
         <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)" title="{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}">
-            <img class="user-img" src="/someuser.png" alt="">            
+            {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
             <i class="material-icons">arrow_drop_down</i>
         </md-button>
         <md-menu-content>
@@ -30,6 +23,7 @@
             </md-menu-item>
         </md-menu-content>
     </md-menu>
+    
 <!--
     <div id="global-search"
          ng-controller="AutosuggestController as asctrl"

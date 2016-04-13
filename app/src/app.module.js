@@ -95,6 +95,36 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
+    }).state('kalendar', {
+        url: '/kalendar',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/kalendar/view/kalendar.html'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    }).state('projekter', {
+        url: '/projekter',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/projekter/view/projekter.html'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    }).state('nogletal', {
+        url: '/nogletal',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/nogletal/view/nogletal.html'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
     }).state('login', {
         parent: 'site',
         url: '/login?error&nosso',

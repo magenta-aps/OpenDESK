@@ -4,7 +4,36 @@
     
     <h1>Documentation for OpenDesk development</h1>
     <p>Hi there. If you want to develop on OpenDesk, you've come to the right place.</p>
-    
+
+    <div>
+        <h3>Dashboard tiles</h3>
+        <p>We created a dashboard that will display the main features for the user.
+        <br>It consists of several tiles, implemented using the following HTML:</p> 
+        <pre>
+            &lt;div class="dashboard-grid"&gt;<br>
+            &nbsp;  &lt;div class="tile"&gt;&lt;/div&gt;<br>
+            &lt;/div&gt;
+        </pre>
+        <p>Positioning and alignment is done through flex-box.</p>
+        <pre>
+            .dashboard-grid {	<br>
+                &nbsp;display: flex;<br>
+                &nbsp;flex-wrap: wrap;<br>
+                &nbsp;justify-content: center;<br>
+                &nbsp;align-content: space-between;<br>
+                <br>
+                &nbsp;.tile {<br>
+                &nbsp;&nbsp;	flex-grow: 1;<br>
+                &nbsp;&nbsp;	display: inline-block;<br>
+                &nbsp;&nbsp;	width: 150px;<br>
+                &nbsp;&nbsp;	height: 150px;	<br>	
+              &nbsp;&nbsp;  overflow: hidden;<br>
+                &nbsp;&nbsp;	margin: .25rem;<br>
+                &nbsp;}<br>
+            }
+        </pre>
+    </div>
+
 </md-content>
 
 <app-footer></app-footer>
