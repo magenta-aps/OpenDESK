@@ -1,6 +1,6 @@
 <md-toolbar>
     <div class="md-toolbar-tools">
-        <a class="md-button" ui-sref="dashboard"><i class="material-icons">menu</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
+        <a class="md-button" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
         
         <md-menu ng-controller="AuthController as vm" md-position-mode="target-right target">
             <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)" title="{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}">

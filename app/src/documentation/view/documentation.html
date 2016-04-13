@@ -5,34 +5,78 @@
     <h1>Documentation for OpenDesk development</h1>
     <p>Hi there. If you want to develop on OpenDesk, you've come to the right place.</p>
 
-    <div>
-        <h3>Dashboard tiles</h3>
-        <p>We created a dashboard that will display the main features for the user.
-        <br>It consists of several tiles, implemented using the following HTML:</p> 
-        <pre>
-            &lt;div class="dashboard-grid"&gt;<br>
-            &nbsp;  &lt;div class="tile"&gt;&lt;/div&gt;<br>
-            &lt;/div&gt;
-        </pre>
-        <p>Positioning and alignment is done through flex-box.</p>
-        <pre>
-            .dashboard-grid {	<br>
-                &nbsp;display: flex;<br>
-                &nbsp;flex-wrap: wrap;<br>
-                &nbsp;justify-content: center;<br>
-                &nbsp;align-content: space-between;<br>
-                <br>
-                &nbsp;.tile {<br>
-                &nbsp;&nbsp;	flex-grow: 1;<br>
-                &nbsp;&nbsp;	display: inline-block;<br>
-                &nbsp;&nbsp;	width: 150px;<br>
-                &nbsp;&nbsp;	height: 150px;	<br>	
-              &nbsp;&nbsp;  overflow: hidden;<br>
-                &nbsp;&nbsp;	margin: .25rem;<br>
-                &nbsp;}<br>
-            }
-        </pre>
-    </div>
+    <hr>
+    
+    <h2>Technical info</h2>
+    <p>Here are some technical details for developers.</p>
+    
+    <h3>Gulp</h3>
+    
+    <p>
+        Gulp is a script handler that helps you build the site on the fly while developing. A complete build can be done by going to your project's dir in a terminal and running <pre>$ gulp build</pre>
+    </p>
+    <p>To have Gulp watch and concatenate your SASS files when you edit them, use <pre>$ gulp watch</pre></p>
+    
+    <hr>
+
+    <h2>Workflow guide</h2>
+    <p>When working on the OpenDesk project, you are advised to follow these guidelines:</p>
+    
+    <h3>Always work on a separate branch</h3>
+    <p>
+        <em>develop</em> branch has the latest changes but you should never work directly on <em>develop</em>.
+        Instead, create a feature or working branch and add/commit your changes to that.
+        When you are finished working on a feature, do
+    </p>
+    <ol>
+        <li><pre>$ git checkout develop</pre></li>
+        <li><pre>$ git pull</pre></li>
+        <li><pre>$ git checkout whateverYourBranchIs</pre></li>
+        <li><pre>$ git merge develop</pre></li>
+        <li>Fix conflicts, if any</li>
+        <li><pre>$ git checkout develop</pre></li>
+        <li><pre>$ git merge whateverYourBranchIs</pre></li>
+        <li><pre>$ git push</pre></li>
+    </ol>
+    
+    <h3>Always be documenting</h3>
+    <p>
+        When you create a new widget or a better way of running the site or whatever, write a short description of it on <strong>this</strong> documentation page.
+        The documentation page comes with the project files under <pre>/app/src/documentation/view/documentation.html</pre>
+        When you have an OpenDesk instance running, you can access the documentation in your browser at <pre>/#/documentation</pre> or follow the link in the footer.
+    </p>
+    
+    <hr>
+
+    <h2>Widgets</h2>
+    <p>Custom widgets are listed here along with tips on how to implement them.</p>
+    
+    <h3>Dashboard tiles</h3>
+    <p>We created a dashboard that will display the main features for the user.
+    <br>It consists of several tiles, implemented using the following HTML:</p> 
+    <pre>
+        &lt;div class="dashboard-grid"&gt;<br>
+        &nbsp;  &lt;div class="tile"&gt;&lt;/div&gt;<br>
+        &lt;/div&gt;
+    </pre>
+    <p>Positioning and alignment is done through flex-box.</p>
+    <pre>
+        .dashboard-grid {	<br>
+            &nbsp;display: flex;<br>
+            &nbsp;flex-wrap: wrap;<br>
+            &nbsp;justify-content: center;<br>
+            &nbsp;align-content: space-between;<br>
+            <br>
+            &nbsp;.tile {<br>
+            &nbsp;&nbsp;	flex-grow: 1;<br>
+            &nbsp;&nbsp;	display: inline-block;<br>
+            &nbsp;&nbsp;	width: 150px;<br>
+            &nbsp;&nbsp;	height: 150px;	<br>	
+          &nbsp;&nbsp;  overflow: hidden;<br>
+            &nbsp;&nbsp;	margin: .25rem;<br>
+            &nbsp;}<br>
+        }
+    </pre>
 
 </md-content>
 

@@ -1,6 +1,8 @@
 <footer ng-controller="FooterController as vm" class="globalfooter">
-  <div ng-show="vm.isDevelopmentMode" class="md-caption globalfooter__body" style="text-align: center">
-    OpenESDH Server running: <a
-          ng-href="https://github.com/openesdh/openesdh-core/commit/{{ vm.gitCommitId }}" title="View commit on GitHub">{{ vm.gitCommitId }}</a> on branch {{ vm.gitBranch }}
+  
+  <p>OpenDesk is developed by <a href="http://www.magenta.dk">Magenta ApS</a>. Read the <a href="#/documentation">documentation.</a></p>
+  <div ng-show="vm.isDevelopmentMode" class="md-caption">
+    OpenESDH Server running: <a ng-href="https://github.com/openesdh/openesdh-core/commit/{{ vm.gitCommitId }}" title="View commit on GitHub">{{ vm.gitCommitId }}</a> on branch {{ vm.gitBranch }}
   </div>
+  
 </footer>
