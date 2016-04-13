@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
         $ = require('gulp-load-plugins')(),
         fs = require('fs'),
-        proxy = require('http-proxy-middleware');
+        proxy = require('http-proxy-middleware'),
+        autoprefixer = require('gulp-autoprefixer');
 
 // Config vars
 // If, after a while, there are a lot of config vars, we can move these to a separate file
@@ -66,6 +67,10 @@ gulp.task('css', function() {
             .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
             .pipe($.concat(dist.name + '.scss'))
             .pipe($.sass())
+            .pipe(autoprefixer({
+                browsers: ['last 2 versions'],
+                cascade: false
+            }))
             .pipe(gulp.dest(dist.folder))
             .pipe($.rename({suffix: '.min'}))
             .pipe($.minifyCss())
