@@ -15,3 +15,24 @@
 		}
 	}
 }
+
+
+.dashboard-grid {	
+	width: 90%;
+	margin: 3rem auto;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: space-between;
+		
+	.tile {
+		flex-grow: 1;
+		border: 1px solid blue;
+		display: inline-block;
+		width: 150px;
+		height: 150px;		
+    padding: 1rem;
+    overflow: hidden;
+		margin: .25rem;
+	}
+}
