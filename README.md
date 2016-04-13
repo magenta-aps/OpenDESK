@@ -1,1 +1,23 @@
-# TO Be written Angular Material
+# OpenDesk UI for AngularJS
+
+OpenDesk UI is a collaboration web app that grant users easy access to Alfresco repository and a range of other services combined with chat and simple workflow tools.
+
+## Setting up and running OpenDesk-UI
+
+You'll want to clone the git repo and get it running. We assume you have an Apache server and Alfresco installation already set up, but you'll need to add a little extra magic.
+
+First, clone the Git repo. In a terminal, go to your home dir and enter the following commands:
+```
+$ git clone https://github.com/magenta-aps/OpenDESK-UI.git
+$ cd ~/www/OpenDESK-UI
+$ npm update (This might take a while)
+$ npm i (Enter "3" if it asks you about selecting versions)
+$ gulp build
+
+```
+When you change .scss (SASS) files in the project, you'll want to run a watcher that grabs your code and compiles new CSS on the fly. You can make that happen by running the gulp watch command in your project directory:
+```
+$ gulp watch
+
+```
+Happy coding :)
