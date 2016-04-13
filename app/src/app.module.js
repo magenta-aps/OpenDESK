@@ -57,18 +57,7 @@ angular
         });
     });
 
-function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROLES, $mdIconProvider) {
-    $mdThemingProvider.theme('default')
-        .primaryPalette('blue', {
-            'default': '600',
-            'hue-1': '400',
-            'hue-2': '800',
-            'hue-3': '900'
-        })
-        .accentPalette('amber')
-        .warnPalette('deep-orange');
-
-    $mdIconProvider.icon('md-calendar', 'app/assets/img/icons/today.svg');
+function config($stateProvider, $urlRouterProvider, USER_ROLES) {
 
     $urlRouterProvider
         .when('/admin/system-settings', '/admin/system-settings/general-configuration')
@@ -94,6 +83,7 @@ function config($mdThemingProvider, $stateProvider, $urlRouterProvider, USER_ROL
             authorizedRoles: [USER_ROLES.user]
         }
     }).state('documentation', {
+        parent: 'site',
         url: '/documentation',
         views: {
             'content@': {
