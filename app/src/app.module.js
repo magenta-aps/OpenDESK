@@ -29,6 +29,7 @@ angular
         'm43nu.auto-height',
         'dcbImgFallback',
         'openDeskApp.documentation',
+				'openDeskApp.projekter',
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations'])// TRANSLATIONS IS ALWAYS LAST!
     .config(config)
@@ -109,7 +110,9 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         url: '/projekter',
         views: {
             'content@': {
-                templateUrl: 'app/src/projekter/view/projekter.html'
+                templateUrl: 'app/src/projekter/view/projekter.html',
+                controller: 'ProjekterController',
+                controllerAs: 'vm'
             }
         },
         data: {

@@ -1,0 +1,36 @@
+.projects-wrap {
+	width: 90%;
+	margin: 1rem auto;
+	background: #eee;
+	padding-top: 1rem;
+	
+	h3 {
+		margin: 0 1rem;
+	}
+
+	ul {
+		padding-left: 0;
+	
+		li {
+			list-style: none;
+			padding: 1rem;
+			border-top: 1px solid #ddd;
+		
+			md-icon {
+				margin-right: 1rem;
+			}
+		}
+	}
+}
+
+
+.project-buttons-wrap {
+	width: 90%;
+	margin: 1rem auto;
+	
+	button {
+		border: none;
+		background: #eee;
+		padding: .5rem;
+	}
+}
