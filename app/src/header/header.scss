@@ -1,0 +1,16 @@
+.od-app {
+    margin-top: $u*4; /* Prevent header from overshadowing top part of content */
+}
+
+.od-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9;
+    background-color: $main-color;
+}
+
+.od-header-homebtn {
+    color: #fff !important;
+}

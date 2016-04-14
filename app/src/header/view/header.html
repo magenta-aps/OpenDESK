@@ -1,24 +1,28 @@
-<a class="md-button" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
+<div class="od-header">
 
-<md-menu ng-controller="AuthController as vm" md-position-mode="target-right target">
-    <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)" title="{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}">
-        {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
-        <i class="material-icons">arrow_drop_down</i>
-    </md-button>
-    <md-menu-content>
-        <md-menu-item>
-            <md-button>
-                {{ 'MENU.VIEW_PROFILE' | translate }}
-            </md-button>
-        </md-menu-item>
-        <md-menu-divider></md-menu-divider>
-        <md-menu-item>
-            <md-button ng-click="vm.logout()">
-                {{ 'MENU.LOGOUT' | translate }}
-            </md-button>
-        </md-menu-item>
-    </md-menu-content>
-</md-menu>
+    <a class="md-button od-header-homebtn" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
+    
+    <md-menu ng-controller="AuthController as vm" md-position-mode="target-right target">
+        <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)" title="{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}">
+            {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
+            <i class="material-icons">arrow_drop_down</i>
+        </md-button>
+        <md-menu-content>
+            <md-menu-item>
+                <md-button>
+                    {{ 'MENU.VIEW_PROFILE' | translate }}
+                </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+                <md-button ng-click="vm.logout()">
+                    {{ 'MENU.LOGOUT' | translate }}
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+
+</div>
 
 <!--
     <div id="global-search"
