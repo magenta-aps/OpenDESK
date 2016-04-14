@@ -14,9 +14,6 @@
         var vm = this;
         
         vm.toggleNotices = buildToggler('notice');
-        vm.isOpenNotices = function(){
-            return $mdSidenav('notice').isOpen();
-        };
         
         vm.close = function () {
             $mdSidenav('notice').close()

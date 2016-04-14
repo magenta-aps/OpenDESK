@@ -52,6 +52,17 @@
         When you have an OpenDesk instance running, you can access the documentation in your browser at <pre>/#/documentation</pre> or follow the link in the footer.
     </p>
     
+    <h3>Naming conventions</h3>
+    <p>
+        Custom-made widgets, filters, directives, etc. should be named with a <em>od</em> prefix to indicate that they are particular to the OpenDesk project.
+        Here is an example from the notifications directive:
+    </p>
+    <pre>
+        .directive('odNotifications' function() {})
+        &lt;od-notifications>
+        &lt;ul class="od-notifylist">
+    </pre>
+    
     <hr>
 
     <h2>Widgets</h2>
@@ -82,6 +93,16 @@
             &nbsp;&nbsp;	margin: .25rem;<br>
             &nbsp;}<br>
         }
+    </pre>
+    
+    <h3>Notification widget</h3>
+    <p>
+        There is a notifications <em>directive</em> that you can pop in any template.
+        Presently, it's featured in the <em>index.html</em> file so it shows up on every page.
+        Using it is a matter of popping it into an HTML template using an <em>od-notifications</em> element.
+    </p>
+    <pre>
+        &lt;od-notifications>&lt;/od-notifications>
     </pre>
 
 </article>

@@ -1,35 +1,25 @@
-<md-toolbar>
-    <div class="md-toolbar-tools">
-        
-        <a class="md-button" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
-        
-        <md-menu ng-controller="AuthController as vm" md-position-mode="target-right target">
-            <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)" title="{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}">
-                {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
-                <i class="material-icons">arrow_drop_down</i>
+<a class="md-button" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
+
+<md-menu ng-controller="AuthController as vm" md-position-mode="target-right target">
+    <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)" title="{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}">
+        {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
+        <i class="material-icons">arrow_drop_down</i>
+    </md-button>
+    <md-menu-content>
+        <md-menu-item>
+            <md-button>
+                {{ 'MENU.VIEW_PROFILE' | translate }}
             </md-button>
-            <md-menu-content>
-                <md-menu-item>
-                    <md-button>
-                        {{ 'MENU.VIEW_PROFILE' | translate }}
-                    </md-button>
-                </md-menu-item>
-                <md-menu-divider></md-menu-divider>
-                <md-menu-item>
-                    <md-button ng-click="vm.logout()">
-                        {{ 'MENU.LOGOUT' | translate }}
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-        
-    </div>
-    
-</md-toolbar>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+            <md-button ng-click="vm.logout()">
+                {{ 'MENU.LOGOUT' | translate }}
+            </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>
 
-<od-notifications></od-notifications>
-
-    
 <!--
     <div id="global-search"
          ng-controller="AutosuggestController as asctrl"

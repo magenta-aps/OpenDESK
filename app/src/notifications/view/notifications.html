@@ -1,25 +1,24 @@
-
 <section layout="row" flex ng-controller="NotificationsController as vm">
 
-    <md-button ng-click="vm.toggleNotices()" ng-hide="vm.isOpenNotices()" class="md-primary pull-right">
+    <md-button ng-click="vm.toggleNotices()" class="od-notifications-toggle">
         <i class="material-icons">notifications</i>
     </md-button>
     
     <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="notice">
         <md-toolbar class="md-theme-light">
             <h1 class="md-toolbar-tools">Notifications</h1>
-            <md-button ng-click="vm.close()" class="md-primary">
+            <md-button ng-click="vm.close()" class="od-notifications-close">
                 <i class="material-icons">close</i>
             </md-button>
         </md-toolbar>
         <md-content layout-padding>
-            <ul>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a></li>
+            <ul class="od-notifylist">
+                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
+                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
+                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
+                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
+                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
+                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
             </ul>
         </md-content>
     </md-sidenav>

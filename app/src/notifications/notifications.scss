@@ -1,17 +1,20 @@
-/* Dashboard - task list */
-#dashboardTasksCard {
-	min-height: 532px;
+.od-notifications {
 
-	md-list-item {
-		padding-left: 5px;
+}
 
-		&:hover {
-			background-color: #F7F7F7;
-			cursor: pointer;
-		}
+.od-notifications-toggle {
+	position: fixed;
+	z-index: 10;
+}
 
-		md-icon {
-			margin-right: 10px;
-		}
-	}
+.od-notifications-close {
+	position: absolute;
+}
+
+.od-notifications-toggle,
+.od-notifications-close {
+	height: $u*3;
+	width: $u*3;
+	top: 0;
+	right: 0;
 }
