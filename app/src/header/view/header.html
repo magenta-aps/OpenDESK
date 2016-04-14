@@ -1,48 +1,30 @@
-<md-toolbar id="global-toolbar" class="global-tools">
+<div class="od-header">
 
-    <div class="global-tools__links">
-        <img class="md-toolbar-tools__logo" src="{{$root.logoSrc}}" alt="logo">
-        <a class="md-button global-tools__link" ng-class="{active: toState == 'dashboard'}" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
-        <span ng-controller="ModulesMenuController as menu">
-            <span ng-repeat="item in menu.items | orderBy: 'order'">
-                <ng-include src="item.templateUrl"></ng-include>
-            </span>
-        </span>
-    </div>
+    <a class="md-button od-header-homebtn" ui-sref="dashboard"><i class="material-icons">dashboard</i> <span hide show-gt-md>{{ 'COMMON.HOME' | translate }}</span></a>
     
-    <md-menu ng-controller="AuthController as vm"
-             class="global-tools__user"
-             md-position-mode="target-right target">
-        <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)"
-                   style="text-transform: capitalize;">
-            <span hide-sm>{{ vm.getUserInfo().user.firstName }}</span> <span hide-sm hide-md>{{ vm.getUserInfo().user.lastName }}</span>
-            <i class="material-icons" style="vertical-align: middle;">more_vert</i>
+    <md-menu ng-controller="AuthController as vm" md-position-mode="target-right target">
+        <md-button aria-label="{{ 'MENU.OPEN_MENU' | translate }}" ng-click="$mdOpenMenu($event)" title="{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}">
+            {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
+            <i class="material-icons">arrow_drop_down</i>
         </md-button>
-        <md-menu-content width="4">
-            <md-menu-item hide-gt-md class="logged-in-user">
-                <i class="material-icons" style="vertical-align: middle; width: auto; padding-left: 0;">person</i>
-                {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
-            </md-menu-item>
-            <md-menu-divider hide-gt-md></md-menu-divider>
+        <md-menu-content>
             <md-menu-item>
-                <md-button ng-disabled="true">
+                <md-button>
                     {{ 'MENU.VIEW_PROFILE' | translate }}
-                </md-button>
-            </md-menu-item>
-            <md-menu-item ng-show="vm.getUserInfo().user.capabilities.isAdmin">
-                <md-button ui-sref="administration.users">
-                    {{ 'ADMIN.ADMINISTRATION' | translate }}
                 </md-button>
             </md-menu-item>
             <md-menu-divider></md-menu-divider>
             <md-menu-item>
-                <md-button id="logout" ng-click="vm.logout()">
+                <md-button ng-click="vm.logout()">
                     {{ 'MENU.LOGOUT' | translate }}
                 </md-button>
             </md-menu-item>
         </md-menu-content>
     </md-menu>
 
+</div>
+
+<!--
     <div id="global-search"
          ng-controller="AutosuggestController as asctrl"
          class="global-tools__search">
@@ -55,7 +37,7 @@
                        placeholder="{{ 'SEARCH.SEARCH' | translate }}">
             </md-input-container>
 
-            <!-- Autocomplete dropdown -->
+            
             <md-whiteframe class="md-whiteframe-z2" ng-if="asctrl.suggestionVisible()">
                 <md-list>
                     <md-subheader class="md-no-sticky" ng-if="asctrl.liveSearchResults.documents.length">
@@ -103,5 +85,4 @@
             </md-whiteframe>
         </form>
     </div>
-
-</md-toolbar>
+-->

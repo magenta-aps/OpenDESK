@@ -61,7 +61,7 @@ gulp.task('scripts', function() {
             .on('error', $.util.log);
 });
 
-// Css
+// CSS
 gulp.task('css', function() {
     return gulp.src(paths.scss)
             .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
@@ -92,7 +92,7 @@ gulp.task('e2e-tests', function() {
 function includeAppConfigParams(content) {
     var argv = require('yargs').argv;
     if (argv.title) {
-        content = content.replace("appName: 'E-ARK'", "appName: '" + argv.title + "'");
+        content = content.replace("appName: 'OpenDesk'", "appName: '" + argv.title + "'");
     }
     if (argv.logo) {
         content = content.replace("logoSrc: './app/assets/images/logo-light.svg'", "logoSrc: '" + argv.logo + "'");
@@ -112,7 +112,7 @@ gulp.task('watch', function() {
  */
 
 /*
- * This task is used to just build the scripts and css.
+ * This task is used to just build the scripts and CSS.
  * Useful if you want to deploy to production (e.g. with Apache).
  */
 gulp.task('build', ['scripts', 'css']);
@@ -134,7 +134,7 @@ gulp.task('ui-test', ['e2e-tests']);
 
 /*
  Running '$ gulp'
- is equal to running '$ gulp dev'
- In other words, the default task is the 'dev' task
+ is equal to running '$ gulp build watch'
+ In other words, the default task is the 'build' and 'watch' task
  */
-gulp.task('default', ['dev']);
+gulp.task('default', ['build', 'watch']);

@@ -18,6 +18,7 @@ angular
         //'openDeskApp.files',
         //'openDeskApp.tasks',
         'openDeskApp.documents',
+        'openDeskApp.notifications',
         'openDeskApp.administration',
         'openDeskApp.groups',
         'openDeskApp.users',

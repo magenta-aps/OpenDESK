@@ -1,0 +1,21 @@
+.od-notifications {
+
+}
+
+.od-notifications-toggle {
+	position: fixed;
+	z-index: 10;
+	color: #fff;
+}
+
+.od-notifications-close {
+	position: absolute;
+}
+
+.od-notifications-toggle,
+.od-notifications-close {
+	height: $u*3;
+	width: $u*3;
+	top: 0;
+	right: 0;
+}
