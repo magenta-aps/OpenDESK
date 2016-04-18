@@ -35,6 +35,10 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
                 || url == "/touch"){
             return ALFRESCO_URI.webClientServiceProxy + url;
         }
+        else if(url.indexOf("/share/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
+            || url == "/touch"){
+            return ALFRESCO_URI.webClientServiceProxy + url;
+        }
         return url;
     }
 

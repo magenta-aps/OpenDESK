@@ -11,7 +11,7 @@ angular
         'swfobject',
         'isteven-multi-select',
         'openDeskApp.init',
-        //'openDeskApp.projects',
+        'openDeskApp.sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
         'openDeskApp.dashboard',
@@ -141,6 +141,18 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         },
         data: {
             authorizedRoles: []
+        }
+    }).state('projects', {
+        url: '/projects',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/sites/view/sites.html',
+                controller: 'SitesController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
         }
     });
 }
