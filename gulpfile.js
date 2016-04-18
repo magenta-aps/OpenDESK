@@ -13,7 +13,8 @@ var environment = {
         proxy: 'http://demo.openesdh.dk'
     },
     local: {
-        proxy: 'http://localhost:8080'
+        repo: 'http://localhost:8080',
+        share: 'http://localhost:8081'
     }
 };
 
@@ -38,7 +39,10 @@ function createWebserver(config) {
                 middleware: [],
                 proxies: [{
                     source: '/alfresco',
-                    target: config.proxy + '/alfresco'
+                    target: config.repo + '/alfresco'
+                }, {
+                    source: '/share',
+                    target: config.share + '/share'
                 }]
             }));
 }
