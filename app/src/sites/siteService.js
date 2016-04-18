@@ -14,14 +14,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
-        createSite: function (siteName) {
-            //return $http.post('/api/openesdh/case/' + caseId + '/status', {status: status}).then(function (response) {
-            return $http.get( '/api/sites').then(function (response) {
+        createSite: function (siteName, siteDescription) {
+            return $http.post( '/api/sites', {shortName: siteName, sitePreset : "default", title : siteName, description : siteDescription}).then(function (response) {
                 return response.data;
             })
         }
-
-
-
     };
 });
