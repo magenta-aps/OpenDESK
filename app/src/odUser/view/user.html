@@ -1,0 +1,49 @@
+<section class="od-user" ng-controller="UserController as vm">
+
+    <button ng-click="vm.toggleUser()" class="od-btn od-user--toggle">
+        <img src="/app/assets/images/avatars/anonymous.jpg" alt="">
+    </button>
+    
+    <div class="od-flyout right fixed" ng-class="{ open: vm.on }" ng-click="vm.toggleUser()">
+        <div class="od-flyout--body" ng-click="$event.stopPropagation()">
+            <button ng-click="vm.toggleUser()" class="od-btn od-user--close">
+                <i class="material-icons">close</i>
+            </button>
+        
+            <div class="od-me" ng-controller="AuthController as vm">
+                <img class="od-me--avatar" src="/app/assets/images/avatars/anonymous.jpg" alt="">
+                <span class="od-me--name">
+                    {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
+                    <button class="od-btn od-me--logout" ng-click="vm.logout()">
+                        {{ 'MENU.LOGOUT' | translate }}
+                    </button>
+                </span>
+            </div>
+            
+            <ul class="od-userlist">
+                <li class="od-userlist--item">
+                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/anonymous.jpg" alt="">
+                    <span class="od-userlist--name">Person personsson</span>
+                </li>
+                <li class="od-userlist--item">
+                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/anonymous.jpg" alt="">
+                    <span class="od-userlist--name">Person personsson</span>
+                </li>
+                <li class="od-userlist--item">
+                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/anonymous.jpg" alt="">
+                    <span class="od-userlist--name">Person personsson</span>
+                </li>
+                <li class="od-userlist--item">
+                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/anonymous.jpg" alt="">
+                    <span class="od-userlist--name">Person personsson</span>
+                </li>
+                <li class="od-userlist--item">
+                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/anonymous.jpg" alt="">
+                    <span class="od-userlist--name">Person personsson</span>
+                </li>
+            </ul>
+        
+        </div>
+    </div>
+    
+</section>

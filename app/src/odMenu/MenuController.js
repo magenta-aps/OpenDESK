@@ -1,16 +1,16 @@
 
     angular
-        .module('openDeskApp.notifications')
-        .controller('NotificationsController', NotificationsController)
-        .directive('odNotifications', function() {
+        .module('openDeskApp.menu')
+        .controller('MenuController', MenuController)
+        .directive('odMenu', function() {
             return {
               restrict: 'E',
               scope: {},
-              templateUrl: '/app/src/notifications/view/notifications.html'
+              templateUrl: '/app/src/odMenu/view/menu.html'
             };
         });
 
-    function NotificationsController($scope, $timeout, $mdSidenav, $log) {
+    function MenuController($scope, $timeout, $mdSidenav, $log) {
         var vm = this;
         
         vm.toggleNotices = buildToggler('notice');

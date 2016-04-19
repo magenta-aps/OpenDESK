@@ -2,8 +2,9 @@
  * Sass constants
  */
 
-$main-color: rgb(63,81,181);
-$u: 16px;
+$main-color: rgb(63,81,181); // Main color. We use lighten() and darken() to make variations of this color
+$u: 16px; // Unit of measurement - usually default font size
+$br-sm-md: $u*40; // Breakpoint between small and medium screens
 
 
 /*
@@ -23,15 +24,108 @@ a:active {
     text-decoration: underline;
 }
 
+body {
+    
+}
+
 article {
     padding: $u $u*2;
+}
+
+footer {
+    padding: $u $u*2;
+    background-color: #eee; 
 }
 
 hr {
     padding: 0;
 }
 
-footer {
-    padding: $u $u*2;
-    background-color: #eee; 
+img {
+    width: 100%;
+    height: auto;
+}
+
+
+/*
+ * Molecule level styles
+ */
+
+// Simple button class can be added to <a> or <button> elements
+.od-btn {
+    &,
+    &:link,
+    &:visited {
+        display: inline-block;
+        box-sizing: border-box;
+        background-color: darken($main-color, 20%);
+        color: #fff;
+        padding: $u*0.5;
+        min-width: $u*3;
+        min-height: $u*3;
+        text-align: center;
+        border: none;
+    }
+    &:hover,
+    &:active {
+        background-color: darken($main-color, 30%);
+        text-decoration: none;
+    }
+    .material-icons {
+        font-size: $u*2;
+    }
+}
+
+// Sliding sidebar that can be fixed in place on large screens
+.od-flyout {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 2;
+    opacity: 0;
+    transition: all 0.3s;
+    &.right {
+        transform: translateX(100%);    
+    }
+    &.left {
+        transform: translateX(-100%);    
+    }
+    .od-flyout--body {
+        background-color: #fff;
+        color: #000;
+        width: $u*20;
+        position: absolute;
+        display: flex;
+        flex-flow: column nowrap;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        height: 100%;
+    }
+    &.right .od-flyout--body {
+        right: 0;
+    }
+    &.left .od-flyout--body {
+        left: 0;
+    }
+    &.open {
+        opacity: 1 ;
+        transform: translateX(0);
+    }
+    
+}
+
+
+/*
+ * General media queries 
+ */
+
+// Screens larger than small (breaks between small and medium screens)
+@media screen and (min-width: $br-sm-md) {
+    
 }

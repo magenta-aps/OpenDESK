@@ -641,15 +641,15 @@
         "ORGANIZATION": "Organisation"
     },
     "ERROR": {
-        "REQUIRED": "Obligatoriske felt",
+        "REQUIRED": "Obligatorisk felt",
         "TOO_SHORT": "Indhold for kort",
         "TOO_LONG": "Indhold for langt",
-        "INVALID_EMAIL": "Invalid e-mail adresse",
+        "INVALID_EMAIL": "Invalid email-adresse",
         "PASSWORD_NOMATCH": "Kodeord matcher ikke",
         "EMAIL_NOT_EXISTS": "Email findes ikke",
         "EMAIL_EXISTS": "Email findes allerede",
         "USERNAME_EXISTS": "Brugernavn findes allerede",
-        "AUTH_FAILURE": "Forkert loginoplysninger",
+        "AUTH_FAILURE": "Forkerte loginoplysninger",
         "AUTH_ERROR": "Fejl",
         "NOT_EQUAL_PATTERN": "Forkert format"
     },

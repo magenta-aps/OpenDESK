@@ -1,14 +1,17 @@
 .od-app {
-    margin-top: $u*4; /* Prevent header from overshadowing top part of content */
+    padding-top: $u*3; /* Prevent header from overshadowing top part of content */
 }
 
 .od-header {
+    background-color: $main-color;
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
-    z-index: 9;
-    background-color: $main-color;
+    height: $u*3;
+    overflow: hidden;
+    z-index: 1;
+    color: #fff;
 }
 
 .od-header-homebtn {

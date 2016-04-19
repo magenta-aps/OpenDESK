@@ -18,7 +18,6 @@ angular
         //'openDeskApp.files',
         //'openDeskApp.tasks',
         'openDeskApp.documents',
-        'openDeskApp.notifications',
         'openDeskApp.administration',
         'openDeskApp.groups',
         'openDeskApp.users',
@@ -29,10 +28,15 @@ angular
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
+        
+        'openDeskApp.notifications',
+        'openDeskApp.user',
+        'openDeskApp.menu',
         'openDeskApp.documentation',
-				'openDeskApp.projekter',
+		'openDeskApp.projekter',
+        
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
-        /*LAST*/ 'openDeskApp.translations'])// TRANSLATIONS IS ALWAYS LAST!
+        /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
         angular.element(window.document)[0].title = APP_CONFIG.appName;

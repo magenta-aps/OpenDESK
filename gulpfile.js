@@ -71,12 +71,12 @@ gulp.task('css', function() {
             .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
             .pipe($.concat(dist.name + '.scss'))
             .pipe($.sass())
+            .pipe(gulp.dest(dist.folder))
+            .pipe($.rename({suffix: '.min'}))
             .pipe(autoprefixer({
                 browsers: ['last 2 versions'],
                 cascade: false
             }))
-            .pipe(gulp.dest(dist.folder))
-            .pipe($.rename({suffix: '.min'}))
             .pipe($.minifyCss())
             .pipe(gulp.dest(dist.folder))
             .on('error', $.util.log);
@@ -141,4 +141,4 @@ gulp.task('ui-test', ['e2e-tests']);
  is equal to running '$ gulp build watch'
  In other words, the default task is the 'build' and 'watch' task
  */
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['build']);

@@ -1,0 +1,50 @@
+.od-user {
+
+}
+
+.od-user--toggle {
+	top: 0;
+	right: $u*3;
+	position: fixed;
+	z-index: 1;
+	height: $u*3;
+	width: $u*3;
+	padding: 0;
+}
+
+.od-user--close {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.od-me--name {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 0 0 $u;
+}
+
+.od-userlist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.od-userlist--item {
+	height: $u*3;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	background-color: #eee;
+	margin-top: 1px;
+}
+
+.od-userlist--avatar {
+	width: $u*3;
+}
+
+.od-userlist--name {
+	padding: $u*0.5;
+}

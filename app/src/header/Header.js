@@ -16,3 +16,4 @@
             templateUrl: 'app/src/header/view/header.html'
         };
     };
+    
