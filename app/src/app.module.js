@@ -158,8 +158,8 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         url: '/documents',
         views: {
             'content@': {
-                templateUrl: 'app/src/documents/view/test.html',
-                controller: 'SitesController',
+                templateUrl: 'app/src/documents/view/projects.html',
+                controller: 'DocumentCtrl',
                 controllerAs: 'vm'
             }
         },
@@ -168,3 +168,4 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         }
     });;
 }
+

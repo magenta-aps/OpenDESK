@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp').factory('cmisService', function ($http) {
+angular.module('openDeskApp.documents').factory('cmisService', function ($http) {
   var cmisBaseUrl = '/alfresco/api/-default-/public/cmis/versions/1.1/browser/',
       callback = 'callback=JSON_CALLBACK';
 

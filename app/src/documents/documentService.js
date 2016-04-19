@@ -24,7 +24,6 @@
             return $http.get('/slingshot/doclib/doclist/documents/node/alfresco/company/home', {
                 params: {max: 50, filter: 'favourites'}
             }).then(function(response) {
-                console.log(response);
                 return response.data;
             });
         }
@@ -36,7 +35,6 @@
                     filter: 'editingMe'
                 }
             }).then(function(response) {
-                console.log(response);
                 return response.data;
             });
         }
