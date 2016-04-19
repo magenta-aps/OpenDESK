@@ -143,7 +143,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: []
         }
     }).state('projects', {
-        url: '/projects',
+        url: '/project',
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/sites.html',
@@ -154,5 +154,17 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-    });
+    }).state('documents', {
+        url: '/documents',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/documents/view/test.html',
+                controller: 'SitesController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    });;
 }

@@ -12,8 +12,9 @@
         return service;
 
         function getDocuments() {
-            return $http.get('/slingshot/doclib/doclist/documents/node/alfresco/company/home', {
-                params: {max: 50, filter: 'recentlyModifiedByMe'}
+           // http://localhost:8080/alfresco/api/-default-/public/cmis/versions/1.0/atom
+            return $http.get('/api/-default-/public/cmis/versions/1.0/atom/children?id=94c021ce-bb09-4642-b860-2076e7f3c5b0', {
+                //params: {max: 50, filter: 'recentlyModifiedByMe'}
             }).then(function(response) {
                 return response.data;
             });
