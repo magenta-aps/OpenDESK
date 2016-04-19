@@ -111,18 +111,6 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-    }).state('projekter', {
-        url: '/projekter',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/projekter/view/projekter.html',
-                controller: 'ProjekterController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
     }).state('nogletal', {
         url: '/nogletal',
         views: {
@@ -147,7 +135,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: []
         }
     }).state('projects', {
-        url: '/projects',
+        url: '/projekter',
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/sites.html',

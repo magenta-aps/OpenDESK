@@ -51,6 +51,33 @@ img {
  * Molecule level styles
  */
 
+// Title that is placed in the header
+.od-title {
+    position: fixed;
+    top: 0;
+    left: $u*3;
+    color: #fff;
+    margin: 0;
+    padding: $u*0.5 $u;
+    font-size: $u*2;
+    line-height: 1;
+    z-index: 1;
+    font-weight: normal;
+}
+
+// Basic styled list
+.od-list {
+    margin: $u 0;
+    padding: 0;
+    list-style: none;
+    li {
+        display: block;
+        background-color: #eee;
+        margin-top: 1px;
+        padding: $u*0.5 $u;
+    }
+}
+
 // Simple button class can be added to <a> or <button> elements
 .od-btn {
     &,
@@ -70,6 +97,10 @@ img {
     &:active {
         background-color: darken($main-color, 30%);
         text-decoration: none;
+    }
+    &.disabled {
+        background-color: #999;
+        cursor: inherit;
     }
     .material-icons {
         font-size: $u*2;
