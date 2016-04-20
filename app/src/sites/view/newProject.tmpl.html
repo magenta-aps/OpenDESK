@@ -1,4 +1,6 @@
-<md-dialog>
+<md-dialog aria-label="New site" ng-controller="SitesController" ng-cloak>
+	<form>
+	
 	<md-toolbar>
 		<div class="md-toolbar-tools">
 			<h2>Create new site</h2>
@@ -7,22 +9,22 @@
 	
 	<md-dialog-content class="md-padding">
 		<p>Here goes name and description of the new site.</p>
-		<form>
 			<div>
 			  <md-input-container>
 			    <label>Name</label>
-			    <input type="text">
+			    <input name="name" type="text" ng-model="newSiteName">
 			  </md-input-container>
 			  <md-input-container>
 			    <label>Description</label>
-			    <textarea></textarea>
+			    <textarea name="description" ng-model="newSiteDescription"></textarea>
 			  </md-input-container>
 			</div>
-		</form>
 	</md-dialog-content>
 	
 	<md-dialog-actions>
-		<md-button>Cancel</md-button>
-		<md-button class="md-primary">Create</md-button>
+		<md-button ng-click="cancel()">Cancel</md-button>
+		<md-button ng-click="testSite(newSiteName, newSiteDescription)" class="md-primary">Create</md-button>
 	</md-dialog-actions>
+	
+	</form>
 </md-dialog>
