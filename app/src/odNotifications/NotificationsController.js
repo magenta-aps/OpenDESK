@@ -10,7 +10,7 @@
             };
         });
 
-    function NotificationsController($scope, $timeout, $mdSidenav, $log) {
+    function NotificationsController($scope, $timeout, $log, notificationsService) {
         var vm = this;
         
         vm.on = false;
@@ -19,6 +19,6 @@
         }
         
         // Fake interactions for UI demo -- REMOVE
-        setTimeout(addNotice(), 5000);
+        $timeout(notificationsService.addNotice('someone'), 5000);
 
     };

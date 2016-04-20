@@ -12,19 +12,21 @@
 
         return service;
 
-        function getNotices() {
+        function getNotices(userId) {
             // Should return a user's unread notifications
+            console.log('Listing all notices');
             return [];
         };
         
-        function addNotice() {
+        function addNotice(userId) {
             console.log('Add notice');
             // adds a notification to a user's list of unread notifications
             return [];
         };
         
-        function delNotice() {
+        function delNotice(userId) {
             // removes a notification from a user's list of unread notifications (usually when she has read it)
+            console.log('Remove a notice');
             return [];
         };
 
