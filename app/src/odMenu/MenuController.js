@@ -10,7 +10,7 @@
             };
         });
 
-    function MenuController($scope, $timeout, $mdSidenav, $log) {
+    function MenuController($scope, $timeout, $log) {
         var vm = this;
         
         vm.toggleNotices = buildToggler('notice');

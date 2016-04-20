@@ -74,6 +74,15 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         resolve: {
             authorize: ['authService', function (authService) {
             }]
+        },
+        views: {
+            'footer@': {
+                templateUrl: 'app/src/footer/view/footer.html',
+                controller: 'FooterController'
+            },
+            'header@': {
+                templateUrl: 'app/src/header/view/header.html'
+            }
         }
     }).state('dashboard', {
         parent: 'site',
@@ -102,6 +111,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: [USER_ROLES.user]
         }
     }).state('kalendar', {
+        parent: 'site',
         url: '/kalendar',
         views: {
             'content@': {
@@ -112,6 +122,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: [USER_ROLES.user]
         }
     }).state('nogletal', {
+        parent: 'site',
         url: '/nogletal',
         views: {
             'content@': {
@@ -129,12 +140,15 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
                 templateUrl: 'app/src/authentication/view/login.html',
                 controller: 'AuthController',
                 controllerAs: 'vm'
-            }
+            },
+            'header@': {},
+            'footer@': {}
         },
         data: {
             authorizedRoles: []
         }
     }).state('projects', {
+        parent: 'site',
         url: '/projekter',
         views: {
             'content@': {
