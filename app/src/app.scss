@@ -25,16 +25,11 @@ a:active {
 }
 
 body {
-    
+
 }
 
 article {
     padding: $u $u*2;
-}
-
-footer {
-    padding: $u $u*2;
-    background-color: #eee; 
 }
 
 hr {
@@ -50,6 +45,14 @@ img {
 /*
  * Molecule level styles
  */
+
+// Page footer
+.od-footer {
+    .od-footer--body {
+        padding: $u $u*2;
+        background-color: #eee;
+    }
+}
 
 // Title that is placed in the header
 .od-title {
@@ -121,10 +124,10 @@ img {
     opacity: 0;
     transition: all 0.3s;
     &.right {
-        transform: translateX(100%);    
+        transform: translateX(100%);
     }
     &.left {
-        transform: translateX(-100%);    
+        transform: translateX(-100%);
     }
     .od-flyout--body {
         background-color: #fff;
@@ -148,15 +151,15 @@ img {
         opacity: 1 ;
         transform: translateX(0);
     }
-    
+
 }
 
 
 /*
- * General media queries 
+ * General media queries
  */
 
 // Screens larger than small (breaks between small and medium screens)
 @media screen and (min-width: $br-sm-md) {
-    
+
 }
