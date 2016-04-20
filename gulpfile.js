@@ -141,4 +141,4 @@ gulp.task('ui-test', ['e2e-tests']);
  is equal to running '$ gulp build watch'
  In other words, the default task is the 'build' and 'watch' task
  */
-gulp.task('default', ['build']);
+gulp.task('default', ['build', 'watch']);
