@@ -17,5 +17,8 @@
         vm.toggleNotices = function() {
             vm.on = !vm.on;
         }
+        
+        // Fake interactions for UI demo -- REMOVE
+        setTimeout(addNotice(), 5000);
 
     };
