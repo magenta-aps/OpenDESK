@@ -4,22 +4,24 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
         
-        function SitesController($scope, siteService) {
-            var vm = this;
-            
-            siteService.getSites().then(function (sites) {
-                vm.sites = sites;
-            });
-            
-            return {
-                createSite : function() {
-          
-                    var siteName = prompt("Please enter site name", new Date().getTime().toString());
-        
-                    var siteDescription = prompt("Please enter site description", new Date().getTime().toString());
-        
-                    siteService.createSite(siteName, siteDescription);
-                }
-            }
-        };
+        function SitesController($scope, $mdDialog) {
+					
+					$scope.getSites = function(event) {
+	   				$mdDialog.show({
+	   				  templateUrl: 'app/src/sites/view/newProject.tmpl.html',
+							parent: angular.element(document.body),
+	   				  targetEvent: event,
+	   				  clickOutsideToClose:true
+		 				});
+					}; // getSites close
+					
+					$scope.cancel = function() {
+					  $mdDialog.cancel();
+					};
+					
+					$scope.testSite = function(name, description) {
+						console.log(name + ", " + description);
+					}
+					
+        }; // SiteCtrl close
         
