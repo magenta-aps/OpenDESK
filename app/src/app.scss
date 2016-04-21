@@ -28,12 +28,12 @@ body {
     
 }
 
-article {
+article,
+footer {
     padding: $u $u*2;
 }
 
 footer {
-    padding: $u $u*2;
     background-color: #eee; 
 }
 
@@ -107,7 +107,7 @@ img {
     }
 }
 
-// Sliding sidebar that can be fixed in place on large screens
+// Sliding sidebar
 .od-flyout {
     display: block;
     position: fixed;
@@ -116,21 +116,14 @@ img {
     left: 0;
     right: 0;
     width: 100%;
-		height: 100%;
+	height: 100%;
     background-color: rgba(0,0,0,0.3);
     z-index: 2;
     opacity: 0;
     transition: all .3s;
-		transition-timing-function: ease-in-out;	
-		pointer-events: none;
-		
-    &.right {
-//        transform: translateX(100%);
-    }
-    &.left {
-//        transform: translateX(-100%);
-    }
-
+    transition-timing-function: ease-in-out;	
+    pointer-events: none;
+    
     .od-flyout--body {
         background-color: #fff;
         color: #000;
@@ -142,26 +135,44 @@ img {
         bottom: 0;
         right: 0;
         height: 100%;
-				
-				transform: translateX(100%);
+		transform: translateX(100%);
     }
+    
     &.right .od-flyout--body {
         right: 0;				
     }
+    
     &.left .od-flyout--body {
         left: 0;
     }
 
     &.open {
-			pointer-events: auto;
-      opacity: 1;
-      transform: translateX(0);
-			
-			.od-flyout--body {
-				transition: all .5s;
-				transform: translateX(0);
-			}
+        pointer-events: auto;
+        opacity: 1;
+        transform: translateX(0);
+        .od-flyout--body {
+            transition: all .5s;
+            transform: translateX(0);
+        }
     }
+    
+    .od-flyout--title {
+        font-size: $u*1.5;
+        background-color: $main-color;
+        color: #fff;
+        padding: $u*0.5 $u;
+        margin: 0;
+    }
+    .od-flyout--close {
+        background-color: transparent;
+        position: absolute;
+        top: 0;
+        right: 0;
+        &:hover,
+        &:active {
+            background-color: rgba(0,0,0,0.3);
+        }
+     }
 
 }
 
