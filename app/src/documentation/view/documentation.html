@@ -1,5 +1,3 @@
-<app-header></app-header>
-
 <article>
     
     <h1>Documentation for OpenDesk development</h1>
@@ -95,6 +93,41 @@
 				}
 			</pre>
     
+	<h3>Flyout widget</h3>
+	<p>The <em>od-flyout</em> widget is a sidenav that is used to present the sliding panels for userlisting and notification listing. We didn't use the <em>md-sidenav</em> because it didn't layout quite the way we'd like it to.</p>
+	<p>You can add a flyout to your view with this code:</p>
+	<pre>
+		&lt;div class="od-flyout right" ng-class="{ open: on }" ng-click="toggleNotices()">
+			&lt;div class="od-flyout--body" ng-click="$event.stopPropagation()">
+				&lt;h2 class="od-flyout--title">Flyout title (optional)&lt;/h2>
+				&lt;button ng-click="toggleNotices()" class="od-btn od-flyout--close">
+					&lt;i class="material-icons">keyboard_arrow_right&lt;/i>
+				&lt;/button>
+			
+				... Put some content here
+			
+			&lt;/div>
+		&lt;/div>
+	</pre>
+	<p>
+		You'll need edit your controller to be able close and open the flyout. Here we use a value <em>on</em> and a function <em>toggleNotices</em>.
+		<em>toggleNotices</em> switches the class <em>open</em> when the flyout is <em>on</em>. The above example does not include a button to switch the flyout on.
+		Refer to the code for <em>odUser</em> to see a complete implementation.
+	</p>
+	<h4>Options</h4>
+	<p>
+		Adding class <em>left</em> or <em>right</em> to the flyout will make it appear from either the left or right hand side of the screen.
+	</p>
+	
+	<h3><em>od-title</em> class for headers </h3>
+	<p>
+		Adding the class <em>od-title</em> to any HTML element places that element in the header bar at the top of the screen.
+		This is useful for &lt;h1> elements that only appear once on every page. On the dashboard page, the user's name is placed in the top bar using <em>od-title</em>:
+		<pre>
+			&lt;h1 class="od-title">Hej [Someone]&lt;/h1>
+		</pre>
+	</p>
+	
     <h3>Notification widget</h3>
     <p>
         There is a notifications <em>directive</em> that you can pop in any template.
@@ -104,6 +137,11 @@
     <pre>
         &lt;od-notifications>&lt;/od-notifications>
     </pre>
+	<h4>Methods</h4>
+	<p>
+		The <em>NotificationsController.js</em> currently uses <em>rmNotice()</em> and <em>addNotice()</em> to add and remove fake notifications from the notifications list.
+		<em>addNotice()</em> uses the <a href="https://material.angularjs.org/latest/api/service/$mdToast">$mdToast service</a> to display a growl-like popup when a new notification is added.
+	</p>
     
     <hr>
     
@@ -217,5 +255,3 @@
     </p>
 
 </article>
-
-<app-footer></app-footer>

@@ -6,8 +6,8 @@
     
     <div class="od-flyout right fixed" ng-class="{ open: vm.on }" ng-click="vm.toggleUser()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
-            <button ng-click="vm.toggleUser()" class="od-btn od-user--close">
-                <i class="material-icons">close</i>
+            <button ng-click="vm.toggleUser()" class="od-btn od-flyout--close">
+                <i class="material-icons">keyboard_arrow_right</i>
             </button>
         
             <div class="od-me" ng-controller="AuthController as vm">

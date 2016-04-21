@@ -10,7 +10,7 @@
             };
         });
 
-    function UserController($scope, $timeout, $mdSidenav, $log) {
+    function UserController($scope, $log) {
         var vm = this;
         
         vm.on = false;
