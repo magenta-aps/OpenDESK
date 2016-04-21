@@ -120,15 +120,15 @@ img {
     background-color: rgba(0,0,0,0.3);
     z-index: 2;
     opacity: 0;
-    transition: all 3s;
-			
-			
-			
+    transition: all .3s;
+		transition-timing-function: ease-in-out;	
+		pointer-events: none;
+		
     &.right {
-        transform: translateX(100%);
+//        transform: translateX(100%);
     }
     &.left {
-        transform: translateX(-100%);
+//        transform: translateX(-100%);
     }
 
     .od-flyout--body {
@@ -142,16 +142,25 @@ img {
         bottom: 0;
         right: 0;
         height: 100%;
+				
+				transform: translateX(100%);
     }
     &.right .od-flyout--body {
-        right: 0;
+        right: 0;				
     }
     &.left .od-flyout--body {
         left: 0;
     }
+
     &.open {
-        opacity: 1;
-        transform: translateX(0);
+			pointer-events: auto;
+      opacity: 1;
+      transform: translateX(0);
+			
+			.od-flyout--body {
+				transition: all .5s;
+				transform: translateX(0);
+			}
     }
 
 }
