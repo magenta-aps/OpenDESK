@@ -25,11 +25,16 @@ a:active {
 }
 
 body {
-
+    
 }
 
 article {
     padding: $u $u*2;
+}
+
+footer {
+    padding: $u $u*2;
+    background-color: #eee; 
 }
 
 hr {
@@ -45,14 +50,6 @@ img {
 /*
  * Molecule level styles
  */
-
-// Page footer
-.od-footer {
-    .od-footer--body {
-        padding: $u $u*2;
-        background-color: #eee;
-    }
-}
 
 // Title that is placed in the header
 .od-title {
@@ -110,7 +107,7 @@ img {
     }
 }
 
-// Sliding sidebar
+// Sliding sidebar that can be fixed in place on large screens
 .od-flyout {
     display: block;
     position: fixed;
@@ -119,33 +116,21 @@ img {
     left: 0;
     right: 0;
     width: 100%;
+		height: 100%;
     background-color: rgba(0,0,0,0.3);
     z-index: 2;
     opacity: 0;
-    transition: all 0.3s;
+    transition: all 3s;
+			
+			
+			
     &.right {
         transform: translateX(100%);
     }
     &.left {
         transform: translateX(-100%);
     }
-    .od-flyout--title {
-        font-size: $u*1.5;
-        background-color: $main-color;
-        color: #fff;
-        padding: $u*0.5 $u;
-        margin: 0;
-    }
-    .od-flyout--close {
-        background-color: transparent;
-        position: absolute;
-        top: 0;
-        right: 0;
-        &:hover,
-        &:active {
-            background-color: rgba(0,0,0,0.3);
-        }
-    }
+
     .od-flyout--body {
         background-color: #fff;
         color: #000;
@@ -165,17 +150,17 @@ img {
         left: 0;
     }
     &.open {
-        opacity: 1 ;
+        opacity: 1;
         transform: translateX(0);
     }
+
 }
 
-
 /*
- * General media queries
+ * General media queries 
  */
 
 // Screens larger than small (breaks between small and medium screens)
 @media screen and (min-width: $br-sm-md) {
-
+    
 }
