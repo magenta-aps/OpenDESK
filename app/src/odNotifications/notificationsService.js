@@ -14,11 +14,10 @@
 
         function getNotices(userId) {
             // Should return a user's unread notifications
-            console.log('Listing all notices');
             return [];
         };
         
-        function addNotice(userId) {
+        function addNotice(userId, noticeObj) {
             console.log('Add notice');
             // adds a notification to a user's list of unread notifications
             return [];

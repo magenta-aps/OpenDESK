@@ -2,21 +2,28 @@
 
     <button ng-click="vm.toggleNotices()" class="od-btn od-notifications--toggle">
         <i class="material-icons">notifications</i>
+        <span class="od-notifications--counter">{{ vm.notifications.length }}</span>
     </button>
     
     <div class="od-flyout right" ng-class="{ open: vm.on }" ng-click="vm.toggleNotices()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
-            <button ng-click="vm.toggleNotices()" class="od-btn od-user--close">
-                <i class="material-icons">close</i>
+            <h2 class="od-flyout--title">Beskeder</h2>
+            <button ng-click="vm.toggleNotices()" class="od-btn od-flyout--close">
+                <i class="material-icons">keyboard_arrow_right</i>
             </button>
         
             <ul class="od-notifylist">
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
-                <li><a href="#">Besked 1 sefliahs efælijas eflæijas eæflihas elæfijhas leæfh </a><hr></li>
+                <li class="od-notifylist--item" ng-repeat="notice in vm.notifications">
+                    <a ng-show="notice.link" ui-sref="notice.link" class="od-notifylist--item--link">
+                        <h3 class="od-notifylist--item--notice">{{ notice.notice }}</h3>
+                        <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.desc }}</p>
+                    </a>
+                    <span ng-show="!notice.link" class="od-notifylist--item--nolink">
+                        <h3 class="od-notifylist--item--notice">{{ notice.notice }}</h3>
+                        <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.desc }}</p>
+                    </span>
+                    <button class="od-btn od-notifylist--item--close" ng-click="vm.rmNotice($index)"><i class="material-icons">close</i></button>
+                </li>
             </ul>
         
         </div>
