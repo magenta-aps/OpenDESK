@@ -5,9 +5,8 @@
     <button class="od-btn" ng-click="vm.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
     
     <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
-    <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>	
-    
-    
+    <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
+
     <ul class="od-list">
         <li ng-repeat="project in vm.sites"><a href="#"><i class="material-icons">work</i> {{ project.title }}</a></li>
     </ul>
