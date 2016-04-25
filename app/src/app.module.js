@@ -160,5 +160,18 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
+    }).state('testuser', {
+        parent: 'site',
+        url: '/testuser',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/users/view/test.html',
+                controller: 'UsersController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
     });
 }

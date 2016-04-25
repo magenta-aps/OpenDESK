@@ -4,32 +4,23 @@ angular
     .module('openDeskApp.users')
     .controller('UsersController', UsersController);
 
-function SitesController($scope, $mdDialog, siteService) {
+function UsersController($scope, $mdDialog, userService) {
 
     var vm = this;
 
-    vm.newSite = function(event) {
-        $mdDialog.show({
-            templateUrl: 'app/src/sites/view/newProject.tmpl.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            clickOutsideToClose:true
+    vm.getPerson = function(name) {
+         userService.getPerson(name).then(function(val) {
+             vm.person = val;
+         });
+    };
+
+    vm.getAllSystemUsers = function (query) {
+        var filter = query ? query : "";
+        return userService.getPeople(filter).then(function(response) {
+            vm.allSystemUsers = response.people;
+            return response;
         });
-    }; // getSites close
+    }
 
-    vm.createSite = function(name, description) {
-        siteService.createSite(name, description);
-        $mdDialog.hide();
-    };
-
-    vm.cancel = function() {
-        $mdDialog.cancel();
-    };
-
-    siteService.getSites().then(function(val) {
-        vm.sites = val;
-    });
-
-
-}; // SiteCtrl close
+};
         
