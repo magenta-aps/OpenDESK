@@ -18,6 +18,27 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             return $http.post( '/api/sites', {shortName: siteName, sitePreset : "default", title : siteName, description : siteDescription}).then(function (response) {
                 return response.data;
             })
+        },
+        addMemberToSite: function (siteName, member, role) {
+            return $http.post( '/api/sites/' + siteName + '/memberships', {role: role, person : {userName : member} }).then(function (response) {
+                return response.data;
+            })
+        },
+        removeMemberFromSite: function (siteName, member) {
+            return $http.delete( '/api/sites/' + siteName + '/memberships/' + member).then(function (response) {
+                return response.data;
+            })
+        },
+        updateRoleOnSiteMember: function (siteName, member, newRole) {
+            return $http.put( '/api/sites/' + siteName + '/memberships', {role: newRole, person : {userName : member}}).then(function (response) {
+                return response.data;
+            })
+        },
+        getSiteRoles: function (siteName) {
+            return $http.get( '/api/sites/' + siteName + "/roles").then(function (response) {
+                return response.data;
+            })
         }
+
     };
 });
