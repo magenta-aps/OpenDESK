@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
         
-        function SitesController($scope, $mdDialog, siteService) {
+        function SitesController($scope, $mdDialog, $window, siteService) {
 			
 			var vm = this;
 			
@@ -49,7 +49,11 @@
 			vm.cancel = function() {
 				$mdDialog.cancel();
 			};
-			
+
+			vm.reload = function() {
+				$window.location.reload();
+			};
+
 			siteService.getSites().then(function(val) {
 				vm.sites = val;
 			});
