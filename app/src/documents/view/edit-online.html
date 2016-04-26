@@ -1,0 +1,34 @@
+<header>
+  <h1 class="title">Edit document</h1>
+</header>
+
+<div class="edit__window window">
+    
+    <!-- Show (fake) requested document -->
+    <iframe ng-if="docId"
+            src="http://dev.openesdh.dk/libreoffice-online/loleaflet/debug/document/document_simple_example.html?file_path=file:///srv/sites/libreoffice-online/documents/test.odt&host=ws://dev.openesdh.dk:9980"
+            class="edit__iframe">
+    </iframe>
+    
+    <!-- Show blank document -->
+    <iframe ng-if="!docId"
+            src="http://dev.openesdh.dk/libreoffice-online/loleaflet/debug/document/document_simple_example.html?file_path=file:///srv/sites/libreoffice-online/documents/blank.docx&host=ws://dev.openesdh.dk:9980"
+            class="edit__iframe">
+    </iframe>
+    
+    <div class="edit__actions">
+        <p>Status:
+            <strong ng-show="!approved"> Kladde</strong>
+            <strong ng-show="pending"><br>Sendt til godkendelse</strong>
+            <strong ng-show="approved"> Endeligt</strong>
+        </p>
+
+        <button ng-show="!isReviewing && !approved && !pending" ng-click="startReview()">
+            Send til godkendelse
+        </button>
+        <button ng-show="isReviewing && !approved" ng-click="approve()">
+            Godkend
+        </button>
+    </div>
+
+</div>
