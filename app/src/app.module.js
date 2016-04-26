@@ -148,6 +148,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: []
         }
     }).state('projects', {
+
         parent: 'site',
         url: '/projekter',
         views: {
@@ -166,7 +167,17 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         views: {
             'content@': {
                 templateUrl: 'app/src/users/view/test.html',
-                controller: 'UsersController',
+                controller: 'UsersController'
+            }
+        }
+
+    }).state('documents', {
+        url: '/documents',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/documents/view/projects.html',
+                controller: 'DocumentCtrl',
+
                 controllerAs: 'vm'
             }
         },
@@ -175,3 +186,4 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         }
     });
 }
+
