@@ -171,6 +171,8 @@ img {
         color: #fff;
         padding: $u*0.5 $u;
         margin: 0;
+        height: $u*3;
+        box-sizing: border-box;
     }
     
     .od-flyout--close {

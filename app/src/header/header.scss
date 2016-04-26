@@ -4,10 +4,11 @@
     top: 0;
     right: 0;
     left: 0;
-    height: $u*3;
     z-index: 1;
     color: #fff;
-		
+    .od-header--body {
+        height: $u*3;
+    }		
     .od-btn {
         height: $u*3;
     }
