@@ -68,6 +68,10 @@
 			//siteService.removeMemberFromSite("heide", "abeecher");
 			//siteService.updateRoleOnSiteMember("heide", "abeecher", "SiteConsumer");
 
+			//siteService.getSitesByQuery('1').then(function(val) {
+			//		vm.roles = val;
+			//})
+
 
 
 

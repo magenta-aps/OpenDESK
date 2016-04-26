@@ -14,6 +14,11 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
+        getSitesByQuery: function (query) {
+            return $http.get( '/api/sites?nf=' + query ).then(function (response) {
+                return response.data;
+            })
+        },
         createSite: function (siteName, siteDescription) {
             return $http.post( '/api/sites', {shortName: siteName, sitePreset : "default", title : siteName, description : siteDescription}).then(function (response) {
                 return response.data;
