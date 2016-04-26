@@ -12,6 +12,12 @@ angular.module('openDeskApp.sites').controller('SitesController', function (site
             var siteDescription = prompt("Please enter site description", new Date().getTime().toString());
 
             siteService.createSite(siteName, siteDescription);
+        },
+
+        deleteSite : function(siteName) {
+            siteService.deleteSite(siteName);
         }
     }
+
+
 });

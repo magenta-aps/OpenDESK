@@ -18,6 +18,11 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             return $http.post( '/api/sites', {shortName: siteName, sitePreset : "default", title : siteName, description : siteDescription}).then(function (response) {
                 return response.data;
             })
+        },
+        deleteSite: function (siteName) {
+            return $http.delete( '/api/sites/'+ siteName).then(function (response) {
+                return response.data;
+            })
         }
     };
 });
