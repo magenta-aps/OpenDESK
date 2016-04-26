@@ -40,7 +40,12 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         getSiteRoles: function (siteName) {
-            return $http.get( '/api/sites/' + siteName + "/roles").then(function (response) {
+            return $http.get('/api/sites/' + siteName + "/roles").then(function (response) {
+                return response.data;
+            })
+        },
+        deleteSite: function (siteName) {
+            return $http.delete( '/api/sites/'+ siteName).then(function (response) {
                 return response.data;
             })
         }

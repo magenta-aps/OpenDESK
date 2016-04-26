@@ -15,11 +15,15 @@
 					targetEvent: event,
 					clickOutsideToClose:true
 				});
-			}; // getSites close
+			};
 			
 			vm.createSite = function(name, description) {
 				siteService.createSite(name, description);
 				$mdDialog.hide();
+			};
+
+			vm.deleteSite = function(siteName) {
+				siteService.deleteSite(siteName);
 			};
 
 			vm.getSiteRoles = function(name) {
@@ -33,6 +37,7 @@
 					// do stuff
 				});
 			};
+
 
 			vm.addMemberToSite = function(siteName, userName, role) {
 				siteService.addMemberToSite(siteName, userName, role).then(function(val){
@@ -77,4 +82,6 @@
 
 
         }; // SiteCtrl close
-        
+
+
+
