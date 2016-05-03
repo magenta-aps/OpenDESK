@@ -2,7 +2,10 @@ var gulp = require('gulp'),
         $ = require('gulp-load-plugins')(),
         fs = require('fs'),
         proxy = require('http-proxy-middleware'),
-        autoprefixer = require('gulp-autoprefixer');
+        autoprefixer = require('gulp-autoprefixer'),
+	gulpNSP = require('gulp-nsp'),
+	pa11y = require('gulp-pa11y');
+
 
 // Config vars
 // If, after a while, there are a lot of config vars, we can move these to a separate file
@@ -104,6 +107,16 @@ function includeAppConfigParams(content) {
     return content;
 }
 
+// Accessibility check
+gulp.task('acc_check', function() {
+    pa11y({url: 'http://178.62.194.129/'});
+});
+
+// Security check
+gulp.task('sec_check', function(cb) {
+    gulpNSP({package: __dirname + '/package.json'}, cb);
+});
+
 // Set up watchers
 gulp.task('watch', function() {
     gulp.watch(paths.scripts, ['scripts']);
@@ -119,7 +132,7 @@ gulp.task('watch', function() {
  * This task is used to just build the scripts and CSS.
  * Useful if you want to deploy to production (e.g. with Apache).
  */
-gulp.task('build', ['scripts', 'css']);
+gulp.task('build', ['scripts', 'css', 'sec_check', 'acc_check']);
 
 gulp.task('test', ['build', 'watch'], function() {
     createWebserver(environment.test);

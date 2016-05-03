@@ -17,8 +17,9 @@
     
     <p>
         Gulp is a script handler that helps you build the site on the fly while developing. A complete build can be done by going to your project's dir in a terminal and running <pre>$ gulp build</pre>
+        The <em>gulp build</em> task both compiles your JS and CSS, and runs a security check for known vunerabilities using <a href="https://nodesecurity.io/tools">Node Security Project</a>.
     </p>
-    <p>To have Gulp watch and concatenate your SASS files when you edit them, use <pre>$ gulp watch</pre></p>
+    <p>To have Gulp watch and concatenate your SASS files when you edit them, use <pre>$ gulp watch</pre></p>    
     
     <h3>Git</h3>
     <p>
@@ -150,6 +151,76 @@
     
     <hr>
     
+	<h2>Modules</h2>
+	
+	<p>
+		This area contains information specific to the various modules that OpenDesk app is made of.
+	</p>
+	
+	<h3>Projects</h3>
+	
+	<p>
+		<em>Projects</em> (projekter) are navigated using states defined in app.module.js.
+		There is a <em>project</em> state for individuel project views. They are defined like so:
+	</p>
+	<pre>
+		
+		.state('projects', {
+			parent: 'site',
+			url: '/projekter',
+			views: {
+				'content@': {
+					templateUrl: 'app/src/sites/view/site.html',
+					controller: 'SitesController',
+					controllerAs: 'vm'
+				}
+			},
+			data: {
+				authorizedRoles: [USER_ROLES.user]
+			}
+		}).state('project', {
+			parent: 'site',
+			url: '/projekter/:projekt',
+			views: {
+				'content@': {
+					templateUrl: 'app/src/sites/view/sites.html',
+					controller: 'SitesController',
+					controllerAs: 'vm'
+				}
+			},
+			data: {
+				authorizedRoles: [USER_ROLES.user],
+				selectedTab: 0
+			}
+		}).
+		
+	</pre>		
+		
+	<p>
+		<em>:projekt</em> is a variable for an individual project.
+	</p>
+	<p>
+		In SitesController:
+	</p>
+	<pre>
+		vm.projekt = $stateParams.projekt;
+	</pre>
+	<p>
+		In sites.html:
+	</p>
+	<pre>
+		&lt;ul class="od-list">
+			&lt;li ng-repeat="project in vm.sites">
+				&lt;a href="#/projekter/{{project.shortName}}">&lt;i class="material-icons">work&lt;/i>  {{ project.title }}&lt;/a>&lt;/li>
+		&lt;/ul>
+	</pre>
+	<p>
+		... er der et link til den nye "state" defineret i app.module.js 
+		Man kan så bruge samme princip for at lave navigering på folder niveau, hvor site.html tilpasses med et link til niveauet under.
+	</p>
+	
+	<hr>
+	
     <h2>Use cases</h2>
     
     <p>Below are the target use cases that OpenDesk will address. They are in Danish langauge.</p>
