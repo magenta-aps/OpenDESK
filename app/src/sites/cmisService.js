@@ -6,9 +6,8 @@ angular.module('openDeskApp.documents').factory('cmisService', function ($http) 
 
   return {
 
-    getChildren: function (path) {
-
-      return $http.jsonp(cmisBaseUrl + 'root/' + path + '?cmisselector=children&succinct=true&' + callback);
+    getContents: function (path) {
+      return $http.jsonp(cmisBaseUrl + 'root/sites/' + path + '?cmisselector=children&succinct=true&' + callback);
     },
 
     getCMISBaseUrl : function(){

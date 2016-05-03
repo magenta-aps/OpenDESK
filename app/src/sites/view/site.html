@@ -8,14 +8,11 @@
     <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
 
     <ul class="od-list">
-        <li ng-repeat="project in vm.sites">
-            <a href="#/projekter/{{project.shortName}}"><i class="material-icons">work</i>  {{ project.title }}</a></li>
+        <li ng-repeat="content in vm.contents">
+            <a href="#/projekter/{{content.name}}?conservedPath={{content.conservedPath}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>
     </ul>
 
-    <!--{{vm.roles}}-->
-    {{vm.project}}
 
 </div>
 
 
-ahh

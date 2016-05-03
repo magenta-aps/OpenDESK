@@ -90,6 +90,40 @@ angular.module('openDeskApp.documents', ['ngRoute', 'checklist-model'])
 
         $scope.nodes = $scope.openFolder('Sites', 'Projects');
 
+
+        $scope.createFolder = function CaseDocsFolderDialog(parentRef, folder){
+            var dlg = this;
+            dlg.folderName = '';
+            dlg.isNew = folder == null;
+            dlg.save = save;
+
+            if(folder != null){
+                dlg.folderName = folder.title;
+            }
+
+            dlg.cancel = function(){
+                $mdDialog.cancel();
+            };
+
+            function save(){
+                var props = {
+                    prop_cm_name: dlg.folderName,
+                    prop_cm_title: dlg.folderName
+                };
+                if(dlg.isNew){
+                    props.alf_destination = parentRef;
+                    formProcessorService.createNode("cm:folder", props).then(function(nodeRef){
+                        $mdDialog.hide(nodeRef);
+                    });
+                }else{
+                    formProcessorService.updateNode(folder.nodeRef, props).then(function(){
+                        $mdDialog.hide();
+                    });
+                }
+            }
+        }
+
+
     }).directive('cmisObject', function () {
         return {
             restrict: 'EA',

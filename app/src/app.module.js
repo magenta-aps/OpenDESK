@@ -148,7 +148,6 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: []
         }
     }).state('projects', {
-
         parent: 'site',
         url: '/projekter',
         views: {
@@ -161,6 +160,21 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
+    }).state('project', {
+        parent: 'site',
+        url: '/projekter/:projekt',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/sites/view/site.html',
+                controller: 'SiteController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user],
+            selectedTab: 0
+        }
+
     }).state('testuser', {
         parent: 'site',
         url: '/testuser',
