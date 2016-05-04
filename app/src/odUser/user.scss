@@ -10,12 +10,14 @@
 	height: $u*3;
 	width: $u*3;
 	padding: 0;
+	&::-moz-focus-inner {
+		padding: 0;
+		border: 0;
+	}
 }
 
-.od-user--close {
-	position: absolute;
-	top: 0;
-	right: 0;
+.od-me--avatar {
+	display: block;
 }
 
 .od-me--name {

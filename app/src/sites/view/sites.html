@@ -1,21 +1,21 @@
-<app-header></app-header>
-
-<div class="od-projects" ng-controller="SitesController as vm">
-
+<div class="od-projects">
+    
     <h1 class="od-title">Projekter</h1>
 
-    <button class="od-btn" ng-click="vm.createSite()"><i class="material-icons">create</i> Nyt Project</button>
+    <button class="od-btn" ng-click="vm.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
     
     <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
-    <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>	
-    
-    
+    <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
+
     <ul class="od-list">
-        <li><a href="#"><i class="material-icons">work</i> Fake project name</a></li>
-        <li><a href="#"><i class="material-icons">work</i> Fake project name</a></li>
-        <li ng-repeat="project in vm.sites"><a href="#"><i class="material-icons">work</i> {{ project.title }}</a></li>
+        <li ng-repeat="project in vm.sites">
+            <a href="#/projekter/{{project.shortName}}"><i class="material-icons">work</i>  {{ project.title }}</a></li>
     </ul>
+
+    <!--{{vm.roles}}-->
+    {{vm.project}}
 
 </div>
 
-<app-footer></app-footer>
+
+ahh

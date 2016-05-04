@@ -32,11 +32,6 @@ article {
     padding: $u $u*2;
 }
 
-footer {
-    padding: $u $u*2;
-    background-color: #eee; 
-}
-
 hr {
     padding: 0;
 }
@@ -51,18 +46,32 @@ img {
  * Molecule level styles
  */
 
+.od-app {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+.od-body {
+    margin: $u*3 0 auto;
+}
+
 // Title that is placed in the header
 .od-title {
     position: fixed;
     top: 0;
     left: $u*3;
+    right: $u*6;
     color: #fff;
     margin: 0;
-    padding: $u*0.5 $u;
-    font-size: $u*2;
+    padding: $u*0.75 $u;
+    font-size: $u*1.5;
     line-height: 1;
     z-index: 1;
     font-weight: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 // Basic styled list
@@ -107,7 +116,7 @@ img {
     }
 }
 
-// Sliding sidebar that can be fixed in place on large screens
+// Sliding sidebar
 .od-flyout {
     display: block;
     position: fixed;
@@ -116,16 +125,14 @@ img {
     left: 0;
     right: 0;
     width: 100%;
+	height: 100%;
     background-color: rgba(0,0,0,0.3);
-    z-index: 2;
+    z-index: 5;
     opacity: 0;
-    transition: all 0.3s;
-    &.right {
-        transform: translateX(100%);    
-    }
-    &.left {
-        transform: translateX(-100%);    
-    }
+    transition: all .3s;
+    transition-timing-function: ease-in-out;	
+    pointer-events: none;
+    
     .od-flyout--body {
         background-color: #fff;
         color: #000;
@@ -137,20 +144,49 @@ img {
         bottom: 0;
         right: 0;
         height: 100%;
+		transform: translateX(100%);
     }
+    
     &.right .od-flyout--body {
-        right: 0;
+        right: 0;				
     }
+    
     &.left .od-flyout--body {
         left: 0;
     }
+
     &.open {
-        opacity: 1 ;
+        pointer-events: auto;
+        opacity: 1;
         transform: translateX(0);
+        .od-flyout--body {
+            transition: all .5s;
+            transform: translateX(0);
+        }
     }
     
-}
+    .od-flyout--title {
+        font-size: $u*1.5;
+        background-color: $main-color;
+        color: #fff;
+        padding: $u*0.5 $u;
+        margin: 0;
+        height: $u*3;
+        box-sizing: border-box;
+    }
+    
+    .od-flyout--close {
+        background-color: transparent;
+        position: absolute;
+        top: 0;
+        right: 0;
+        &:hover,
+        &:active {
+            background-color: rgba(0,0,0,0.3);
+        }
+     }
 
+}
 
 /*
  * General media queries 

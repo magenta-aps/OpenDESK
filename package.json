@@ -36,11 +36,15 @@
     "selenium-webdriver": "^2.47.1",
     "shelljs": "^0.2.6",
     "yargs": "^3.31.0",
-    "gulp-autoprefixer": "~3.1.0"
+    "gulp-autoprefixer": "~3.1.0",
+    "gulp-pa11y": "0.0.4"
   },
   "scripts": {
     "postinstall": "bower update",
     "prestart": "npm update",
     "test": "protractor app/tests/e2e/conf.js"
+  },
+  "dependencies": {
+    "gulp-nsp": "~2.4.0"
   }
 }

@@ -17,3 +17,65 @@
 	top: 0;
 	right: 0;
 }
+
+.od-notifications--counter {
+	display: block;
+	position: absolute;
+	top: $u*0.25;
+	right: $u*0.25;
+	font-size: $u*0.75;
+	color: #fff;
+	background-color: adjust-hue($main-color, 120deg);
+	padding: $u*0.25;
+	border-radius: $u*0.25;
+}
+
+.od-notifylist {
+	list-style: none;
+}
+
+.od-notifylist,
+.od-notifylist--item--notice,
+.od-notifylist--item--desc, {
+	margin: 0;
+	padding: 0;
+}
+
+.od-notifylist--item {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: start;
+	justify-content: space-between;
+	background-color: #eee;
+	margin-top: 1px;
+}
+
+.od-notifylist--item--link,
+.od-notifylist--item--nolink {
+	padding: $u;
+}
+
+.od-notifylist--item--link {
+	cursor: pointer;
+	&:hover,
+	&:active {
+		background-color: #ccc;
+		text-decoration: none;
+	}
+}
+
+.od-notifylist--item--notice {
+	font-size: $u;
+	font-weight: normal;
+}
+
+.od-notifylist--item--desc {
+	font-size: $u*0.9;
+	color: #666;
+}
+
+.od-notifylist--item--close {
+	flex: 0 0 auto;
+	background-color: transparent;
+	color: $main-color;
+}
