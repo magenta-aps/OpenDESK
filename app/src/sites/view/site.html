@@ -1,17 +1,26 @@
-<div class="od-projects">
+<div class="od-projects" ng-controller="SitesController as sitesCtrl">
     
     <h1 class="od-title">Projekter</h1>
 
-    <button class="od-btn" ng-click="vm.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
+    <button class="od-btn" ng-click="sitesCtrl.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
     
     <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
     <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
+    <button class="od-btn" ng-click="sitesCtrl.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
+    <button class="od-btn" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
 
+    <h2>Filer</h2>
     <ul class="od-list">
         <li ng-repeat="content in vm.contents">
             <a href="#/projekter/{{content.name}}?conservedPath={{content.conservedPath}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>
     </ul>
 
+    <h2>Medlemmer</h2>
+    <ul class="od-members">
+        <li ng-repeat="member in vm.members">
+            <a href=""> {{ member.authority.userName }}</a> - <button class="od-btn" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()">Slet medlem</button>
+        </li>
+    </ul>
 
 </div>
 

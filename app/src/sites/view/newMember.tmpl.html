@@ -1,0 +1,35 @@
+<md-dialog aria-label="New member" ng-controller="SitesController as sitesCtrl" ng-cloak>
+	<form name="addMemberForm" ng-submit="sitesCtrl.addMemberToSite(sitesCtrl.projekt, newMemberName, newMemberRole); sitesCtrl.reload();">
+	
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Add member to site</h2>
+			</div>
+		</md-toolbar>
+		
+		<md-dialog-content class="md-padding">
+			<p>Who do you wish to add?</p>
+				<div>
+				  <md-input-container>
+					<label>Name</label>
+					<input type="text" name="newMemberName" required ng-model="newMemberName">
+					<div ng-messages="addMemberForm.newMemberName.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				  </md-input-container>
+				  <md-input-container>
+					<label>Role</label>
+					<textarea required name="newMemberRole" ng-model="newMemberRole"></textarea>
+					<div ng-messages="addMemberForm.newMemberRole.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				  </md-input-container>
+				</div>
+		</md-dialog-content>
+		
+		<md-dialog-actions>
+			<md-button ng-click="sitesCtrl.cancel()">Cancel</md-button>
+			<md-button type="submit" class="md-primary">Add</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

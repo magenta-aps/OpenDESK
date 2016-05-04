@@ -42,6 +42,19 @@
 			});
 			vm.project = $stateParams.projekt;
 
+                        siteService.getSiteMembers(vm.project).then(function(val) {
+                                vm.members = val;
+                        });
+
+                        vm.newMember = function(event) {
+                                $mdDialog.show({
+                                        templateUrl: 'app/src/sites/view/newMember.tmpl.html',
+                                        parent: angular.element(document.body),
+                                        targetEvent: event,
+                                        clickOutsideToClose: true
+                                });
+                        };
+
 			// below for testing purpose - loads some data
 
 			//siteService.getSiteRoles("heide").then(function(val) {

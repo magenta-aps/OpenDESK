@@ -38,7 +38,6 @@
 				});
 			};
 
-
 			vm.addMemberToSite = function(siteName, userName, role) {
 				siteService.addMemberToSite(siteName, userName, role).then(function(val){
 					// do stuff
@@ -64,7 +63,6 @@
 			});
 
 			vm.projekt = $stateParams.projekt;
-
 
 			// below for testing purpose - loads some data
 
