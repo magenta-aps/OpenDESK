@@ -23,6 +23,7 @@
 			};
 
 			vm.deleteSite = function(siteName) {
+				debugger;
 				siteService.deleteSite(siteName);
 			};
 
