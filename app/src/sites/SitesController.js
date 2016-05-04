@@ -23,8 +23,15 @@
 			};
 
 			vm.deleteSite = function(siteName) {
-				debugger;
-				siteService.deleteSite(siteName);
+		    var confirm = $mdDialog.confirm()
+					.title('Would you like to delete this projekt?')
+					.textContent('This will remove all blablabla')
+					.ok('Yes!')
+					.cancel('No, changed my mind');
+		    $mdDialog.show(confirm).then(function() {
+					siteService.deleteSite(siteName);
+		      // TODO add a redirect to projekter
+		    });
 			};
 
 			vm.getSiteRoles = function(name) {

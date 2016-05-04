@@ -4,7 +4,7 @@
 
     <button class="od-btn" ng-click="siteCtrl.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
 		
-		<button class="od-btn" ng-click="siteCtrl.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet Projekt</button>
+		<button class="od-btn" ng-click="siteCtrl.deleteSite($siteName)"><i class="material-icons">delete</i> Slet Projekt</button>
     
     <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
     <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
