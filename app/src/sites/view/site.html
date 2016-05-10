@@ -9,11 +9,18 @@
     <button class="od-btn" ng-click="sitesCtrl.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
     <button class="od-btn" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
 
+
     <h2>Filer</h2>
+
+    <button class="od-btn" ng-click="vm.newFolderDialog($event)"><i class="material-icons">create</i> Ny folder</button>
+
+
     <ul class="od-list">
         <li ng-repeat="content in vm.contents">
-            <a href="#/projekter/{{content.name}}?conservedPath={{content.conservedPath}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>
+            <!--<a href="#/projekter/{{content.name}}?currentPath={{content.currentPath}}&currentFolderNodeRef={{content.nodeRef}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>-->
+            <a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>
     </ul>
+
 
     <h2>Medlemmer</h2>
     <ul class="od-members">
@@ -22,6 +29,6 @@
         </li>
     </ul>
 
-</div>
 
+</div>
 

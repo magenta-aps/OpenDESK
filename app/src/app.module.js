@@ -162,7 +162,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         }
     }).state('project', {
         parent: 'site',
-        url: '/projekter/:projekt',
+        url: '/projekter/:projekt{path:.*}',
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/site.html',
