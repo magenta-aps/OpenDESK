@@ -48,7 +48,13 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             return $http.delete( '/api/sites/'+ siteName).then(function (response) {
                 return response.data;
             })
-        }
+        },
+        createFolder : function (type, props){
+        return $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
+            var nodeRef = response.data.persistedObject;
+            return nodeRef;
+        });
+    }
 
     };
 });

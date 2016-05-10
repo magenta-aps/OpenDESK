@@ -7,12 +7,12 @@
     <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
     <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
 
+    <button class="od-btn" ng-click="vm.newFolderDialog($event)"><i class="material-icons">create</i> Ny folder</button>
+
     <ul class="od-list">
         <li ng-repeat="content in vm.contents">
-            <a href="#/projekter/{{content.name}}?conservedPath={{content.conservedPath}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>
+            <!--<a href="#/projekter/{{content.name}}?currentPath={{content.currentPath}}&currentFolderNodeRef={{content.nodeRef}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>-->
+            <a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>
     </ul>
-
-
 </div>
-
 
