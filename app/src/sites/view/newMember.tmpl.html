@@ -19,7 +19,14 @@
 				  </md-input-container>
 				  <md-input-container>
 					<label>Role</label>
-					<textarea required name="newMemberRole" ng-model="newMemberRole"></textarea>
+					<!-- <select required name="newMemberRole" ng-model="newMemberRole"> -->
+					<md-select ng-model="newMemberRole" style="">
+						<md-option>Foobar</md-option>
+						<md-option>Foobar</md-option>
+						<md-option>Foobar</md-option>
+						<md-option>Foobar</md-option>
+						<md-option>Foobar</md-option>
+					</md-select>
 					<div ng-messages="addMemberForm.newMemberRole.$error">
 						<div ng-message="required">Dette felt skal udfyldes</div>
 					</div>
