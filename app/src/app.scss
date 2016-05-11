@@ -114,6 +114,10 @@ img {
     .material-icons {
         font-size: $u*2;
     }
+		
+		&.od-btn-small {
+			transform: scale(.75);
+		}
 }
 
 // Sliding sidebar

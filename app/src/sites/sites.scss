@@ -41,7 +41,10 @@
 
 
 //
-md-select {
-	width: 174px;
-	margin-top: -23px !important;
+.od-select-wrap {
+	margin-top: -5px !important;
+
+	md-select {
+		width: 174px;
+	}	
 }

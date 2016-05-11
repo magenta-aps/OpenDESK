@@ -4,10 +4,10 @@
 
     <button class="od-btn" ng-click="sitesCtrl.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
     
-    <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
-    <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
+    <!-- <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
+    <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button> -->
     <button class="od-btn" ng-click="sitesCtrl.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
-    <button class="od-btn" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
+    
 
 
     <h2>Filer</h2>
@@ -23,9 +23,10 @@
 
 
     <h2>Medlemmer</h2>
+		<button class="od-btn" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
     <ul class="od-members">
         <li ng-repeat="member in vm.members">
-            <a href=""> {{ member.authority.userName }}</a> - <button class="od-btn" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()">Slet medlem</button>
+            <a href=""> {{ member.authority.userName }}</a> - <button class="od-btn od-btn-small" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()">Slet medlem</button>
         </li>
     </ul>
 
