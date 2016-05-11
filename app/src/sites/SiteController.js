@@ -74,6 +74,15 @@
 					});
 			};
 
+			vm.test = function(files) {
+
+				console.log(files);
+
+				for (var x in files) {
+					console.log(files[x].name)
+				}
+			}
+
 			// below for testing purpose - loads some data
 
 			//siteService.getSiteRoles("heide").then(function(val) {

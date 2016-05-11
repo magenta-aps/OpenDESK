@@ -1,12 +1,12 @@
-<div class="od-projects" ng-controller="SitesController as sitesCtrl">
+<div class="od-projects" ng-controller="SiteController as siteCtrl">
     
     <h1 class="od-title">Projekter</h1>
 
-    <button class="od-btn" ng-click="sitesCtrl.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
+    <button class="od-btn" ng-click="siteCtrl.test()"><i class="material-icons">create</i> Nyt Projekt</button>
     
     <button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
     <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
-    <button class="od-btn" ng-click="sitesCtrl.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
+    <button class="od-btn" ng-click="siteCtrl.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
     <button class="od-btn" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
 
 
@@ -21,13 +21,53 @@
             <a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>
     </ul>
 
-
     <h2>Medlemmer</h2>
     <ul class="od-members">
         <li ng-repeat="member in vm.members">
             <a href=""> {{ member.authority.userName }}</a> - <button class="od-btn" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()">Slet medlem</button>
         </li>
     </ul>
+
+    <input  id="upload" file-model="files" multiple="" type="file">
+
+    <button class="od-btn" ng-click="siteCtrl.test(files)"><i class="material-icons">create</i>upload files</button>
+
+    <!--<javascript>-->
+
+    <!--filesInput.addEventListener("change", function(event){-->
+
+    <!--var files = event.target.files; //FileList object-->
+    <!--var output = document.getElementById("result");-->
+
+    <!--for(var i = 0; i< files.length; i++)-->
+    <!--{-->
+    <!--var file = files[i];-->
+
+    <!--//Only pics-->
+    <!--if(!file.type.match('image'))-->
+    <!--continue;-->
+
+    <!--var picReader = new FileReader();-->
+
+    <!--picReader.addEventListener("load",function(event){-->
+
+    <!--var picFile = event.target;-->
+
+    <!--var div = document.createElement("div");-->
+
+    <!--div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" + "title='" + picFile.name + "'/>";-->
+
+    <!--output.insertBefore(div,null);-->
+
+    <!--});-->
+
+    <!--//Read the image-->
+    <!--picReader.readAsDataURL(file);-->
+    <!--}-->
+
+    <!--});-->
+    <!--}-->
+    <!--</javascript>-->
 
 
 </div>
