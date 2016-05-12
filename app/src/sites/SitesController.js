@@ -24,10 +24,10 @@
 
 			vm.deleteSite = function(siteName) {
 		    var confirm = $mdDialog.confirm()
-					.title('Would you like to delete this projekt?')
-					.textContent('This will remove all blablabla')
-					.ok('Yes!')
-					.cancel('No, changed my mind');
+					.title('Vil du slette dette projekt?')
+					.textContent('Projektet og alle dets filer vil blive slettet')
+					.ok('Ja')
+					.cancel('Annullér');
 		    $mdDialog.show(confirm).then(function() {
 					siteService.deleteSite(siteName);
 		      // TODO add a redirect to projekter
