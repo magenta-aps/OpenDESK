@@ -53,8 +53,21 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         return $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
             var nodeRef = response.data.persistedObject;
             return nodeRef;
-        });
-    }
+            })
+        },
+        uploadFiles : function (file, destination, extras) {
 
+            var formData = new FormData();
+            formData.append("filedata", file);
+            formData.append("filename", file.name);
+            formData.append("destination", destination ? destination : null);
+
+            return $http.post("/api/upload", formData,  {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function(response){
+                return response;
+            });
+        }
     };
 });

@@ -48,6 +48,18 @@
 				});
 			};
 
+			vm.uploadDocumentsDialog = function(event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					clickOutsideToClose:true
+				});
+			};
+
+
+
+
 			cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function(val) {
 
 
@@ -74,14 +86,26 @@
 					});
 			};
 
-			vm.test = function(files) {
+			vm.upload = function(files) {
 
-				console.log(files);
+				console.log(files.length);
+				var cmisQuery = $stateParams.projekt + $stateParams.path;
+				cmisService.getNode(cmisQuery).then(function(val) {
 
-				for (var x in files) {
-					console.log(files[x].name)
-				}
+					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+
+					for (var i=0; i< files.length;i++) {
+						siteService.uploadFiles(files[i],currentFolderNodeRef);
+						console.log(files[i].name)
+					}
+					$mdDialog.cancel();
+
+					// refresh
+					vm.reload();
+				});
 			}
+
+
 
 			// below for testing purpose - loads some data
 
