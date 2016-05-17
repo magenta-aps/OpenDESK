@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('siteService', function ($http, $window) {
+angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils) {
     var restBaseUrl = '/alfresco/s/api/';
 
     return {
@@ -49,12 +49,23 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
-        createFolder : function (type, props){
-        return $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
-            var nodeRef = response.data.persistedObject;
-            return nodeRef;
-        });
-    }
-
+        createFolder : function (type, props) {
+            return $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
+                var nodeRef = response.data.persistedObject;
+                return nodeRef;
+            })
+        },
+        deleteFolder : function (nodeRef) {
+            var url = '/slingshot/doclib/action/folder/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
+            return $http.delete(url).then(function (result) {
+                return result.data;
+            })
+        },
+        deleteFile : function (nodeRef){
+            var url = '/slingshot/doclib/action/file/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
+            return $http.delete(url).then(function(result){
+                return result.data;
+            });
+        }
     };
 });

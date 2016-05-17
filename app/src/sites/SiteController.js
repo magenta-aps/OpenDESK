@@ -48,15 +48,52 @@
 				});
 			};
 
+			vm.deleteFileDialog = function(event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/deleteFile.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					clickOutsideToClose:true
+				});
+			};
+
+			vm.deleteFile = function (nodeRef) {
+				siteService.deleteFile(nodeRef);
+
+				vm.reload();
+			}
+
+			vm.deleteFoldereDialog = function(event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/deleteFolder.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					clickOutsideToClose:true
+				});
+			};
+
+			vm.deleteFolder = function (nodeRef) {
+				siteService.deleteFolder(nodeRef);
+
+				vm.reload();
+			}
+
+
+
+
+
+
+
 			cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function(val) {
 
 
 				vm.contents = new Array();
 
 				for (var x in val.data.objects) {
+					console.log(val);
 				  vm.contents.push({name : val.data.objects[x].object.succinctProperties["cmis:name"],
 				                    contentType : val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-				                    nodeRef : val.data.objects[x].object.succinctProperties["cmis:parentId"]});
+				                    nodeRef : val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]});
 				};
 			});
 

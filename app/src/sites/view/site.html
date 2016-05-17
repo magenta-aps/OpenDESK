@@ -9,11 +9,13 @@
 	<button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
     <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
     <button class="od-btn" ng-click="vm.newFolderDialog($event)"><i class="material-icons">create</i> Ny folder</button>
+    <button class="od-btn" ng-click="vm.deleteFileDialog($event)"><i class="material-icons">create</i> Slet dokument</button>
+    <button class="od-btn" ng-click="vm.deleteFoldereDialog($event)"><i class="material-icons">create</i> Slet folder</button>
 
     <ul class="od-list">
         <li ng-repeat="content in vm.contents">
             <!--<a href="#/projekter/{{content.name}}?currentPath={{content.currentPath}}&currentFolderNodeRef={{content.nodeRef}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>-->
-            <a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a>
+            <a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}}) - {{content.nodeRef}} </a>
 		</li>
     </ul>
 	
