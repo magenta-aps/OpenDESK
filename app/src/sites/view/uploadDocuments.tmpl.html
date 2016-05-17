@@ -1,0 +1,15 @@
+<md-dialog aria-label="upload-files" ng-controller="SiteController as vm" ng-cloak>
+
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Upload filer</h2>
+			</div>
+		</md-toolbar>
+		
+		<md-dialog-content class="md-padding">
+
+			<input  id="upload" file-model="files" multiple="" type="file">
+			<button class="od-btn" ng-click="vm.upload(files)" ><i class="material-icons">create</i>upload files</button>
+		</md-dialog-content>
+	</form>
+</md-dialog>

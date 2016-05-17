@@ -5,130 +5,157 @@
         .controller('SiteController', SiteController);
         
         function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location) {
-			
+
 			var vm = this;
 
 			vm.project = $stateParams.projekt;
 			vm.path = $stateParams.path;
 
-			vm.cancel = function() {
+			vm.cancel = function () {
 				$mdDialog.cancel();
 			};
 
-			vm.reload = function() {
+			vm.reload = function () {
 				$window.location.reload();
 			};
 
-			vm.createFolder = function(folderName) {
+			vm.deleteSite = function (project) {
+				siteService.deleteSite(project);
+			}
+
+			vm.createFolder = function (folderName) {
 				var currentFolderNodeRef;
 				var cmisQuery = $stateParams.projekt + $stateParams.path;
 
-				cmisService.getNode(cmisQuery).then(function(val) {
+				cmisService.getNode(cmisQuery).then(function (val) {
 					currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 
 					var props = {
 						prop_cm_name: folderName,
-						prop_cm_title:folderName,
-						alf_destination : currentFolderNodeRef
+						prop_cm_title: folderName,
+						alf_destination: currentFolderNodeRef
 					};
 
-					siteService.createFolder("cm:folder",props);
+					siteService.createFolder("cm:folder", props);
 
 					vm.reload();
 				});
 			}
 
 
-			vm.newFolderDialog = function(event) {
+			vm.newFolderDialog = function (event) {
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/newFolder.tmpl.html',
 					parent: angular.element(document.body),
 					targetEvent: event,
-					clickOutsideToClose:true
+					clickOutsideToClose: true
 				});
 			};
 
-			vm.deleteFileDialog = function(event) {
+
+			vm.deleteFileDialog = function (event) {
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/deleteFile.tmpl.html',
 					parent: angular.element(document.body),
 					targetEvent: event,
-					clickOutsideToClose:true
+					clickOutsideToClose: true
 				});
-			};
-
-			vm.deleteFile = function (nodeRef) {
-				siteService.deleteFile(nodeRef);
-
-				vm.reload();
 			}
 
-			vm.deleteFoldereDialog = function(event) {
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/deleteFolder.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: event,
-					clickOutsideToClose:true
-				});
-			};
-
-			vm.deleteFolder = function (nodeRef) {
-				siteService.deleteFolder(nodeRef);
-
-				vm.reload();
-			}
-
-
-
-
-
-
-
-			cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function(val) {
-
-
-				vm.contents = new Array();
-
-				for (var x in val.data.objects) {
-					console.log(val);
-				  vm.contents.push({name : val.data.objects[x].object.succinctProperties["cmis:name"],
-				                    contentType : val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-				                    nodeRef : val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]});
-				};
-			});
-
-
-			siteService.getSiteMembers(vm.project).then(function(val) {
-					vm.members = val;
-			});
-
-			vm.newMember = function(event) {
+				vm.uploadDocumentsDialog = function (event) {
 					$mdDialog.show({
-							templateUrl: 'app/src/sites/view/newMember.tmpl.html',
-							parent: angular.element(document.body),
-							targetEvent: event,
-							clickOutsideToClose: true
+						templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
+						parent: angular.element(document.body),
+						targetEvent: event,
+						clickOutsideToClose: true
 					});
-			};
+				};
 
-			// below for testing purpose - loads some data
+				vm.deleteFile = function (nodeRef) {
+					siteService.deleteFile(nodeRef);
 
-			//siteService.getSiteRoles("heide").then(function(val) {
-			//	vm.roles = val.siteRoles;
-			//})
+					vm.reload();
+				}
 
-			//siteService.addMemberToSite("heide", "abeecher", "SiteContributor");
-			//siteService.removeMemberFromSite("heide", "abeecher");
-			//siteService.updateRoleOnSiteMember("heide", "abeecher", "SiteConsumer");
+				vm.deleteFoldereDialog = function (event) {
+					$mdDialog.show({
+						templateUrl: 'app/src/sites/view/deleteFolder.tmpl.html',
+						parent: angular.element(document.body),
+						targetEvent: event,
+						clickOutsideToClose: true
+					});
+				};
 
-			//siteService.getSitesByQuery('1').then(function(val) {
-			//		vm.roles = val;
-			//})
+				vm.deleteFolder = function (nodeRef) {
+					siteService.deleteFolder(nodeRef);
+
+					vm.reload();
+				}
+
+				cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
 
 
+					vm.contents = new Array();
+
+					for (var x in val.data.objects) {
+						vm.contents.push({
+							name: val.data.objects[x].object.succinctProperties["cmis:name"],
+							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
+						});
+					}
+					;
+				});
 
 
+				siteService.getSiteMembers(vm.project).then(function (val) {
+					vm.members = val;
+				});
 
-        }; // SiteCtrl close
+				vm.newMember = function (event) {
+					$mdDialog.show({
+						templateUrl: 'app/src/sites/view/newMember.tmpl.html',
+						parent: angular.element(document.body),
+						targetEvent: event,
+						clickOutsideToClose: true
+					});
+				};
+
+				vm.upload = function (files) {
+
+					console.log(files.length);
+					var cmisQuery = $stateParams.projekt + $stateParams.path;
+					cmisService.getNode(cmisQuery).then(function (val) {
+
+						var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+
+						for (var i = 0; i < files.length; i++) {
+							siteService.uploadFiles(files[i], currentFolderNodeRef);
+							console.log(files[i].name)
+						}
+						$mdDialog.cancel();
+
+						// refresh
+						vm.reload();
+					});
+				};
+
+
+				// below for testing purpose - loads some data
+
+				//siteService.getSiteRoles("heide").then(function(val) {
+				//	vm.roles = val.siteRoles;
+				//})
+
+				//siteService.addMemberToSite("heide", "abeecher", "SiteContributor");
+				//siteService.removeMemberFromSite("heide", "abeecher");
+				//siteService.updateRoleOnSiteMember("heide", "abeecher", "SiteConsumer");
+
+				//siteService.getSitesByQuery('1').then(function(val) {
+				//		vm.roles = val;
+				//})
+
+
+			}; // SiteCtrl close
 
 

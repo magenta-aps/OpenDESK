@@ -1,16 +1,22 @@
-<div class="od-projects" ng-controller="SitesController as sitesCtrl">
+<div class="od-projects" ng-controller="SiteController as siteCtrl">
     
     <h1 class="od-title">Projekter</h1>
 
-    <button class="od-btn" ng-click="sitesCtrl.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
+
+    <button class="od-btn" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
+    <button class="od-btn" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
+
+
 
     <h2>Filer</h2>
 
-	<button class="od-btn disabled"><i class="material-icons">file_upload</i> Upload</button>
-    <button class="od-btn disabled"><i class="material-icons">create</i> Nyt dokument</button>
     <button class="od-btn" ng-click="vm.newFolderDialog($event)"><i class="material-icons">create</i> Ny folder</button>
+    <button class="od-btn" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">create</i> upload filer</button>
     <button class="od-btn" ng-click="vm.deleteFileDialog($event)"><i class="material-icons">create</i> Slet dokument</button>
     <button class="od-btn" ng-click="vm.deleteFoldereDialog($event)"><i class="material-icons">create</i> Slet folder</button>
+
+
+
 
     <ul class="od-list">
         <li ng-repeat="content in vm.contents">
@@ -18,7 +24,8 @@
             <a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}}) - {{content.nodeRef}} </a>
 		</li>
     </ul>
-	
+
+
     <h2>Medlemmer</h2>
 		<button class="od-btn" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
     <ul class="od-members">
@@ -26,5 +33,45 @@
             <a href=""> {{ member.authority.userName }}</a> - <button class="od-btn od-btn-small" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()">Slet medlem</button>
         </li>
     </ul>
+
+
+
+    <!--<javascript>-->
+
+    <!--filesInput.addEventListener("change", function(event){-->
+
+    <!--var files = event.target.files; //FileList object-->
+    <!--var output = document.getElementById("result");-->
+
+    <!--for(var i = 0; i< files.length; i++)-->
+    <!--{-->
+    <!--var file = files[i];-->
+
+    <!--//Only pics-->
+    <!--if(!file.type.match('image'))-->
+    <!--continue;-->
+
+    <!--var picReader = new FileReader();-->
+
+    <!--picReader.addEventListener("load",function(event){-->
+
+    <!--var picFile = event.target;-->
+
+    <!--var div = document.createElement("div");-->
+
+    <!--div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" + "title='" + picFile.name + "'/>";-->
+
+    <!--output.insertBefore(div,null);-->
+
+    <!--});-->
+
+    <!--//Read the image-->
+    <!--picReader.readAsDataURL(file);-->
+    <!--}-->
+
+    <!--});-->
+    <!--}-->
+    <!--</javascript>-->
+
 
 </div>

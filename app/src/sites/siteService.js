@@ -65,6 +65,20 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             var url = '/slingshot/doclib/action/file/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
             return $http.delete(url).then(function(result){
                 return result.data;
+            })
+        },
+        uploadFiles : function (file, destination, extras) {
+
+            var formData = new FormData();
+            formData.append("filedata", file);
+            formData.append("filename", file.name);
+            formData.append("destination", destination ? destination : null);
+
+            return $http.post("/api/upload", formData,  {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function(response){
+                return response;
             });
         }
     };
