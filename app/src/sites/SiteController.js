@@ -20,9 +20,19 @@
 			};
 
 			vm.deleteSite = function (project) {
-				siteService.deleteSite(project);
-				$window.location.reload();
-				$window.location.href = '#/projekter';
+				vm.deleteSite = function (project) {
+				 var confirm = $mdDialog.confirm()
+						.clickOutsideToClose(true)
+						.title('Would you like to delete this projekt?')
+						.textContent('This will remove all blablabla')
+						.ok('Yes!')
+						.cancel('No, changed my mind');
+					$mdDialog.show(confirm).then(function() {
+						siteService.deleteSite(project);
+						$window.location.reload();
+						$window.location.href = '#/projekter';
+					});
+				}
 			}
 
 			vm.createFolder = function (folderName) {
