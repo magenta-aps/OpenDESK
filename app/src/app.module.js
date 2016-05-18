@@ -32,7 +32,6 @@ angular
         'openDeskApp.notifications',
         'openDeskApp.user',
         'openDeskApp.menu',
-        'openDeskApp.documentation',
 		'openDeskApp.projekter',
         
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
@@ -91,19 +90,6 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             'content@': {
                 templateUrl: 'app/src/dashboard/view/dashboard.html',
                 controller: 'DashboardController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('documentation', {
-        parent: 'site',
-        url: '/documentation',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/documentation/view/documentation.html',
-                controller: 'DocumentationController',
                 controllerAs: 'vm'
             }
         },
