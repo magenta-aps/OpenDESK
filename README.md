@@ -10,14 +10,12 @@ First, clone the Git repo. In a terminal, go to your home dir and enter the foll
 ```
 $ git clone https://github.com/magenta-aps/OpenDESK-UI.git
 $ cd ~/www/OpenDESK-UI
-$ npm update (This might take a while)
-$ npm i (Enter "3" if it asks you about selecting versions)
-$ gulp build
-
+$ ./update-all.sh 
 ```
+*Note:* The above _update-all_ command might take a while. Enter "3" if it asks you about selecting versions for translation package)
+
 When you change .scss (SASS) files in the project, you'll want to run a watcher that grabs your code and compiles new CSS on the fly. You can make that happen by running the gulp watch command in your project directory:
 ```
 $ gulp watch
-
 ```
 Happy coding :)
