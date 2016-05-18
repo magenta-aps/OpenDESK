@@ -32,7 +32,6 @@ angular
         'openDeskApp.notifications',
         'openDeskApp.user',
         'openDeskApp.menu',
-        'openDeskApp.documentation',
 		'openDeskApp.projekter',
         
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
