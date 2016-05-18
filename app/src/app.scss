@@ -192,6 +192,13 @@ img {
 
 }
 
+// Icons in buttons
+.md-button .material-icons {
+    vertical-align: middle;
+    margin-top: -($u*0.25);
+}
+
+
 /*
  * General media queries 
  */
