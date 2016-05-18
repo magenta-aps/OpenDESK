@@ -2,13 +2,13 @@
     
     <h1 class="od-title">Projekter</h1>
 
-    <button class="od-btn" ng-click="vm.newSite($event)"><i class="material-icons">create</i> Nyt Projekt</button>
+    <button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">folder_special</i> Nyt Projekt</button>
     
     <ul class="od-list">
         <li ng-repeat="project in vm.sites">
-            <a href="#/projekter/{{project.shortName}}"><i class="material-icons">work</i>  {{ project.title }}</a></li>
+            <a href="#/projekter/{{project.shortName}}"><i class="material-icons">work</i>  {{ project.title }}</a>
+        </li>
     </ul>
-
 
 </div>
 
