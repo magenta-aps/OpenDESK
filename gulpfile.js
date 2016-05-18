@@ -1,11 +1,16 @@
+
+
+/*
+ * INITIALIZE GULP
+ */
+
 var gulp = require('gulp'),
-        $ = require('gulp-load-plugins')(),
-        fs = require('fs'),
-        proxy = require('http-proxy-middleware'),
-        autoprefixer = require('gulp-autoprefixer'),
+    $ = require('gulp-load-plugins')(),
+    fs = require('fs'),
+    proxy = require('http-proxy-middleware'),
+    autoprefixer = require('gulp-autoprefixer'),
 	gulpNSP = require('gulp-nsp'),
 	pa11y = require('gulp-pa11y');
-
 
 // Config vars
 // If, after a while, there are a lot of config vars, we can move these to a separate file
@@ -34,7 +39,11 @@ var dist = {
     folder: './dist/'
 };
 
-// Setting up a local webserver
+
+/*
+ * LOCAL WEBSERVER
+ */
+
 function createWebserver(config) {
     return gulp.src('./')
             .pipe($.webserver({
@@ -50,6 +59,11 @@ function createWebserver(config) {
                 }]
             }));
 }
+
+
+/*
+ * GULP TASKS
+ */
 
 // Script tasks
 gulp.task('scripts', function() {
@@ -68,7 +82,7 @@ gulp.task('scripts', function() {
             .on('error', $.util.log);
 });
 
-// CSS
+// CSS tasks
 gulp.task('css', function() {
     return gulp.src(paths.scss)
             .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
@@ -85,7 +99,7 @@ gulp.task('css', function() {
             .on('error', $.util.log);
 });
 
-// UI-test
+//UI tests
 gulp.task('e2e-tests', function() {
     gulp.src(paths.e2e_tests)
             .pipe($.protractor.protractor({
@@ -95,7 +109,6 @@ gulp.task('e2e-tests', function() {
                 throw e;
             });
 });
-
 function includeAppConfigParams(content) {
     var argv = require('yargs').argv;
     if (argv.title) {
@@ -123,15 +136,14 @@ gulp.task('watch', function() {
     gulp.watch(paths.scss, ['css']);
 });
 
-/** ----------------
- * Gulp runner tasks
- * (tasks to run from the CLI)
- */
 
 /*
- * This task is used to just build the scripts and CSS.
- * Useful if you want to deploy to production (e.g. with Apache).
+ * GULP TASK RUNS
+ * Gulp tasks to run from the CLI
  */
+
+// This task is used to just build the scripts and CSS.
+// Useful if you want to deploy to production (e.g. with Apache).
 gulp.task('build', ['scripts', 'css', 'sec_check', 'acc_check']);
 
 gulp.task('test', ['build', 'watch'], function() {
@@ -146,12 +158,10 @@ gulp.task('local', ['build', 'watch'], function() {
     createWebserver(environment.local);
 });
 
-/* Tests */
+// Tests
 gulp.task('ui-test', ['e2e-tests']);
 
-/*
- Running '$ gulp'
- is equal to running '$ gulp build watch'
- In other words, the default task is the 'build' and 'watch' task
- */
+// Running 'gulp' is equal to running 'gulp build watch'
+// In other words, the default task is the 'build' and 'watch' task
 gulp.task('default', ['build', 'watch']);
+
