@@ -96,19 +96,6 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-    }).state('documentation', {
-        parent: 'site',
-        url: '/documentation',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/documentation/view/documentation.html',
-                controller: 'DocumentationController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
     }).state('kalendar', {
         parent: 'site',
         url: '/kalendar',
