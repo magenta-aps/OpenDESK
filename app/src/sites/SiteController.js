@@ -21,6 +21,8 @@
 
 			vm.deleteSite = function (project) {
 				siteService.deleteSite(project);
+				$window.location.reload();
+				$window.location.href = '#/projekter';
 			}
 
 			vm.createFolder = function (folderName) {
