@@ -183,25 +183,8 @@
 					});
 				};
 
-				vm.getAllUsers = function() {
-					return siteService.getAllUsers("")
+				vm.getAllUsers = function(searchText) {					
+					return siteService.getAllUsers(searchText)
 				};
 
-				// below for testing purpose - loads some data
-
-				//siteService.getSiteRoles("heide").then(function(val) {
-				//	vm.roles = val.siteRoles;
-				//})
-
-				//siteService.addMemberToSite("heide", "abeecher", "SiteContributor");
-				//siteService.removeMemberFromSite("heide", "abeecher");
-				//siteService.updateRoleOnSiteMember("heide", "abeecher", "SiteConsumer");
-
-				//siteService.getSitesByQuery('1').then(function(val) {
-				//		vm.roles = val;
-				//})
-
-
 			}; // SiteCtrl close
-
-
