@@ -142,13 +142,13 @@
 						var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 
 						for (var i = 0; i < files.length; i++) {
-							siteService.uploadFiles(files[i], currentFolderNodeRef);
-							console.log(files[i].name)
+							siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
+								//console.log(response);
+								vm.reload();
+								} );
 						}
 						$mdDialog.cancel();
 
-						// refresh
-						vm.reload();
 					});
 				};
 
