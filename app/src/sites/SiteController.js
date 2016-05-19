@@ -122,6 +122,15 @@
 
 				siteService.getSiteMembers(vm.project).then(function (val) {
 					vm.members = val;
+
+					vm.test = siteService.getAllUsers();
+					console.log(vm.test);
+
+
+
+
+
+
 				});
 
 				vm.newMember = function (event) {

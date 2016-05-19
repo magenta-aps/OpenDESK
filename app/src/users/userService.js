@@ -40,9 +40,6 @@ function userService($http) {
         });
     }
     
-
-
-
     function getPeople(filter) {
         return $http.get('/api/people' + filter).then(function(response) {
             return response.data;
