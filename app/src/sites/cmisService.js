@@ -2,8 +2,7 @@
 
 angular.module('openDeskApp.documents').factory('cmisService', function ($http) {
   var cmisBaseUrl = '/alfresco/api/-default-/public/cmis/versions/1.1/browser/',
-      callback = 'callback=JSON_CALLBACK',
-  callback2 = 'callback=JSON_CALLBACK';
+      callback = 'callback=JSON_CALLBACK';
 
   return {
 

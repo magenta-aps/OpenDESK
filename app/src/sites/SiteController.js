@@ -7,9 +7,15 @@
         function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location) {
 
 			var vm = this;
+			$scope.contents = [];
 
 			vm.project = $stateParams.projekt;
 			vm.path = $stateParams.path;
+
+			$scope.test = 1;
+			vm.foo = function () {
+				$scope.test = $scope.test + 1;
+			};
 
 			vm.cancel = function () {
 				$mdDialog.cancel();
@@ -79,6 +85,8 @@
 						templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
 						parent: angular.element(document.body),
 						targetEvent: event,
+						scope: $scope,        // use parent scope in template
+						preserveScope: true,  // do not forget this if use parent scope
 						clickOutsideToClose: true
 					});
 				};
@@ -104,20 +112,21 @@
 					vm.reload();
 				}
 
-				cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
 
-
-					vm.contents = new Array();
-
-					for (var x in val.data.objects) {
-						vm.contents.push({
-							name: val.data.objects[x].object.succinctProperties["cmis:name"],
-							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
-						});
-					}
-					;
-				});
+			     vm.loadContents = function() {
+					cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
+						var result = [];
+						for (var x in val.data.objects) {
+							result.push({
+								name: val.data.objects[x].object.succinctProperties["cmis:name"],
+								contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+								nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
+							});
+						}
+						$scope.contents = result;
+					});
+				}
+			    vm.loadContents();
 
 
 				siteService.getSiteMembers(vm.project).then(function (val) {
@@ -135,8 +144,7 @@
 				};
 
 				vm.upload = function (files) {
-
-					console.log(files.length);
+					//console.log(files.length);
 					var cmisQuery = $stateParams.projekt + $stateParams.path;
 					cmisService.getNode(cmisQuery).then(function (val) {
 
@@ -145,7 +153,7 @@
 						for (var i = 0; i < files.length; i++) {
 							siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
 								//console.log(response);
-								vm.reload();
+								vm.loadContents();
 								} );
 						}
 						$mdDialog.cancel();
@@ -177,6 +185,9 @@
 					});
 				};
 
+				vm.getAllUsers = function() {
+					return siteService.getAllUsers("")
+				};
 
 				// below for testing purpose - loads some data
 

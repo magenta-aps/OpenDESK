@@ -1,4 +1,4 @@
-<div class="od-projects" ng-controller="SiteController as siteCtrl">
+<div class="od-projects">
     
     <h1 class="od-title">{{ vm.project }}</h1>		
 
@@ -17,7 +17,7 @@
 			<button class="md-button" ng-click="vm.deleteFileDialog($event)"><i class="material-icons">delete</i> Slet dokument</button>
 			<button class="md-button" ng-click="vm.deleteFoldereDialog($event)"><i class="material-icons">delete</i> Slet folder</button>
 			<ul class="od-list">
-				<li ng-repeat="content in vm.contents">
+				<li ng-repeat="content in contents">
 					<!--<a href="#/projekter/{{content.name}}?currentPath={{content.currentPath}}&currentFolderNodeRef={{content.nodeRef}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>-->
 					<a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">folder</i> {{content.name}}</a>
 				</li>
