@@ -183,8 +183,8 @@
 					});
 				};
 
-				vm.getAllUsers = function(searchText) {					
-					return siteService.getAllUsers(searchText)
+				vm.getAllUsers = function(filter) {
+					return siteService.getAllUsers(filter)
 				};
 
 			}; // SiteCtrl close

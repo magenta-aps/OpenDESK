@@ -16,7 +16,7 @@
 					md-selected-item="selectedItem"
 					md-search-text="searchText"
 					md-items="user in siteCtrl.getAllUsers(searchText)"
-					md-item-text="user.userName"
+					md-item-text="user.firstName + ' ' + user.lastName"
 					md-floating-label="Hvem vil du tilføje?">
 					<md-item-template>
 					  <span md-highlight-text="searchText">{{ user.firstName }} {{ user.lastName }}</span>
