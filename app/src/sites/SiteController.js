@@ -183,8 +183,8 @@
 					});
 				};
 
-				vm.getAllUsers = function() {
-					return siteService.getAllUsers("")
+				vm.getAllUsers = function(filter) {
+					return siteService.getAllUsers(filter)
 				};
 
 				// below for testing purpose - loads some data

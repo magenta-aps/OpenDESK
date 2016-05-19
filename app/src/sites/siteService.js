@@ -67,8 +67,8 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return result.data;
             })
         },
-        getAllUsers : function (){
-           return userService.getPeople("");
+        getAllUsers : function (filter){
+           return userService.getPeople("?filter=" + filter);
         },
         uploadFiles : function (file, destination, extras) {
 
