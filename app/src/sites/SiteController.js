@@ -12,11 +12,6 @@
 			vm.project = $stateParams.projekt;
 			vm.path = $stateParams.path;
 
-			$scope.test = 1;
-			vm.foo = function () {
-				$scope.test = $scope.test + 1;
-			};
-
 			vm.cancel = function () {
 				$mdDialog.cancel();
 			};
@@ -173,7 +168,8 @@
 
 				vm.addMemberToSite = function(siteName, userName, role) {
 					siteService.addMemberToSite(siteName, userName, role).then(function(val){
-						// do stuff
+						$mdDialog.hide();
+						vm.reload();
 					});
 				};
 

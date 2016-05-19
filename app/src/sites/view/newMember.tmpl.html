@@ -1,5 +1,5 @@
 <md-dialog aria-label="New member" ng-controller="SiteController as siteCtrl" ng-cloak>
-	<form name="addMemberForm" ng-submit="siteCtrl.addMemberToSite(siteCtrl.projekt, newMemberName, newMemberRole); siteCtrl.reload();">
+	<form name="addMemberForm" ng-submit="siteCtrl.addMemberToSite(siteCtrl.project, newMemberName.userName, newMemberRole);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
@@ -9,36 +9,32 @@
 		
 		<md-dialog-content class="md-padding">
 			<div>
-				
+
 				<md-autocomplete
 					required
 					md-input-name="autocomplete"
-					md-selected-item="selectedItem"
+					md-selected-item="newMemberName"
 					md-search-text="searchText"
 					md-items="user in siteCtrl.getAllUsers(searchText)"
 					md-item-text="user.firstName + ' ' + user.lastName"
 					md-floating-label="Hvem vil du tilføje?">
 					<md-item-template>
-					  <span md-highlight-text="searchText">{{ user.firstName }} {{ user.lastName }}</span>
+						<span md-highlight-text="searchText">{{ user.firstName }} {{ user.lastName }}</span>
 					</md-item-template>
 					<div ng-messages="autocompleteForm.autocomplete.$error">
-					  <div ng-message="required">Dette felt skal udfyldes</div>
+						<div ng-message="required">Dette felt skal udfyldes</div>
 					</div>
 				</md-autocomplete>
-					  
-				<md-input-container class="od-select-wrap">
-				  <label>Rolle</label>
-				  <!-- <select required name="newMemberRole" ng-model="newMemberRole"> -->
-				  <md-select ng-model="newMemberRole">
-					  <md-option>Foobar</md-option>
-					  <md-option>Foobar</md-option>
-					  <md-option>Foobar</md-option>
-					  <md-option>Foobar</md-option>
-					  <md-option>Foobar</md-option>
-				  </md-select>
-				  <div ng-messages="siteCtrl.addMemberForm.newMemberRole.$error">
-					  <div ng-message="required">Dette felt skal udfyldes</div>
-				  </div>
+
+				<md-input-container>
+					<label>Rolle</label>
+					<md-select required ng-model="newMemberRole">
+						<md-option>SiteManager</md-option>
+						<md-option>SiteCollaborator</md-option>
+					</md-select>
+					<div ng-messages="siteCtrl.addMemberForm.newMemberRole.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
 				</md-input-container>
 				
 			</div>
