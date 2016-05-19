@@ -11,17 +11,20 @@
 	<div layout-gt-sm="row">
 		
 		<div flex-gt-sm="75">
-			<h2>Filer</h2>
-			<button class="md-button" ng-click="vm.newFolderDialog($event)"><i class="material-icons">create_new_folder</i> Ny folder</button>
-			<button class="md-button" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload filer</button>
+			<h2>Dokumenter</h2>
+			<button class="md-button" ng-click="vm.newFolderDialog($event)"><i class="material-icons">create_new_folder</i> Ny mappe</button>
+			<button class="md-button" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter</button>
 			<button class="md-button" ng-click="vm.deleteFileDialog($event)"><i class="material-icons">delete</i> Slet dokument</button>
-			<button class="md-button" ng-click="vm.deleteFoldereDialog($event)"><i class="material-icons">delete</i> Slet folder</button>
-			<ul class="od-list">
-				<li ng-repeat="content in vm.contents">
-					<!--<a href="#/projekter/{{content.name}}?currentPath={{content.currentPath}}&currentFolderNodeRef={{content.nodeRef}}"><i class="material-icons">work</i> {{content.name}}  ({{content.contentType}})  </a></li>-->
-					<a href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}"><i class="material-icons">folder</i> {{content.name}}</a>
-				</li>
-			</ul>
+			<button class="md-button" ng-click="vm.deleteFoldereDialog($event)"><i class="material-icons">delete</i> Slet mappe</button>
+			<md-list>
+				<md-list-item ng-repeat="content in vm.contents" flex="100">
+					<a class="od-filebrowser-link" href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
+						<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
+						<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
+						{{content.name}}
+					</a>
+				</<md-list-item>
+			</md-list>
 		</div>
 	
 		<div flex-gt-sm="25">

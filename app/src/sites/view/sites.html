@@ -4,13 +4,13 @@
 
     <button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">folder_special</i> Nyt Projekt</button>
     
-    <ul class="od-list">
-        <li ng-repeat="project in vm.sites">
-            <a href="#/projekter/{{project.shortName}}"><i class="material-icons">work</i>  {{ project.title }}</a>
-        </li>
-    </ul>
-
-</div>
-
+    <md-list>
+        <md-list-item ng-repeat="project in vm.sites" flex="100">
+            <a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
+                <i class="material-icons">folder_special</i>
+                {{ project.title }}
+            </a>
+        </<md-list-item>
+    </md-list>
 
 </div>
