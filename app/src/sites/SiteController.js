@@ -11,7 +11,18 @@
 
 			vm.project = $stateParams.projekt;
 			vm.path = $stateParams.path;
-
+			vm.breadCrumb = [{slug: vm.project, link: '/'}];
+			
+			vm.upDateBreadCrumb = function() {
+				var bc = '';
+				vm.path.split('/').forEach(function(val) {
+					if (val != '') {
+						bc = bc + '/' + val;
+                        vm.breadCrumb.push({slug: val, link: bc});
+                    };
+				});
+			};
+			
 			vm.cancel = function () {
 				$mdDialog.cancel();
 			};
@@ -73,114 +84,113 @@
 				});
 			}
 
-				vm.uploadDocumentsDialog = function (event) {
-					$mdDialog.show({
-						templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
-						parent: angular.element(document.body),
-						targetEvent: event,
-						scope: $scope,        // use parent scope in template
-						preserveScope: true,  // do not forget this if use parent scope
-						clickOutsideToClose: true
-					});
-				};
+			vm.uploadDocumentsDialog = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
 
-				vm.deleteFile = function (nodeRef) {
-					siteService.deleteFile(nodeRef);
+			vm.deleteFile = function (nodeRef) {
+				siteService.deleteFile(nodeRef);
 
-					vm.reload();
-				}
+				vm.reload();
+			}
 
-				vm.deleteFoldereDialog = function (event) {
-					$mdDialog.show({
-						templateUrl: 'app/src/sites/view/deleteFolder.tmpl.html',
-						parent: angular.element(document.body),
-						targetEvent: event,
-						clickOutsideToClose: true
-					});
-				};
+			vm.deleteFoldereDialog = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/deleteFolder.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					clickOutsideToClose: true
+				});
+			};
 
-				vm.deleteFolder = function (nodeRef) {
-					siteService.deleteFolder(nodeRef);
+			vm.deleteFolder = function (nodeRef) {
+				siteService.deleteFolder(nodeRef);
 
-					vm.reload();
-				}
-
-
-			     vm.loadContents = function() {
-					cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
-						var result = [];
-						for (var x in val.data.objects) {
-							result.push({
-								name: val.data.objects[x].object.succinctProperties["cmis:name"],
-								contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-								nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
-							});
-						}
-						$scope.contents = result;
-					});
-				}
-			    vm.loadContents();
+				vm.reload();
+			}
 
 
-				siteService.getSiteMembers(vm.project).then(function (val) {
-					vm.members = val;
+			vm.loadContents = function() {
+				cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
+					var result = [];
+					for (var x in val.data.objects) {
+						result.push({
+							name: val.data.objects[x].object.succinctProperties["cmis:name"],
+							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
+						});
+					}
+					$scope.contents = result;
+				});
+				vm.upDateBreadCrumb();
+			}
+			vm.loadContents();
+
+
+			siteService.getSiteMembers(vm.project).then(function (val) {
+				vm.members = val;
+
+			});
+
+			vm.newMember = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/newMember.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					clickOutsideToClose: true
+				});
+			};
+
+			vm.upload = function (files) {
+				var cmisQuery = $stateParams.projekt + $stateParams.path;
+				cmisService.getNode(cmisQuery).then(function (val) {
+
+					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+
+					for (var i = 0; i < files.length; i++) {
+						siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
+							vm.loadContents();
+							} );
+					}
+					$mdDialog.cancel();
 
 				});
+			};
 
-				vm.newMember = function (event) {
-					$mdDialog.show({
-						templateUrl: 'app/src/sites/view/newMember.tmpl.html',
-						parent: angular.element(document.body),
-						targetEvent: event,
-						clickOutsideToClose: true
-					});
-				};
+			vm.getSiteRoles = function(name) {
+				siteService.getSiteRoles(name).then(function(val){
+					vm.roles = val;
+				});
+			};
 
-				vm.upload = function (files) {
-					//console.log(files.length);
-					var cmisQuery = $stateParams.projekt + $stateParams.path;
-					cmisService.getNode(cmisQuery).then(function (val) {
+			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
+				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
+					// do stuff
+				});
+			};
 
-						var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+			vm.addMemberToSite = function(siteName, userName, role) {
+				siteService.addMemberToSite(siteName, userName, role).then(function(val){
+					$mdDialog.hide();
+					vm.reload();
+				});
+			};
 
-						for (var i = 0; i < files.length; i++) {
-							siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
-								//console.log(response);
-								vm.loadContents();
-								} );
-						}
-						$mdDialog.cancel();
+			vm.removeMemberFromSite = function(siteName, userName) {
+				siteService.removeMemberFromSite(siteName, userName).then(function(val){
+					// do stuff
+				});
+			};
 
-					});
-				};
+			vm.getAllUsers = function(filter) {
+				return siteService.getAllUsers(filter)
+			};
 
-				vm.getSiteRoles = function(name) {
-					siteService.getSiteRoles(name).then(function(val){
-						vm.roles = val;
-					});
-				};
-
-				vm.updateRoleOnSiteMember = function(siteName, userName, role) {
-					siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
-						// do stuff
-					});
-				};
-
-				vm.addMemberToSite = function(siteName, userName, role) {
-					siteService.addMemberToSite(siteName, userName, role).then(function(val){
-						$mdDialog.hide();
-						vm.reload();
-					});
-				};
-
-				vm.removeMemberFromSite = function(siteName, userName) {
-					siteService.removeMemberFromSite(siteName, userName).then(function(val){
-						// do stuff
-					});
-				};
-
-				vm.getAllUsers = function(filter) {
-					return siteService.getAllUsers(filter)
-				};
-
-			}; // SiteCtrl close
+		}; // SiteCtrl close
