@@ -34,29 +34,6 @@
 		    });
 			};
 
-			vm.getSiteRoles = function(name) {
-				siteService.getSiteRoles(name).then(function(val){
-					vm.roles = val;
-				});
-			};
-
-			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
-				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
-					// do stuff
-				});
-			};
-
-			vm.addMemberToSite = function(siteName, userName, role) {
-				siteService.addMemberToSite(siteName, userName, role).then(function(val){
-					// do stuff
-				});
-			};
-
-			vm.removeMemberFromSite = function(siteName, userName) {
-				siteService.removeMemberFromSite(siteName, userName).then(function(val){
-					// do stuff
-				});
-			};
 
 			vm.cancel = function() {
 				$mdDialog.cancel();

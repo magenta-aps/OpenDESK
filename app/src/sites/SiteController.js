@@ -123,14 +123,6 @@
 				siteService.getSiteMembers(vm.project).then(function (val) {
 					vm.members = val;
 
-					vm.test = siteService.getAllUsers();
-					console.log(vm.test);
-
-
-
-
-
-
 				});
 
 				vm.newMember = function (event) {
@@ -158,6 +150,30 @@
 						}
 						$mdDialog.cancel();
 
+					});
+				};
+
+				vm.getSiteRoles = function(name) {
+					siteService.getSiteRoles(name).then(function(val){
+						vm.roles = val;
+					});
+				};
+
+				vm.updateRoleOnSiteMember = function(siteName, userName, role) {
+					siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
+						// do stuff
+					});
+				};
+
+				vm.addMemberToSite = function(siteName, userName, role) {
+					siteService.addMemberToSite(siteName, userName, role).then(function(val){
+						// do stuff
+					});
+				};
+
+				vm.removeMemberFromSite = function(siteName, userName) {
+					siteService.removeMemberFromSite(siteName, userName).then(function(val){
+						// do stuff
 					});
 				};
 
