@@ -187,21 +187,4 @@
 					return siteService.getAllUsers(filter)
 				};
 
-				// below for testing purpose - loads some data
-
-				//siteService.getSiteRoles("heide").then(function(val) {
-				//	vm.roles = val.siteRoles;
-				//})
-
-				//siteService.addMemberToSite("heide", "abeecher", "SiteContributor");
-				//siteService.removeMemberFromSite("heide", "abeecher");
-				//siteService.updateRoleOnSiteMember("heide", "abeecher", "SiteConsumer");
-
-				//siteService.getSitesByQuery('1').then(function(val) {
-				//		vm.roles = val;
-				//})
-
-
 			}; // SiteCtrl close
-
-
