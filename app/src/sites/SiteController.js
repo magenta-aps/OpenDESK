@@ -26,19 +26,17 @@
 			};
 
 			vm.deleteSite = function (project) {
-				vm.deleteSite = function (project) {
 				 var confirm = $mdDialog.confirm()
-						.clickOutsideToClose(true)
-						.title('Would you like to delete this projekt?')
-						.textContent('This will remove all blablabla')
-						.ok('Yes!')
-						.cancel('No, changed my mind');
-					$mdDialog.show(confirm).then(function() {
-						siteService.deleteSite(project);
-						$window.location.reload();
-						$window.location.href = '#/projekter';
-					});
-				}
+					.clickOutsideToClose(true)
+					.title('Vil du slette dette projekt?')
+					.textContent('Projektet og alle dets filer vil blive fjernet')
+					.ok('Slet')
+					.cancel('Annullér');
+				$mdDialog.show(confirm).then(function() {
+					siteService.deleteSite(project);
+					$window.location.reload();
+					$window.location.href = '#/projekter';
+				});
 			}
 
 			vm.createFolder = function (folderName) {

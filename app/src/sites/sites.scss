@@ -48,3 +48,15 @@
 		width: 174px;
 	}	
 }
+
+.od-filebrowser-link {
+	display: block;
+	border-top: solid 1px #eee;
+	width: 100%;
+	padding: $u*0.75 0 $u*0.5;
+	
+	.material-icons {
+		vertical-align: middle;
+		margin-top: -($u*0.25);
+	}
+}

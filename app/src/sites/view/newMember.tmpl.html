@@ -1,4 +1,4 @@
-<md-dialog aria-label="New member" ng-controller="SitesController as sitesCtrl" ng-cloak>
+<md-dialog aria-label="New member" ng-controller="SiteController as sitesCtrl" ng-cloak>
 	<form name="addMemberForm" ng-submit="sitesCtrl.addMemberToSite(sitesCtrl.projekt, newMemberName, newMemberRole); sitesCtrl.reload();">
 	
 		<md-toolbar>
@@ -9,14 +9,25 @@
 		
 		<md-dialog-content class="md-padding">
 			<p>Who do you wish to add?</p>
-				<div>
-				  <md-input-container>
+				<div ng-controller="SiteController as vm">
+					<md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="member in members" md-item-text="member.authority.userName">
+					  <md-item-template>
+					    <span md-highlight-text="searchText">{{ member }}</span>
+					  </md-item-template>
+					  <md-not-found>
+					    No matches found.
+					  </md-not-found>
+					</md-autocomplete>					
+					
+					
+				  <!-- <md-input-container>
 					<label>Name</label>
 					<input type="text" name="newMemberName" required ng-model="newMemberName">
 					<div ng-messages="addMemberForm.newMemberName.$error">
 						<div ng-message="required">Dette felt skal udfyldes</div>
 					</div>
-				  </md-input-container>
+				  </md-input-container> -->
+						
 				  <md-input-container class="od-select-wrap">
 					<label>Role</label>
 					<!-- <select required name="newMemberRole" ng-model="newMemberRole"> -->
