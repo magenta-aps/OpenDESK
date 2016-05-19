@@ -33,8 +33,9 @@
 			<h2>Medlemmer</h2>
 			<button class="md-button" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
 			<ul class="od-members">
-				<li ng-repeat="member in vm.members">
-					<a href=""> {{ member.authority.userName }}</a> - <button class="md-button" title="Slet medlem" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()"><i class="material-icons">remove_circle_outline</i></button>
+				<li ng-repeat="member in vm.members" layout="row" layout-align="space-between center">
+					<span>{{ member.authority.firstName }} {{ member.authority.lastName }}</span>
+					<button class="md-button" title="Slet medlem" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()"><i class="material-icons">remove_circle_outline</i></button>
 				</li>
 			</ul>
 		</div>
