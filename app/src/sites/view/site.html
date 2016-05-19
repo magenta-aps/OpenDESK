@@ -17,9 +17,15 @@
 			<button class="md-button" ng-click="vm.deleteFileDialog($event)"><i class="material-icons">delete</i> Slet dokument</button>
 			<button class="md-button" ng-click="vm.deleteFoldereDialog($event)"><i class="material-icons">delete</i> Slet mappe</button>
 			
+			<nav class="od-filebrowser-breadcrumb">
+				<a ng-repeat="part in vm.breadCrumb" ng-href="#/projekter/{{vm.project}}{{part.link}}">
+					{{ part.slug }}
+				</a>
+			</nav>
 			<md-list layout="column">
 				<md-list-item ng-repeat="content in contents" flex="100">
-					<a class="od-filebrowser-link" href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
+					<md-divider></md-divider>
+					<a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
 						<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
 						<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
 						{{content.name}}
