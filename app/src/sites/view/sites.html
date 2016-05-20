@@ -6,6 +6,7 @@
     
     <md-list>
         <md-list-item ng-repeat="project in vm.sites" flex="100">
+            <md-divider></md-divider>
             <a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
                 <i class="material-icons">folder_special</i>
                 {{ project.title }}

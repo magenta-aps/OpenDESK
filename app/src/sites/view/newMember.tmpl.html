@@ -1,5 +1,5 @@
-<md-dialog aria-label="New member" ng-controller="SiteController as siteCtrl" ng-cloak>
-	<form name="addMemberForm" ng-submit="siteCtrl.addMemberToSite(siteCtrl.project, newMemberName.userName, newMemberRole);">
+<md-dialog aria-label="New member"  ng-cloak>
+	<form name="addMemberForm" ng-submit="vm.addMemberToSite(vm.project, newMemberName.userName, newMemberRole);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
@@ -15,7 +15,7 @@
 					md-input-name="autocomplete"
 					md-selected-item="newMemberName"
 					md-search-text="searchText"
-					md-items="user in siteCtrl.getAllUsers(searchText)"
+					md-items="user in vm.getAllUsers(searchText)"
 					md-item-text="user.firstName + ' ' + user.lastName"
 					md-floating-label="Hvem vil du tilføje?">
 					<md-item-template>
@@ -32,7 +32,7 @@
 						<md-option>SiteManager</md-option>
 						<md-option>SiteCollaborator</md-option>
 					</md-select>
-					<div ng-messages="siteCtrl.addMemberForm.newMemberRole.$error">
+					<div ng-messages="vm.addMemberForm.newMemberRole.$error">
 						<div ng-message="required">Dette felt skal udfyldes</div>
 					</div>
 				</md-input-container>
@@ -41,7 +41,7 @@
 		</md-dialog-content>
 		
 		<md-dialog-actions>
-			<md-button ng-click="siteCtrl.cancel()">Annullér</md-button>
+			<md-button ng-click="vm.cancel()">Annullér</md-button>
 			<md-button type="submit" class="md-primary">Tilføj</md-button>
 		</md-dialog-actions>
 		
