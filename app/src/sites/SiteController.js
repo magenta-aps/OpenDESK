@@ -131,6 +131,8 @@
 					$mdDialog.show({
 						templateUrl: 'app/src/sites/view/newMember.tmpl.html',
 						parent: angular.element(document.body),
+						scope: $scope,        // use parent scope in template
+						preserveScope: true,  // do not forget this if use parent scope
 						targetEvent: event,
 						clickOutsideToClose: true
 					});
@@ -169,7 +171,6 @@
 				vm.addMemberToSite = function(siteName, userName, role) {
 					siteService.addMemberToSite(siteName, userName, role).then(function(val){
 						$mdDialog.hide();
-						vm.reload();
 					});
 				};
 
