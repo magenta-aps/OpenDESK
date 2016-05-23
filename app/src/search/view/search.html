@@ -1,111 +1,53 @@
-<md-content layout="column" ng-controller="SearchController as sctrl">
-  
-    <div class="sub-toolbar" layout-padding>
-        <h1 class="md-headline search__header">
-            <span class="muted">{{ 'SEARCH.SEARCHING_FOR' | translate }}:</span>
-            {{ sctrl.searchTerm }}
-        </h1>
-        <div flex class="opene-toggleview">
-            <md-button class="md-icon-button md-accent" ng-class="{active: sctrl.layout == 'grid'}" ng-click="sctrl.layout = 'grid'" title="{{ 'COMMON.GRID_VIEW' | translate }}"><i class="material-icons">view_stream</i></md-button>
-            <md-button class="md-icon-button md-accent" ng-class="{active: sctrl.layout == 'list'}" ng-click="sctrl.layout = 'list'" title="{{ 'COMMON.LIST_VIEW' | translate }}"><i class="material-icons">view_list</i></md-button>
-        </div>
+<div class="od-projects">
+
+    <h1 class="od-title">{{ vm.project }}</h1>
+
+    <div layout="row" layout-align="space-between center">
+        <a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
+        <button class="md-button" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
     </div>
 
-    <div layout="row">
-        
-        <div flex="25" class="menu">
-            <form name="facets" class="filters">
-                <span class="filter-title muted">{{ "SEARCH.FILTER_SEARCH" | translate }}</span>
-                <fieldset ng-repeat="(key, facet) in sctrl.fullSearchResults.facets"
-                          ng-if="facet.length > 0">
-                    <a class="toggle-btn closed" toggle-class="closed">{{ key | translate }} <i class="material-icons">arrow_drop_down</i></a>
-                    <div class="toggle-obj">
-                        <md-checkbox ng-repeat="hit in facet" aria-label="{{hit.value}}" 
-                                        class="md-primary" 
-                                        ng-model="hit.selected"
-                                        ng-change="sctrl.filterResults(key, hit.value)">
-                            <span class="search-hits">{{ hit.label | translate }}</span>
-                        </md-checkbox>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-        
-        <div flex="75" class="search__list">
-            
-            <div ng-repeat="item in sctrl.fullSearchResults.results" ng-show="sctrl.layout == 'grid'">
-                
-                <div ng-if="item.type == 'case'" class="search__item-case">
-                    <div class="search__item__icon">
-                        <span class="material-icons">folder_open</span>
-                    </div>
-                    <div class="search__item__info">
-                        <h2 class="md-title search__item__title">
-                            <span class="muted">{{ item.case.caseId }}</span>
-                            <a title="{{ 'CASE.VIEW_CASE_DETAILS' | translate }}" class="search__item__link md-hue-1" href="#/cases/case/{{ item.case.caseId }}">{{ item.displayName }}</a>
-                        </h2>
-                        <p class="search__item__desc">{{ item.description }}</p>
-                        <div class="search__item__changed muted">{{ "COMMON.MODIFIED_BY" | translate }} {{ item.modifiedBy }} {{ item.modifiedOn | date }}</div>
-                    </div>
-                </div>
-            
-                <div ng-if="item.type == 'document'" class="search__item-document">
-                    <div class="search__item__icon">
-                        <span class="material-icons">insert_drive_file</span>
-                    </div>
-                    <div class="search__item__info">
-                        <h2 ng-if="item.type == 'document' && item.case" class="search__item__title">
-                            <span class="search__item__bonusinfo muted">{{ "CASE.CASE" | translate }}: {{ item.case.caseId }}</span>
-                            <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="search__item__link md-hue-1" href="#/cases/case/{{ item.case.caseId }}/doc/{{ item.docRecordNodeRef | nodeRefUri }}">{{ item.displayName }}</a>
-                        </h2>
-                        <p class="search__item__desc">{{ item.description }}</p>
-                        <div class="search__item__changed muted">{{ "COMMON.MODIFIED_BY" | translate }} {{ item.modifiedBy }} {{ item.modifiedOn | date }}</div>
-                    </div>
-                </div>
-            
-            </div>
-            
-            <table ng-show="sctrl.layout == 'list'" class="list-search">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>{{ "COMMON.TITLE" | translate }}</th>
-                        <th>{{ "COMMON.DESCRIPTION" | translate }}</th>
-                        <th style="text-align: right; padding-right: 24px;">{{ "COMMON.MODIFIED_BY" | translate }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in sctrl.fullSearchResults.results" >
-                        <td>
-                            <div ng-if="item.type == 'case'">
-                                <span class="material-icons">folder_open</span>
-                            </div>
-                            <div ng-if="item.type == 'document'">
-                                <span class="material-icons">insert_drive_file</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div ng-if="item.type == 'case'">
-                                <span class="muted">{{ item.case.caseId }}</span>
-                                <a title="{{ 'CASE.VIEW_CASE_DETAILS' | translate }}" class="search__item__link md-hue-1" href="#/cases/case/{{ item.case.caseId }}">{{ item.displayName }}</a>
-                            </div>
-                            <div ng-if="item.type == 'document' && item.case">
-                                <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="search__item__link md-hue-1" href="#/cases/case/{{ item.case.caseId }}/doc/{{ item.docRecordNodeRef | nodeRefUri }}">{{ item.displayName }}</a>
-                            </div>
-                        </td>
-                        <td>
-                            {{ item.description }}
-                        </td>
-                        <td style="text-align: right;">
-                            <div class="muted">{{ "COMMON.MODIFIED_BY" | translate }} {{ item.modifiedBy }} {{ item.modifiedOn | date }}</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-        </div>
-        
-    </div> 
-    
+    <form name="addMemberForm" ng-submit="Alert(hej);">
 
-</md-content>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Tilføj medlem til projekt</h2>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding">
+            <div>
+
+                <md-autocomplete
+                        required
+                        md-input-name="autocomplete"
+                        md-selected-item="newMemberName"
+                        md-search-text="searchText"
+                        md-items="results in vm.getAutoSuggestions(searchText)"
+                        md-item-text="results"
+                        md-floating-label="Hvad vil du søge efter?">
+                    <md-item-template>
+                        <span md-highlight-text="searchText"></span>
+                    </md-item-template>
+                    <div ng-messages="autocompleteForm.autocomplete.$error">
+                        <div ng-message="required">Dette felt skal udfyldes</div>
+                    </div>
+                </md-autocomplete>
+
+
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button ng-click="vm.cancel()">Annullér</md-button>
+            <md-button type="submit" class="md-primary">Tilføj</md-button>
+        </md-dialog-actions>
+
+    </form>
+
+
+
+
+
+</div>

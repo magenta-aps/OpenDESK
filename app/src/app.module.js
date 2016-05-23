@@ -184,6 +184,18 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
+    }).state('search', {
+        url: '/search',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/search/view/search.html',
+                controller: 'SearchController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
     });
 }
 
