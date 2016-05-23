@@ -26,7 +26,13 @@
             searchService.getSearchSuggestions(term).then(function (val) {
                 console.log("Thada");
                 console.log(val);
-                return val;
+                if (val != undefined) {
+                    return val;
+                }
+                else {
+                    return [];
+                }
+
             });
         }
 
