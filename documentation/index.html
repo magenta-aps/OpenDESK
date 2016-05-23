@@ -15,6 +15,40 @@
         <p>Hi there. If you want to develop on OpenDesk, you&#39;ve come to the right place.</p>
         <h2 id="technical-info">Technical info</h2>
         <p>Here are some technical details for developers.</p>
+        <h3 id="RefreshInDialogs">Problems with refresh when working with dialogs</h3>
+        <p>We have had problems with refresh of components when working in a dialog. This is a problem caused by not beeing in the same scope.</p>
+        <p>The solution is to pass on the current scope to the dialog. Your component then has to be a part of the scope</p>
+        <p>It is illustrated in the following</p>
+
+        <pre>
+            // put your variable in the $scope
+            $scope.members = [];
+
+            // pass the current scope to your component
+            vm.uploadDocumentsDialog = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+
+            // gotchas
+            dont add the controller again in the template, this will make refresh fail
+
+            <.md-dialog aria-label="New member" ng-controller="SiteController as siteCtrl" ng-cloak>
+
+            If you do like above, the refresh will fail as the controller is loaded again. You dont need to add the controller, the variables are already available.
+
+
+        </pre>
+
+
+
+
         <h3 id="public-site">Public site</h3>
         <p>A publicly facing site running OpenDesk can be found at <a href="http://178.62.208.124/#/">http://178.62.208.124/#/</a>.</p>
         <h3 id="gulp">Gulp</h3>
