@@ -24,7 +24,7 @@
                         md-selected-item="searchQuery"
                         md-search-text="searchText"
                         md-items="results in vm.getAutoSuggestions(searchText)"
-                        md-item-text="results"
+                        md-item-text="results.term"
                         md-floating-label="Hvad vil du søge efter?">
                     <md-item-template>
                         <span md-highlight-text="searchText">{{results.term}}</span>

@@ -27,8 +27,6 @@
 
         vm.getSearchresults = function(term) {
 
-            alert(term);
-
             return searchService.getSearchResults(term).then(function (val) {
 
                 if (val != undefined) {
