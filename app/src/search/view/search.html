@@ -4,14 +4,13 @@
 
     <div layout="row" layout-align="space-between center">
         <a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
-        <button class="md-button" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
     </div>
 
     <form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Tilføj medlem til projekt</h2>
+                <h2>Søgning</h2>
             </div>
         </md-toolbar>
 
@@ -40,15 +39,13 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button ng-click="vm.cancel()">Annullér</md-button>
-            <md-button type="submit" class="md-primary">Tilføj</md-button>
+            <md-button type="submit" class="md-primary">Søg</md-button>
         </md-dialog-actions>
 
     </form>
 
-
-    <li ng-repeat="r in results.items" layout="row" layout-align="space-between center">
-        <span>{{ r.name }} {{ r.modifiedBy }}</span>
+    <li ng-repeat="r in searchResults.data.items" layout="row" layout-align="space-between center">
+        <span><b>Name:</b> {{ r.name }} <b>Modified by:</b> {{ r.modifiedBy }}</span>
     </li>
 
 
