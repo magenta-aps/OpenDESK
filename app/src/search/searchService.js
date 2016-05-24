@@ -7,8 +7,9 @@ angular.module('openDeskApp.search').factory('searchService', function ($http, $
     return {
 
         getSearchSuggestions: function (term) {
-            return $http.get( '/alfresco/s/slingshot/auto-suggest?t=' + term).then(function (response) {
-                return response.data.suggestions;
+            return $http.get( '/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=50").then(function (response) {
+                console.log(response);
+                return response.data.items;
             })
         },
         getSearchResults: function (term) {
