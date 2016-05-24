@@ -11,19 +11,10 @@
     function SearchController($scope, $stateParams, searchService) {
         var vm = this;
 
-        //
-        //vm.getAutoSuggestions = function(term) {
-        //
-        //    searchService.getSearchSuggestions(term).then(function (response) {
-        //        vm.results = response;
-        //    });
-        //}
-
+        $scope.searchResults = [];
 
         vm.getAutoSuggestions = function(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {
-                console.log("Thada");
-                console.log(val);
 
                 if (val != undefined) {
                     return val;
@@ -34,7 +25,16 @@
             });
         }
 
+        vm.getSearchresults = function(term) {
+            return searchService.getSearchResults(term).then(function (val) {
 
-
-
+                if (val != undefined) {
+                    $scope.searchResults = val;
+                }
+                else {
+                    return [];
+                }
+            });
+        }
     }
+

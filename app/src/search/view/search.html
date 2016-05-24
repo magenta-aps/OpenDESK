@@ -7,7 +7,7 @@
         <button class="md-button" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
     </div>
 
-    <form name="addMemberForm" ng-submit="Alert(hej);">
+    <form name="doSearch" ng-submit="vm.getSearchresults(searchQuery);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -21,13 +21,13 @@
                 <md-autocomplete
                         required
                         md-input-name="autocomplete"
-                        md-selected-item="newMemberName"
+                        md-selected-item="searchQuery"
                         md-search-text="searchText"
                         md-items="results in vm.getAutoSuggestions(searchText)"
                         md-item-text="results"
                         md-floating-label="Hvad vil du søge efter?">
                     <md-item-template>
-                        <span md-highlight-text="searchText">{{results}}</span>
+                        <span md-highlight-text="searchText">{{results.term}}</span>
                     </md-item-template>
                     <div ng-messages="autocompleteForm.autocomplete.$error">
                         <div ng-message="required">Dette felt skal udfyldes</div>
@@ -47,6 +47,9 @@
     </form>
 
 
+    <li ng-repeat="r in vm.results.items" layout="row" layout-align="space-between center">
+        <span>{{ r.name }} {{ r.modifiedBy }}</span>
+    </li>
 
 
 
