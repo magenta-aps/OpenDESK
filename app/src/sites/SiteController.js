@@ -76,13 +76,18 @@
 			};
 
 
-			vm.deleteFileDialog = function (event) {
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/deleteFile.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: event,
-					clickOutsideToClose: true
-				});
+			vm.deleteFileDialog = function (event, nodeRef) {
+  			var confirm = $mdDialog.confirm()
+  			      .title('Would you like to delete this file?')
+  			      .textContent('Something happens in danish.')
+  			      .ariaLabel('Sluk dokument')
+  			      .targetEvent(event)
+  			      .ok('Yes')
+  			      .cancel('Nej, tak');
+  			
+  			$mdDialog.show(confirm).then(function() {
+  			  vm.deleteFile(nodeRef);
+  			});
 			}
 
 			vm.uploadDocumentsDialog = function (event) {

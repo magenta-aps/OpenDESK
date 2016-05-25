@@ -31,7 +31,8 @@
 						{{content.name}}
 					</a>
 					
-					<button class="md-button" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button>
+					<button class="md-button" ng-show="content.contentType === 'cmis:folder'" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button>
+					<button class="md-button" ng-show="content.contentType === 'cmis:document'" ng-click="vm.deleteFileDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button>
 					
 				</md-list-item>
 			</md-list>
