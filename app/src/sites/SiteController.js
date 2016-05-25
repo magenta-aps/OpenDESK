@@ -102,13 +102,18 @@
 				vm.reload();
 			}
 
-			vm.deleteFoldereDialog = function (event) {
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/deleteFolder.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: event,
-					clickOutsideToClose: true
-				});
+			vm.deleteFoldereDialog = function (event, nodeRef) {
+			   var confirm = $mdDialog.confirm()
+			         .title('Would you like to delete this folder?')
+			         .textContent('This will delete this folder with all its contents.')
+			         .ariaLabel('Sluk mappe')
+			         .targetEvent(event)
+			         .ok('Yes')
+			         .cancel('Nej, tak');
+
+			   $mdDialog.show(confirm).then(function() {
+			     vm.deleteFolder(nodeRef);
+			   });
 			};
 
 			vm.deleteFolder = function (nodeRef) {
