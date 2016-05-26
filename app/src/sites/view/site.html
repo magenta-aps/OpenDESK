@@ -7,7 +7,6 @@
 		<button class="md-button" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>		
 	</div>
 
-
 	<div layout-gt-sm="row">
 		
 		<div flex-gt-sm="75">
@@ -46,7 +45,7 @@
 			<h2>Medlemmer</h2>
 			<button class="md-button" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
 			<ul class="od-members">
-				{{ members.length }}
+
 
 				<li ng-repeat="member in members" layout="row" layout-align="space-between center">
 					<span>{{ member.authority.firstName }} {{ member.authority.lastName }}</span>
@@ -54,7 +53,7 @@
 				</li>
 			</ul>
 		</div>
-	
+
 	</div>
 
 

@@ -9,6 +9,7 @@
 			var vm = this;
 			$scope.contents = [];
 			$scope.members = [];
+			$scope.roles = [];
 
 			vm.project = $stateParams.projekt;
 			vm.path = $stateParams.path;
@@ -180,11 +181,13 @@
 				});
 			};
 
-			vm.getSiteRoles = function(name) {
-				siteService.getSiteRoles(name).then(function(val){
-					vm.roles = val;
+			vm.loadSiteRoles = function() {
+				   siteService.getSiteRoles(vm.project).then(function(response){
+					   console.log(response);
+					   $scope.roles = response.siteRoles;
 				});
 			};
+			vm.loadSiteRoles();
 
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
 				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
@@ -208,5 +211,7 @@
 			vm.getAllUsers = function(filter) {
 				return siteService.getAllUsers(filter)
 			};
+
+
 
 		}; // SiteCtrl close
