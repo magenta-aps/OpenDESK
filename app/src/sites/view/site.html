@@ -14,8 +14,6 @@
 			<h2>Dokumenter</h2>
 			<button class="md-button" ng-click="vm.newFolderDialog($event)"><i class="material-icons">create_new_folder</i> Ny mappe</button>
 			<button class="md-button" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter</button>
-			<button class="md-button" ng-click="vm.deleteFileDialog($event)"><i class="material-icons">delete</i> Slet dokument</button>
-			<button class="md-button" ng-click="vm.deleteFoldereDialog($event)"><i class="material-icons">delete</i> Slet mappe</button>
 			
 			<nav class="od-filebrowser-breadcrumb">
 				<a ng-repeat="part in vm.breadCrumb" ng-href="#/projekter/{{vm.project}}{{part.link}}">
