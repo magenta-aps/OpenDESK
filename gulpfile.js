@@ -22,7 +22,7 @@ var environment = {
         proxy: 'http://178.62.194.129:8080'
     },
     local: {
-        repo: 'http://178.62.194.129:8080',
+        repo: 'http://localhost:8080',
         share: 'http://localhost:8081'
     }
 };
