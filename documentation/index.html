@@ -210,6 +210,48 @@
         <p>Berit tjekker Ullas personalemappe i SDløn (native windows) som starter i et sømløst Citrix vindue. Login styres af Ballerup idp service.</p>
         <p>Berit tjekker på Intra – lederportal reglerne for sygefraværssamtaler og samarbejdspolitikken. Berit ser at der i hendes notifikationer på arbejdspladsen, er en mail fra Ole – hendes personale konsulent i HR. Berit klikker på notifikationen og mailvinduet (html) åbner. Berit læser Oles kommentarer til hendes samtale med tillidsmanden om kommunens nye sygefraværs og fastholdelsespolitik. der er et link til politikken på Intra. Berit når at se en ny notifikation om at hendes nye nøglestal for økonomi er fine, samt at hendes souschef Karin har journaliseret en kladde til referat fra forældremødet aftenen inden. Det ligger til godkendelse i Dokumenter. Berit har stadig tid så hun klikker på linket til Referatet, læser det og godkender det. Referatet bliver automatisk journaliseret på den sag Karin har angivet. I Dokumenter står referatet nu som endeligt. Berit lukker vinduet logger ud, og er klar til samtalen med tillidsmanden.</p>
         <p>Efter samtalen logger Berit ind på Arbejdspladsen (Glaspladen) og åbner personalesagen. Berit skriver sit referat af samtalen og sender et link til tillidsmanden. Når tillidsmanden har læst og accepteret referatet kan det gøres aktivt på personalesagen – indtil da optræder det i Dokumenter.</p>
-    
+
+
+
+        <h2 id="update staging">How to update the staging environment</h2>
+
+        <pre>
+
+            logon to the server with your user. I use this for my user:
+
+              <b>ssh flemming@178.62.194.129</b>
+
+            change to the folder where staging is setup:
+
+              <b>cd /var/www/staging/OpenDESK-UI/</b>
+
+            change the user to flemming, as i am the one who has checked it out from github
+
+              <b>sudu su flemming</b>
+
+            you will be promptet for your own users password
+
+            enter the command:
+
+              <b>git pull</b>
+
+            now build the project and update any newly added dependencies
+
+              <b>npm update</b>
+              <b>npm i</b> (press 3 when you are promptet)
+
+              <b>gulp local</b> (to build the files) - just press crtl d, to cancel the gulp server when its started
+
+            finally restart the apache server
+
+              <b>sudo service apache2 restart</b>  (you will be promptet for your own password)
+
+
+
+
+
+        </pre>
+
+
     </body>
 </html>
