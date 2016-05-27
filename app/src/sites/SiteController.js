@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location) {
+        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService) {
 
 			var vm = this;
 			$scope.contents = [];
@@ -211,6 +211,19 @@
 			vm.getAllUsers = function(filter) {
 				return siteService.getAllUsers(filter)
 			};
+
+			vm.previewDocument = function previewDocument(nodeRef){
+				documentPreviewService.previewDocument(nodeRef);
+			}
+
+			vm.downloadDocument = function downloadDocument(nodeRef, name){
+				alfrescoDownloadService.downloadFile(nodeRef, name);
+			}
+
+
+
+
+
 
 
 

@@ -137,7 +137,7 @@
                             'image/jpeg'
                             ],
                 templateUrl: 'image.html',
-                maxItemSize: 2000000,
+                maxItemSize: 20000000,
                 initScope: function($scope){
                     $scope.itemMaxSizeExceeded = (this.itemSize && parseInt(this.itemSize) > this.maxItemSize);
                     if($scope.itemMaxSizeExceeded === false){
