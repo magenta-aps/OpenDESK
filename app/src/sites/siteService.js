@@ -24,6 +24,17 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
+        updateSiteName : function (shortName, newName){
+            return $http.put( '/api/sites/' + shortName, {shortName: shortName, sitePreset : "default", title : newName, description : "cropA"}).then(function (response) {
+                return response.data;
+            })
+        },
+        loadSiteData : function (shortName){
+            return $http.get( '/api/sites/' + shortName).then(function (response) {
+                console.log(response.data.title);
+                return response.data.title;
+            })
+        },
         addMemberToSite: function (siteName, member, role) {
             return $http.post( '/api/sites/' + siteName + '/memberships', {role: role, person : {userName : member} }).then(function (response) {
                 return response.data;
@@ -68,10 +79,11 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         getAllUsers : function (filter){
-           return userService.getPeople("?filter=" + filter).then(function(result){
+            return userService.getPeople("?filter=" + filter).then(function(result){
                 return result.people;
             });
         },
+
         uploadFiles : function (file, destination, extras) {
 
             var formData = new FormData();

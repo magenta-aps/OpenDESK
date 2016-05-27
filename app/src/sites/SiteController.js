@@ -47,6 +47,40 @@
 				});
 			}
 
+			vm.renameSiteDialog = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+
+			vm.updateSiteName = function (newName) {
+				var r = siteService.updateSiteName(vm.project, newName);
+
+				r.then(function(result){
+					vm.project_title=result.title;
+						console.log(result);
+					$mdDialog.hide();
+
+					});
+			}
+
+			vm.loadSiteData = function () {
+				var r = siteService.loadSiteData(vm.project);
+
+				r.then(function(result) {
+					vm.project_title = result;
+				});
+
+
+			}
+			vm.loadSiteData();
+
+
 			vm.createFolder = function (folderName) {
 				var currentFolderNodeRef;
 				var cmisQuery = $stateParams.projekt + $stateParams.path;
@@ -104,7 +138,6 @@
 
 			vm.deleteFile = function (nodeRef) {
 				siteService.deleteFile(nodeRef);
-
 				vm.reload();
 			}
 
@@ -183,7 +216,6 @@
 
 			vm.loadSiteRoles = function() {
 				   siteService.getSiteRoles(vm.project).then(function(response){
-					   console.log(response);
 					   $scope.roles = response.siteRoles;
 				});
 			};
