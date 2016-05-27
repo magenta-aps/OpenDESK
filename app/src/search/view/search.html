@@ -45,7 +45,12 @@
     </form>
 
     <li ng-repeat="r in searchResults.data.items" layout="row" layout-align="space-between center">
-        <span><b>Name:</b> {{ r.name }} <b>Modified by:</b> {{ r.modifiedBy }}</span>
+        <span> {{ r.name }} , <i>Modified by</i> {{ r.modifiedBy }}
+
+                    <button class="md-button"  ng-click="vm.downloadDocument(r.nodeRef, r.name)">download<i class="material-icons"></i></button>
+					<button class="md-button"  ng-click="vm.previewDocument(r.nodeRef)">preview<i class="material-icons"></i></button>
+
+        </span>
     </li>
 
 

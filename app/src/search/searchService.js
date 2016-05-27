@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.search').factory('searchService', function ($http, $window, alfrescoNodeUtils) {
+angular.module('openDeskApp.search').factory('searchService', function ($http, $window, alfrescoNodeUtils ) {
     var restBaseUrl = '/alfresco/s/api/';
     //var restBaseUrl = '/alfresco/s/slingshot/auto-suggest';
     //alfresco/s/slingshot/auto-suggest?t={term}&limit={limit?}
@@ -17,5 +17,8 @@ angular.module('openDeskApp.search').factory('searchService', function ($http, $
                 return response;
             })
         }
+
+
+
     };
 });

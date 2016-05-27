@@ -8,7 +8,7 @@
      * @param $scope
      * @constructor
      */
-    function SearchController($scope, $stateParams, searchService) {
+    function SearchController($scope, $stateParams, searchService, documentPreviewService, alfrescoDownloadService) {
         var vm = this;
 
         $scope.searchResults = [];
@@ -37,5 +37,15 @@
                 }
             });
         }
+
+        vm.previewDocument = function previewDocument(nodeRef){
+            documentPreviewService.previewDocument(nodeRef);
+        }
+
+        vm.downloadDocument = function downloadDocument(nodeRef, name){
+            alfrescoDownloadService.downloadFile(nodeRef, name);
+        }
+
+
     }
 
