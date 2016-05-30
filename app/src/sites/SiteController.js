@@ -14,6 +14,14 @@
 			vm.project = $stateParams.projekt;
 			vm.path = $stateParams.path;
 			vm.breadCrumb = [{slug: vm.project, link: '/'}];
+
+			//// testing of the move/copy
+			//var nodeRef = "workspace://SpacesStore/c0951576-6104-4aaf-8c85-49dfa8b758db";
+			////var nodeRef2 = "workspace://SpacesStore/8bf7cd04-dfd7-4342-8864-91bdce706504";
+            //
+			//vm.source = [nodeRef];
+			//vm.dest = "workspace://SpacesStore/53e662db-74f3-49ee-a15e-eb0c58c6b3b0"; // folder: 1
+			//vm.parentId = "workspace://SpacesStore/de35297e-9317-42f0-9ce9-89c58976df7a";
 			
 			vm.upDateBreadCrumb = function() {
 				var bc = '';
@@ -252,11 +260,13 @@
 				alfrescoDownloadService.downloadFile(nodeRef, name);
 			}
 
+			vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
+				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+			}
 
-
-
-
-
-
+			vm.copyNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
+				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+			}
 
 		}; // SiteCtrl close
+

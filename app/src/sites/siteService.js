@@ -83,7 +83,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return result.people;
             });
         },
-
         uploadFiles : function (file, destination, extras) {
 
             var formData = new FormData();
@@ -96,6 +95,16 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 headers: {'Content-Type': undefined}
             }).then(function(response){
                 return response;
+            });
+        },
+        moveNodeRefs : function (sourceNodeRefs, destNodeRef, parentNodeRef){
+            return $http.post('/slingshot/doclib/action/move-to/node/' + alfrescoNodeUtils.processNodeRef(destNodeRef).uri, {nodeRefs: sourceNodeRefs, parentId : parentNodeRef}).then(function (response) {
+                return result.response;
+            });
+        },
+        copyNodeRefs : function (sourceNodeRefs, destNodeRef, parentNodeRef){
+            return $http.post('/slingshot/doclib/action/copy-to/node/' + alfrescoNodeUtils.processNodeRef(destNodeRef).uri, {nodeRefs: sourceNodeRefs, parentId : parentNodeRef}).then(function (response) {
+                return result.response;
             });
         }
     };
