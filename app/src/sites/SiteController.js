@@ -6,6 +6,13 @@
         
         function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService) {
 
+			converse.initialize({
+				bosh_service_url: '/http-bind', // Please use this connection manager only for testing purposes
+				i18n: locales.en, // Refer to ./locale/locales.js to see which locales are supported
+				show_controlbox_by_default: true,
+				roster_groups: true
+			});
+
 			var vm = this;
 			$scope.contents = [];
 			$scope.members = [];

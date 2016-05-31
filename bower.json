@@ -27,6 +27,7 @@
     "angular-ui-router": "",
     "isteven-angular-multiselect": "3.0.0",
     "material-wizard": "",
+    "converseJS": "https://github.com/magenta-aps/converse.js.git",
     "pdfjs-dist": ""
   },
   "devDependencies": {
