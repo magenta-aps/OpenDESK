@@ -50,7 +50,8 @@
 
 
 				<li ng-repeat="member in members" layout="row" layout-align="space-between center">
-					<span>{{ member.authority.firstName }} {{ member.authority.lastName }}</span>
+					{{ member.authority.firstName }} {{ member.authority.lastName }}
+					<span class="muted">({{ member.role }})</span>
 					<button class="md-button" title="Slet medlem" ng-click="sitesCtrl.removeMemberFromSite(vm.project, member.authority.userName); sitesCtrl.reload()"><i class="material-icons">remove_circle_outline</i></button>
 				</li>
 			</ul>
