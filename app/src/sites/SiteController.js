@@ -130,6 +130,7 @@
   			
   			$mdDialog.show(confirm).then(function() {
   			  vm.deleteFile(nodeRef);
+					
   			});
 			}
 
@@ -240,6 +241,21 @@
 					vm.loadMembers();
 				});
 				$mdDialog.hide();
+			};
+			
+			vm.deleteMemberDialog = function (siteName, userName) {
+			   var confirm = $mdDialog.confirm()
+			         .title('Would you like to delete this member?')
+			         .textContent('Something på dansk.')
+			         .ariaLabel('Sluk medlem')
+			         .targetEvent(event)
+			         .ok('Yes')
+			         .cancel('Nej, tak');
+
+			   $mdDialog.show(confirm).then(function() {
+			     vm.removeMemberFromSite(siteName, userName);
+					 vm.reload();
+			   });
 			};
 
 			vm.removeMemberFromSite = function(siteName, userName) {
