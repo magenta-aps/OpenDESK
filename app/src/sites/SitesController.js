@@ -3,11 +3,11 @@
     angular
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
-        
+
         function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams) {
-			
+
 			var vm = this;
-			
+
 			vm.newSite = function(event) {
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/newProject.tmpl.html',
@@ -16,7 +16,7 @@
 					clickOutsideToClose:true
 				});
 			};
-			
+
 			vm.createSite = function(name, description) {
 				siteService.createSite(name, description);
 				$mdDialog.hide();
@@ -47,7 +47,19 @@
 				vm.sites = val;
 			});
 
-			vm.projekt = $stateParams.projekt;
+
+
+			vm.querySites = function(q) {
+				return siteService.getSitesByQuery(q).then(function (val) {
+					vm.sites = val;
+				});
+			}
+
+
+            //
+			//vm.projekt = $stateParams.projekt;
+            //
+			
 
 			// below for testing purpose - loads some data
 

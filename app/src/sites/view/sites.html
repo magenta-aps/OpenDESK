@@ -1,9 +1,12 @@
 <div class="od-projects">
-    
+
+
     <h1 class="od-title">Projekter</h1>
 
     <button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">folder_special</i> Nyt Projekt</button>
-    
+
+    <input placeholder="søg" type="text" ng-model="query" ng-change="vm.querySites(query)"/>
+
     <md-list>
         <md-list-item ng-repeat="project in vm.sites" flex="100">
             <md-divider></md-divider>
@@ -13,5 +16,8 @@
             </a>
         </<md-list-item>
     </md-list>
+
+
+
 
 </div>
