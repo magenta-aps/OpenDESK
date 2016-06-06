@@ -59,7 +59,7 @@
             //
 			//vm.projekt = $stateParams.projekt;
             //
-			
+
 
 			// below for testing purpose - loads some data
 

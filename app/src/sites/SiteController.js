@@ -284,5 +284,23 @@
 				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
 			}
 
+			vm.renameDocument = function renameDocument(docNodeRef, newName) {
+
+				var props = {
+					prop_cm_name: newName
+				};
+
+				siteService.updateNode(docNodeRef, props);
+			}
+
+			//vm.test = function test() {
+			//	var nodeRef = "workspace://SpacesStore/8c23bfdb-e1bb-4f17-9682-144404bca3e3";
+			//	var newName = "gufsssssfy.jpg"
+            //
+			//	vm.renameDocument(nodeRef, newName);
+			//}
+
+
+
 		}; // SiteCtrl close
 
