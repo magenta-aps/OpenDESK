@@ -53,7 +53,39 @@
 				<li ng-repeat="member in members" layout="row" layout-align="space-between center">
 					{{ member.authority.firstName }} {{ member.authority.lastName }}
 					<span class="muted">({{ member.role }})</span>
-					<button class="md-button" title="Slet medlem" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName);"><i class="material-icons">remove_circle_outline</i></button>
+
+					<md-menu>
+					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
+					    </md-button>
+						
+					    <md-menu-content width="6">
+					      <md-menu-item>
+					        <md-button ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+					          <md-icon md-menu-align-target>create</md-icon>
+					          Change role
+					        </md-button>
+					      </md-menu-item>
+					      
+					      <md-menu-item>
+					        <md-button ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName);">
+					          <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+					          Remove member
+					        </md-button>
+					      </md-menu-item>
+					    </md-menu-content>
+					</md-menu>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				</li>
 			</ul>
 		</div>

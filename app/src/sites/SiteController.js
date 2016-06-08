@@ -40,6 +40,13 @@
 			vm.reload = function () {
 				$window.location.reload();
 			};
+			
+			var originatorEv;
+			vm.openMenu = function($mdOpenMenu, event) {
+			  originatorEv = event;
+			  $mdOpenMenu(event);
+			};
+			
 
 			vm.deleteSite = function (project) {
 				 var confirm = $mdDialog.confirm()
@@ -206,7 +213,6 @@
 				});
 			};
 
-
 			vm.upload = function (files) {
 				var cmisQuery = $stateParams.projekt + $stateParams.path;
 				cmisService.getNode(cmisQuery).then(function (val) {
@@ -230,6 +236,20 @@
 			};
 			vm.loadSiteRoles();
 
+			vm.currentDialogUser = '';
+
+			vm.updateMemberRoleDialog = function(event, user) {
+				vm.currentDialogUser = user;				
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
+					parent: angular.element(document.body),
+					scope: $scope,
+					preserveScope: true,
+					targetEvent: event,
+					clickOutsideToClose: true
+				});
+			}
+			
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
 				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
 					// do stuff
