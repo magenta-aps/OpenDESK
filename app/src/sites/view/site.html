@@ -6,7 +6,6 @@
 		<a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 		<button class="md-button" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>		
 		<button class="md-button" ng-click="vm.renameSiteDialog($event)"> Omdøb projekt</button>
-		<!--<button class="md-button" ng-click="vm.test()"> Omdøb document</button>-->
 		<!--<button class="md-button" ng-click="vm.copyNodeRefs(vm.source, vm.dest, vm.parentId)"> Afprøv flyt</button>-->
 	</div>
 
@@ -31,10 +30,68 @@
 						{{content.name}}
 					</a>
 					
-					<button class="md-button" ng-show="content.contentType === 'cmis:folder'" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button>
-					<button class="md-button" ng-show="content.contentType === 'cmis:document'" ng-click="vm.downloadDocument(content.nodeRef, content.name)">download<i class="material-icons"></i></button>
-					<button class="md-button" ng-show="content.contentType === 'cmis:document'" ng-click="vm.previewDocument(content.nodeRef)">preview<i class="material-icons"></i></button>
-					<button class="md-button" ng-show="content.contentType === 'cmis:document'" ng-click="vm.deleteFileDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button>
+					<md-menu ng-show="content.contentType === 'cmis:document'">
+					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
+					    </md-button>
+						
+					    <md-menu-content width="6">
+					      <md-menu-item>
+					        <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
+					          <md-icon md-menu-align-target>get_app</md-icon>
+					          Download
+					        </md-button>
+					      </md-menu-item>
+					      
+					      <md-menu-item>
+					        <md-button ng-click="vm.previewDocument(content.nodeRef)">
+					          <md-icon md-menu-align-target>zoom_in</md-icon>
+					          Preview
+					        </md-button>
+					      </md-menu-item>
+								
+					      <md-menu-item>
+					        <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
+					          <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+					          Delete
+					        </md-button>
+					      </md-menu-item>
+								
+					      <md-menu-item>
+					        <md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
+					          <md-icon md-menu-align-target>create</md-icon>
+					          Rename
+					        </md-button>
+					      </md-menu-item>
+					    </md-menu-content>
+					</md-menu>
+					
+					
+					<md-menu ng-show="content.contentType === 'cmis:folder'">
+					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
+					    </md-button>
+						
+					    <md-menu-content width="6">
+					      <md-menu-item>
+					        <md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
+					          <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+					          Delete
+					        </md-button>
+					      </md-menu-item>
+								
+					      <!-- <md-menu-item>
+					        <md-button ng-click="">
+					          <md-icon md-menu-align-target>create</md-icon>
+					          Rename
+					        </md-button>
+					      </md-menu-item> -->
+					    </md-menu-content>
+					</md-menu>
+					
+
+<!--
+					<button class="md-button" ng-show="content.contentType === 'cmis:folder'" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button> -->
 
 				</md-list-item>
 			</md-list>
@@ -48,8 +105,6 @@
 			<h2>Medlemmer</h2>
 			<button class="md-button" ng-click="vm.newMember($event)"><i class="material-icons">face</i> Tilføj medlem</button>
 			<ul class="od-members">
-
-
 				<li ng-repeat="member in members" layout="row" layout-align="space-between center">
 					{{ member.authority.firstName }} {{ member.authority.lastName }}
 					<span class="muted">({{ member.role }})</span>
@@ -75,17 +130,6 @@
 					      </md-menu-item>
 					    </md-menu-content>
 					</md-menu>
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
 				</li>
 			</ul>
 		</div>

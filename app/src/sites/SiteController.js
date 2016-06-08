@@ -304,6 +304,23 @@
 				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
 			}
 
+			
+			vm.renameDocumentDialog = function(event, docNodeRef) {
+				var confirm = $mdDialog.prompt()
+	      	.title('What would you like name this?')
+	      	.placeholder('Name')
+	      	.ariaLabel('Name')
+	      	.targetEvent(event)
+	      	.ok('Rename')
+	      	.cancel('Annullér');
+	    	$mdDialog.show(confirm).then(function(result) {
+					// TODO extract from input:
+					var newName = "foo file";
+					vm.renameDocument(docNodeRef, newName);
+					vm.reload();
+	    	});
+			}
+			
 			vm.renameDocument = function renameDocument(docNodeRef, newName) {
 
 				var props = {
@@ -313,12 +330,12 @@
 				siteService.updateNode(docNodeRef, props);
 			}
 
-			//vm.test = function test() {
-			//	var nodeRef = "workspace://SpacesStore/8c23bfdb-e1bb-4f17-9682-144404bca3e3";
-			//	var newName = "gufsssssfy.jpg"
-            //
-			//	vm.renameDocument(nodeRef, newName);
-			//}
+			// vm.test = function test() {
+			// 	var nodeRef = "workspace://SpacesStore/8c23bfdb-e1bb-4f17-9682-144404bca3e3";
+			// 	var newName = "gufsssssfy.jpg"
+			//
+			// 	vm.renameDocument(nodeRef, newName);
+			// }
 
 
 
