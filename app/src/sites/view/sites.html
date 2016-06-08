@@ -2,10 +2,15 @@
 
 
     <h1 class="od-title">Projekter</h1>
-
+		
+<div layout="row" layout-align="space-between">
     <button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">folder_special</i> Nyt Projekt</button>
-
-    <input placeholder="søg" type="text" ng-model="query" ng-change="vm.querySites(query)"/>
+		<!-- <br> -->
+		<md-input-container>
+			<label>Søg</label>
+			<input type="text" ng-model="query" ng-change="vm.querySites(query)">
+		</md-input-container>
+	</div>
 
     <md-list>
         <md-list-item ng-repeat="project in vm.sites" flex="100">

@@ -305,7 +305,7 @@
 			}
 
 			
-			vm.renameDocumentDialog = function(event, docNodeRef) {				
+			vm.renameDocumentDialog = function(event, docNodeRef) {
 				var confirm = $mdDialog.prompt()
 	      	.title('What would you like name this?')
 	      	.placeholder('Name')
