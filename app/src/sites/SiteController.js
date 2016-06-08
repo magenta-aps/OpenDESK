@@ -305,7 +305,7 @@
 			}
 
 			
-			vm.renameDocumentDialog = function(event, docNodeRef) {
+			vm.renameDocumentDialog = function(event, docNodeRef) {				
 				var confirm = $mdDialog.prompt()
 	      	.title('What would you like name this?')
 	      	.placeholder('Name')
@@ -314,8 +314,7 @@
 	      	.ok('Rename')
 	      	.cancel('Annullér');
 	    	$mdDialog.show(confirm).then(function(result) {
-					// TODO extract from input:
-					var newName = "foo file";
+					var newName = result;					
 					vm.renameDocument(docNodeRef, newName);
 					vm.reload();
 	    	});
