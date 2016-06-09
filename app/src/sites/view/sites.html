@@ -3,13 +3,31 @@
 
     <h1 class="od-title">Projekter</h1>
 		
-<div layout="row" layout-align="space-between">
+    <!-- <a class="od-search-link" href="#/search">
+        <i class="material-icons">search</i>
+        Search
+    </a> -->
+		
+		
+		
+<div layout="row" layout-align="space-between center">
     <button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">folder_special</i> Nyt Projekt</button>
-		<!-- <br> -->
+		
+    <a class="od-search-link" href="#/search">
+        <i class="material-icons">search</i>
+        Search
+    </a>
+    
+		
 		<md-input-container>
-			<label>Søg</label>
+			<label>Browse projekter...</label>
 			<input type="text" ng-model="query" ng-change="vm.querySites(query)">
 		</md-input-container>
+		
+		
+    
+		
+    
 	</div>
 
     <md-list>

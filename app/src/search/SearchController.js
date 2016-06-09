@@ -10,7 +10,13 @@
      */
     function SearchController($scope, $stateParams, searchService, documentPreviewService, alfrescoDownloadService) {
         var vm = this;
-
+				
+				var originatorEv;
+				vm.openMenu = function($mdOpenMenu, event) {
+				  originatorEv = event;
+				  $mdOpenMenu(event);
+				};
+				
         $scope.searchResults = [];
 
         vm.getAutoSuggestions = function(term) {

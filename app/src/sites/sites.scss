@@ -69,3 +69,19 @@
 		content: '/';
 	}
 }
+
+.od-search-link {
+	@extend .od-filebrowser-link;
+	
+//	display: inline-block;
+	
+//	float: right;
+	width: 100px;
+//	margin: -$u*.5;
+}
+
+	
+md-input-container {
+	margin: 0;
+	padding: 0 !important;
+}
