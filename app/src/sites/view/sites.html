@@ -40,7 +40,7 @@
 				<md-list-item ng-repeat="project in vm.sites" flex="100">
 					<md-divider></md-divider>
 					<a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
-						<i class="material-icons">folder_special</i>
+						<i class="material-icons">folder_open</i>
 						{{ project.title }}
 					</a>
 					
@@ -50,16 +50,14 @@
 					    </md-button>
 						
 					    <md-menu-content width="6">
-								<!-- TODO: Make work -->
 								<md-menu-item>
-					        <md-button ng-click="vm.deleteSite(vm.project)">
+					        <md-button ng-click="vm.deleteSite(project.title)">
 					          <md-icon md-menu-align-target>remove_circle_outline</md-icon>
 					          Delete
 					        </md-button>
 					      </md-menu-item>
-								<!-- TODO: Make work -->
 								<md-menu-item>
-					        <md-button ng-click="vm.renameSiteDialog($event)">
+					        <md-button ng-click="vm.renameSiteDialog($event, project)">
 					          <md-icon md-menu-align-target>create</md-icon>
 					          Omdøb
 					        </md-button>

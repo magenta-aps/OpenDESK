@@ -23,15 +23,15 @@
 			};
 
 			vm.deleteSite = function(siteName) {
-		    var confirm = $mdDialog.confirm()
+				var confirm = $mdDialog.confirm()
 					.title('Vil du slette dette projekt?')
 					.textContent('Projektet og alle dets filer vil blive slettet')
 					.ok('Ja')
 					.cancel('Annullér');
-		    $mdDialog.show(confirm).then(function() {
+				$mdDialog.show(confirm).then(function() {
 					siteService.deleteSite(siteName);
-		      // TODO add a redirect to projekter
-		    });
+					vm.reload();
+				});
 			};
 
 
@@ -61,6 +61,30 @@
 				});
 			}
 
+
+			vm.currentDialogSite = '';
+			vm.renameSiteDialog = function (event, site) {
+				vm.currentDialogSite = site;		
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+
+			vm.updateSiteName = function (shortName, newName) {
+				var r = siteService.updateSiteName(shortName, newName);
+
+				r.then(function(result){
+					vm.project_title=result.title;
+						console.log(result);
+					$mdDialog.hide();
+					vm.reload();
+					});
+			}
 
             //
 			//vm.projekt = $stateParams.projekt;

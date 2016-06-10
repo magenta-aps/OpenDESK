@@ -48,41 +48,41 @@
 			};
 			
 
-			vm.deleteSite = function (project) {
-				 var confirm = $mdDialog.confirm()
-					.clickOutsideToClose(true)
-					.title('Vil du slette dette projekt?')
-					.textContent('Projektet og alle dets filer vil blive fjernet')
-					.ok('Slet')
-					.cancel('Annullér');
-				$mdDialog.show(confirm).then(function() {
-					siteService.deleteSite(project);
-					$window.location.reload();
-					$window.location.href = '#/projekter';
-				});
-			}
+			// vm.deleteSite = function (project) {
+			// 	//  var confirm = $mdDialog.confirm()
+			// 	// 	.clickOutsideToClose(true)
+			// 	// 	.title('Vil du slette dette projekt?')
+			// 	// 	.textContent('Projektet og alle dets filer vil blive fjernet')
+			// 	// 	.ok('Slet')
+			// 	// 	.cancel('Annullér');
+			// 	// $mdDialog.show(confirm).then(function() {
+			// 	// 	siteService.deleteSite(project);
+			// 	// 	$window.location.reload();
+			// 	// 	$window.location.href = '#/projekter';
+			// 	// });
+			// }
 
-			vm.renameSiteDialog = function (event) {
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: event,
-					scope: $scope,        // use parent scope in template
-					preserveScope: true,  // do not forget this if use parent scope
-					clickOutsideToClose: true
-				});
-			};
-
-			vm.updateSiteName = function (newName) {
-				var r = siteService.updateSiteName(vm.project, newName);
-
-				r.then(function(result){
-					vm.project_title=result.title;
-						console.log(result);
-					$mdDialog.hide();
-
-					});
-			}
+			// vm.renameSiteDialog = function (event) {
+// 				$mdDialog.show({
+// 					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+// 					parent: angular.element(document.body),
+// 					targetEvent: event,
+// 					scope: $scope,        // use parent scope in template
+// 					preserveScope: true,  // do not forget this if use parent scope
+// 					clickOutsideToClose: true
+// 				});
+// 			};
+//
+// 			vm.updateSiteName = function (newName) {
+// 				var r = siteService.updateSiteName(vm.project, newName);
+//
+// 				r.then(function(result){
+// 					vm.project_title=result.title;
+// 						console.log(result);
+// 					$mdDialog.hide();
+//
+// 					});
+// 			}
 
 			vm.loadSiteData = function () {
 				var r = siteService.loadSiteData(vm.project);

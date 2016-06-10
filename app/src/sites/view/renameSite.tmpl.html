@@ -1,5 +1,5 @@
 <md-dialog aria-label="Rename project"  ng-cloak>
-	<form name="createFolderForm" ng-submit="vm.updateSiteName(newSiteName);">
+	<form name="createFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, newSiteName);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
