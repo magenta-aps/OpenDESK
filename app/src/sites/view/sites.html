@@ -1,46 +1,60 @@
 <div class="od-projects">
 
+	<h1 class="od-title">Projekter</h1>
+		
+	<md-card>
+		<md-card-content>
+			<div layout="row" layout-align="space-between center">
+				<md-input-container>
+					<!-- <i class="material-icons">search</i> -->
+					<label>Browse projekter...</label>
+					<input type="text" ng-model="query" ng-change="vm.querySites(query)">
+				</md-input-container>
+			
+				<div ng-controller="SearchController as vm" class="od-search">
+					<form name="doSearch" ng-submit="vm.getSearchresults(searchText);" layout="row" layout-align="space-between center" class="od-search-form">
+    		
+						<!-- <md-dialog-content flex="66"> -->
+							<div>
+								<md-autocomplete
+												required
+												md-input-name="autocomplete"
+												md-selected-item="searchQuery"
+												md-search-text="searchText"
+												md-items="r in vm.getAutoSuggestions(searchText)"
+												md-item-text="r.name"
+												md-floating-label="Hvad vil du søge efter?">
+									<md-item-template>
+										<span md-highlight-text="searchText">{{r.name}}</span>
+									</md-item-template>
+									<div ng-messages="autocompleteForm.autocomplete.$error">
+										<div ng-message="required">Dette felt skal udfyldes</div>
+									</div>
+								</md-autocomplete>
+							</div>
+						<!-- </md-dialog-content> -->
+						
+						<!-- <md-dialog-actions flex="33"> -->
+							<md-button type="submit" class="md-primary">Søg</md-button>
+						<!-- </md-dialog-actions> -->
+					</form>
+				</div>
+			</div>		
+		<!-- </md-card-content>
+	</md-card>
 
-    <h1 class="od-title">Projekter</h1>
-		
-    <!-- <a class="od-search-link" href="#/search">
-        <i class="material-icons">search</i>
-        Search
-    </a> -->
-		
-		
-		
-<div layout="row" layout-align="space-between center">
-    <button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">folder_special</i> Nyt Projekt</button>
-		
-    <a class="od-search-link" href="#/search">
-        <i class="material-icons">search</i>
-        Search
-    </a>
-    
-		
-		<md-input-container>
-			<label>Browse projekter...</label>
-			<input type="text" ng-model="query" ng-change="vm.querySites(query)">
-		</md-input-container>
-		
-		
-    
-		
-    
-	</div>
-
-    <md-list>
-        <md-list-item ng-repeat="project in vm.sites" flex="100">
-            <md-divider></md-divider>
-            <a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
-                <i class="material-icons">folder_special</i>
-                {{ project.title }}
-            </a>
-        </md-list-item>
-    </md-list>
-
-
-
-
+	<md-card>
+		<md-card-content> -->
+			<md-list>
+				<md-list-item ng-repeat="project in vm.sites" flex="100">
+					<md-divider></md-divider>
+					<a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
+						<i class="material-icons">folder_special</i>
+						{{ project.title }}
+					</a>
+				</md-list-item>
+			</md-list>
+			</md-card-content>		
+			<button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">add</i> Nyt Projekt</button>
+	</md-card>
 </div>

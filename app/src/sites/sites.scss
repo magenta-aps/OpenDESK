@@ -69,17 +69,15 @@
 		content: '/';
 	}
 }
-
-.od-search-link {
-	@extend .od-filebrowser-link;
 	
-//	display: inline-block;
+.od-search-form {
 	
-//	float: right;
-	width: 100px;
-//	margin: -$u*.5;
-}
-
+	button {
+		margin: 0;
+		margin-top: -$u;
+	}
+	
+}	
 	
 md-input-container {
 	margin: 0;

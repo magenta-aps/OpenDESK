@@ -8,7 +8,7 @@
      * @param $scope
      * @constructor
      */
-    function SearchController($scope, $stateParams, searchService, documentPreviewService, alfrescoDownloadService) {
+    function SearchController($scope, $state, $stateParams, searchService, documentPreviewService, alfrescoDownloadService) {
         var vm = this;
 				
 				var originatorEv;
@@ -32,11 +32,10 @@
         }
 
         vm.getSearchresults = function(term) {
-
             return searchService.getSearchResults(term).then(function (val) {
-
                 if (val != undefined) {
-                    $scope.searchResults = val;
+                    $scope.searchResults = val;	
+										$state.go('search');
                 }
                 else {
                     return [];
@@ -51,7 +50,6 @@
         vm.downloadDocument = function downloadDocument(nodeRef, name){
             alfrescoDownloadService.downloadFile(nodeRef, name);
         }
-
 
     }
 

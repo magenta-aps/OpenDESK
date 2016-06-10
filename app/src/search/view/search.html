@@ -6,8 +6,8 @@
     <div layout="row" layout-align="space-between center">
         <a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
     </div>
-
-    <form name="doSearch" ng-submit="vm.getSearchresults(searchText);" layout="row" layout-align="space-between center" class="od-search-form">
+  
+    <!-- <form name="doSearch" ng-submit="vm.getSearchresults(searchText);" layout="row" layout-align="space-between center" class="od-search-form">
 
         <md-dialog-content flex="66">
             <div>
@@ -34,8 +34,7 @@
             <md-button type="submit" class="md-primary">Søg</md-button>
         </md-dialog-actions>
 
-    </form>
-
+    </form> -->
 			<md-list layout="column">
 				<md-list-item ng-repeat="r in searchResults.data.items" flex="100">
 					<md-divider></md-divider>
@@ -44,12 +43,12 @@
 						<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
 						{{ r.name }}, <i>Modified by</i> {{ r.modifiedBy }}
 					</a>
-					
+
 					<md-menu>
 					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
 					    </md-button>
-						
+
 					    <md-menu-content width="6">
 					      <md-menu-item>
 					        <md-button ng-click="vm.downloadDocument(r.nodeRef, r.name)">
@@ -57,7 +56,7 @@
 					          Download
 					        </md-button>
 					      </md-menu-item>
-					      
+
 					      <md-menu-item>
 					        <md-button ng-click="vm.previewDocument(r.nodeRef)">
 					          <md-icon md-menu-align-target>search</md-icon>
@@ -66,7 +65,7 @@
 					      </md-menu-item>
 					    </md-menu-content>
 					</md-menu>
-					
+
 					
 				</md-list-item>
 			</md-list>
