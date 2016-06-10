@@ -42,6 +42,12 @@
 			vm.reload = function() {
 				$window.location.reload();
 			};
+			
+			var originatorEv;
+			vm.openMenu = function($mdOpenMenu, event) {
+			  originatorEv = event;
+			  $mdOpenMenu(event);
+			};
 
 			siteService.getSites().then(function(val) {
 				vm.sites = val;
