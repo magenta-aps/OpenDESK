@@ -28,8 +28,8 @@
 				vm.path.split('/').forEach(function(val) {
 					if (val != '') {
 						bc = bc + '/' + val;
-                        vm.breadCrumb.push({slug: val, link: bc});
-                    };
+				    	vm.breadCrumb.push({slug: val, link: bc});
+				    };
 				});
 			};
 			

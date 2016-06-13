@@ -12,97 +12,100 @@
 	<div layout-gt-sm="row">
 		<md-card flex-gt-sm="66">
 			<md-card-content>
-				<h2><!-- <i class="material-icons">content_copy</i> -->Dokumenter</h2>
+				<h2 class="od-title-icon"><i class="material-icons">library_books</i>Dokumenter</h2>
 			
 				<nav class="od-filebrowser-breadcrumb">
+<!-- TODO 
+					- Show only if not in root 
+					- Show proper folder name ()
+-->
 					<a ng-repeat="part in vm.breadCrumb" ng-href="#/projekter/{{vm.project}}{{part.link}}">
 						{{ part.slug }}
 					</a>
 				</nav>
 				
-				<md-list layout="column">
-					<md-list-item ng-repeat="content in contents" flex="100">
-					<md-divider></md-divider>
-					<a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
-						<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
-						<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
-						{{content.name}}
-					</a>
-					
-					<md-menu ng-show="content.contentType === 'cmis:document'">
-						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-							<md-icon md-menu-origin>arrow_drop_down</md-icon>
-						</md-button>
-						
-						<md-menu-content width="6">
-							<md-menu-item>
-								<md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
-									<md-icon md-menu-align-target>get_app</md-icon>
-									Download
-								</md-button>
-							</md-menu-item>
-					      
-							<md-menu-item>
-								<md-button ng-click="vm.previewDocument(content.nodeRef)">
-									<md-icon md-menu-align-target>search</md-icon>
-									Preview
-								</md-button>
-							</md-menu-item>	
-							
-							<md-menu-item>
-								<md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
-									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-									Delete
-								</md-button>
-							</md-menu-item>
-								
-							<md-menu-item>
-								<md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
-									<md-icon md-menu-align-target>create</md-icon>
-									Rename
-								</md-button>
-							</md-menu-item>
-						</md-menu-content>
-					</md-menu>
-					
-					<md-menu ng-show="content.contentType === 'cmis:folder'">
-						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-							<md-icon md-menu-origin>arrow_drop_down</md-icon>
-						</md-button>
-						
-						<md-menu-content width="6">
-							<md-menu-item>
-								<md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
-									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-									Delete
-								</md-button>
-							</md-menu-item>
-								
-							<!-- <md-menu-item>
-								<md-button ng-click="">
-									<md-icon md-menu-align-target>create</md-icon>
-									Rename
-								</md-button>
-								</md-menu-item> -->
-							</md-menu-content>
-						</md-menu>
-					
+				
+        <md-virtual-repeat-container flex-height style="max-height: 350px;">
+            <div md-virtual-repeat="content in contents" class="repeat-item" layout="row">							
+							<a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
+								<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
+								<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
+								{{content.name}}
+							</a>
 
-<!--
-<button class="md-button" ng-show="content.contentType === 'cmis:folder'" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button> -->
+							<md-menu ng-show="content.contentType === 'cmis:document'">
+								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+									<md-icon md-menu-origin>arrow_drop_down</md-icon>
+								</md-button>
 
-					</md-list-item>
-				</md-list>
-			
+								<md-menu-content width="6">
+									<md-menu-item>
+										<md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
+											<md-icon md-menu-align-target>get_app</md-icon>
+											Download
+										</md-button>
+									</md-menu-item>
+
+									<md-menu-item>
+										<md-button ng-click="vm.previewDocument(content.nodeRef)">
+											<md-icon md-menu-align-target>search</md-icon>
+											Preview
+										</md-button>
+									</md-menu-item>
+
+									<md-menu-item>
+										<md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
+											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+											Delete
+										</md-button>
+									</md-menu-item>
+
+									<md-menu-item>
+										<md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
+											<md-icon md-menu-align-target>create</md-icon>
+											Rename
+										</md-button>
+									</md-menu-item>
+								</md-menu-content>
+							</md-menu>
+
+							<md-menu ng-show="content.contentType === 'cmis:folder'">
+								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+									<md-icon md-menu-origin>arrow_drop_down</md-icon>
+								</md-button>
+
+								<md-menu-content width="6">
+									<md-menu-item>
+										<md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
+											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+											Delete
+										</md-button>
+									</md-menu-item>
+
+									<!-- <md-menu-item>
+										<md-button ng-click="">
+											<md-icon md-menu-align-target>create</md-icon>
+											Rename
+										</md-button>
+										</md-menu-item> -->
+									</md-menu-content>
+								</md-menu>
+
+
+							<!--
+							<button class="md-button" ng-show="content.contentType === 'cmis:folder'" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)"><i class="material-icons">remove_circle_outline</i></button> -->
+            </div>
+        </md-virtual-repeat-container>
+
 				<p ng-show="contents.length === 0">
 					Denne mappe er tom
 				</p>
 			</md-card-content>
 			
 			
-			<div layout="row" layout-align="space-between center">
+			<div layout="row" layout-align="start center">
 				<button class="md-button" ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Ny mappe</button>
-				<button class="md-button" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">add</i> Upload dokumenter</button>
+				<button class="md-button" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter</button>
 			</div>
 			
 		</md-card>
@@ -115,7 +118,7 @@
 
 		<md-card flex-gt-sm="33">
 			<md-card-content>
-				<h2><!-- <i class="material-icons">face</i>  -->Medlemmer</h2>
+				<h2 class="od-title-icon"><i class="material-icons">group</i>Medlemmer</h2>
 				
 				<ul class="od-members">
 					<li ng-repeat="member in members" layout="row" layout-align="space-between center">
@@ -146,8 +149,10 @@
 					</li>
 				</ul>
 			</md-card-content>
-
+			
+			<div layout="row" layout-align="start center">
 				<button class="md-button" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem</button>
+			</div>
 		</md-card>
 
 	</div>

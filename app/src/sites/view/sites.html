@@ -36,19 +36,60 @@
 			</div>		
 
 
-			<md-list>
+
+
+        <md-virtual-repeat-container flex-height style="max-height: 350px;">
+            <div md-virtual-repeat="project in vm.sites" class="repeat-item" layout="row">							
+								<a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
+								<i class="material-icons">folder_open</i>
+								{{ project.title }}
+							</a>
+					
+							<md-menu>
+							    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							      <md-icon md-menu-origin>arrow_drop_down</md-icon>
+							    </md-button>
+						
+							    <md-menu-content width="6">
+										<md-menu-item>
+							        <md-button ng-click="vm.deleteSite(project.title)">
+							          <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+							          Delete
+							        </md-button>
+							      </md-menu-item>
+										<md-menu-item>
+							        <md-button ng-click="vm.renameSiteDialog($event, project)">
+							          <md-icon md-menu-align-target>create</md-icon>
+							          Omdøb
+							        </md-button>
+							      </md-menu-item>
+							    </md-menu-content>
+							</md-menu>
+							
+							
+							
+						</div>
+        </md-virtual-repeat-container>
+
+
+
+
+
+
+
+			<!-- <md-list>
 				<md-list-item ng-repeat="project in vm.sites" flex="100">
 					<md-divider></md-divider>
 					<a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
 						<i class="material-icons">folder_open</i>
 						{{ project.title }}
 					</a>
-					
+
 					<md-menu>
 					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
 					    </md-button>
-						
+
 					    <md-menu-content width="6">
 								<md-menu-item>
 					        <md-button ng-click="vm.deleteSite(project.title)">
@@ -64,10 +105,13 @@
 					      </md-menu-item>
 					    </md-menu-content>
 					</md-menu>
-					
+
 				</md-list-item>
-			</md-list>
+			</md-list> -->
 			</md-card-content>		
-			<button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">add</i> Nyt Projekt</button>
+			
+			<div layout="row" layout-align="start center">
+				<button class="md-button" ng-click="vm.newSite($event)"><i class="material-icons">add</i> Nyt Projekt</button>
+			</div>
 	</md-card>
 </div>

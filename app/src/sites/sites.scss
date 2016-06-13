@@ -79,7 +79,25 @@
 	
 }	
 	
+.od-title-icon {
+	@extend .od-filebrowser-link;
+	margin-top: 0;
+	
+	.material-icons {
+		margin-right: $u/2;
+	}
+}
+	
 md-input-container {
 	margin: 0;
 	padding: 0 !important;
+}
+
+.repeat-item	{
+//	line-height: $u/2;
+	height: $u*3;
+		
+	&:not(:first-child) {
+		border-top: 1px solid #e1e1e1;
+	}
 }
