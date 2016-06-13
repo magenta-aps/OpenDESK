@@ -153,8 +153,9 @@
 			};
 
 			vm.deleteFile = function (nodeRef) {
-				siteService.deleteFile(nodeRef);
-				vm.reload();
+				siteService.deleteFile(nodeRef).then(function(val){
+					vm.loadContents();
+				});
 			}
 
 			vm.deleteFoldereDialog = function (event, nodeRef) {
@@ -262,25 +263,24 @@
 				});
 				$mdDialog.hide();
 			};
-			
-			vm.deleteMemberDialog = function (siteName, userName) {
-			   var confirm = $mdDialog.confirm()
-			         .title('Would you like to delete this member?')
-			         .textContent('Something på dansk.')
-			         .ariaLabel('Sluk medlem')
-			         .targetEvent(event)
-			         .ok('Yes')
-			         .cancel('Nej, tak');
 
-			   $mdDialog.show(confirm).then(function() {
-			     vm.removeMemberFromSite(siteName, userName);
-					 vm.reload();
-			   });
+			vm.deleteMemberDialog = function (siteName, userName) {
+				var confirm = $mdDialog.confirm()
+					.title('Would you like to delete this member?')
+					.textContent('Something på dansk.')
+					.ariaLabel('Sluk medlem')
+					.targetEvent(event)
+					.ok('Yes')
+					.cancel('Nej, tak')
+
+				$mdDialog.show(confirm).then(function() {
+					vm.removeMemberFromSite(siteName, userName);
+				});
 			};
 
 			vm.removeMemberFromSite = function(siteName, userName) {
 				siteService.removeMemberFromSite(siteName, userName).then(function(val){
-					// do stuff
+					vm.loadMembers();
 				});
 			};
 
