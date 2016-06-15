@@ -89,12 +89,7 @@ md-list {
 	overflow: scroll;
 }
 
-
-
-
-
-
-.od-search {	
+.od-search {
 
 	form {
 	 	width: 190px;
@@ -102,8 +97,11 @@ md-list {
 	 	position: relative;
 		background: white;
 		border-radius: 0.25em;
-		margin-right: $u;
+		margin-right: $u/2;
 		margin-bottom: $u;
+		box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+								0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+								0px 2px 1px -1px rgba(0, 0, 0, 0.12);
 	}
 
 	i {
@@ -124,6 +122,7 @@ md-list {
 		padding-bottom: 3px;
 	}
 }
+
 
 
 

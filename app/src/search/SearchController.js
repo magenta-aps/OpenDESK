@@ -18,6 +18,14 @@
 				};
 				
         $scope.searchResults = [];
+				
+				vm.saveSearchResults = function(result) {
+					console.log(result);
+					// store it somehow
+					// put it into scope
+
+					window.location.href = "#/search";
+				}
 
         vm.getAutoSuggestions = function(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {
