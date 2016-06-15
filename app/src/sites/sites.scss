@@ -70,15 +70,6 @@
 	}
 }
 	
-.od-search-form {
-	
-	button {
-		margin: 0;
-		margin-top: -$u;
-	}
-	
-}	
-	
 .od-title-icon {
 	@extend .od-filebrowser-link;
 	margin-top: 0;
@@ -97,3 +88,57 @@ md-list {
 	max-height: 400px; 
 	overflow: scroll;
 }
+
+
+
+
+
+
+.od-search {	
+
+	form {
+	 	width: 190px;
+	 	height: 30px;
+	 	position: relative;
+		background: white;
+		border-radius: 0.25em;
+		margin-right: $u;
+		margin-bottom: $u;
+	}
+
+	i {
+		position: absolute;
+		z-index: 9000;
+		left: 5px;
+		top: 3px;
+		color: rgba(0,0,0,0.25);
+	}
+
+   input {
+     padding: 0.5rem 0.5rem 0.5rem 2rem;
+	   border-radius: 0.25em;
+   }
+	 
+	label {
+	 	padding-left: $u*2 !important;
+		padding-bottom: 3px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
