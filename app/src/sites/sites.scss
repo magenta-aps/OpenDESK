@@ -87,6 +87,7 @@ md-input-container {
 md-list {
 	max-height: 400px; 
 	overflow: scroll;
+	overflow-y: hidden;
 }
 
 .od-search {
