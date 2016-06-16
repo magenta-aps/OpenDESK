@@ -33,7 +33,6 @@
 				<!-- <md-button type="submit" class="md-primary">Søg</md-button> -->
 		</form>
 	</div>
-		
 		<!-- <button class="md-button" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
 			<button class="md-button" ng-click="vm.renameSiteDialog($event)"> Omdøb projekt</button> -->
 			<!-- <button class="md-button" ng-click="vm.copyNodeRefs(vm.source, vm.dest, vm.parentId)"> Afprøv flyt</button> -->
@@ -45,10 +44,6 @@
 				<h2 class="od-title-icon"><i class="material-icons">library_books</i>Dokumenter</h2>
 			
 				<nav class="od-filebrowser-breadcrumb">
-<!-- TODO 
-					- Show only if not in root 
-					- Show proper folder name ()
--->
 					<a ng-repeat="part in vm.breadCrumb" ng-href="#/projekter/{{vm.project}}{{part.link}}">
 						{{ part.slug }}
 					</a>
