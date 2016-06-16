@@ -5,31 +5,30 @@
 	<div layout="row" layout-align="space-between center">
 		<a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 		
-		<div ng-controller="SearchController as vm" class="od-search" layout="row">
-				<span flex></span>
-				<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">    		
-					<!-- <md-input-container> -->
-						<i class="material-icons">search</i>
-						<md-autocomplete
-								required
-								md-input-name="autocomplete"
-								md-selected-item="searchQuery"
-								md-search-text="searchText"
-								md-items="r in vm.getAutoSuggestions(searchText)"
-								md-item-text="r.name"
-								md-floating-label="Søg">
-							<md-item-template>
-								<span md-highlight-text="searchText" ng-click="vm.saveSearchResults(r);">{{r.name}}</span>
-							</md-item-template>
-							<div ng-messages="autocompleteForm.autocomplete.$error">
-								<div ng-message="required">Dette felt skal udfyldes</div>
-							</div>
-						</md-autocomplete>
-					<!-- </md-input-container> -->
-						<!-- <md-button type="submit" class="md-primary">Søg</md-button> -->
-				</form>
-			</div>
-		
+	<div ng-controller="SearchController as vm" class="od-search" layout="row">
+		<span flex></span>
+		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">    		
+			<!-- <md-input-container> -->
+				<i class="material-icons">search</i>
+				<md-autocomplete
+						required
+						md-input-name="autocomplete"
+						md-selected-item="searchQuery"
+						md-search-text="searchText"
+						md-items="r in vm.getAutoSuggestions(searchText)"
+						md-item-text="r.name"
+						md-floating-label="Søg">
+					<md-item-template>
+						<span md-highlight-text="searchText" ng-click="vm.getSearchresults(searchText);">{{r.name}}</span>
+					</md-item-template>
+					<div ng-messages="autocompleteForm.autocomplete.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				</md-autocomplete>
+			<!-- </md-input-container> -->
+				<!-- <md-button type="submit" class="md-primary">Søg</md-button> -->
+		</form>
+	</div>
 		
 		<!-- <button class="md-button" ng-click="vm.deleteSite(vm.project)"><i class="material-icons">delete</i> Slet projekt</button>
 			<button class="md-button" ng-click="vm.renameSiteDialog($event)"> Omdøb projekt</button> -->
