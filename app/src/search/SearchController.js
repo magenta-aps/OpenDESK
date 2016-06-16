@@ -1,14 +1,15 @@
-
     angular
-        .module('openDeskApp.search')
-        .controller('SearchController', SearchController);
+        .module('openDeskApp.search', ['ngCookies'])
+        .controller('SearchController', SearchController, ['$cookies', function($cookies) {        	
+					$cookies.searchResult = "";
+        }]);
 
     /**
      * Main Controller for the Search module
      * @param $scope
      * @constructor
      */
-    function SearchController($scope, $state, $stateParams, searchService, documentPreviewService, alfrescoDownloadService) {
+    function SearchController($scope, $state, $cookies, $stateParams, searchService, documentPreviewService, alfrescoDownloadService) {
         var vm = this;
 				
 				var originatorEv;
@@ -17,15 +18,8 @@
 				  $mdOpenMenu(event);
 				};
 				
-        $scope.searchResults = [];
-				
-				vm.saveSearchResults = function(result) {
-					console.log(result);
-					// store it somehow
-					// put it into scope
-
-					window.location.href = "#/search";
-				}
+        // $scope.searchResults = [];
+				$scope.searchResults = $cookies.getObject("searchResult");
 
         vm.getAutoSuggestions = function(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {
@@ -38,17 +32,19 @@
                 }
             });
         }
-
+				
         vm.getSearchresults = function(term) {
-            return searchService.getSearchResults(term).then(function (val) {
-                if (val != undefined) {
-                    $scope.searchResults = val;	
-										$state.go('search');
-                }
-                else {
-                    return [];
-                }
-            });
+					return searchService.getSearchResults(term).then(function (val) {
+						if (val != undefined) {
+							$cookies.putObject("searchResult", val);
+							window.location.href = "#/search";
+							
+							// $scope.searchResults = val;							
+							// $state.go('search');
+						} else {
+							return [];
+						}
+					});
         }
 
         vm.previewDocument = function previewDocument(nodeRef){

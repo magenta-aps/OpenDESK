@@ -16,7 +16,7 @@
 							md-item-text="r.name"
 							md-floating-label="Søg">
 						<md-item-template>
-							<span md-highlight-text="searchText" ng-click="vm.saveSearchResults(r);">{{r.name}}</span>
+							<span md-highlight-text="searchText" ng-click="vm.getSearchresults(searchText);">{{r.name}}</span>
 						</md-item-template>
 						<div ng-messages="autocompleteForm.autocomplete.$error">
 							<div ng-message="required">Dette felt skal udfyldes</div>
