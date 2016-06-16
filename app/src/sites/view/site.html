@@ -7,7 +7,11 @@
 		
 	<div ng-controller="SearchController as vm" class="od-search" layout="row">
 		<span flex></span>
+<<<<<<< HEAD
 		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">    		
+=======
+		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
+>>>>>>> maries_branch
 			<!-- <md-input-container> -->
 				<i class="material-icons">search</i>
 				<md-autocomplete
@@ -142,12 +146,12 @@
 			<md-card-content>
 				<h2 class="od-title-icon"><i class="material-icons">group</i>Medlemmer</h2>
 				
-				<ul class="od-members">
-					<li ng-repeat="member in members" layout="row" layout-align="space-between center">
-						{{ member.authority.firstName }} {{ member.authority.lastName }}
-						<span class="muted">({{ member.role }})</span>
-
-						<md-menu>
+				<table class="od-members">
+				  <tr ng-repeat="member in members">
+				    <td>{{ member.authority.firstName }} {{ member.authority.lastName }}</td>
+				    <td>{{ member.role }}</td>
+				    <td>
+							<md-menu>
 							<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 								<md-icon md-menu-origin>arrow_drop_down</md-icon>
 							</md-button>
@@ -168,11 +172,12 @@
 								</md-menu-item>
 							</md-menu-content>
 						</md-menu>
-					</li>
-				</ul>
+					</td>
+				  </tr>
+				</table>
 			</md-card-content>
 			
-			<div layout="row" layout-align="start center">
+			<div layout="row" layout-align="start end" class="od-add-member">
 				<button class="md-button" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem</button>
 			</div>
 		</md-card>

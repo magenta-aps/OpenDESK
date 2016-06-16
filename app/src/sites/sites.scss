@@ -90,6 +90,10 @@ md-list {
 	overflow-y: hidden;
 }
 
+md-card {
+	position: relative;
+}
+
 .od-search {
 
 	form {
@@ -122,6 +126,25 @@ md-list {
 	 	padding-left: $u*2 !important;
 		padding-bottom: 3px;
 	}
+}
+
+.od-members {
+	width: 100%;
+	
+	tr {
+		td:last-child {
+			text-align: right;
+						
+			button {
+				margin: 0;
+			}
+		}
+	}
+}
+
+.od-add-member {
+	position: absolute;
+	bottom: 0;
 }
 
 
