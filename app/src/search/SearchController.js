@@ -1,6 +1,6 @@
     angular
         .module('openDeskApp.search', ['ngCookies'])
-        .controller('SearchController', SearchController, ['$cookies', function($cookie) {        	
+        .controller('SearchController', SearchController, ['$cookies', function($cookies) {        	
 					$cookies.searchResult = "";
         }]);
 

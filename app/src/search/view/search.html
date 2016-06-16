@@ -34,43 +34,45 @@
         </md-dialog-actions>
 
     </form> -->
-		<md-card>
-			<md-card-content>
-				<md-list layout="column">
-					<md-list-item ng-repeat="r in searchResults.data.items" flex="100">
-						<md-divider></md-divider>
-						<a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
-							<i class="material-icons">insert_drive_file</i>
-							{{ r.name }}, <i>Modified by</i> {{ r.modifiedBy }}
-						</a>
-      	
-						<md-menu>
-						    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-						      <md-icon md-menu-origin>arrow_drop_down</md-icon>
-						    </md-button>
-      	
-						    <md-menu-content width="6">
-						      <md-menu-item>
-						        <md-button ng-click="vm.downloadDocument(r.nodeRef, r.name)">
-						          <md-icon md-menu-align-target>get_app</md-icon>
-						          Download
-						        </md-button>
-						      </md-menu-item>
-      	
-						      <md-menu-item>
-						        <md-button ng-click="vm.previewDocument(r.nodeRef)">
-						          <md-icon md-menu-align-target>search</md-icon>
-						          Preview
-						        </md-button>
-						      </md-menu-item>
-						    </md-menu-content>
-						</md-menu>
-      	
-					</md-list-item>
-				</md-list>
-			<md-card-content>
-		</md-card>
+			
+	<md-card>
+		<md-card-content>
+			<md-list layout="column">
+				<md-list-item ng-repeat="r in searchResults.data.items" flex="100">
+					<md-divider></md-divider>
+					<a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
+						<i class="material-icons">insert_drive_file</i>
+						{{ r.name }}, <i>Modified by</i> {{ r.modifiedBy }}
+					</a>
 
+					<md-menu>
+					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
+					    </md-button>
+
+					    <md-menu-content width="6">
+					      <md-menu-item>
+					        <md-button ng-click="vm.downloadDocument(r.nodeRef, r.name)">
+					          <md-icon md-menu-align-target>get_app</md-icon>
+					          Download
+					        </md-button>
+					      </md-menu-item>
+
+					      <md-menu-item>
+					        <md-button ng-click="vm.previewDocument(r.nodeRef)">
+					          <md-icon md-menu-align-target>search</md-icon>
+					          Preview
+					        </md-button>
+					      </md-menu-item>
+					    </md-menu-content>
+					</md-menu>
+
+					
+				</md-list-item>
+			</md-list>
+
+		</md-card-content>
+	</md-card>
 
 
 
