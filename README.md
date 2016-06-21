@@ -19,3 +19,8 @@ When you change .scss (SASS) files in the project, you'll want to run a watcher 
 $ gulp watch
 ```
 Happy coding :)
+
+If you want to run OpenDesk-UI against an Alfresco server running on localhost, then run:
+```
+$ gulp local
+```

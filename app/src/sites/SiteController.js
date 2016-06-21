@@ -28,8 +28,8 @@
 				vm.path.split('/').forEach(function(val) {
 					if (val != '') {
 						bc = bc + '/' + val;
-                        vm.breadCrumb.push({slug: val, link: bc});
-                    };
+				    	vm.breadCrumb.push({slug: val, link: bc});
+				    };
 				});
 			};
 			
@@ -40,42 +40,12 @@
 			vm.reload = function () {
 				$window.location.reload();
 			};
-
-			vm.deleteSite = function (project) {
-				 var confirm = $mdDialog.confirm()
-					.clickOutsideToClose(true)
-					.title('Vil du slette dette projekt?')
-					.textContent('Projektet og alle dets filer vil blive fjernet')
-					.ok('Slet')
-					.cancel('Annullér');
-				$mdDialog.show(confirm).then(function() {
-					siteService.deleteSite(project);
-					$window.location.reload();
-					$window.location.href = '#/projekter';
-				});
-			}
-
-			vm.renameSiteDialog = function (event) {
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: event,
-					scope: $scope,        // use parent scope in template
-					preserveScope: true,  // do not forget this if use parent scope
-					clickOutsideToClose: true
-				});
+			
+			var originatorEv;
+			vm.openMenu = function($mdOpenMenu, event) {
+			  originatorEv = event;
+			  $mdOpenMenu(event);
 			};
-
-			vm.updateSiteName = function (newName) {
-				var r = siteService.updateSiteName(vm.project, newName);
-
-				r.then(function(result){
-					vm.project_title=result.title;
-						console.log(result);
-					$mdDialog.hide();
-
-					});
-			}
 
 			vm.loadSiteData = function () {
 				var r = siteService.loadSiteData(vm.project);
@@ -130,6 +100,7 @@
   			
   			$mdDialog.show(confirm).then(function() {
   			  vm.deleteFile(nodeRef);
+					
   			});
 			}
 
@@ -205,7 +176,6 @@
 				});
 			};
 
-
 			vm.upload = function (files) {
 				var cmisQuery = $stateParams.projekt + $stateParams.path;
 				cmisService.getNode(cmisQuery).then(function (val) {
@@ -229,6 +199,20 @@
 			};
 			vm.loadSiteRoles();
 
+			vm.currentDialogUser = '';
+
+			vm.updateMemberRoleDialog = function(event, user) {
+				vm.currentDialogUser = user;				
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
+					parent: angular.element(document.body),
+					scope: $scope,
+					preserveScope: true,
+					targetEvent: event,
+					clickOutsideToClose: true
+				});
+			}
+			
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
 				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
 					// do stuff
@@ -240,6 +224,21 @@
 					vm.loadMembers();
 				});
 				$mdDialog.hide();
+			};
+			
+			vm.deleteMemberDialog = function (siteName, userName) {
+			   var confirm = $mdDialog.confirm()
+			         .title('Would you like to delete this member?')
+			         .textContent('Something på dansk.')
+			         .ariaLabel('Sluk medlem')
+			         .targetEvent(event)
+			         .ok('Yes')
+			         .cancel('Nej, tak');
+
+			   $mdDialog.show(confirm).then(function() {
+			     vm.removeMemberFromSite(siteName, userName);
+					 vm.reload();
+			   });
 			};
 
 			vm.removeMemberFromSite = function(siteName, userName) {
@@ -267,6 +266,40 @@
 			vm.copyNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
 				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
 			}
+
+			
+			vm.renameDocumentDialog = function(event, docNodeRef) {
+				var confirm = $mdDialog.prompt()
+	      	.title('What would you like name this?')
+	      	.placeholder('Name')
+	      	.ariaLabel('Name')
+	      	.targetEvent(event)
+	      	.ok('Rename')
+	      	.cancel('Annullér');
+	    	$mdDialog.show(confirm).then(function(result) {
+					var newName = result;					
+					vm.renameDocument(docNodeRef, newName);
+					vm.reload();
+	    	});
+			}
+			
+			vm.renameDocument = function renameDocument(docNodeRef, newName) {
+
+				var props = {
+					prop_cm_name: newName
+				};
+
+				siteService.updateNode(docNodeRef, props);
+			}
+
+			// vm.test = function test() {
+			// 	var nodeRef = "workspace://SpacesStore/8c23bfdb-e1bb-4f17-9682-144404bca3e3";
+			// 	var newName = "gufsssssfy.jpg"
+			//
+			// 	vm.renameDocument(nodeRef, newName);
+			// }
+
+
 
 		}; // SiteCtrl close
 
