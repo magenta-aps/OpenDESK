@@ -31,6 +31,7 @@ angular
         'dcbImgFallback',
         
         'openDeskApp.notifications',
+        'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',
 		'openDeskApp.projekter',

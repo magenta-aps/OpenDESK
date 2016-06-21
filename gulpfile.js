@@ -23,7 +23,8 @@ var environment = {
     },
     local: {
         repo: 'http://localhost:8080',
-        share: 'http://localhost:8081'
+        share: 'http://localhost:8081',
+        chat: 'http://demo.opendesk.dk:5280/http-bind'
     }
 };
 
@@ -56,6 +57,9 @@ function createWebserver(config) {
                 }, {
                     source: '/share',
                     target: config.share + '/share'
+                },{
+                    source: '/http-bind',
+                    target: config.chat
                 }]
             }));
 }
