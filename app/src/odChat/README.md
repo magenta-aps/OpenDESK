@@ -40,5 +40,4 @@ bower link converse.js
 ```
 
 This sets up a symlink, so that any change you make in converse.js locally will immediately be available
-in OpenDesk. Note that you still must run `make dist` in converse.js to build it, and then run `npm install`
-in OpenDesk.
+in OpenDesk. Note that you still must run `make dist` in converse.js to build it.

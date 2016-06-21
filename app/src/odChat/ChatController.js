@@ -10,10 +10,24 @@
             };
         });
 
-    function ChatController($scope, $mdToast) {
+    function ChatController($scope, $mdToast, userService) {
         var vm = this;
 
-        // Initialize ConverseJS chat
+
+	var userSearchCallback = function (query, callback) {
+	    // Grab the user's jabber domain, for constructing jabber domains for each user in the results.
+	    var xmppDomain = converse.user.jid().match("@(.+?)/")[1];
+	    userService.getPeople('?filter=' + encodeURIComponent(query)).then(function (data) {
+		callback(data.people.map(function (person) {
+		    return {
+			id: person.userName + '@' + xmppDomain,
+			fullname: person.firstName + ' ' + person.lastName
+		    };
+		}));
+	    });
+	};
+
+	// Initialize ConverseJS chat
         converse.initialize({
             bosh_service_url: '/http-bind', // Please use this connection manager only for testing purposes
             i18n: locales['da'], // Refer to ./src/locales.js in converseJS project to see which locales are supported
@@ -24,8 +38,11 @@
             allow_dragresize: false,
             visible_toolbar_buttons: {
                 call: true
-            }
-        });
+            },
+
+	    xhr_user_search: true,
+	    xhr_user_search_callback: userSearchCallback
+	});
         
         converse.listen.on('callButtonClicked', function(event, data) {
             console.log('Strophe connection is ', data.connection);
