@@ -35,6 +35,11 @@
   },
   "resolutions": {
     "angular": "^1.4.9",
-    "angular-material": "1.0.x"
+    "angular-material": "1.0.x",
+    "bootstrap": "~3.3.6",
+    "requirejs": "~2.2.0",
+    "jquery": "1.12.3",
+    "backbone": "1.1.2",
+    "angular-translate": "2.11.0"
   }
 }
