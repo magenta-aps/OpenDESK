@@ -11,7 +11,8 @@
             retainCurrentLocation: retainCurrentLocation,
             getRetainedLocation: getRetainedLocation,
             clearRetainedLocation: clearRetainedLocation,
-            isExternalUser: isExternalUser
+            isExternalUser: isExternalUser,
+            makeURL: makeURL
         };
 
         init();
@@ -65,5 +66,13 @@
             }
             var externalUserNameRe = /.+_.+(@.+)?$/
             return externalUserNameRe.test(userInfo.user.userName);
+        }
+
+        function makeURL(url) {
+            if (this.getUserInfo().ticket) {
+                return url + (url.indexOf("?") === -1 ? "?" : "&") + "alf_ticket=" + this.getUserInfo().ticket;
+            } else {
+                return url;
+            }
         }
     }

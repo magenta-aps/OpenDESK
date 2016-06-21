@@ -17,15 +17,15 @@
             // Grab the user's jabber domain, for constructing jabber domains for each user in the results.
             var xmppDomain = converse.user.jid().match("@(.+?)/")[1];
             userService.getPeople('?filter=' + encodeURIComponent(query)).then(function (data) {
-            callback(data.people.map(function (person) {
-                return {
-                id: person.userName + '@' + xmppDomain,
-                fullname: person.firstName + ' ' + person.lastName
-                };
-            }));
+                callback(data.people.map(function (person) {
+                    return {
+                        id: person.userName + '@' + xmppDomain,
+                        fullname: person.firstName + ' ' + person.lastName
+                    };
+                }));
             });
         };
-    
+
         // Initialize ConverseJS chat
         converse.initialize({
             bosh_service_url: '/http-bind', // Please use this connection manager only for testing purposes

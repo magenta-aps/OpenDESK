@@ -3,6 +3,7 @@ angular
         'ngSanitize',
         'ngMaterial',
         'ngMessages',
+			  'ngCookies',
         'material.wizard',
         'ui.router',
         'rt.encodeuri',
@@ -30,6 +31,7 @@ angular
         'dcbImgFallback',
         
         'openDeskApp.notifications',
+        'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',
 		'openDeskApp.projekter',

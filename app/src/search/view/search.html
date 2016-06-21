@@ -1,20 +1,14 @@
 <div class="od-projects">
 
-    <h1 class="od-title">{{ vm.project }}</h1>
+    <h1 class="od-title">Søgning</h1>
 
     <div layout="row" layout-align="space-between center">
         <a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
     </div>
 
-    <form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
+    <!-- <form name="doSearch" ng-submit="vm.getSearchresults(searchText);" layout="row" layout-align="space-between center" class="od-search-form">
 
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>Søgning</h2>
-            </div>
-        </md-toolbar>
-
-        <md-dialog-content class="md-padding">
+        <md-dialog-content flex="66">
             <div>
 
                 <md-autocomplete
@@ -32,26 +26,60 @@
                         <div ng-message="required">Dette felt skal udfyldes</div>
                     </div>
                 </md-autocomplete>
-
-
-
             </div>
         </md-dialog-content>
 
-        <md-dialog-actions>
+        <md-dialog-actions flex="33">
             <md-button type="submit" class="md-primary">Søg</md-button>
         </md-dialog-actions>
 
-    </form>
+    </form> -->
+			
+	<md-card>
+		<md-card-content>
+			<md-list layout="column">
+				<md-list-item ng-repeat="r in searchResults.data.items" flex="100">
+					<md-divider></md-divider>
+					<a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
+						<i class="material-icons">insert_drive_file</i>
+						{{ r.name }}, <i>Modified by</i> {{ r.modifiedBy }}
+					</a>
 
-    <li ng-repeat="r in searchResults.data.items" layout="row" layout-align="space-between center">
-        <span> {{ r.name }} , <i>Modified by</i> {{ r.modifiedBy }}
+					<md-menu>
+					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
+					    </md-button>
 
-                    <button class="md-button"  ng-click="vm.downloadDocument(r.nodeRef, r.name)">download<i class="material-icons"></i></button>
-					<button class="md-button"  ng-click="vm.previewDocument(r.nodeRef)">preview<i class="material-icons"></i></button>
+					    <md-menu-content width="6">
+					      <md-menu-item>
+					        <md-button ng-click="vm.downloadDocument(r.nodeRef, r.name)">
+					          <md-icon md-menu-align-target>get_app</md-icon>
+					          Download
+					        </md-button>
+					      </md-menu-item>
 
-        </span>
-    </li>
+					      <md-menu-item>
+					        <md-button ng-click="vm.previewDocument(r.nodeRef)">
+					          <md-icon md-menu-align-target>search</md-icon>
+					          Preview
+					        </md-button>
+					      </md-menu-item>
+					    </md-menu-content>
+					</md-menu>
+
+					
+				</md-list-item>
+			</md-list>
+
+		</md-card-content>
+	</md-card>
+
+
+
+
+
+
+
 
 
 

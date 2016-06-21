@@ -2,7 +2,7 @@ angular
         .module('openDeskApp')
         .factory('alfrescoDownloadService', AlfrescoDownloadService);
 
-function AlfrescoDownloadService(alfrescoNodeUtils, ALFRESCO_URI) {
+function AlfrescoDownloadService(alfrescoNodeUtils, ALFRESCO_URI, sessionService) {
 
     var service = {
         downloadFile: downloadFile
@@ -12,6 +12,7 @@ function AlfrescoDownloadService(alfrescoNodeUtils, ALFRESCO_URI) {
     function downloadFile(nodeRef, fileName) {
 
         var url = ALFRESCO_URI.webClientServiceProxy + "/api/node/content/" + alfrescoNodeUtils.processNodeRef(nodeRef).uri + "/" + fileName + "?a=true";
+        url = sessionService.makeURL(url);
 
         var iframe = document.querySelector("#downloadFrame");
         if (iframe === null) {
