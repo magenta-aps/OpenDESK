@@ -27,3 +27,18 @@ make dist
 in the root of the converseJS project to build the project.
 The new files can be commited and pushed to the repository.
 The next time you build openDESK-UI with gulp it will fetch your changes through bower.
+
+If you want to make some changes locally in converse.js and try them out without pushing
+them to GitHub, then you can use `bower link`. In your converse.js directory, run:
+```
+bower link
+```
+
+Then, in your OpenDESK-UI directory, run:
+```
+bower link converse.js
+```
+
+This sets up a symlink, so that any change you make in converse.js locally will immediately be available
+in OpenDesk. Note that you still must run `make dist` in converse.js to build it, and then run `npm install`
+in OpenDesk.
