@@ -20,7 +20,7 @@
                 callback(data.people.map(function (person) {
                     return {
                         id: person.userName + '@' + xmppDomain,
-                        fullname: person.firstName + ' ' + person.lastName
+                        fullname: person.firstName + ' ' + person.lastName + ' (' + person.userName + ')'
                     };
                 }));
             });
