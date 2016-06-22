@@ -30,6 +30,9 @@
         converse.initialize({
             bosh_service_url: '/http-bind', // Please use this connection manager only for testing purposes
             i18n: locales['da'], // Refer to ./src/locales.js in converseJS project to see which locales are supported
+	    keepalive: true,
+	    allow_logout: false,
+	    allow_registration: false,
             show_controlbox_by_default: false,
             roster_groups: true,
             hide_muc_server: true,
