@@ -15,16 +15,15 @@ var gulp = require('gulp'),
 // Config vars
 // If, after a while, there are a lot of config vars, we can move these to a separate file
 var environment = {
-    test: {
-        proxy: 'http://test.openesdh.dk'
-    },
     demo: {
-        proxy: 'http://178.62.194.129:8080'
+	chat: 'http://demo.opendesk.dk:5280/http-bind',
+        repo: 'http://demo.opendesk.dk:8080',
+        share: 'http://demo.opendesk.dk:8081'
     },
     local: {
+        chat: 'http://demo.opendesk.dk:5280/http-bind',
         repo: 'http://localhost:8080',
-        share: 'http://localhost:8081',
-        chat: 'http://demo.opendesk.dk:5280/http-bind'
+        share: 'http://localhost:8081'
     }
 };
 
@@ -149,10 +148,6 @@ gulp.task('watch', function() {
 // This task is used to just build the scripts and CSS.
 // Useful if you want to deploy to production (e.g. with Apache).
 gulp.task('build', ['scripts', 'css', 'sec_check', 'acc_check']);
-
-gulp.task('test', ['build', 'watch'], function() {
-    createWebserver(environment.test);
-});
 
 gulp.task('demo', ['build', 'watch'], function() {
     createWebserver(environment.demo);

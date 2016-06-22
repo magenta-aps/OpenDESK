@@ -20,7 +20,12 @@ $ gulp watch
 ```
 Happy coding :)
 
-If you want to run OpenDesk-UI against an Alfresco server running on localhost, then run:
+If you want to run OpenDesk-UI against an Alfresco server running on localhost and ejabberd running on demo.opendesk.dk, then run:
 ```
 $ gulp local
+```
+
+If you want to run it against the demo.opendesk.dk Alfresco/ejabberd server, then run:
+```
+$ gulp demo
 ```
