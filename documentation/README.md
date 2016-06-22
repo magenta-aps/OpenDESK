@@ -123,7 +123,8 @@ npm i  // (press 3 when you are prompted)
 gulp local  // (to build the files - just press crtl d, to cancel the gulp server when its started)
 ```
 
-finally restart the apache server
+finally change the user back restart the apache server
 ```
+exit // exits from being the 'flemming' user
 sudo service apache2 restart  // (you will be prompted for your own password)
 ```
