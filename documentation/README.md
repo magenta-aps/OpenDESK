@@ -94,7 +94,10 @@ Read more info on working with git in the workflow guide below.
 
 ## How to update the staging environment
 
-logon to the server with your user. I use this for my user:
+The staging site can be accessed at http://178.62.194.129/#/
+
+In order to update its codebase, log on to the server with your user. 
+I use this for my user:
 ```
 ssh flemming@178.62.194.129
 ```
