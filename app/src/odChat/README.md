@@ -32,13 +32,13 @@ var msg = converse
           )
           .up()
           .c('active', {
-              'xmlns': 'http://demo.opendesk.dk/protocol/chatstates'
+              'xmlns': 'http://xmppserver.org/protocol/chatstates'
           })
           .tree();
 
 converse.send(msg);
 ```
-At the time of writing, I honestly don't know what half of the code does. But taking this bit and switching the `to:`, `id:`, and `t()` variables will make it miracously work.
+At the time of writing, I honestly don't know what half of the code does. But taking this bit and switching the `to:`, `id:`, `xmlns:`, and `t()` variables will make it miracously work.
 
 
 ## ConverseJS is a separate project 
