@@ -12,6 +12,35 @@ chatService.initialize();
 Please refer to the [ConverseJS documentation](https://conversejs.org/docs/html/index.html) for more info about initializing the chat module.
 
 
+## Chat messages
+
+ConverseJS enables you to do some programmatic stuff with chat.
+The `connverse` object found in chatService.js has a `send` method to send messages in the XMPP format. An example of a message could look like this:
+```
+var msg = converse
+          .env
+          .$msg({
+            to: 'user@xmppserver.org', // Reciever of the msg
+            from: 'otheruser@xmppserver.org', // Sender of the msg. 
+            // In many contexts, converseJS will automatically supply 'from' info
+            id: 123,
+            type: 'chat' // or 'groupchat'
+          })
+          .c('body')
+          .t(
+            'This is the message sent.'
+          )
+          .up()
+          .c('active', {
+              'xmlns': 'http://demo.opendesk.dk/protocol/chatstates'
+          })
+          .tree();
+
+converse.send(msg);
+```
+At the time of writing, I honestly don't know what half of the code does. But taking this bit and switching the `to:`, `id:`, and `t()` variables will make it miracously work.
+
+
 ## ConverseJS is a separate project 
 
 OpenDesk uses a fork of the converseJS project which resides at [https://github.com/magenta-aps/converse.js.git](https://github.com/magenta-aps/converse.js.git)
