@@ -84,9 +84,7 @@ function chatService(XMPP_DOMAIN) {
                 console.log('this is a 1:1 chat');
                 msgObj.type = 'chat'
             };
-            var msg = converse.env.$msg(msgObj).c('body').t(message).up().c('active', {
-                'xmlns': 'http://demo.opendesk.dk/protocol/chatstates'
-            }).tree();
+            var msg = converse.env.$msg(msgObj).c('body').t(message);
             converse.send(msg);
 
         });
