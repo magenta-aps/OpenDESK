@@ -38,7 +38,7 @@ var msg = converse
 
 converse.send(msg);
 ```
-At the time of writing, I honestly don't know what half of the code does. But taking this bit and switching the `to:`, `id:`, `xmlns:`, and `t()` variables will make it miracously work.
+At the time of writing, I honestly don't know what half of the code does. But taking this bit and switching the `to:`, `id:`, `xmlns:`, and `t()` variables will make it miracously work. Take a look at [this introduction to XMPP](http://www.slideshare.net/guest488a24/xmpp-in-real-time?next_slideshow=1) to get an idea of what is going on.
 
 
 ## ConverseJS is a separate project 
