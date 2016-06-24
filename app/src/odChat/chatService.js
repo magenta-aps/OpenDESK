@@ -2,7 +2,7 @@ angular
     .module('openDeskApp.chat')
     .factory('chatService', chatService);
 
-function chatService(XMPP_DOMAIN) {
+function chatService(XMPP_DOMAIN, userService) {
     var initialized = false;
 
     return {
@@ -45,8 +45,8 @@ function chatService(XMPP_DOMAIN) {
 
         // Initialize ConverseJS chat
         converse.initialize({
-            bosh_service_url: '/http-bind', // Please use this connection manager only for testing purposes
-            debug: true,
+            bosh_service_url: '/http-bind',
+            //debug: true,
             i18n: locales['da'], // Refer to ./src/locales.js in converseJS project to see which locales are supported
             keepalive: true,
             allow_logout: false,
