@@ -3,10 +3,11 @@
         .module('openDeskApp.documents')
         .factory('documentService', documentService);
 
-    function documentService($http) {
+    function documentService($http, alfrescoNodeUtils) {
         var service = {
             getDocuments: getDocuments,
-            getFavoriteDocuments: getFavoriteDocuments
+            getFavoriteDocuments: getFavoriteDocuments,
+            getPath : getPath
         };
 
         return service;
@@ -39,7 +40,11 @@
             });
         }
 
-
-
-
+        function getPath(documentNodeRef) {
+            console.log("documentService: " + (documentNodeRef));
+            return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {
+            }).then(function(response) {
+                return response.data.item.location;
+            });
+        }
     }

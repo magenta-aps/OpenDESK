@@ -1,6 +1,6 @@
     angular
         .module('openDeskApp.search', ['ngCookies'])
-        .controller('SearchController', SearchController, ['$cookies', function($cookies) {        	
+        .controller('SearchController', SearchController, ['$cookies', function($cookies) {
 					$cookies.searchResult = "";
         }]);
 
@@ -9,7 +9,7 @@
      * @param $scope
      * @constructor
      */
-    function SearchController($scope, $state, $cookies, $stateParams, searchService, documentPreviewService, alfrescoDownloadService) {
+    function SearchController($scope, $state, $cookies, $stateParams, searchService, documentPreviewService, alfrescoDownloadService, documentService, $window) {
         var vm = this;
 				
 				var originatorEv;
@@ -36,6 +36,9 @@
         vm.getSearchresults = function(term) {
 					return searchService.getSearchResults(term).then(function (val) {
 						if (val != undefined) {
+
+                            console.log(val);
+
 							$cookies.putObject("searchResult", val);
 							window.location.href = "#/search";
 							
@@ -53,6 +56,30 @@
 
         vm.downloadDocument = function downloadDocument(nodeRef, name){
             alfrescoDownloadService.downloadFile(nodeRef, name);
+        }
+
+        $scope.selectedDocumentPath = "";
+
+        vm.gotoPath = function (nodeRef) {
+
+            var ref = nodeRef;
+
+            documentService.getPath(ref.split("/")[3]).then(function(val) {
+
+                $scope.selectedDocumentPath = val.container
+
+
+                var project = val.site;
+                var container = val.container;
+                var path = val.path;
+
+                var projectPath = project + "/" + container + "/" + path;
+
+                $window.location.href = '#/projekter/' + projectPath;
+
+                console.log("gotoPath")}
+
+            );
         }
 
     }

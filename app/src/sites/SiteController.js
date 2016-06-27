@@ -4,11 +4,12 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService) {
+        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService) {
 
 			var vm = this;
 			$scope.contents = [];
 			$scope.members = [];
+			$scope.roles = [];
 			$scope.roles = [];
 
 			vm.project = $stateParams.projekt;
@@ -145,6 +146,12 @@
 				cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
 					var result = [];
 					for (var x in val.data.objects) {
+
+						var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+
+
+					    documentService.getPath(ref.split("/")[3]).then(function(val) {console.log(val)});
+
 						result.push({
 							name: val.data.objects[x].object.succinctProperties["cmis:name"],
 							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
@@ -291,6 +298,8 @@
 
 				siteService.updateNode(docNodeRef, props);
 			}
+
+
 
 			// vm.test = function test() {
 			// 	var nodeRef = "workspace://SpacesStore/8c23bfdb-e1bb-4f17-9682-144404bca3e3";
