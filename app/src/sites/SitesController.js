@@ -79,11 +79,14 @@
 				var r = siteService.updateSiteName(shortName, newName);
 
 				r.then(function(result){
-					vm.project_title=result.title;
-						console.log(result);
+					vm.project_title = result.title;
+					console.log(result);
 					$mdDialog.hide();
-					vm.reload();
+					
+					siteService.getSites().then(function(val) {
+						vm.sites = val;
 					});
+				});
 			}
 
             //

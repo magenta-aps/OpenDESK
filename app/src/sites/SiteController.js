@@ -75,8 +75,10 @@
 
 					siteService.createFolder("cm:folder", props);
 
-					vm.reload();
+					vm.loadContents();
 				});
+				
+				$mdDialog.hide();
 			}
 
 
@@ -85,6 +87,8 @@
 					templateUrl: 'app/src/sites/view/newFolder.tmpl.html',
 					parent: angular.element(document.body),
 					targetEvent: event,
+					scope: $scope,
+        	preserveScope: true,
 					clickOutsideToClose: true
 				});
 			};
@@ -137,8 +141,9 @@
 
 			vm.deleteFolder = function (nodeRef) {
 				siteService.deleteFolder(nodeRef);
-
-				vm.reload();
+				
+				vm.loadContents();
+				$mdDialog.hide();
 			}
 
 
@@ -222,8 +227,9 @@
 			
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
 				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
-					// do stuff
+					vm.loadMembers();
 				});
+				$mdDialog.hide();
 			};
 
 			vm.addMemberToSite = function(siteName, userName, role) {
