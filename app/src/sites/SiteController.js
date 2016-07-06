@@ -59,6 +59,27 @@
 			}
 			vm.loadSiteData();
 
+			vm.loadContents = function() {
+				cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
+					var result = [];
+					for (var x in val.data.objects) {
+
+						var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+
+
+					    documentService.getPath(ref.split("/")[3]).then(function(val) {console.log(val)});
+
+						result.push({
+							name: val.data.objects[x].object.succinctProperties["cmis:name"],
+							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
+						});
+					}
+					$scope.contents = result;
+				});
+				vm.upDateBreadCrumb();
+			}
+			vm.loadContents();
 
 			vm.createFolder = function (folderName) {
 				var currentFolderNodeRef;
@@ -80,8 +101,7 @@
 				
 				$mdDialog.hide();
 			}
-
-
+			
 			vm.newFolderDialog = function (event) {
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/newFolder.tmpl.html',
@@ -140,34 +160,15 @@
 			};
 
 			vm.deleteFolder = function (nodeRef) {
-				siteService.deleteFolder(nodeRef);
+				siteService.deleteFolder(nodeRef).then(function (val) {
+					vm.loadContents();
+				});
 				
-				vm.loadContents();
 				$mdDialog.hide();
 			}
 
 
-			vm.loadContents = function() {
-				cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
-					var result = [];
-					for (var x in val.data.objects) {
-
-						var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
-
-
-					    documentService.getPath(ref.split("/")[3]).then(function(val) {console.log(val)});
-
-						result.push({
-							name: val.data.objects[x].object.succinctProperties["cmis:name"],
-							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
-						});
-					}
-					$scope.contents = result;
-				});
-				vm.upDateBreadCrumb();
-			}
-			vm.loadContents();
+			
 
 			vm.loadMembers = function () {
 				siteService.getSiteMembers(vm.project).then(function (val) {
