@@ -16,22 +16,37 @@
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/newProject.tmpl.html',
 					parent: angular.element(document.body),
+					scope: $scope,
+					preserveScope: true,
 					targetEvent: event,
 					clickOutsideToClose:true
 				});
 			};
 
-			vm.createSite = function(name, description) {
-				siteService.createSite(name, description).then(function (val) {
-					//TODO load stuff without reload..
-					vm.reload();
+			// vm.createSite = function(name, description) {
+			// 	siteService.createSite(name, description).then(function (val) {
+			// 		//TODO load stuff without reload..
+			// 		vm.reload();
+			// 	});
+			//
+			// 	$mdDialog.hide();
+			// };
+
+
+			vm.createSite = function (name, description) {
+				var r = siteService.createSite(name, description);
+
+				r.then(function(result){			
+					
+					siteService.getSites().then(function(val) {
+						vm.sites = val;
+					});
+					
+					$mdDialog.hide();
 				});
-				
-				$mdDialog.hide();
-			};
+			}
 
-
-			vm.deleteSite = function(siteName) {				
+			vm.deleteSiteDialog = function(siteName) {
 				var confirm = $mdDialog.confirm()
 					.title('Vil du slette dette projekt?')
 					.textContent('Projektet og alle dets filer vil blive slettet')
