@@ -16,13 +16,13 @@
 			vm.path = $stateParams.path;
 			vm.breadCrumb = [{slug: vm.project, link: '/'}];
 
-			//// testing of the move/copy
-			//var nodeRef = "workspace://SpacesStore/c0951576-6104-4aaf-8c85-49dfa8b758db";
-			////var nodeRef2 = "workspace://SpacesStore/8bf7cd04-dfd7-4342-8864-91bdce706504";
-            //
-			//vm.source = [nodeRef];
-			//vm.dest = "workspace://SpacesStore/53e662db-74f3-49ee-a15e-eb0c58c6b3b0"; // folder: 1
-			//vm.parentId = "workspace://SpacesStore/de35297e-9317-42f0-9ce9-89c58976df7a";
+			// // testing of the move/copy
+			// // var nodeRef = "workspace://SpacesStore/c0951576-6104-4aaf-8c85-49dfa8b758db";
+			// //var nodeRef2 = "workspace://SpacesStore/8bf7cd04-dfd7-4342-8864-91bdce706504";
+			//
+			// vm.source = [nodeRef];
+			// // vm.dest = "workspace://SpacesStore/53e662db-74f3-49ee-a15e-eb0c58c6b3b0"; // folder: 1
+			// // vm.parentId = "workspace://SpacesStore/de35297e-9317-42f0-9ce9-89c58976df7a";
 			
 			vm.upDateBreadCrumb = function() {
 				var bc = '';
@@ -113,6 +113,16 @@
 				});
 			};
 
+			vm.uploadDocumentsDialog = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
 
 			vm.deleteFileDialog = function (event, nodeRef) {
   			var confirm = $mdDialog.confirm()
@@ -125,24 +135,15 @@
   			
   			$mdDialog.show(confirm).then(function() {
   			  vm.deleteFile(nodeRef);
-					
   			});
 			}
 
-			vm.uploadDocumentsDialog = function (event) {
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: event,
-					scope: $scope,        // use parent scope in template
-					preserveScope: true,  // do not forget this if use parent scope
-					clickOutsideToClose: true
-				});
-			};
-
 			vm.deleteFile = function (nodeRef) {
-				siteService.deleteFile(nodeRef);
-				vm.reload();
+				siteService.deleteFile(nodeRef).then(function (val) {
+					vm.loadContents();
+				});
+				
+				$mdDialog.hide();
 			}
 
 			vm.deleteFoldereDialog = function (event, nodeRef) {
@@ -206,8 +207,8 @@
 			};
 
 			vm.loadSiteRoles = function() {
-				   siteService.getSiteRoles(vm.project).then(function(response){
-					   $scope.roles = response.siteRoles;
+				siteService.getSiteRoles(vm.project).then(function(response){
+					$scope.roles = response.siteRoles;
 				});
 			};
 			vm.loadSiteRoles();
@@ -251,14 +252,15 @@
 
 			   $mdDialog.show(confirm).then(function() {
 			     vm.removeMemberFromSite(siteName, userName);
-					 vm.reload();
 			   });
 			};
 
 			vm.removeMemberFromSite = function(siteName, userName) {
 				siteService.removeMemberFromSite(siteName, userName).then(function(val){
-					// do stuff
+					vm.loadMembers();
 				});
+				
+				$mdDialog.hide();
 			};
 
 			vm.getAllUsers = function(filter) {
@@ -293,17 +295,22 @@
 	    	$mdDialog.show(confirm).then(function(result) {
 					var newName = result;					
 					vm.renameDocument(docNodeRef, newName);
-					vm.reload();
+			
 	    	});
+				
+				
 			}
 			
 			vm.renameDocument = function renameDocument(docNodeRef, newName) {
-
 				var props = {
 					prop_cm_name: newName
 				};
-
-				siteService.updateNode(docNodeRef, props);
+				
+				siteService.updateNode(docNodeRef, props).then(function(val){
+					vm.loadContents();
+				});
+				
+				$mdDialog.hide();
 			}
 
 

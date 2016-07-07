@@ -7,6 +7,10 @@
         function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams) {
 
 			var vm = this;
+			
+			siteService.getSites().then(function(val) {
+				vm.sites = val;
+			});
 
 			vm.newSite = function(event) {
 				$mdDialog.show({
@@ -18,21 +22,37 @@
 			};
 
 			vm.createSite = function(name, description) {
-				siteService.createSite(name, description);
+				siteService.createSite(name, description).then(function (val) {
+					//TODO load stuff without reload..
+					vm.reload();
+				});
+				
 				$mdDialog.hide();
 			};
 
-			vm.deleteSite = function(siteName) {
+
+			vm.deleteSite = function(siteName) {				
 				var confirm = $mdDialog.confirm()
 					.title('Vil du slette dette projekt?')
 					.textContent('Projektet og alle dets filer vil blive slettet')
 					.ok('Ja')
 					.cancel('Annullér');
 				$mdDialog.show(confirm).then(function() {
-					siteService.deleteSite(siteName);
-					vm.reload();
+					vm.deleteSite(siteName);
 				});
 			};
+			
+			vm.deleteSite = function (siteName) {
+				var r = siteService.deleteSite(siteName);
+
+				r.then(function(result){
+					$mdDialog.hide();
+					
+					siteService.getSites().then(function(val) {
+						vm.sites = val;
+					});
+				});
+			}
 
 
 			vm.cancel = function() {
@@ -48,10 +68,6 @@
 			  originatorEv = event;
 			  $mdOpenMenu(event);
 			};
-
-			siteService.getSites().then(function(val) {
-				vm.sites = val;
-			});
 
 
 

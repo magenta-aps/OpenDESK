@@ -4,7 +4,7 @@
 		
 	<div ng-controller="SearchController as vm" class="od-search" layout="row">
 			<span flex></span>
-			<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">    		
+			<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
 				<!-- <md-input-container> -->
 					<i class="material-icons">search</i>
 					<md-autocomplete
@@ -52,7 +52,7 @@
 				
 					    <md-menu-content width="6">
 								<md-menu-item>
-					        <md-button ng-click="vm.deleteSite(project.title)">
+					        <md-button ng-click="vm.deleteSite(project.shortName)">
 					          <md-icon md-menu-align-target>remove_circle_outline</md-icon>
 					          Delete
 					        </md-button>
