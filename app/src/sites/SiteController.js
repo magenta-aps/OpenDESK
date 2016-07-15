@@ -60,7 +60,10 @@
 			vm.loadSiteData();
 
 			vm.loadContents = function() {
-				cmisService.getFolderNodes($stateParams.projekt + $stateParams.path).then(function (val) {
+
+				console.log($stateParams.path);
+
+				cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
 					var result = [];
 					for (var x in val.data.objects) {
 
@@ -83,7 +86,7 @@
 
 			vm.createFolder = function (folderName) {
 				var currentFolderNodeRef;
-				var cmisQuery = $stateParams.projekt + $stateParams.path;
+				var cmisQuery = $stateParams.projekt + "/documentLibrary/" + $stateParams.path;
 
 				cmisService.getNode(cmisQuery).then(function (val) {
 					currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
@@ -191,7 +194,7 @@
 			};
 
 			vm.upload = function (files) {
-				var cmisQuery = $stateParams.projekt + $stateParams.path;
+				var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
 				cmisService.getNode(cmisQuery).then(function (val) {
 
 					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
