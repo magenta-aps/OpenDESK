@@ -22,4 +22,11 @@
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
 	</bean>
+
+	<bean id="webscript.notifications.get"
+		  class="dk.opendesk.Notifications"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="personService" ref="PersonService"/>
+	</bean>
 </beans>

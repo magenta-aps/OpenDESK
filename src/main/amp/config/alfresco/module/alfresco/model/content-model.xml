@@ -28,20 +28,15 @@
         -->
 
     <aspects>
-        <aspect name="od:notification">
-            <title>Notification</title>
+        <aspect name="od:notifications">
+            <title>Notifications related to a specific user</title>
             <properties>
-                <property name="od:subject">
+                <property name="od:notification">
                     <type>d:text</type>
+                    <multiple>true</multiple>
                 </property>
-
             </properties>
         </aspect>
-
-
     </aspects>
-
-
-
 
 </model>
