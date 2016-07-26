@@ -19,6 +19,7 @@
     <namespaces>
         <namespace uri="http://www.mycompany.com/model/content/1.0" prefix="myc"/>
         <namespace uri="http://www.magenta-aps.dk/model/content/1.0" prefix="od"/>
+        <namespace uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
     </namespaces>
 
 
@@ -26,17 +27,48 @@
     <!-- ===============================================================================================================
         Constraints, Types, and Aspects go here...
         -->
+    <types>
+        <type name="od:notification">
+            <title>Notification</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="od:subject">
+                    <type>d:text</type>
+                </property>
+                <property name="od:message">
+                    <type>d:text</type>
+                </property>
+                <property name="od:read">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+        </type>
+    </types>
+
 
     <aspects>
         <aspect name="od:notifications">
             <title>Notifications related to a specific user</title>
-            <properties>
-                <property name="od:notification">
-                    <type>d:text</type>
-                    <multiple>true</multiple>
-                </property>
-            </properties>
+                <properties>
+                    <property name="od:test">
+                        <title>test</title>
+                        <type>d:text</type>
+                    </property>
+                </properties>
+
+            <associations>
+                <child-association name="od:ids">
+                    <target>
+                        <class>od:notification</class>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+
         </aspect>
     </aspects>
+
+
 
 </model>

@@ -1,1 +1,1 @@
-Message: ${fromJava}
+<#--Message: ${fromJava}-->

@@ -1,1 +1,1 @@
-Message: ${fromJS} ${fromJava}
+Message:  ${fromJava}
