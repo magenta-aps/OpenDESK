@@ -3,54 +3,72 @@
     angular
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
-        
+
         function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams) {
-			
+
 			var vm = this;
 			
+			siteService.getSites().then(function(val) {
+				vm.sites = val;
+			});
+
 			vm.newSite = function(event) {
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/newProject.tmpl.html',
 					parent: angular.element(document.body),
+					scope: $scope,
+					preserveScope: true,
 					targetEvent: event,
 					clickOutsideToClose:true
 				});
 			};
+
+			// vm.createSite = function(name, description) {
+			// 	siteService.createSite(name, description).then(function (val) {
+			// 		//TODO load stuff without reload..
+			// 		vm.reload();
+			// 	});
+			//
+			// 	$mdDialog.hide();
+			// };
+
+
+			vm.createSite = function (name, description) {
+				var r = siteService.createSite(name, description);
+
+				r.then(function(result){			
+					
+					siteService.getSites().then(function(val) {
+						vm.sites = val;
+					});
+					
+					$mdDialog.hide();
+				});
+			}
+
+			vm.deleteSiteDialog = function(siteName) {
+				var confirm = $mdDialog.confirm()
+					.title('Vil du slette dette projekt?')
+					.textContent('Projektet og alle dets filer vil blive slettet')
+					.ok('Ja')
+					.cancel('Annullér');
+				$mdDialog.show(confirm).then(function() {
+					vm.deleteSite(siteName);
+				});
+			};
 			
-			vm.createSite = function(name, description) {
-				siteService.createSite(name, description);
-				$mdDialog.hide();
-			};
+			vm.deleteSite = function (siteName) {
+				var r = siteService.deleteSite(siteName);
 
-			vm.deleteSite = function(siteName) {
-				debugger;
-				siteService.deleteSite(siteName);
-			};
-
-			vm.getSiteRoles = function(name) {
-				siteService.getSiteRoles(name).then(function(val){
-					vm.roles = val;
+				r.then(function(result){
+					$mdDialog.hide();
+					
+					siteService.getSites().then(function(val) {
+						vm.sites = val;
+					});
 				});
-			};
+			}
 
-			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
-				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
-					// do stuff
-				});
-			};
-
-
-			vm.addMemberToSite = function(siteName, userName, role) {
-				siteService.addMemberToSite(siteName, userName, role).then(function(val){
-					// do stuff
-				});
-			};
-
-			vm.removeMemberFromSite = function(siteName, userName) {
-				siteService.removeMemberFromSite(siteName, userName).then(function(val){
-					// do stuff
-				});
-			};
 
 			vm.cancel = function() {
 				$mdDialog.cancel();
@@ -59,12 +77,52 @@
 			vm.reload = function() {
 				$window.location.reload();
 			};
+			
+			var originatorEv;
+			vm.openMenu = function($mdOpenMenu, event) {
+			  originatorEv = event;
+			  $mdOpenMenu(event);
+			};
 
-			siteService.getSites().then(function(val) {
-				vm.sites = val;
-			});
 
-			vm.projekt = $stateParams.projekt;
+
+			vm.querySites = function(q) {
+				return siteService.getSitesByQuery(q).then(function (val) {
+					vm.sites = val;
+				});
+			}
+
+
+			vm.currentDialogSite = '';
+			vm.renameSiteDialog = function (event, site) {
+				vm.currentDialogSite = site;		
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+
+			vm.updateSiteName = function (shortName, newName) {
+				var r = siteService.updateSiteName(shortName, newName);
+
+				r.then(function(result){
+					vm.project_title = result.title;
+					console.log(result);
+					$mdDialog.hide();
+					
+					siteService.getSites().then(function(val) {
+						vm.sites = val;
+					});
+				});
+			}
+
+            //
+			//vm.projekt = $stateParams.projekt;
+            //
 
 
 			// below for testing purpose - loads some data
@@ -80,7 +138,6 @@
 			//siteService.getSitesByQuery('1').then(function(val) {
 			//		vm.roles = val;
 			//})
-
 
 
 

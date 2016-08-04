@@ -25,7 +25,7 @@ a:active {
 }
 
 body {
-    
+  background: #ddd;
 }
 
 article {
@@ -41,6 +41,11 @@ img {
     height: auto;
 }
 
+// Muted (greyed) text
+.muted {
+    opacity: 0.66;
+    font-size: 0.9em;
+}
 
 /*
  * Molecule level styles
@@ -114,6 +119,10 @@ img {
     .material-icons {
         font-size: $u*2;
     }
+		
+		&.od-btn-small {
+			transform: scale(.75);
+		}
 }
 
 // Sliding sidebar
@@ -187,6 +196,13 @@ img {
      }
 
 }
+
+// Icons in buttons
+.md-button .material-icons {
+    vertical-align: middle;
+    margin-top: -($u*0.25);
+}
+
 
 /*
  * General media queries 

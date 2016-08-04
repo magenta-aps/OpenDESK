@@ -1,26 +1,19 @@
-<md-dialog aria-label="New site" ng-cloak>
-	<form name="createSiteForm" ng-submit="vm.createSite(newSiteName, newSiteDescription);">
+<md-dialog aria-label="Rename project"  ng-cloak>
+	<form name="createFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, newSiteName);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Create new site</h2>
+				<h2>Create new folder</h2>
 			</div>
 		</md-toolbar>
 		
 		<md-dialog-content class="md-padding">
-			<p>Here goes name and description of the new site.</p>
+			<p>Here goes the name of the new folder.</p>
 				<div>
 				  <md-input-container>
 					<label>Name</label>
 					<input type="text" name="newSiteName" required ng-model="newSiteName">
 					<div ng-messages="createSiteForm.newSiteName.$error">
-						<div ng-message="required">Dette felt skal udfyldes</div>
-					</div>
-				  </md-input-container>
-				  <md-input-container>
-					<label>Description</label>
-					<textarea required name="newSiteDesc" ng-model="newSiteDescription"></textarea>
-					<div ng-messages="createSiteForm.newSiteDesc.$error">
 						<div ng-message="required">Dette felt skal udfyldes</div>
 					</div>
 				  </md-input-container>

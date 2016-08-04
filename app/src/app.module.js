@@ -3,6 +3,7 @@ angular
         'ngSanitize',
         'ngMaterial',
         'ngMessages',
+			  'ngCookies',
         'material.wizard',
         'ui.router',
         'rt.encodeuri',
@@ -30,9 +31,9 @@ angular
         'dcbImgFallback',
         
         'openDeskApp.notifications',
+        'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',
-        'openDeskApp.documentation',
 		'openDeskApp.projekter',
         
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
@@ -97,19 +98,6 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-    }).state('documentation', {
-        parent: 'site',
-        url: '/documentation',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/documentation/view/documentation.html',
-                controller: 'DocumentationController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
     }).state('kalendar', {
         parent: 'site',
         url: '/kalendar',
@@ -162,7 +150,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         }
     }).state('project', {
         parent: 'site',
-        url: '/projekter/:projekt',
+        url: '/projekter/:projekt{path:.*}',
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/site.html',
@@ -192,6 +180,18 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
                 templateUrl: 'app/src/documents/view/projects.html',
                 controller: 'DocumentCtrl',
 
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    }).state('search', {
+        url: '/search',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/search/view/search.html',
+                controller: 'SearchController',
                 controllerAs: 'vm'
             }
         },

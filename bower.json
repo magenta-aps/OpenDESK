@@ -1,8 +1,8 @@
 {
-  "name": "OpenESDH UI",
-  "description": "OpenESDH with Angular Material UI implementation",
+  "name": "opendesk-ui",
+  "description": "OpenDesk UI with Angular Material implementation",
   "version": "0.0.1",
-  "homepage": "https://github.com/OpenESDH/OpenESDH-UI",
+  "homepage": "https://github.com/magenta-aps/OpenDESK-UI",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -27,13 +27,20 @@
     "angular-ui-router": "",
     "isteven-angular-multiselect": "3.0.0",
     "material-wizard": "",
-    "pdfjs-dist": ""
+    "converse.js": "https://github.com/magenta-aps/converse.js.git#master",
+    "pdfjs-dist": "",
+    "angular-cookies": "^1.5.7"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.x"
   },
   "resolutions": {
     "angular": "^1.4.9",
-    "angular-material": "1.0.x"
+    "angular-material": "1.0.x",
+    "bootstrap": "~3.3.6",
+    "requirejs": "~2.2.0",
+    "jquery": "1.12.3",
+    "backbone": "1.1.2",
+    "angular-translate": "2.11.0"
   }
 }

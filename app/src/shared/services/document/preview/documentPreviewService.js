@@ -137,7 +137,7 @@
                             'image/jpeg'
                             ],
                 templateUrl: 'image.html',
-                maxItemSize: 2000000,
+                maxItemSize: 20000000,
                 initScope: function($scope){
                     $scope.itemMaxSizeExceeded = (this.itemSize && parseInt(this.itemSize) > this.maxItemSize);
                     if($scope.itemMaxSizeExceeded === false){
@@ -241,6 +241,7 @@
                     this.itemSize = item.node.size;
                     this.mimeType = item.node.mimetype;
                     this.contentUrl = ALFRESCO_URI.webClientServiceProxy + (this._acceptsMimeType(item) ? this._getContentUrl(item) : this._getThumbnailUrl(item));
+                    this.contentUrl = sessionService.makeURL(this.contentUrl);
                 },
                 
                 _acceptsMimeType: function(item){
