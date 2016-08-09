@@ -73,7 +73,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         removeMemberFromSite: function (siteName, member) {
-            return $http.delete('/api/sites/' + siteName + '/memberships/' + member).then(function (response) {
+            return $http.delete('/api/sites/' + siteName + '/memberships/' + member).then(function(response) {
                 return response.data;
             })
         },

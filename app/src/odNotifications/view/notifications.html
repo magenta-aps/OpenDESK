@@ -1,32 +1,41 @@
+
+
+
+
 <section  class="od-notifications" ng-controller="NotificationsController as vm">
 
     <button ng-click="vm.toggleNotices()" class="od-btn od-notifications--toggle">
         <i class="material-icons">notifications</i>
         <span class="od-notifications--counter">{{ vm.notifications.length }}</span>
     </button>
-    
+
     <div class="od-flyout right" ng-class="{ open: vm.on }" ng-click="vm.toggleNotices()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
             <h2 class="od-flyout--title">Beskeder</h2>
             <button ng-click="vm.toggleNotices()" class="od-btn od-flyout--close">
                 <i class="material-icons">keyboard_arrow_right</i>
             </button>
-        
+
             <ul class="od-notifylist">
                 <li class="od-notifylist--item" ng-repeat="notice in vm.notifications">
                     <a ng-show="notice.link" ui-sref="notice.link" class="od-notifylist--item--link">
-                        <h3 class="od-notifylist--item--notice">{{ notice.notice }}</h3>
-                        <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.desc }}</p>
+                        <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
+                        <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.message }}</p>
                     </a>
                     <span ng-show="!notice.link" class="od-notifylist--item--nolink">
-                        <h3 class="od-notifylist--item--notice">{{ notice.notice }}</h3>
-                        <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.desc }}</p>
+                        <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
+                        <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.message }}</p>
                     </span>
                     <button class="od-btn od-notifylist--item--close" ng-click="vm.rmNotice($index)"><i class="material-icons">close</i></button>
                 </li>
             </ul>
-        
+
+
+
         </div>
     </div>
-        
+
+
+
 </section>
+

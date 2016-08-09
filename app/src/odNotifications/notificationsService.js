@@ -3,7 +3,9 @@
         .module('openDeskApp.notifications')
         .factory('notificationsService', notificationsService);
 
-    function notificationsService() {
+    var restBaseUrl = '/alfresco/service';
+
+    function notificationsService($http) {
         var service = {
             getNotices: getNotices,
             addNotice: addNotice,
@@ -13,9 +15,17 @@
         return service;
 
         function getNotices(userId) {
-            // Should return a user's unread notifications
-            return [];
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&method=getAll").then(function(response) {
+              return response.data;
+            })
+
         };
+
+
+
+
+
+
         
         function addNotice(userId, noticeObj) {
             console.log('Add notice');
