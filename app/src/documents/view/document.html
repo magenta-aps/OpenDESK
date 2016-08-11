@@ -1,22 +1,43 @@
-<md-content layout="column">
-    <div class="sub-toolbar md-whiteframe-3dp">
-        <div layout="row" layout-align="space-between center" layout-padding>
-            <div layout="row" layout-align="start center">
-                <md-button ng-href="#/cases/case/{{docCtrl.caseId}}" ng-if="docCtrl.caseId">
-                    <i class="material-icons" style="vertical-align: middle;">arrow_back</i>
-                    {{ docCtrl.caseId}}
-                </md-button>
-                <md-button ng-href="#/" ng-if="!docCtrl.caseId">
-                    <i class="material-icons" style="vertical-align: middle;">arrow_back</i>
-                    {{ 'COMMON.HOME' | translate }}
-                </md-button>
-                <h1 class="md-headline">
-                    {{ docCtrl.doc.title}}
-                    <span class="muted">({{docCtrl.doc.status| docStatus}})</span>
-                </h1>
-            </div>
+<md-content layout="column" layout-padding>
+
+    <breadcrumb paths="vm.paths"></breadcrumb>
+
+    <h1 class="md-headline">
+        {{ vm.doc.fileName }}
+    </h1>
+    
+    <div layout-sm="column" layout-gt-sm="row">
+        <div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
+            <ng-include src="viewerTemplateUrl"></ng-include>
+        </div>
+        <div flex-gt-sm="33" layout-padding>
+            <dl>
+                <dt>
+                    Oprettet
+                </dt>
+                <dd>
+                    {{ vm.doc.createdOn }}        
+                </dd>
+                <dt>
+                    Oprettet af
+                </dt>
+                <dd>
+                    {{ vm.doc.createdBy }}        
+                </dd>
+                <dt>
+                    Senest ændret
+                </dt>
+                <dd>
+                    {{ vm.doc.modifiedOn }}        
+                </dd>
+                <dt>
+                    Senest ændret af
+                </dt>
+                <dd>
+                    {{ vm.doc.modifiedBy }}        
+                </dd>
+            </dl>
         </div>
     </div>
-
-    <ng-include src="'app/src/documents/view/documentDetails.html'"></ng-include>
+    
 </md-content>

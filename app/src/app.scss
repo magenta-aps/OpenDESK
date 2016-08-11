@@ -41,6 +41,16 @@ img {
     height: auto;
 }
 
+dl dt {
+    font-size: $u*0.9;
+    color: lighten($main-color, 20%);
+}
+
+dl dd {
+    padding: 0 0 $u;
+    margin: 0;
+}
+
 // Muted (greyed) text
 .muted {
     opacity: 0.66;
@@ -195,6 +205,24 @@ img {
         }
      }
 
+}
+
+// Styles for breadcrumb directive
+.od-filebrowser-breadcrumb {
+	margin: 0;
+	background-color: #eee;
+	font-size: $u*0.9;
+    padding: 0 $u*0.5;
+	
+	a {
+		display: inline-block;
+		padding: $u*0.5 0;
+	}
+	a:after {
+		display: inline-block;
+        padding-left: $u*0.25;
+		content: '/';
+	}
 }
 
 // Icons in buttons

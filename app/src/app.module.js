@@ -16,8 +16,6 @@ angular
         'openDeskApp.translations.init',
         'openDeskApp.header',
         'openDeskApp.dashboard',
-        //'openDeskApp.files',
-        //'openDeskApp.tasks',
         'openDeskApp.documents',
         'openDeskApp.administration',
         'openDeskApp.groups',
@@ -34,7 +32,6 @@ angular
         'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',
-		'openDeskApp.projekter',
         
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
@@ -172,20 +169,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
                 controller: 'UsersController'
             }
         }
-
-    }).state('documents', {
-        url: '/documents',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/documents/view/projects.html',
-                controller: 'DocumentCtrl',
-
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
+        
     }).state('search', {
         url: '/search',
         views: {
