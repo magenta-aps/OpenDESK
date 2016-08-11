@@ -41,7 +41,7 @@
                     plugin: plugin
                 }
             });
-        }
+        };
         
         function DialogController($scope, $mdDialog, plugin) {
             

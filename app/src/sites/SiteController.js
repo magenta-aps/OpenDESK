@@ -13,8 +13,27 @@
 			$scope.roles = [];
 
 			vm.project = $stateParams.projekt;
-			vm.path = $stateParams.path;
-			vm.breadCrumb = [{slug: vm.project, link: '/'}];
+			
+			// Compile paths for breadcrumb directive
+			vm.paths = [
+				{
+					title: 'Projekter',
+					link: '#/projekter'
+				},
+				{
+					title: vm.project,
+					link: '#/projekter/' + vm.project
+				}
+			];
+			var pathArr = $stateParams.path.split('/');
+			for (var a in pathArr) {
+				if (pathArr[a] !== '') {
+					vm.paths.push({
+						title: pathArr[a],
+						link: '#/projekter/' + vm.project + '/' + pathArr[a]
+					});
+				};
+			};
 
 			// // testing of the move/copy
 			// // var nodeRef = "workspace://SpacesStore/c0951576-6104-4aaf-8c85-49dfa8b758db";
@@ -23,16 +42,6 @@
 			// vm.source = [nodeRef];
 			// // vm.dest = "workspace://SpacesStore/53e662db-74f3-49ee-a15e-eb0c58c6b3b0"; // folder: 1
 			// // vm.parentId = "workspace://SpacesStore/de35297e-9317-42f0-9ce9-89c58976df7a";
-			
-			vm.upDateBreadCrumb = function() {
-				var bc = '';
-				vm.path.split('/').forEach(function(val) {
-					if (val != '') {
-						bc = bc + '/' + val;
-				    	vm.breadCrumb.push({slug: val, link: bc});
-				    };
-				});
-			};
 			
 			vm.cancel = function () {
 				$mdDialog.cancel();
@@ -55,7 +64,6 @@
 					vm.project_title = result;
 				});
 
-
 			}
 			vm.loadSiteData();
 
@@ -69,18 +77,19 @@
 
 						var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
 
-
 					    documentService.getPath(ref.split("/")[3]).then(function(val) {console.log(val)});
+						
+						var shortRef = ref.split("/")[3];
 
 						result.push({
 							name: val.data.objects[x].object.succinctProperties["cmis:name"],
 							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"]
+							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
+							shortRef: shortRef
 						});
 					}
 					$scope.contents = result;
 				});
-				vm.upDateBreadCrumb();
 			}
 			vm.loadContents();
 
