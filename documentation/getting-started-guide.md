@@ -101,7 +101,7 @@ You'll probably be asked to enter your login credentials for Github.
 
 ## Merging with everybody else's code
 
-Now that your working branch has been changed and updated, you can browse to the project's Github page and make a pull request. 
+Now that your working branch has been changed and updated, you can browse to the project's Github page and make a pull request. This way you'll merge your code with what everybody else has been creating.
 
 1. Open a browser and go to https://github.com/magenta-aps/OpenDESK-UI 
 2. Use the "Branch" dropdown to select and view your working branch
@@ -111,5 +111,4 @@ Now that your working branch has been changed and updated, you can browse to the
 
 If Github informs you that there will be **conflicts,** you should go back, update _develop_ branch in your development setup, merge it into your working branch, and sort out the conflicts in your working branch before committing and pushing again. **Only create and merge a pull request when there are no conflicts.**
 
-That's it. You are now part of the team.
-
+That's it. You're should be good to go by now :)
