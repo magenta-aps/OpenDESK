@@ -91,7 +91,7 @@ You can make git remember your username for every push by going to console and e
 ```
 $ git config credential.username yourusername
 ```
-Read more info on working with git in the workflow guide below.
+Read more info on working with git in the workflow guide below and check the [git cheat sheet.](/documentation/git-cheat-sheet.md)
 
 
 ## How to update the staging environment
