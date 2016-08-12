@@ -106,7 +106,7 @@ Now that your working branch has been changed and updated, you can browse to the
 1. Open a browser and go to https://github.com/magenta-aps/OpenDESK-UI 
 2. Use the "Branch" dropdown to select and view your working branch
 3. Click "Pull request"
-4. Check that the "base" branch is develop, and the "compare" branch is your working branch. 
+4. Check that the "base" branch is _develop_, and the "compare" branch is your working branch. 
 5. With a bit of luck, Github will inform you that the branches are "Able to merge". Then you can just add a comment and hit "Create pull request". 
 
 If Github informs you that there will be **conflicts,** you should go back, update _develop_ branch in your development setup, merge it into your working branch, and sort out the conflicts in your working branch before committing and pushing again. **Only create and merge a pull request when there are no conflicts.**
