@@ -3,6 +3,8 @@
 Hi there. If you want to develop on OpenDesk, you've come to the right place.
 Documentation now uses Markdown notation for ease of editing. [Learn markdown.](https://help.github.com/articles/basic-writing-and-formatting-syntax/)
 
+* [Getting started guide](/documentation/getting-started-guide.md)
+
 * [Workflow guide](/documentation/workflow-guide.md)
 
 * [Use cases](/documentation/userstories.md)
