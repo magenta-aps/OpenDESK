@@ -26,6 +26,7 @@ When you have a working branch set up, check it out and merge the code from _dev
 $ git checkout yourBranchName
 $ git merge develop
 ```
+See the [git cheat sheet](/documentation/git-cheat-sheet.md) for more helpful git commands.
 
 4. Open a browser and check if the new changes feature on your development installation. Sometimes the changes are not visible in the browser because of strange caching behaviours. Use the browser's history cleanup to clear the cache.
 
