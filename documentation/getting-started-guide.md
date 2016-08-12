@@ -52,8 +52,8 @@ $ git status
 ```
 You should see a list of files ready for adding. It should look a little like this:
 ```
-On branch develop
-Your branch is up-to-date with 'origin/develop'.
+On branch yourBrancName
+Your branch is up-to-date with 'origin/yourBrancName'.
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
@@ -79,7 +79,21 @@ $ git add someFolder/markup.html
 ```
 $ git add styles.scss someFolder/markup.html moreStyles.scss
 ```
-Do `git status` again to see if the files you wanted to stage for commit are indeed staged.
+Do `git status` again to see if the files you wanted to stage for commit are indeed staged. It should look a little like this:
 ```
+On branch yourBrancName
+Your branch is up-to-date with 'origin/yourBrancName'.
 
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   moreStyles.scss
+	modified:   styles.scss
+	modified:   someFolder/markup.html
 ```
+Now you can commit and push your changes to the repository.
+```
+$ git commit -m 'Leave a note about your changes here'
+$ git push
+```
+You'll probably be asked to enter your login credentials for Github.
