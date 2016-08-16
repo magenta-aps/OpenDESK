@@ -3,6 +3,8 @@
 Hi there. If you want to develop on OpenDesk, you've come to the right place.
 Documentation now uses Markdown notation for ease of editing. [Learn markdown.](https://help.github.com/articles/basic-writing-and-formatting-syntax/)
 
+* [Getting started guide](/documentation/getting-started-guide.md)
+
 * [Workflow guide](/documentation/workflow-guide.md)
 
 * [Use cases](/documentation/userstories.md)
@@ -89,7 +91,7 @@ You can make git remember your username for every push by going to console and e
 ```
 $ git config credential.username yourusername
 ```
-Read more info on working with git in the workflow guide below.
+Read more info on working with git in the workflow guide below and check the [git cheat sheet.](/documentation/git-cheat-sheet.md)
 
 
 ## How to update the staging environment
