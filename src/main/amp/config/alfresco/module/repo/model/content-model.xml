@@ -19,7 +19,6 @@
     <namespaces>
         <namespace uri="http://www.mycompany.com/model/content/1.0" prefix="myc"/>
         <namespace uri="http://www.magenta-aps.dk/model/content/1.0" prefix="od"/>
-        <namespace uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
     </namespaces>
 
 
@@ -38,9 +37,18 @@
                 <property name="od:message">
                     <type>d:text</type>
                 </property>
+                <property name="od:type">
+                    <type>d:text</type>
+                </property>
                 <property name="od:read">
                     <type>d:boolean</type>
                     <default>false</default>
+                </property>
+                <property name="od:document">
+                    <type>d:noderef</type>
+                </property>
+                <property name="od:creator">
+                    <type>d:noderef</type>
                 </property>
             </properties>
         </type>

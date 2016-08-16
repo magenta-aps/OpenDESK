@@ -42,7 +42,7 @@ import dk.opendesk.repo.utils.Utils;
 /**
  * A demonstration Java controller for the Hello World Web Script.
  *
- * @author martin.bergljung@alfresco.com
+ * @author martin.bergljung@repo.com
  * @since 2.1.0
  */
 public class Notifications extends AbstractWebScript {
@@ -63,10 +63,6 @@ public class Notifications extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-
-        System.out.println("hello");
-
-
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
         NodeRef nodeRef = null;
@@ -82,10 +78,6 @@ public class Notifications extends AbstractWebScript {
         String method = params.get("method");
         String subject = params.get("subject");
         String message = params.get("message");
-
-        System.out.println(method);
-        System.out.println(userName);
-
 
         if (method != null && method.equals("getAll")) {
 
@@ -202,3 +194,5 @@ public class Notifications extends AbstractWebScript {
 
 // setRead
 //http://localhost:8080/alfresco/service/notifications?method=setRead&NODE_ID=76e15607-5519-4ad6-915c-1c07086535f2&STORE_TYPE=workspace&STORE_ID=SpacesStore
+
+//http://178.62.194.129:8080/alfresco/service/notifications?method=setRead&NODE_ID=/f1115ab8-bf2f-408c-b5ee-72acfb14be4c&STORE_TYPE=workspace&STORE_ID=SpacesStore

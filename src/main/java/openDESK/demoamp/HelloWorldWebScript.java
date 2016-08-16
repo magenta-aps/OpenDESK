@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * A demonstration Java controller for the Hello World Web Script.
  *
- * @author martin.bergljung@alfresco.com
+ * @author martin.bergljung@repo.com
  * @since 2.1.0
  */
 public class HelloWorldWebScript extends DeclarativeWebScript {

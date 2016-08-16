@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>openDESK</groupId>
-    <artifactId>alfresco</artifactId>
+    <artifactId>repo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>alfresco Repository AMP project</name>
     <packaging>amp</packaging>
@@ -18,21 +18,21 @@
     <!-- 
         SDK properties have sensible defaults in the SDK parent,
         but you can override the properties below to use another version.
-        For more available properties see the alfresco-sdk-parent POM.
+        For more available properties see the repo-sdk-parent POM.
        -->
     <properties>
 
 
         <jdk>1.8</jdk>
         <alfresco.version>5.1.e</alfresco.version>
-        <!--<alfresco.client.war>alfresco</alfresco.client.war>-->
-        <!--<alfresco.client.contextPath>/alfresco</alfresco.client.contextPath>-->
+        <!--<repo.client.war>repo</repo.client.war>-->
+        <!--<repo.client.contextPath>/repo</repo.client.contextPath>-->
         <alfresco.client.war.folder>${project.build.directory}/${project.build.finalName}-war</alfresco.client.war.folder>
 
         <!-- The following are default values for data location and Alfresco Community version.
              Uncomment if you need to change (Note. current default version for Enterprise edition is 5.1)
-          <alfresco.version>5.1.e</alfresco.version>
-          <alfresco.data.location>/absolute/path/to/alf_data_dev</alfresco.data.location> -->
+          <repo.version>5.1.e</repo.version>
+          <repo.data.location>/absolute/path/to/alf_data_dev</repo.data.location> -->
 
         <!-- This control the root logging level for all apps uncomment and change, defaults to WARN
             <app.log.root.level>WARN</app.log.root.level>
@@ -48,7 +48,7 @@
         (e.g.version and edition) -->
     <dependencyManagement>
         <dependencies>
-            <!-- Setup what versions of the different Alfresco artifacts that will be used (depends on alfresco.version),
+            <!-- Setup what versions of the different Alfresco artifacts that will be used (depends on repo.version),
                  so we don't have to specify version in any of the dependency definitions in our POM.
                  For more info see:
                     http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies
@@ -66,7 +66,7 @@
     <dependencies>
         <!-- Following dependencies are needed for compiling Java code in src/main/java;
              <scope>provided</scope> is inherited for each of the following;
-             for more info, please refer to alfresco-platform-distribution POM -->
+             for more info, please refer to repo-platform-distribution POM -->
         <dependency>
             <groupId>${alfresco.groupId}</groupId>
             <artifactId>alfresco-repository</artifactId>
