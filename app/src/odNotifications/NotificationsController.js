@@ -34,7 +34,7 @@
 
         notificationsService.getNotices("admin").then (function (val) {
             vm.notifications = val;
-            console.log(val);
+            // console.log(val);
         });
 
 

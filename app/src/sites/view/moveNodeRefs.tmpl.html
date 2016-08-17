@@ -1,0 +1,25 @@
+<md-dialog aria-label="Move item"  ng-cloak>
+	<form name="moveNodeRef" ng-submit="vm.moveNodeRefs(sourceNodeRefs, vm.destNode, parentNodeRef);">
+
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Where do you want to move this to?</h2>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content class="md-padding">
+				<md-radio-group ng-model="data.group3">
+				  <md-radio-button ng-repeat="folder in vm.source" ng-model="destNode" ng-show="folder.contentType === 'cmis:folder'" ng-value="folder.nodeRef" aria-label="{{ folder.name }}">
+						{{ folder.name }} 
+				  </md-radio-button>
+				</md-radio-group>
+
+		</md-dialog-content>
+
+		<md-dialog-actions>
+			<md-button ng-click="vm.cancel()">Annullér</md-button>
+			<md-button type="submit" class="md-primary">Move</md-button>
+		</md-dialog-actions>
+
+	</form>
+</md-dialog>

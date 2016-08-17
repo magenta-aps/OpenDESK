@@ -89,6 +89,21 @@
 											Rename
 										</md-button>
 									</md-menu-item>
+									
+									<md-menu-item>
+										<md-button ng-click="">
+											<md-icon md-menu-align-target>content_copy</md-icon>
+											Copy
+										</md-button>
+									</md-menu-item>
+									
+									<md-menu-item>
+										<md-button ng-click="vm.moveFileDialog($event, contents, content.nodeRef, '?')">
+										<!-- <md-button ng-click="vm.moveFileDialog(vm.source, vm.dest, vm.parentId)"> -->
+											<md-icon md-menu-align-target>compare_arrows</md-icon>
+											Move
+										</md-button>
+									</md-menu-item>
 								</md-menu-content>
 							</md-menu>
 

@@ -36,8 +36,7 @@
         vm.getSearchresults = function(term) {
 					return searchService.getSearchResults(term).then(function (val) {
 						if (val != undefined) {
-
-                            console.log(val);
+							console.log(val);
 
 							$cookies.putObject("searchResult", val);
 							window.location.href = "#/search";
