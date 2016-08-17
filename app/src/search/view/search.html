@@ -38,10 +38,11 @@
 	<md-card>
 		<md-card-content>
 			<md-list layout="column">
-				<md-list-item ng-repeat="r in searchResults.data.items" flex="100">
+				<md-list-item ng-repeat="r in searchResults" flex="100">
+				<!-- <md-list-item flex="100"> -->
 					<md-divider></md-divider>
-
-					<a class="od-filebrowser-link" ng-href="#/dokument/{{r.shortRef}}">
+					<a class="od-filebrowser-link" ng-href="#/dokument/{{r.nodeRef.replace('workspace://SpacesStore/', '')}}">
+																								
 						<i class="material-icons">insert_drive_file</i>
 						{{ r.name }}, <i>Modified by</i> {{ r.modifiedBy }}
 					</a>
@@ -67,8 +68,6 @@
 					      </md-menu-item>
 					    </md-menu-content>
 					</md-menu>
-
-					
 				</md-list-item>
 			</md-list>
 

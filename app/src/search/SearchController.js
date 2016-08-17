@@ -19,7 +19,8 @@
 				};
 				
         // $scope.searchResults = [];
-				// $scope.searchResults = $cookies.get("searchResult");
+				// $scope.searchResults.push(JSON.parse($cookies.get("searchResult")));
+				$scope.searchResults = JSON.parse($cookies.get("searchResult"));
 
         vm.getAutoSuggestions = function(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {
@@ -34,13 +35,19 @@
         }
 				
         vm.getSearchresults = function(term) {		
-					console.log(term);			
+
 					return searchService.getSearchResults(term).then(function (val) {
 						if (val != undefined) {
-							// console.log(val);
-							// $cookies.remove("searchResult");
-							// $cookies.put("searchResult", val);
-							// $cookies.putObject("searchResult", val);
+
+							console.log(val.data.items);
+							$cookies.remove("searchResult");
+							$cookies.put("searchResult", JSON.stringify((val.data.items)));
+							var parsedCookie = JSON.parse($cookies.get("searchResult"));
+							console.log(parsedCookie);
+							$scope.searchResults.push(parsedCookie);
+							
+							console.log($scope.searchResults);
+														
 							window.location.href = "#/search";
 
 						} else {
