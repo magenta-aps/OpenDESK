@@ -19,7 +19,7 @@
 				};
 				
         // $scope.searchResults = [];
-				$scope.searchResults = $cookies.getObject("searchResult");
+				// $scope.searchResults = $cookies.get("searchResult");
 
         vm.getAutoSuggestions = function(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {
@@ -33,16 +33,16 @@
             });
         }
 				
-        vm.getSearchresults = function(term) {
+        vm.getSearchresults = function(term) {		
+					console.log(term);			
 					return searchService.getSearchResults(term).then(function (val) {
 						if (val != undefined) {
-							console.log(val);
-
-							$cookies.putObject("searchResult", val);
+							// console.log(val);
+							// $cookies.remove("searchResult");
+							// $cookies.put("searchResult", val);
+							// $cookies.putObject("searchResult", val);
 							window.location.href = "#/search";
-							
-							// $scope.searchResults = val;							
-							// $state.go('search');
+
 						} else {
 							return [];
 						}
@@ -66,19 +66,15 @@
             documentService.getPath(ref.split("/")[3]).then(function(val) {
 
                 $scope.selectedDocumentPath = val.container
+                // var project = val.site;
+                // var container = val.container;
+                // var path = val.path;
 
-
-                var project = val.site;
-                var container = val.container;
-                var path = val.path;
-
-                var projectPath = project + "/" + container + "/" + path;
-
-                $window.location.href = '#/projekter/' + projectPath;
-
-                console.log("gotoPath")}
-
-            );
+								var path = ref.replace("workspace://SpacesStore/", "");
+                $window.location.href = "/#/dokument/" + path;
+								
+                console.log("gotoPath");
+							});
         }
 
     }
