@@ -21,7 +21,7 @@
         // $scope.searchResults = [];
 				// $scope.searchResults.push(JSON.parse($cookies.get("searchResult")));
 				
-				if ($cookies.get("searchResult") != "") {
+				if ($cookies.get("searchResult") != '') {
 					$scope.searchResults = JSON.parse($cookies.get("searchResult"));
 				}
 				
@@ -49,7 +49,6 @@
 							var parsedCookie = JSON.parse($cookies.get("searchResult"));
 							console.log(parsedCookie);
 							$scope.searchResults.push(parsedCookie);
-							
 							console.log($scope.searchResults);
 														
 							window.location.href = "#/search";
