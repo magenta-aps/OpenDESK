@@ -20,7 +20,11 @@
 				
         // $scope.searchResults = [];
 				// $scope.searchResults.push(JSON.parse($cookies.get("searchResult")));
-				$scope.searchResults = JSON.parse($cookies.get("searchResult"));
+				
+				if ($cookies.get("searchResult") != "") {
+					$scope.searchResults = JSON.parse($cookies.get("searchResult"));
+				}
+				
 
         vm.getAutoSuggestions = function(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {

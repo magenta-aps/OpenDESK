@@ -37,7 +37,7 @@
 			
 	<md-card>
 		<md-card-content>
-			<md-list layout="column">
+			<md-list layout="column" >
 				<md-list-item ng-repeat="r in searchResults" flex="100">
 				<!-- <md-list-item flex="100"> -->
 					<md-divider></md-divider>
@@ -70,6 +70,10 @@
 					</md-menu>
 				</md-list-item>
 			</md-list>
+			
+			<div ng-show="searchResults.length == 0">
+				No results found.
+			</div>
 
 		</md-card-content>
 	</md-card>
