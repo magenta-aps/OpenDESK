@@ -10,10 +10,12 @@
             };
         });
 
-    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService) {
+    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService) {
         var vm = this;
-
-
+				
+				var userInfo = sessionService.getUserInfo();
+				var currentUser = userInfo.user.userName;
+				
         vm.notifications = new Array();
         vm.on = false;
         vm.toggleNotices = function() {
@@ -30,24 +32,27 @@
             );
         };
         
-        // Fake notifications while we wait for notification service -- REMOVE
-
-        notificationsService.getNotices("admin").then (function (val) {
+        notificationsService.getNotices(currentUser).then (function (val) {
             vm.notifications = val;
             // console.log(val);
         });
 
 
-        //vm.notifications = [
+        // vm.notifications = [
         //    {id: 1, notice: 'Someone did something'},
         //    {id: 2, notice: 'You should do something', link: 'projekter'},
         //    {id: 3, notice: 'Check this out', desc: 'Someone did something and you should know about it'},
         //    {id: 4, notice: 'Something changed', desc: 'Someone did something, check it out', link: 'projekter'}
-        //];
+        // ];
 
 
         vm.rmNotice = function(nIndex) {
-            vm.notifications.splice(nIndex, 1);
+            // vm.notifications.splice(nIndex, 1);
+						// nIndex doesn't work for splice, since it is nodeRef.
+
+						notificationsService.delNotice(currentUser, nIndex).then(function(){
+							console.log("deleted notification");
+						});
         };
 
         vm.addNotice = function() {
