@@ -10,8 +10,9 @@
             };
         });
 
-    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService) {
+    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, authService) {
         var vm = this;
+
 
 
         vm.notifications = new Array();
@@ -32,18 +33,20 @@
         
         // Fake notifications while we wait for notification service -- REMOVE
 
-        notificationsService.getNotices("admin").then (function (val) {
+        notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
             vm.notifications = val;
             console.log(val);
         });
 
 
-        //vm.notifications = [
-        //    {id: 1, notice: 'Someone did something'},
-        //    {id: 2, notice: 'You should do something', link: 'projekter'},
-        //    {id: 3, notice: 'Check this out', desc: 'Someone did something and you should know about it'},
-        //    {id: 4, notice: 'Something changed', desc: 'Someone did something, check it out', link: 'projekter'}
-        //];
+        //test of the wf call
+        //notificationsService.addWFNotice(authService.getUserInfo().user.userName, "admin", "titel", "emne", "022f4f48-d3f6-4ea0-8d08-463ce3aa6179").then (function (val) {
+        //    console.log(val);
+        //});
+
+        notificationsService.setReadNotice("admin", "workspace://SpacesStore/fe5598f8-a3fe-4834-9712-5f1aba8f7f1f")
+
+
 
 
         vm.rmNotice = function(nIndex) {

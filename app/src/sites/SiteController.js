@@ -136,6 +136,17 @@
 				});
 			};
 
+			vm.reviewDocumentsDialog = function (event, nodeRef) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/reviewDocument.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+
 			vm.deleteFileDialog = function (event, nodeRef) {
   			var confirm = $mdDialog.confirm()
   			      .title('Would you like to delete this file?')
@@ -148,6 +159,10 @@
   			$mdDialog.show(confirm).then(function() {
   			  vm.deleteFile(nodeRef);
   			});
+			}
+
+			vm.reviewDocument = function (document, reviewer, comment) {
+				alert("hej");
 			}
 
 			vm.deleteFile = function (nodeRef) {

@@ -18,14 +18,42 @@
 
             <ul class="od-notifylist">
                 <li class="od-notifylist--item" ng-repeat="notice in vm.notifications">
-                    <a ng-show="notice.link" ui-sref="notice.link" class="od-notifylist--item--link">
-                        <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
-                        <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.message }}</p>
-                    </a>
+
+
+                    <!--http://localhost:8000/#/dokument/022f4f48-d3f6-4ea0-8d08-463ce3aa6179-->
+
+                        <a ng-show="notice.link" ui-sref="notice.link" class="od-notifylist--item--link">
+                            <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
+                            <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.message }}</p>
+
+                        </a>
                     <span ng-show="!notice.link" class="od-notifylist--item--nolink">
-                        <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
+                        <h3 class="od-notifylist--item--notice">title: {{ notice.subject }}</h3>
+                        <h3 class="od-notifylist--item--notice"> message:{{ notice.message }}</h3>
+                        <h3 class="od-notifylist--item--notice"> doc:
+                            <a href="http://localhost:8000/#/dokument/{{ notice.document }}">dokument navn</a>
+                             </h3>
                         <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.message }}</p>
+
+                        {{ notice.nodeRef }}
+
+
+
                     </span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <button class="od-btn od-notifylist--item--close" ng-click="vm.rmNotice($index)"><i class="material-icons">close</i></button>
                 </li>
             </ul>
