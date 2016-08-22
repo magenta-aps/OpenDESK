@@ -17,7 +17,7 @@
             </button>
 
             <ul class="od-notifylist">
-                <li class="od-notifylist--item" ng-repeat="notice in vm.notifications">
+                <li ng-repeat="notice in vm.notifications" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                     <a ng-show="notice.link" ui-sref="notice.link" class="od-notifylist--item--link">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p  class="od-notifylist--item--desc">{{ notice.message }}</p>
