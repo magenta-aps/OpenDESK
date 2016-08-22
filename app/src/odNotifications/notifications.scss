@@ -61,7 +61,7 @@
 	flex-flow: row nowrap;
 	align-items: start;
 	justify-content: space-between;
-	background-color: #eee;
+	background-color: #ddd;
 	margin-top: 1px;
 }
 
@@ -93,4 +93,12 @@
 	flex: 0 0 auto;
 	background-color: transparent;
 	color: $main-color;
+}
+
+.od-notifylist--item--read {
+	background: #eee;
+	
+	.od-notifylist--item--read-btn {
+		display: none;
+	}
 }

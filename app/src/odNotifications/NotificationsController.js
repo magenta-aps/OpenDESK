@@ -34,7 +34,7 @@
         
         notificationsService.getNotices(currentUser).then (function (val) {
             vm.notifications = val;
-            // console.log(val);
+            console.log(val);
         });
 
 
@@ -56,8 +56,9 @@
         };
 				
 				vm.setRead = function(noticeObj) {
-					notificationsService.setReadNotice(currentUser, noticeObj).then(function(){
+					notificationsService.setReadNotice(currentUser, noticeObj).then(function(val){
 						console.log("check");
+						// TODO display in UI
 					});
 				};
 
