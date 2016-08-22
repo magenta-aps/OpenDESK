@@ -12,6 +12,21 @@
 	padding: 0;
 }
 
+.od-notify-btns {
+	position: absolute;
+	right: 0;
+	padding-top: $u;
+	display: block;
+	
+	button {
+		font-size: $u/2 !important;
+		padding: 2px;
+		border: none;
+		background: transparent;
+		color: $main-color;
+	}
+}
+
 .od-notifications--close {
 	position: absolute;
 	top: 0;

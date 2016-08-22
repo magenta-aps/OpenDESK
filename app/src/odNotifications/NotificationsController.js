@@ -47,13 +47,19 @@
 
 
         vm.rmNotice = function(nIndex) {
-            // vm.notifications.splice(nIndex, 1);
-						// nIndex doesn't work for splice, since it is nodeRef.
-
 						notificationsService.delNotice(currentUser, nIndex).then(function(){
-							console.log("deleted notification");
+							
+			        notificationsService.getNotices(currentUser).then (function (val) {
+			            vm.notifications = val;
+			        });
 						});
         };
+				
+				vm.setRead = function(noticeObj) {
+					notificationsService.setReadNotice(currentUser, noticeObj).then(function(){
+						console.log("check");
+					});
+				};
 
         vm.addNotice = function() {
             vm.popNotice({notice: 'Hey there'});

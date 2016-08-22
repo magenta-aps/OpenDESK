@@ -20,15 +20,16 @@
                 <li class="od-notifylist--item" ng-repeat="notice in vm.notifications">
                     <a ng-show="notice.link" ui-sref="notice.link" class="od-notifylist--item--link">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
-                        <!-- <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.message }}</p> -->
                         <p  class="od-notifylist--item--desc">{{ notice.message }}</p>
                     </a>
                     <span ng-show="!notice.link" class="od-notifylist--item--nolink">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
-                        <!-- <p  class="od-notifylist--item--desc" ng-show="notice.desc">{{ notice.message }}</p> -->
                         <p  class="od-notifylist--item--desc">{{ notice.message }}</p>
                     </span>
-                    <button class="od-btn od-notifylist--item--close" ng-click="vm.rmNotice(notice.nodeRef)"><i class="material-icons">close</i></button>
+										<div class="od-notify-btns">
+                    	<button class="od-notifylist--item--read" ng-click="vm.setRead(notice.nodeRef)"><i class="material-icons">done</i></button>
+                    	<button class="od-notifylist--item--close" ng-click="vm.rmNotice(notice.nodeRef)"><i class="material-icons">delete</i></button>
+										</div>
                 </li>
             </ul>
 
