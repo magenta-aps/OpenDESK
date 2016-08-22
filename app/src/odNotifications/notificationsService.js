@@ -28,7 +28,7 @@
             var s = noticeObj.split("/");
             var ref = (s[3])
 
-            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&NODE_ID=" + ref + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=setREAD").then(function(response) {
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&NODE_ID=" + ref + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=setRead").then(function(response) {
                 return response;
             })
         };
