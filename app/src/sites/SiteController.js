@@ -13,7 +13,11 @@
 			$scope.roles = [];
 
 			vm.project = $stateParams.projekt;
-			
+
+
+
+
+
 			// Compile paths for breadcrumb directive
 			vm.paths = [
 				{
@@ -69,28 +73,37 @@
 
 			vm.loadContents = function() {
 
-				console.log($stateParams.path);
+				var currentFolderNodeRef_cmisQuery = $stateParams.projekt + "/documentLibrary/" + $stateParams.path;
 
-				cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
-					var result = [];
-					for (var x in val.data.objects) {
+				cmisService.getNode(currentFolderNodeRef_cmisQuery).then(function (val) {
+					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 
-						var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+					console.log(currentFolderNodeRef);
 
-					    documentService.getPath(ref.split("/")[3]).then(function(val) {console.log(val)});
-						
-						var shortRef = ref.split("/")[3];
+					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
+						var result = [];
+						for (var x in val.data.objects) {
 
-						result.push({
-							name: val.data.objects[x].object.succinctProperties["cmis:name"],
-							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
-							shortRef: shortRef
-						});
-					}
-					$scope.contents = result;
+							var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+
+							documentService.getPath(ref.split("/")[3]).then(function(val) {});
+
+							var shortRef = ref.split("/")[3];
+
+							result.push({
+								name: val.data.objects[x].object.succinctProperties["cmis:name"],
+								contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+								nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
+								parentNodeRef: currentFolderNodeRef,
+								shortRef: shortRef
+							});
+						}
+						$scope.contents = result;
+					});
 				});
 			}
+
+
 			vm.loadContents();
 
 			vm.createFolder = function (folderName) {
@@ -218,6 +231,7 @@
 			};
 
 			vm.upload = function (files) {
+
 				var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
 				cmisService.getNode(cmisQuery).then(function (val) {
 
@@ -306,8 +320,8 @@
 				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
 			}
 
-			vm.copyNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
+				siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
 			}
 
 			
