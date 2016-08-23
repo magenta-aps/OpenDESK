@@ -13,7 +13,11 @@
 			$scope.roles = [];
 
 			vm.project = $stateParams.projekt;
-			
+
+
+
+
+
 			// Compile paths for breadcrumb directive
 			vm.paths = [
 				{
@@ -61,28 +65,39 @@
 			vm.loadSiteData();
 
 			vm.loadContents = function() {
-				console.log($stateParams.path);
 
-				cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
-					var result = [];
-					for (var x in val.data.objects) {
+				var currentFolderNodeRef_cmisQuery = $stateParams.projekt + "/documentLibrary/" + $stateParams.path;
 
-						var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+				cmisService.getNode(currentFolderNodeRef_cmisQuery).then(function (val) {
+					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 
-					    documentService.getPath(ref.split("/")[3]).then(function(val) {console.log(val)});
-						
-						var shortRef = ref.split("/")[3];
 
-						result.push({
-							name: val.data.objects[x].object.succinctProperties["cmis:name"],
-							contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-							nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
-							shortRef: shortRef
-						});
-					}
-					$scope.contents = result;
+					console.log(currentFolderNodeRef);
+
+					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
+						var result = [];
+						for (var x in val.data.objects) {
+
+							var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+
+							documentService.getPath(ref.split("/")[3]).then(function(val) {});
+
+							var shortRef = ref.split("/")[3];
+
+							result.push({
+								name: val.data.objects[x].object.succinctProperties["cmis:name"],
+								contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+								nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
+								parentNodeRef: currentFolderNodeRef,
+								shortRef: shortRef
+							});
+						}
+						$scope.contents = result;
+					});
 				});
 			}
+
+
 			vm.loadContents();
 
 			vm.createFolder = function (folderName) {
@@ -128,6 +143,17 @@
 				});
 			};
 
+			vm.reviewDocumentsDialog = function (event, nodeRef) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/reviewDocument.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+
 			vm.deleteFileDialog = function (event, nodeRef) {
   			var confirm = $mdDialog.confirm()
   			      .title('Would you like to delete this file?')
@@ -140,6 +166,10 @@
   			$mdDialog.show(confirm).then(function() {
   			  vm.deleteFile(nodeRef);
   			});
+			}
+
+			vm.reviewDocument = function (document, reviewer, comment) {
+				alert("hej");
 			}
 
 			vm.deleteFile = function (nodeRef) {
@@ -195,6 +225,7 @@
 			};
 
 			vm.upload = function (files) {
+
 				var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
 				cmisService.getNode(cmisQuery).then(function (val) {
 
@@ -307,8 +338,8 @@
 				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
 			}
 
-			vm.copyNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
+				siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
 			}
 
 			

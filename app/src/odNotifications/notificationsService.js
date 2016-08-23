@@ -10,7 +10,8 @@
             getNotices: getNotices,
             addNotice: addNotice,
             delNotice: delNotice,
-            setReadNotice: setRead
+            setReadNotice: setRead,
+            addWFNotice: addWFNotice
         };
 
         return service;
@@ -35,6 +36,12 @@
 
         function addNotice(userId, subject, message) {
             return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&method=add").then(function(response) {
+                return response;
+            })
+        };
+
+        function addWFNotice(creator, userId, subject, message, documentId) {
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&creator=" + creator  + "&document=" + documentId + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=add" + "&type=wf").then(function(response) {
                 return response;
             })
         };

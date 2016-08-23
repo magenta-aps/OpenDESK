@@ -23,16 +23,6 @@
 				});
 			};
 
-			// vm.createSite = function(name, description) {
-			// 	siteService.createSite(name, description).then(function (val) {
-			// 		//TODO load stuff without reload..
-			// 		vm.reload();
-			// 	});
-			//
-			// 	$mdDialog.hide();
-			// };
-
-
 			vm.createSite = function (name, description) {
 				var r = siteService.createSite(name, description);
 
@@ -111,7 +101,6 @@
 
 				r.then(function(result){
 					vm.project_title = result.title;
-					console.log(result);
 					$mdDialog.hide();
 					
 					siteService.getSites().then(function(val) {
@@ -119,28 +108,6 @@
 					});
 				});
 			}
-
-            //
-			//vm.projekt = $stateParams.projekt;
-            //
-
-
-			// below for testing purpose - loads some data
-
-			//siteService.getSiteRoles("heide").then(function(val) {
-			//	vm.roles = val.siteRoles;
-			//})
-
-			//siteService.addMemberToSite("heide", "abeecher", "SiteContributor");
-			//siteService.removeMemberFromSite("heide", "abeecher");
-			//siteService.updateRoleOnSiteMember("heide", "abeecher", "SiteConsumer");
-
-			//siteService.getSitesByQuery('1').then(function(val) {
-			//		vm.roles = val;
-			//})
-
-
-
 
         }; // SiteCtrl close
 

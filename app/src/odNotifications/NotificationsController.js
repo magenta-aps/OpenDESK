@@ -10,12 +10,14 @@
             };
         });
 
-    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService) {
+
+    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService, authService) {
         var vm = this;
 				
 				var userInfo = sessionService.getUserInfo();
 				var currentUser = userInfo.user.userName;
 				
+
         vm.notifications = new Array();
         vm.on = false;
         vm.toggleNotices = function() {
@@ -32,18 +34,14 @@
             );
         };
         
-        notificationsService.getNotices(currentUser).then (function (val) {
+
+        notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
+
             vm.notifications = val;
             console.log(val);
         });
 
 
-        // vm.notifications = [
-        //    {id: 1, notice: 'Someone did something'},
-        //    {id: 2, notice: 'You should do something', link: 'projekter'},
-        //    {id: 3, notice: 'Check this out', desc: 'Someone did something and you should know about it'},
-        //    {id: 4, notice: 'Something changed', desc: 'Someone did something, check it out', link: 'projekter'}
-        // ];
 
 
         vm.rmNotice = function(nIndex) {

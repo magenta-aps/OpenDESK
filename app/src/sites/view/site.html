@@ -79,16 +79,17 @@
 									<md-menu-item>
 										<md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Delete
+											Slet
 										</md-button>
 									</md-menu-item>
 	
 									<md-menu-item>
 										<md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
 											<md-icon md-menu-align-target>create</md-icon>
-											Rename
+											Omdøb
 										</md-button>
 									</md-menu-item>
+
 									
 									<md-menu-item>
 										<md-button ng-click="">
@@ -104,6 +105,16 @@
 											Move
 										</md-button>
 									</md-menu-item>
+
+
+									<md-menu-item>
+										<md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
+											<md-icon md-menu-align-target>create</md-icon>
+											Send til godkendelse
+										</md-button>
+									</md-menu-item>
+
+
 								</md-menu-content>
 							</md-menu>
 
