@@ -70,7 +70,7 @@ function chatService(XMPP_DOMAIN, userService) {
             //console.log(data.model);
 
             // This link will be unique to the chat room
-            var videoLink = 'https://jitsi.magenta-aps.dk/' + data.model.get('jid').replace(/[^a-z]/gi, '');
+            var videoLink = 'https://meet.jit.si/' + data.model.get('jid').replace(/[^a-z]/gi, '');
 
             var message = 'vil gerne starte en videochat med dig. Klik linket for at starte: ' + videoLink;
             var msgObj = {
