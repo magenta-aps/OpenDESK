@@ -65,28 +65,28 @@ function chatService(XMPP_DOMAIN, userService) {
 
         // When "Call button" is clicked, display a video link message to everyone in the chat room
         converse.listen.on('callButtonClicked', function(event, data) {
-
-            //console.log(data.connection);
-            //console.log(data.model);
-
+            
             // This link will be unique to the chat room
             var videoLink = 'https://meet.jit.si/' + data.model.get('jid').replace(/[^a-z]/gi, '');
 
             var message = 'vil gerne starte en videochat med dig. Klik linket for at starte: ' + videoLink;
+            
             var msgObj = {
+                from: converse.user.jid(),
                 to: data.model.get('jid'),
-                id: (new Date()).getTime()
+                type: 'chat'
             };
+            
             if (data.model.attributes.type === 'chatroom') {
-                console.log('this is a group chat');
-                msgObj.type = 'groupchat'
-            } else {
-                console.log('this is a 1:1 chat');
-                msgObj.type = 'chat'
+                msgObj.type = 'groupchat';
             };
+            //var msg = converse.env.$msg(msgObj).c('body').t(message);
             var msg = converse.env.$msg(msgObj).c('body').t(message);
             converse.send(msg);
-
+            
+            // Opens a chat window on the calling user's end
+            window.open(videoLink, '', 'width=600,height=600');
+            
         });
         return true;
     };
