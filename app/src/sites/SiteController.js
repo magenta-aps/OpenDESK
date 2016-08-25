@@ -15,9 +15,6 @@
 			vm.project = $stateParams.projekt;
 
 
-
-
-
 			// Compile paths for breadcrumb directive
 			vm.paths = [
 				{
@@ -40,12 +37,19 @@
 			};
 
 			// // testing of the move/copy
-			  var nodeRef = "workspace://SpacesStore/d4a3e854-7cfd-483c-a117-b4fc0ce102e9";
+			  var nodeRef = "workspace://SpacesStore/7cb5adc4-f18c-42d0-8225-6a00d6c31e68";
 			// //var nodeRef2 = "workspace://SpacesStore/8bf7cd04-dfd7-4342-8864-91bdce706504";
 			//
 
 
-			// siteService.moveNodeRefs([nodeRef], "workspace://SpacesStore/7cb5adc4-f18c-42d0-8225-6a00d6c31e68", "workspace://SpacesStore/d41769e3-704c-4dfd-825b-7b7dbf847bef")
+			//siteService.moveNodeRefs([nodeRef], "workspace://SpacesStore/7cb5adc4-f18c-42d0-8225-6a00d6c31e68", "workspace://SpacesStore/d41769e3-704c-4dfd-825b-7b7dbf847bef").catch (function (result) {
+			//	alert("jej")
+			//	console.log(result);
+			//	});
+
+
+
+
 
 			
 			vm.cancel = function () {
@@ -332,11 +336,15 @@
 			}
 
 			vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+				return siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
+					return response;
+				});
 			}
 
 			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+				return siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
+					return response;
+				})
 			}
 
 			
@@ -380,7 +388,16 @@
 
 
 
+
+
+
+
+
+
+
 		}; // SiteCtrl close
+
+
 
 
 

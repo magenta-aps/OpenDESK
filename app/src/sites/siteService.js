@@ -137,10 +137,9 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 nodeRefs: sourceNodeRefs,
                 parentId: parentNodeRef
             }).then(function (response) {
-                return result.response;
+                return response;
             }).catch(function (response) {
-                console.log("fleeeeeming");
-                return result.response;
+                return response;
             });
         },
         copyNodeRefs: function (sourceNodeRefs, destNodeRef, parentNodeRef) {
@@ -148,7 +147,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 nodeRefs: sourceNodeRefs,
                 parentId: parentNodeRef
             }).then(function (response) {
-                return result.response;
+                return response;
             });
         },
         updateNode: function (nodeRef, props) {
