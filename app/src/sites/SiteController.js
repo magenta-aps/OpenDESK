@@ -335,11 +335,15 @@
 			}
 
 			vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+				return siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
+					return response;
+				});
 			}
 
 			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef)
+				return siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
+					return response;
+				});
 			}
 
 			
@@ -378,12 +382,17 @@
 
 
 			// vm.test = function test() {
-			// 	var nodeRef = "workspace://SpacesStore/8c23bfdb-e1bb-4f17-9682-144404bca3e3";
+			//var nodeRef = "workspace://SpacesStore/7cb5adc4-f18c-42d0-8225-6a00d6c31e68";
 			// 	var newName = "gufsssssfy.jpg"
 			//
 			// 	vm.renameDocument(nodeRef, newName);
 			// }
 
+
+			//vm.moveNodeRefs([nodeRef], "workspace://SpacesStore/812e33b2-6716-4bd7-a8f1-a792e7e7eef7", "workspace://SpacesStore/d41769e3-704c-4dfd-825b-7b7dbf847bef").then (function (response){
+			//	console.log(response.data.overallSuccess);
+			//	console.log(response.data.results[0].fileExist);
+			//});
 
 
 		}; // SiteCtrl close
