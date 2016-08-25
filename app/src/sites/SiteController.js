@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService) {
+        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService) {
 
 			var vm = this;
 			$scope.contents = [];
@@ -40,12 +40,13 @@
 			};
 
 			// // testing of the move/copy
-			// // var nodeRef = "workspace://SpacesStore/c0951576-6104-4aaf-8c85-49dfa8b758db";
+			  var nodeRef = "workspace://SpacesStore/d4a3e854-7cfd-483c-a117-b4fc0ce102e9";
 			// //var nodeRef2 = "workspace://SpacesStore/8bf7cd04-dfd7-4342-8864-91bdce706504";
 			//
-			// vm.source = [nodeRef];
-			// // vm.dest = "workspace://SpacesStore/53e662db-74f3-49ee-a15e-eb0c58c6b3b0"; // folder: 1
-			// // vm.parentId = "workspace://SpacesStore/de35297e-9317-42f0-9ce9-89c58976df7a";
+
+
+			// siteService.moveNodeRefs([nodeRef], "workspace://SpacesStore/7cb5adc4-f18c-42d0-8225-6a00d6c31e68", "workspace://SpacesStore/d41769e3-704c-4dfd-825b-7b7dbf847bef")
+
 			
 			vm.cancel = function () {
 				$mdDialog.cancel();
@@ -150,6 +151,9 @@
 			};
 
 			vm.reviewDocumentsDialog = function (event, nodeRef) {
+
+				$scope.nodeRef = nodeRef;
+
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/reviewDocument.tmpl.html',
 					parent: angular.element(document.body),
@@ -175,7 +179,8 @@
 			}
 
 			vm.reviewDocument = function (document, reviewer, comment) {
-				alert("hej");
+
+
 			}
 
 			vm.deleteFile = function (nodeRef) {
@@ -206,6 +211,16 @@
 				});
 				
 				$mdDialog.hide();
+			}
+
+			vm.createReviewNotification = function (documentNodeRef, receiver, subject, comment) {
+
+				var s = documentNodeRef.split("/");
+				var ref = (s[3])
+
+				notificationsService.addWFNotice(authService.getUserInfo().user.userName, receiver, subject, comment, ref).then (function (val) {
+					console.log(val);
+				});
 			}
 
 
@@ -367,3 +382,6 @@
 
 		}; // SiteCtrl close
 
+
+
+//TODO: refactor all the methods that dont belong here to a relevant server- and pass on the call to them in the controller

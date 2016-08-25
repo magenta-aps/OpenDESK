@@ -1,5 +1,5 @@
 <md-dialog aria-label="New member"  ng-cloak>
-	<form name="addMemberForm" ng-submit="vm.createReviewNotification(vm.project, n);">
+	<form name="addMemberForm" ng-submit="vm.createReviewNotification(nodeRef, newMemberName.userName, subject, comment);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
@@ -25,6 +25,32 @@
 						<div ng-message="required">Dette felt skal udfyldes</div>
 					</div>
 				</md-autocomplete>
+
+				<md-dialog-content class="md-padding">
+					<div>
+						<md-input-container>
+							<label>Emne</label>
+							<input type="text" name="subject" required ng-model="subject">
+							<div ng-messages="createSiteForm.newSiteName.$error">
+								<div ng-message="required">Dette felt skal udfyldes</div>
+							</div>
+						</md-input-container>
+					</div>
+				</md-dialog-content>
+
+				<md-dialog-content class="md-padding">
+					<div>
+						<md-input-container>
+							<label>Kommentar</label>
+							<input type="text" name="comment" required ng-model="comment">
+							<div ng-messages="createSiteForm.newSiteName.$error">
+								<div ng-message="required">Dette felt skal udfyldes</div>
+							</div>
+						</md-input-container>
+					</div>
+				</md-dialog-content>
+
+
 
 
 				
