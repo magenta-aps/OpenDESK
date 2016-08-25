@@ -1,9 +1,9 @@
-<md-dialog aria-label="Move item" ng-cloak>
-	<form name="moveNodeRef" ng-submit="vm.moveNodeRefs(vm.source, destination, vm.parentId);">
+<md-dialog aria-label="Copy item" ng-cloak>
+	<form name="copyNodeRef" ng-submit="vm.copyNodeRefs(vm.source, destination, vm.parentId);">
 
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Where do you want to move this to?</h2>
+				<h2>Where do you want to copy this to?</h2>
 			</div>
 		</md-toolbar>
 
@@ -18,7 +18,7 @@
 
 		<md-dialog-actions>
 			<md-button ng-click="vm.cancel()">Annullér</md-button>
-			<md-button type="submit" class="md-primary">Move</md-button>
+			<md-button type="submit" class="md-primary">Copy</md-button>
 		</md-dialog-actions>
 
 	</form>

@@ -319,10 +319,11 @@
 			// // vm.parentId = "workspace://SpacesStore/de35297e-9317-42f0-9ce9-89c58976df7a";
 
 
-			vm.moveFileDialog = function moveFileDialog(event, sources, nodeRef, parentId) {
-				vm.source = sources;
-				vm.parentId = parentId;
-				vm.nodeRef = nodeRef;
+			vm.moveFileDialog = function moveFileDialog(event, folders, nodeRef, parentNodeRef) {
+				vm.source = [];
+				vm.source.push(nodeRef);
+				vm.parentId = parentNodeRef;
+				vm.folders = folders;
 				
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/moveNodeRefs.tmpl.html',
@@ -333,16 +334,64 @@
 					clickOutsideToClose: true
 				});
 			}
+			
+			vm.copyFileDialog = function copyFileDialog(event, folders, nodeRef, parentNodeRef) {
+				vm.source = [];
+				vm.source.push(nodeRef);
+				vm.parentId = parentNodeRef;
+				vm.folders = folders;
+				
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/copyNodeRefs.tmpl.html',
+					parent: angular.element(document.body),
+					scope: $scope,
+					preserveScope: true,
+					targetEvent: event,
+					clickOutsideToClose: true
+				});
+			}
 
 			vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				return siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
+				return siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {									
+					if (response.data.results[0].fileExist) {
+						console.log("already exists");
+						
+						$mdDialog.show(
+						  $mdDialog.alert()
+						    .parent(angular.element(document.body))
+						    .clickOutsideToClose(true)
+						    .title('There is already a file with the same name in the folder you chose.')
+						    .ariaLabel('Already exists')
+						    .ok('Ok')
+						);
+					} else {
+						vm.loadContents();
+					}
 					return response;
+					
 				});
 			}
 
 			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
 				return siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
+					$mdDialog.hide();
+					
+					if (response.data.results[0].fileExist) {
+						console.log("already exists");
+						
+						$mdDialog.show(
+						  $mdDialog.alert()
+						    .parent(angular.element(document.body))
+						    .clickOutsideToClose(true)
+						    .title('There is already a file with the same name in the folder you chose.')
+						    .ariaLabel('Already exists')
+						    .ok('Ok')
+						);
+					} else {
+						vm.loadContents();
+					}
 					return response;
+					
 				});
 			}
 
