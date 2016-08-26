@@ -222,9 +222,11 @@
 				var s = documentNodeRef.split("/");
 				var ref = (s[3])
 
-				notificationsService.addWFNotice(authService.getUserInfo().user.userName, receiver, subject, comment, ref).then (function (val) {
-					console.log(val);
+				notificationsService.addWFNotice(authService.getUserInfo().user.userName, receiver, subject, comment, ref, "wf").then (function (val) {
+					$mdDialog.hide();
 				});
+
+
 			}
 
 

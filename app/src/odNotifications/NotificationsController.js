@@ -32,8 +32,7 @@
         };
         
         notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
-            vm.notifications = val;
-            console.log(val);
+            $scope.notifications = val;
         });
 
 

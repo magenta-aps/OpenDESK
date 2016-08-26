@@ -36,6 +36,43 @@
                 <dd>
                     {{ vm.doc.modifiedBy }}        
                 </dd>
+
+
+
+
+                 <span ng-show="vm.wf" class="od-notifylist--item--nolink">
+
+
+                <dt>
+                    Review
+                </dt>
+                     <br>
+
+                     <dd> Du er blevet bedt om at reviewe dette dokument:
+
+
+               <md-button ng-click="vm.newFolderDialog($event)">
+                   Godkend
+               </md-button>
+
+
+
+               <md-button ng-click="vm.newFolderDialog($event)">
+                   Afvis
+               </md-button>
+
+                        <!--<h3 class="od-notifylist&#45;&#45;item&#45;&#45;notice">title: {{ notice.subject }}</h3>-->
+                        <!--<h3 class="od-notifylist&#45;&#45;item&#45;&#45;notice"> message:{{ notice.message }}</h3>-->
+                        <!--<h3 class="od-notifylist&#45;&#45;item&#45;&#45;notice"> doc:-->
+                            <!--<a href="http://localhost:8000/#/dokument/{{ notice.document }}?type=wf">dokument navn</a>-->
+                        <!--</h3>-->
+                        <!--<p  class="od-notifylist&#45;&#45;item&#45;&#45;desc" ng-show="notice.desc">{{ notice.message }}</p>-->
+   </dd>
+                    </span>
+
+
+
+
             </dl>
         </div>
     </div>
