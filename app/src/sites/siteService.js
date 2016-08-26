@@ -148,8 +148,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 parentId: parentNodeRef
             }).then(function (response) {
                 return response;
-            }).then(function (response) {
-                return response;
             });
         },
         updateNode: function (nodeRef, props) {

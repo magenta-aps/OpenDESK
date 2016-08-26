@@ -36,13 +36,8 @@
         
 
         notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
-
-            vm.notifications = val;
-            console.log(val);
+            $scope.notifications = val;
         });
-
-
-
 
         vm.rmNotice = function(nIndex) {
 						notificationsService.delNotice(currentUser, nIndex).then(function(){

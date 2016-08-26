@@ -40,8 +40,8 @@
             })
         };
 
-        function addWFNotice(creator, userId, subject, message, documentId) {
-            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&creator=" + creator  + "&document=" + documentId + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=add" + "&type=wf").then(function(response) {
+        function addWFNotice(creator, userId, subject, message, documentId, type) {
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&creator=" + creator  + "&document=" + documentId + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=add" + "&type=" + type).then(function(response) {
                 return response;
             })
         };

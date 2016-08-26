@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService) {
+        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService) {
 
 			var vm = this;
 			$scope.contents = [];
@@ -13,9 +13,6 @@
 			$scope.roles = [];
 
 			vm.project = $stateParams.projekt;
-
-
-
 
 
 			// Compile paths for breadcrumb directive
@@ -38,6 +35,7 @@
 					});
 				};
 			};
+
 
 			
 			vm.cancel = function () {
@@ -144,6 +142,9 @@
 			};
 
 			vm.reviewDocumentsDialog = function (event, nodeRef) {
+
+				$scope.nodeRef = nodeRef;
+
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/reviewDocument.tmpl.html',
 					parent: angular.element(document.body),
@@ -169,7 +170,8 @@
 			}
 
 			vm.reviewDocument = function (document, reviewer, comment) {
-				alert("hej");
+
+
 			}
 
 			vm.deleteFile = function (nodeRef) {
@@ -200,6 +202,18 @@
 				});
 				
 				$mdDialog.hide();
+			}
+
+			vm.createReviewNotification = function (documentNodeRef, receiver, subject, comment) {
+
+				var s = documentNodeRef.split("/");
+				var ref = (s[3])
+
+				notificationsService.addWFNotice(authService.getUserInfo().user.userName, receiver, subject, comment, ref, "wf").then (function (val) {
+					$mdDialog.hide();
+				});
+
+
 			}
 
 
@@ -345,6 +359,7 @@
 			}
 
 			vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
+
 				return siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {									
 					$mdDialog.hide();
 					
@@ -363,15 +378,30 @@
 						vm.loadContents();
 					}
 					return response;
-					
+
 				});
 			}
 
 			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
 				return siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
 					$mdDialog.hide();
-					vm.loadContents();
-					
+
+					if (response.data.results[0].fileExist) {
+						console.log("already exists");
+
+						$mdDialog.show(
+							$mdDialog.alert()
+								.parent(angular.element(document.body))
+								.clickOutsideToClose(true)
+								.title('There is already a file with the same name in the folder you chose.')
+								.ariaLabel('Already exists')
+								.ok('Ok')
+						);
+					} else {
+						vm.loadContents();
+					}
+					return response;
+
 				});
 			}
 
@@ -424,5 +454,17 @@
 			//});
 
 
+
+
+
+
+
+
+
 		}; // SiteCtrl close
 
+
+
+
+
+//TODO: refactor all the methods that dont belong here to a relevant server- and pass on the call to them in the controller
