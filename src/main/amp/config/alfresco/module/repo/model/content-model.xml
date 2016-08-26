@@ -48,7 +48,7 @@
                     <type>d:noderef</type>
                 </property>
                 <property name="od:creator">
-                    <type>d:noderef</type>
+                    <type>d:text</type>
                 </property>
             </properties>
         </type>

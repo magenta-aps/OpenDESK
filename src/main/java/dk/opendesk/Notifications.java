@@ -17,6 +17,7 @@ limitations under the License.
 package dk.opendesk;
 
 import dk.opendesk.repo.model.OpenDeskModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -34,17 +35,13 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.*;
 
 import dk.opendesk.repo.utils.Utils;
 
-/**
- * A demonstration Java controller for the Hello World Web Script.
- *
- * @author martin.bergljung@repo.com
- * @since 2.1.0
- */
 public class Notifications extends AbstractWebScript {
 
 
@@ -69,15 +66,27 @@ public class Notifications extends AbstractWebScript {
         String storeType = params.get("STORE_TYPE");
         String storeId = params.get("STORE_ID");
         String nodeId = params.get("NODE_ID");
+        String creatorName = params.get("creator");
+
+        String documentId = params.get("document");
+        System.out.println("hvad er document: " + documentId);
+        NodeRef documentNodeRef = null;
 
         if (storeType != null && storeId != null && nodeId != null) {
             nodeRef = new NodeRef(storeType, storeId, nodeId);
+        }
+
+        if (storeType != null && storeId != null && documentId != null) {
+            documentNodeRef = new NodeRef(storeType, storeId, documentId);
         }
 
         String userName = params.get("userName");
         String method = params.get("method");
         String subject = params.get("subject");
         String message = params.get("message");
+        String type = params.get("type");
+
+        System.out.println(method);
 
         if (method != null && method.equals("getAll")) {
 
@@ -91,13 +100,28 @@ public class Notifications extends AbstractWebScript {
         }
 
         else if (method != null && method.equals("add")) {
-            this.addNotification(userName,message,subject);
+
+//
+//            System.out.println("type");
+//            System.out.println(type);
+//            System.out.println(type.contains("wf"));
+
+            if (type != null && type.contains("wf")) {
+//
+//                System.out.println("creating wf notification");
+//                System.out.println("documentNodeRef");
+//                System.out.println(documentNodeRef);
+                this.addWFNotification(userName, message, subject, creatorName, documentNodeRef, type);
+            }
+            else {
+                this.addNotification(userName, message, subject);
+            }
         }
 
         else if (method != null && method.equals("remove")) {
 
             if (! nodeService.exists(nodeRef)) {
-                throw new AlfrescoRuntimeException("Sorry, " + nodeRef + " doesn't exist");
+                throw new AlfrescoRuntimeException("Sorry, " + nodeRef + " doesn't exist, sucker!");
             }
             else {
 
@@ -132,14 +156,25 @@ public class Notifications extends AbstractWebScript {
             Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
 
             String subject = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
+            String type = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
             String message = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
             Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
+            String creator = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_CREATOR);
+            NodeRef document = (NodeRef)props.get(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT);
+
+
+
+            String documentShortNodeRef = document.toString();
+            documentShortNodeRef = documentShortNodeRef.split("/")[3];
 
             try {
                 json.put("nodeRef",child.getChildRef());
                 json.put("subject",subject);
                 json.put("message",message);
+                json.put("document",documentShortNodeRef);
+                json.put("creator",creator);
                 json.put("read",read);
+                json.put("type",type);
                 json.put("created",nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
 
                 result.add(json);
@@ -147,15 +182,16 @@ public class Notifications extends AbstractWebScript {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
         return result;
     }
 
     private Map<String, Object> addNotification(String userName, String message, String subject) {
 
+        //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
+
         NodeRef user = personService.getPerson(userName);
-        System.out.println(user);
+//        System.out.println(user);
 
         ChildAssociationRef childAssocRef = this.nodeService.createNode(
                 user,
@@ -168,10 +204,66 @@ public class Notifications extends AbstractWebScript {
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
+                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, "non-wf");
 
                 nodeService.setProperties(childAssocRef.getChildRef(),contentProps);
 
                 nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
+
+        return null;
+    }
+
+    private Map<String, Object> addWFNotification(String userName, String message, String subject, String creator, NodeRef document, String type) {
+
+        NodeRef user = personService.getPerson(userName);
+//        System.out.println(user);
+
+        final ChildAssociationRef[] childAssocRef = new ChildAssociationRef[1];
+
+        AuthenticationUtil.RunAsWork<Void> runAsWork = new AuthenticationUtil.RunAsWork<Void>() {
+            @Override
+            public Void doWork() throws Exception {
+                try {
+
+                      childAssocRef[0] = nodeService.createNode(
+                            user,
+                            OpenDeskModel.PROP_NOTIFICATION_ASSOC,
+                            QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(userName)),
+                            OpenDeskModel.PROP_NOTIFICATION,
+                            null);
+
+
+//                    System.out.println(childAssocRef[0]);
+//                    System.out.println(" creator" + creator);
+
+
+                    Map<QName, Serializable> contentProps = new HashMap<QName, Serializable>();
+                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
+                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
+                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
+                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT, document);
+                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_CREATOR, creator);
+                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, type);
+
+                    nodeService.setProperties(childAssocRef[0].getChildRef(), contentProps);
+
+                    nodeService.addAspect(childAssocRef[0].getChildRef(), ContentModel.ASPECT_HIDDEN, null);
+
+
+
+                } catch (Throwable t) {
+//                    LOGGER.severe("ERROR when removing permissions on " + nodeRef.toString());
+//                    LOGGER.severe(t.getMessage() + " caused by: "+ t.getCause().getMessage());
+//                    StringWriter stringWriter = new StringWriter();
+//                    PrintWriter printWriter = new PrintWriter(stringWriter);
+//                    t.printStackTrace(printWriter);
+//                    LOGGER.severe(stringWriter.toString());
+                    System.out.println(t.toString());
+                }
+                return null;
+            }
+        };
+        AuthenticationUtil.runAs(runAsWork, AuthenticationUtil.getAdminUserName());
 
         return null;
     }
@@ -184,8 +276,6 @@ public class Notifications extends AbstractWebScript {
         nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_READ, true);
     }
 
-
-
 }
 
 // create
@@ -196,3 +286,6 @@ public class Notifications extends AbstractWebScript {
 //http://localhost:8080/alfresco/service/notifications?method=setRead&NODE_ID=76e15607-5519-4ad6-915c-1c07086535f2&STORE_TYPE=workspace&STORE_ID=SpacesStore
 
 //http://178.62.194.129:8080/alfresco/service/notifications?method=setRead&NODE_ID=/f1115ab8-bf2f-408c-b5ee-72acfb14be4c&STORE_TYPE=workspace&STORE_ID=SpacesStore
+
+
+
