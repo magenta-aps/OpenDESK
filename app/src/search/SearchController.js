@@ -51,39 +51,19 @@
         }
 				
         vm.getSearchresults = function(term) {
-					return searchService.getSearchResults(term).then(function (val) {
+            return searchService.getSearchResults(term).then(function (val) {
 
+                console.log(val);
 
-						if (val != undefined) {
+                if (val != undefined) {
 
+                    $scope.searchResults = [];
+                    $scope.searchResults = val.data.items;
 
-                            $scope.searchResults = [];
-
-                            $scope.searchResults = val.data.items;
-
-
-
-
-
-                            //$cookies.remove("searchResult");
-							//console.log("val.data.items");
-							//console.log(val.data.items);
-                            //
-							//$cookies.put("searchResult", JSON.stringify((val.data.items)));
-							//var parsedCookie = JSON.parse($cookies.get("searchResult"));
-							//console.log("parsedCookie");
-							//console.log(parsedCookie);
-                            //
-							//$scope.searchResults.push("parsedCookie");
-							//$scope.searchResults.push(parsedCookie);
-							//console.log($scope.searchResults);
-														
-							window.location.href = "#/search";
-
-						} else {
-							return [];
-						}
-					});
+                } else {
+                    return [];
+                }
+            });
         }
 
         vm.previewDocument = function previewDocument(nodeRef){
