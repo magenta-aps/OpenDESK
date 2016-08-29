@@ -11,7 +11,7 @@
         });
 
 
-    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService, authService) {
+    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService, authService, $interval) {
         var vm = this;
 				
 				var userInfo = sessionService.getUserInfo();
@@ -33,6 +33,16 @@
                     .action('Luk')
             );
         };
+
+
+        $interval(callAtTimeout, 10000);
+
+        function callAtTimeout() {
+            //console.log("Timeout occurred");
+            notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
+                $scope.notifications = val;
+            });
+        }
         
 
         notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
