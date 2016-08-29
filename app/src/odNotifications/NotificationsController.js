@@ -59,15 +59,8 @@
 				
 				vm.setRead = function(noticeObj) {
 					notificationsService.setReadNotice(currentUser, noticeObj).then(function(val){
-						console.log("check");
                         vm.updateNotifications();
 					});
 				};
-
-        vm.addNotice = function() {
-            vm.popNotice({notice: 'Hey there'});
-            vm.notifications.push({notice: 'Hey there'});
-        };
-        $timeout(vm.addNotice(), 3000);
 
     };
