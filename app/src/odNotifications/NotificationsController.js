@@ -39,31 +39,28 @@
 
         function callAtTimeout() {
             //console.log("Timeout occurred");
-            notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
+            vm.updateNotifications();
+        }
+
+        vm.updateNotifications = function updateNotifications()
+        {
+            notificationsService.getNotices(authService.getUserInfo().user.userName).then(function (val) {
                 $scope.notifications = val;
             });
         }
-        
-
-        notificationsService.getNotices(authService.getUserInfo().user.userName).then (function (val) {
-            $scope.notifications = val;
-        });
+        vm.updateNotifications();
 
         vm.rmNotice = function(nIndex) {
 						notificationsService.delNotice(currentUser, nIndex).then(function(){
-							
-			        notificationsService.getNotices(currentUser).then (function (val) {
-			            vm.notifications = val;
-			        });
+
+                            vm.updateNotifications();
 						});
         };
 				
 				vm.setRead = function(noticeObj) {
 					notificationsService.setReadNotice(currentUser, noticeObj).then(function(val){
 						console.log("check");
-		        notificationsService.getNotices(currentUser).then (function (val) {
-		            vm.notifications = val;
-		        });
+                        vm.updateNotifications();
 					});
 				};
 
