@@ -12,7 +12,7 @@ angular.module('openDeskApp.search').factory('searchService', function ($http, $
             })
         },
         getSearchResults: function (term) {
-            return $http.get( '/alfresco/s/slingshot/live-search-docs?t=' + term).then(function (response) {
+            return $http.get( '/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=50").then(function (response) {
                 return response;
             })
         }

@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService) {
 
 			var vm = this;
 			
@@ -106,6 +106,54 @@
 					siteService.getSites().then(function(val) {
 						vm.sites = val;
 					});
+				});
+			}
+
+			vm.getSearchresults = function getSearchReslts(term){
+				return searchService.getSearchResults(term).then(function (val) {
+
+					console.log(val);
+
+					if (val != undefined) {
+
+						$rootScope.searchResults = [];
+						$rootScope.searchResults = val.data.items;
+
+						window.location.href = "#/search";
+
+					} else {
+						return [];
+					}
+				});
+			}
+
+			vm.getAutoSuggestions = function getAutoSuggestions(term) {
+				return searchService.getSearchSuggestions(term).then(function (val) {
+
+					if (val != undefined) {
+						return val;
+					}
+					else {
+						return [];
+					}
+				});
+			}
+
+			vm.gotoPath = function (nodeRef) {
+
+				var ref = nodeRef;
+
+				documentService.getPath(ref.split("/")[3]).then(function(val) {
+
+					$scope.selectedDocumentPath = val.container
+					// var project = val.site;
+					// var container = val.container;
+					// var path = val.path;
+
+					var path = ref.replace("workspace://SpacesStore/", "");
+					$window.location.href = "/#/dokument/" + path;
+
+					console.log("gotoPath");
 				});
 			}
 
