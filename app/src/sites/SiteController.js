@@ -36,8 +36,6 @@
 				};
 			};
 
-
-			
 			vm.cancel = function () {
 				$mdDialog.cancel();
 			};
@@ -324,13 +322,10 @@
 				alfrescoDownloadService.downloadFile(nodeRef, name);
 			}
 			
-			
-
-			vm.moveFileDialog = function moveFileDialog(event, folders, nodeRef, parentNodeRef) {
+			vm.moveFileDialog = function moveFileDialog(event, nodeRef, parentNodeRef) {
 				vm.source = [];
 				vm.source.push(nodeRef);
 				vm.parentId = parentNodeRef;
-				vm.folders = folders;
 				
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/moveNodeRefs.tmpl.html',
@@ -339,14 +334,17 @@
 					preserveScope: true,
 					targetEvent: event,
 					clickOutsideToClose: true
+				}).then(function(){
+					vm.moveNodeRefs(vm.source, $scope.destination, vm.parentId);
+				}, function(){
+					console.log('You cancelled a move action');
 				});
 			}
 			
-			vm.copyFileDialog = function copyFileDialog(event, folders, nodeRef, parentNodeRef) {
+			vm.copyFileDialog = function copyFileDialog(event, nodeRef, parentNodeRef) {
 				vm.source = [];
 				vm.source.push(nodeRef);
 				vm.parentId = parentNodeRef;
-				vm.folders = folders;
 				
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/copyNodeRefs.tmpl.html',
@@ -355,9 +353,14 @@
 					preserveScope: true,
 					targetEvent: event,
 					clickOutsideToClose: true
+				}).then(function(){
+					vm.copyNodeRefs(vm.source, $scope.destination, vm.parentId)
+				}, function(){
+					console.log('You cancelled a copy action');
 				});
 			}
 
+			
 			vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
 
 				return siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {									
@@ -382,6 +385,7 @@
 				});
 			}
 
+			
 			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
 				return siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
 					$mdDialog.hide();
@@ -406,23 +410,19 @@
 			}
 
 			
-			
-			
-			
 			vm.renameDocumentDialog = function(event, docNodeRef) {
 				var confirm = $mdDialog.prompt()
-	      	.title('What would you like name this?')
-	      	.placeholder('Name')
-	      	.ariaLabel('Name')
-	      	.targetEvent(event)
-	      	.ok('Rename')
-	      	.cancel('Annullér');
-	    	$mdDialog.show(confirm).then(function(result) {
-					var newName = result;					
-					vm.renameDocument(docNodeRef, newName);
-			
-	    	});
+				.title('What would you like name this?')
+				.placeholder('Name')
+				.ariaLabel('Name')
+				.targetEvent(event)
+				.ok('Rename')
+				.cancel('Annullér');
+				$mdDialog.show(confirm).then(function(result) {
+						var newName = result;					
+						vm.renameDocument(docNodeRef, newName);
 				
+				});
 				
 			}
 			
@@ -454,17 +454,7 @@
 			//});
 
 
-
-
-
-
-
-
-
 		}; // SiteCtrl close
-
-
-
 
 
 //TODO: refactor all the methods that dont belong here to a relevant server- and pass on the call to them in the controller

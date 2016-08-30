@@ -147,6 +147,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 nodeRefs: sourceNodeRefs,
                 parentId: parentNodeRef
             }).then(function (response) {
+                console.log('Copy action success');
+                return response;
+            }, function() {
+                console.log('Copy action failure');
                 return response;
             });
         },
