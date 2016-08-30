@@ -69,7 +69,6 @@ public class Notifications extends AbstractWebScript {
         String creatorName = params.get("creator");
 
         String documentId = params.get("document");
-        System.out.println("hvad er document: " + documentId);
         NodeRef documentNodeRef = null;
 
         if (storeType != null && storeId != null && nodeId != null) {
@@ -86,7 +85,6 @@ public class Notifications extends AbstractWebScript {
         String message = params.get("message");
         String type = params.get("type");
 
-        System.out.println(method);
 
         if (method != null && method.equals("getAll")) {
 
@@ -258,7 +256,6 @@ public class Notifications extends AbstractWebScript {
 //                    PrintWriter printWriter = new PrintWriter(stringWriter);
 //                    t.printStackTrace(printWriter);
 //                    LOGGER.severe(stringWriter.toString());
-                    System.out.println(t.toString());
                 }
                 return null;
             }

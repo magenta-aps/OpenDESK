@@ -100,7 +100,10 @@ public class FileBrowser extends AbstractWebScript {
         JSONObject json = new JSONObject();
 
         try {
-            json.put("primaryParent", nodeService.getPrimaryParent(nodeRef).getParentRef());
+            json.put("primaryParent_nodeRef", nodeService.getPrimaryParent(nodeRef).getParentRef());
+            json.put("primaryParent_name", nodeService.getProperty(nodeService.getPrimaryParent(nodeRef).getParentRef(), ContentModel.PROP_NAME));
+            json.put("currentNodeRef_nodeRef", nodeRef.toString());
+            json.put("currentNodeRef_name", nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
             result.add(json);
 
         } catch (JSONException e) {
