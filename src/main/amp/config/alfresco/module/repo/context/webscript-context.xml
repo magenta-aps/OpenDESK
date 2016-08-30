@@ -29,4 +29,11 @@
 		<property name="nodeService" ref="NodeService"/>
 		<property name="personService" ref="PersonService"/>
 	</bean>
+
+	<bean id="webscript.filebrowser.get"
+		  class="dk.opendesk.webscripts.FileBrowser"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="fileFolderService" ref="FileFolderService"/>
+	</bean>
 </beans>
