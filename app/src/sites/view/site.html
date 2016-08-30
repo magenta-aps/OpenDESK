@@ -92,14 +92,14 @@
 
 									
 									<md-menu-item>
-										<md-button ng-click="vm.copyFileDialog($event, contents, content.nodeRef)">
+										<md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
 											<md-icon md-menu-align-target>content_copy</md-icon>
 											Copy
 										</md-button>
 									</md-menu-item>
 									
 									<md-menu-item>
-										<md-button ng-click="vm.moveFileDialog($event, contents, content.nodeRef, content.parentNodeRef)">
+										<md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
 											<md-icon md-menu-align-target>compare_arrows</md-icon>
 											Move
 										</md-button>
@@ -163,11 +163,6 @@
 			</div>
 			
 		</md-card>
-
-
-
-
-
 
 
 		<md-card flex-gt-sm="33">
