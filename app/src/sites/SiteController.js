@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService) {
+        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, searchService) {
 
 			var vm = this;
 			$scope.contents = [];
@@ -438,6 +438,36 @@
 				$mdDialog.hide();
 			}
 
+			vm.getSearchresults = function getSearchReslts(term){
+				return searchService.getSearchResults(term).then(function (val) {
+
+					console.log(val);
+
+					if (val != undefined) {
+
+						$rootScope.searchResults = [];
+						$rootScope.searchResults = val.data.items;
+
+						window.location.href = "#/search";
+
+					} else {
+						return [];
+					}
+				});
+			}
+
+			vm.getAutoSuggestions = function getAutoSuggestions(term) {
+				return searchService.getSearchSuggestions(term).then(function (val) {
+
+					if (val != undefined) {
+						return val;
+					}
+					else {
+						return [];
+					}
+				});
+			}
+
 
 
 			// vm.test = function test() {
@@ -452,6 +482,25 @@
 			//	console.log(response.data.overallSuccess);
 			//	console.log(response.data.results[0].fileExist);
 			//});
+
+			vm.gotoPath = function (nodeRef) {
+
+				var ref = nodeRef;
+
+				documentService.getPath(ref.split("/")[3]).then(function(val) {
+
+					$scope.selectedDocumentPath = val.container
+					// var project = val.site;
+					// var container = val.container;
+					// var path = val.path;
+
+					var path = ref.replace("workspace://SpacesStore/", "");
+					$window.location.href = "/#/dokument/" + path;
+
+					console.log("gotoPath");
+				});
+			}
+
 
 
 		}; // SiteCtrl close

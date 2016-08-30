@@ -1,8 +1,10 @@
     angular
         .module('openDeskApp.search', ['ngCookies'])
         .controller('SearchController', SearchController, ['$cookies', function($cookies) {
-					$cookies.searchResult = "";
-        }]);
+					//$cookies.searchResult = "";
+
+        }])
+
 
     /**
      * Main Controller for the Search module
@@ -16,15 +18,25 @@
 				vm.openMenu = function($mdOpenMenu, event) {
 				  originatorEv = event;
 				  $mdOpenMenu(event);
+
+
 				};
-				
-        $scope.searchResults = [];
-				// $scope.searchResults.push(JSON.parse($cookies.get("searchResult")));
-				
-				if ($cookies.get("searchResult")) {
-					$scope.searchResults = JSON.parse($cookies.get("searchResult"));
-				}
-				
+
+
+        console.log("$scope");
+        console.log($scope);
+        console.log("$parent");
+        console.log($scope.$parent);
+        console.log("searchResults");
+        console.log($scope.searchResults);
+
+        //$scope.searchResults = [];
+			//	 $scope.searchResults.push(JSON.parse($cookies.get("searchResult")));
+
+				//if ($cookies.get("searchResult")) {
+				//	$scope.searchResults = JSON.parse($cookies.get("searchResult"));
+				//}
+
 
         vm.getAutoSuggestions = function(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {
@@ -38,25 +50,20 @@
             });
         }
 				
-        vm.getSearchresults = function(term) {		
+        vm.getSearchresults = function(term) {
+            return searchService.getSearchResults(term).then(function (val) {
 
-					return searchService.getSearchResults(term).then(function (val) {
-						if (val != undefined) {
+                console.log(val);
 
-							console.log(val.data.items);
-							$cookies.remove("searchResult");
-							$cookies.put("searchResult", JSON.stringify((val.data.items)));
-							var parsedCookie = JSON.parse($cookies.get("searchResult"));
-							console.log(parsedCookie);
-							$scope.searchResults.push(parsedCookie);
-							console.log($scope.searchResults);
-														
-							window.location.href = "#/search";
+                if (val != undefined) {
 
-						} else {
-							return [];
-						}
-					});
+                    $scope.searchResults = [];
+                    $scope.searchResults = val.data.items;
+
+                } else {
+                    return [];
+                }
+            });
         }
 
         vm.previewDocument = function previewDocument(nodeRef){
