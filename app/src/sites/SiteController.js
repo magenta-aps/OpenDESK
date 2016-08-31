@@ -335,7 +335,7 @@
 					targetEvent: event,
 					clickOutsideToClose: true
 				}).then(function(){
-					vm.moveNodeRefs(vm.source, $scope.destination, vm.parentId);
+					console.log('Dispatching move action');
 				}, function(){
 					console.log('You cancelled a move action');
 				});
@@ -354,7 +354,7 @@
 					targetEvent: event,
 					clickOutsideToClose: true
 				}).then(function(){
-					vm.copyNodeRefs(vm.source, $scope.destination, vm.parentId)
+					console.log('Dispatching copy action');
 				}, function(){
 					console.log('You cancelled a copy action');
 				});
@@ -362,8 +362,7 @@
 
 			
 			vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-
-				return siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {									
+				siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {									
 					$mdDialog.hide();
 					
 					if (response.data.results[0].fileExist) {
@@ -387,7 +386,7 @@
 
 			
 			vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-				return siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
+				siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
 					$mdDialog.hide();
 
 					if (response.data.results[0].fileExist) {
