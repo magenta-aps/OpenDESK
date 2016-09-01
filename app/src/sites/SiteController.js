@@ -14,27 +14,33 @@
 
 			vm.project = $stateParams.projekt;
 
-
 			// Compile paths for breadcrumb directive
-			vm.paths = [
-				{
-					title: 'Projekter',
-					link: '#/projekter'
-				},
-				{
-					title: vm.project,
-					link: '#/projekter/' + vm.project
-				}
-			];
-			var pathArr = $stateParams.path.split('/');
-			for (var a in pathArr) {
-				if (pathArr[a] !== '') {
-					vm.paths.push({
-						title: pathArr[a],
-						link: '#/projekter/' + vm.project + '/' + pathArr[a]
-					});
+			vm.paths = buildBreadCrumbPath();
+			
+			function buildBreadCrumbPath() {
+				var paths = [
+					{
+						title: 'Projekter',
+						link: '#/projekter'
+					},
+					{
+						title: vm.project,
+						link: '#/projekter/' + vm.project
+					}
+				];
+				var pathArr = $stateParams.path.split('/');
+				var pathLink = '/';
+				for (var a in pathArr) {
+					if (pathArr[a] !== '') {
+						paths.push({
+							title: pathArr[a],
+							link: '#/projekter/' + vm.project + pathLink + pathArr[a]
+						});
+						pathLink = pathLink + pathArr[a] + '/';
+					};
 				};
-			};
+				return paths;
+            };
 
 			vm.path = $stateParams.path;
 

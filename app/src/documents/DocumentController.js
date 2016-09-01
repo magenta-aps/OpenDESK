@@ -8,12 +8,7 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     var vm = this;
     vm.doc = [];
     vm.plugin = [];
-    vm.paths = [
-        {
-            title: 'Projekter',
-            link: '#/projekter'
-        }
-    ];
+    vm.paths = [];
 
 
     vm.newFolderDialog = function (event) {
@@ -56,34 +51,45 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     //
     //}
 
+
     documentService.getDocument($stateParams.doc).then(function(response) {
 
         vm.doc = response.item;
 
-        vm.paths.push({
-            title: response.item.location.siteTitle,
-            link: '#/projekter/' + response.item.location.site
-        });
-
-        // remove any parameters before parsing
-
-
-        var pathArr = response.item.location.path.split('/');
-
-
-        for (var a in pathArr) {
-            if (pathArr[a] !== '') {
-                vm.paths.push({
-                    title: pathArr[a],
-                    link: '#/projekter/' + response.item.location.site + '/' + pathArr[a]
-                });
+        // Compile paths for breadcrumb directive
+        vm.paths = buildBreadCrumbPath(response);
+        
+        function buildBreadCrumbPath(response) {
+            var paths = [
+                {
+                    title: 'Projekter',
+                    link: '#/projekter'
+                },
+                {
+                    title: response.item.location.siteTitle,
+                    link: '#/projekter/' + response.item.location.site
+                }
+            ];
+            var pathArr = response.item.location.path.split('/');
+            var pathLink = '/';
+            for (var a in pathArr) {
+                if (pathArr[a] !== '') {
+                    paths.push({
+                        title: pathArr[a],
+                        link: '#/projekter/' + response.item.location.site + pathLink + pathArr[a]
+                    });
+                    pathLink = pathLink + pathArr[a] + '/';
+                };
             };
-        }
-        vm.paths.push({
-            title: response.item.location.file,
-            link: response.item.location.path
-        });
+            paths.push({
+                title: response.item.location.file,
+                link: response.item.location.path
+            });
+            return paths;
+        };
+        
     });
+    
     
     documentPreviewService.previewDocumentPlugin('workspace://SpacesStore/' + $stateParams.doc).then(function(plugin){
         
