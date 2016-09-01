@@ -36,6 +36,8 @@
 				};
 			};
 
+			vm.path = $stateParams.path;
+
 
 			
 			vm.cancel = function () {
