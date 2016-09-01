@@ -3,22 +3,20 @@
 
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Where do you want to copy this to?</h2>
+				<h2>Kopiér til ...</h2>
 			</div>
 		</md-toolbar>
 
 		<md-dialog-content class="md-padding">
-				<md-radio-group ng-model="destination">
-				  <md-radio-button ng-repeat="folder in vm.folders" ng-model="destination" ng-show="folder.contentType === 'cmis:folder'" ng-value="folder.nodeRef" aria-label="destination">
-						{{ folder.name }}
-				  </md-radio-button>
-				</md-radio-group>
+				
+			<node-picker root="vm.parentId" model="destination"></node-picker>
+			<md-divider></md-divider>
 
 		</md-dialog-content>
 
 		<md-dialog-actions>
 			<md-button ng-click="vm.cancel()">Annullér</md-button>
-			<md-button type="submit" class="md-primary">Copy</md-button>
+			<md-button ng-disabled="!destination" type="submit" class="md-primary md-raised">Kopiér hertil</md-button>
 		</md-dialog-actions>
 
 	</form>

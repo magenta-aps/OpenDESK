@@ -60,7 +60,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         loadSiteData: function (shortName) {
             return $http.get('/api/sites/' + shortName).then(function (response) {
-                console.log(response.data.title);
                 return response.data.title;
             })
         },
@@ -133,6 +132,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         moveNodeRefs: function (sourceNodeRefs, destNodeRef, parentNodeRef) {
+            console.log('move noderefs:');
+            console.log(sourceNodeRefs);
+            console.log(destNodeRef);
+            console.log(parentNodeRef);
             return $http.post('/slingshot/doclib/action/move-to/node/' + alfrescoNodeUtils.processNodeRef(destNodeRef).uri, {
                 nodeRefs: sourceNodeRefs,
                 parentId: parentNodeRef
@@ -147,6 +150,8 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 nodeRefs: sourceNodeRefs,
                 parentId: parentNodeRef
             }).then(function (response) {
+                return response;
+            }, function() {
                 return response;
             });
         },
