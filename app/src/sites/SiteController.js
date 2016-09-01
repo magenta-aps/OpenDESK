@@ -12,6 +12,9 @@
 			$scope.roles = [];
 			$scope.roles = [];
 
+			console.log("$stateParams");
+			console.log($stateParams);
+
 			vm.project = $stateParams.projekt;
 
 
@@ -27,6 +30,9 @@
 				}
 			];
 			var pathArr = $stateParams.path.split('/');
+
+			console.log(pathArr);
+
 			for (var a in pathArr) {
 				if (pathArr[a] !== '') {
 					vm.paths.push({
@@ -37,6 +43,7 @@
 			};
 
 			vm.path = $stateParams.path;
+
 
 			vm.cancel = function () {
 				$mdDialog.cancel();
@@ -241,6 +248,8 @@
 			vm.upload = function (files) {
 
 				var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
+
+
 				cmisService.getNode(cmisQuery).then(function (val) {
 
 					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
