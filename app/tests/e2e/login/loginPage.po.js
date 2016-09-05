@@ -26,6 +26,8 @@ var LoginPage = function () {
      */
     public.loginAs = function(userName, password) {
 
+
+        console.log("userName");
         console.log(userName);
 
         //following PageObject pattern define the functions here.
