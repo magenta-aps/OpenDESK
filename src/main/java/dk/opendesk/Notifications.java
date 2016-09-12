@@ -153,27 +153,78 @@ public class Notifications extends AbstractWebScript {
 
             Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
 
-            String subject = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
-            String type = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
-            String message = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
-            Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
-            String creator = (String)props.get(OpenDeskModel.PROP_NOTIFICATION_CREATOR);
-            NodeRef document = (NodeRef)props.get(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT);
 
+            Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
+
+            if (!read) {
+                String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
+                String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
+                String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
+
+                String creator = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_CREATOR);
+                NodeRef document = (NodeRef) props.get(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT);
+
+
+                String documentShortNodeRef = document.toString();
+                documentShortNodeRef = documentShortNodeRef.split("/")[3];
+
+                try {
+                    json.put("nodeRef", child.getChildRef());
+                    json.put("subject", subject);
+                    json.put("message", message);
+                    json.put("document", documentShortNodeRef);
+                    json.put("creator", creator);
+                    json.put("read", read);
+                    json.put("type", type);
+                    json.put("created", nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
+
+                    result.add(json);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    // also returns read notifications
+    private JSONArray getAllNotifications(String userName) {
+
+        NodeRef user = personService.getPerson(userName);
+
+        Set<QName> types = new HashSet<>();
+        types.add(OpenDeskModel.PROP_NOTIFICATION);
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
+        JSONArray result = new JSONArray();
+
+        for (ChildAssociationRef child : childAssociationRefs) {
+            JSONObject json = new JSONObject();
+
+
+            Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
+
+            String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
+            String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
+            String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
+            Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
+            String creator = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_CREATOR);
+            NodeRef document = (NodeRef) props.get(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT);
 
 
             String documentShortNodeRef = document.toString();
             documentShortNodeRef = documentShortNodeRef.split("/")[3];
 
             try {
-                json.put("nodeRef",child.getChildRef());
-                json.put("subject",subject);
-                json.put("message",message);
-                json.put("document",documentShortNodeRef);
-                json.put("creator",creator);
-                json.put("read",read);
-                json.put("type",type);
-                json.put("created",nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
+                json.put("nodeRef", child.getChildRef());
+                json.put("subject", subject);
+                json.put("message", message);
+                json.put("document", documentShortNodeRef);
+                json.put("creator", creator);
+                json.put("read", read);
+                json.put("type", type);
+                json.put("created", nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
 
                 result.add(json);
 
@@ -181,8 +232,14 @@ public class Notifications extends AbstractWebScript {
                 e.printStackTrace();
             }
         }
+
         return result;
     }
+
+
+
+
+
 
     private Map<String, Object> addNotification(String userName, String message, String subject) {
 
