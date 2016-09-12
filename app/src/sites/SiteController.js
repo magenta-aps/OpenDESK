@@ -168,11 +168,11 @@
 
 			vm.deleteFileDialog = function (event, nodeRef) {
   			var confirm = $mdDialog.confirm()
-  			      .title('Would you like to delete this file?')
-  			      .textContent('Something happens in danish.')
-  			      .ariaLabel('Sluk dokument')
+  			      .title('Slette denne fil?')
+  			      .textContent('')
+  			      .ariaLabel('Slet dokument')
   			      .targetEvent(event)
-  			      .ok('Yes')
+  			      .ok('Slet')
   			      .cancel('Nej, tak');
   			
   			$mdDialog.show(confirm).then(function() {
@@ -195,11 +195,11 @@
 
 			vm.deleteFoldereDialog = function (event, nodeRef) {
 			   var confirm = $mdDialog.confirm()
-			         .title('Would you like to delete this folder?')
-			         .textContent('This will delete this folder with all its contents.')
-			         .ariaLabel('Sluk mappe')
+			         .title('Slette denne mappe?')
+			         .textContent('Dette vil slette mappen med alt dens indhold')
+			         .ariaLabel('Slet mappe')
 			         .targetEvent(event)
-			         .ok('Yes')
+			         .ok('Slet')
 			         .cancel('Nej, tak');
 
 			   $mdDialog.show(confirm).then(function() {
@@ -305,11 +305,11 @@
 			
 			vm.deleteMemberDialog = function (siteName, userName) {
 			   var confirm = $mdDialog.confirm()
-			         .title('Would you like to delete this member?')
-			         .textContent('Something på dansk.')
-			         .ariaLabel('Sluk medlem')
+			         .title('Slette dette medlem?')
+			         .textContent('')
+			         .ariaLabel('Slet medlem')
 			         .targetEvent(event)
-			         .ok('Yes')
+			         .ok('Slet')
 			         .cancel('Nej, tak');
 
 			   $mdDialog.show(confirm).then(function() {
@@ -387,8 +387,8 @@
 						  $mdDialog.alert()
 						    .parent(angular.element(document.body))
 						    .clickOutsideToClose(true)
-						    .title('There is already a file with the same name in the folder you chose.')
-						    .ariaLabel('Already exists')
+						    .title('Der er allerede en fil med samme navn i mappen du valgte.')
+						    .ariaLabel('Eksisterer allerede')
 						    .ok('Ok')
 						);
 					} else {
@@ -411,8 +411,8 @@
 							$mdDialog.alert()
 								.parent(angular.element(document.body))
 								.clickOutsideToClose(true)
-								.title('There is already a file with the same name in the folder you chose.')
-								.ariaLabel('Already exists')
+								.title('Der er allerede en fil med samme navn i mappen du valgte.')
+								.ariaLabel('Eksisterer allerede')
 								.ok('Ok')
 						);
 					} else {
@@ -426,11 +426,11 @@
 			
 			vm.renameDocumentDialog = function(event, docNodeRef) {
 				var confirm = $mdDialog.prompt()
-				.title('What would you like name this?')
-				.placeholder('Name')
-				.ariaLabel('Name')
+				.title('Hvordan vil du navngive dette?')
+				.placeholder('Navn')
+				.ariaLabel('Navn')
 				.targetEvent(event)
-				.ok('Rename')
+				.ok('Omdøb')
 				.cancel('Annullér');
 				$mdDialog.show(confirm).then(function(result) {
 						var newName = result;					

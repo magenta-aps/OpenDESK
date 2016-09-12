@@ -94,21 +94,21 @@
 									<md-menu-item>
 										<md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
 											<md-icon md-menu-align-target>content_copy</md-icon>
-											Copy
+											Kopiér
 										</md-button>
 									</md-menu-item>
 									
 									<md-menu-item>
 										<md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
 											<md-icon md-menu-align-target>compare_arrows</md-icon>
-											Move
+											Flyt
 										</md-button>
 									</md-menu-item>
 
 
 									<md-menu-item>
 										<md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
-											<md-icon md-menu-align-target>create</md-icon>
+											<md-icon md-menu-align-target>playlist_add_check</md-icon>
 											Send til godkendelse
 										</md-button>
 									</md-menu-item>
@@ -135,7 +135,7 @@
 									<md-menu-item>
 										<md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Delete
+											Slet
 										</md-button>
 									</md-menu-item>
 	
@@ -183,14 +183,14 @@
 								<md-menu-item>
 									<md-button ng-click="vm.updateMemberRoleDialog($event, member.authority)">
 										<md-icon md-menu-align-target>create</md-icon>
-										Change role
+										Redigér medlem
 									</md-button>
 								</md-menu-item>
 					      
 								<md-menu-item>
 									<md-button ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName);">
 										<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-										Remove member
+										Slet
 									</md-button>
 								</md-menu-item>
 							</md-menu-content>
