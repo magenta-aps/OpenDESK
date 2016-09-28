@@ -59,7 +59,6 @@
 				});
 			}
 
-
 			vm.cancel = function() {
 				$mdDialog.cancel();
 			};

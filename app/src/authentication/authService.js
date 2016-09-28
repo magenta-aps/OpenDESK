@@ -32,7 +32,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     
     function prefixAlfrescoServiceUrl(url){
         if(url.indexOf("/api/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
-                || url == "/touch"){
+               || url.indexOf("/lool")  == 0  || url.indexOf("/wopi") == 0 || url == "/touch" ){
             return ALFRESCO_URI.webClientServiceProxy + url;
         }
         else if(url.indexOf("/share/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0

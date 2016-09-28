@@ -1,5 +1,3 @@
-
-
 /*
  * INITIALIZE GULP
  */
@@ -9,14 +7,14 @@ var gulp = require('gulp'),
     fs = require('fs'),
     proxy = require('http-proxy-middleware'),
     autoprefixer = require('gulp-autoprefixer'),
-	gulpNSP = require('gulp-nsp'),
-	pa11y = require('gulp-pa11y');
+    gulpNSP = require('gulp-nsp'),
+    pa11y = require('gulp-pa11y');
 
 // Config vars
 // If, after a while, there are a lot of config vars, we can move these to a separate file
 var environment = {
     demo: {
-	chat: 'http://demo.opendesk.dk:5280/http-bind',
+        chat: 'http://demo.opendesk.dk:5280/http-bind',
         repo: 'http://demo.opendesk.dk:8080',
         share: 'http://demo.opendesk.dk:8081'
     },
@@ -46,21 +44,26 @@ var dist = {
 
 function createWebserver(config) {
     return gulp.src('./')
-            .pipe($.webserver({
-                open: false, // Open up a browser automatically
-                host: '0.0.0.0', // hostname needed if you want to access the server from anywhere on your local network
-                middleware: [],
-                proxies: [{
-                    source: '/alfresco',
-                    target: config.repo + '/alfresco'
-                }, {
-                    source: '/share',
-                    target: config.share + '/share'
-                },{
-                    source: '/http-bind',
-                    target: config.chat
-                }]
-            }));
+        .pipe($.webserver({
+            open: false, // Open up a browser automatically
+            host: '0.0.0.0', // hostname needed if you want to access the server from anywhere on your local network
+            middleware: function (req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+                next();
+            },
+            proxies: [{
+                source: '/alfresco',
+                target: config.repo + '/alfresco'
+            }, {
+                source: '/share',
+                target: config.share + '/share'
+            }, {
+                source: '/http-bind',
+                target: config.chat
+            }]
+        }));
 }
 
 
@@ -69,48 +72,48 @@ function createWebserver(config) {
  */
 
 // Script tasks
-gulp.task('scripts', function() {
+gulp.task('scripts', function () {
     return gulp.src(paths.scripts)
-            .pipe($.wrap('(function(){\n"use strict";\n<%= contents %>\n})();'))
-            //.pipe($.jshint('.jshintrc'))
-            //.pipe($.jshint.reporter('jshint-stylish'))
-            .pipe($.concat(dist.name + '.js'))
-            .pipe($.change(includeAppConfigParams))
-            .pipe(gulp.dest(dist.folder))
-            .pipe($.rename({suffix: '.min'}))
-            .pipe($.stripDebug())
-            .pipe($.ngAnnotate())
-            .pipe($.uglify())
-            .pipe(gulp.dest(dist.folder))
-            .on('error', $.util.log);
+        .pipe($.wrap('(function(){\n"use strict";\n<%= contents %>\n})();'))
+        //.pipe($.jshint('.jshintrc'))
+        //.pipe($.jshint.reporter('jshint-stylish'))
+        .pipe($.concat(dist.name + '.js'))
+        .pipe($.change(includeAppConfigParams))
+        .pipe(gulp.dest(dist.folder))
+        .pipe($.rename({suffix: '.min'}))
+        .pipe($.stripDebug())
+        .pipe($.ngAnnotate())
+        .pipe($.uglify())
+        .pipe(gulp.dest(dist.folder))
+        .on('error', $.util.log);
 });
 
 // CSS tasks
-gulp.task('css', function() {
+gulp.task('css', function () {
     return gulp.src(paths.scss)
-            .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
-            .pipe($.concat(dist.name + '.scss'))
-            .pipe($.sass())
-            .pipe(gulp.dest(dist.folder))
-            .pipe($.rename({suffix: '.min'}))
-            .pipe(autoprefixer({
-                browsers: ['last 2 versions'],
-                cascade: false
-            }))
-            .pipe($.minifyCss())
-            .pipe(gulp.dest(dist.folder))
-            .on('error', $.util.log);
+        .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
+        .pipe($.concat(dist.name + '.scss'))
+        .pipe($.sass())
+        .pipe(gulp.dest(dist.folder))
+        .pipe($.rename({suffix: '.min'}))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
+        .pipe($.minifyCss())
+        .pipe(gulp.dest(dist.folder))
+        .on('error', $.util.log);
 });
 
 //UI tests
-gulp.task('e2e-tests', function() {
+gulp.task('e2e-tests', function () {
     gulp.src(paths.e2e_tests)
-            .pipe($.protractor.protractor({
-                configFile: paths.protractorConfigFile
-            }))
-            .on('error', function(e) {
-                throw e;
-            });
+        .pipe($.protractor.protractor({
+            configFile: paths.protractorConfigFile
+        }))
+        .on('error', function (e) {
+            throw e;
+        });
 });
 function includeAppConfigParams(content) {
     var argv = require('yargs').argv;
@@ -124,17 +127,17 @@ function includeAppConfigParams(content) {
 }
 
 // Accessibility check
-gulp.task('acc_check', function() {
+gulp.task('acc_check', function () {
     pa11y({url: 'http://178.62.194.129/'});
 });
 
 // Security check
-gulp.task('sec_check', function(cb) {
+gulp.task('sec_check', function (cb) {
     gulpNSP({package: __dirname + '/package.json'}, cb);
 });
 
 // Set up watchers
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.scss, ['css']);
 });
@@ -149,11 +152,11 @@ gulp.task('watch', function() {
 // Useful if you want to deploy to production (e.g. with Apache).
 gulp.task('build', ['scripts', 'css', 'sec_check', 'acc_check']);
 
-gulp.task('demo', ['build', 'watch'], function() {
+gulp.task('demo', ['build', 'watch'], function () {
     createWebserver(environment.demo);
 });
 
-gulp.task('local', ['build', 'watch'], function() {
+gulp.task('local', ['build', 'watch'], function () {
     createWebserver(environment.local);
 });
 

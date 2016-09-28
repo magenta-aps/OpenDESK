@@ -61,7 +61,13 @@ angular
         });
     });
 
-function config($stateProvider, $urlRouterProvider, USER_ROLES) {
+function config($stateProvider, $urlRouterProvider,$sceDelegateProvider, USER_ROLES) {
+    $sceDelegateProvider.resourceUrlWhitelist([
+        // Allow same origin resource loads.
+        'self',
+        // Allow loading from our assets domain.  Notice the difference between * and **.
+        'https://lool.magenta.dk:9980/**'
+    ]);
 
     $urlRouterProvider
         .when('/admin/system-settings', '/admin/system-settings/general-configuration')
