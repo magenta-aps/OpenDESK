@@ -6,11 +6,24 @@
         
         function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, searchService) {
 
+
+			$scope.role_mapping = {};
+			$scope.role_mapping["SiteManager"] = "Projektejer";
+			$scope.role_mapping["SiteContributor"] = "Projektmedarbejder";
+			$scope.role_mapping["SiteConsumer"] = "Read-only bruger";
+
+
+			$scope.role_mapping_reverse = {};
+			$scope.role_mapping_reverse["Projektejer"] = "SiteManager";
+			$scope.role_mapping_reverse["Projektmedarbejder"] = "SiteContributor";
+			$scope.role_mapping_reverse["Read-only bruger"] = "SiteConsumer";
+
+
 			var vm = this;
 			$scope.contents = [];
 			$scope.members = [];
 			$scope.roles = [];
-			$scope.roles = [];
+			$scope.roles_translated = [];
 
 			console.log("$stateParams");
 			console.log($stateParams);
@@ -270,7 +283,18 @@
 
 			vm.loadSiteRoles = function() {
 				siteService.getSiteRoles(vm.project).then(function(response){
-					$scope.roles = response.siteRoles;
+
+					$scope.roles_translated = [];
+
+					for (var x in response.siteRoles) {
+
+						if ($scope.role_mapping[response.siteRoles[x]] != null) {
+							$scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
+						}
+
+					}
+
+					//$scope.roles = response.siteRoles;
 				});
 			};
 			vm.loadSiteRoles();
@@ -290,14 +314,14 @@
 			}
 			
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
-				siteService.updateRoleOnSiteMember(siteName, userName, role).then(function(val){
+				siteService.updateRoleOnSiteMember(siteName, userName, $scope.role_mapping_reverse[role]).then(function(val){
 					vm.loadMembers();
 				});
 				$mdDialog.hide();
 			};
 
 			vm.addMemberToSite = function(siteName, userName, role) {
-				siteService.addMemberToSite(siteName, userName, role).then(function(val){
+				siteService.addMemberToSite(siteName, userName, $scope.role_mapping_reverse[role]).then(function(val){
 					vm.loadMembers();
 				});
 				$mdDialog.hide();

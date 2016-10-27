@@ -172,7 +172,7 @@
 				<table class="od-members">
 				  <tr ng-repeat="member in members">
 				    <td>{{ member.authority.firstName }} {{ member.authority.lastName }}</td>
-				    <td>{{ member.role }}</td>
+				    <td>{{ role_mapping[member.role] }}</td>
 				    <td>
 							<md-menu>
 							<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">

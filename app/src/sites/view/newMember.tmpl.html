@@ -29,7 +29,7 @@
 				<md-input-container>
 					<label>Rolle</label>
 					<md-select required ng-model="newMemberRole">
-						<md-option ng-repeat="r in roles">{{ r }}</md-option>
+						<md-option ng-repeat="r in roles_translated">{{ r }}</md-option>
 					</md-select>
 					<div ng-messages="vm.addMemberForm.newMemberRole.$error">
 						<div ng-message="required">Dette felt skal udfyldes</div>
