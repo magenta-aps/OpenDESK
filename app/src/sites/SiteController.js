@@ -6,17 +6,25 @@
         
         function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, searchService) {
 
-
 			$scope.role_mapping = {};
 			$scope.role_mapping["SiteManager"] = "Projektejer";
-			$scope.role_mapping["SiteContributor"] = "Projektmedarbejder";
-			$scope.role_mapping["SiteConsumer"] = "Read-only bruger";
+			$scope.role_mapping["SiteContributor"] = "Kan skrive";
+			$scope.role_mapping["SiteConsumer"] = "Kan læse";
+
+
+			$scope.role_translation = {};
+			$scope.role_translation["1"] = "Projektejer";
+			$scope.role_translation["2"] = "Kan skrive";
+			$scope.role_translation["3"] = "Kan læse";
 
 
 			$scope.role_mapping_reverse = {};
-			$scope.role_mapping_reverse["Projektejer"] = "SiteManager";
-			$scope.role_mapping_reverse["Projektmedarbejder"] = "SiteContributor";
-			$scope.role_mapping_reverse["Read-only bruger"] = "SiteConsumer";
+			$scope.role_mapping_reverse["1"] = "SiteManager";
+			$scope.role_mapping_reverse["2"] = "SiteContributor";
+			$scope.role_mapping_reverse["3"] = "SiteConsumer";
+
+
+
 
 
 			var vm = this;
@@ -33,6 +41,20 @@
 			// Compile paths for breadcrumb directive
 
 			vm.paths = buildBreadCrumbPath();
+
+
+
+			function translation_to_value(translation) {
+
+				for (var x in $scope.role_translation) {
+					var v = $scope.role_translation[x];
+
+					if (v === translation) {
+						return x;
+					}
+				}
+			}
+
 			
 			function buildBreadCrumbPath() {
 				var paths = [
@@ -314,14 +336,25 @@
 			}
 			
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
-				siteService.updateRoleOnSiteMember(siteName, userName, $scope.role_mapping_reverse[role]).then(function(val){
+
+				// getTheValue
+				var role_int_value = translation_to_value(role);
+				var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
+
+				siteService.updateRoleOnSiteMember(siteName, userName, role_alfresco_value ).then(function(val){
 					vm.loadMembers();
 				});
 				$mdDialog.hide();
 			};
 
 			vm.addMemberToSite = function(siteName, userName, role) {
-				siteService.addMemberToSite(siteName, userName, $scope.role_mapping_reverse[role]).then(function(val){
+
+				// getTheValue
+				var role_int_value = translation_to_value(role);
+				var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
+
+
+				siteService.addMemberToSite(siteName, userName, role_alfresco_value).then(function(val){
 					vm.loadMembers();
 				});
 				$mdDialog.hide();
