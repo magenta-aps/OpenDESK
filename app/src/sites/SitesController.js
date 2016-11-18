@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService) {
 
 			var vm = this;
 			
@@ -22,16 +22,6 @@
 					clickOutsideToClose:true
 				});
 			};
-
-			// vm.createSite = function(name, description) {
-			// 	siteService.createSite(name, description).then(function (val) {
-			// 		//TODO load stuff without reload..
-			// 		vm.reload();
-			// 	});
-			//
-			// 	$mdDialog.hide();
-			// };
-
 
 			vm.createSite = function (name, description) {
 				var r = siteService.createSite(name, description);
@@ -111,7 +101,6 @@
 
 				r.then(function(result){
 					vm.project_title = result.title;
-					console.log(result);
 					$mdDialog.hide();
 					
 					siteService.getSites().then(function(val) {
@@ -120,27 +109,53 @@
 				});
 			}
 
-            //
-			//vm.projekt = $stateParams.projekt;
-            //
+			vm.getSearchresults = function getSearchReslts(term){
+				return searchService.getSearchResults(term).then(function (val) {
 
+					console.log(val);
 
-			// below for testing purpose - loads some data
+					if (val != undefined) {
 
-			//siteService.getSiteRoles("heide").then(function(val) {
-			//	vm.roles = val.siteRoles;
-			//})
+						$rootScope.searchResults = [];
+						$rootScope.searchResults = val.data.items;
 
-			//siteService.addMemberToSite("heide", "abeecher", "SiteContributor");
-			//siteService.removeMemberFromSite("heide", "abeecher");
-			//siteService.updateRoleOnSiteMember("heide", "abeecher", "SiteConsumer");
+						window.location.href = "#/search";
 
-			//siteService.getSitesByQuery('1').then(function(val) {
-			//		vm.roles = val;
-			//})
+					} else {
+						return [];
+					}
+				});
+			}
 
+			vm.getAutoSuggestions = function getAutoSuggestions(term) {
+				return searchService.getSearchSuggestions(term).then(function (val) {
 
+					if (val != undefined) {
+						return val;
+					}
+					else {
+						return [];
+					}
+				});
+			}
 
+			vm.gotoPath = function (nodeRef) {
+
+				var ref = nodeRef;
+
+				documentService.getPath(ref.split("/")[3]).then(function(val) {
+
+					$scope.selectedDocumentPath = val.container
+					// var project = val.site;
+					// var container = val.container;
+					// var path = val.path;
+
+					var path = ref.replace("workspace://SpacesStore/", "");
+					$window.location.href = "/#/dokument/" + path;
+
+					console.log("gotoPath");
+				});
+			}
 
         }; // SiteCtrl close
 

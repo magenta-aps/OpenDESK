@@ -36,7 +36,7 @@ exports.config = {
             try {
                 return require('../../../../loginDetails.json');
             } catch (e) {
-                return {'username': 'admin', 'password': 'admin'};
+                return {'username': 'admin', 'password': 'bullerfisk1992'};
             }
         })();
         // Add a screenshot reporter and store screenshots to `/tmp/screnshots`:
@@ -58,10 +58,10 @@ exports.config = {
         );*/
     },
     suites: {
-        login: './login/*.test.js',
-        header: './common/*.test.js',
-        case: './cases/*.test.js',
-        users: './users/*.test.js',
-        admin: './admin/*.test.js'
+        login: './login/*.test.js'
+        //header: './common/*.test.js',
+        //case: './cases/*.test.js',
+        //users: './users/*.test.js',
+        //admin: './admin/*.test.js'
     }
 };

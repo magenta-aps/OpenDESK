@@ -10,9 +10,13 @@
             };
         });
 
-    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService) {
-        var vm = this;
 
+    function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService, authService, $interval) {
+        var vm = this;
+				
+				var userInfo = sessionService.getUserInfo();
+				var currentUser = userInfo.user.userName;
+				
 
         vm.notifications = new Array();
         vm.on = false;
@@ -29,31 +33,34 @@
                     .action('Luk')
             );
         };
-        
-        // Fake notifications while we wait for notification service -- REMOVE
-
-        notificationsService.getNotices("admin").then (function (val) {
-            vm.notifications = val;
-            console.log(val);
-        });
 
 
-        //vm.notifications = [
-        //    {id: 1, notice: 'Someone did something'},
-        //    {id: 2, notice: 'You should do something', link: 'projekter'},
-        //    {id: 3, notice: 'Check this out', desc: 'Someone did something and you should know about it'},
-        //    {id: 4, notice: 'Something changed', desc: 'Someone did something, check it out', link: 'projekter'}
-        //];
+        $interval(callAtTimeout, 10000);
 
+        function callAtTimeout() {
+            //console.log("Timeout occurred");
+            vm.updateNotifications();
+        }
+
+        vm.updateNotifications = function updateNotifications()
+        {
+            notificationsService.getNotices(authService.getUserInfo().user.userName).then(function (val) {
+                $scope.notifications = val;
+            });
+        }
+        vm.updateNotifications();
 
         vm.rmNotice = function(nIndex) {
-            vm.notifications.splice(nIndex, 1);
-        };
+						notificationsService.delNotice(currentUser, nIndex).then(function(){
 
-        vm.addNotice = function() {
-            vm.popNotice({notice: 'Hey there'});
-            vm.notifications.push({notice: 'Hey there'});
+                            vm.updateNotifications();
+						});
         };
-        $timeout(vm.addNotice(), 3000);
+				
+				vm.setRead = function(noticeObj) {
+					notificationsService.setReadNotice(currentUser, noticeObj).then(function(val){
+                        vm.updateNotifications();
+					});
+				};
 
     };

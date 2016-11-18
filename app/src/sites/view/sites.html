@@ -1,8 +1,8 @@
-<div class="od-projects">
+	<div class="od-projects">
 
 	<h1 class="od-title">Projekter</h1>
 		
-	<div ng-controller="SearchController as vm" class="od-search" layout="row">
+	<div class="od-search" layout="row">
 			<span flex></span>
 			<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
 				<!-- <md-input-container> -->
@@ -16,12 +16,13 @@
 							md-item-text="r.name"
 							md-floating-label="Søg">
 						<md-item-template>
-							<span md-highlight-text="searchText" ng-click="vm.getSearchresults(searchText);">{{r.name}}</span>
+							<span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
 						</md-item-template>
 						<div ng-messages="autocompleteForm.autocomplete.$error">
 							<div ng-message="required">Dette felt skal udfyldes</div>
 						</div>
 					</md-autocomplete>
+					
 				<!-- </md-input-container> -->
 					<!-- <md-button type="submit" class="md-primary">Søg</md-button> -->
 			</form>
@@ -32,11 +33,10 @@
 			<div layout="row" layout-align="space-between center">
 				<md-input-container>
 					<!-- <i class="material-icons">search</i> -->
-					<label>Browse projekter...</label>
+					<label>Find projekt</label>
 					<input type="text" ng-model="query" ng-change="vm.querySites(query)">
 				</md-input-container>
 			</div>		
-
 
 			<md-list>
 			  <md-list-item ng-repeat="project in vm.sites">
@@ -54,7 +54,7 @@
 								<md-menu-item>
 					        <md-button ng-click="vm.deleteSiteDialog(project.shortName)">
 					          <md-icon md-menu-align-target>remove_circle_outline</md-icon>
-					          Delete
+					          Slet
 					        </md-button>
 					      </md-menu-item>
 								<md-menu-item>

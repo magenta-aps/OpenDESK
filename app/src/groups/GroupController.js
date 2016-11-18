@@ -93,10 +93,10 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
         var confirmDel = $mdDialog.confirm()
             .title('Remove member')
             .textContent('Remove ' + memberName + ' from ' + group_shortName + ' group?')
-            .ariaLabel('Delete group')
+            .ariaLabel('Slet gruppe')
             .targetEvent(ev)
-            .ok('Delete')
-            .cancel('Cancel');
+            .ok('Slet')
+            .cancel('Annulér');
         $mdDialog.show(confirmDel).then(function () {
             if (authType === "GROUP")
                 memberName = authType + "_" + memberName;
@@ -128,12 +128,12 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
 
     function deleteGroup(shortName, ev) {
         var confirmDel = $mdDialog.confirm()
-            .title('Delete group')
-            .textContent('Delete ' + shortName + '?')
-            .ariaLabel('Delete group')
+            .title('Slet gruppe')
+            .textContent('Slet ' + shortName + '?')
+            .ariaLabel('Slet gruppe')
             .targetEvent(ev)
-            .ok('Delete')
-            .cancel('Cancel');
+            .ok('Slet')
+            .cancel('Annullér');
         $mdDialog.show(confirmDel).then(function () {
             groupService.deleteGroup(shortName).then(function (response) {
                 vm.group = response;

@@ -6,12 +6,20 @@
     left: 0;
     z-index: 1;
     color: #fff;
+		height: 48px;
+		
     .od-header--body {
         height: $u*3;
     }		
     .od-btn {
         height: $u*3;
     }
+		
+		
+		
+		.avatar {
+			height: 48px;
+		}
 }
 
 .od-header-homebtn {

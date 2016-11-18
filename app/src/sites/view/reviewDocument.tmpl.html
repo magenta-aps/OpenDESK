@@ -1,9 +1,9 @@
 <md-dialog aria-label="New member"  ng-cloak>
-	<form name="addMemberForm" ng-submit="vm.addMemberToSite(vm.project, newMemberName.userName, newMemberRole);">
+	<form name="addMemberForm" ng-submit="vm.createReviewNotification(nodeRef, newMemberName.userName, subject, comment);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Tilføj medlem til projekt</h2>
+				<h2>Tilføj reviewer</h2>
 			</div>
 		</md-toolbar>
 		
@@ -26,15 +26,33 @@
 					</div>
 				</md-autocomplete>
 
-				<md-input-container>
-					<label>Rolle</label>
-					<md-select required ng-model="newMemberRole">
-						<md-option ng-repeat="r in roles_translated">{{ r }}</md-option>
-					</md-select>
-					<div ng-messages="vm.addMemberForm.newMemberRole.$error">
-						<div ng-message="required">Dette felt skal udfyldes</div>
+				<md-dialog-content class="md-padding">
+					<div>
+						<md-input-container>
+							<label>Emne</label>
+							<input type="text" name="subject" required ng-model="subject">
+							<div ng-messages="createSiteForm.newSiteName.$error">
+								<div ng-message="required">Dette felt skal udfyldes</div>
+							</div>
+						</md-input-container>
 					</div>
-				</md-input-container>
+				</md-dialog-content>
+
+				<md-dialog-content class="md-padding">
+					<div>
+						<md-input-container>
+							<label>Kommentar</label>
+							<input type="text" name="comment" required ng-model="comment">
+							<div ng-messages="createSiteForm.newSiteName.$error">
+								<div ng-message="required">Dette felt skal udfyldes</div>
+							</div>
+						</md-input-container>
+					</div>
+				</md-dialog-content>
+
+
+
+
 				
 			</div>
 		</md-dialog-content>
