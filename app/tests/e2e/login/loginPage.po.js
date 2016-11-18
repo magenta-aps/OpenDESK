@@ -12,7 +12,7 @@ var LoginPage = function () {
     };
 
     public.loginAsAdmin = function () {
-        public.loginAs(browser.params.loginDetails.admin.username, browser.params.loginDetails.admin.password);
+        public.loginAs("admin", "bullerfisk1992");
     };
 
     public.loginAsUser = function (user) {
@@ -25,6 +25,11 @@ var LoginPage = function () {
      * @param password
      */
     public.loginAs = function(userName, password) {
+
+
+        console.log("userName");
+        console.log(userName);
+
         //following PageObject pattern define the functions here.
         browser.get('http://localhost:8000');
         //The fields
@@ -39,9 +44,9 @@ var LoginPage = function () {
     };
 
     public.logout = function() {
-        globalHeaderMenu.getHeaderMenuItem().userMenuBtn.click();
-        element(by.xpath('//button[@id="logout"]')).click();
-        browser.driver.sleep(2000);
+        //globalHeaderMenu.getHeaderMenuItem().userMenuBtn.click();
+        //element(by.xpath('//button[@id="logout"]')).click();
+        //browser.driver.sleep(2000);
     };
 
     return public;

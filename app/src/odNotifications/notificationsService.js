@@ -9,7 +9,9 @@
         var service = {
             getNotices: getNotices,
             addNotice: addNotice,
-            delNotice: delNotice
+            delNotice: delNotice,
+            setReadNotice: setRead,
+            addWFNotice: addWFNotice
         };
 
         return service;
@@ -22,21 +24,36 @@
         };
 
 
+        function setRead(userId, noticeObj) {
 
+            var s = noticeObj.split("/");
+            var ref = (s[3])
 
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&NODE_ID=" + ref + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=setRead").then(function(response) {
+                return response;
+            })
+        };
 
+        function addNotice(userId, subject, message) {
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&method=add").then(function(response) {
+                return response;
+            })
+        };
 
-        
-        function addNotice(userId, noticeObj) {
-            console.log('Add notice');
-            // adds a notification to a user's list of unread notifications
-            return [];
+        function addWFNotice(creator, userId, subject, message, documentId, type) {
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&creator=" + creator  + "&document=" + documentId + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=add" + "&type=" + type).then(function(response) {
+                return response;
+            })
         };
         
-        function delNotice(userId) {
-            // removes a notification from a user's list of unread notifications (usually when she has read it)
-            console.log('Remove a notice');
-            return [];
+        function delNotice(userId, noticeObj) {
+
+            var s = noticeObj.split("/");
+            var ref = (s[3])
+
+            return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&NODE_ID=" + ref + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=remove").then(function(response) {
+                return response;
+            })
         };
 
     };

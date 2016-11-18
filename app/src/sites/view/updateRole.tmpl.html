@@ -3,7 +3,7 @@
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Edit {{vm.currentDialogUser.firstName}}'s rolle </h2>
+				<h2>Redigér {{vm.currentDialogUser.firstName}}'s rolle </h2>
 			</div>
 		</md-toolbar>
 
@@ -12,7 +12,7 @@
 				<md-input-container>
 					<label>Rolle</label>
 					<md-select required ng-model="newMemberRole">
-						<md-option ng-repeat="r in roles">{{ r }}</md-option>
+						<md-option ng-repeat="r in roles_translated">{{ r }}</md-option>
 					</md-select>
 					<div ng-messages="vm.editRoleForm.newMemberRole.$error">
 						<div ng-message="required">Dette felt skal udfyldes</div>
@@ -23,7 +23,7 @@
 		
 		<md-dialog-actions>
 			<md-button ng-click="vm.cancel()">Annullér</md-button>
-			<md-button ng-click="vm.loadSiteRoles()" type="submit" class="md-primary">Update</md-button>
+			<md-button ng-click="vm.loadSiteRoles()" type="submit" class="md-primary">Opdatér</md-button>
 		</md-dialog-actions>
 		
 	</form>

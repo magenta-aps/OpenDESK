@@ -3,15 +3,14 @@
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Create new folder</h2>
+				<h2>Opret nyt mappe</h2>
 			</div>
 		</md-toolbar>
 		
 		<md-dialog-content class="md-padding">
-			<p>Here goes the name of the new folder.</p>
 				<div>
 				  <md-input-container>
-					<label>Name</label>
+					<label>Navn</label>
 					<input type="text" name="newFolderName" required ng-model="newFolderName">
 					<div ng-messages="createSiteForm.newSiteName.$error">
 						<div ng-message="required">Dette felt skal udfyldes</div>
@@ -21,8 +20,8 @@
 		</md-dialog-content>
 		
 		<md-dialog-actions>
-			<md-button ng-click="vm.cancel()">Cancel</md-button>
-			<md-button type="submit" class="md-primary">Create</md-button>
+			<md-button ng-click="vm.cancel()">Annullér</md-button>
+			<md-button type="submit" class="md-primary">Tilføj</md-button>
 		</md-dialog-actions>
 	</form>
 </md-dialog>

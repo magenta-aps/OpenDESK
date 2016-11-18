@@ -5,7 +5,7 @@
 	<div layout="row" layout-align="space-between center">
 		<a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 		
-		<div ng-controller="SearchController as vm" class="od-search" layout="row">
+		<div  class="od-search" layout="row">
 			<span flex></span>
 			<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
 				<!-- <md-input-container> -->
@@ -19,7 +19,7 @@
 							md-item-text="r.name"
 							md-floating-label="Søg">
 						<md-item-template>
-							<span md-highlight-text="searchText" ng-click="vm.getSearchresults(searchText);">{{r.name}}</span>
+							<span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
 						</md-item-template>
 						<div ng-messages="autocompleteForm.autocomplete.$error">
 							<div ng-message="required">Dette felt skal udfyldes</div>
@@ -79,16 +79,41 @@
 									<md-menu-item>
 										<md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Delete
+											Slet
 										</md-button>
 									</md-menu-item>
 	
 									<md-menu-item>
 										<md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
 											<md-icon md-menu-align-target>create</md-icon>
-											Rename
+											Omdøb
 										</md-button>
 									</md-menu-item>
+
+									
+									<md-menu-item>
+										<md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
+											<md-icon md-menu-align-target>content_copy</md-icon>
+											Kopiér
+										</md-button>
+									</md-menu-item>
+									
+									<md-menu-item>
+										<md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
+											<md-icon md-menu-align-target>compare_arrows</md-icon>
+											Flyt
+										</md-button>
+									</md-menu-item>
+
+
+									<md-menu-item>
+										<md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
+											<md-icon md-menu-align-target>playlist_add_check</md-icon>
+											Send til godkendelse
+										</md-button>
+									</md-menu-item>
+
+
 								</md-menu-content>
 							</md-menu>
 
@@ -110,7 +135,7 @@
 									<md-menu-item>
 										<md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Delete
+											Slet
 										</md-button>
 									</md-menu-item>
 	
@@ -140,11 +165,6 @@
 		</md-card>
 
 
-
-
-
-
-
 		<md-card flex-gt-sm="33">
 			<md-card-content>
 				<h2 class="od-title-icon"><i class="material-icons">group</i>Medlemmer</h2>
@@ -152,7 +172,7 @@
 				<table class="od-members">
 				  <tr ng-repeat="member in members">
 				    <td>{{ member.authority.firstName }} {{ member.authority.lastName }}</td>
-				    <td>{{ member.role }}</td>
+				    <td>{{ role_mapping[member.role] }}</td>
 				    <td>
 							<md-menu>
 							<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -163,14 +183,14 @@
 								<md-menu-item>
 									<md-button ng-click="vm.updateMemberRoleDialog($event, member.authority)">
 										<md-icon md-menu-align-target>create</md-icon>
-										Change role
+										Redigér medlem
 									</md-button>
 								</md-menu-item>
 					      
 								<md-menu-item>
 									<md-button ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName);">
 										<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-										Remove member
+										Slet
 									</md-button>
 								</md-menu-item>
 							</md-menu-content>
