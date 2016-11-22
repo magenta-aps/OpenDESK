@@ -36,12 +36,17 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Sites extends AbstractWebScript {
 
+
+    public class CustomComparator implements Comparator<SiteInfo> {
+        @Override
+        public int compare(SiteInfo o1, SiteInfo o2) {
+            return o1.getTitle().compareTo(o2.getTitle());
+        }
+    }
 
     private SiteService siteService;
     private NodeService nodeService;
@@ -97,7 +102,23 @@ public class Sites extends AbstractWebScript {
 
         System.out.println("hvad er q" + q);
 
-        List<SiteInfo> sites = siteService.findSites(q, 1000);
+
+        //TODO : carefully choose the number of sites to return
+        List<SiteInfo> sites = siteService.findSites(q, 2000);
+
+        // need to reverse the order of sites as they appear in wrong sort order
+        Collections.sort(sites, new CustomComparator());
+
+
+
+
+
+
+
+
+
+
+
 
         Iterator i = sites.iterator();
 
