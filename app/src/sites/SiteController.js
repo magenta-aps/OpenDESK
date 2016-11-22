@@ -115,10 +115,10 @@
 				cmisService.getNode(currentFolderNodeRef_cmisQuery).then(function (val) {
 					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 
-
-					console.log(currentFolderNodeRef);
-
 					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
+
+
+
 						var result = [];
 						for (var x in val.data.objects) {
 
@@ -133,7 +133,9 @@
 								contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
 								nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
 								parentNodeRef: currentFolderNodeRef,
-								shortRef: shortRef
+								shortRef: shortRef,
+								lastChangedBy : val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"],
+								lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"])
 							});
 						}
 						$scope.contents = result;
