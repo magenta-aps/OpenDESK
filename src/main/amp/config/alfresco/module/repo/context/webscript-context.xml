@@ -36,4 +36,17 @@
 		<property name="nodeService" ref="NodeService"/>
 		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
+
+	<bean id="webscript.sites.get"
+		  class="dk.opendesk.webscripts.sites.Sites"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="siteService" ref="SiteService"/>
+	</bean>
+
+	<bean id="webscript.purge.get"
+		  class="dk.opendesk.webscripts.Purge" parent="webscript">
+		<property name="nodeArchiveService" ref="nodeArchiveService"/>
+	</bean>
+
 </beans>

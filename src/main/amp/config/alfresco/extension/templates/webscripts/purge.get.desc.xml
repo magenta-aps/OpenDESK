@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Purge all</shortname>
+    <description>Purge all archived nodes</description>
+    <url>/purge</url>
+    <authentication>admin</authentication>
+    <transaction>none</transaction>
+</webscript>
