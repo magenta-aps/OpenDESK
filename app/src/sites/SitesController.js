@@ -138,7 +138,7 @@
 						return [];
 					}
 				});
-			}
+			};
 
 			vm.getAutoSuggestions = function getAutoSuggestions(term) {
 				return searchService.getSearchSuggestions(term).then(function (val) {
@@ -150,7 +150,7 @@
 						return [];
 					}
 				});
-			}
+			};
 
 			vm.gotoPath = function (nodeRef) {
 

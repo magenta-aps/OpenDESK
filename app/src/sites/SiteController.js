@@ -4,7 +4,9 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, searchService) {
+        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
+								alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
+								searchService, userService) {
 
 			$scope.role_mapping = {};
 			$scope.role_mapping["SiteManager"] = "Projektejer";
@@ -76,10 +78,10 @@
 							link: '#/projekter/' + vm.project + pathLink + pathArr[a]
 						});
 						pathLink = pathLink + pathArr[a] + '/';
-					};
-				};
+					}
+				}
 				return paths;
-            };
+            }
 
 			vm.path = $stateParams.path;
 
@@ -105,7 +107,7 @@
 					vm.project_title = result;
 				});
 
-			}
+			};
 			vm.loadSiteData();
 
 			vm.loadContents = function() {
@@ -117,31 +119,33 @@
 
 					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
 
-
-
 						var result = [];
 						for (var x in val.data.objects) {
 
-							var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+							userService.getPerson(val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"])
+								.then(function(response){
+									var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
 
-							documentService.getPath(ref.split("/")[3]).then(function(val) {});
+									documentService.getPath(ref.split("/")[3]).then(function(val) {});
 
-							var shortRef = ref.split("/")[3];
+									var shortRef = ref.split("/")[3];
 
-							result.push({
-								name: val.data.objects[x].object.succinctProperties["cmis:name"],
-								contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-								nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
-								parentNodeRef: currentFolderNodeRef,
-								shortRef: shortRef,
-								lastChangedBy : val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"],
-								lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"])
-							});
+									result.push({
+										name: val.data.objects[x].object.succinctProperties["cmis:name"],
+										contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+										nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
+										parentNodeRef: currentFolderNodeRef,
+										shortRef: shortRef,
+										userName: response.userName,
+										lastChangedBy : response.firstName +" "+ response.lastName,
+										lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"])
+									});
+								});
 						}
 						$scope.contents = result;
 					});
 				});
-			}
+			};
 
 
 			vm.loadContents();
@@ -215,12 +219,11 @@
   			$mdDialog.show(confirm).then(function() {
   			  vm.deleteFile(nodeRef);
   			});
-			}
+			};
 
 			vm.reviewDocument = function (document, reviewer, comment) {
 
-
-			}
+			};
 
 			vm.deleteFile = function (nodeRef) {
 				siteService.deleteFile(nodeRef).then(function (val) {
@@ -228,7 +231,7 @@
 				});
 				
 				$mdDialog.hide();
-			}
+			};
 
 			vm.deleteFoldereDialog = function (event, nodeRef) {
 			   var confirm = $mdDialog.confirm()
