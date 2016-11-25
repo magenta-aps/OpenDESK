@@ -10,6 +10,7 @@
 			
 			siteService.getSites().then(function(val) {
 				vm.sites = val;
+				//console.log(typeof vm.sites[0].created);
 			});
 
 			vm.newSite = function(event) {
@@ -90,6 +91,18 @@
 					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
 					parent: angular.element(document.body),
 					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+			
+			vm.infoSiteDialog = function (site) {
+				vm.currentDialogSite = site;		
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
+					parent: angular.element(document.body),
+					//targetEvent: event,
 					scope: $scope,        // use parent scope in template
 					preserveScope: true,  // do not forget this if use parent scope
 					clickOutsideToClose: true

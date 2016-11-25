@@ -70,9 +70,10 @@ md-input-container {
 }
 
 md-list {
-	max-height: 400px; 
+	max-height: 350px; 
 	overflow: scroll;
 	overflow-x: hidden;
+	font-size: 0.9em;
 }
 
 md-card {
@@ -114,11 +115,11 @@ md-card {
 md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0;}
 
 .od-members {
-	width: 100%;
-	cursor: hand;
-	cursor: pointer;
+	width: 99%;
 	th {
 		text-align: left;
+		cursor: hand;
+		cursor: pointer;
 
 	}
 	th {
@@ -127,10 +128,8 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 		}
 	}
 	tr {
-
 		td:last-child {
-			text-align: right;
-						
+			text-align: right;			
 			button {
 				margin: 0;
 			}
@@ -143,9 +142,14 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	border-collapse: collapse;
 	tr {
 		td {
-			border-bottom: 1px solid #ddd;
-			padding-top: 5px;
-			padding-bottom: 5px;
+			border-bottom: 1px solid #ededed;
+			padding-top: 3px;
+			padding-bottom: 3px;
+		}
+	}
+	tbody {
+		tr:hover {
+			background-color: #efefef;
 		}
 	}
 }
@@ -155,6 +159,13 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	bottom: 0;
 }
 
+.data {
+	color: black;
+}
+
+.btnAlign {
+	margin-top: 20px;
+}
 
 
 
