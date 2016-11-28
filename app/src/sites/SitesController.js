@@ -80,7 +80,7 @@
 				return siteService.getSitesByQuery(q).then(function (val) {
 					vm.sites = val;
 				});
-			}
+			};
 
 
 			vm.currentDialogSite = '';
@@ -96,8 +96,8 @@
 				});
 			};
 
-			vm.updateSiteName = function (shortName, newName) {
-				var r = siteService.updateSiteName(shortName, newName);
+			vm.updateSiteName = function (shortName, newName, description) {
+				var r = siteService.updateSiteName(shortName, newName, description);
 
 				r.then(function(result){
 					vm.project_title = result.title;
@@ -107,7 +107,7 @@
 						vm.sites = val;
 					});
 				});
-			}
+			};
 
 			vm.getSearchresults = function getSearchReslts(term){
 				return searchService.getSearchResults(term).then(function (val) {
@@ -125,7 +125,7 @@
 						return [];
 					}
 				});
-			}
+			};
 
 			vm.getAutoSuggestions = function getAutoSuggestions(term) {
 				return searchService.getSearchSuggestions(term).then(function (val) {

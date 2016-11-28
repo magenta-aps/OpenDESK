@@ -48,12 +48,12 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
-        updateSiteName: function (shortName, newName) {
+        updateSiteName: function (shortName, newName, description) {
             return $http.put('/api/sites/' + shortName, {
                 shortName: shortName,
                 sitePreset: "default",
                 title: newName,
-                description: "cropA"
+                description: (description && description != '') ? description: ''
             }).then(function (response) {
                 return response.data;
             })
