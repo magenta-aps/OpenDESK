@@ -73,7 +73,7 @@ md-list {
 	max-height: 350px; 
 	overflow: scroll;
 	overflow-x: hidden;
-	font-size: 0.9em;
+	
 }
 
 md-card {
@@ -157,6 +157,28 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 .od-add-member {
 	position: absolute;
 	bottom: 0;
+}
+
+.od-filebrowser-breadcrumb {
+	font-size: 16px;
+	background-color: #e4e4e4;
+	a {
+		padding: 0 0 2px 0;
+	}
+}
+
+.od-filebrowser-breadcrumb a:after{
+	content:'';
+	position: relative;
+	top: 3px;
+	left: -8px;
+	width: 14px;
+	height: 17px;
+	transform: scale(0.999) rotate(45deg);
+	z-index: 1;
+	box-shadow: 2px -2px 0px #fff;
+	border-radius: 0 5px 0 50px;
+
 }
 
 .data {

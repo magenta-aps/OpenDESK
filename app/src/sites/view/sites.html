@@ -53,7 +53,7 @@
 								{{ project.title }}
 							</a></td>			
 							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>						
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator }}</a></td>						
+							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>						
 							<td>
 								<md-menu>
 									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">

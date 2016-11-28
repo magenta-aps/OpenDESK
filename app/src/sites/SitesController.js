@@ -109,11 +109,12 @@
 				});
 			};
 
-			vm.updateSiteName = function (shortName, newName) {
-				var r = siteService.updateSiteName(shortName, newName);
+			vm.updateSiteName = function (shortName, newName, newDescription) {
+				var r = siteService.updateSiteName(shortName, newName, newDescription);
 
 				r.then(function(result){
 					vm.project_title = result.title;
+					vm.project_description = result.description;
 					$mdDialog.hide();
 					
 					siteService.getSites().then(function(val) {

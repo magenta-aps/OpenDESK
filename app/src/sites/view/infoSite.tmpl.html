@@ -20,7 +20,7 @@
 				Oprettet:
 				</div>
 				<div flex class="data">
-				{{ vm.currentDialogSite.created }}				
+				{{ vm.currentDialogSite.created  | openeDate}}				
 				</div>
 			</div>		
 			<div layout="row" layout-xs="column" layout-margin>
@@ -28,9 +28,9 @@
 				Oprettet af:
 				</div>
 				<div flex class="data">
-				{{ vm.currentDialogSite.creator }}				
+				{{ vm.currentDialogSite.creator.fullName }}				
 				</div>
-			</div>		
+			</div>
 			<div layout="row" layout-xs="column" layout-margin>
 				<div flex="20">
 				Beskrivelse:
