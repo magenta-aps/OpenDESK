@@ -1,4 +1,5 @@
-<md-dialog aria-label="Rename project" flex="25">
+
+<!--md-dialog aria-label="Rename project" flex="25">
 	<form name="renameFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, vm.currentDialogSite.title, vm.currentDialogSite.description);">
 	
 		<md-toolbar>
@@ -17,9 +18,9 @@
 				</div>
 			  </md-input-container>
 			</div>
-			</md-dialog-content>
+		</md-dialog-content>
 
-			<md-dialog-content class="md-padding">
+		<md-dialog-content class="md-padding">
 			<div layout-margin>
 			  <md-input-container>
 				<label>Beskrivelse</label>
@@ -34,5 +35,42 @@
 			<md-button type="submit" class="md-primary">Opdatér</md-button>
 		</md-dialog-actions>
 		
-	</form>
+	</form-->
+<md-dialog aria-label="Rename project" ng-cloak flex="25">
+    <form name="renameFolderForm"
+          ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, newSiteName, siteDescription);">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Redigér projekt</h2>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding">
+            <div layout-margin>
+                <md-input-container>
+                    <label>Navn</label>
+                    <input type="text" name="newSiteName" required ng-model="newSiteName" md-autofocus>
+
+                    <div ng-messages="createSiteForm.newSiteName.$error">
+                        <div ng-message="required">Dette felt skal udfyldes</div>
+                    </div>
+                </md-input-container>
+            </div>
+		</md-dialog-content>
+		<md-dialog-content class="md-padding">
+            <div layout-margin>
+                <md-input-container>
+                    <label>Beskrivelse</label>
+                    <textarea name="siteDescription" rows="5" ng-model="siteDescription" rows="2" columns="3"></textarea>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button ng-click="vm.cancel()">Annullér</md-button>
+            <md-button type="submit" class="md-primary">Opdatér</md-button>
+        </md-dialog-actions>
+    </form>
+
 </md-dialog>
