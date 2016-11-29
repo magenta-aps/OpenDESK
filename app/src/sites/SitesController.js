@@ -10,7 +10,7 @@
 			
 			siteService.getSites().then(function(val) {
 				vm.sites = val;
-				//console.log(typeof vm.sites[0].created);
+				//console.log(typeof vm.sites[0].title);
 			});
 
 			vm.newSite = function(event) {
@@ -111,7 +111,6 @@
 
 			vm.updateSiteName = function (shortName, newName, newDescription) {
 				var r = siteService.updateSiteName(shortName, newName, newDescription);
-
 				r.then(function(result){
 					vm.project_title = result.title;
 					vm.project_description = result.description;
