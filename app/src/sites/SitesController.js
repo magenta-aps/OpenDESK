@@ -84,9 +84,13 @@
 			};
 
 
-			vm.currentDialogSite = '';
-			vm.renameSiteDialog = function (event, site) {
-				vm.currentDialogSite = site;		
+			vm.currentDialogTitle = '';
+			vm.currentDialogDescription = '';
+			vm.currentDialogShortName = '';
+			vm.renameSiteDialog = function (event, shortName, title, description) {
+				vm.currentDialogTitle = title;
+				vm.currentDialogDescription = description;
+				vm.currentDialogShortName = shortName;
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
 					parent: angular.element(document.body),
@@ -97,6 +101,7 @@
 				});
 			};
 			
+			vm.currentDialogSite = '';
 			vm.infoSiteDialog = function (site) {
 				vm.currentDialogSite = site;		
 				$mdDialog.show({

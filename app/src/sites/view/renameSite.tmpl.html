@@ -1,6 +1,41 @@
+<md-dialog style="width:360px">
+	<form name="renameFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogShortName, vm.currentDialogTitle, vm.currentDialogDescription);">
+		<div>
+			<md-toolbar>
+				<div class="md-toolbar-tools">
+					<h2>Redigér projekt</h2>
+				</div>
+			</md-toolbar>
+			
+			<md-content class="md-padding">
+				<div layout-margin>
+				  <md-input-container>
+					<label>Navn</label>
+					<input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle" md-autofocus>
+					<div ng-messages="renameFolderForm.newSiteName.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				  </md-input-container>
+				</div>
+			
+				<div layout-margin>
+					<md-input-container class="md-block">
+					  <label>Biography</label>
+					  <textarea ng-model="vm.currentDialogDescription" md-maxlength="250"></textarea>
+					</md-input-container>
+				</div>
+			</md-content>
 
-<!--md-dialog aria-label="Rename project" flex="25">
-	<form name="renameFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, vm.currentDialogSite.title, vm.currentDialogSite.description);">
+			<md-dialog-actions>
+				<md-button ng-click="vm.cancel()">Annullér</md-button>
+				<md-button type="submit" class="md-primary">Opdatér</md-button>
+			</md-dialog-actions>
+		</div>
+	</form>
+</md-dialog>
+
+<!--md-dialog aria-label="Rename project" flex="25" ng-cloak>
+	<form name="renameFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, vm.currentDialogSiteTitle, vm.currentDialogSiteDescription);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
@@ -8,26 +43,26 @@
 			</div>
 		</md-toolbar>
 		
-		<md-dialog-content class="md-padding">
-			<div layout-margin>
+		<md-content class="md-padding">
+			<div  layout-margin>
 			  <md-input-container>
 				<label>Navn</label>
-				<input type="text" name="newSiteName" required ng-model="vm.currentDialogSite.title" md-autofocus>
+				<input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle" md-autofocus>
 				<div ng-messages="createSiteForm.newSiteName.$error">
 					<div ng-message="required">Dette felt skal udfyldes</div>
 				</div>
 			  </md-input-container>
 			</div>
-		</md-dialog-content>
+		</md-content>
 
-		<md-dialog-content class="md-padding">
-			<div layout-margin>
-			  <md-input-container>
+		<md-content class="md-padding">
+			<div  layout-margin>
+			  <md-input-container class="md-block">
 				<label>Beskrivelse</label>
-				<textarea md-maxlength="150" rows="5" ng-model="vm.currentDialogSite.description"></textarea>
+				<textarea ng-model="vm.currentDialogDescription" md-maxlength="250"></textarea>
 			  </md-input-container>
 			</div>											
-		</md-dialog-content>
+		</md-content>
 
 				
 		<md-dialog-actions>
@@ -35,8 +70,9 @@
 			<md-button type="submit" class="md-primary">Opdatér</md-button>
 		</md-dialog-actions>
 		
-	</form-->
-<md-dialog aria-label="Rename project" ng-cloak flex="25">
+	</form>
+</md-dialog-->
+<!--md-dialog aria-label="Rename project" ng-cloak flex="25">
     <form name="renameFolderForm"
           ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, newSiteName, siteDescription);">
 
@@ -62,7 +98,7 @@
             <div layout-margin>
                 <md-input-container>
                     <label>Beskrivelse</label>
-                    <textarea name="siteDescription" rows="5" ng-model="siteDescription" rows="2" columns="3"></textarea>
+                    <textarea name="siteDescription" rows="5" ng-model="siteDescription" rows="2"></textarea>
                 </md-input-container>
             </div>
         </md-dialog-content>
@@ -73,4 +109,4 @@
         </md-dialog-actions>
     </form>
 
-</md-dialog>
+</md-dialog-->
