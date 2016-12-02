@@ -18,15 +18,11 @@ package dk.opendesk.webscripts.sites;
 
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.model.FileInfo;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -35,7 +31,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Sites extends AbstractWebScript {
@@ -50,7 +46,7 @@ public class Sites extends AbstractWebScript {
 
     private SiteService siteService;
     private NodeService nodeService;
-
+    private PersonService personService;
 
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
@@ -58,8 +54,9 @@ public class Sites extends AbstractWebScript {
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
-
+    public void setPersonService(PersonService personService) {
+        this.personService = personService;
+    }
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
@@ -81,8 +78,6 @@ public class Sites extends AbstractWebScript {
 
         if (method != null && method.equals("getAll")) {
 
-            System.out.println("hej2");
-
             JSONArray result = this.getAllSites(q);
             try {
                 result.writeJSONString(webScriptResponse.getWriter());
@@ -93,32 +88,16 @@ public class Sites extends AbstractWebScript {
         }
     }
 
-
     private JSONArray getAllSites(String q) {
-
-
         JSONArray result = new JSONArray();
 
-
         System.out.println("hvad er q" + q);
-
 
         //TODO : carefully choose the number of sites to return
         List<SiteInfo> sites = siteService.findSites(q, 2000);
 
         // need to reverse the order of sites as they appear in wrong sort order
         Collections.sort(sites, new CustomComparator());
-
-
-
-
-
-
-
-
-
-
-
 
         Iterator i = sites.iterator();
 
@@ -128,19 +107,24 @@ public class Sites extends AbstractWebScript {
             SiteInfo s = (SiteInfo)i.next();
 
             try {
-                json.put("created", s.getCreatedDate().toString());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                json.put("created", sdf.format( s.getCreatedDate() ));
                 json.put("title", s.getTitle());
                 json.put("shortName", s.getShortName());
 
-
                 NodeRef n = s.getNodeRef();
                 json.put("nodeRef", n.toString());
-                String creator = (String)nodeService.getProperty(n, ContentModel.PROP_CREATOR);
+                JSONObject creator = new JSONObject();
+
+                NodeRef cn = this.personService.getPerson((String)nodeService.getProperty(n, ContentModel.PROP_CREATOR));
+
+                creator.put("userName", (String)nodeService.getProperty(n, ContentModel.PROP_CREATOR));
+                creator.put("firstName", (String)nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
+                creator.put("lastName", (String)nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+                creator.put("fullName", (String)nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) +" "+(String)nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
                 json.put("creator", creator);
 
                 json.put("description", s.getDescription());
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -150,57 +134,7 @@ public class Sites extends AbstractWebScript {
 
             result.add(json);
         }
-//
-//        try {
-//            json.put("primaryParent_nodeRef", nodeService.getPrimaryParent(nodeRef).getParentRef());
-//            json.put("primaryParent_name", nodeService.getProperty(nodeService.getPrimaryParent(nodeRef).getParentRef(), ContentModel.PROP_NAME));
-//            json.put("currentNodeRef_nodeRef", nodeRef.toString());
-//            json.put("currentNodeRef_name", nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
-//            result.add(json);
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//
-//        for (ChildAssociationRef child : childAssociationRefs) {
-//             json = new JSONObject();
-//
-//            nodeService.getType(child.getChildRef());
-//
-//
-//            Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
-//
-//            String name = (String) props.get(ContentModel.PROP_NAME);
-//            Boolean hasChildren = false;
-//
-//            QName nodeType = nodeService.getType(child.getChildRef());
-//
-//            if (nodeType.equals(ContentModel.TYPE_FOLDER)) {
-//                List<FileInfo> folderChilds = fileFolderService.list(child.getChildRef());
-//                if (folderChilds.size() > 0) {
-//                    hasChildren = true;
-//                }
-//            }
-//
-//
-//            try {
-//                json.put("nodeRef", child.getChildRef());
-//                json.put("name", name);
-//                json.put("hasChildren", hasChildren);
-//
-//                children.add(json);
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
-//        result.add(children);
 
         return result;
         }
     }
-
-//http://localhost:8080/alfresco/s/filebrowser?&method=getAll&NODE_ID=bbf34889-6eed-4027-9e9d-aa6fb82ef922&STORE_TYPE=workspace&STORE_ID=SpacesStore
