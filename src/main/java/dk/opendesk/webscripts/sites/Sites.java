@@ -83,6 +83,8 @@ public class Sites extends AbstractWebScript {
 
             System.out.println("hej2");
 
+//            webScriptResponse.setContentEncoding("UTF-8");
+
             JSONArray result = this.getAllSites(q);
             try {
                 result.writeJSONString(webScriptResponse.getWriter());
