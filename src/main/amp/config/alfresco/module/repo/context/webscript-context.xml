@@ -42,6 +42,7 @@
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
 		<property name="siteService" ref="SiteService"/>
+		<property name="personService" ref="PersonService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"
