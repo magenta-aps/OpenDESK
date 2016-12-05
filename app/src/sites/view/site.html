@@ -30,56 +30,6 @@
 			</form>
 		</div>
 	</div>
-	
-	<!--md-list>						
-		<table class="od-members od-members-row">
-			<thead>
-			<tr>
-				<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Projektnavn</th>
-				<th sort-table="created" title="Sortér kolonne">Oprettet</th>
-				<th colspan="2" sort-table="creator" title="Sortér kolonne">Oprettet af</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr ng-repeat="project in vm.sites | orderObjectBy:orderByAttribute:reverseOrder">	
-				<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
-					<i class="material-icons">folder_open</i>
-					{{ project.title }}
-				</a></td>			
-				<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>						
-				<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator }}</a></td>						
-				<td>
-					<md-menu>
-						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-						  <md-icon md-menu-origin>arrow_drop_down</md-icon>
-						</md-button>
-				
-						<md-menu-content width="6">
-							<md-menu-item>
-								<md-button ng-click="vm.infoSiteDialog(project)">
-									<md-icon md-menu-align-target>info_outline</md-icon>
-									Information
-								</md-button>
-							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-click="vm.renameSiteDialog($event, project)">
-									<md-icon md-menu-align-target>create</md-icon>
-									Redigér
-								</md-button>
-							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-click="vm.deleteSiteDialog(project.shortName)">
-									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-									Slet
-								</md-button>
-							</md-menu-item>
-						</md-menu-content>
-					</md-menu>
-				</td>
-			</tr>
-			</tbody>
-		</table>
-	</md-list-->
 
 	<div layout-gt-sm="row">
 		<md-card flex-gt-sm="70">
@@ -88,12 +38,12 @@
 			
 				<breadcrumb paths="vm.paths"></breadcrumb>
 				
-				<md-list>
+				<md-list class="sortHead">
 					<!--md-list-item ng-repeat="content in contents">
 						<md-divider></md-divider-->
 						
 					<table class="od-members od-members-row">
-						<thead>
+						<thead fix-head>
 						<tr>
 							<th sort-table="name" sort-default="!reverse" title="Sortér kolonne">Navn</th>
 							<th sort-table="lastChanged" title="Sortér kolonne">Ændret</th>

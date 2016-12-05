@@ -105,6 +105,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         deleteFolder: function (nodeRef) {
             var url = '/slingshot/doclib/action/folder/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
             return $http.delete(url).then(function (result) {
+				console.log(result);
                 return result.data;
             })
         },

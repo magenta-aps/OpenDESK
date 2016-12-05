@@ -42,33 +42,39 @@
         <div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
             <ng-include src="viewerTemplateUrl"></ng-include>
         </div>
-        <div flex-gt-sm="33" style="padding: 1rem; background-color: #efefef;">
+        <div flex-gt-sm="33" style="padding: 0 1rem; background-color: #efefef;">
             <dl>
-                <dt>
-                    Oprettet
-                </dt>
-                <dd>
-                    {{ vm.doc.createdOn }}        
-                </dd>
-                <dt>
-                    Oprettet af
-                </dt>
-                <dd>
-                    {{ vm.doc.createdBy }}        
-                </dd>
-                <dt>
-                    Senest ændret
-                </dt>
-                <dd>
-                    {{ vm.doc.modifiedOn }}        
-                </dd>
-                <dt>
-                    Senest ændret af
-                </dt>
-                <dd>
-                    {{ vm.doc.modifiedBy }}        
-                </dd>
-
+				<div class="expandCollapse">					
+					<ul>
+						<li>
+							<input type="checkbox" checked>
+							<i class="check"></i>
+							
+							<h2><i class="material-icons header">history</i>&nbsp;Historik</h2>
+							<p class="transition">
+								<span style="float: left; width: 170px; font-weight: bold; margin-bottom: 10px">Senest ændret</span>
+								<span style="float: left; width: 280px; font-weight: bold; margin-bottom: 10px">Senest ændret af</span>
+								<span style="float: right; position:relative; right: 25px;"><i style="color: #6b6b6b;" class="material-icons">publish</i></span><br>
+								<span style="float: left; width: 170px;">{{ vm.doc.modifiedOn | openeDate }}</span>                                                 
+								<span style="float: left; width: 280px;">{{ vm.doc.modifiedBy }}</span><br>
+								<span style="float: left; width: 170px;">{{ vm.doc.createdOn | openeDate }}</span>                                                 
+								<span style="float: left; width: 280px;">{{ vm.doc.createdBy }}</span>
+							</p>
+							<!--dt>
+								Oprettet
+							</dt>
+							<dd>
+								{{ vm.doc.createdOn | openeDate }}        
+							</dd>
+							<dt>
+								Oprettet af
+							</dt>
+							<dd>
+								{{ vm.doc.createdBy }}        
+							</dd-->               
+						</li>
+					</ul>
+				</div>
 
 
 
