@@ -120,11 +120,13 @@
 					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
 
 						var result = [];
-						for (var x in val.data.objects) {
+
+
+						for (let x in val.data.objects) {
 
 							userService.getPerson(val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"])
 								.then(function(response){
-									var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+									let ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
 
 									documentService.getPath(ref.split("/")[3]).then(function(val) {});
 
@@ -163,9 +165,11 @@
 						alf_destination: currentFolderNodeRef
 					};
 
-					siteService.createFolder("cm:folder", props);
+					siteService.createFolder("cm:folder", props).then(function(response){
+						vm.loadContents();
+					});
 
-					vm.loadContents();
+
 				});
 				
 				$mdDialog.hide();
