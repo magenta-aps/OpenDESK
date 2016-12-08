@@ -1,6 +1,6 @@
 <div class="od-projects">
     
-	<h1 class="od-title">{{ vm.project_title }}</h1>
+	<h1 class="od-title">Projekt: {{ vm.project_title }}</h1>
 
 	<div layout="row" layout-align="space-between center">
 		<a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
@@ -58,7 +58,7 @@
 									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">
 										<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
 										{{content.name}}</a></td>							
-									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate }}</a></td>
+									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}</a></td>
 									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChangedBy}}</a></td>
 									<td>
 									<md-menu>
@@ -133,8 +133,8 @@
 										<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
 										{{content.name}}
 									</a></td>
-									<td></td>
-									<td></td>
+									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate }}</a></td>
+									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChangedBy}}</a></td>
 									<td>
 									<md-menu>
 										<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">

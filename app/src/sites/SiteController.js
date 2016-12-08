@@ -35,16 +35,7 @@
 			$scope.roles = [];
 			$scope.roles_translated = [];
 
-			console.log("$stateParams");
-			console.log($stateParams);
-
 			vm.project = $stateParams.projekt;
-
-			// Compile paths for breadcrumb directive
-
-			vm.paths = buildBreadCrumbPath();
-
-
 
 			function translation_to_value(translation) {
 
@@ -58,14 +49,14 @@
 			}
 
 			
-			function buildBreadCrumbPath() {
+			function buildBreadCrumbPath(project_title) {
 				var paths = [
 					{
 						title: 'Projekter',
 						link: '#/projekter'
 					},
 					{
-						title: vm.project,
+						title: project_title,
 						link: '#/projekter/' + vm.project
 					}
 				];
@@ -105,10 +96,13 @@
 
 				r.then(function(result) {
 					vm.project_title = result;
+					// Compile paths for breadcrumb directive
+					vm.paths = buildBreadCrumbPath(vm.project_title);
 				});
-
 			};
 			vm.loadSiteData();
+			
+			
 
 			vm.loadContents = function() {
 
@@ -447,7 +441,6 @@
 					$mdDialog.hide();
 					
 					if (response.data.results[0].fileExist) {
-						console.log("already exists");
 						
 						$mdDialog.show(
 						  $mdDialog.alert()
@@ -471,7 +464,6 @@
 					$mdDialog.hide();
 
 					if (response.data.results[0].fileExist) {
-						console.log("already exists");
 
 						$mdDialog.show(
 							$mdDialog.alert()
@@ -520,8 +512,6 @@
 
 			vm.getSearchresults = function getSearchReslts(term){
 				return searchService.getSearchResults(term).then(function (val) {
-
-					console.log(val);
 
 					if (val != undefined) {
 
@@ -577,7 +567,6 @@
 					var path = ref.replace("workspace://SpacesStore/", "");
 					$window.location.href = "/#/dokument/" + path;
 
-					console.log("gotoPath");
 				});
 			}
 

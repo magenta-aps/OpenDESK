@@ -30,7 +30,8 @@
     "converse.js": "https://github.com/magenta-aps/converse.js.git#master",
     "pdfjs-dist": "",
     "angular-cookies": "^1.5.7",
-    "angular-fixed-table-header": "^0.2.1"
+    "angular-fixed-table-header": "^0.2.1",
+	"angular-i18n": ""
   },
   "devDependencies": {
     "angular-mocks": "^1.4.x"
