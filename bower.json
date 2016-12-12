@@ -7,8 +7,6 @@
   "private": true,
   "dependencies": {
     "angular": "^1.4.x",
-    "angular-animate": "^1.4.x",
-    "angular-aria": "^1.4.x",
     "angular-auto-height": "https://github.com/m43nu/angular-auto-height.git",
     "angular-encode-uri": "",
     "angular-file-saver": "",
@@ -30,8 +28,10 @@
     "converse.js": "https://github.com/magenta-aps/converse.js.git#master",
     "pdfjs-dist": "",
     "angular-cookies": "^1.5.7",
-    "angular-fixed-table-header": "^0.2.1",
-	"angular-i18n": ""
+    "angular-fixed-table-header": "",
+	"angular-i18n": "",
+    "angular-animate": "1.5.9",
+    "angular-aria": "1.5.9"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.x"
