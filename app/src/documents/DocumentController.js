@@ -21,6 +21,17 @@ function DocumentController($scope, documentService, $stateParams, $location, do
             clickOutsideToClose: true
         });
     };
+	
+	vm.uploadNewVersionDialog = function (event) {
+		$mdDialog.show({
+			templateUrl: 'app/src/documents/view/uploadNewVersion.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: event,
+			scope: $scope,        // use parent scope in template
+			preserveScope: true,  // do not forget this if use parent scope
+			clickOutsideToClose: true
+		});
+	};
 
 
     // prepare to handle a preview of a document to review

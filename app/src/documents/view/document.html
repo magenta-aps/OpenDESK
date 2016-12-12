@@ -1,3 +1,7 @@
+	<div class="od-projects">
+    
+	<h1 class="od-title">Projekt: {{ vm.project_title }}</h1>
+	
 	<div layout="row" layout-align="space-between center">
 		<a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 		
@@ -53,8 +57,7 @@
 							<h2><i class="material-icons header">history</i>&nbsp;Historik</h2>
 							<p class="transition">
 								<span style="float: left; width: 170px; font-weight: bold; padding-bottom: 10px; border-bottom: 1px solid #ccc;">Senest ændret</span>
-								<span style="float: left; width: 280px; font-weight: bold; padding-bottom: 10px; border-bottom: 1px solid #ccc;">Senest ændret af</span>
-								<span style="float: right; position:relative; right: 25px;"><i style="color: #6b6b6b;" class="material-icons">publish</i></span><br>
+								<span style="float: left; width: 280px; font-weight: bold; padding-bottom: 10px; border-bottom: 1px solid #ccc;">Senest ændret af<md-button style="padding: 0; margin: 0; border: none; position: relative; left: 80px; min-height: 28px; min-width: 50px; line-height: 28px" ng-click="vm.uploadNewVersionDialog($event)"><i style="color: #6b6b6b;" class="material-icons">publish</i></md-button></span><br>
 								<span style="float: left; width: 170px; border-bottom: 1px solid #ccc;">{{ vm.doc.modifiedOn | openeDate }}</span>                                                 
 								<span style="float: left; width: 280px; border-bottom: 1px solid #ccc;">{{ vm.doc.modifiedBy }}</span><br>
 								<span style="float: left; width: 170px; border-bottom: 1px solid #ccc;">{{ vm.doc.createdOn | openeDate }}</span>                                                 
@@ -75,8 +78,6 @@
 						</li>
 					</ul>
 				</div>
-
-
 
                  <span ng-show="vm.wf" class="od-notifylist--item--nolink">
 
@@ -117,4 +118,5 @@
 		
     
 </md-content>
+</div>
 	<!-- </md-card> -->
