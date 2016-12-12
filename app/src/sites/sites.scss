@@ -164,6 +164,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 .od-filebrowser-breadcrumb {
 	font-size: 16px;
 	background-color: #d9d9d9;
+	box-shadow: 1px 2px 1px #bdbdbd;
 	a {
 		padding: 0 0 2px 0;
 		color: #333399;
@@ -192,7 +193,26 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	margin-top: 20px;
 }
 
+.uploadBtn, input {
+	color: red;
+}
 
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
 
 
 
@@ -202,11 +222,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	transition: all 0.4s ease-in-out;
 	-webkit-transition: all 0.4s ease-in-out; /* Safari */
 }
-/*
-.flipIn, h1, ul li {
-  animation: flipdown 0.3s ease both;
-}
-*/
 
 .no-select, h2 {
   -webkit-tap-highlight-color: transparent;
@@ -219,9 +234,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 }
 
 .expandCollapse {
-	/*position: relative;
-	top: -25px;
-	*/
+
 	h2 {
 	  font-size: 16px;
 	  line-height: 28px;
@@ -245,12 +258,10 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	  margin-top: 14px;
 	  padding-left: 10px;
 	  z-index: 2;
-	  /*border-bottom: 1px solid #ccc;*/
 	}
 
 	ul {
 	  list-style: none;
-/*	  perspective: 900px;*/
 	  padding: 0;
 	  margin: 0;
 	}
@@ -267,24 +278,11 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	  top: 6px;
 	}
 
-/*
-	ul li:nth-of-type(1) {
-	  animation-delay: 0.5s;
-	}
-	ul li:nth-of-type(2) {
-	  animation-delay: 0.75s;
-	}
-	ul li:nth-of-type(3) {
-	  animation-delay: 1s;
-	}
-*/
-	
 	ul li:last-of-type {
 	  padding-bottom: 0;
 	}
 	ul li i.check {
 	  position: absolute;
-	  /*transform: translate(-6px, 0);*/
 	  margin-top: 13px;
 	  right: 18px;
 	}
@@ -314,7 +312,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	  margin-top: 0;
 	  max-height: 0;
 	  opacity: 0;
-	  /*transform: translate(0, 1%);*/
 	}
 	ul li input[type=checkbox]:checked ~ i.check:before {
 	  transform: translate(2px, 0) rotate(45deg);
@@ -323,31 +320,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	  transform: translate(-2px, 0) rotate(-45deg);
 	}
 }
-/*
-@keyframes flipdown {
-  0% {
-    opacity: 0;
-    transform-origin: top center;
-    transform: rotateX(-90deg);
-  }
-  5% {
-    opacity: 1;
-  }
-  80% {
-    transform: rotateX(8deg);
-  }
-  83% {
-    transform: rotateX(6deg);
-  }
-  92% {
-    transform: rotateX(-3deg);
-  }
-  100% {
-    transform-origin: top center;
-    transform: rotateX(0deg);
-  }
-}
-*/
 
 
 
