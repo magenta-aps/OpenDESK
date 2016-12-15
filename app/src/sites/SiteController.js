@@ -275,9 +275,7 @@
 
 
 			}
-
-
-			
+	
 
 			vm.loadMembers = function () {
 				siteService.getSiteMembers(vm.project).then(function (val) {
