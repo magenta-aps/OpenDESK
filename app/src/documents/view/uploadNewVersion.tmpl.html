@@ -1,4 +1,4 @@
-<md-dialog aria-label="upload-files" ng-cloak>
+<md-dialog aria-label="upload-files" ng-cloak style="width:520px">
 
 		<md-toolbar>
 			<div class="md-toolbar-tools">
@@ -8,10 +8,22 @@
 		
 		
 		
-		
+		<md-dialog-content class="md-padding" style="padding-top: 30px;">
+			<div class="fileUpload md-button md-raised md-primary" style="padding: 0 48px">
+				<span>Hent opdateret dokument</span>
+				<!--input type="file" id="uploadBtn" class="upload" name="selectedFile" ng-model="selectedFile" ng-change="vm.selectFile(selectedFile)"/-->			
+				<input type="file" id="uploadBtn" class="upload" file-on-change="vm.selectFile" file-model="file"/>			
+			</div>		
+		</md-dialog-content>
 		<md-dialog-content class="md-padding">
-			<!--input class="uploadBtn" id="upload" file-model="files" multiple="" type="file"-->
-			<button class="md-button" ng-click="vm.upload(files)" ><i class="material-icons">file_upload</i>upload dokumenter</button>
+			<div id="uploadFile" class="chosenFile"><i class="material-icons" style="position: relative; top: 5px; color: #6b6b6b;">error_outline</i>&nbsp;Der er ikke valgt noget dokument </div> 
+		</md-dialog-content>
+		<md-dialog-content class="md-padding">
+			<!--div class="uploadBtn">
+				<input class="uploadLabel" id="upload" file-model="file" type="file">
+			</div-->
+			<md-button class="md-raised md-primary" ng-click="vm.upload(file)"><i class="material-icons">file_upload</i>&nbsp;overfør dokument&nbsp;</md-button>
+			<md-button class="md-raised" ng-click="vm.cancel()">Annullér</md-button>
 		</md-dialog-content>
 	</form>
 </md-dialog>

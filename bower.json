@@ -7,8 +7,8 @@
   "private": true,
   "dependencies": {
     "angular": "^1.4.x",
-    "angular-animate": "^1.4.x",
-    "angular-aria": "^1.4.x",
+    "angular-animate": "1.5.9",
+    "angular-aria": "1.5.9",
     "angular-auto-height": "https://github.com/m43nu/angular-auto-height.git",
     "angular-encode-uri": "",
     "angular-file-saver": "",

@@ -9,7 +9,17 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     vm.doc = [];
     vm.plugin = [];
     vm.paths = [];
-
+	
+	
+	vm.selectFile = function(event){
+        var file = event.target.value;
+		var fileName = file.replace(/^C:\\fakepath\\/, "");
+		document.getElementById("uploadFile").innerHTML = fileName;		
+    };
+	
+	vm.cancel = function() {
+		$mdDialog.cancel();
+	};
 
     vm.newFolderDialog = function (event) {
         $mdDialog.show({
@@ -61,10 +71,13 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     //
     //
     //}
-
+	
+	/*vm.selectFile = function (file) {
+		document.getElementById("uploadFile").value = file;
+	};*/
 
     documentService.getDocument($stateParams.doc).then(function(response) {
-
+		
         vm.doc = response.item;
 
         // Compile paths for breadcrumb directive

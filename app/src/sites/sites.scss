@@ -75,6 +75,10 @@ md-list {
 	overflow: auto;
 }
 
+.md-button {
+	font-size: 13px;
+}
+
 .sortHead {
 	padding-top: 0px;
 }
@@ -193,27 +197,29 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	margin-top: 20px;
 }
 
-.uploadBtn, input {
-	color: red;
-}
-
 .fileUpload {
-    position: relative;
-    overflow: hidden;
-    margin: 10px;
+	position: relative;
+	overflow: hidden;
+	margin: 10px;
 }
 .fileUpload input.upload {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0;
-    filter: alpha(opacity=0);
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
 }
 
+.chosenFile {
+	float: left; 
+	background-color: #fff; 
+	border: none; 
+	padding: 0 10px 40px 20px;
+}
 
 
 /*expand collapse*/
