@@ -23,6 +23,7 @@ angular
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
+		//'openDeskApp.templates',
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
@@ -89,6 +90,32 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             'content@': {
                 templateUrl: 'app/src/dashboard/view/dashboard.html',
                 controller: 'DashboardController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+	}).state('templateList', {
+        parent: 'site',
+        url: '/skabeloner',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/templates/view/templateList.html',
+                controller: 'TemplatesController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+	}).state('editTemplate', {
+        parent: 'site',
+        url: '/skabelon',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/templates/view/editTemplate.html',
+                controller: 'TemplatesController',
                 controllerAs: 'vm'
             }
         },

@@ -9,6 +9,7 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     vm.doc = [];
     vm.plugin = [];
     vm.paths = [];
+	vm.title = [];
 	
 	
 	vm.selectFile = function(event){
@@ -82,6 +83,8 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
+		
+		vm.title = response.item.location.siteTitle;
         
         function buildBreadCrumbPath(response) {
             var paths = [

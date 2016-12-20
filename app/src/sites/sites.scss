@@ -69,6 +69,14 @@ md-input-container {
 	padding: 0 !important;
 }
 
+md-input-container.md-input-focused label, md-input-container.md-input-has-value label {
+    font-size: 120%;
+}
+
+md-input-container:not(.md-input-focused, .md-input-has-value) label {
+    color: #797979;
+}
+
 md-list {
 	max-height: 350px; 
 	max-width: 2400px;
@@ -77,6 +85,14 @@ md-list {
 
 .md-button {
 	font-size: 13px;
+	letter-spacing: 0.04em;
+}
+
+.od-title {
+	font-size: 22px;
+	letter-spacing: 0.02em;
+	padding-top: 14px;
+	right:	145px;
 }
 
 .sortHead {
@@ -219,6 +235,12 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	background-color: #fff; 
 	border: none; 
 	padding: 0 10px 40px 20px;
+	
+	i {
+		position: relative; 
+		top: 5px; 
+		color: #6b6b6b;
+	}
 }
 
 

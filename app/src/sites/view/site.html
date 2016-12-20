@@ -3,7 +3,7 @@
 	<h1 class="od-title">Projekt: {{ vm.project_title }}</h1>
 
 	<div layout="row" layout-align="space-between center">
-		<a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
+		<a class="md-button" style="font-size: 14px" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 		
 		<div  class="od-search" layout="row">
 			<span flex></span>
@@ -175,16 +175,9 @@
 				<div layout="row" layout-align="start center" class="btnAlign">
 					<md-button class="md-raised md-primary" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter&nbsp;&nbsp;</md-button>
 					<md-button class="md-raised" ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe&nbsp;&nbsp;</md-button>
-					<!--button class="md-button" ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Ny mappe</button>
-					<button class="md-button" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter</button-->
 				</div>
-			</md-card-content>
-			
-			
-			
-			
+			</md-card-content>											
 		</md-card>
-
 
 		<md-card flex-gt-sm="30">
 			<md-card-content>
@@ -225,7 +218,6 @@
 				</md-list>
 			
 			<div layout="row" layout-align="start center" class="btnAlign">
-				<!--button class="md-button" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem</button-->
 				<md-button class="md-raised" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem&nbsp;&nbsp;</md-button>
 			</div>
 		</md-card-content>

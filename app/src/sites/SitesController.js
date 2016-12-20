@@ -75,14 +75,11 @@
 			  $mdOpenMenu(event);
 			};
 
-
-
 			vm.querySites = function(q) {
 				return siteService.getSitesByQuery(q).then(function (val) {
 					vm.sites = val;
 				});
 			};
-
 
 			vm.currentDialogTitle = '';
 			vm.currentDialogDescription = '';
