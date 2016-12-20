@@ -56,6 +56,7 @@
 							
 							<h2><i class="material-icons header">history</i>&nbsp;Historik</h2>
 							<p class="transition">
+
 								<span style="float: left; font-size: 90%; width: 150px; font-weight: bold; padding-bottom: 5px; border-bottom: 1px solid #ccc;">Senest ændret</span>
 								<span style="float: left; font-size: 90%; font-weight: bold; padding-bottom: 5px; border-bottom: 1px solid #ccc;">Senest ændret af&nbsp;</span>
 								<span style="float: right; padding-right: 10px;"><md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" style="padding: 0; margin: 0; border: none; min-height: 26px; min-width: 35px; line-height: 26px" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button></span><br>
@@ -77,6 +78,8 @@
 						</li>
 					</ul>
 				</div>
+
+
 
                  <span ng-show="vm.wf" class="od-notifylist--item--nolink">
 
@@ -114,8 +117,24 @@
             </dl>
         </div>
     </div>
-		
+
+
+
     
 </md-content>
+<table>
+		<tr ng-repeat="h in history">
+			<td>
+
+
+				{{ h.modifier }}
+				{{ h.nodeRef }}
+				{{ h.created }}
+				{{ h.version }}
+
+			</td>
+
+		</tr>
+</table>
 </div>
 	<!-- </md-card> -->
