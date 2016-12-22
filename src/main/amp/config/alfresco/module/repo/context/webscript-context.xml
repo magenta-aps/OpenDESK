@@ -37,6 +37,14 @@
 		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
+	<bean id="webscript.documents.history.get"
+		  class="dk.opendesk.webscripts.documents.History"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="versionService" ref="VersionService"/>
+		<property name="personService" ref="PersonService"/>
+	</bean>
+
 	<bean id="webscript.sites.get"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
