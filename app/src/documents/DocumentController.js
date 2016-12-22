@@ -11,7 +11,11 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     vm.paths = [];
 	vm.title = [];
 	
-	
+
+    documentService.getHistory($stateParams.doc).then (function (val){
+        $scope.history = val;
+    });
+
 	vm.selectFile = function(event){
         var file = event.target.value;
 		var fileName = file.replace(/^C:\\fakepath\\/, "");

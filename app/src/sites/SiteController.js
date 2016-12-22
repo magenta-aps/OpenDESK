@@ -31,11 +31,15 @@
 
 			var vm = this;
 			$scope.contents = [];
+			$scope.history = [];
 			$scope.members = [];
 			$scope.roles = [];
 			$scope.roles_translated = [];
 
 			vm.project = $stateParams.projekt;
+			
+			
+			
 
 			function translation_to_value(translation) {
 
@@ -102,9 +106,8 @@
 			};
 			vm.loadSiteData();
 			
-			
 
-			vm.loadContents = function() {
+			vm.loadContents = function() {								
 
 				var currentFolderNodeRef_cmisQuery = $stateParams.projekt + "/documentLibrary/" + $stateParams.path;
 
@@ -125,7 +128,16 @@
 									documentService.getPath(ref.split("/")[3]).then(function(val) {});
 
 									var shortRef = ref.split("/")[3];
-
+									
+									//documentService.getHistory(val.data.objects[x].object.succinctProperties["cmis:objectId"]).then (function (val){$scope.history = val;});
+									//documentService.getHistory(shortRef).then (function (val){$scope.history = val;});
+									/*
+									console.log("obj = " + $scope.history);
+									
+									if ($scope.history != undefined) {
+										console.log("length = " + $scope.history.length);
+									}
+									*/
 									result.push({
 										name: val.data.objects[x].object.succinctProperties["cmis:name"],
 										contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
@@ -145,6 +157,14 @@
 
 
 			vm.loadContents();
+
+			
+			vm.loadHistory  = function(doc) {
+				$scope.history = [];
+				documentService.getHistory(doc).then (function (val){
+					$scope.history = val;
+				});
+			};
 
 			vm.createFolder = function (folderName) {
 				var currentFolderNodeRef;

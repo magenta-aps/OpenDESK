@@ -51,28 +51,20 @@
 							<i class="check"></i>
 							
 							<h2><i class="material-icons header">history</i>&nbsp;Historik</h2>
-							<p class="transition">
+							<p class="transition pHeader">
+
 								<span style="float: left; font-size: 90%; width: 150px; font-weight: bold; padding-bottom: 5px; border-bottom: 1px solid #ccc;">Senest ændret</span>
-								<span style="float: left; font-size: 90%; font-weight: bold; padding-bottom: 5px; border-bottom: 1px solid #ccc;">Senest ændret af&nbsp;</span>
-								<span style="float: right; padding-right: 10px; padding-bottom: 5px;"><md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button></span><br>
-								<span style="float: left; font-size: 90%; padding-top: 5px; border-bottom: 0px solid #ccc;">{{ vm.doc.modifiedOn | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ vm.doc.modifiedBy }}&nbsp;</span><br>
-								<span style="float: left; font-size: 90%; border-bottom: 0px solid #ccc;">{{ vm.doc.createdOn | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ vm.doc.createdBy }}&nbsp;</span>
-							</p>
-							<!--dt>
-								Oprettet
-							</dt>
-							<dd>
-								{{ vm.doc.createdOn | openeDate }}        
-							</dd>
-							<dt>
-								Oprettet af
-							</dt>
-							<dd>
-								{{ vm.doc.createdBy }}        
-							</dd-->               
+								<span style="float: left; font-size: 90%; font-weight: bold; padding-bottom: 5px; border-bottom: 1px solid #ccc;">Senest ændret af&nbsp;</span>								
+								<span style="float: right; padding-right: 10px; padding-bottom: 5px; position: relative; top: -6px;"><md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button></span><br>
+							</p>							
+							<p class="transition pContent" ng-repeat="h in history">															
+								<span style="float: left; font-size: 90%; border-bottom: 0px solid #ccc;">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</span>										
+							</p>   
 						</li>
 					</ul>
 				</div>
+
+
 
                  <span ng-show="vm.wf" class="od-notifylist--item--nolink">
 
@@ -110,7 +102,9 @@
             </dl>
         </div>
     </div>
-		
+
+
+
     
 </md-content>
 </div>

@@ -6,7 +6,8 @@ angular
 function documentService($http) {
     var service = {
         getDocument: getDocument,
-        getPath: getPath
+        getPath: getPath,
+        getHistory: getHistory
     };
 
     return service;
@@ -24,4 +25,16 @@ function documentService($http) {
             return response.data.item.location;
         });
     }
+
+    function getHistory(documentNodeRef) {
+
+        var url = '/alfresco/s/history?method=getAll&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore';
+
+        return $http.get(url).then(function(response){
+            console.log(response.data);
+            return response.data;
+        });
+    }
+
+
 }

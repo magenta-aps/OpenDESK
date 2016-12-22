@@ -41,13 +41,11 @@
 				<md-list class="sortHead">
 					<!--md-list-item ng-repeat="content in contents">
 						<md-divider></md-divider-->
-						
+									
 					<table class="od-members od-members-row">
 						<thead fix-head>
 						<tr>
 							<th sort-table="name" sort-default="!reverse" title="Sortér kolonne">Navn</th>
-							<!--th sort-table="lastChanged" title="Sortér kolonne">Ændret</th>
-							<th colspan="2" sort-table="lastChangedBy" title="Sortér kolonne">Ændret af</th-->
 							<th colspan="2" sort-table="lastChanged" title="Sortér kolonne">Historik</th>
 						</tr>
 						</thead>
@@ -58,10 +56,27 @@
 									
 									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">
 										<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
-										{{content.name}}</a></td>							
-									<!--td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}</a></td>
-									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChangedBy}}</a></td-->
-									<td>{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</td>
+										{{content.name}}</a></td>																
+									<td>
+										{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}
+										<md-menu md-offset="-310 55">
+											<md-button class="md-icon-button" aria-label="Se historik" style="position: relative; left: -15px;" ng-click="$mdOpenMenu($event); vm.loadHistory(content.shortRef)">
+												<md-icon md-menu-origin">arrow_drop_down</md-icon>
+											</md-button>
+											<md-menu-content>
+												<md-menu-item class="menuListHead">
+													Ændret
+													<span style="width: 81px;"></span>
+													Ændret af														
+												</md-menu-item>
+												<md-menu-item ng-repeat="h in history" class="menuList">
+													<md-button>
+													{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}
+													</md-button>
+												</md-menu-item>
+											</md-menu-content>										
+										</md-menu>
+									</td>									
 									<td>
 									<md-menu>
 										<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -137,7 +152,7 @@
 									</a></td>
 									<!--td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate }}</a></td>
 									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChangedBy}}</a></td-->
-									<td>{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</td>
+									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a></td>
 									<td>
 									<md-menu>
 										<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">

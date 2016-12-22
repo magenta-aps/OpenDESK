@@ -243,6 +243,22 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	}
 }
 
+.menuListHead {
+    padding-left: 15px;
+	font-weight: bold;
+	color: #5e5e5e;
+	font-size: 90%;
+	letter-spacing: 0.05em;
+}
+
+.menuList {
+    position: relative;
+    top: -15px;
+    border-top: 1px solid #efefef;
+    font-size: 90%;
+    letter-spacing: 0.04em;
+}
+
 
 /*expand collapse*/
 
@@ -261,6 +277,18 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
   user-select: none;
 }
 
+.pHeader {
+	  line-height: 30px;
+	  letter-spacing: 1px;
+	  margin-top: 14px;
+}	
+.pContent {
+	  letter-spacing: 0.05em;
+	  margin-top: 0px;
+	  position: relative;
+	  top: -20px;
+}
+
 .expandCollapse {
 
 	h2 {
@@ -277,16 +305,13 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 
 	p {
 	  font-size: 15px;
-	  line-height: 30px;
-	  letter-spacing: 1px;
-	  position: relative;
 	  overflow: hidden;
 	  max-height: 800px;
+	  position: relative;
 	  opacity: 1;
-	  margin-top: 14px;
 	  padding-left: 10px;
 	  z-index: 2;
-	}
+	}	
 
 	ul {
 	  list-style: none;
