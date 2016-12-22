@@ -124,13 +124,15 @@
 </md-content>
 <table>
 		<tr ng-repeat="h in history">
-			<td>
+<td>
 
 
 				{{ h.modifier }}
 				{{ h.nodeRef }}
 				{{ h.created }}
 				{{ h.version }}
+
+				<a href="http://localhost:8000/#/dokument/{{h.nodeRef}}?archived=true" >tes</a>
 
 			</td>
 

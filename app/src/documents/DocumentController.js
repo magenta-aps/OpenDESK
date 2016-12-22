@@ -11,6 +11,19 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     vm.paths = [];
 
 
+    if($location.search().archived !=  undefined)
+    {
+        vm.showArchived = $location.search().archived;
+    }
+    else{
+        vm.showArchived = false;
+    }
+
+
+    console.log("vm.showArchived");
+    console.log(vm.showArchived );
+
+
 
     documentService.getHistory($stateParams.doc).then (function (val){
         $scope.history = val;
@@ -118,14 +131,22 @@ function DocumentController($scope, documentService, $stateParams, $location, do
         };
         
     });
-    
-    
-    documentPreviewService.previewDocumentPlugin('workspace://SpacesStore/' + $stateParams.doc).then(function(plugin){
+
+    if (vm.showArchived) {
+        console.log("true");
+        vm.store = 'versionStore://version2Store/'
+    }
+    else {
+        console.log("false");
+        vm.store = 'workspace://SpacesStore/'
+    }
+
+    documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
         
         vm.plugin = plugin;
         $scope.config = plugin;
         $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
-    
+
         $scope.download = function(){
             alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
         };
