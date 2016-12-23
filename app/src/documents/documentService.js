@@ -31,7 +31,6 @@ function documentService($http) {
         var url = '/alfresco/s/history?method=getAll&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore';
 
         return $http.get(url).then(function(response){
-            console.log(response.data);
             return response.data;
         });
     }

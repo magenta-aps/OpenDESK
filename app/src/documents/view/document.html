@@ -47,7 +47,7 @@
 				<div class="expandCollapse">					
 					<ul>
 						<li>
-							<input type="checkbox" checked>
+							<input type="checkbox" id="historyBox" checked>
 							<i class="check"></i>
 							
 							<h2><i class="material-icons header">history</i>&nbsp;Historik</h2>
@@ -58,7 +58,7 @@
 								<span style="float: right; padding-right: 10px; padding-bottom: 5px; position: relative; top: -6px;"><md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button></span><br>
 							</p>							
 							<p class="transition pContent" ng-repeat="h in history">															
-								<span style="float: left; font-size: 90%; border-bottom: 0px solid #ccc;">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</span>										
+								<span style="float: left; font-size: 90%; border-bottom: 0px solid #ccc;"><a href="/#/dokument/{{h.nodeRef}}?archived=true">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
 							</p>   
 						</li>
 					</ul>
@@ -107,5 +107,22 @@
 
     
 </md-content>
+
+<table>
+		<tr ng-repeat="h in history">
+<td>
+
+
+				{{ h.modifier }}
+				{{ h.nodeRef }}
+				{{ h.created }}
+				{{ h.version }}
+
+				<a href="/#/dokument/{{h.nodeRef}}?archived=true" >tes</a>
+
+			</td>
+
+		</tr>
+</table>
 </div>
 	<!-- </md-card> -->

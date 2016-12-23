@@ -164,7 +164,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	border-collapse: collapse;
 	tr {
 		td {
-			border-bottom: 1px solid #ededed;
+			border-top: 1px solid #ededed;
 			padding-top: 2px;
 			padding-bottom: 2px;
 		}
@@ -173,6 +173,9 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 		tr:hover {
 			background-color: #efefef;
 		}
+	}
+	a:hover {
+		text-decoration: none;
 	}
 }
 
@@ -257,6 +260,14 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
     border-top: 1px solid #efefef;
     font-size: 90%;
     letter-spacing: 0.04em;
+	line-height: 50px;
+	a {
+		color: #333399;
+	}
+	a:hover {
+		background-color: #efefef;		
+		text-decoration: none;
+	}
 }
 
 

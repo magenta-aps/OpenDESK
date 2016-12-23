@@ -46,7 +46,7 @@
 						<thead fix-head>
 						<tr>
 							<th sort-table="name" sort-default="!reverse" title="Sortér kolonne">Navn</th>
-							<th colspan="2" sort-table="lastChanged" title="Sortér kolonne">Historik</th>
+							<th colspan="3" sort-table="lastChanged" title="Sortér kolonne">Historik</th>
 						</tr>
 						</thead>
 						<tbody>							
@@ -58,24 +58,34 @@
 										<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
 										{{content.name}}</a></td>																
 									<td>
-										{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}
-										<md-menu md-offset="-310 55">
-											<md-button class="md-icon-button" aria-label="Se historik" style="position: relative; left: -15px;" ng-click="$mdOpenMenu($event); vm.loadHistory(content.shortRef)">
-												<md-icon md-menu-origin">arrow_drop_down</md-icon>
-											</md-button>
-											<md-menu-content>
-												<md-menu-item class="menuListHead">
-													Ændret
-													<span style="width: 81px;"></span>
-													Ændret af														
-												</md-menu-item>
-												<md-menu-item ng-repeat="h in history" class="menuList">
-													<md-button>
-													{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}
-													</md-button>
-												</md-menu-item>
-											</md-menu-content>										
-										</md-menu>
+										<table>
+											<tr>
+												<td style="border: none; margin: 0; padding: 0">
+													<a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
+												</td>
+												<td style="border: none; margin: 0; padding: 0">
+													<md-menu md-offset="-300 65">
+														<md-button class="md-icon-button" aria-label="Se historik" ng-click="$mdOpenMenu($event); vm.loadHistory(content.shortRef)">
+															<md-icon md-menu-origin" title="Se historik" style="font-size: 22px; position: relative; top: 5px">history</md-icon>
+														</md-button>
+														<md-menu-content>
+															<md-menu-item class="menuListHead">
+																Ændret
+																<span style="width: 81px;"></span>
+																Ændret af														
+															</md-menu-item>
+															<md-menu-item ng-repeat="h in history" class="menuList">
+																<a href="/#/dokument/{{h.nodeRef}}?archived=true">
+																<!--a href="/#/dokument/{{h.nodeRef}}"-->
+																<!--a href="/#/dokument/{{content.shortRef}}"-->
+																{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a>												
+																</md-button>
+															</md-menu-item>
+														</md-menu-content>										
+													</md-menu>
+												</td>
+											</tr>
+										</table>
 									</td>									
 									<td>
 									<md-menu>
