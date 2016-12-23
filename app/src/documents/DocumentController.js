@@ -3,13 +3,16 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService) {
+function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService) {
     
     var vm = this;
     vm.doc = [];
     vm.plugin = [];
     vm.paths = [];
 
+
+    console.log("$stateParams");
+    console.log($stateParams);
 
     if($location.search().archived !=  undefined)
     {
@@ -18,11 +21,6 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     else{
         vm.showArchived = false;
     }
-
-
-    console.log("vm.showArchived");
-    console.log(vm.showArchived );
-
 
 
     documentService.getHistory($stateParams.doc).then (function (val){
@@ -60,6 +58,29 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 			clickOutsideToClose: true
 		});
 	};
+
+    vm.uploadNewVersion = function (files) {
+
+        var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
+
+
+        cmisService.getNode(cmisQuery).then(function (val) {
+
+            var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+
+            for (var i = 0; i < files.length; i++) {
+                siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
+                    vm.loadContents();
+                } );
+            }
+            $mdDialog.cancel();
+
+        });
+    };
+
+    vm.getVersion = function (version) {
+
+    }
 
 
     // prepare to handle a preview of a document to review
@@ -102,32 +123,32 @@ function DocumentController($scope, documentService, $stateParams, $location, do
         vm.paths = buildBreadCrumbPath(response);
         
         function buildBreadCrumbPath(response) {
-            var paths = [
-                {
-                    title: 'Projekter',
-                    link: '#/projekter'
-                },
-                {
-                    title: response.item.location.siteTitle,
-                    link: '#/projekter/' + response.item.location.site
-                }
-            ];
-            var pathArr = response.item.location.path.split('/');
-            var pathLink = '/';
-            for (var a in pathArr) {
-                if (pathArr[a] !== '') {
-                    paths.push({
-                        title: pathArr[a],
-                        link: '#/projekter/' + response.item.location.site + pathLink + pathArr[a]
-                    });
-                    pathLink = pathLink + pathArr[a] + '/';
+                var paths = [
+                    {
+                        title: 'Projekter',
+                        link: '#/projekter'
+                    },
+                    {
+                        title: response.item.location.siteTitle,
+                        link: '#/projekter/' + response.item.location.site
+                    }
+                ];
+                var pathArr = response.item.location.path.split('/');
+                var pathLink = '/';
+                for (var a in pathArr) {
+                    if (pathArr[a] !== '') {
+                        paths.push({
+                            title: pathArr[a],
+                            link: '#/projekter/' + response.item.location.site + pathLink + pathArr[a]
+                        });
+                        pathLink = pathLink + pathArr[a] + '/';
+                    };
                 };
-            };
-            paths.push({
-                title: response.item.location.file,
-                link: response.item.location.path
-            });
-            return paths;
+                paths.push({
+                    title: response.item.location.file,
+                    link: response.item.location.path
+                });
+                return paths;
         };
         
     });
@@ -156,5 +177,8 @@ function DocumentController($scope, documentService, $stateParams, $location, do
         }
         
     });
+
+
+
     
 };

@@ -15,6 +15,7 @@ angular
         'openDeskApp.sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
+        'openDeskApp.header',
         'openDeskApp.dashboard',
         'openDeskApp.documents',
         'openDeskApp.administration',

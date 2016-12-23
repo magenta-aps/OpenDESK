@@ -113,6 +113,9 @@
 
 					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
 
+
+						console.log(val);
+
 						var result = [];
 
 
@@ -134,7 +137,9 @@
 										shortRef: shortRef,
 										userName: response.userName,
 										lastChangedBy : response.firstName +" "+ response.lastName,
-										lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"])
+										lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"]),
+										hasHistory : (val.data.objects[x].object.succinctProperties["cmis:versionLabel"] == "1.0" ? true : false)
+
 									});
 								});
 						}

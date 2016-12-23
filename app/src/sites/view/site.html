@@ -57,6 +57,7 @@
 								<tr ng-show="content.contentType === 'cmis:document'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">	
 									
 									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">
+									<!--<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}({nodiref:'Home&#45;&#45;f8d218ae-d998-4aa4-94ee-f27144a21238'})">-->
 										<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
 										{{content.name}}</a></td>							
 									<!--td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}</a></td>

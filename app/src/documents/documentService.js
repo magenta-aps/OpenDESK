@@ -7,7 +7,8 @@ function documentService($http) {
     var service = {
         getDocument: getDocument,
         getPath: getPath,
-        getHistory: getHistory
+        getHistory: getHistory,
+        UploadNewVersion: uploadNewVersion
     };
 
     return service;
@@ -32,6 +33,23 @@ function documentService($http) {
 
         return $http.get(url).then(function(response){
             return response.data;
+        });
+    }
+
+    function uploadNewVersion (file, destination, nodeRef, major) {
+
+        var formData = new FormData();
+        formData.append("filedata", file);
+        formData.append("filename", file.name);
+        formData.append("updatenoderef", nodeRef);
+        formData.append("majorversion", major);
+        //formData.append("destination", destination ? destination : null);
+
+        return $http.post("/api/upload", formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        }).then(function (response) {
+            return response;
         });
     }
 
