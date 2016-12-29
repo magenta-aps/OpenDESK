@@ -110,8 +110,6 @@ public class FileBrowser extends AbstractWebScript {
             e.printStackTrace();
         }
 
-
-
         for (ChildAssociationRef child : childAssociationRefs) {
              json = new JSONObject();
 

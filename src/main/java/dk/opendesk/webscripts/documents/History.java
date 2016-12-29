@@ -72,7 +72,6 @@ public class History extends AbstractWebScript {
 
         System.out.println("hej");
 
-
         NodeRef nodeRef = null;
         String storeType = params.get("STORE_TYPE");
         String storeId = params.get("STORE_ID");
@@ -116,17 +115,10 @@ public class History extends AbstractWebScript {
                 System.out.println("start:");
                 Version v = (Version)i.next();
 
-
-
-
                 try {
-                    System.out.println("v.getFrozenStateNodeRef()");
-                    System.out.println(v.getFrozenStateNodeRef());
 
+                    json.put("parent_nodeRef", nodeRef.getId());
                     json.put("nodeRef", v.getFrozenStateNodeRef().getId());
-
-                    System.out.println("v.getCreator()");
-                    System.out.println(v.getFrozenModifier());
 
                     NodeRef modifier = this.personService.getPerson(v.getFrozenModifier());
 
