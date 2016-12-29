@@ -3,7 +3,7 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService) {
+function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
     
     var vm = this;
     vm.doc = [];
@@ -11,8 +11,6 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     vm.paths = [];
 
 
-    console.log("$stateParams");
-    console.log($stateParams);
 
     if($location.search().archived !=  undefined)
     {
@@ -59,23 +57,46 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 		});
 	};
 
-    vm.uploadNewVersion = function (files) {
+    vm.uploadNewVersion = function (file) {
 
-        var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
+        console.log("hvad er files");
+        console.log(file);
+
+        // TODO du skal sende det to parametre med : prjekt og path - den kan du få fra vm.paths[1] - se console.log
+
+        console.log(vm.paths);
+        console.log("vm.paths");
+
+        documentService.getDocument($stateParams.doc).then(function(response) {
+
+            console.log("hvad er nodeRef");
+            console.log(response);
+
+            var cmisQuery = response.item.location.site + "/documentLibrary/" + response.item.location.path
 
 
-        cmisService.getNode(cmisQuery).then(function (val) {
+            cmisService.getNode(cmisQuery).then(function (val) {
 
-            var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                console.log("current");
+                console.log(currentFolderNodeRef);
 
-            for (var i = 0; i < files.length; i++) {
-                siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
-                    vm.loadContents();
-                } );
-            }
-            $mdDialog.cancel();
+
+                    siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function(response){
+                        $window.location.reload();
+
+
+                    } );
+
+                $mdDialog.cancel();
+
+            });
 
         });
+
+
+
+
     };
 
     vm.getVersion = function (version) {
@@ -116,6 +137,9 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 	};*/
 
     documentService.getDocument($stateParams.doc).then(function(response) {
+
+        console.log("hvad er response");
+        console.log(response);
 		
         vm.doc = response.item;
 
@@ -154,11 +178,9 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     });
 
     if (vm.showArchived) {
-        console.log("true");
         vm.store = 'versionStore://version2Store/'
     }
     else {
-        console.log("false");
         vm.store = 'workspace://SpacesStore/'
     }
 
