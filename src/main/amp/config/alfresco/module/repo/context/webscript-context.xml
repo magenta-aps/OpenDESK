@@ -45,6 +45,19 @@
 		<property name="personService" ref="PersonService"/>
 	</bean>
 
+	<bean id="webscript.sites.projectdepartment.post"
+		  class="dk.opendesk.webscripts.sites.ProjectDepartment"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="personService" ref="PersonService"/>
+		<property name="authorityService" ref="AuthorityService"/>
+		<property name="permissionService" ref="PermissionService"/>
+	</bean>
+
+
+
+
 	<bean id="webscript.sites.get"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">

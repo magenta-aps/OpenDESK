@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>projectdepartment_create</shortname>
+    <description>create projectdepartment site</description>
+    <url>/projectdepartment-create</url>
+    <authentication>user</authentication>
+    <format default="html"></format>
+</webscript>

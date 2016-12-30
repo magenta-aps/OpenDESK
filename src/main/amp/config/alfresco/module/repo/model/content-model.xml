@@ -76,14 +76,7 @@
 
         </type>
 
-
-
     </types>
-
-
-
-
-
 
     <aspects>
         <aspect name="od:notifications">
@@ -103,9 +96,33 @@
                     </target>
                 </child-association>
             </associations>
-
         </aspect>
+
+        <!-- projecttypes -->
+
+        <aspect name="od:projecttype_projectdepartment">
+            <title>Attributes related to the projecttype: project-department</title>
+            <properties>
+                <property name="od:name">
+                    <title>name</title>
+                    <type>d:text</type>
+                </property>
+
+                <property name="od:description">
+                    <title>description</title>
+                    <type>d:text</type>
+                </property>
+
+                <property name="od:sbsys">
+                    <title>sbsys</title>
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+
     </aspects>
+
+
 
 
 

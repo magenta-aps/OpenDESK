@@ -12,11 +12,32 @@ public interface OpenDeskModel {
     String OD_PREFIX = "od";
 
 
+
+
+    // Groupnames
+
+    String GLOBAL_PROJECTMANAGERS = "Projectmanagers";
+
+    String PD_GROUP_PROJECTOWNER = "PD_PROJECTOWNER";
+    String PD_GROUP_PROJECTMANAGER = "PD_PROJECTMANAGER";
+    String PD_GROUP_PROJECTGROUP= "PD_PROJECTGROUP";
+    String PD_GROUP_WORKGROUP = "PD_WORKGROUP";
+    String PD_GROUP_MONITORS = "PD_MONITORS";
+
+
+
     /**
      * types
      */
 
     QName PROP_NOTIFICATION = QName.createQName(OD_URI, "notification");
+
+
+    /**
+     * aspects
+     */
+
+    QName ASPECT_PD = QName.createQName(OD_URI, "projecttype_projectdepartment");
 
 
 
@@ -31,9 +52,20 @@ public interface OpenDeskModel {
     QName PROP_NOTIFICATION_TYPE = QName.createQName(OD_URI, "type");
 
 
+
+    /**
+     * projectDepartment properties
+     */
+    QName PROP_PD_NAME = QName.createQName(OD_URI, "name");
+    QName PROP_PD_DESCRIPTION = QName.createQName(OD_URI, "description");
+    QName PROP_PD_SBSYS = QName.createQName(OD_URI, "sbsys");
+
+
     /**
      * Association Names
      */
     QName PROP_NOTIFICATION_ASSOC = QName.createQName(OD_URI, "ids");
+
+
 
 }
