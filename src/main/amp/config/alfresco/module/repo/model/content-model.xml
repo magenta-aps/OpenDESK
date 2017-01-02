@@ -117,6 +117,13 @@
                     <title>sbsys</title>
                     <type>d:text</type>
                 </property>
+
+                <property name="od:state">
+                    <title>sbsys</title>
+                    <type>d:text</type>
+                </property>
+
+
             </properties>
         </aspect>
 

@@ -24,6 +24,13 @@ public interface OpenDeskModel {
     String PD_GROUP_WORKGROUP = "PD_WORKGROUP";
     String PD_GROUP_MONITORS = "PD_MONITORS";
 
+    /**
+     * project states
+     */
+
+
+    String STATE_ACTIVE = "ACTIVE";
+    String STATE_CLOSED = "CLOSED";
 
 
     /**
@@ -59,6 +66,7 @@ public interface OpenDeskModel {
     QName PROP_PD_NAME = QName.createQName(OD_URI, "name");
     QName PROP_PD_DESCRIPTION = QName.createQName(OD_URI, "description");
     QName PROP_PD_SBSYS = QName.createQName(OD_URI, "sbsys");
+    QName PROP_PD_STATE = QName.createQName(OD_URI, "state");
 
 
     /**

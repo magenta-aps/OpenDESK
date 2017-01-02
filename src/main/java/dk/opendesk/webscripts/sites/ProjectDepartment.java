@@ -16,7 +16,6 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.sites;
 
-import com.google.gdata.data.DateTime;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
@@ -37,13 +36,11 @@ import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ProjectDepartment extends AbstractWebScript {
@@ -116,6 +113,20 @@ public class ProjectDepartment extends AbstractWebScript {
             }
             String site_sbsys = json.getString("PARAM_SBSYS");
 
+            if (!json.has("PARAM_OWNER") || json.getString("PARAM_OWNER").length() == 0)
+            {
+                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
+                        "PARAM_OWNER 'OWNER' is a required POST parameter.");
+            }
+            String site_owner = json.getString("PARAM_OWNER");
+
+            if (!json.has("PARAM_MANAGER") || json.getString("PARAM_MANAGER").length() == 0)
+            {
+                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
+                        "PARAM_MANAGER 'MANAGER' is a required POST parameter.");
+            }
+            String site_manager = json.getString("PARAM_MANAGER");
+
 
 
 
@@ -123,7 +134,9 @@ public class ProjectDepartment extends AbstractWebScript {
 
             Long id = (Long)nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
 
-            this.createGroups(Long.toString(id));
+            this.createGroupAddMembers(Long.toString(id), site_owner, site_manager);
+
+
 
 
 
@@ -180,6 +193,7 @@ public class ProjectDepartment extends AbstractWebScript {
         aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
         aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
         aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
+        aspectProps.put(OpenDeskModel.PROP_PD_STATE, OpenDeskModel.STATE_ACTIVE);
 
         nodeService.addAspect(site.getNodeRef(), OpenDeskModel.ASPECT_PD, aspectProps);
 
@@ -193,7 +207,7 @@ public class ProjectDepartment extends AbstractWebScript {
     }
 
 
-    private void createGroups(String id) {
+    private void createGroupAddMembers(String id, String owner, String site_manager) {
 
 
         // create groups and add permissions
@@ -206,26 +220,34 @@ public class ProjectDepartment extends AbstractWebScript {
 
         String projectowner = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER);
         authorityService.addAuthority(parentGroup, projectowner);
+        authorityService.addAuthority(projectowner,owner);
 
         String projectgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP);
         authorityService.addAuthority(parentGroup, projectgroup);
 
-        String projectmanager = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
+
+
+        String projectmanager = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
         authorityService.addAuthority(parentGroup, projectmanager);
+        authorityService.addAuthority(projectmanager,site_manager);
+
+
+
 
         String workgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_WORKGROUP);
         authorityService.addAuthority(parentGroup, workgroup);
 
-        permissionService.setPermission(newSiteRef,monitors,PermissionService.CONTRIBUTOR,true);
-        permissionService.setPermission(newSiteRef,projectowner,PermissionService.CONTRIBUTOR,true);
-        permissionService.setPermission(newSiteRef,projectgroup,PermissionService.CONTRIBUTOR,true);
-        permissionService.setPermission(newSiteRef,projectmanager,PermissionService.CONTRIBUTOR,true);
+        permissionService.setPermission(newSiteRef, monitors, PermissionService.CONTRIBUTOR, true);
+        permissionService.setPermission(newSiteRef, projectowner, PermissionService.CONTRIBUTOR, true);
+        permissionService.setPermission(newSiteRef, projectgroup, PermissionService.CONTRIBUTOR, true);
+        permissionService.setPermission(newSiteRef, projectmanager, PermissionService.CONTRIBUTOR, true);
         permissionService.setPermission(newSiteRef,workgroup,PermissionService.CONTRIBUTOR,true);
 
         // allow all other projectmanagers to access this project
 
-        permissionService.setPermission(newSiteRef,OpenDeskModel.GLOBAL_PROJECTMANAGERS,PermissionService.CONTRIBUTOR,true);
+        permissionService.setPermission(newSiteRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, PermissionService.CONTRIBUTOR, true);
 
     }
+
 
 }
