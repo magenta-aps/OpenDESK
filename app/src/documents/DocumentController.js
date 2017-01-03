@@ -3,7 +3,7 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService) {
+function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService) {
     
     var vm = this;
     vm.doc = [];
@@ -12,21 +12,26 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 	vm.title = [];
 	
 
-    if($location.search().archived !=  undefined)
+    console.log("$stateParams");
+    console.log($stateParams);
+	
+	var parentDocumentNode = "";
+	var selectedDocumentNode = "";
+
+    if($location.search().archived !=  undefined && $location.search().parent !=  undefined)
     {
         vm.showArchived = $location.search().archived;
+		parentDocumentNode = $location.search().parent;
 		document.getElementById("historyBox").checked = false;
+		selectedDocumentNode = $stateParams.doc;
     }
     else{
         vm.showArchived = false;
+		parentDocumentNode = $stateParams.doc;
     }
 
 
-    console.log("vm.showArchived");
-    console.log(vm.showArchived );
-
-
-    documentService.getHistory($stateParams.doc).then (function (val){
+    documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
     });
 
@@ -62,6 +67,30 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 		});
 	};
 
+	
+    vm.uploadNewVersion = function (files) {
+
+        var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
+
+
+        cmisService.getNode(cmisQuery).then(function (val) {
+
+            var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+
+            for (var i = 0; i < files.length; i++) {
+                siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
+                    vm.loadContents();
+                } );
+            }
+            $mdDialog.cancel();
+
+        });
+    };
+
+    vm.getVersion = function (version) {
+
+    }
+
 
     // prepare to handle a preview of a document to review
     var paramValue = $location.search().dtype;
@@ -92,7 +121,12 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     //}
 	
 
-    documentService.getDocument($stateParams.doc).then(function(response) {
+    documentService.getDocument(parentDocumentNode).then(function(response) {
+		
+		if (document.getElementById(selectedDocumentNode) != undefined) {
+			document.getElementById(selectedDocumentNode).style.backgroundColor = "#ccc";
+			document.getElementById(selectedDocumentNode).style.lineHeight = "2";
+		}
 		
         vm.doc = response.item;
 
@@ -102,42 +136,42 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 		vm.title = response.item.location.siteTitle;
         
         function buildBreadCrumbPath(response) {
-            var paths = [
-                {
-                    title: 'Projekter',
-                    link: '#/projekter'
-                },
-                {
-                    title: response.item.location.siteTitle,
-                    link: '#/projekter/' + response.item.location.site
-                }
-            ];
-            var pathArr = response.item.location.path.split('/');
-            var pathLink = '/';
-            for (var a in pathArr) {
-                if (pathArr[a] !== '') {
-                    paths.push({
-                        title: pathArr[a],
-                        link: '#/projekter/' + response.item.location.site + pathLink + pathArr[a]
-                    });
-                    pathLink = pathLink + pathArr[a] + '/';
+                var paths = [
+                    {
+                        title: 'Projekter',
+                        link: '#/projekter'
+                    },
+                    {
+                        title: response.item.location.siteTitle,
+                        link: '#/projekter/' + response.item.location.site
+                    }
+                ];
+                var pathArr = response.item.location.path.split('/');
+                var pathLink = '/';
+                for (var a in pathArr) {
+                    if (pathArr[a] !== '') {
+                        paths.push({
+                            title: pathArr[a],
+                            link: '#/projekter/' + response.item.location.site + pathLink + pathArr[a]
+                        });
+                        pathLink = pathLink + pathArr[a] + '/';
+                    };
                 };
-            };
-            paths.push({
-                title: response.item.location.file,
-                link: response.item.location.path
-            });
-            return paths;
+                paths.push({
+                    title: response.item.location.file,
+                    link: response.item.location.path
+                });
+                return paths;
         };
         
     });
 
     if (vm.showArchived) {
-        console.log("true");
+        //console.log("true");
         vm.store = 'versionStore://version2Store/'
     }
     else {
-        console.log("false");
+        //console.log("false");
         vm.store = 'workspace://SpacesStore/'
     }
 
@@ -156,5 +190,8 @@ function DocumentController($scope, documentService, $stateParams, $location, do
         }
         
     });
+
+
+
     
 };

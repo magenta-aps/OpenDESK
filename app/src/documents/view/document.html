@@ -32,12 +32,16 @@
 <md-content layout="column" layout-padding>
 
     <breadcrumb paths="vm.paths"></breadcrumb>
-
-
-    <h1 class="md-headline">
-        {{ vm.doc.fileName }}
-    </h1>
-    
+	<div layout-sm="column" layout-gt-sm="row">
+		<div flex-gt-sm="95">
+			<h1 class="md-headline">
+				{{ vm.doc.fileName }}
+			</h1>
+		</div>
+		<div flex-gt-sm="5">
+			<md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button>
+		</div>
+	</div>
     <div layout-sm="column" layout-gt-sm="row">
         <div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
             <ng-include src="viewerTemplateUrl"></ng-include>
@@ -55,10 +59,11 @@
 
 								<span style="float: left; font-size: 90%; width: 150px; font-weight: bold; padding-bottom: 5px; border-bottom: 1px solid #ccc;">Senest ændret</span>
 								<span style="float: left; font-size: 90%; font-weight: bold; padding-bottom: 5px; border-bottom: 1px solid #ccc;">Senest ændret af&nbsp;</span>								
-								<span style="float: right; padding-right: 10px; padding-bottom: 5px; position: relative; top: -6px;"><md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button></span><br>
+								<!--span style="float: right; padding-right: 10px; padding-bottom: 5px; position: relative; top: -6px;"><md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button></span-->
+								<br>
 							</p>							
 							<p class="transition pContent" ng-repeat="h in history">															
-								<span style="float: left; font-size: 90%; border-bottom: 0px solid #ccc;"><a href="/#/dokument/{{h.nodeRef}}?archived=true">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
+								<span id="{{h.nodeRef}}" style="float: left; width: 90%; padding-left: 10px; padding-right: 10px; font-size: 90%;"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
 							</p>   
 						</li>
 					</ul>
@@ -102,27 +107,6 @@
             </dl>
         </div>
     </div>
-
-
-
-    
 </md-content>
-
-<table>
-		<tr ng-repeat="h in history">
-<td>
-
-
-				{{ h.modifier }}
-				{{ h.nodeRef }}
-				{{ h.created }}
-				{{ h.version }}
-
-				<a href="/#/dokument/{{h.nodeRef}}?archived=true" >tes</a>
-
-			</td>
-
-		</tr>
-</table>
 </div>
 	<!-- </md-card> -->

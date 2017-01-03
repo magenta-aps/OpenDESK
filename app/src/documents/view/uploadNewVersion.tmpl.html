@@ -15,8 +15,11 @@
 		<md-dialog-content class="md-padding">
 			<div id="uploadFile" class="chosenFile"><i class="material-icons">error_outline</i>&nbsp;Der er ikke valgt noget dokument </div> 
 		</md-dialog-content>
-		<md-dialog-content class="md-padding">			
-			<md-button class="md-raised md-primary" ng-click="vm.upload(file)"><i class="material-icons">file_upload</i>&nbsp;overfør dokument&nbsp;</md-button>
+		<md-dialog-content class="md-padding">
+			<!--div class="uploadBtn">
+				<input class="uploadLabel" id="upload" file-model="file" type="file">
+			</div-->
+			<md-button class="md-raised md-primary" ng-click="vm.uploadNewVersion(file)"><i class="material-icons">file_upload</i>&nbsp;overfør dokument&nbsp;</md-button>
 			<md-button class="md-raised" ng-click="vm.cancel()">Annullér</md-button>
 		</md-dialog-content>
 	</form>

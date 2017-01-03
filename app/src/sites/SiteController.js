@@ -116,6 +116,9 @@
 
 					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
 
+
+						console.log(val);
+
 						var result = [];
 
 
@@ -131,9 +134,9 @@
 									
 									//documentService.getHistory(val.data.objects[x].object.succinctProperties["cmis:objectId"]).then (function (val){$scope.history = val;});
 									//documentService.getHistory(shortRef).then (function (val){$scope.history = val;});
-									/*
-									console.log("obj = " + $scope.history);
 									
+									console.log(val.data.objects[x].object.succinctProperties["cmis:versionLabel"].value);
+									/*
 									if ($scope.history != undefined) {
 										console.log("length = " + $scope.history.length);
 									}
@@ -146,7 +149,9 @@
 										shortRef: shortRef,
 										userName: response.userName,
 										lastChangedBy : response.firstName +" "+ response.lastName,
-										lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"])
+										lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"]),
+										hasHistory : (val.data.objects[x].object.succinctProperties["cmis:versionLabel"] == "1.0" ? false : true)
+
 									});
 								});
 						}
