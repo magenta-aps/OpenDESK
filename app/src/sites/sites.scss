@@ -291,11 +291,13 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 .pHeader {
 	  line-height: 30px;
 	  letter-spacing: 1px;
-	  margin-top: 14px;
+	  margin-top: 12px;
+	  margin-bottom: 12px;
 }	
 .pContent {
 	  letter-spacing: 0.05em;
-	  margin-top: 0px;
+	  margin-top: 0;
+	  line-height: 14px;
 }
 
 .expandCollapse {
@@ -341,7 +343,10 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 	}
 
 	ul li:last-of-type {
-	  padding-bottom: 0;
+		padding-bottom: 0;
+		max-height: 350px;
+		overflow: auto;
+		overflow-x: hidden;
 	}
 	ul li i.check {
 	  position: absolute;

@@ -3,7 +3,7 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService) {
+function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
     
     var vm = this;
     vm.doc = [];
@@ -11,19 +11,15 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     vm.paths = [];
 	vm.title = [];
 	
-
-    console.log("$stateParams");
-    console.log($stateParams);
 	
 	var parentDocumentNode = "";
-	var selectedDocumentNode = "";
+	var selectedDocumentNode = $stateParams.doc;;
 
     if($location.search().archived !=  undefined && $location.search().parent !=  undefined)
     {
         vm.showArchived = $location.search().archived;
 		parentDocumentNode = $location.search().parent;
 		document.getElementById("historyBox").checked = false;
-		selectedDocumentNode = $stateParams.doc;
     }
     else{
         vm.showArchived = false;
@@ -32,7 +28,7 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 
 
     documentService.getHistory(parentDocumentNode).then (function (val){
-        $scope.history = val;
+        $scope.history = val;		
     });
 
 	vm.selectFile = function(event){
@@ -67,24 +63,35 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 		});
 	};
 
-	
-    vm.uploadNewVersion = function (files) {
 
-        var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
+    vm.uploadNewVersion = function (file) {
+
+		if(vm.paths[vm.paths.length -1].title != file.name){
+			document.getElementById("uploadFile").innerHTML = "<i class='material-icons'>warning</i>&nbsp;Du skal vælge et dokument, der hedder<br>det samme som det eksisterende dokument. ";				
+		} else {
+			documentService.getDocument(vm.showArchived ? parentDocumentNode : selectedDocumentNode).then(function(response) {
+
+				var cmisQuery = response.item.location.site + "/documentLibrary/" + response.item.location.path
 
 
-        cmisService.getNode(cmisQuery).then(function (val) {
+				cmisService.getNode(cmisQuery).then(function (val) {
 
-            var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+				   
+					siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function(response){
+						var param = vm.showArchived ? parentDocumentNode : selectedDocumentNode;
+						if (window.location.hash == "#/dokument/"+ param) {
+							window.location.reload();
+						} else {
+							window.location.replace("/#/dokument/"+ param);
+						}
+					} );
 
-            for (var i = 0; i < files.length; i++) {
-                siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
-                    vm.loadContents();
-                } );
-            }
-            $mdDialog.cancel();
+					$mdDialog.cancel();
 
-        });
+				});
+			});
+		}
     };
 
     vm.getVersion = function (version) {
@@ -108,25 +115,18 @@ function DocumentController($scope, documentService, $stateParams, $location, do
         });
     }
 
-    //vm.createReviewNotification = function (documentNodeRef, receiver, subject, comment) {
-    //
-    //    var s = documentNodeRef.split("/");
-    //    var ref = (s[3])
-    //
-    //    notificationsService.addWFNotice(authService.getUserInfo().user.userName, receiver, subject, comment, ref, "wf-response").then (function (val) {
-    //        $mdDialog.hide();
-    //    });
-    //
-    //
-    //}
 	
+	vm.highlightVersion = function () {
+		
+		var elm = document.getElementById(selectedDocumentNode) != undefined ? selectedDocumentNode : $scope.history[0].nodeRef;
+		
+		if (document.getElementById(elm) != undefined) {
+			document.getElementById(elm).style.backgroundColor = "#ccc";
+			document.getElementById(elm).style.lineHeight = "2";
+		}
+	}
 
     documentService.getDocument(parentDocumentNode).then(function(response) {
-		
-		if (document.getElementById(selectedDocumentNode) != undefined) {
-			document.getElementById(selectedDocumentNode).style.backgroundColor = "#ccc";
-			document.getElementById(selectedDocumentNode).style.lineHeight = "2";
-		}
 		
         vm.doc = response.item;
 
@@ -163,15 +163,13 @@ function DocumentController($scope, documentService, $stateParams, $location, do
                 });
                 return paths;
         };
-        
+        vm.highlightVersion();
     });
 
     if (vm.showArchived) {
-        //console.log("true");
         vm.store = 'versionStore://version2Store/'
     }
     else {
-        //console.log("false");
         vm.store = 'workspace://SpacesStore/'
     }
 

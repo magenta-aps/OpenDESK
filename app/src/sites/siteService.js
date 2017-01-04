@@ -135,6 +135,21 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             }).then(function (response) {
                 return response;
             });
+        },uploadNewVersion: function (file, destination, existingNodeRef, extras) {
+
+            var formData = new FormData();
+            formData.append("filedata", file);
+            formData.append("updatenoderef", existingNodeRef);
+            formData.append("majorversion", false);
+            formData.append("filename", file.name);
+            formData.append("destination", destination ? destination : null);
+
+            return $http.post("/api/upload", formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function (response) {
+                return response;
+            });
         },
         moveNodeRefs: function (sourceNodeRefs, destNodeRef, parentNodeRef) {
             console.log('move noderefs:');
