@@ -131,16 +131,7 @@
 									documentService.getPath(ref.split("/")[3]).then(function(val) {});
 
 									var shortRef = ref.split("/")[3];
-									
-									//documentService.getHistory(val.data.objects[x].object.succinctProperties["cmis:objectId"]).then (function (val){$scope.history = val;});
-									//documentService.getHistory(shortRef).then (function (val){$scope.history = val;});
-									
-									console.log(val.data.objects[x].object.succinctProperties["cmis:versionLabel"].value);
-									/*
-									if ($scope.history != undefined) {
-										console.log("length = " + $scope.history.length);
-									}
-									*/
+															
 									result.push({
 										name: val.data.objects[x].object.succinctProperties["cmis:name"],
 										contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],

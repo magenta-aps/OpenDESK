@@ -64,14 +64,14 @@
 													<a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
 												</td>
 												<td ng-show="content.hasHistory" style="border: none; margin: 0; padding: 0">
-													<md-menu md-offset="-300 65">
+													<md-menu md-position-mode="left bottom">
 														<md-button class="md-icon-button" aria-label="Se historik" ng-click="$mdOpenMenu($event); vm.loadHistory(content.shortRef)">
 															<md-icon md-menu-origin" title="Se historik" style="font-size: 22px; position: relative; top: 5px">history</md-icon>
 														</md-button>
 														<md-menu-content>
 															<md-menu-item class="menuListHead">
 																Ændret
-																<span style="width: 81px;"></span>
+																<span style="width: 70px;"></span>
 																Ændret af														
 															</md-menu-item>
 															<md-menu-item ng-repeat="h in history" class="menuList">
