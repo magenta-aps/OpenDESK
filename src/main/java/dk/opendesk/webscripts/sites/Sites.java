@@ -16,17 +16,23 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.sites;
 
+import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -37,6 +43,8 @@ import java.util.*;
 public class Sites extends AbstractWebScript {
 
 
+    final Logger logger = LoggerFactory.getLogger(Sites.class);
+
     public class CustomComparator implements Comparator<SiteInfo> {
         @Override
         public int compare(SiteInfo o1, SiteInfo o2) {
@@ -44,6 +52,12 @@ public class Sites extends AbstractWebScript {
         }
     }
 
+
+
+
+
+
+    private NodeArchiveService nodeArchiveService;
     private SiteService siteService;
     private NodeService nodeService;
     private PersonService personService;
@@ -56,6 +70,10 @@ public class Sites extends AbstractWebScript {
     }
     public void setPersonService(PersonService personService) {
         this.personService = personService;
+    }
+
+    public void setNodeArchiveService(NodeArchiveService nodeArchiveService) {
+        this.nodeArchiveService = nodeArchiveService;
     }
 
     @Override
@@ -85,6 +103,25 @@ public class Sites extends AbstractWebScript {
             try {
                 result.writeJSONString(webScriptResponse.getWriter());
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else if (method != null && method.equals("deleteTestSites")) {
+
+            webScriptResponse.setContentEncoding("UTF-8");
+
+            this.removeTestSites();
+
+            JSONObject return_json = new JSONObject();
+            JSONArray result = new JSONArray();
+
+            try {
+
+                return_json.put("status", "success");
+                result.add(return_json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -140,4 +177,54 @@ public class Sites extends AbstractWebScript {
 
         return result;
         }
+
+
+    public void removeTestSites() {
+
+        ArrayList l = new ArrayList();
+        l.add(OpenDeskModel.testsite_1);
+        l.add(OpenDeskModel.testsite_2);
+
+        Iterator i = l.iterator();
+
+
+        while (i.hasNext()) {
+
+
+
+
+
+            String siteName = (String)i.next();
+            System.out.println(siteName);
+
+
+//
+            SiteInfo site = siteService.getSite(siteName);
+
+              if (site != null) {
+                  System.out.println(site.getNodeRef());
+                  siteService.deleteSite(siteName);
+              }
+        }
+
+
+
+
+
+
+
+//
+//            try {
+//                this.nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+//            } catch (Throwable t) {
+//                logger.error("@@@ Error executing purge ", t);
+//
+//             }
+
+
+
+
+    }
+
+
     }

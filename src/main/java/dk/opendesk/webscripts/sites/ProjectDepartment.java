@@ -20,6 +20,8 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.domain.permissions.Authority;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -32,6 +34,7 @@ import org.alfresco.service.cmr.site.SiteService;
 
 import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.QNamePattern;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
@@ -46,36 +49,37 @@ import java.util.*;
 public class ProjectDepartment extends AbstractWebScript {
 
     private NodeRef newSiteRef = null;
-    private PermissionService permissionService;
+    private NodeRef documentLibrary = null;
 
-
-    public class CustomComparator implements Comparator<SiteInfo> {
-        @Override
-        public int compare(SiteInfo o1, SiteInfo o2) {
-            return o1.getTitle().compareTo(o2.getTitle());
-        }
-    }
 
     private SiteService siteService;
     private NodeService nodeService;
-    private PersonService personService;
+    private PermissionService permissionService;
     private AuthorityService authorityService;
+    private FileFolderService fileFolderService;
 
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
+
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
 
-    } public void setPermissionService(PermissionService permissionService) {
+    public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
+
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
+
+
+
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
@@ -127,17 +131,35 @@ public class ProjectDepartment extends AbstractWebScript {
             }
             String site_manager = json.getString("PARAM_MANAGER");
 
+            if (!json.has("PARAM_TEMPLATE_NODEREF") || json.getString("PARAM_TEMPLATE_NODEREF").length() == 0)
+            {
+                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
+                        "PARAM_TEMPLATE_NODEREF 'TEMPLATE_NODEREF' is a required POST parameter.");
+            }
+            String site_template_noderef = json.getString("PARAM_TEMPLATE_NODEREF");
+            NodeRef templateNodeRef = new NodeRef("workspace://SpacesStore/" + site_template_noderef);
+
+
+            if (!json.has("PARAM_CENTERID") || json.getString("PARAM_CENTERID").length() == 0)
+            {
+                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
+                        "PARAM_CENTERID 'CENTERID' is a required POST parameter.");
+            }
+            String site_center_id = json.getString("PARAM_CENTERID");
+
+
+            // todo talk with Heine if members of PD_PROJECTGROUP", "PD_WORKGROUP" and "PD_MONITORS"; are adding during create or afterwards
 
 
 
-            this.createSite(site_name, site_description, site_sbsys, SiteVisibility.PUBLIC);
+
+            this.createSite(site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
 
             Long id = (Long)nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
 
             this.createGroupAddMembers(Long.toString(id), site_owner, site_manager);
 
-
-
+            this.addTemplate(templateNodeRef);
 
 
             JSONObject return_json = new JSONObject();
@@ -175,7 +197,7 @@ public class ProjectDepartment extends AbstractWebScript {
         }
     }
 
-    private void createSite(String name, String description, String sbsys, SiteVisibility siteVisibility) {
+    private void createSite(String name, String description, String sbsys, String center_id, SiteVisibility siteVisibility) {
 
 
         System.out.println(name);
@@ -194,6 +216,7 @@ public class ProjectDepartment extends AbstractWebScript {
         aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
         aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
         aspectProps.put(OpenDeskModel.PROP_PD_STATE, OpenDeskModel.STATE_ACTIVE);
+        aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
 
         nodeService.addAspect(site.getNodeRef(), OpenDeskModel.ASPECT_PD, aspectProps);
 
@@ -204,6 +227,10 @@ public class ProjectDepartment extends AbstractWebScript {
 
 
         ChildAssociationRef child = nodeService.createNode(site.getNodeRef(), ContentModel.ASSOC_CONTAINS, QName.createQName(OpenDeskModel.OD_PREFIX, "documentLibrary"), ContentModel.TYPE_FOLDER, documentLibaryProps);
+
+        this.documentLibrary = child.getChildRef();
+
+
     }
 
 
@@ -220,7 +247,7 @@ public class ProjectDepartment extends AbstractWebScript {
 
         String projectowner = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER);
         authorityService.addAuthority(parentGroup, projectowner);
-        authorityService.addAuthority(projectowner,owner);
+        authorityService.addAuthority(projectowner, owner);
 
         String projectgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP);
         authorityService.addAuthority(parentGroup, projectgroup);
@@ -249,5 +276,11 @@ public class ProjectDepartment extends AbstractWebScript {
 
     }
 
+    private void addTemplate(NodeRef template) throws FileNotFoundException {
+
+        String name = (String)nodeService.getProperty(template, ContentModel.PROP_NAME);
+
+        fileFolderService.copy(template, documentLibrary, name);
+    }
 
 }

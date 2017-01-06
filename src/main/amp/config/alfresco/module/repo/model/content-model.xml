@@ -123,6 +123,11 @@
                     <type>d:text</type>
                 </property>
 
+                <property name="od:center_id">
+                    <title>sbsys</title>
+                    <type>d:text</type>
+                </property>
+
 
             </properties>
         </aspect>
