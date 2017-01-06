@@ -3,7 +3,7 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
+function DocumentController($scope, $timeout, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
     
     var vm = this;
     vm.doc = [];
@@ -13,7 +13,8 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 	
 	
 	var parentDocumentNode = "";
-	var selectedDocumentNode = $stateParams.doc;;
+	var firstDocumentNode = "";
+	var selectedDocumentNode = $stateParams.doc;
 
     if($location.search().archived !=  undefined && $location.search().parent !=  undefined)
     {
@@ -28,7 +29,8 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 
 
     documentService.getHistory(parentDocumentNode).then (function (val){
-        $scope.history = val;		
+        $scope.history = val;
+		firstDocumentNode = $scope.history[0].nodeRef;
     });
 
 	vm.selectFile = function(event){
@@ -118,9 +120,11 @@ function DocumentController($scope, documentService, $stateParams, $location, do
 	
 	vm.highlightVersion = function () {
 		
-		var elm = document.getElementById(selectedDocumentNode) != undefined ? selectedDocumentNode : $scope.history[0].nodeRef;
+		var elm = document.getElementById(selectedDocumentNode) != undefined ? selectedDocumentNode : firstDocumentNode;
 		
-		if (document.getElementById(elm) != undefined) {
+		if (elm == "") {
+			 $timeout(vm.highlightVersion, 100);
+		} else {
 			document.getElementById(elm).style.backgroundColor = "#ccc";
 			document.getElementById(elm).style.lineHeight = "2";
 		}
@@ -163,7 +167,7 @@ function DocumentController($scope, documentService, $stateParams, $location, do
                 });
                 return paths;
         };
-        vm.highlightVersion();
+        
     });
 
     if (vm.showArchived) {
@@ -172,8 +176,8 @@ function DocumentController($scope, documentService, $stateParams, $location, do
     else {
         vm.store = 'workspace://SpacesStore/'
     }
-
-    documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
+	
+	documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
         
         vm.plugin = plugin;
         $scope.config = plugin;
@@ -189,7 +193,9 @@ function DocumentController($scope, documentService, $stateParams, $location, do
         
     });
 
-
-
+	angular.element(document).ready(function () {
+		vm.highlightVersion();
+	});
     
 };
+	

@@ -291,13 +291,26 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 .pHeader {
 	  line-height: 30px;
 	  letter-spacing: 1px;
-	  margin-top: 12px;
-	  margin-bottom: 12px;
+	  margin: 12px 0 12px 0;
+	  span {
+		float: left; 
+		font-size: 90%; 
+		font-weight: bold; 
+		border-bottom: 1px solid #ccc;
+	  }
 }	
 .pContent {
 	  letter-spacing: 0.05em;
 	  margin-top: 0;
-	  line-height: 14px;
+	  max-height: 250px; 
+	  overflow: auto; 
+	  width: 98%;
+	  span {
+		float: left; 
+		width: 92%; 
+		padding: 0 10px 0 10px; 
+		font-size: 90%;
+	  }
 }
 
 .expandCollapse {
@@ -316,12 +329,8 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 
 	p {
 	  font-size: 15px;
-	  overflow: hidden;
-	  max-height: 800px;
-	  position: relative;
-	  opacity: 1;
+	  line-height: 28px;
 	  padding-left: 10px;
-	  /*z-index: 2;*/
 	}	
 
 	ul {
@@ -344,8 +353,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 
 	ul li:last-of-type {
 		padding-bottom: 0;
-		max-height: 350px;
-		overflow: auto;
 		overflow-x: hidden;
 	}
 	ul li i.check {
