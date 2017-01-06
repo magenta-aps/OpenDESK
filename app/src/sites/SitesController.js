@@ -35,7 +35,7 @@
 					
 					$mdDialog.hide();
 				});
-			}
+			};
 
 			vm.deleteSiteDialog = function(siteName) {
 				var confirm = $mdDialog.confirm()
@@ -58,7 +58,7 @@
 						vm.sites = val;
 					});
 				});
-			}
+			};
 
 
 			vm.cancel = function() {
@@ -171,9 +171,9 @@
 
 					console.log("gotoPath");
 				});
-			}
+			};
 
-        }; // SiteCtrl close
+        } // SiteCtrl close
 
 
 
