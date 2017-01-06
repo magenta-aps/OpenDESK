@@ -1,0 +1,49 @@
+<md-dialog aria-label="Info on project" flex="35">
+
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Information om projekt</h2>
+			</div>
+		</md-toolbar>
+		
+		<md-dialog-content class="md-padding">
+			<div layout="row" layout-xs="column" layout-margin>
+				<div flex="25">
+				Navn:
+				</div>
+				<div flex class="data">
+				{{ vm.currentDialogSite.title }}				
+				</div>
+			</div>
+			<div layout="row" layout-xs="column" layout-margin>
+				<div flex="25">
+				Oprettet:
+				</div>
+				<div flex class="data">
+				{{ vm.currentDialogSite.created  | openeDate}}				
+				</div>
+			</div>		
+			<div layout="row" layout-xs="column" layout-margin>
+				<div flex="25">
+				Oprettet af:
+				</div>
+				<div flex class="data">
+				{{ vm.currentDialogSite.creator.fullName }}				
+				</div>
+			</div>
+			<div layout="row" layout-xs="column" layout-margin>
+				<div flex="25">
+				Beskrivelse:
+				</div>
+				<div flex class="data">
+				{{ vm.currentDialogSite.description }}				
+				</div>
+			</div>		
+		</md-dialog-content>
+
+				
+		<md-dialog-actions>
+			<md-button ng-click="vm.cancel()">Luk</md-button>
+		</md-dialog-actions>
+		
+</md-dialog>

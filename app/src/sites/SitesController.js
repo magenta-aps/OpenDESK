@@ -10,6 +10,7 @@
 			
 			siteService.getSites().then(function(val) {
 				vm.sites = val;
+				//console.log(typeof vm.sites[0].title);
 			});
 
 			vm.newSite = function(event) {
@@ -74,18 +75,19 @@
 			  $mdOpenMenu(event);
 			};
 
-
-
 			vm.querySites = function(q) {
 				return siteService.getSitesByQuery(q).then(function (val) {
 					vm.sites = val;
 				});
-			}
+			};
 
-
-			vm.currentDialogSite = '';
-			vm.renameSiteDialog = function (event, site) {
-				vm.currentDialogSite = site;		
+			vm.currentDialogTitle = '';
+			vm.currentDialogDescription = '';
+			vm.currentDialogShortName = '';
+			vm.renameSiteDialog = function (event, shortName, title, description) {
+				vm.currentDialogTitle = title;
+				vm.currentDialogDescription = description;
+				vm.currentDialogShortName = shortName;
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
 					parent: angular.element(document.body),
@@ -95,19 +97,33 @@
 					clickOutsideToClose: true
 				});
 			};
+			
+			vm.currentDialogSite = '';
+			vm.infoSiteDialog = function (site) {
+				vm.currentDialogSite = site;		
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
+					parent: angular.element(document.body),
+					//targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
 
-			vm.updateSiteName = function (shortName, newName) {
-				var r = siteService.updateSiteName(shortName, newName);
+			vm.updateSiteName = function (shortName, newName, description) {
+				var r = siteService.updateSiteName(shortName, newName, description);
 
 				r.then(function(result){
 					vm.project_title = result.title;
+					vm.project_description = result.description;
 					$mdDialog.hide();
 					
 					siteService.getSites().then(function(val) {
 						vm.sites = val;
 					});
 				});
-			}
+			};
 
 			vm.getSearchresults = function getSearchReslts(term){
 				return searchService.getSearchResults(term).then(function (val) {
@@ -125,7 +141,7 @@
 						return [];
 					}
 				});
-			}
+			};
 
 			vm.getAutoSuggestions = function getAutoSuggestions(term) {
 				return searchService.getSearchSuggestions(term).then(function (val) {
@@ -137,7 +153,7 @@
 						return [];
 					}
 				});
-			}
+			};
 
 			vm.gotoPath = function (nodeRef) {
 

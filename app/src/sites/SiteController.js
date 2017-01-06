@@ -4,7 +4,9 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, searchService) {
+        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
+								alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
+								searchService, userService) {
 
 			$scope.role_mapping = {};
 			$scope.role_mapping["SiteManager"] = "Projektejer";
@@ -29,20 +31,15 @@
 
 			var vm = this;
 			$scope.contents = [];
+			$scope.history = [];
 			$scope.members = [];
 			$scope.roles = [];
 			$scope.roles_translated = [];
 
-			console.log("$stateParams");
-			console.log($stateParams);
-
 			vm.project = $stateParams.projekt;
-
-			// Compile paths for breadcrumb directive
-
-			vm.paths = buildBreadCrumbPath();
-
-
+			
+			
+			
 
 			function translation_to_value(translation) {
 
@@ -56,14 +53,14 @@
 			}
 
 			
-			function buildBreadCrumbPath() {
+			function buildBreadCrumbPath(project_title) {
 				var paths = [
 					{
 						title: 'Projekter',
 						link: '#/projekter'
 					},
 					{
-						title: vm.project,
+						title: project_title,
 						link: '#/projekter/' + vm.project
 					}
 				];
@@ -76,10 +73,10 @@
 							link: '#/projekter/' + vm.project + pathLink + pathArr[a]
 						});
 						pathLink = pathLink + pathArr[a] + '/';
-					};
-				};
+					}
+				}
 				return paths;
-            };
+            }
 
 			vm.path = $stateParams.path;
 
@@ -103,46 +100,67 @@
 
 				r.then(function(result) {
 					vm.project_title = result;
+					// Compile paths for breadcrumb directive
+					vm.paths = buildBreadCrumbPath(vm.project_title);
 				});
-
-			}
+			};
 			vm.loadSiteData();
+			
 
-			vm.loadContents = function() {
+			vm.loadContents = function() {								
 
 				var currentFolderNodeRef_cmisQuery = $stateParams.projekt + "/documentLibrary/" + $stateParams.path;
 
 				cmisService.getNode(currentFolderNodeRef_cmisQuery).then(function (val) {
 					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 
-
-					console.log(currentFolderNodeRef);
-
 					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
+
+
+						console.log(val);
+
 						var result = [];
-						for (var x in val.data.objects) {
 
-							var ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
 
-							documentService.getPath(ref.split("/")[3]).then(function(val) {});
+						for (let x in val.data.objects) {
 
-							var shortRef = ref.split("/")[3];
+							userService.getPerson(val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"])
+								.then(function(response){
+									let ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
 
-							result.push({
-								name: val.data.objects[x].object.succinctProperties["cmis:name"],
-								contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-								nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
-								parentNodeRef: currentFolderNodeRef,
-								shortRef: shortRef
-							});
+									documentService.getPath(ref.split("/")[3]).then(function(val) {});
+
+									var shortRef = ref.split("/")[3];
+															
+									result.push({
+										name: val.data.objects[x].object.succinctProperties["cmis:name"],
+										contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+										nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
+										parentNodeRef: currentFolderNodeRef,
+										shortRef: shortRef,
+										userName: response.userName,
+										lastChangedBy : response.firstName +" "+ response.lastName,
+										lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"]),
+										hasHistory : (val.data.objects[x].object.succinctProperties["cmis:versionLabel"] == "1.0" ? false : true)
+
+									});
+								});
 						}
 						$scope.contents = result;
 					});
 				});
-			}
+			};
 
 
 			vm.loadContents();
+
+			
+			vm.loadHistory  = function(doc) {
+				$scope.history = [];
+				documentService.getHistory(doc).then (function (val){
+					$scope.history = val;
+				});
+			};
 
 			vm.createFolder = function (folderName) {
 				var currentFolderNodeRef;
@@ -157,9 +175,11 @@
 						alf_destination: currentFolderNodeRef
 					};
 
-					siteService.createFolder("cm:folder", props);
+					siteService.createFolder("cm:folder", props).then(function(response){
+						vm.loadContents();
+					});
 
-					vm.loadContents();
+
 				});
 				
 				$mdDialog.hide();
@@ -179,6 +199,17 @@
 			vm.uploadDocumentsDialog = function (event) {
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/uploadDocuments.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
+			
+			vm.uploadNewVersionDialog = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/uploadNewVersion.tmpl.html',
 					parent: angular.element(document.body),
 					targetEvent: event,
 					scope: $scope,        // use parent scope in template
@@ -213,12 +244,11 @@
   			$mdDialog.show(confirm).then(function() {
   			  vm.deleteFile(nodeRef);
   			});
-			}
+			};
 
 			vm.reviewDocument = function (document, reviewer, comment) {
 
-
-			}
+			};
 
 			vm.deleteFile = function (nodeRef) {
 				siteService.deleteFile(nodeRef).then(function (val) {
@@ -226,7 +256,7 @@
 				});
 				
 				$mdDialog.hide();
-			}
+			};
 
 			vm.deleteFoldereDialog = function (event, nodeRef) {
 			   var confirm = $mdDialog.confirm()
@@ -261,9 +291,7 @@
 
 
 			}
-
-
-			
+	
 
 			vm.loadMembers = function () {
 				siteService.getSiteMembers(vm.project).then(function (val) {
@@ -438,7 +466,6 @@
 					$mdDialog.hide();
 					
 					if (response.data.results[0].fileExist) {
-						console.log("already exists");
 						
 						$mdDialog.show(
 						  $mdDialog.alert()
@@ -462,7 +489,6 @@
 					$mdDialog.hide();
 
 					if (response.data.results[0].fileExist) {
-						console.log("already exists");
 
 						$mdDialog.show(
 							$mdDialog.alert()
@@ -511,8 +537,6 @@
 
 			vm.getSearchresults = function getSearchReslts(term){
 				return searchService.getSearchResults(term).then(function (val) {
-
-					console.log(val);
 
 					if (val != undefined) {
 
@@ -568,7 +592,6 @@
 					var path = ref.replace("workspace://SpacesStore/", "");
 					$window.location.href = "/#/dokument/" + path;
 
-					console.log("gotoPath");
 				});
 			}
 

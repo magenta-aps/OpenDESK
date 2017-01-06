@@ -9,9 +9,9 @@
                 return '';
             }
             
-            var format = 'dd. MMM. yyyy HH:mm';
+            var format = 'dd. MMM yyyy HH:mm';
             if(givenFormat == 'fullDate'){
-                format = 'dd. MMM. yyyy HH:mm:ss';
+                format = 'dd. MMM yyyy HH:mm:ss';
             }
             
             return dateFilter(dateValue, format);

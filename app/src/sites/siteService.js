@@ -1,21 +1,25 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService) {
+angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService) {
     var restBaseUrl = '/alfresco/s/api/';
 
     return {
+
+
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
             })
         },
         getSites: function () {
-            return $http.get('/api/sites').then(function (response) {
+            return $http.get("/alfresco/service/sites?q=" + "&method=getAll").then(function(response) {
                 return response.data;
             })
         },
         getSitesByQuery: function (query) {
-            return $http.get('/api/sites?nf=' + query).then(function (response) {
+            return $http.get("/alfresco/service/sites?q=" + query + "&method=getAll").then(function(response) {
+
+                console.log(response);
                 return response.data;
             })
         },
@@ -48,12 +52,12 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
-        updateSiteName: function (shortName, newName) {
+        updateSiteName: function (shortName, newName, description) {
             return $http.put('/api/sites/' + shortName, {
                 shortName: shortName,
                 sitePreset: "default",
                 title: newName,
-                description: "cropA"
+                description: (description && description != '') ? description: ''
             }).then(function (response) {
                 return response.data;
             })
@@ -103,6 +107,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         deleteFolder: function (nodeRef) {
             var url = '/slingshot/doclib/action/folder/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
             return $http.delete(url).then(function (result) {
+				console.log(result);
                 return result.data;
             })
         },
@@ -121,6 +126,21 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
 
             var formData = new FormData();
             formData.append("filedata", file);
+            formData.append("filename", file.name);
+            formData.append("destination", destination ? destination : null);
+
+            return $http.post("/api/upload", formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function (response) {
+                return response;
+            });
+        },uploadNewVersion: function (file, destination, existingNodeRef, extras) {
+
+            var formData = new FormData();
+            formData.append("filedata", file);
+            formData.append("updatenoderef", existingNodeRef);
+            formData.append("majorversion", false);
             formData.append("filename", file.name);
             formData.append("destination", destination ? destination : null);
 
