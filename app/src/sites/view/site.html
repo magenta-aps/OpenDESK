@@ -39,8 +39,6 @@
 				<breadcrumb paths="vm.paths"></breadcrumb>
 				
 				<md-list class="sortHead">
-					<!--md-list-item ng-repeat="content in contents">
-						<md-divider></md-divider-->
 									
 					<table class="od-members od-members-row">
 						<thead fix-head>
@@ -50,147 +48,136 @@
 						</tr>
 						</thead>
 						<tbody>							
-																							
-							<!--div ng-show="content.contentType === 'cmis:document'" layout="row" layout-align="space-between center" flex-->
-								<tr ng-show="content.contentType === 'cmis:document'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">	
-									
-									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">
-										<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
-										{{content.name}}</a></td>																
-									<td>
-										<table>
-											<tr>
-												<td style="border: none; margin: 0; padding: 0">
-													<a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
-												</td>
-												<td ng-show="content.hasHistory" style="border: none; margin: 0; padding: 0">
-													<md-menu md-position-mode="left bottom">
-														<md-button class="md-icon-button" aria-label="Se historik" ng-click="$mdOpenMenu($event); vm.loadHistory(content.shortRef)">
-															<md-icon md-menu-origin" title="Se historik" style="font-size: 22px; position: relative; top: 5px">history</md-icon>
-														</md-button>
-														<md-menu-content>
-															<md-menu-item class="menuListHead">
-																Ændret
-																<span style="width: 70px;"></span>
-																Ændret af														
-															</md-menu-item>
-															<md-menu-item ng-repeat="h in history" class="menuList">
-																<a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">
-																<!--a href="/#/dokument/{{h.nodeRef}}"-->
-																<!--a href="/#/dokument/{{content.shortRef}}"-->
-																{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a>												
-																</md-button>
-															</md-menu-item>
-														</md-menu-content>										
-													</md-menu>
-												</td>
-											</tr>
-										</table>
-									</td>									
-									<td>
-									<md-menu>
-										<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-											<md-icon md-menu-origin>dehaze</md-icon>
-										</md-button>
-			
-										<md-menu-content width="6">
-											<md-menu-item>
-												<md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
-													<md-icon md-menu-align-target>get_app</md-icon>
-													Download
-												</md-button>
-											</md-menu-item>
-			
-											<md-menu-item>
-												<md-button ng-click="vm.previewDocument(content.nodeRef)">
-													<md-icon md-menu-align-target>search</md-icon>
-													Preview
-												</md-button>
-											</md-menu-item>
-			
-											<md-menu-item>
-												<md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
-													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-													Slet
-												</md-button>
-											</md-menu-item>
-			
-											<md-menu-item>
-												<md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
-													<md-icon md-menu-align-target>create</md-icon>
-													Omdøb
-												</md-button>
-											</md-menu-item>
-
-											
-											<md-menu-item>
-												<md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
-													<md-icon md-menu-align-target>content_copy</md-icon>
-													Kopiér
-												</md-button>
-											</md-menu-item>
-											
-											<md-menu-item>
-												<md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
-													<md-icon md-menu-align-target>compare_arrows</md-icon>
-													Flyt
-												</md-button>
-											</md-menu-item>
-
-
-											<md-menu-item>
-												<md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
-													<md-icon md-menu-align-target>playlist_add_check</md-icon>
-													Send til godkendelse
-												</md-button>
-											</md-menu-item>
-
-
-										</md-menu-content>
-									</md-menu>
-									</td>
-								</tr>
-							<!--/div-->
-
-							<!--div ng-show="content.contentType === 'cmis:folder'" layout="row" layout-align="space-between center" flex-->
-							
-								<tr ng-show="content.contentType === 'cmis:folder'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">	
-									
-									<td><a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
-										<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
-										{{content.name}}
-									</a></td>
-									<!--td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate }}</a></td>
-									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChangedBy}}</a></td-->
-									<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a></td>
-									<td>
-									<md-menu>
-										<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-											<md-icon md-menu-origin>dehaze</md-icon>
-										</md-button>
-
-										<md-menu-content width="6">
-											<md-menu-item>
-												<md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
-													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-													Slet
-												</md-button>
-											</md-menu-item>
-			
-											<!-- <md-menu-item>
-											<md-button ng-click="">
-												<md-icon md-menu-align-target>create</md-icon>
-												Rename
+																						
+							<tr ng-show="content.contentType === 'cmis:document'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">	
+								
+								<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">
+									<i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
+									{{content.name}}</a></td>																
+								<td>
+									<table>
+										<tr>
+											<td style="border: none; margin: 0; padding: 0">
+												<a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
+											</td>
+											<td ng-show="content.hasHistory" style="border: none; margin: 0; padding: 0">
+												<md-menu md-position-mode="left bottom">
+													<md-button class="md-icon-button" aria-label="Se historik" ng-click="$mdOpenMenu($event); vm.loadHistory(content.shortRef)">
+														<md-icon md-menu-origin" title="Se historik" style="font-size: 22px; position: relative; top: 5px">history</md-icon>
+													</md-button>
+													<md-menu-content>
+														<md-menu-item class="menuListHead">
+															Ændret
+															<span style="width: 70px;"></span>
+															Ændret af														
+														</md-menu-item>
+														<md-menu-item ng-repeat="h in history" class="menuList">
+															<a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">
+															{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a>												
+															</md-button>
+														</md-menu-item>
+													</md-menu-content>										
+												</md-menu>
+											</td>
+										</tr>
+									</table>
+								</td>									
+								<td>
+								<md-menu>
+									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+										<md-icon md-menu-origin>dehaze</md-icon>
+									</md-button>
+		
+									<md-menu-content width="6">
+										<md-menu-item>
+											<md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
+												<md-icon md-menu-align-target>get_app</md-icon>
+												Download
 											</md-button>
-											</md-menu-item> -->
-										</md-menu-content>
-									</md-menu>
-									</td>							
-								</tr>
-							</tbody>
-						<!--/div-->							
+										</md-menu-item>
+		
+										<md-menu-item>
+											<md-button ng-click="vm.previewDocument(content.nodeRef)">
+												<md-icon md-menu-align-target>search</md-icon>
+												Preview
+											</md-button>
+										</md-menu-item>
+		
+										<md-menu-item>
+											<md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
+												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+												Slet
+											</md-button>
+										</md-menu-item>
+		
+										<md-menu-item>
+											<md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
+												<md-icon md-menu-align-target>create</md-icon>
+												Omdøb
+											</md-button>
+										</md-menu-item>
+
+										
+										<md-menu-item>
+											<md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
+												<md-icon md-menu-align-target>content_copy</md-icon>
+												Kopiér
+											</md-button>
+										</md-menu-item>
+										
+										<md-menu-item>
+											<md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
+												<md-icon md-menu-align-target>compare_arrows</md-icon>
+												Flyt
+											</md-button>
+										</md-menu-item>
+
+
+										<md-menu-item>
+											<md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
+												<md-icon md-menu-align-target>playlist_add_check</md-icon>
+												Send til godkendelse
+											</md-button>
+										</md-menu-item>
+
+
+									</md-menu-content>
+								</md-menu>
+								</td>
+							</tr>
+							<tr ng-show="content.contentType === 'cmis:folder'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">	
+								
+								<td><a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
+									<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
+									{{content.name}}
+								</a></td>
+								<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a></td>
+								<td>
+								<md-menu>
+									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+										<md-icon md-menu-origin>dehaze</md-icon>
+									</md-button>
+
+									<md-menu-content width="6">
+										<md-menu-item>
+											<md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
+												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+												Slet
+											</md-button>
+										</md-menu-item>
+		
+										<!-- <md-menu-item>
+										<md-button ng-click="">
+											<md-icon md-menu-align-target>create</md-icon>
+											Rename
+										</md-button>
+										</md-menu-item> -->
+									</md-menu-content>
+								</md-menu>
+								</td>							
+							</tr>
+						</tbody>						
 					</table>
-					<!--/md-list-item-->
 				</md-list>
 
 				<p ng-show="contents.length === 0">
