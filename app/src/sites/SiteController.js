@@ -26,21 +26,25 @@
 			$scope.role_mapping_reverse["3"] = "SiteConsumer";
 
 
-
-
-
 			var vm = this;
-			$scope.contents = [];
+			
+            $scope.contents = [];
 			$scope.history = [];
 			$scope.members = [];
 			$scope.roles = [];
 			$scope.roles_translated = [];
 
 			vm.project = $stateParams.projekt;
-			
-			
-			
-
+            vm.userRole = 'siteConsumer';
+            
+            
+            siteService.getSiteUserRole(vm.project, authService.getUserInfo().user.userName).then(
+                function (response) {
+                    vm.userRole = response;
+                }                                                                   
+            );
+             
+            
 			function translation_to_value(translation) {
 
 				for (var x in $scope.role_translation) {

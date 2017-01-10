@@ -72,8 +72,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
     $stateProvider.state('site', {
         abstract: true,
         resolve: {
-            authorize: ['authService', function (authService) {
-            }]
+            authorize: ['authService', function (authService) {}]
         },
         views: {
             'footer@': {

@@ -4,14 +4,21 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService) {
 
 			var vm = this;
-			
-			siteService.getSites().then(function(val) {
-				vm.sites = val;
-				//console.log(typeof vm.sites[0].title);
-			});
+            
+            vm.sites = [];
+            
+            function getSites() {
+                siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(
+                    function(response) {
+                        vm.sites = response;
+                    }
+                );    
+            };
+            getSites();
+
 
 			vm.newSite = function(event) {
 				$mdDialog.show({
@@ -29,7 +36,7 @@
 
 				r.then(function(result){			
 					
-					siteService.getSites().then(function(val) {
+					getSites().then(function(val) {
 						vm.sites = val;
 					});
 					
