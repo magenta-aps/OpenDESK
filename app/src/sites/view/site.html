@@ -151,7 +151,7 @@
 									<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
 									{{content.name}}
 								</a></td>
-								<td><a class="od-filebrowser-link" ng-href="#/dokument/{{content.shortRef}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a></td>
+								<td><a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a></td>
 								<td>
 								<md-menu>
 									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -193,7 +193,7 @@
 
 		<md-card flex-gt-sm="30">
 			<md-card-content>
-				<h2 class="od-title-icon"><i class="material-icons">group</i>Medlemmer</h2>			
+				<h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>			
 				<md-list>
 					<md-list-item>	
 						<table class="od-members">
