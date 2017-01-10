@@ -10,8 +10,8 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     vm.plugin = [];
     vm.paths = [];
 	vm.title = [];
-	
-	
+            
+    
 	var parentDocumentNode = "";
 	var firstDocumentNode = "";
 	var selectedDocumentNode = $stateParams.doc;
@@ -26,13 +26,14 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.showArchived = false;
 		parentDocumentNode = $stateParams.doc;
     }
-
+    
 
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
 		firstDocumentNode = $scope.history[0].nodeRef;
     });
 
+    
 	vm.selectFile = function(event){
         var file = event.target.value;
 		var fileName = file.replace(/^C:\\fakepath\\/, "");
@@ -43,6 +44,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		$mdDialog.cancel();
 	};
 
+    
     vm.newFolderDialog = function (event) {
         $mdDialog.show({
             templateUrl: 'app/src/documents/view/reviewComment.tmpl.html',

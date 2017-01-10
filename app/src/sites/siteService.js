@@ -11,15 +11,29 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
+        getSiteUserRole: function (siteShortName, userName) {
+            https://frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx/memberships/flemming
+            return $http.get('/api/sites/' + siteShortName + '/memberships/' + userName ).then(function (response) {
+                return response.data.role;
+            }) 
+        },
         getSites: function () {
             return $http.get("/alfresco/service/sites?q=" + "&method=getAll").then(function(response) {
                 return response.data;
             })
         },
+        getSitesPerUser: function (userId) {
+            return $http.get("/api/people/" + userId + "/sites").then(
+                function(response) {
+                    return response.data;
+                },
+                function(err) {
+                    console.log(err);
+                }
+            )
+        },
         getSitesByQuery: function (query) {
             return $http.get("/alfresco/service/sites?q=" + query + "&method=getAll").then(function(response) {
-
-                console.log(response);
                 return response.data;
             })
         },
