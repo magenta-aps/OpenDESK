@@ -10,6 +10,7 @@
             
             vm.sites = [];
             
+            
             function getSites() {
                 siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(
                     function(response) {
@@ -61,7 +62,7 @@
 				r.then(function(result){
 					$mdDialog.hide();
 					
-					siteService.getSites().then(function(val) {
+					getSites().then(function(val) {
 						vm.sites = val;
 					});
 				});
@@ -82,12 +83,6 @@
 			  $mdOpenMenu(event);
 			};
 
-			vm.querySites = function(q) {
-				return siteService.getSitesByQuery(q).then(function (val) {
-					vm.sites = val;
-				});
-			};
-
 			vm.currentDialogTitle = '';
 			vm.currentDialogDescription = '';
 			vm.currentDialogShortName = '';
@@ -105,6 +100,7 @@
 				});
 			};
 			
+            
 			vm.currentDialogSite = '';
 			vm.infoSiteDialog = function (site) {
 				vm.currentDialogSite = site;		
@@ -118,6 +114,7 @@
 				});
 			};
 
+            
 			vm.updateSiteName = function (shortName, newName, description) {
 				var r = siteService.updateSiteName(shortName, newName, description);
 
@@ -126,12 +123,13 @@
 					vm.project_description = result.description;
 					$mdDialog.hide();
 					
-					siteService.getSites().then(function(val) {
+					getSites().then(function(val) {
 						vm.sites = val;
 					});
 				});
 			};
 
+            
 			vm.getSearchresults = function getSearchReslts(term){
 				return searchService.getSearchResults(term).then(function (val) {
 
@@ -150,6 +148,7 @@
 				});
 			};
 
+            
 			vm.getAutoSuggestions = function getAutoSuggestions(term) {
 				return searchService.getSearchSuggestions(term).then(function (val) {
 
@@ -162,6 +161,7 @@
 				});
 			};
 
+            
 			vm.gotoPath = function (nodeRef) {
 
 				var ref = nodeRef;
@@ -180,7 +180,5 @@
 				});
 			};
 
+            
         } // SiteCtrl close
-
-
-

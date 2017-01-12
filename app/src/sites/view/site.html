@@ -203,7 +203,7 @@
                             {{ role_mapping[member.role] }}
                         </div>
                         <div flex="20" flex-gt-lg="10" style="text-align: right;">
-                            <md-menu ng-if="vm.userRole !== 'SiteConsumer'">			
+                            <md-menu ng-if="vm.userRole === 'SiteManager'">			
                                 <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
                                     <md-icon md-menu-origin>dehaze</md-icon>
                                 </md-button>
@@ -230,7 +230,7 @@
 				</md-list>
 			
 			<div layout="row" layout-align="start center" class="btnAlign">
-				<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem&nbsp;&nbsp;</md-button>
+				<md-button ng-if="vm.userRole === 'SiteManager'" class="md-raised" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem&nbsp;&nbsp;</md-button>
 			</div>
 		</md-card-content>
 	</md-card>
