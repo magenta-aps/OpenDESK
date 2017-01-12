@@ -3,7 +3,9 @@ angular
     .module('openDeskApp.documents')
     .factory('documentService', documentService);
 
+
 function documentService($http) {
+
     var service = {
         getDocument: getDocument,
         getPath: getPath,
@@ -13,13 +15,17 @@ function documentService($http) {
 
     return service;
 
+    
     function getDocument(documentNodeRef) {
         return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {
         }).then(function(response) {
+            console.log('doc user access data');
+            console.log(response.data.item.permissions.userAccess.create);
             return response.data;
         });
     }
 
+    
     function getPath(documentNodeRef) {
         return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {
         }).then(function(response) {
@@ -27,6 +33,7 @@ function documentService($http) {
         });
     }
 
+    
     function getHistory(documentNodeRef) {
 
         var url = '/alfresco/s/history?method=getAll&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore';
@@ -36,6 +43,7 @@ function documentService($http) {
         });
     }
 
+    
     function uploadNewVersion (file, destination, nodeRef, major) {
 
         var formData = new FormData();

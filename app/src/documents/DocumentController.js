@@ -27,7 +27,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		parentDocumentNode = $stateParams.doc;
     }
     
-
+    
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
 		firstDocumentNode = $scope.history[0].nodeRef;
@@ -98,6 +98,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		}
     };
 
+    
     vm.getVersion = function (version) {
 
     }
@@ -112,8 +113,8 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.wf = true;
     }
 
+    
     vm.createWFNotification = function(comment) {
-
         notificationsService.addWFNotice(authService.getUserInfo().user.userName, vm.wf_from, "review svar", comment, vm.wf_doc, "wf-response").then (function (val) {
             $mdDialog.hide();
         });
@@ -121,7 +122,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
 	
 	vm.highlightVersion = function () {
-		
 		var elm = document.getElementById(selectedDocumentNode) != undefined ? selectedDocumentNode : firstDocumentNode;
 		
 		if (elm == "") {
@@ -135,6 +135,8 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     documentService.getDocument(parentDocumentNode).then(function(response) {
 		
         vm.doc = response.item;
+        
+        console.log(vm.doc);
 
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
@@ -167,6 +169,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     title: response.item.location.file,
                     link: response.item.location.path
                 });
+                console.log(paths[1].title);
                 return paths;
         };
         
