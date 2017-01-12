@@ -18,7 +18,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             }) 
         },
         getSites: function () {
-            return $http.get("/alfresco/service/sites?q=" + "&method=getAll").then(function(response) {
+            return $http.get("/alfresco/service/sites?q=method=getAll").then(function(response) {
                 return response.data;
             })
         },

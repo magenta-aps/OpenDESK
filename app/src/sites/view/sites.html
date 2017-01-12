@@ -5,34 +5,30 @@
 	<div class="od-search" layout="row">
 		<span flex></span>
 		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
-			<!-- <md-input-container> -->
-				<i class="material-icons">search</i>
-				<md-autocomplete
-						required
-						md-input-name="autocomplete"
-						md-selected-item="searchQuery"
-						md-search-text="searchText"
-						md-items="r in vm.getAutoSuggestions(searchText)"
-						md-item-text="r.name"
-						md-floating-label="Søg">
-					<md-item-template>
-						<span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
-					</md-item-template>
-					<div ng-messages="autocompleteForm.autocomplete.$error">
-						<div ng-message="required">Dette felt skal udfyldes</div>
-					</div>
-				</md-autocomplete>		
-			<!-- </md-input-container> -->
-				<!-- <md-button type="submit" class="md-primary">Søg</md-button> -->
+            <i class="material-icons">search</i>
+            <md-autocomplete
+                    required
+                    md-input-name="autocomplete"
+                    md-selected-item="searchQuery"
+                    md-search-text="searchText"
+                    md-items="r in vm.getAutoSuggestions(searchText)"
+                    md-item-text="r.name"
+                    md-floating-label="Søg">
+                <md-item-template>
+                    <span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
+                </md-item-template>
+                <div ng-messages="autocompleteForm.autocomplete.$error">
+                    <div ng-message="required">Dette felt skal udfyldes</div>
+                </div>
+            </md-autocomplete>		
 		</form>
 	</div>	
 	<md-card>
 		<md-card-content>
 			<div layout="row" layout-align="space-between center">
 				<md-input-container>
-					<!-- <i class="material-icons">search</i> -->
 					<label>Find projekt</label>
-					<input type="text" ng-model="query" ng-change="vm.querySites(query)">
+					<input type="text" ng-model="vm.search">
 				</md-input-container>
 			</div>
 			<md-list class="sortHead">						
@@ -47,13 +43,13 @@
 					</thead>
 					
 					<tbody>
-						<tr ng-repeat="project in vm.sites | orderObjectBy:orderByAttribute:reverseOrder">	
+						<tr ng-repeat="project in vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">	
 							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">
 								<i class="material-icons">content_paste</i>
 								{{ project.title }}
 							</a></td>			
 							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>						
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>						
+							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>			
 							<td>
 								<md-menu>
 									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
