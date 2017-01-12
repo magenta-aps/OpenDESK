@@ -39,7 +39,7 @@
 			</h1>
 		</div>
 		<div flex-gt-sm="5">
-			<md-button aria-label="Overfør ny version" class="md-fab md-mini md-primary" style="z-index: 0;" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button>
+			<md-button ng-if="vm.doc.permissions.userAccess.create === true" aria-label="Overfør ny version" class="md-fab md-mini md-primary" style="z-index: 0;" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button>
 		</div>
 	</div>
     <div layout-sm="column" layout-gt-sm="row">
