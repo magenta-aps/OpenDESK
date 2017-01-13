@@ -12,9 +12,9 @@
             
             
             function getSites() {
-                siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(
-                    function(response) {
+                return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
                         vm.sites = response;
+						return response;
                     }
                 );    
             };
@@ -33,15 +33,15 @@
 			};
 
 			vm.createSite = function (name, description) {
-				var r = siteService.createSite(name, description);
 
-				r.then(function(result){			
-					
+				siteService.createSite(name, description).then(function(val) {
+
 					getSites().then(function(val) {
-						vm.sites = val;
-					});
-					
-					$mdDialog.hide();
+								vm.sites = val;
+								$mdDialog.hide();
+							});
+
+
 				});
 			};
 

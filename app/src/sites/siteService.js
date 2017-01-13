@@ -23,7 +23,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         getSitesPerUser: function (userId) {
-            return $http.get("/api/people/" + userId + "/sites").then(
+            return $http.get("/alfresco/service/sites?q=" + "query" + "&method=getSitesPerUser").then(
                 function(response) {
                     return response.data;
                 },
@@ -33,7 +33,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             )
         },
         getSitesByQuery: function (query) {
-            return $http.get("/alfresco/service/sites?q=" + query + "&method=getAll").then(function(response) {
+            return $http.get("/alfresco/service/sites?q=" + query + "&method=getSitesPerUser").then(function(response) {
                 return response.data;
             })
         },

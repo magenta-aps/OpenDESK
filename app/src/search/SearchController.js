@@ -23,13 +23,6 @@
 				};
 
 
-        console.log("$scope");
-        console.log($scope);
-        console.log("$parent");
-        console.log($scope.$parent);
-        console.log("searchResults");
-        console.log($scope.searchResults);
-
         //$scope.searchResults = [];
 			//	 $scope.searchResults.push(JSON.parse($cookies.get("searchResult")));
 
