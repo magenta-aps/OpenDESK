@@ -81,12 +81,17 @@ public interface OpenDeskModel {
     // this project needs to be bootstrapped - this project contains the root_folder of the company wide templates
     String templateProjectName = "skabelon";
 
+
+    // TODO refactor and use a list - now we need to update the delete sites in Sites.java aswell
+
     /**
      * TestSites
      */
 
     String testsite_1 = "Magenta_1";
     String testsite_2 = "Magenta_2";
+    String testsite_rename = "Magenta_rename";
+    String testsite_new_name = "Magenta_newrename";
 
 
 

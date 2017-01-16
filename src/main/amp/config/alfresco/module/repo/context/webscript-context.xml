@@ -65,6 +65,7 @@
 		<property name="siteService" ref="SiteService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="nodeArchiveService" ref="nodeArchiveService"/>
+		<property name="authenticationService" ref="authenticationService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"

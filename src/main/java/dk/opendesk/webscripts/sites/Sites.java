@@ -23,6 +23,7 @@ import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
@@ -53,8 +54,11 @@ public class Sites extends AbstractWebScript {
     }
 
 
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 
-
+    AuthenticationService authenticationService;
 
 
     private NodeArchiveService nodeArchiveService;
@@ -94,6 +98,8 @@ public class Sites extends AbstractWebScript {
         String q = params.get("q");
         String method = params.get("method");
 
+        System.out.println(method);
+
         if (method != null && method.equals("getAll")) {
 
 
@@ -124,7 +130,14 @@ public class Sites extends AbstractWebScript {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (method != null && method.equals("getSitesPerUser")) {
 
+            JSONArray result = this.getAllSitesForCurrentUser();
+            try {
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -169,62 +182,87 @@ public class Sites extends AbstractWebScript {
                 e.printStackTrace();
             }
 
-            System.out.println(s);
-
-
             result.add(json);
         }
 
         return result;
         }
 
+    private JSONArray getAllSitesForCurrentUser() {
+
+        System.out.println("inside currentuser");
+
+        JSONArray result = new JSONArray();
+
+        List<SiteInfo> currentuser_sites = siteService.listSites(authenticationService.getCurrentUserName());
+        System.out.println(currentuser_sites);
+
+        // need to reverse the order of sites as they appear in wrong sort order
+        Collections.sort(currentuser_sites, new CustomComparator());
+
+        Iterator i = currentuser_sites.iterator();
+
+        while (i.hasNext()) {
+            JSONObject json = new JSONObject();
+
+            SiteInfo s = (SiteInfo)i.next();
+
+            System.out.println("currentuser_sites.contains(s)");
+            System.out.println(currentuser_sites.contains(s));
+
+            if (currentuser_sites.contains(s)) {
+
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    json.put("created", sdf.format(s.getCreatedDate()));
+                    json.put("title", s.getTitle());
+                    json.put("shortName", s.getShortName());
+
+                    NodeRef n = s.getNodeRef();
+                    json.put("nodeRef", n.toString());
+                    JSONObject creator = new JSONObject();
+
+                    NodeRef cn = this.personService.getPerson((String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
+
+                    creator.put("userName", (String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
+                    creator.put("firstName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
+                    creator.put("lastName", (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+                    creator.put("fullName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+                    json.put("creator", creator);
+
+                    json.put("description", s.getDescription());
+
+                    result.add(json);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return result;
+    }
 
     public void removeTestSites() {
 
         ArrayList l = new ArrayList();
         l.add(OpenDeskModel.testsite_1);
         l.add(OpenDeskModel.testsite_2);
+        l.add(OpenDeskModel.testsite_rename);
+        l.add(OpenDeskModel.testsite_new_name);
 
         Iterator i = l.iterator();
 
-
         while (i.hasNext()) {
-
-
-
-
-
             String siteName = (String)i.next();
-            System.out.println(siteName);
 
-
-//
             SiteInfo site = siteService.getSite(siteName);
 
               if (site != null) {
-                  System.out.println(site.getNodeRef());
                   siteService.deleteSite(siteName);
               }
         }
-
-
-
-
-
-
-
-//
-//            try {
-//                this.nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-//            } catch (Throwable t) {
-//                logger.error("@@@ Error executing purge ", t);
-//
-//             }
-
-
-
-
     }
 
 
-    }
+}
