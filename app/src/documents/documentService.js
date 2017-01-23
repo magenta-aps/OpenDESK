@@ -52,7 +52,7 @@ function documentService($http) {
 
         return $http.get(url).then(function(response){
 
-            console("tadaaaaa");
+            console.log("tadaaaaa");
             console.log(response);
             return response.data;
         });
