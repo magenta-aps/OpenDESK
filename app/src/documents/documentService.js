@@ -48,7 +48,7 @@ function documentService($http) {
 
         http://178.62.194.129:8080/alfresco/s/previewhelper?version_node=33ae6baa-6444-4b86-b0f2-88b8d483ae5c&parent_node=6dda80ba-9a9a-490f-9058-4fcf3da2d621
 
-        var url = '/alfresco/s/previewHelper?version_node=' + versionNode + '&parent_node=' + node;
+        var url = '/alfresco/s/previewhelper?version_node=' + versionNode + '&parent_node=' + node;
 
         return $http.get(url).then(function(response){
 
