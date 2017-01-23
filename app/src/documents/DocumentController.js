@@ -26,7 +26,9 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.showArchived = false;
 		parentDocumentNode = $stateParams.doc;
     }
-    
+
+
+
     
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
@@ -177,6 +179,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
     if (vm.showArchived) {
         vm.store = 'versionStore://version2Store/'
+
+        documentService.createThumbnail(selectedDocumentNode, parentDocumentNode);
+
+
     }
     else {
         vm.store = 'workspace://SpacesStore/'
