@@ -54,7 +54,7 @@ function documentService($http) {
 
             console.log("tadaaaaa");
             console.log(response);
-            return response.data;
+            return response.data[0].nodeRef;
         });
     }
 
