@@ -177,34 +177,63 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         
     });
 
+
+    // todo check if not ok type like pdf, jpg and png - then skip this step
     if (vm.showArchived) {
+
+
         vm.store = 'versionStore://version2Store/'
 
-        var temp_node = documentService.createThumbnail(parentDocumentNode, selectedDocumentNode);
-        console.log("tempnode");
-        console.log(temp_node);
+        documentService.createThumbnail(parentDocumentNode, selectedDocumentNode).then (function(response) {
+
+            console.log(response.data);
+
+            documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function(plugin){
+
+                vm.plugin = plugin;
+                $scope.config = plugin;
+                $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
+
+                $scope.download = function(){
+                    alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
+                };
+
+                if(plugin.initScope){
+                    plugin.initScope($scope);
+                }
+
+            });
+
+
+
+        })
+
+
 
 
     }
     else {
         vm.store = 'workspace://SpacesStore/'
+
+        documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
+
+            vm.plugin = plugin;
+            $scope.config = plugin;
+            $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
+
+            $scope.download = function(){
+                alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
+            };
+
+            if(plugin.initScope){
+                plugin.initScope($scope);
+            }
+
+        });
+
+
     }
 	
-	documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
-        
-        vm.plugin = plugin;
-        $scope.config = plugin;
-        $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
-
-        $scope.download = function(){
-            alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
-        };
-        
-        if(plugin.initScope){
-            plugin.initScope($scope);
-        }
-        
-    });
 
 	angular.element(document).ready(function () {
 		vm.highlightVersion();

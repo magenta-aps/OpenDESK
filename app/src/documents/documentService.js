@@ -52,9 +52,7 @@ function documentService($http) {
 
         return $http.get(url).then(function(response){
 
-            console.log("tadaaaaa");
-            console.log(response);
-            return response.data[0].nodeRef;
+            return response;
         });
     }
 
