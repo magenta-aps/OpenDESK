@@ -10,7 +10,8 @@ function documentService($http) {
         getDocument: getDocument,
         getPath: getPath,
         getHistory: getHistory,
-        UploadNewVersion: uploadNewVersion
+        UploadNewVersion: uploadNewVersion,
+        createThumbnail: createThumbnail
     };
 
     return service;
