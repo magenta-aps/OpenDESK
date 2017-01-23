@@ -182,7 +182,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
         var temp_node = documentService.createThumbnail(parentDocumentNode, selectedDocumentNode);
         console.log("tempnode");
-        console.log(tempnode);
+        console.log(temp_node);
 
 
     }
