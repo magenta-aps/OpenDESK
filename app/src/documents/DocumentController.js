@@ -180,7 +180,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     if (vm.showArchived) {
         vm.store = 'versionStore://version2Store/'
 
-        documentService.createThumbnail(selectedDocumentNode, parentDocumentNode);
+        documentService.createThumbnail(parentDocumentNode, selectedDocumentNode);
 
 
     }
