@@ -208,7 +208,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                 console.log("response.data[0].noderef");
                 console.log(response.data[0].nodeRef);
 
-                documentService.cleanupThumbnail(response.data[0].nodeRef)
+                //documentService.cleanupThumbnail(response.data[0].nodeRef)
 
                 // delete the
 
