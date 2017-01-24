@@ -195,6 +195,13 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             return $http.post('/api/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
                 return response.data;
             });
+        },
+        getContents: function (node) {
+            return $http.get("/alfresco/service/contents?node=" + node).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
         }
     }
 });
