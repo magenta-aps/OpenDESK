@@ -186,8 +186,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
         documentService.createThumbnail(parentDocumentNode, selectedDocumentNode).then (function(response) {
 
-            console.log(response.data);
-
             documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function(plugin){
 
                 vm.plugin = plugin;
@@ -195,6 +193,8 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                 $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
 
                 $scope.download = function(){
+
+                    // todo fix the download url to download from version/version2store
                     alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
                 };
 
@@ -202,7 +202,20 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     plugin.initScope($scope);
                 }
 
+                console.log("response");
+                console.log(response);
+
+                console.log("response.data[0].noderef");
+                console.log(response.data[0].nodeRef);
+
+                documentService.cleanupThumbnail(response.data[0].nodeRef)
+
+                // delete the
+
+
             });
+
+
 
 
 
