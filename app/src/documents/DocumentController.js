@@ -215,10 +215,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
             });
 
-
-
-
-
         })
 
 
