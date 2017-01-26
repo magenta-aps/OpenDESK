@@ -201,13 +201,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                 }
 
 
-
-                $timeout(function () {
-
                     // delete the temporary node
-                    documentService.cleanupThumbnail(response.data[0].nodeRef)
+                documentService.cleanupThumbnail(response.data[0].nodeRef)
 
-                }, 5000);
+
 
 
 
