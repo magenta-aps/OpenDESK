@@ -138,7 +138,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		
         vm.doc = response.item;
         
-        console.log(vm.doc);
 
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
@@ -171,7 +170,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     title: response.item.location.file,
                     link: response.item.location.path
                 });
-                console.log(paths[1].title);
                 return paths;
         };
         
@@ -202,15 +200,22 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     plugin.initScope($scope);
                 }
 
-                console.log("response");
-                console.log(response);
 
-                console.log("response.data[0].noderef");
-                console.log(response.data[0].nodeRef);
 
-                //documentService.cleanupThumbnail(response.data[0].nodeRef)
+                $timeout(function () {
 
-                // delete the
+                    // delete the temporary node
+                    documentService.cleanupThumbnail(response.data[0].nodeRef)
+
+                }, 5000);
+
+
+
+
+
+
+
+
 
 
             });
