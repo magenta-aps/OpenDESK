@@ -214,6 +214,9 @@ public class Sites extends AbstractWebScript {
 
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    System.out.println("hej");
+                    System.out.println(s.getShortName());
+                    System.out.println(s.getCreatedDate());
                     json.put("created", sdf.format(s.getCreatedDate()));
                     json.put("title", s.getTitle());
                     json.put("shortName", s.getShortName());
