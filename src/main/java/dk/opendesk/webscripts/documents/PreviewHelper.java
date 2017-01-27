@@ -89,7 +89,7 @@ public class PreviewHelper extends AbstractWebScript {
                 System.out.println(node);
 
                 try {
-                    // sleep a while until the fiel has been loaded in the frontend
+                    // sleep a while until the preview has been loaded in the frontend
                     Thread.sleep(10000);
                     nodeService.deleteNode(node);
                     System.out.println("done cleaning" + new Date());

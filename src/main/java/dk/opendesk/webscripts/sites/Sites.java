@@ -24,6 +24,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
@@ -65,6 +66,12 @@ public class Sites extends AbstractWebScript {
     private SiteService siteService;
     private NodeService nodeService;
     private PersonService personService;
+
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
+
+    private AuthorityService authorityService;
 
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
@@ -139,6 +146,29 @@ public class Sites extends AbstractWebScript {
                 e.printStackTrace();
             }
         }
+         else if (method != null && method.equals("addUser")) {
+
+            String siteShortName = params.get("siteShortName");
+            String user = params.get("user");
+            String group = params.get("group");
+
+            this.addUser(siteShortName,user,group);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("result", "success");
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+         }
     }
 
     private JSONArray getAllSites(String q) {
@@ -190,8 +220,6 @@ public class Sites extends AbstractWebScript {
 
     private JSONArray getAllSitesForCurrentUser() {
 
-        System.out.println("inside currentuser");
-
         JSONArray result = new JSONArray();
 
         List<SiteInfo> currentuser_sites = siteService.listSites(authenticationService.getCurrentUserName());
@@ -207,16 +235,10 @@ public class Sites extends AbstractWebScript {
 
             SiteInfo s = (SiteInfo)i.next();
 
-            System.out.println("currentuser_sites.contains(s)");
-            System.out.println(currentuser_sites.contains(s));
-
             if (currentuser_sites.contains(s)) {
 
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                    System.out.println("hej");
-                    System.out.println(s.getShortName());
-                    System.out.println(s.getCreatedDate());
                     json.put("created", sdf.format(s.getCreatedDate()));
                     json.put("title", s.getTitle());
                     json.put("shortName", s.getShortName());
@@ -267,5 +289,16 @@ public class Sites extends AbstractWebScript {
         }
     }
 
+    private void addUser(String siteShortName, String user, String group) {
 
+        SiteInfo site = siteService.getSite(siteShortName);
+
+        NodeRef nodeRef = site.getNodeRef();
+
+        String siteID = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
+
+        String groupName = siteID + "_" + group;
+
+        authorityService.addAuthority(groupName, user);
+    }
 }

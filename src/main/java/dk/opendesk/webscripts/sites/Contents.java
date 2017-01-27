@@ -68,8 +68,6 @@ public class Contents extends AbstractWebScript {
 
         String nodeId = params.get("node");
 
-        System.out.println(nodeId);
-
 
             nodeRef = new NodeRef("workspace://SpacesStore/" +  nodeId);
 
@@ -138,8 +136,6 @@ public class Contents extends AbstractWebScript {
                     json.put("lastChanged", d.getTime());
 
                     String label = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_VERSION_LABEL);
-
-                    System.out.println(label);
 
 
                     if (label == null) {
