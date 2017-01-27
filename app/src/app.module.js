@@ -186,6 +186,20 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: [USER_ROLES.user],
             selectedTab: 0
         }
+        }).state('project', {
+        parent: 'site',
+        url: '/projekter/:projekt{path:.*}',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/sites/view/site.html',
+                controller: 'SiteController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user],
+            selectedTab: 0
+        }
 
     }).state('testuser', {
         parent: 'site',

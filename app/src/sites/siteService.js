@@ -202,6 +202,13 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 console.log(response.data);
                 return response.data;
             })
+        },
+        addUser: function (siteShortName, user, group) {
+            return $http.get("/alfresco/service/site?method=addUser&" + "siteShortName=" + siteShortName + "&user=" + user + "&group=" + group).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
         }
     }
 });

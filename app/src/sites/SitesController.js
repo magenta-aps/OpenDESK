@@ -180,5 +180,4 @@
 				});
 			};
 
-            
         } // SiteCtrl close
