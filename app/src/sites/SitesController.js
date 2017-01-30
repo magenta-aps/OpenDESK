@@ -4,12 +4,18 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
 			var vm = this;
             
             vm.sites = [];
-            
+
+
+			 //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
+
+			//pd_siteService.getAllOrganizationalCenters();
+
+			// siteService.addUser("kage1", "fhp", "PD_MONITORS");
             
             function getSites() {
                 return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
@@ -181,3 +187,5 @@
 			};
 
         } // SiteCtrl close
+
+
