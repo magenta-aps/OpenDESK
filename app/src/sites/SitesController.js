@@ -11,12 +11,16 @@
             vm.sites = [];
 
 
+			// siteService.removeRole("kage2", "abeecher", "Consumer")
+
 			 //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
 
 			//pd_siteService.getAllOrganizationalCenters();
 
-			// siteService.addUser("kage1", "fhp", "PD_MONITORS");
-            
+			//siteService.addUser("kage1", "abeecher", "PD_MONITORS");
+			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
+
+
             function getSites() {
                 return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
                         vm.sites = response;

@@ -5,7 +5,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
 
     return {
 
-
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
@@ -216,6 +215,18 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 console.log(response.data);
                 return response.data;
             })
+        },
+        addRole : function (siteShortName, user, role) {
+            return $http.get("/alfresco/service/sites?method=addPermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+                console.log(response.data)
+                return response.data
+            });
+        },
+        removeRole : function (siteShortName, user, role) {
+            return $http.get("/alfresco/service/sites?method=removePermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+                console.log(response.data)
+                return response.data
+            });
         }
     }
 });
