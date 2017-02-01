@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService) {
+angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
     var restBaseUrl = '/alfresco/s/api/';
 
     return {
@@ -225,6 +225,22 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         removeRole : function (siteShortName, user, role) {
             return $http.get("/alfresco/service/sites?method=removePermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
                 console.log(response.data)
+                return response.data
+            });
+        },
+        getGroupMembers : function (siteShortName, groupName) {
+            return $http.get("/alfresco/service/sites?method=getDBID&siteShortName=" + siteShortName).then(function(response) {
+
+                var dbid = response.data[0].DBID;
+                console.log(dbid)
+
+                var requestName = dbid + "_" + groupName;
+
+                return groupService.getGroupMembers(requestName). then (function(r) {
+                    console.log(r);
+                });
+;
+
                 return response.data
             });
         }
