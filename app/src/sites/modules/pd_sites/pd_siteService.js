@@ -10,7 +10,7 @@ angular
 
 
         createPDSite: function (siteName, description, sbsys, center_id, owner, manager) {
-            return $http.post('/alfresco/service/projectdepartment-create', {
+            return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
                 PARAM_DESCRIPTION : description,
                 PARAM_SBSYS : sbsys,
@@ -25,7 +25,7 @@ angular
         },
 
         addTemplate: function (siteName, template) {
-            return $http.post('/alfresco/service/projectdepartment-create', {
+            return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
                 PARAM_TEMPLATE : template
             }).then(function (response) {

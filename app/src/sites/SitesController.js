@@ -10,6 +10,7 @@
             
             vm.sites = [];
 
+            //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","admin", "abeecher");
 			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
 			//siteService.removeRole("kage2", "abeecher", "Consumer")
 			//siteService.addUser("kage1", "abeecher", "PD_MONITORS");
