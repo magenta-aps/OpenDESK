@@ -191,7 +191,7 @@
 			</md-card-content>											
 		</md-card>
 
-		<md-card flex-gt-sm="30">
+		<!--md-card flex-gt-sm="30">
 			<md-card-content>
 				<h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>
 				<md-list class="od-members">
@@ -233,12 +233,50 @@
                     <md-button ng-if="vm.userRole === 'SiteManager'" class="md-raised" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem&nbsp;&nbsp;</md-button>
                 </div>
             </md-card-content>
-        </md-card>
+        </md-card-->
         
-        <md-card flex-gt-sm="30" ng-controller="PdSiteController as pc">
+        <md-card flex-gt-sm="30" ng-controller="PdSiteController as pd">
 			<md-card-content>
 				<h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>
-				<md-list class="od-members">
+				
+				<div class="expandCollapse">					
+					<ul>
+						<li>
+							<input type="checkbox" ng-change="pd.showProjectMembers(this, vm.project, 'PD_PROJECTMANAGER');" checked>
+							<i class="check"></i>														
+							<h2>&nbsp;Projektgruppe</h2>							
+							<p class="transition pContent">													
+								<span ng-repeat="members in projectMembers">{{ members.name }}</span>										
+							</p>
+						</li>
+						<li>
+							<input type="checkbox" checked>
+							<i class="check"></i>							
+							<h2>&nbsp;Styregruppe</h2>							
+							<p class="transition pContent">													
+								<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
+							</p>
+						</li>
+						<li>
+							<input type="checkbox" checked>
+							<i class="check"></i>							
+							<h2>&nbsp;Arbejdsgruppe</h2>							
+							<p class="transition pContent">													
+								<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
+							</p>
+						</li>
+						<li>
+							<input type="checkbox" checked>
+							<i class="check"></i>							
+							<h2>&nbsp;Følgegruppe</h2>							
+							<p class="transition pContent">													
+								<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
+							</p>
+						</li>
+					</ul>
+				</div>
+								
+				<!--md-list class="od-members">
 					<md-list-item ng-repeat="member in members">	
 						<div flex="50" flex-gt-lg="60">
                             {{ member.authority.firstName }} {{ member.authority.lastName }}
@@ -271,11 +309,11 @@
                         </div>
                         <md-divider></md-divider>
 					</md-list-item>			 			  
-				</md-list>
+				</md-list-->
 			
-                <div layout="row" layout-align="start center" class="btnAlign">
+                <!--div layout="row" layout-align="start center" class="btnAlign">
                     <md-button ng-if="vm.userRole === 'SiteManager'" class="md-raised" ng-click="vm.newMember($event)"><i class="material-icons">add</i> Tilføj medlem&nbsp;&nbsp;</md-button>
-                </div>
+                </div-->
             </md-card-content>
         </md-card>
 

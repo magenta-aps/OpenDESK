@@ -4,9 +4,10 @@
         .module('openDeskApp.pd_sites')
         .controller('PdSiteController', PdSiteController);
         
-        function PdSiteController($mdDialog, pd_siteService) {
+        function PdSiteController($mdDialog, siteService, pd_siteService) {
 
             var pd = this;
+            var membersLoaded = false;
             
 			// siteService.removeRole("kage2", "abeecher", "Consumer")
 
@@ -18,6 +19,24 @@
 			// siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
             
             pd.newPDSite = newPDSite;
+            pd.showProjectMembers = showProjectMembers;
+            pd.loadProjectMembers = loadProjectMembers;
+            
+            
+            function loadProjectMembers(projectShortname, memberType) {
+				pd.projectMembers = [];
+				siteService.getGroupMembers(projectShortname, memberType).then (function (val){
+					pd.projectGroup = val;
+				});
+			}
+			
+			
+            function showProjectMembers(elm, projectShortname, memberType) {
+				if (elm.checked === true && !membersLoaded) {
+					pd.loadProjectMembers(projectShortname, memberType);
+					membersLoaded = true;
+				}
+			}
             
             
             function newPDSite(ev) {
