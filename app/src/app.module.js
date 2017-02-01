@@ -13,6 +13,7 @@ angular
         'isteven-multi-select',
         'openDeskApp.init',
         'openDeskApp.sites',
+        'openDeskApp.pd_sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
         'openDeskApp.header',

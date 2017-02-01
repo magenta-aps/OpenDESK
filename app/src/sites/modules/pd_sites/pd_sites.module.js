@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('openDeskApp.sites', ['fixed.table.header']);
+angular.module('openDeskApp.pd_sites', ['fixed.table.header']);
