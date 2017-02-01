@@ -5,7 +5,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
 
     return {
 
-
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
@@ -23,7 +22,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         getSitesPerUser: function (userId) {
-            return $http.get("/api/people/" + userId + "/sites").then(
+            return $http.get("/alfresco/service/sites?q=" + "query" + "&method=getSitesPerUser").then(
                 function(response) {
                     return response.data;
                 },
@@ -33,7 +32,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             )
         },
         getSitesByQuery: function (query) {
-            return $http.get("/alfresco/service/sites?q=" + query + "&method=getAll").then(function(response) {
+            return $http.get("/alfresco/service/sites?q=" + query + "&method=getSitesPerUser").then(function(response) {
                 return response.data;
             })
         },
@@ -194,6 +193,39 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         updateNode: function (nodeRef, props) {
             return $http.post('/api/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
                 return response.data;
+            });
+        },
+        getContents: function (node) {
+            return $http.get("/alfresco/service/contents?node=" + node).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
+        },
+        addUser: function (siteShortName, user, group) {
+            return $http.get("/alfresco/service/sites?method=addUser&" + "siteShortName=" + siteShortName + "&user=" + user + "&group=" + group).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
+        },
+        removeUser: function (siteShortName, user, group) {
+            return $http.get("/alfresco/service/sites?method=removeUser&" + "siteShortName=" + siteShortName + "&user=" + user + "&group=" + group).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
+        },
+        addRole : function (siteShortName, user, role) {
+            return $http.get("/alfresco/service/sites?method=addPermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+                console.log(response.data)
+                return response.data
+            });
+        },
+        removeRole : function (siteShortName, user, role) {
+            return $http.get("/alfresco/service/sites?method=removePermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+                console.log(response.data)
+                return response.data
             });
         }
     }

@@ -4,17 +4,27 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
 			var vm = this;
             
             vm.sites = [];
-            
-            
+
+
+			// siteService.removeRole("kage2", "abeecher", "Consumer")
+
+			 //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
+
+			//pd_siteService.getAllOrganizationalCenters();
+
+			//siteService.addUser("kage1", "abeecher", "PD_MONITORS");
+			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
+
+
             function getSites() {
-                siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(
-                    function(response) {
+                return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
                         vm.sites = response;
+						return response;
                     }
                 );    
             };
@@ -33,15 +43,15 @@
 			};
 
 			vm.createSite = function (name, description) {
-				var r = siteService.createSite(name, description);
 
-				r.then(function(result){			
-					
+				siteService.createSite(name, description).then(function(val) {
+
 					getSites().then(function(val) {
-						vm.sites = val;
-					});
-					
-					$mdDialog.hide();
+								vm.sites = val;
+								$mdDialog.hide();
+							});
+
+
 				});
 			};
 
@@ -180,5 +190,6 @@
 				});
 			};
 
-            
         } // SiteCtrl close
+
+

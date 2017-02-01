@@ -118,40 +118,51 @@
 				cmisService.getNode(currentFolderNodeRef_cmisQuery).then(function (val) {
 					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 
-					cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
+
+					siteService.getContents(currentFolderNodeRef.split("/")[3]).then (function (response) {
+						$scope.contents = response;
+					})
 
 
-						console.log(val);
-
-						var result = [];
 
 
-						for (let x in val.data.objects) {
-
-							userService.getPerson(val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"])
-								.then(function(response){
-									let ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
-
-									documentService.getPath(ref.split("/")[3]).then(function(val) {});
-
-									var shortRef = ref.split("/")[3];
-															
-									result.push({
-										name: val.data.objects[x].object.succinctProperties["cmis:name"],
-										contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-										nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
-										parentNodeRef: currentFolderNodeRef,
-										shortRef: shortRef,
-										userName: response.userName,
-										lastChangedBy : response.firstName +" "+ response.lastName,
-										lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"]),
-										hasHistory : (val.data.objects[x].object.succinctProperties["cmis:versionLabel"] == "1.0" ? false : true)
-
-									});
-								});
-						}
-						$scope.contents = result;
-					});
+					//cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
+                    //
+                    //
+					//	console.log(val);
+                    //
+					//	var result = [];
+                    //
+                    //
+					//	for (let x in val.data.objects) {
+                    //
+					//		userService.getPerson(val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"])
+					//			.then(function(response){
+					//				let ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+                    //
+					//				documentService.getPath(ref.split("/")[3]).then(function(val) {});
+                    //
+					//				var shortRef = ref.split("/")[3];
+					//
+					//				result.push({
+					//					name: val.data.objects[x].object.succinctProperties["cmis:name"],
+					//					contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+					//					nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
+					//					parentNodeRef: currentFolderNodeRef,
+					//					shortRef: shortRef,
+					//					userName: response.userName,
+					//					lastChangedBy : response.firstName +" "+ response.lastName,
+					//					lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"]),
+					//					hasHistory : (val.data.objects[x].object.succinctProperties["cmis:versionLabel"] == "1.0" ? false : true)
+                    //
+					//				});
+					//			});
+					//	}
+					//
+					//
+					//
+					//	$scope.contents = result;
+					//});
 				});
 			};
 

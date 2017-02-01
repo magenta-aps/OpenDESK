@@ -75,7 +75,7 @@ function GroupService(ALFRESCO_URI, $http, $q) {
      * @returns [authorities]
      */
     function getGroupMembers(groupShortName) {
-        return $http.get(GROUP_PROXY_URI + groupShortName + '/children?maxItems=100').then(successOrReject);
+        return $http.get(GROUP_PROXY_URI + groupShortName + '/children?maxItems=500').then(successOrReject);
     }
 
     /**

@@ -26,7 +26,9 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.showArchived = false;
 		parentDocumentNode = $stateParams.doc;
     }
-    
+
+
+
     
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
@@ -136,7 +138,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		
         vm.doc = response.item;
         
-        console.log(vm.doc);
 
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
@@ -169,34 +170,81 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     title: response.item.location.file,
                     link: response.item.location.path
                 });
-                console.log(paths[1].title);
                 return paths;
         };
         
     });
 
+
+    // todo check if not ok type like pdf, jpg and png - then skip this step
     if (vm.showArchived) {
+
+
         vm.store = 'versionStore://version2Store/'
+
+        documentService.createThumbnail(parentDocumentNode, selectedDocumentNode).then (function(response) {
+
+            documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function(plugin){
+
+                vm.plugin = plugin;
+                $scope.config = plugin;
+                $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
+
+                $scope.download = function(){
+
+                    // todo fix the download url to download from version/version2store
+                    alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
+                };
+
+                if(plugin.initScope){
+                    plugin.initScope($scope);
+                }
+
+
+                    // delete the temporary node
+                documentService.cleanupThumbnail(response.data[0].nodeRef)
+
+
+
+
+
+
+
+
+
+
+
+
+            });
+
+        })
+
+
+
+
     }
     else {
         vm.store = 'workspace://SpacesStore/'
+
+        documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
+
+            vm.plugin = plugin;
+            $scope.config = plugin;
+            $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
+
+            $scope.download = function(){
+                alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
+            };
+
+            if(plugin.initScope){
+                plugin.initScope($scope);
+            }
+
+        });
+
+
     }
 	
-	documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
-        
-        vm.plugin = plugin;
-        $scope.config = plugin;
-        $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
-
-        $scope.download = function(){
-            alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
-        };
-        
-        if(plugin.initScope){
-            plugin.initScope($scope);
-        }
-        
-    });
 
 	angular.element(document).ready(function () {
 		vm.highlightVersion();
