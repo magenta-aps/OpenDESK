@@ -10,12 +10,12 @@
             
 			// siteService.removeRole("kage2", "abeecher", "Consumer")
 
-    		pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
+    		// pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
 
-			//pd_siteService.getAllOrganizationalCenters();
+			// pd_siteService.getAllOrganizationalCenters();
 
-			//siteService.addUser("kage1", "abeecher", "PD_MONITORS");
-			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
+			// siteService.addUser("kage1", "abeecher", "PD_MONITORS");
+			// siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
             
             pd.newPDSite = newPDSite;
             
