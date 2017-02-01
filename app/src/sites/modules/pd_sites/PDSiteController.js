@@ -23,6 +23,41 @@
             function newPDSite(ev) {
                 console.log('creating new pdsite' + ev);
             };
-            
+			
+			pd.loadProjectMembers  = function(projectShortname, memberType) {
+				pd.projectMembers = [];
+				siteService.getGroupMembers(projectShortname, memberType).then (function (val){
+					pd.projectGroup = val;
+				});
+			};
+			
+			var membersLoaded = false;
+			function showProjectMembers(elm, projectShortname, memberType) {
+				if (elm.checked == true && !membersLoaded) {
+					pd.loadProjectMembers(projectShortname, memberType);
+					membersLoaded = true;
+				}
+			}
+			
+			
+			
+			/*
+			vm.loadHistory  = function(doc) {
+				$scope.history = [];
+				documentService.getHistory(doc).then (function (val){
+					$scope.history = val;
+				});
+			};
+			*/
+			
+/*			
+PD_PROJECTGROUP (Projektgruppe)
+
+PD_WORKGROUP (Arbejdsgruppe)
+
+PD_MONITORS (Følgegruppe)
+
+PD_STEERING_GROUP (styregruppe)
+*/            
 
 		} // SiteCtrl close

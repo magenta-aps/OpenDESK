@@ -24,8 +24,7 @@
 			$scope.role_mapping_reverse["1"] = "SiteManager";
 			$scope.role_mapping_reverse["2"] = "SiteContributor";
 			$scope.role_mapping_reverse["3"] = "SiteConsumer";
-
-
+			
 			var vm = this;
 			
             $scope.contents = [];
@@ -37,6 +36,7 @@
 			vm.project = $stateParams.projekt;
             vm.userRole = 'siteConsumer';
             
+			//siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
             
             siteService.getSiteUserRole(vm.project, authService.getUserInfo().user.userName).then(
                 function (response) {
