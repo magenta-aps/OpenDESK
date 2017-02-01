@@ -1,0 +1,64 @@
+<md-dialog aria-label="Opret nyt avanceret projekt" class="pd-create-site-diag">
+    <form ng-submit="submitNewPDSite()">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>Opret nyt projekt med styring og følgegrupper</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+            </md-button>
+          </div>
+        </md-toolbar>
+        
+        <md-dialog-content style="max-width:800px;max-height:810px; ">
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Navn">
+                    <md-content class="md-padding">
+                        <md-input-container>
+                            <label>Navn</label>
+                            <input type="text" ng-model="newSite.siteName">
+                            </md-input-container>
+                        <md-input-container>
+                            <label>Beskrivelse</label>
+                            <textarea ng-model="newSite.desc"></textarea>
+                        </md-input-container>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Styring">
+                    <md-content class="md-padding">
+                        <md-input-container>
+                            <label>Projektejer</label>
+                            <input type="text" ng-model="newSite.owner">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Projektleder</label>
+                            <input type="text" ng-model="newSite.manager">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Organisatorisk enhed</label>
+                            <input type="text" ng-model="newSite.center_id">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>SBSYS sagsnr.</label>
+                            <input type="text" ng-model="newSite.sbsys">
+                        </md-input-container>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Grupper">
+                    <md-content class="md-padding">
+                        
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
+        
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" >
+                Annullér
+            </md-button>
+            <span flex></span>
+            <input type="submit" class="md-button md-raised md-primary" value="Opret">
+        </md-dialog-actions>
+        
+    </form>
+</md-dialog>
