@@ -10,19 +10,11 @@
             
             vm.sites = [];
 
-
-
+            //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","admin", "abeecher");
 			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
-
-			// siteService.removeRole("kage2", "abeecher", "Consumer")
-
-			 //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
-
-			//pd_siteService.getAllOrganizationalCenters();
-
+			//siteService.removeRole("kage2", "abeecher", "Consumer")
 			//siteService.addUser("kage1", "abeecher", "PD_MONITORS");
 			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
-
 
 
             function getSites() {
@@ -194,11 +186,6 @@
 					console.log("gotoPath");
 				});
 			};
-            
-            
-            vm.openMenu = function($mdOpenMenu, ev) {
-                $mdOpenMenu.open(ev);
-            };
             
             
         } // SiteCtrl close
