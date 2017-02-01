@@ -4,23 +4,13 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService) {
 
 			var vm = this;
             
             vm.sites = [];
 
-
-			// siteService.removeRole("kage2", "abeecher", "Consumer")
-
-			 //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
-
-			//pd_siteService.getAllOrganizationalCenters();
-
-			//siteService.addUser("kage1", "abeecher", "PD_MONITORS");
-			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
-
-
+            
             function getSites() {
                 return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
                         vm.sites = response;
@@ -42,6 +32,7 @@
 				});
 			};
 
+            
 			vm.createSite = function (name, description) {
 
 				siteService.createSite(name, description).then(function(val) {
@@ -189,7 +180,11 @@
 					console.log("gotoPath");
 				});
 			};
-
+            
+            
+            vm.openMenu = function($mdOpenMenu, ev) {
+                $mdOpenMenu.open(ev);
+            };
+            
+            
         } // SiteCtrl close
-
-
