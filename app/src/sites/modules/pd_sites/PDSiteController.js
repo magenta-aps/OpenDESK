@@ -4,13 +4,13 @@
         .module('openDeskApp.pd_sites')
         .controller('PDSiteController', PDSiteController);
         
-        function PDSiteController($mdDialog) {
+        function PDSiteController($mdDialog, pd_siteService) {
 
             var pd = this;
             
 			// siteService.removeRole("kage2", "abeecher", "Consumer")
 
-    		//pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
+    		pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
 
 			//pd_siteService.getAllOrganizationalCenters();
 
