@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('pd_siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+angular
+    .module('openDeskApp.pd_sites')
+    .factory('pd_siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+    
     var restBaseUrl = '/alfresco/s/api/';
 
     return {
@@ -42,5 +45,6 @@ angular.module('openDeskApp.sites').factory('pd_siteService', function ($http, $
             });
         }
 
-    }
+    };
+    
 });
