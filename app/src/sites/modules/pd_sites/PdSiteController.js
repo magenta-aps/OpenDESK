@@ -2,9 +2,9 @@
 
     angular
         .module('openDeskApp.pd_sites')
-        .controller('PDSiteController', PDSiteController);
+        .controller('PdSiteController', PdSiteController);
         
-        function PDSiteController($mdDialog, pd_siteService) {
+        function PdSiteController($mdDialog, pd_siteService) {
 
             var pd = this;
             

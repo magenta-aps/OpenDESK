@@ -1,7 +1,7 @@
 'use strict';
 
     angular
-        .module('openDeskApp.sites', ['ngMaterial'])
+        .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
         function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService) {

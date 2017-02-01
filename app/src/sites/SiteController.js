@@ -25,6 +25,7 @@
 			$scope.role_mapping_reverse["2"] = "SiteContributor";
 			$scope.role_mapping_reverse["3"] = "SiteConsumer";
 
+            console.log('doing stuff');
 
 			var vm = this;
 			
