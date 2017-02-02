@@ -1,9 +1,8 @@
-
 angular
     .module('openDeskApp')
     .directive('openeAutocomplete', autocomplete);
 
-function autocomplete(){
+function autocomplete() {
 
     return {
         restrict: 'E',
@@ -18,7 +17,7 @@ function autocomplete(){
         controllerAs: 'vm',
         controller: '@',
         name: 'controllerName',
-      	bindToController: true,
+        bindToController: true,
         templateUrl: 'app/src/common/components/authoritySelector/view/authoritySelectorOptions.html'
     };
 }

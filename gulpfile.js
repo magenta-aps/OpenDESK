@@ -1,5 +1,3 @@
-
-
 /*
  * INITIALIZE GULP
  */
@@ -11,6 +9,13 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
 	gulpNSP = require('gulp-nsp'),
 	pa11y = require('gulp-pa11y');
+
+var paths = {
+    scripts: ['app/src/**/*.module.js', 'app/src/**/*.js', '!app/src/**/*Spec.js', '!app/src/modules/test/**/*.js', '!app/src/modules/**/tests/**/*.js'],
+    scss: ['app/src/app.scss', 'app/src/**/*.scss'],
+    e2e_tests: ['app/tests/e2e/**/*test.js', 'app/src/modules/**/*test.js'],
+    protractorConfigFile: 'app/tests/e2e/conf.js'
+};
 
 // Config vars
 // If, after a while, there are a lot of config vars, we can move these to a separate file
@@ -24,14 +29,12 @@ var environment = {
         chat: 'http://demo.opendesk.dk:5280/http-bind',
         repo: 'http://localhost:8080',
         share: 'http://localhost:8081'
+    },
+    staging: {
+        chat: 'http://demo.opendesk.dk:5280/http-bind',
+        repo: 'http://178.62.194.129:8080',
+        share: 'http://178.62.194.129:8081'
     }
-};
-
-var paths = {
-    scripts: ['app/src/**/*.module.js', 'app/src/**/*.js', '!app/src/**/*Spec.js', '!app/src/modules/test/**/*.js', '!app/src/modules/**/tests/**/*.js'],
-    scss: ['app/src/app.scss', 'app/src/**/*.scss'],
-    e2e_tests: ['app/tests/e2e/**/*test.js', 'app/src/modules/**/*test.js'],
-    protractorConfigFile: 'app/tests/e2e/conf.js'
 };
 
 var dist = {
@@ -144,7 +147,6 @@ gulp.task('watch', function () {
     gulp.watch(paths.scss, ['css']);
 });
 
-
 /*
  * GULP TASK RUNS
  * Gulp tasks to run from the CLI
@@ -160,6 +162,10 @@ gulp.task('demo', ['build', 'watch'], function () {
 
 gulp.task('local', ['build', 'watch'], function () {
     createWebserver(environment.local);
+});
+
+gulp.task('staging', ['build', 'watch'], function () {
+    createWebserver(environment.staging);
 });
 
 // Tests

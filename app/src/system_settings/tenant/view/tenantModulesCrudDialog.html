@@ -15,6 +15,7 @@
                 <label>{{ 'ADMIN.SYS_SETTINGS.TENANTS_MODULES.TENANT' | translate }}: </label>
                 <span>{{tm.tenantDomain}}</span>
             </p>
+
             <p>
                 <label>{{ 'ADMIN.SYS_SETTINGS.TENANTS_MODULES.TENANT_UI_CONTEXT' | translate }} *</label>
                 <input type="text" name="tenantUIContext" ng-model="tm.tenantUIContext" required>
@@ -22,18 +23,20 @@
             <label>{{ 'ADMIN.SYS_SETTINGS.TENANTS_MODULES.MODULES' | translate }}</label>
             <md-list>
                 <md-list-item class="md-3-line" ng-repeat="module in tm.openeModules">
-                    <md-checkbox ng-model="module.selected" ng-change="tm.moduleSelected(module)" aria-label="{{module.id}}"></md-checkbox>
+                    <md-checkbox ng-model="module.selected" ng-change="tm.moduleSelected(module)"
+                                 aria-label="{{module.id}}"></md-checkbox>
                     <div class="md-list-item-text">
                         {{ module.id }}
                     </div>
                 </md-list-item>
             </md-list>
-            
-            
+
+
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button class="md-primary" type="submit" ng-disabled="!tm.canSave(tenantModulesForm)" ng-click="tm.save(tenantModulesForm)">
+            <md-button class="md-primary" type="submit" ng-disabled="!tm.canSave(tenantModulesForm)"
+                       ng-click="tm.save(tenantModulesForm)">
                 {{ 'COMMON.SAVE' | translate }}
             </md-button>
             <md-button ng-click="tm.cancel()">

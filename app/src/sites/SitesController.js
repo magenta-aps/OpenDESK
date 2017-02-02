@@ -1,200 +1,175 @@
 'use strict';
 
-    angular
-        .module('openDeskApp.sites')
-        .controller('SitesController', SitesController);
+angular
+    .module('openDeskApp.sites')
+    .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
+function SitesController($scope, $mdDialog, $window, siteService, searchService, $rootScope, documentService, authService) {
 
-			var vm = this;
-            
-            vm.sites = [];
+    var vm = this;
 
-			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
+    vm.sites = [];
 
-			// siteService.removeRole("kage2", "abeecher", "Consumer")
+    function getSites() {
+        return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function (response) {
+                vm.sites = response;
+                return response;
+            }
+        );
+    }
 
-			 //pd_siteService.createPDSite("kage8", "desc", "100", "center_1","fhp", "fhp");
+    getSites();
 
-			//pd_siteService.getAllOrganizationalCenters();
+    vm.newSite = function (event) {
+        $mdDialog.show({
+            templateUrl: 'app/src/sites/view/newProject.tmpl.html',
+            parent: angular.element(document.body),
+            scope: $scope,
+            preserveScope: true,
+            targetEvent: event,
+            clickOutsideToClose: true
+        });
+    };
 
+    vm.createSite = function (name, description) {
 
-            //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","admin", "abeecher");
-			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
-			//siteService.removeRole("kage2", "abeecher", "Consumer")
+        siteService.createSite(name, description).then(function (val) {
 
-			//siteService.addUser("kage8", "abeecher", "PD_MONITORS");
-			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
-
-
-            function getSites() {
-                return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
-                        vm.sites = response;
-						return response;
-                    }
-                );    
-            };
-            getSites();
-
-
-			vm.newSite = function(event) {
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/newProject.tmpl.html',
-					parent: angular.element(document.body),
-					scope: $scope,
-					preserveScope: true,
-					targetEvent: event,
-					clickOutsideToClose:true
-				});
-			};
-
-            
-			vm.createSite = function (name, description) {
-
-				siteService.createSite(name, description).then(function(val) {
-
-					getSites().then(function(val) {
-								vm.sites = val;
-								$mdDialog.hide();
-							});
+            getSites().then(function (val) {
+                vm.sites = val;
+                $mdDialog.hide();
+            });
 
 
-				});
-			};
+        });
+    };
 
-			vm.deleteSiteDialog = function(siteName) {
-				var confirm = $mdDialog.confirm()
-					.title('Vil du slette dette projekt?')
-					.textContent('Projektet og alle dets filer vil blive slettet')
-					.ok('Ja')
-					.cancel('Annullér');
-				$mdDialog.show(confirm).then(function() {
-					vm.deleteSite(siteName);
-				});
-			};
-			
-			vm.deleteSite = function (siteName) {
-				var r = siteService.deleteSite(siteName);
+    vm.deleteSiteDialog = function (siteName) {
+        var confirm = $mdDialog.confirm()
+            .title('Vil du slette dette projekt?')
+            .textContent('Projektet og alle dets filer vil blive slettet')
+            .ok('Ja')
+            .cancel('Annullér');
+        $mdDialog.show(confirm).then(function () {
+            vm.deleteSite(siteName);
+        });
+    };
 
-				r.then(function(result){
-					$mdDialog.hide();
-					
-					getSites().then(function(val) {
-						vm.sites = val;
-					});
-				});
-			};
+    vm.deleteSite = function (siteName) {
+        var r = siteService.deleteSite(siteName);
 
-			vm.cancel = function() {
-				$mdDialog.cancel();
-			};
+        r.then(function (result) {
+            $mdDialog.hide();
 
-			vm.reload = function() {
-				$window.location.reload();
-			};
-			
-			var originatorEv;
-			vm.openMenu = function($mdOpenMenu, event) {
-			  originatorEv = event;
-			  $mdOpenMenu(event);
-			};
+            getSites().then(function (val) {
+                vm.sites = val;
+            });
+        });
+    };
 
-			vm.currentDialogTitle = '';
-			vm.currentDialogDescription = '';
-			vm.currentDialogShortName = '';
-			vm.renameSiteDialog = function (event, shortName, title, description) {
-				vm.currentDialogTitle = title;
-				vm.currentDialogDescription = description;
-				vm.currentDialogShortName = shortName;
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: event,
-					scope: $scope,        // use parent scope in template
-					preserveScope: true,  // do not forget this if use parent scope
-					clickOutsideToClose: true
-				});
-			};
-			
-            
-			vm.currentDialogSite = '';
-			vm.infoSiteDialog = function (site) {
-				vm.currentDialogSite = site;		
-				$mdDialog.show({
-					templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
-					parent: angular.element(document.body),
-					//targetEvent: event,
-					scope: $scope,        // use parent scope in template
-					preserveScope: true,  // do not forget this if use parent scope
-					clickOutsideToClose: true
-				});
-			};
+    vm.cancel = function () {
+        $mdDialog.cancel();
+    };
 
-            
-			vm.updateSiteName = function (shortName, newName, description) {
-				var r = siteService.updateSiteName(shortName, newName, description);
+    vm.reload = function () {
+        $window.location.reload();
+    };
 
-				r.then(function(result){
-					vm.project_title = result.title;
-					vm.project_description = result.description;
-					$mdDialog.hide();
-					
-					getSites().then(function(val) {
-						vm.sites = val;
-					});
-				});
-			};
+    var originatorEv;
+    vm.openMenu = function ($mdOpenMenu, event) {
+        originatorEv = event;
+        $mdOpenMenu(event);
+    };
 
-            
-			vm.getSearchresults = function getSearchReslts(term){
-				return searchService.getSearchResults(term).then(function (val) {
+    vm.currentDialogTitle = '';
+    vm.currentDialogDescription = '';
+    vm.currentDialogShortName = '';
+    vm.currentDialogSite = '';
+    vm.infoSiteDialog = function (site) {
+        vm.currentDialogSite = site;
+        $mdDialog.show({
+            templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
+            parent: angular.element(document.body),
+            //targetEvent: event,
+            scope: $scope,        // use parent scope in template
+            preserveScope: true,  // do not forget this if use parent scope
+            clickOutsideToClose: true
+        });
+    };
+    vm.renameSiteDialog = function (event, shortName, title, description) {
+        vm.currentDialogTitle = title;
+        vm.currentDialogDescription = description;
+        vm.currentDialogShortName = shortName;
+        $mdDialog.show({
+            templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,        // use parent scope in template
+            preserveScope: true,  // do not forget this if use parent scope
+            clickOutsideToClose: true
+        });
+    };
 
-					console.log(val);
+    vm.updateSiteName = function (shortName, newName, description) {
+        var r = siteService.updateSiteName(shortName, newName, description);
 
-					if (val != undefined) {
+        r.then(function (result) {
+            vm.project_title = result.title;
+            vm.project_description = result.description;
+            $mdDialog.hide();
 
-						$rootScope.searchResults = [];
-						$rootScope.searchResults = val.data.items;
+            getSites().then(function (val) {
+                vm.sites = val;
+            });
+        });
+    };
 
-						window.location.href = "#/search";
+    vm.getSearchresults = function getSearchReslts(term) {
+        return searchService.getSearchResults(term).then(function (val) {
 
-					} else {
-						return [];
-					}
-				});
-			};
+            console.log(val);
 
-            
-			vm.getAutoSuggestions = function getAutoSuggestions(term) {
-				return searchService.getSearchSuggestions(term).then(function (val) {
+            if (val != undefined) {
 
-					if (val != undefined) {
-						return val;
-					}
-					else {
-						return [];
-					}
-				});
-			};
+                $rootScope.searchResults = [];
+                $rootScope.searchResults = val.data.items;
 
-            
-			vm.gotoPath = function (nodeRef) {
+                window.location.href = "#/search";
 
-				var ref = nodeRef;
+            } else {
+                return [];
+            }
+        });
+    };
 
-				documentService.getPath(ref.split("/")[3]).then(function(val) {
+    vm.getAutoSuggestions = function getAutoSuggestions(term) {
+        return searchService.getSearchSuggestions(term).then(function (val) {
 
-					$scope.selectedDocumentPath = val.container
-					// var project = val.site;
-					// var container = val.container;
-					// var path = val.path;
+            if (val != undefined) {
+                return val;
+            }
+            else {
+                return [];
+            }
+        });
+    };
 
-					var path = ref.replace("workspace://SpacesStore/", "");
-					$window.location.href = "/#/dokument/" + path;
+    vm.gotoPath = function (nodeRef) {
 
-					console.log("gotoPath");
-				});
-			};
-            
-            
-        } // SiteCtrl close
+        var ref = nodeRef;
+
+        documentService.getPath(ref.split("/")[3]).then(function (val) {
+
+            $scope.selectedDocumentPath = val.container
+            // var project = val.site;
+            // var container = val.container;
+            // var path = val.path;
+
+            var path = ref.replace("workspace://SpacesStore/", "");
+            $window.location.href = "/#/dokument/" + path;
+
+            console.log("gotoPath");
+        });
+    };
+
+} // SiteCtrl close

@@ -1,15 +1,15 @@
 <md-dialog aria-label="Opret nyt avanceret projekt" class="pd-create-site-diag">
     <form ng-submit="submitNewPDSite()">
         <md-toolbar>
-          <div class="md-toolbar-tools">
-            <h2>Opret nyt projekt med styring og følgegrupper</h2>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-click="cancel()">
-                <i class="material-icons" aria-label="Luk dialogboks">close</i>
-            </md-button>
-          </div>
+            <div class="md-toolbar-tools">
+                <h2>Opret nyt projekt med styring og følgegrupper</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
         </md-toolbar>
-        
+
         <md-dialog-content>
             <md-tabs md-dynamic-height md-border-bottom>
                 <md-tab label="Navn">
@@ -17,7 +17,7 @@
                         <md-input-container>
                             <label>Navn</label>
                             <input type="text" ng-model="newSite.siteName">
-                            </md-input-container>
+                        </md-input-container>
                         <md-input-container>
                             <label>Beskrivelse</label>
                             <textarea ng-model="newSite.desc"></textarea>
@@ -46,19 +46,19 @@
                 </md-tab>
                 <md-tab label="Grupper">
                     <md-content class="md-padding" layout="column">
-                        
+
                     </md-content>
                 </md-tab>
             </md-tabs>
         </md-dialog-content>
-        
+
         <md-dialog-actions layout="row">
-            <md-button ng-click="cancel()" >
+            <md-button ng-click="cancel()">
                 Annullér
             </md-button>
             <span flex></span>
             <input type="submit" class="md-button md-raised md-primary" value="Opret">
         </md-dialog-actions>
-        
+
     </form>
 </md-dialog>

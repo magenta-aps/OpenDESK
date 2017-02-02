@@ -32,9 +32,9 @@ function chatService(XMPP_DOMAIN, userService) {
             return false;
         }
         initialized = true;
-        var userSearchCallback = function(query, callback) {
-            userService.getPeople('?filter=' + encodeURIComponent(query)).then(function(data) {
-                callback(data.people.map(function(person) {
+        var userSearchCallback = function (query, callback) {
+            userService.getPeople('?filter=' + encodeURIComponent(query)).then(function (data) {
+                callback(data.people.map(function (person) {
                     return {
                         id: person.userName + '@' + XMPP_DOMAIN,
                         fullname: person.firstName + ' ' + person.lastName + ' (' + person.userName + ')'
@@ -64,29 +64,30 @@ function chatService(XMPP_DOMAIN, userService) {
         });
 
         // When "Call button" is clicked, display a video link message to everyone in the chat room
-        converse.listen.on('callButtonClicked', function(event, data) {
-            
+        converse.listen.on('callButtonClicked', function (event, data) {
+
             // This link will be unique to the chat room
             var videoLink = 'https://meet.jit.si/' + data.model.get('jid').replace(/[^a-z]/gi, '');
 
             var message = 'vil gerne starte en videochat med dig. Klik linket for at starte: ' + videoLink;
-            
+
             var msgObj = {
                 from: converse.user.jid(),
                 to: data.model.get('jid'),
                 type: 'chat'
             };
-            
+
             if (data.model.attributes.type === 'chatroom') {
                 msgObj.type = 'groupchat';
-            };
+            }
+            ;
             //var msg = converse.env.$msg(msgObj).c('body').t(message);
             var msg = converse.env.$msg(msgObj).c('body').t(message);
             converse.send(msg);
-            
+
             // Opens a chat window on the calling user's end
             window.open(videoLink, '', 'width=600,height=600');
-            
+
         });
         return true;
     };

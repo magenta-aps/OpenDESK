@@ -1,14 +1,14 @@
+angular
+    .module('openDeskApp')
+    .filter('workflowTaskStatus', workflowTaskStatusFilterFactory);
 
-    angular
-        .module('openDeskApp')
-        .filter('workflowTaskStatus', workflowTaskStatusFilterFactory);
-    
-    function workflowTaskStatusFilterFactory($translate){
-        function workflowTaskStatusFilter(taskStatus) {
-            if(taskStatus == undefined){
-                return '';
-            }
-            return $translate.instant('WORKFLOW.TASK.STATUS.' + taskStatus.replace( /\s/g, ""));
+function workflowTaskStatusFilterFactory($translate) {
+    function workflowTaskStatusFilter(taskStatus) {
+        if (taskStatus == undefined) {
+            return '';
         }
-        return workflowTaskStatusFilter;
+        return $translate.instant('WORKFLOW.TASK.STATUS.' + taskStatus.replace(/\s/g, ""));
     }
+
+    return workflowTaskStatusFilter;
+}

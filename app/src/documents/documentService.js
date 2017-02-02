@@ -1,4 +1,3 @@
-
 angular
     .module('openDeskApp.documents')
     .factory('documentService', documentService);
@@ -17,30 +16,28 @@ function documentService($http) {
 
     return service;
 
-    
+
     function getDocument(documentNodeRef) {
-        return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {
-        }).then(function(response) {
+        return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
             console.log('doc user access data');
             console.log(response.data.item.permissions.userAccess.create);
             return response.data;
         });
     }
 
-    
+
     function getPath(documentNodeRef) {
-        return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {
-        }).then(function(response) {
+        return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
             return response.data.item.location;
         });
     }
 
-    
+
     function getHistory(documentNodeRef) {
 
         var url = '/alfresco/s/history?method=getAll&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore';
 
-        return $http.get(url).then(function(response){
+        return $http.get(url).then(function (response) {
             return response.data;
         });
     }
@@ -51,7 +48,7 @@ function documentService($http) {
 
         var url = '/alfresco/s/previewhelper?version_node=' + versionNode + '&parent_node=' + node + "&method=create";
 
-        return $http.get(url).then(function(response){
+        return $http.get(url).then(function (response) {
 
             return response;
         });
@@ -61,14 +58,14 @@ function documentService($http) {
 
         var url = '/alfresco/s/previewhelper?version_node=' + node.split("/")[3] + '&method=cleanup';
 
-        return $http.get(url).then(function(response){
+        return $http.get(url).then(function (response) {
 
             return response;
         });
     }
 
-    
-    function uploadNewVersion (file, destination, nodeRef, major) {
+
+    function uploadNewVersion(file, destination, nodeRef, major) {
 
         var formData = new FormData();
         formData.append("filedata", file);

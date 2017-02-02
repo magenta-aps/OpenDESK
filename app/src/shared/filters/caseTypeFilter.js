@@ -1,14 +1,14 @@
-    
-    angular
-        .module('openDeskApp')
-        .filter('caseType', caseTypeFilterFactory);
-    
-    function caseTypeFilterFactory($translate){
-        function caseTypeFilter(type) {
-            if (typeof type === 'undefined') {
-                return "";
-            }
-            return $translate.instant(type.replace(":", "_").toUpperCase() + '.TYPE');
+angular
+    .module('openDeskApp')
+    .filter('caseType', caseTypeFilterFactory);
+
+function caseTypeFilterFactory($translate) {
+    function caseTypeFilter(type) {
+        if (typeof type === 'undefined') {
+            return "";
         }
-        return caseTypeFilter;
+        return $translate.instant(type.replace(":", "_").toUpperCase() + '.TYPE');
     }
+
+    return caseTypeFilter;
+}

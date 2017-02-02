@@ -1,23 +1,23 @@
 <md-dialog aria-label="Copy item" ng-cloak>
-	<form name="copyNodeRef" ng-submit="vm.copyNodeRefs(vm.source, destination, vm.parentId);">
+    <form name="copyNodeRef" ng-submit="vm.copyNodeRefs(vm.source, destination, vm.parentId);">
 
-		<md-toolbar>
-			<div class="md-toolbar-tools">
-				<h2>Kopiér til ...</h2>
-			</div>
-		</md-toolbar>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Kopiér til ...</h2>
+            </div>
+        </md-toolbar>
 
-		<md-dialog-content class="md-padding">
-				
-			<node-picker root="vm.parentId" model="destination"></node-picker>
-			<md-divider></md-divider>
+        <md-dialog-content class="md-padding">
 
-		</md-dialog-content>
+            <node-picker root="vm.parentId" model="destination"></node-picker>
+            <md-divider></md-divider>
 
-		<md-dialog-actions>
-			<md-button ng-click="vm.cancel()">Annullér</md-button>
-			<md-button ng-disabled="!destination" type="submit" class="md-primary md-raised">Kopiér hertil</md-button>
-		</md-dialog-actions>
+        </md-dialog-content>
 
-	</form>
+        <md-dialog-actions>
+            <md-button ng-click="vm.cancel()">Annullér</md-button>
+            <md-button ng-disabled="!destination" type="submit" class="md-primary md-raised">Kopiér hertil</md-button>
+        </md-dialog-actions>
+
+    </form>
 </md-dialog>

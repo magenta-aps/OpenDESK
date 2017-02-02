@@ -1,10 +1,9 @@
-
 angular
-        .module('openDeskApp.systemsettings')
-        .controller('GeneralConfigurationController', GeneralConfigurationController);
+    .module('openDeskApp.systemsettings')
+    .controller('GeneralConfigurationController', GeneralConfigurationController);
 
 function GeneralConfigurationController($mdDialog, $translate, $state, notificationUtilsService,
-        oeParametersService) {
+                                        oeParametersService) {
     var vm = this;
     vm.parameters = [];
     vm.loadList = loadList;
@@ -13,7 +12,7 @@ function GeneralConfigurationController($mdDialog, $translate, $state, notificat
     vm.loadList();
 
     function loadList() {
-        oeParametersService.getParameters().then(function(data) {
+        oeParametersService.getParameters().then(function (data) {
             vm.parameters = data;
             return data;
         });
@@ -21,17 +20,17 @@ function GeneralConfigurationController($mdDialog, $translate, $state, notificat
 
     function saveParameters(ev) {
         var confirm = $mdDialog.confirm()
-                .title($translate.instant('COMMON.CONFIRM'))
-                .textContent($translate.instant('ADMIN.SYS_SETTINGS.GENERAL.ARE_YOU_SURE_YOU_WANT_TO_SAVE_PARAMETERS'))
-                .targetEvent(ev)
-                .ok($translate.instant('COMMON.YES'))
-                .cancel($translate.instant('COMMON.CANCEL'));
-        $mdDialog.show(confirm).then(function() {
-            oeParametersService.saveParameters(vm.parameters).then(function() {
+            .title($translate.instant('COMMON.CONFIRM'))
+            .textContent($translate.instant('ADMIN.SYS_SETTINGS.GENERAL.ARE_YOU_SURE_YOU_WANT_TO_SAVE_PARAMETERS'))
+            .targetEvent(ev)
+            .ok($translate.instant('COMMON.YES'))
+            .cancel($translate.instant('COMMON.CANCEL'));
+        $mdDialog.show(confirm).then(function () {
+            oeParametersService.saveParameters(vm.parameters).then(function () {
                 notificationUtilsService.notify($translate.instant("ADMIN.SYS_SETTINGS.GENERAL.SAVED_SUCCESSFULLY"));
                 //reload full state
                 $state.reload();
-            }, function(response) {
+            }, function (response) {
                 notificationUtilsService.alert(response.data.message || response.statusText);
             });
         });

@@ -1,20 +1,19 @@
+angular
+    .module('openDeskApp.common.directives')
+    .directive('informItemSelectedThenClear', informItemSelectedThenClear);
 
-    angular
-        .module('openDeskApp.common.directives')
-        .directive('informItemSelectedThenClear', informItemSelectedThenClear);
-    
-    function informItemSelectedThenClear(){
-        return {
-            require: 'mdAutocomplete',
-            restrict: 'A',
-            link : function(scope, elm, attrs){
-                var ctrl = elm.controller('mdAutocomplete');
-                ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
-                    if (item) {
-                        scope.$eval(attrs.informItemSelectedThenClear);
-                        ctrl.clear();
-                    }
-                })); 
-            }
+function informItemSelectedThenClear() {
+    return {
+        require: 'mdAutocomplete',
+        restrict: 'A',
+        link: function (scope, elm, attrs) {
+            var ctrl = elm.controller('mdAutocomplete');
+            ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
+                if (item) {
+                    scope.$eval(attrs.informItemSelectedThenClear);
+                    ctrl.clear();
+                }
+            }));
         }
     }
+}

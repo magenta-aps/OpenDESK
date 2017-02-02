@@ -2,7 +2,8 @@
     <md-card-content>
         <div layout>
             <md-button ui-sref="administration.groups" ng-aria="{{ 'GROUP.GROUPS' | translate }}">
-                <i class="material-icons" style="vertical-align: middle;">arrow_back</i> {{ 'GROUP.GROUPS' | translate }}
+                <i class="material-icons" style="vertical-align: middle;">arrow_back</i> {{ 'GROUP.GROUPS' | translate
+                }}
             </md-button>
             <h3 class="md-headline" layout-margin>
                 {{ 'GROUP.GROUP' | translate }}: <span class="muted">{{ vm.group.displayName }}</span>
@@ -19,14 +20,17 @@
             </div>
             <md-virtual-repeat-container md-auto-shrink style="height: 450px;">
                 <div md-virtual-repeat="m in vm.groups" class="repeat-item" layout>
-                    <span class="r" flex="5"><i class="material-icons">{{ m.authorityType == 'USER' ? "person" : "group" }}</i></span>
+                    <span class="r" flex="5"><i class="material-icons">{{ m.authorityType == 'USER' ? "person" : "group"
+                        }}</i></span>
                     <span class="r" flex="50">{{ m.displayName}}</span>
               
                     <span class="r" flex="25">
-                        <md-button ng-show="{{ m.authorityType == 'GROUP' }}" ui-sref="administration.group({'shortName': m.shortName })">
+                        <md-button ng-show="{{ m.authorityType == 'GROUP' }}"
+                                   ui-sref="administration.group({'shortName': m.shortName })">
                             {{ 'COMMON.VIEW_DETAILS' | translate }}
                         </md-button>
-                        <md-button ng-disabled="false" ng-click="vm.removeMemberFromGroup(vm.group.shortName, m.authorityType, m.shortName, $event)">
+                        <md-button ng-disabled="false"
+                                   ng-click="vm.removeMemberFromGroup(vm.group.shortName, m.authorityType, m.shortName, $event)">
                             {{ 'COMMON.REMOVE' | translate }}
                         </md-button>
                     </span>
@@ -36,7 +40,9 @@
     </md-card-content>
 
     <md-card-footer>
-        <opene-group-user-dialog search-type="users" get-selected-items="vm.addMembersToGroup"></opene-group-user-dialog>
-        <opene-group-user-dialog search-type="groups" get-selected-items="vm.addMembersToGroup"></opene-group-user-dialog>
+        <opene-group-user-dialog search-type="users"
+                                 get-selected-items="vm.addMembersToGroup"></opene-group-user-dialog>
+        <opene-group-user-dialog search-type="groups"
+                                 get-selected-items="vm.addMembersToGroup"></opene-group-user-dialog>
     </md-card-footer>
 </md-card>

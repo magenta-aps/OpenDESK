@@ -1,1 +1,1 @@
-angular.module('openDeskApp.groups', [ 'ngMaterial', 'pascalprecht.translate']);
+angular.module('openDeskApp.groups', ['ngMaterial', 'pascalprecht.translate']);

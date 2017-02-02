@@ -3,7 +3,7 @@ angular
         'ngSanitize',
         'ngMaterial',
         'ngMessages',
-		'ngCookies',
+        'ngCookies',
         'material.wizard',
         'ui.router',
         'rt.encodeuri',
@@ -16,7 +16,6 @@ angular
         'openDeskApp.pd_sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
-        'openDeskApp.header',
         'openDeskApp.dashboard',
         'openDeskApp.documents',
         'openDeskApp.administration',
@@ -25,17 +24,15 @@ angular
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
-		//'openDeskApp.templates',
+		'openDeskApp.lool',
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
-        
         'openDeskApp.notifications',
         'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',
-        
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
@@ -64,7 +61,7 @@ angular
         });
     });
 
-function config($stateProvider, $urlRouterProvider,$sceDelegateProvider, USER_ROLES) {
+function config($stateProvider, $urlRouterProvider, $sceDelegateProvider, USER_ROLES) {
     $sceDelegateProvider.resourceUrlWhitelist([
         // Allow same origin resource loads.
         'self',
@@ -79,7 +76,8 @@ function config($stateProvider, $urlRouterProvider,$sceDelegateProvider, USER_RO
     $stateProvider.state('site', {
         abstract: true,
         resolve: {
-            authorize: ['authService', function (authService) {}]
+            authorize: ['authService', function (authService) {
+            }]
         },
         views: {
             'footer@': {
@@ -103,7 +101,7 @@ function config($stateProvider, $urlRouterProvider,$sceDelegateProvider, USER_RO
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-	}).state('templateList', {
+    }).state('templateList', {
         parent: 'site',
         url: '/skabeloner',
         views: {
@@ -116,7 +114,7 @@ function config($stateProvider, $urlRouterProvider,$sceDelegateProvider, USER_RO
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-	}).state('editTemplate', {
+    }).state('editTemplate', {
         parent: 'site',
         url: '/skabelon',
         views: {
@@ -203,7 +201,7 @@ function config($stateProvider, $urlRouterProvider,$sceDelegateProvider, USER_RO
                 controller: 'UsersController'
             }
         }
-        
+
     }).state('search', {
         url: '/search',
         views: {

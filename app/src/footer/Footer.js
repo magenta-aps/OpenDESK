@@ -1,7 +1,6 @@
-
 angular
     .module('openDeskApp')
-    .directive('appFooter', function() {
+    .directive('appFooter', function () {
         return {
             restrict: 'E',
             scope: {},

@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "angular": "^1.4.x",
+    "angular": "^1.6.x",
     "angular-animate": "1.5.9",
     "angular-aria": "1.5.9",
     "angular-auto-height": "https://github.com/m43nu/angular-auto-height.git",
@@ -34,10 +34,10 @@
     "angular-i18n": ""
   },
   "devDependencies": {
-    "angular-mocks": "^1.4.x"
+    "angular-mocks": "^1.6.x"
   },
   "resolutions": {
-    "angular": "^1.4.9",
+    "angular": "^1.6.1",
     "angular-material": "1.0.x",
     "bootstrap": "~3.3.6",
     "requirejs": "~2.2.0",

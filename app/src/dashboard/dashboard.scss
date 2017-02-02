@@ -1,40 +1,40 @@
-.dashboard-grid {	
-	margin: $u*2;
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-	align-content: space-between;
-	.tile {
-		flex: 1 0 auto;
-		background: #eee;
-		display: inline-block;
-		width: $u*5;
-		height: $u*5;		
-		padding: $u;
-		overflow: hidden;
-		margin: $u*0.25;
-		text-align: center;
-		&:hover,
-		&:active {
-			text-decoration: none;
-			background-color: #ddd;
-		}
-		.material-icons {
-			font-size: $u*3;
-			display: block;
-			margin: 0 0 $u*0.5;
-		}
-	}
-	@media screen and (min-width: $br-sm-md) {
-		.tile {
-			width: $u*10;
-			height: $u*10;
-			text-align: left;
-			.material-icons {
-				display: inline-block;
-				font-size: $u*1.5;
-				margin: 0;
-			}
-		}
-	}
+.dashboard-grid {
+  margin: $u*2;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-content: space-between;
+  .tile {
+    flex: 1 0 auto;
+    background: #eee;
+    display: inline-block;
+    width: $u*5;
+    height: $u*5;
+    padding: $u;
+    overflow: hidden;
+    margin: $u*0.25;
+    text-align: center;
+    &:hover,
+    &:active {
+      text-decoration: none;
+      background-color: #ddd;
+    }
+    .material-icons {
+      font-size: $u*3;
+      display: block;
+      margin: 0 0 $u*0.5;
+    }
+  }
+  @media screen and (min-width: $br-sm-md) {
+    .tile {
+      width: $u*10;
+      height: $u*10;
+      text-align: left;
+      .material-icons {
+        display: inline-block;
+        font-size: $u*1.5;
+        margin: 0;
+      }
+    }
+  }
 }

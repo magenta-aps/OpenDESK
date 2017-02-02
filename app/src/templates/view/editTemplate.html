@@ -1,55 +1,65 @@
 <div class="od-projects">
-<div layout="row" layout-align="space-between center">
-	<a class="md-button btnAlign" style="font-size: 14px" href="#/skabeloner"><i class="material-icons">arrow_back</i> Tilbage til alle projektskabeloner</a>
-</div>
-<div layout-gt-sm="row">
-<md-card flex="70">
-    <md-card-content>
-        <h2 class="od-title-icon"><i class="material-icons">content_copy</i>Opret Projektskabelon</h2>						
-		<h3 class="od-title-icon">&nbsp;Tilføj standarddokumenter</h3>
-	</md-card-content>				
-					
-	<md-card-content class="md-padding">
-		<div id="uploadFile" class="chosenFile"><i class="material-icons">error_outline</i>&nbsp;Der er ikke tilføjet noget dokument </div> 
-	</md-card-content>
-					
-	<md-card-content class="md-padding">
-		<div layout="row" layout-align="start center" class="btnAlign">
-			<md-button class="md-raised" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter&nbsp;&nbsp;</md-button>
-			<md-button class="md-raised" ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe&nbsp;&nbsp;</md-button>
-		</div>
-    </md-card-content>
-</md-card>
-<md-card flex="30">
-    <md-card-content>
-        <h2 class="od-title-icon">&nbsp;</h2>						
-		<h3 class="od-title-icon">Udfyld oplysninger</h3>						
-	</md-card-content>
-	<md-content class="md-padding">
-				<div layout-margin>
-				  <md-input-container>
-					<label>Skabelonnavn</label>
-					<input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle" md-autofocus>
-					<div ng-messages="renameFolderForm.newSiteName.$error">
-						<div ng-message="required">Dette felt skal udfyldes</div>
-					</div>
-				  </md-input-container>
-				</div>
-				<div layout-margin>
-					<md-input-container>
-						<label>Projektnavn</label>
-						<input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle">
-						<div ng-messages="renameFolderForm.newSiteName.$error">
-							<div ng-message="required">Dette felt skal udfyldes</div>
-						</div>
-					</md-input-container>
-				</div>	
-			</md-content>
-	<md-card-content>				
-        <div layout="row" layout-align="start center" class="btnAlign">
-			<md-button class="md-primary md-raised" ng-click="vm.createTemplate($event)"><i class="material-icons">check</i> Opret skabelon&nbsp;&nbsp;</md-button>			
-		</div>
-    </md-card-content>
-</md-card>
-</div>
+    <div layout="row" layout-align="space-between center">
+        <a class="md-button btnAlign" style="font-size: 14px" href="#/skabeloner"><i
+                class="material-icons">arrow_back</i> Tilbage til alle projektskabeloner</a>
+    </div>
+    <div layout-gt-sm="row">
+        <md-card flex="70">
+            <md-card-content>
+                <h2 class="od-title-icon"><i class="material-icons">content_copy</i>Opret Projektskabelon</h2>
+
+                <h3 class="od-title-icon">&nbsp;Tilføj standarddokumenter</h3>
+            </md-card-content>
+
+            <md-card-content class="md-padding">
+                <div id="uploadFile" class="chosenFile"><i class="material-icons">error_outline</i>&nbsp;Der er ikke
+                    tilføjet noget dokument
+                </div>
+            </md-card-content>
+
+            <md-card-content class="md-padding">
+                <div layout="row" layout-align="start center" class="btnAlign">
+                    <md-button class="md-raised" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i>
+                        Upload dokumenter&nbsp;&nbsp;</md-button>
+                    <md-button class="md-raised" ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i>
+                        Opret ny mappe&nbsp;&nbsp;</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card flex="30">
+            <md-card-content>
+                <h2 class="od-title-icon">&nbsp;</h2>
+
+                <h3 class="od-title-icon">Udfyld oplysninger</h3>
+            </md-card-content>
+            <md-content class="md-padding">
+                <div layout-margin>
+                    <md-input-container>
+                        <label>Skabelonnavn</label>
+                        <input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle" md-autofocus>
+
+                        <div ng-messages="renameFolderForm.newSiteName.$error">
+                            <div ng-message="required">Dette felt skal udfyldes</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout-margin>
+                    <md-input-container>
+                        <label>Projektnavn</label>
+                        <input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle">
+
+                        <div ng-messages="renameFolderForm.newSiteName.$error">
+                            <div ng-message="required">Dette felt skal udfyldes</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </md-content>
+            <md-card-content>
+                <div layout="row" layout-align="start center" class="btnAlign">
+                    <md-button class="md-primary md-raised" ng-click="vm.createTemplate($event)"><i
+                            class="material-icons">check</i> Opret skabelon&nbsp;&nbsp;</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>

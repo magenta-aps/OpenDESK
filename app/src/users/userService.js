@@ -1,7 +1,6 @@
-
 angular
-        .module('openDeskApp.users')
-        .factory('userService', userService);
+    .module('openDeskApp.users')
+    .factory('userService', userService);
 
 function userService($http) {
     return {
@@ -10,16 +9,16 @@ function userService($http) {
         getAuthorities: getAuthorities,
         getPersons: getPersons
     };
-    
+
 
     function getPerson(username) {
-        return $http.get('/api/people/' + username).then(function(response) {
+        return $http.get('/api/people/' + username).then(function (response) {
             return response.data;
         });
     }
 
     function getHome() {
-        return $http.get('/api/nodelocator/userhome').then(function(response) {
+        return $http.get('/api/nodelocator/userhome').then(function (response) {
             return response.data.data;
         });
     }
@@ -28,20 +27,20 @@ function userService($http) {
      * gets all authorities
      */
     function getAuthorities() {
-        return $http.get('/api/opendesk/authorities').then(function(response) {
+        return $http.get('/api/opendesk/authorities').then(function (response) {
             var items = response.data;
             //TODO: remove this temp fix:
-            if (items.data && items.data.items){
+            if (items.data && items.data.items) {
                 items = items.data.items;
             }
-            return Object.keys(items).map(function(key) {
+            return Object.keys(items).map(function (key) {
                 return items[key];
             });
         });
     }
-    
+
     function getPeople(filter) {
-        return $http.get('/api/people' + filter).then(function(response) {
+        return $http.get('/api/people' + filter).then(function (response) {
             return response.data;
         });
     }
@@ -51,7 +50,7 @@ function userService($http) {
         if (searchTerm && searchTerm.length > 0) {
             url += '&searchTerm=' + searchTerm;
         }
-        return $http.get(url).then(function(result) {
+        return $http.get(url).then(function (result) {
             return result.data.data.items;
         });
     }
