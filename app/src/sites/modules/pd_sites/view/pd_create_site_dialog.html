@@ -12,35 +12,44 @@
         
         <md-dialog-content>
             <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab label="Navn">
+                <md-tab label="Navn og styring">
                     <md-content class="md-padding" layout="column">
                         <md-input-container>
-                            <label>Navn</label>
-                            <input type="text" ng-model="newSite.siteName">
+                            <label>Projektnavn</label>
+                            <input type="text" ng-model="newSite.siteName" required>
                             </md-input-container>
                         <md-input-container>
                             <label>Beskrivelse</label>
                             <textarea ng-model="newSite.desc"></textarea>
                         </md-input-container>
-                    </md-content>
-                </md-tab>
-                <md-tab label="Styring">
-                    <md-content class="md-padding" layout="column">
-                        <md-input-container>
-                            <label>Projektejer</label>
-                            <input type="text" ng-model="newSite.owner">
-                        </md-input-container>
+                            
+                        <md-autocomplete
+                                    md-selected-item="newSite.owner"
+                                    md-search-text="searchText"
+                                    md-selected-item-change="selectedItemChange( item )"
+                                    md-items="item in querySearchProjectOwners( searchText )"
+                                    md-item-text="item.shortName"
+                                    md-min-length="2"
+                                    placeholder="Projektejer">
+                                <md-item-template>
+                                    <span md-highlight-text="searchText" md-highlight-flags="^i">{{ item.fullName }}</span>
+                                </md-item-template>
+                                <md-not-found>
+                                    Ingen brugere matcher "{{ searchText }}".
+                                </md-not-found>
+                        </md-autocomplete>
+                            
                         <md-input-container>
                             <label>Projektleder</label>
-                            <input type="text" ng-model="newSite.manager">
+                            <input type="text" ng-model="newSite.manager" required>
                         </md-input-container>
                         <md-input-container>
                             <label>Organisatorisk enhed</label>
-                            <input type="text" ng-model="newSite.center_id">
+                            <input type="text" ng-model="newSite.center_id" required>
                         </md-input-container>
                         <md-input-container>
                             <label>SBSYS sagsnr.</label>
-                            <input type="text" ng-model="newSite.sbsys">
+                            <input type="text" ng-model="newSite.sbsys" required>
                         </md-input-container>
                     </md-content>
                 </md-tab>

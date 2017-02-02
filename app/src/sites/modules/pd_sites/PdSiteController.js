@@ -41,7 +41,7 @@
             
             function newPDSite(ev) {
                 $mdDialog.show({
-                    controller: CreatePDSiteDialogController,
+                    controller: PdSiteCreateController,
                     templateUrl: 'app/src/sites/modules/pd_sites/view/pd_create_site_dialog.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
@@ -50,15 +50,40 @@
             }
             
             
-            function CreatePDSiteDialogController($scope, $mdDialog, pd_siteService, $state) {
+            function PdSiteCreateController($scope, $mdDialog, pd_siteService, $state, $filter) {
                 
                 $scope.newSite = {};
+                var availProjectOwners = [];
                 
-                $scope.cancel = function() {
+                $scope.cancel = cancel;
+                $scope.querySearchProjectOwners = querySearchProjectOwners;
+                $scope.submitNewPDSite = submitNewPDSite;
+                
+                getProjectOwners();
+                
+                function cancel() {
                     $mdDialog.cancel();
-                };
+                }
                 
-                $scope.submitNewPDSite = function() {
+                function getProjectOwners() {
+                    pd_siteService.getAllManagers().then(
+                        function(response) {
+                            console.log('Got available project owners');
+                            console.log(response.data);
+                            availProjectOwners = response.data;
+                        },
+                        function(err) {
+                            console.log('Got error retrieving project owners');
+                            console.log(err);
+                        }
+                    );
+                }
+                
+                function querySearchProjectOwners(query) {
+                    return $filter('filter')(availProjectOwners, { name: query });
+                }
+                
+                function submitNewPDSite() {
                     // siteName, description, sbsys, center_id, owner, manager
                     pd_siteService.createPDSite(
                         $scope.newSite.siteName,
@@ -76,7 +101,7 @@
                             console.log(err);
                         }
                     );
-                };
+                }
                 
             }
             
