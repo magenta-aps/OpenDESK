@@ -234,45 +234,50 @@
                 </div>
             </md-card-content>
         </md-card-->
-        
         <md-card flex-gt-sm="30" ng-controller="PdSiteController as pd">
 			<md-card-content>
 				<h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>
+				<md-button ng-click="pd.showProjectMembers(true,'TestAvanceretprojekt','PD_PROJECTOWNER')">knap</md-button>
+				<table>													
+					<tr ng-repeat="members in pd.projectMembers">
+						<td>fisk {{ members.fullName }}</td>
+					</tr>										
+				</table>	
 				
 				<div class="expandCollapse">					
 					<ul>
 						<li>
-							<input type="checkbox" ng-change="pd.showProjectMembers(this, vm.project, 'PD_PROJECTMANAGER');" checked>
+							<input type="checkbox" id="cb1" ng-model="item.selected" ng-change="pd.showProjectMembers(item.selected,'{{vm.project}}','PD_PROJECTOWNER')" checked>
 							<i class="check"></i>														
-							<h2>&nbsp;Projektgruppe</h2>							
+							<h2>&nbsp;Projektgruppe</h2>
+							<p class="transition pContent">													
+								<span ng-repeat="members in pd.projectMembers">{{ members.fullName }}</span>										
+							</p>														
+						</li>
+						<!--li>
+							<input type="checkbox" ng-change="pc.showProjectMembers(item.selected, '{{vm.project}}', 'PD_WORKGROUP')" checked>
+							<i class="check"></i>							
+							<h2>&nbsp;Styregruppe</h2>							
 							<p class="transition pContent">													
 								<span ng-repeat="members in projectMembers">{{ members.name }}</span>										
 							</p>
 						</li>
 						<li>
-							<input type="checkbox" checked>
-							<i class="check"></i>							
-							<h2>&nbsp;Styregruppe</h2>							
-							<p class="transition pContent">													
-								<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
-							</p>
-						</li>
-						<li>
-							<input type="checkbox" checked>
+							<input type="checkbox" ng-change="pc.showProjectMembers(item.selected, '{{vm.project}}', 'PD_MONITORS')" checked>
 							<i class="check"></i>							
 							<h2>&nbsp;Arbejdsgruppe</h2>							
 							<p class="transition pContent">													
-								<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
+								<span ng-repeat="members in projectMembers">{{ members.name }}</span>										
 							</p>
 						</li>
 						<li>
-							<input type="checkbox" checked>
+							<input type="checkbox" ng-change="pc.showProjectMembers(item.selected, '{{vm.project}}', 'PD_STEERING_GROUP')" checked>
 							<i class="check"></i>							
 							<h2>&nbsp;Følgegruppe</h2>							
 							<p class="transition pContent">													
-								<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
+								<span ng-repeat="members in projectMembers">{{ members.name }}</span>										
 							</p>
-						</li>
+						</li-->
 					</ul>
 				</div>
 								

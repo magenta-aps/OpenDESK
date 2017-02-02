@@ -237,10 +237,8 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 var requestName = dbid + "_" + groupName;
 
                 return groupService.getGroupMembers(requestName). then (function(r) {
-                    console.log(r);
+                    return r;
                 });
-;
-
                 return response.data
             });
         }
