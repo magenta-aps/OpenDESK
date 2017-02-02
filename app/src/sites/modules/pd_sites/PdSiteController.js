@@ -50,16 +50,20 @@
             }
             
             
-            function PdSiteCreateController($scope, $mdDialog, pd_siteService, $state, $filter) {
+            function PdSiteCreateController($scope, $mdDialog, pd_siteService, $state, $filter, siteService) {
                 
                 $scope.newSite = {};
+                $scope.availOrgs = [];
                 var availProjectOwners = [];
+                var availPeople = [];
                 
                 $scope.cancel = cancel;
-                $scope.querySearchProjectOwners = querySearchProjectOwners;
+                $scope.searchProjectOwners = searchProjectOwners;
+                $scope.searchPeople = searchPeople;
                 $scope.submitNewPDSite = submitNewPDSite;
                 
                 getProjectOwners();
+                getAvailOrgs();
                 
                 function cancel() {
                     $mdDialog.cancel();
@@ -79,12 +83,27 @@
                     );
                 }
                 
-                function querySearchProjectOwners(query) {
-                    return $filter('filter')(availProjectOwners, { name: query });
+                function searchProjectOwners(query) {
+                    var hitList = $filter('filter')(availProjectOwners, { fullName: query });
+                    return hitList;
+                }
+                
+                function searchPeople(query) {
+                    console.log('searchPeople controller');
+                    if (query) {
+                        return siteService.getAllUsers(query);
+                    }
+                }
+                
+                function getAvailOrgs() {
+                    pd_siteService.getAllOrganizationalCenters().then(
+                        function (response) {
+                            return response;
+                        }
+                    );
                 }
                 
                 function submitNewPDSite() {
-                    // siteName, description, sbsys, center_id, owner, manager
                     pd_siteService.createPDSite(
                         $scope.newSite.siteName,
                         $scope.newSite.desc,

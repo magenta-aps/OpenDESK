@@ -43,12 +43,10 @@ angular
     function getAllManagers() {
         return groupService.getGroupMembers("GLOBAL_Projectmanagers").then(
             function(response) {
-                console.log('success getting all managers from service');
                 console.log(response.data);
                 return response;
             },
             function(err) {
-                console.log('failure getting all managers from service');
                 console.log(err);
             }
         );
@@ -58,6 +56,7 @@ angular
     function getAllOrganizationalCenters() {
         return groupService.getGroupMembers("OrganizationalCenters").then (function(response) {
             console.log(response);
+            return response;
         });
     }
 

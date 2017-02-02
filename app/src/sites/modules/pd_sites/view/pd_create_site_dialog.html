@@ -1,5 +1,5 @@
 <md-dialog aria-label="Opret nyt avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="submitNewPDSite()">
+    <form ng-submit="submitNewPDSite()" class="pd-site-create-form">
         <md-toolbar>
           <div class="md-toolbar-tools">
             <h2>Opret nyt projekt med styring og følgegrupper</h2>
@@ -24,29 +24,45 @@
                         </md-input-container>
                             
                         <md-autocomplete
-                                    md-selected-item="newSite.owner"
-                                    md-search-text="searchText"
-                                    md-selected-item-change="selectedItemChange( item )"
-                                    md-items="item in querySearchProjectOwners( searchText )"
-                                    md-item-text="item.shortName"
-                                    md-min-length="2"
-                                    placeholder="Projektejer">
-                                <md-item-template>
-                                    <span md-highlight-text="searchText" md-highlight-flags="^i">{{ item.fullName }}</span>
-                                </md-item-template>
-                                <md-not-found>
-                                    Ingen brugere matcher "{{ searchText }}".
-                                </md-not-found>
+                                md-selected-item="newSite.owner"
+                                md-search-text="searchTextOwner"
+                                md-items="item in searchProjectOwners(searchTextOwner)"
+                                md-item-text="item.fullName"
+                                md-min-length="2"
+                                placeholder="Projektejer">
+                            <md-item-template>
+                                <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ item.fullName }}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Ingen brugere matcher "{{ searchTextOwner }}".
+                            </md-not-found>
                         </md-autocomplete>
                             
-                        <md-input-container>
-                            <label>Projektleder</label>
-                            <input type="text" ng-model="newSite.manager" required>
-                        </md-input-container>
+                        <md-autocomplete
+                                md-selected-item="newSite.manager"
+                                md-search-text="searchTextManager"
+                                md-items="man in searchPeople(searchTextManager)"
+                                md-item-text="man.firstName + ' ' + man.lastName"
+                                md-min-length="2"
+                                placeholder="Projekleder"
+                                md-delay="500">
+                            <md-item-template>
+                                <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Ingen brugere matcher "{{ searchTextManager }}".
+                            </md-not-found>
+                        </md-autocomplete>
+                        
                         <md-input-container>
                             <label>Organisatorisk enhed</label>
-                            <input type="text" ng-model="newSite.center_id" required>
+                            <md-select ng-model="newSite.center_id" required>
+                                <md-option ng-repeat="org in availOrgs" value="{{ org.name }}">
+                                    {{ org.name }}
+                                </md-option>
+                            </md-select>
                         </md-input-container>
+                        
                         <md-input-container>
                             <label>SBSYS sagsnr.</label>
                             <input type="text" ng-model="newSite.sbsys" required>
