@@ -4,19 +4,18 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
 			var vm = this;
             
             vm.sites = [];
 
 
-
 			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
 
 			// siteService.removeRole("kage2", "abeecher", "Consumer")
 
-			 //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
+			 pd_siteService.createPDSite("kage8", "desc", "100", "center_1","fhp", "fhp");
 
 			//pd_siteService.getAllOrganizationalCenters();
 
