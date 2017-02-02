@@ -3,7 +3,7 @@ angular
         'ngSanitize',
         'ngMaterial',
         'ngMessages',
-			  'ngCookies',
+		'ngCookies',
         'material.wizard',
         'ui.router',
         'rt.encodeuri',

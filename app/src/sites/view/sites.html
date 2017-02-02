@@ -88,28 +88,8 @@
 			
             <div layout="row" layout-align="start center" class="btnAlign">
                 
-                <md-menu>
-                    <md-button class="md-text-icon-button md-raised md-primary" ng-click="vm.openMenu($mdOpenMenu, $event)">
-                        <i class="material-icons">add</i>
-                        Opret nyt Projekt
-                    </md-button>
-                    <md-menu-content>
-                        <md-menu-item>
-                            <md-button ng-click="vm.newSite($event)">
-                                <i class="material-icons">add</i>
-                                Nyt projekt
-                            </md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-controller="PDSiteController as pd">
-                            <md-button ng-click="pd.newPDSite($event)">
-                                <i class="material-icons">add</i>
-                                Nyt avanceret projekt
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-                
 				<md-button class="md-raised md-primary" ng-click="vm.newSite($event)"><i class="material-icons">add</i> Opret nyt Projekt&nbsp;&nbsp;</md-button>
+                <md-button ng-controller="PdSiteController as pc" class="md-raised md-primary" ng-click="pc.newPDSite($event)"><i class="material-icons">add</i> Opret nyt Avanceret Projekt&nbsp;&nbsp;</md-button>
                 
 			</div>
             
