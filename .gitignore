@@ -1,3 +1,5 @@
+build/
+junitresults.xml
 logs/*
 !.gitkeep
 node_modules/
@@ -19,3 +21,4 @@ web.config
 /bin/
 ._*
 app/src/app.iml
+*.log

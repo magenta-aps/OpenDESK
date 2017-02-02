@@ -1,7 +1,7 @@
 <section class="od-user" ng-controller="UserController as vm">
 
     <button ng-click="vm.toggleUser()" class="od-btn od-user--toggle">
-			<img src="/app/assets/images/avatars/Majbrit.jpg" class="avatar" alt="">
+        <i class="material-icons">person</i>
     </button>
     
     <div class="od-flyout right fixed" ng-class="{ open: vm.on }" ng-click="vm.toggleUser()">
@@ -11,38 +11,18 @@
             </button>
         
             <div class="od-me" ng-controller="AuthController as vm">
-                <img class="od-me--avatar" src="/app/assets/images/avatars/Majbrit.jpg" alt="">
-                <span class="od-me--name">
-                    {{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}
-                    <button class="od-btn od-me--logout" ng-click="vm.logout()">
-                        {{ 'MENU.LOGOUT' | translate }}
-                    </button>
-                </span>
+                <h2><i class="material-icons">person</i> {{ vm.getUserInfo().user.userName }}</h2>
+                <dl>
+                    <dt>Navn</dt>
+                    <dd>{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}</dd>
+                </dl>
+                
+                <button class="od-btn" ng-click="vm.logout()">
+
+                    {{ 'MENU.LOGOUT' | translate }}
+                </button>
             </div>
             
-            <ul class="od-userlist">
-                <li class="od-userlist--item">
-                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/Majbrit.jpg" alt="">
-                    <span class="od-userlist--name">Person personsson</span>
-                </li>
-                <li class="od-userlist--item">
-                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/Majbrit.jpg" alt="">
-                    <span class="od-userlist--name">Person personsson</span>
-                </li>
-                <li class="od-userlist--item">
-                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/Majbrit.jpg" alt="">
-                    <span class="od-userlist--name">Person personsson</span>
-                </li>
-                <li class="od-userlist--item">
-                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/Majbrit.jpg" alt="">
-                    <span class="od-userlist--name">Person personsson</span>
-                </li>
-                <li class="od-userlist--item">
-                    <img class="od-userlist--avatar" src="/app/assets/images/avatars/Majbrit.jpg" alt="">
-                    <span class="od-userlist--name">Person personsson</span>
-                </li>
-            </ul>
-        
         </div>
     </div>
     

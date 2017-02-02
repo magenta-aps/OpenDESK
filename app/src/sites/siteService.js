@@ -1,21 +1,39 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService) {
+angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
     var restBaseUrl = '/alfresco/s/api/';
 
     return {
+
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
             })
         },
+        getSiteUserRole: function (siteShortName, userName) {
+            https://frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx/memberships/flemming
+            return $http.get('/api/sites/' + siteShortName + '/memberships/' + userName ).then(function (response) {
+                return response.data.role;
+            }) 
+        },
         getSites: function () {
-            return $http.get('/api/sites').then(function (response) {
+            return $http.get("/alfresco/service/sites?method=getAll").then(function(response) {
                 return response.data;
             })
         },
+        getSitesPerUser: function (userId) {
+            return $http.get("/alfresco/service/sites?q=" + "query" + "&method=getSitesPerUser").then(
+                function(response) {
+                    console.log(response);
+                    return response.data;
+                },
+                function(err) {
+                    console.log(err);
+                }
+            )
+        },
         getSitesByQuery: function (query) {
-            return $http.get('/api/sites?nf=' + query).then(function (response) {
+            return $http.get("/alfresco/service/sites?q=" + query + "&method=getSitesPerUser").then(function(response) {
                 return response.data;
             })
         },
@@ -48,12 +66,12 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
-        updateSiteName: function (shortName, newName) {
+        updateSiteName: function (shortName, newName, description) {
             return $http.put('/api/sites/' + shortName, {
                 shortName: shortName,
                 sitePreset: "default",
                 title: newName,
-                description: "cropA"
+                description: (description && description != '') ? description: ''
             }).then(function (response) {
                 return response.data;
             })
@@ -103,6 +121,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         deleteFolder: function (nodeRef) {
             var url = '/slingshot/doclib/action/folder/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
             return $http.delete(url).then(function (result) {
+				console.log(result);
                 return result.data;
             })
         },
@@ -121,6 +140,21 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
 
             var formData = new FormData();
             formData.append("filedata", file);
+            formData.append("filename", file.name);
+            formData.append("destination", destination ? destination : null);
+
+            return $http.post("/api/upload", formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function (response) {
+                return response;
+            });
+        },uploadNewVersion: function (file, destination, existingNodeRef, extras) {
+
+            var formData = new FormData();
+            formData.append("filedata", file);
+            formData.append("updatenoderef", existingNodeRef);
+            formData.append("majorversion", false);
             formData.append("filename", file.name);
             formData.append("destination", destination ? destination : null);
 
@@ -160,6 +194,55 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         updateNode: function (nodeRef, props) {
             return $http.post('/api/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
                 return response.data;
+            });
+        },
+        getContents: function (node) {
+            return $http.get("/alfresco/service/contents?node=" + node).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
+        },
+        addUser: function (siteShortName, user, group) {
+            return $http.get("/alfresco/service/sites?method=addUser&" + "siteShortName=" + siteShortName + "&user=" + user + "&group=" + group).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
+        },
+        removeUser: function (siteShortName, user, group) {
+            return $http.get("/alfresco/service/sites?method=removeUser&" + "siteShortName=" + siteShortName + "&user=" + user + "&group=" + group).then(function(response) {
+
+                console.log(response.data);
+                return response.data;
+            })
+        },
+        addRole : function (siteShortName, user, role) {
+            return $http.get("/alfresco/service/sites?method=addPermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+                console.log(response.data)
+                return response.data
+            });
+        },
+        removeRole : function (siteShortName, user, role) {
+            return $http.get("/alfresco/service/sites?method=removePermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+                console.log(response.data)
+                return response.data
+            });
+        },
+        getGroupMembers : function (siteShortName, groupName) {
+            return $http.get("/alfresco/service/sites?method=getDBID&siteShortName=" + siteShortName).then(function(response) {
+
+                var dbid = response.data[0].DBID;
+                console.log(dbid)
+
+                var requestName = dbid + "_" + groupName;
+
+                return groupService.getGroupMembers(requestName). then (function(r) {
+                    console.log(r);
+                });
+;
+
+                return response.data
             });
         }
     }

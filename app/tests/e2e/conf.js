@@ -1,7 +1,7 @@
 var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
 
 exports.config = {
-    capabilities: {'browserName': 'firefox'},
+    capabilities: {'browserName': 'chrome'},
     /*multiCapabilities: [
      {'browserName': 'chrome'},
      {'browserName': 'firefox'},

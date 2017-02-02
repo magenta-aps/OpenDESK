@@ -1,3 +1,5 @@
+
+
 /*
  * INITIALIZE GULP
  */
@@ -7,14 +9,14 @@ var gulp = require('gulp'),
     fs = require('fs'),
     proxy = require('http-proxy-middleware'),
     autoprefixer = require('gulp-autoprefixer'),
-    gulpNSP = require('gulp-nsp'),
-    pa11y = require('gulp-pa11y');
+	gulpNSP = require('gulp-nsp'),
+	pa11y = require('gulp-pa11y');
 
 // Config vars
 // If, after a while, there are a lot of config vars, we can move these to a separate file
 var environment = {
     demo: {
-        chat: 'http://demo.opendesk.dk:5280/http-bind',
+	chat: 'http://demo.opendesk.dk:5280/http-bind',
         repo: 'http://demo.opendesk.dk:8080',
         share: 'http://demo.opendesk.dk:8081'
     },
@@ -72,37 +74,37 @@ function createWebserver(config) {
  */
 
 // Script tasks
-gulp.task('scripts', function () {
+gulp.task('scripts', function() {
     return gulp.src(paths.scripts)
-        .pipe($.wrap('(function(){\n"use strict";\n<%= contents %>\n})();'))
-        //.pipe($.jshint('.jshintrc'))
-        //.pipe($.jshint.reporter('jshint-stylish'))
-        .pipe($.concat(dist.name + '.js'))
-        .pipe($.change(includeAppConfigParams))
-        .pipe(gulp.dest(dist.folder))
-        .pipe($.rename({suffix: '.min'}))
-        .pipe($.stripDebug())
-        .pipe($.ngAnnotate())
-        .pipe($.uglify())
-        .pipe(gulp.dest(dist.folder))
-        .on('error', $.util.log);
+            .pipe($.wrap('(function(){\n"use strict";\n<%= contents %>\n})();'))
+            //.pipe($.jshint('.jshintrc'))
+            //.pipe($.jshint.reporter('jshint-stylish'))
+            .pipe($.concat(dist.name + '.js'))
+            .pipe($.change(includeAppConfigParams))
+            .pipe(gulp.dest(dist.folder))
+            .pipe($.rename({suffix: '.min'}))
+            .pipe($.stripDebug())
+            .pipe($.ngAnnotate())
+            //.pipe($.uglify())
+            .pipe(gulp.dest(dist.folder))
+            .on('error', $.util.log);
 });
 
 // CSS tasks
 gulp.task('css', function () {
     return gulp.src(paths.scss)
-        .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
-        .pipe($.concat(dist.name + '.scss'))
-        .pipe($.sass())
-        .pipe(gulp.dest(dist.folder))
-        .pipe($.rename({suffix: '.min'}))
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
-            cascade: false
-        }))
-        .pipe($.minifyCss())
-        .pipe(gulp.dest(dist.folder))
-        .on('error', $.util.log);
+            .pipe($.wrap('/** ---------------- \n * Filepath: <%= file.relative %>\n */\n<%= contents %>'))
+            .pipe($.concat(dist.name + '.scss'))
+            .pipe($.sass())
+            .pipe(gulp.dest(dist.folder))
+            .pipe($.rename({suffix: '.min'}))
+            .pipe(autoprefixer({
+                browsers: ['last 2 versions'],
+                cascade: false
+            }))
+            .pipe($.minifyCss())
+            .pipe(gulp.dest(dist.folder))
+            .on('error', $.util.log);
 });
 
 //UI tests

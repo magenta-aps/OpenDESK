@@ -4,13 +4,38 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
 			var vm = this;
-			
-			siteService.getSites().then(function(val) {
-				vm.sites = val;
-			});
+            
+            vm.sites = [];
+
+			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
+
+			// siteService.removeRole("kage2", "abeecher", "Consumer")
+
+			 //pd_siteService.createPDSite("kage8", "desc", "100", "center_1","fhp", "fhp");
+
+			//pd_siteService.getAllOrganizationalCenters();
+
+
+            //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","admin", "abeecher");
+			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
+			//siteService.removeRole("kage2", "abeecher", "Consumer")
+
+			//siteService.addUser("kage8", "abeecher", "PD_MONITORS");
+			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
+
+
+            function getSites() {
+                return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
+                        vm.sites = response;
+						return response;
+                    }
+                );    
+            };
+            getSites();
+
 
 			vm.newSite = function(event) {
 				$mdDialog.show({
@@ -23,18 +48,19 @@
 				});
 			};
 
+            
 			vm.createSite = function (name, description) {
-				var r = siteService.createSite(name, description);
 
-				r.then(function(result){			
-					
-					siteService.getSites().then(function(val) {
-						vm.sites = val;
-					});
-					
-					$mdDialog.hide();
+				siteService.createSite(name, description).then(function(val) {
+
+					getSites().then(function(val) {
+								vm.sites = val;
+								$mdDialog.hide();
+							});
+
+
 				});
-			}
+			};
 
 			vm.deleteSiteDialog = function(siteName) {
 				var confirm = $mdDialog.confirm()
@@ -53,11 +79,11 @@
 				r.then(function(result){
 					$mdDialog.hide();
 					
-					siteService.getSites().then(function(val) {
+					getSites().then(function(val) {
 						vm.sites = val;
 					});
 				});
-			}
+			};
 
 			vm.cancel = function() {
 				$mdDialog.cancel();
@@ -73,18 +99,13 @@
 			  $mdOpenMenu(event);
 			};
 
-
-
-			vm.querySites = function(q) {
-				return siteService.getSitesByQuery(q).then(function (val) {
-					vm.sites = val;
-				});
-			}
-
-
-			vm.currentDialogSite = '';
-			vm.renameSiteDialog = function (event, site) {
-				vm.currentDialogSite = site;		
+			vm.currentDialogTitle = '';
+			vm.currentDialogDescription = '';
+			vm.currentDialogShortName = '';
+			vm.renameSiteDialog = function (event, shortName, title, description) {
+				vm.currentDialogTitle = title;
+				vm.currentDialogDescription = description;
+				vm.currentDialogShortName = shortName;
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
 					parent: angular.element(document.body),
@@ -94,20 +115,37 @@
 					clickOutsideToClose: true
 				});
 			};
+			
+            
+			vm.currentDialogSite = '';
+			vm.infoSiteDialog = function (site) {
+				vm.currentDialogSite = site;		
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
+					parent: angular.element(document.body),
+					//targetEvent: event,
+					scope: $scope,        // use parent scope in template
+					preserveScope: true,  // do not forget this if use parent scope
+					clickOutsideToClose: true
+				});
+			};
 
-			vm.updateSiteName = function (shortName, newName) {
-				var r = siteService.updateSiteName(shortName, newName);
+            
+			vm.updateSiteName = function (shortName, newName, description) {
+				var r = siteService.updateSiteName(shortName, newName, description);
 
 				r.then(function(result){
 					vm.project_title = result.title;
+					vm.project_description = result.description;
 					$mdDialog.hide();
 					
-					siteService.getSites().then(function(val) {
+					getSites().then(function(val) {
 						vm.sites = val;
 					});
 				});
-			}
+			};
 
+            
 			vm.getSearchresults = function getSearchReslts(term){
 				return searchService.getSearchResults(term).then(function (val) {
 
@@ -124,8 +162,9 @@
 						return [];
 					}
 				});
-			}
+			};
 
+            
 			vm.getAutoSuggestions = function getAutoSuggestions(term) {
 				return searchService.getSearchSuggestions(term).then(function (val) {
 
@@ -136,8 +175,9 @@
 						return [];
 					}
 				});
-			}
+			};
 
+            
 			vm.gotoPath = function (nodeRef) {
 
 				var ref = nodeRef;
@@ -154,9 +194,7 @@
 
 					console.log("gotoPath");
 				});
-			}
-
-        }; // SiteCtrl close
-
-
-
+			};
+            
+            
+        } // SiteCtrl close

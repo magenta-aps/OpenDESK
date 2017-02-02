@@ -7,8 +7,8 @@
   "private": true,
   "dependencies": {
     "angular": "^1.4.x",
-    "angular-animate": "^1.4.x",
-    "angular-aria": "^1.4.x",
+    "angular-animate": "1.5.9",
+    "angular-aria": "1.5.9",
     "angular-auto-height": "https://github.com/m43nu/angular-auto-height.git",
     "angular-encode-uri": "",
     "angular-file-saver": "",
@@ -29,7 +29,9 @@
     "material-wizard": "",
     "converse.js": "https://github.com/magenta-aps/converse.js.git#master",
     "pdfjs-dist": "",
-    "angular-cookies": "^1.5.7"
+    "angular-cookies": "^1.5.7",
+    "angular-fixed-table-header": "",
+    "angular-i18n": ""
   },
   "devDependencies": {
     "angular-mocks": "^1.4.x"
@@ -41,6 +43,6 @@
     "requirejs": "~2.2.0",
     "jquery": "1.12.3",
     "backbone": "1.1.2",
-    "angular-translate": "2.11.1"
+    "angular-translate": "2.13.1"
   }
 }

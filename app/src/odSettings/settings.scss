@@ -1,0 +1,52 @@
+.od-settings {
+
+}
+
+.od-settings--toggle {
+	top: 0;
+	right: $u*6;
+	position: fixed;
+	z-index: 1;
+	/*height: $u*2;
+	width: $u*2;*/
+	padding: 0;
+	&::-moz-focus-inner {
+		padding: 0;
+		border: 0;
+	}
+}
+
+.od-me--avatar {
+	display: block;
+}
+
+.od-me--name {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 0 0 $u;
+}
+
+.od-userlist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.od-userlist--item {
+	height: $u*3;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	background-color: #eee;
+	margin-top: 1px;
+}
+
+.od-userlist--avatar {
+	width: $u*3;
+}
+
+.od-userlist--name {
+	padding: $u*0.5;
+}

@@ -252,10 +252,13 @@
                 },
                 
                 _acceptsThumbnail: function(item){
-                    if(this.thumbnail === null || this.thumbnail === undefined 
+                    if(this.thumbnail === null || this.thumbnail === undefined
                             || item.thumbnailDefinitions === null || item.thumbnailDefinitions === undefined){
                         return false;
                     }
+
+
+
                     return item.thumbnailDefinitions.indexOf(this.thumbnail) !== -1;
                 },
                 
