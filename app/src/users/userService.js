@@ -51,9 +51,17 @@ function userService($http) {
         if (searchTerm && searchTerm.length > 0) {
             url += '&searchTerm=' + searchTerm;
         }
-        return $http.get(url).then(function(result) {
-            return result.data.data.items;
-        });
+        return $http.get(url).then(
+            function(result) {
+                console.log('got persons (service)');
+                console.log(result);
+                return result.data.data.items;
+            },
+            function(err) {
+                console.log('no got persons (service)');
+                console.log(err);
+            }
+        );
     }
 
 

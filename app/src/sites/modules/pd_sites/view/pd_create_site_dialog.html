@@ -1,5 +1,5 @@
 <md-dialog aria-label="Opret nyt avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="submitNewPDSite()">
+    <form ng-submit="submitNewPDSite()" class="pd-site-create-form">
         <md-toolbar>
           <div class="md-toolbar-tools">
             <h2>Opret nyt projekt med styring og følgegrupper</h2>
@@ -12,40 +12,75 @@
         
         <md-dialog-content>
             <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab label="Navn">
+                <md-tab label="Navn og styring">
                     <md-content class="md-padding" layout="column">
                         <md-input-container>
-                            <label>Navn</label>
-                            <input type="text" ng-model="newSite.siteName">
+                            <label>Projektnavn</label>
+                            <input type="text" ng-model="newSite.siteName" required>
                             </md-input-container>
                         <md-input-container>
                             <label>Beskrivelse</label>
-                            <textarea ng-model="newSite.desc"></textarea>
+                            <textarea ng-model="newSite.desc" required></textarea>
                         </md-input-container>
-                    </md-content>
-                </md-tab>
-                <md-tab label="Styring">
-                    <md-content class="md-padding" layout="column">
-                        <md-input-container>
-                            <label>Projektejer</label>
-                            <input type="text" ng-model="newSite.owner">
-                        </md-input-container>
-                        <md-input-container>
-                            <label>Projektleder</label>
-                            <input type="text" ng-model="newSite.manager">
-                        </md-input-container>
+                            
+                        <md-autocomplete
+                                md-selected-item="newSite.owner"
+                                md-search-text="searchTextOwner"
+                                md-items="item in searchProjectOwners(searchTextOwner)"
+                                md-item-text="item.fullName"
+                                md-min-length="2"
+                                placeholder="Projektejer">
+                            <md-item-template>
+                                <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ item.fullName }}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Ingen brugere matcher "{{ searchTextOwner }}".
+                            </md-not-found>
+                        </md-autocomplete>
+                            
+                        <md-autocomplete
+                                md-selected-item="newSite.manager"
+                                md-search-text="searchTextManager"
+                                md-items="man in searchPeople(searchTextManager)"
+                                md-item-text="man.firstName + ' ' + man.lastName"
+                                md-min-length="2"
+                                placeholder="Projekleder">
+                            <md-item-template>
+                                <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Ingen brugere matcher "{{ searchTextManager }}".
+                            </md-not-found>
+                        </md-autocomplete>
+                        
                         <md-input-container>
                             <label>Organisatorisk enhed</label>
-                            <input type="text" ng-model="newSite.center_id">
+                            <md-select ng-model="newSite.center_id" required>
+                                <md-option ng-repeat="org in availOrgs" value="{{ org.shortName }}">
+                                    {{ org.displayName }}
+                                </md-option>
+                            </md-select>
                         </md-input-container>
+                        
                         <md-input-container>
                             <label>SBSYS sagsnr.</label>
-                            <input type="text" ng-model="newSite.sbsys">
+                            <input type="text" ng-model="newSite.sbsys" required>
                         </md-input-container>
                     </md-content>
                 </md-tab>
                 <md-tab label="Grupper">
                     <md-content class="md-padding" layout="column">
+                        
+                        <md-chips ng-model="newSite.projektgruppe"
+                                  md-require-match="true"
+                                  placeholder="Angiv medlemmer">
+                            <md-autocomplete
+                                md-search-text="searchTextProjGroup"
+                                md-items="projperson in searchPeople(searchTextProjGroup)"
+                                md-item-text="projperson.firstName + ' ' + projperson.lastName"
+                                md-min-length="2">
+                            </md-autocomplete>
+                        </md-chips>
                         
                     </md-content>
                 </md-tab>
