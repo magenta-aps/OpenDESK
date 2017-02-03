@@ -50,7 +50,7 @@
             }
             
             
-            function PdSiteCreateController($scope, $mdDialog, pd_siteService, $state, $filter, siteService) {
+            function PdSiteCreateController($scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
                 
                 $scope.newSite = {};
                 $scope.availOrgs = [];
@@ -98,23 +98,30 @@
                 function getAvailOrgs() {
                     pd_siteService.getAllOrganizationalCenters().then(
                         function (response) {
-                            return response;
+                            $scope.availOrgs = response.data;
                         }
                     );
                 }
                 
                 function submitNewPDSite() {
+                    console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + $scope.newSite.manager.userName);
                     pd_siteService.createPDSite(
                         $scope.newSite.siteName,
                         $scope.newSite.desc,
                         $scope.newSite.sbsys,
                         $scope.newSite.center_id,
-                        $scope.newSite.owner,
-                        $scope.newSite.manager
+                        $scope.newSite.owner.shortName,
+                        $scope.newSite.manager.userName
                     ).then(
                         function(response) {
-                            console.log('Project created successfully. ' + response);
-                            $state.go('project', { projekt: $scope.newSite.siteName });
+                            if(response.data[0].status === 'success') {
+                                $mdDialog.cancel();
+                                $mdToast.show(
+                                    $mdToast.simple()
+                                            .textContent('Du har oprettet projekt: ' + $scope.newSite.siteName)
+                                            .hideDelay(3000)
+                                );
+                            }
                         },
                         function(err) {
                             console.log(err);

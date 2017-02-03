@@ -20,7 +20,7 @@
                             </md-input-container>
                         <md-input-container>
                             <label>Beskrivelse</label>
-                            <textarea ng-model="newSite.desc"></textarea>
+                            <textarea ng-model="newSite.desc" required></textarea>
                         </md-input-container>
                             
                         <md-autocomplete
@@ -44,8 +44,7 @@
                                 md-items="man in searchPeople(searchTextManager)"
                                 md-item-text="man.firstName + ' ' + man.lastName"
                                 md-min-length="2"
-                                placeholder="Projekleder"
-                                md-delay="500">
+                                placeholder="Projekleder">
                             <md-item-template>
                                 <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
                             </md-item-template>
@@ -57,8 +56,8 @@
                         <md-input-container>
                             <label>Organisatorisk enhed</label>
                             <md-select ng-model="newSite.center_id" required>
-                                <md-option ng-repeat="org in availOrgs" value="{{ org.name }}">
-                                    {{ org.name }}
+                                <md-option ng-repeat="org in availOrgs" value="{{ org.shortName }}">
+                                    {{ org.displayName }}
                                 </md-option>
                             </md-select>
                         </md-input-container>
@@ -71,6 +70,17 @@
                 </md-tab>
                 <md-tab label="Grupper">
                     <md-content class="md-padding" layout="column">
+                        
+                        <md-chips ng-model="newSite.projektgruppe"
+                                  md-require-match="true"
+                                  placeholder="Angiv medlemmer">
+                            <md-autocomplete
+                                md-search-text="searchTextProjGroup"
+                                md-items="projperson in searchPeople(searchTextProjGroup)"
+                                md-item-text="projperson.firstName + ' ' + projperson.lastName"
+                                md-min-length="2">
+                            </md-autocomplete>
+                        </md-chips>
                         
                     </md-content>
                 </md-tab>
