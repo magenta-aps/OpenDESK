@@ -26,18 +26,19 @@
             function loadProjectMembers(projectShortname, memberType) {
 				pd.projectMembers = [];
 				siteService.getGroupMembers(projectShortname, memberType).then (function (val){
-					pd.projectGroup = val;
+					pd.projectMembers = val;
+					//console.log("member " + val.data[0].fullName);
 				});
 			}
 			
 			
-            function showProjectMembers(elm, projectShortname, memberType) {
-				if (elm.checked === true && !membersLoaded) {
-					pd.loadProjectMembers(projectShortname, memberType);
+            function showProjectMembers(selected, projectShortname, memberType) {
+				if (selected && !membersLoaded) {
+					loadProjectMembers(projectShortname, memberType);
 					membersLoaded = true;
 				}
 			}
-            
+			           
             
             function newPDSite(ev) {
                 $mdDialog.show({
