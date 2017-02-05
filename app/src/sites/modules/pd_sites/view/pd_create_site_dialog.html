@@ -71,15 +71,21 @@
                 <md-tab label="Grupper">
                     <md-content class="md-padding" layout="column">
                         
-                        <md-chips ng-model="newSite.projektgruppe"
-                                  md-require-match="true"
-                                  placeholder="Angiv medlemmer">
-                            <md-autocomplete
-                                md-search-text="searchTextProjGroup"
-                                md-items="projperson in searchPeople(searchTextProjGroup)"
-                                md-item-text="projperson.firstName + ' ' + projperson.lastName"
-                                md-min-length="2">
+                        <md-chips ng-model="projektGruppe"
+                                  md-autocomplete-snap
+                                  md-require-match="true">
+                            <md-autocomplete md-selected-item="selectedProjGrpItem"
+                                             md-search-text="srchprjgrptxt"
+                                             md-items="pgitem in searchPeople(srchprjgrptxt)"
+                                             md-item-text="pgitem.firstName"
+                                             placeholder="Angiv et projektmedlem">
+                                <span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
                             </md-autocomplete>
+                            <md-chip-template>
+                                <span>
+                                    <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
+                                </span>
+                            </md-chip-template>
                         </md-chips>
                         
                     </md-content>
