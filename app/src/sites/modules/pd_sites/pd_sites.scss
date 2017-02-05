@@ -11,3 +11,23 @@
         margin: $u*0.5 0;    
     }
 }
+
+.pd-group-toggle {
+    background-color: #eaeaea;
+    padding: $u*0.5 $u;
+    margin: $u 0 0;
+    box-shadow: 0 $u*0.25 $u*0.5 rgba(125,125,125,0.3);
+    cursor: pointer;
+    
+    &:hover {
+        box-shadow: 0 $u*0.5 $u*0.5 rgba(125,125,125,0.3);
+    }
+    &.open {
+        .material-icons {
+            transform: rotate(180deg);
+        }
+    }
+    &.closed {
+        
+    }
+}
