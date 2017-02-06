@@ -234,15 +234,15 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             return $http.get("/alfresco/service/sites?method=getDBID&siteShortName=" + siteShortName).then(function(response) {
 
                 var dbid = response.data[0].DBID;
-                console.log(dbid)
+                console.log(dbid);
 
                 var requestName = dbid + "_" + groupName;
 
-                return groupService.getGroupMembers(requestName). then (function(r) {
-                    console.log(r);
+                return groupService.getGroupMembers(requestName).then(function(r) {
+                    return r.data;
                 });
 
-                return response.data
+                return response.data;
             });
         }
 

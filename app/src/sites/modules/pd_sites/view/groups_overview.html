@@ -1,0 +1,100 @@
+<md-card ng-controller="PdSiteController as pd">
+    <md-card-content>
+        <h3 class="od-title-icon"><i class="material-icons">group</i> Styret projekt, projektgrupper</h3>
+                        
+        <!--md-list class="od-members">
+            <md-list-item ng-repeat="member in members">	
+                <div flex="50" flex-gt-lg="60">
+                    {{ member.authority.firstName }} {{ member.authority.lastName }}
+                </div>
+                <div flex="30">
+                    {{ role_mapping[member.role] }}
+                </div>
+                <div flex="20" flex-gt-lg="10" style="text-align: right;">
+                    <md-menu ng-if="vm.userRole === 'SiteManager'">			
+                        <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                            <md-icon md-menu-origin>dehaze</md-icon>
+                        </md-button>
+                    
+                        <md-menu-content width="6">
+                            <md-menu-item>
+                                <md-button ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+                                    <md-icon md-menu-align-target>create</md-icon>
+                                    Redigér medlem
+                                </md-button>
+                            </md-menu-item>
+                      
+                            <md-menu-item>
+                                <md-button ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName);">
+                                    <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+                                    Slet
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>			 			  
+        </md-list-->
+        
+        <h4 ng-click="pd.showProjGroupList = !pd.showProjGroupList"
+            class="pd-group-toggle"
+            ng-class="pd.showProjGroupList ? 'closed' : 'open'"
+            layout="row">
+            <span>Projektgruppe</span>
+            <span flex></span>
+            <i class="material-icons">keyboard_arrow_down</i>
+        </h4>
+        <ul ng-hide="pd.showProjGroupList">
+            <li ng-repeat="mem in pd.site.members.pd_projectgroup">
+                {{ mem.displayName }}
+            </li>
+        </ul>
+        
+        <h4 ng-click="pd.showSteerGroupList = !pd.showSteerGroupList"
+            class="pd-group-toggle"
+            ng-class="pd.showSteerGroupList ? 'open' : 'closed'"
+            layout="row">
+            <span>Styregruppe</span>
+            <span flex></span>
+            <i class="material-icons">keyboard_arrow_down</i>
+        </h4>
+        <ul ng-show="pd.showSteerGroupList">
+            <li ng-repeat="mem in pd.site.members.pd_steering_group">
+                {{ mem.displayName }}
+            </li>
+        </ul>
+        
+        <h4 ng-click="pd.showWorkGroupList = !pd.showWorkGroupList"
+            class="pd-group-toggle"
+            ng-class="pd.showWorkGroupList ? 'open' : 'closed'"
+            layout="row">
+            <span>Arbejdsgruppe</span>
+            <span flex></span>
+            <i class="material-icons">keyboard_arrow_down</i>
+        </h4>
+        <ul ng-show="pd.showWorkGroupList">
+            <li ng-repeat="mem in pd.site.members.pd_workgroup">
+                {{ mem.displayName }}
+            </li>
+        </ul>
+        
+        <h4 ng-click="pd.showMonitorsList = !pd.showMonitorsList"
+            class="pd-group-toggle"
+            ng-class="pd.showMonitorsList ? 'open' : 'closed'"
+            layout="row">
+            <span>Følgegruppe</span>
+            <span flex></span>
+            <i class="material-icons">keyboard_arrow_down</i>
+        </h4>
+        <ul ng-show="pd.showMonitorsList">
+            <li ng-repeat="mem in pd.site.members.pd_monitors">
+                {{ mem.displayName }}
+            </li>
+        </ul>
+    
+        <div layout="row" layout-align="start center" class="btnAlign">
+            <md-button class="md-raised md-icon-button" ng-click="pd.editPDSite($event)" aria-label="Redigér gruppemedlemmer"><i class="material-icons">add</i></md-button>
+        </div>
+    </md-card-content>
+</md-card>

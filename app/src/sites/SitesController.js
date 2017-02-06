@@ -24,6 +24,7 @@
 			//siteService.removeRole("kage2", "abeecher", "Consumer")
 
 			//siteService.addUser("kage8", "abeecher", "PD_MONITORS");
+			//siteService.addUser("TestAvanceretprojekt", "abeecher", "PD_PROJECTOWNER");
 			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
 
 
