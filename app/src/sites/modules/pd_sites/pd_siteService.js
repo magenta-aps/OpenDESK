@@ -36,12 +36,13 @@ angular
 
         getAllManagers: function () {
             groupService.getGroupMembers("GLOBAL_Projectmanagers").then (function(response) {
-               console.log(response);
             });
         },
         getAllOrganizationalCenters: function () {
             groupService.getGroupMembers("OrganizationalCenters").then (function(response) {
+                console.log("response");
                 console.log(response);
+                console.log("response");
             });
         }
 

@@ -10,7 +10,7 @@
             
             vm.sites = [];
 
-			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
+			pd_siteService.getAllOrganizationalCenters();
 
 			// siteService.removeRole("kage2", "abeecher", "Consumer")
 

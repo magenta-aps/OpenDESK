@@ -133,6 +133,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         getAllUsers: function (filter) {
             return userService.getPeople("?filter=" + filter).then(function (result) {
+                console.log(result);
                 return result.people;
             });
         },
@@ -240,10 +241,13 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return groupService.getGroupMembers(requestName). then (function(r) {
                     console.log(r);
                 });
-;
 
                 return response.data
             });
         }
+
+
+
+
     }
 });
