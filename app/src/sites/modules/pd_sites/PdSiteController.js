@@ -174,9 +174,9 @@ angular
                     function(response) {
                         if(response.data[0].status === 'success') {
                             $mdDialog.cancel();
-                            
-                            // Uncomment and refactor the following when site shortName becomes available
-                            /* 
+
+                            var shortName = response.data[0].shortName;
+
                             for (var up in $scope.projektGruppe) {
                                 siteService.addUser( $scope.newSite.siteName, $scope.projektGruppe[up].userName, 'PD_PROJECTGROUP' ).then(
                                     function(response) {
@@ -221,7 +221,7 @@ angular
                                     }
                                 );
                             }
-                            */
+
                             
                             $mdToast.show(
                                 $mdToast.simple()
