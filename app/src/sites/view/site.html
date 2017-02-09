@@ -179,7 +179,7 @@
 							<tr ng-show="content.contentType === 'cmis:link'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
 								<td><a class="od-filebrowser-link" ng-href="#/projekter/{{content.destination_link}}">
-									<i class="material-icons" ng-show="content.contentType === 'cmis:link'">folder</i>
+									<i class="material-icons" ng-show="content.contentType === 'cmis:link'">content_paste</i>
 									--link-- {{content.name}} --link--
 								</a></td>
 								<td>
