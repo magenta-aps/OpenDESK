@@ -145,36 +145,66 @@
 								</md-menu>
 								</td>
 							</tr>
-							<tr ng-show="content.contentType === 'cmis:folder'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">	
-								
+							<tr ng-show="content.contentType === 'cmis:folder'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
+
 								<td><a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
 									<i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
 									{{content.name}}
 								</a></td>
 								<td><a class="od-filebrowser-link" ng-href="#/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a></td>
 								<td>
-								<md-menu>
-									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-										<md-icon md-menu-origin>dehaze</md-icon>
-									</md-button>
-
-									<md-menu-content width="6">
-										<md-menu-item>
-											<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
-												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-												Slet
-											</md-button>
-										</md-menu-item>
-		
-										<!-- <md-menu-item>
-										<md-button ng-click="">
-											<md-icon md-menu-align-target>create</md-icon>
-											Rename
+									<md-menu>
+										<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+											<md-icon md-menu-origin>dehaze</md-icon>
 										</md-button>
-										</md-menu-item> -->
-									</md-menu-content>
-								</md-menu>
-								</td>							
+
+										<md-menu-content width="6">
+											<md-menu-item>
+												<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
+													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+													Slet
+												</md-button>
+											</md-menu-item>
+
+											<!-- <md-menu-item>
+                                            <md-button ng-click="">
+                                                <md-icon md-menu-align-target>create</md-icon>
+                                                Rename
+                                            </md-button>
+                                            </md-menu-item> -->
+										</md-menu-content>
+									</md-menu>
+								</td>
+							</tr>
+							<tr ng-show="content.contentType === 'cmis:link'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
+
+								<td><a class="od-filebrowser-link" ng-href="#/projekter/{{content.destination_link}}">
+									<i class="material-icons" ng-show="content.contentType === 'cmis:link'">folder</i>
+									--link-- {{content.name}} --link--
+								</a></td>
+								<td>
+									<md-menu>
+										<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+											<md-icon md-menu-origin>dehaze</md-icon>
+										</md-button>
+
+										<md-menu-content width="6">
+											<md-menu-item>
+												<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteLink(content.nodeid, content.destination_nodeid)">
+													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+													Slet
+												</md-button>
+											</md-menu-item>
+
+											<!-- <md-menu-item>
+                                            <md-button ng-click="">
+                                                <md-icon md-menu-align-target>create</md-icon>
+                                                Rename
+                                            </md-button>
+                                            </md-menu-item> -->
+										</md-menu-content>
+									</md-menu>
+								</td>
 							</tr>
 						</tbody>						
 					</table>
@@ -187,6 +217,7 @@
 				<div layout="row" layout-align="start center" class="btnAlign">
 					<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised md-primary" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter</md-button>
 					<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised" ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe</md-button>
+					<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised" ng-click="vm.newLinkDialog($event)"><i class="material-icons">add</i> Opret projektlink</md-button>
 				</div>
 			</md-card-content>											
 		</md-card>

@@ -244,6 +244,18 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
 
                 return response.data;
             });
+        },
+        createLink : function (source, destination) {
+            return $http.get("/alfresco/service/sites?method=addLink&source=" + source + "&destination=" + destination).then(function(response) {
+                console.log(response.data)
+                return response.data
+            });
+        },
+        deleteLink : function (source, destination) {
+            return $http.get("/alfresco/service/sites?method=deleteLink&source=" + source + "&destination=" + destination).then(function(response) {
+                console.log(response.data)
+                return response.data
+            });
         }
 
 
