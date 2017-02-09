@@ -58,6 +58,21 @@
             </properties>
         </type>
 
+        <type name="od:link">
+            <title>Link</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="od:targetproject">
+                    <type>d:text</type>
+                </property>
+                <property name="od:targetproject_noderef">
+                    <type>d:noderef</type>
+                </property>
+            </properties>
+        </type>
+
+
+
 
 
     <!-- Type and property definitions -->

@@ -18,13 +18,15 @@ public interface OpenDeskModel {
 
     // Groupnames
 
-    public static String GLOBAL_PROJECTMANAGERS = "Projectmanagers";
+    public static String GLOBAL_PROJECTMANAGERS = "GLOBAL_Projectmanagers"; // a collection of all projectmanagers
+    public static String GLOBAL_OrganizationalCenters = "GLOBAL_OrganizationalCenters"; // a collection of all projectmanagers
 
-    public static String PD_GROUP_PROJECTOWNER = "PD_PROJECTOWNER";
-    public static String PD_GROUP_PROJECTMANAGER = "PD_PROJECTMANAGER";
-    public static String PD_GROUP_PROJECTGROUP= "PD_PROJECTGROUP";
-    public static String PD_GROUP_WORKGROUP = "PD_WORKGROUP";
-    public static String PD_GROUP_MONITORS = "PD_MONITORS";
+    public static String PD_GROUP_PROJECTOWNER = "PD_PROJECTOWNER"; // projektejere
+    public static String PD_GROUP_PROJECTMANAGER = "PD_PROJECTMANAGER"; // projektledere
+    public static String PD_GROUP_PROJECTGROUP= "PD_PROJECTGROUP"; // projektgruppe
+    public static String PD_GROUP_WORKGROUP = "PD_WORKGROUP"; // (arbejdsgruppe)
+    public static String PD_GROUP_MONITORS = "PD_MONITORS"; // følgegruppe
+    public static String PD_GROUP_STEERING_GROUP = "PD_STEERING_GROUP"; // følgegruppe
 
     /**
      * project states
@@ -40,6 +42,9 @@ public interface OpenDeskModel {
      */
 
     public static QName PROP_NOTIFICATION = QName.createQName(OD_URI, "notification");
+
+    public static QName TYPE_LINK = QName.createQName(OD_URI, "link");
+
 
 
     /**
@@ -71,6 +76,11 @@ public interface OpenDeskModel {
     public static QName PROP_PD_STATE = QName.createQName(OD_URI, "state");
     public static QName PROP_PD_CENTERID = QName.createQName(OD_URI, "center_id");
 
+    /**
+     * projectlink properties
+     */
+    public static QName PROP_LINK = QName.createQName(OD_URI, "targetproject");
+    public static QName PROP_LINK_NODEREF = QName.createQName(OD_URI, "targetproject_noderef");
 
     /**
      * Association Names
@@ -94,6 +104,12 @@ public interface OpenDeskModel {
     String testsite_new_name = "Magenta_newrename";
 
 
+    /**
+     * Projecttypes
+     */
+
+    String project = "Project";
+    String pd_project = "PD-Project";
 
 
 

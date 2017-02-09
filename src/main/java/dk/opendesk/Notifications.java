@@ -96,7 +96,6 @@ public class Notifications extends AbstractWebScript {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
         else if (method != null && method.equals("add")) {
@@ -168,7 +167,15 @@ public class Notifications extends AbstractWebScript {
 
 
                 String documentShortNodeRef = document.toString();
-                documentShortNodeRef = documentShortNodeRef.split("/")[3];
+
+                if (documentShortNodeRef != null) {
+                    documentShortNodeRef = documentShortNodeRef.split("/")[3];
+                }
+                else {
+                    documentShortNodeRef = "";
+                }
+
+
 
                 try {
                     json.put("nodeRef", child.getChildRef());

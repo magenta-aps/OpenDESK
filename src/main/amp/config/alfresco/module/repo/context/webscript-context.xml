@@ -61,7 +61,6 @@
 		<property name="siteService" ref="SiteService"/>
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="permissionService" ref="PermissionService"/>
-		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
 
@@ -83,6 +82,8 @@
 		<property name="personService" ref="PersonService"/>
 		<property name="nodeArchiveService" ref="nodeArchiveService"/>
 		<property name="authenticationService" ref="authenticationService"/>
+		<property name="AuthorityService" ref="authorityService"/>
+		<property name="permissionService" ref="PermissionService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"

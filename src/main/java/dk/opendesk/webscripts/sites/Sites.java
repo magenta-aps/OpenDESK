@@ -20,14 +20,17 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.archive.NodeArchiveService;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -39,6 +42,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -66,6 +70,12 @@ public class Sites extends AbstractWebScript {
     private SiteService siteService;
     private NodeService nodeService;
     private PersonService personService;
+
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
+    private PermissionService permissionService;
 
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
@@ -105,6 +115,7 @@ public class Sites extends AbstractWebScript {
         String q = params.get("q");
         String method = params.get("method");
 
+        System.out.println("method");
         System.out.println(method);
 
         if (method != null && method.equals("getAll")) {
@@ -141,6 +152,7 @@ public class Sites extends AbstractWebScript {
 
             JSONArray result = this.getAllSitesForCurrentUser();
             try {
+                webScriptResponse.setContentEncoding("UTF-8");
                 result.writeJSONString(webScriptResponse.getWriter());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -169,6 +181,151 @@ public class Sites extends AbstractWebScript {
                 je.printStackTrace();
             }
          }
+        else if (method != null && method.equals("removeUser")) {
+
+            String siteShortName = params.get("siteShortName");
+            String user = params.get("user");
+            String group = params.get("group");
+
+            this.removeUser(siteShortName,user,group);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("result", "success");
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
+        else if (method != null && method.equals("addPermission")) {
+
+            String siteShortName = params.get("siteShortName");
+            String user = params.get("user");
+            String role = params.get("role");
+
+            this.addPermission(siteShortName, user, role);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("result", "success");
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
+        else if (method != null && method.equals("removePermission")) {
+
+            String siteShortName = params.get("siteShortName");
+            String user = params.get("user");
+            String role = params.get("role");
+
+            this.removePermission(siteShortName, user, role);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("result", "success");
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
+        else if (method != null && method.equals("getDBID")) {
+
+            String siteShortName = params.get("siteShortName");
+
+            Long DBID = this.getDBID(siteShortName);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("DBID", DBID);
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
+        else if (method != null && method.equals("addLink")) {
+
+            String source = params.get("source");
+            String destination = params.get("destination");
+
+
+            this.addLink(source, destination);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("result", "success");
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
+        else if (method != null && method.equals("deleteLink")) {
+
+            String source = params.get("source");
+            String destination = params.get("destination");
+
+            NodeRef source_n = new NodeRef("workspace://SpacesStore/" + source);
+            NodeRef destination_n = new NodeRef("workspace://SpacesStore/" + destination);
+
+
+            this.deleteLink(source_n, destination_n);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("result", "success");
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
+
+
+
+
+
+
     }
 
     private JSONArray getAllSites(String q) {
@@ -223,7 +380,6 @@ public class Sites extends AbstractWebScript {
         JSONArray result = new JSONArray();
 
         List<SiteInfo> currentuser_sites = siteService.listSites(authenticationService.getCurrentUserName());
-        System.out.println(currentuser_sites);
 
         // need to reverse the order of sites as they appear in wrong sort order
         Collections.sort(currentuser_sites, new CustomComparator());
@@ -243,8 +399,19 @@ public class Sites extends AbstractWebScript {
                     json.put("title", s.getTitle());
                     json.put("shortName", s.getShortName());
 
+
+
+
                     NodeRef n = s.getNodeRef();
                     json.put("nodeRef", n.toString());
+
+                    if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+                        json.put("type",OpenDeskModel.pd_project);
+                    }
+                    else {
+                        json.put("type",OpenDeskModel.project);
+                    }
+
                     JSONObject creator = new JSONObject();
 
                     NodeRef cn = this.personService.getPerson((String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
@@ -253,6 +420,10 @@ public class Sites extends AbstractWebScript {
                     creator.put("firstName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
                     creator.put("lastName", (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
                     creator.put("fullName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+
+
+
+
                     json.put("creator", creator);
 
                     json.put("description", s.getDescription());
@@ -295,10 +466,96 @@ public class Sites extends AbstractWebScript {
 
         NodeRef nodeRef = site.getNodeRef();
 
-        String siteID = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
+        Long siteID = (Long)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
 
-        String groupName = siteID + "_" + group;
+        String groupName = "GROUP_" + siteID + "_" + group;
 
         authorityService.addAuthority(groupName, user);
+    }
+
+    private void removeUser(String siteShortName, String user, String group) {
+
+        SiteInfo site = siteService.getSite(siteShortName);
+
+        NodeRef nodeRef = site.getNodeRef();
+
+        Long siteID = (Long)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
+
+        String groupName = "GROUP_" + siteID + "_" + group;
+
+        authorityService.removeAuthority(groupName, user);
+    }
+
+    private Long getDBID(String siteShortName) {
+
+        SiteInfo site = siteService.getSite(siteShortName);
+
+        NodeRef nodeRef = site.getNodeRef();
+
+        Long siteID = (Long)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
+
+        return siteID;
+    }
+
+    private void addPermission(String siteShortName, String user, String role) {
+
+        System.out.println(siteShortName);
+        System.out.println(user);
+        System.out.println(role);
+
+        NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
+
+        permissionService.setPermission(ref, user, role, true);
+    }
+
+    private void removePermission(String siteShortName, String user, String role) {
+
+        System.out.println(siteShortName);
+        System.out.println(user);
+        System.out.println(role);
+
+        NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
+
+        permissionService.deletePermission(ref, user, role);
+    }
+
+    private void addLink(String source_project, String destinaion_project) {
+
+        SiteInfo source = siteService.getSite(source_project);
+        SiteInfo destination = siteService.getSite(destinaion_project);
+
+        // Get the documentLibrary of the site.
+        NodeRef source_documentLib = siteService.getContainer(source.getShortName(), "documentlibrary");
+        System.out.println(source_documentLib); // Get the documentLibrary of the site.
+
+        NodeRef dest_documentLib = siteService.getContainer(destination.getShortName(), "documentlibrary");
+        System.out.println(source_documentLib);
+
+        // create link for source
+        Map<QName, Serializable> linkProperties = new HashMap<QName, Serializable>();
+        linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(destination.getNodeRef(), ContentModel.PROP_NAME));
+        linkProperties.put(OpenDeskModel.PROP_LINK, destination.getShortName());
+
+
+
+        ChildAssociationRef source_nodeRef = nodeService.createNode(source_documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(OpenDeskModel.OD_PREFIX, "link"), OpenDeskModel.TYPE_LINK, linkProperties);
+
+
+         // create link for destination
+         linkProperties = new HashMap<QName, Serializable>();
+         linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(source.getNodeRef(), ContentModel.PROP_NAME));
+         linkProperties.put(OpenDeskModel.PROP_LINK, source.getShortName());
+
+
+        ChildAssociationRef destination_nodeRef = nodeService.createNode(dest_documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(OpenDeskModel.OD_PREFIX, "link"), OpenDeskModel.TYPE_LINK, linkProperties);
+
+        // for easy deletion of the links, we do a save of the nodeRefs on each side
+        nodeService.setProperty(source_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF, destination_nodeRef.getChildRef());
+        nodeService.setProperty(destination_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF, source_nodeRef.getChildRef());
+    }
+
+    private void deleteLink(NodeRef source, NodeRef destination) {
+        nodeService.deleteNode(source);
+        nodeService.deleteNode(destination);
     }
 }

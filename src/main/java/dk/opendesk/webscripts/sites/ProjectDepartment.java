@@ -20,6 +20,7 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.domain.permissions.Authority;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -31,6 +32,7 @@ import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 
 import org.alfresco.service.cmr.site.SiteVisibility;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
@@ -91,6 +93,13 @@ public class ProjectDepartment extends AbstractWebScript {
         try {
             json = new JSONObject(c.getContent());
 
+            if (!json.has("PARAM_METHOD") || json.getString("PARAM_METHOD").length() == 0)
+            {
+                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
+                        "PARAM_METHOD 'METHOD' is a required POST parameter.");
+            }
+            String method = json.getString("PARAM_METHOD");
+
             if (!json.has("PARAM_NAME") || json.getString("PARAM_NAME").length() == 0)
             {
                 throw new WebScriptException(Status.STATUS_BAD_REQUEST,
@@ -127,30 +136,42 @@ public class ProjectDepartment extends AbstractWebScript {
             String site_manager = json.getString("PARAM_MANAGER");
 
 
+            if (method.equals("createPDSITE")) {
+
+                AuthenticationUtil.pushAuthentication();
+                try {
+                    AuthenticationUtil.setRunAsUserSystem();
+                    // ...code to be run as Admin...
+
+                    this.createSite(site_name, site_description, site_sbsys, SiteVisibility.PUBLIC);
+
+                    Long id = (Long)nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
+
+                    this.createGroupAddMembers(Long.toString(id), site_owner, site_manager);
+
+                    JSONObject return_json = new JSONObject();
+
+                    return_json.put("status", "success");
+                    return_json.put("nodeRef", newSiteRef);
+                    return_json.put("shortName", siteService.getSiteShortName(newSiteRef));
+
+                    JSONArray result = new JSONArray();
+                    result.add(return_json);
+
+                    webScriptResponse.setContentEncoding("UTF-8");
+                    result.writeJSONString(webScriptResponse.getWriter());
 
 
-            this.createSite(site_name, site_description, site_sbsys, SiteVisibility.PUBLIC);
+                } finally {
+                    AuthenticationUtil.popAuthentication();
+                }
+            }
+            else if (method.equals("addTemplate")) {
 
-            Long id = (Long)nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
+            }
+            else if (method.equals("addTemplate")) {
 
-            this.createGroupAddMembers(Long.toString(id), site_owner, site_manager);
-
-
-
-
-
-            JSONObject return_json = new JSONObject();
-
-            return_json.put("status", "success");
-            return_json.put("nodeRef", newSiteRef);
-
-            JSONArray result = new JSONArray();
-            result.add(return_json);
-
-            webScriptResponse.setContentEncoding("UTF-8");
-            result.writeJSONString(webScriptResponse.getWriter());
-
-
+            }
         }
         catch (Exception e) {
             System.out.println(e);
@@ -169,8 +190,6 @@ public class ProjectDepartment extends AbstractWebScript {
             catch (Exception ex) {
                 ex.printStackTrace();
             }
-
-
         }
     }
 
@@ -183,7 +202,6 @@ public class ProjectDepartment extends AbstractWebScript {
 
 
         // add the projectdepartment aspect
-
         Map<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
         aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
         aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
@@ -204,25 +222,12 @@ public class ProjectDepartment extends AbstractWebScript {
 
     private void createGroupAddMembers(String id, String owner, String site_manager) {
 
-        System.out.println("id=" + id);
-
-
         // create groups and add permissions
-        System.out.println("heuy");
-
         String parentGroup = authorityService.createAuthority(AuthorityType.GROUP,  id);
-        System.out.println("heu123y");
-        String monitors = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_MONITORS);
-        authorityService.addAuthority(parentGroup, monitors);
 
         String projectowner = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER);
         authorityService.addAuthority(parentGroup, projectowner);
-        authorityService.addAuthority(projectowner,owner);
-
-        String projectgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP);
-        authorityService.addAuthority(parentGroup, projectgroup);
-
-
+        authorityService.addAuthority(projectowner, owner);
 
         String projectmanager = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
         authorityService.addAuthority(parentGroup, projectmanager);
@@ -230,9 +235,18 @@ public class ProjectDepartment extends AbstractWebScript {
 
 
 
+        String monitors = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_MONITORS);
+        authorityService.addAuthority(parentGroup, monitors);
+
+        String projectgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP);
+        authorityService.addAuthority(parentGroup, projectgroup);
 
         String workgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_WORKGROUP);
         authorityService.addAuthority(parentGroup, workgroup);
+
+        String steeringgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_STEERING_GROUP);
+        authorityService.addAuthority(parentGroup, steeringgroup);
+
 
         permissionService.setPermission(newSiteRef, monitors, PermissionService.CONTRIBUTOR, true);
         permissionService.setPermission(newSiteRef, projectowner, PermissionService.CONTRIBUTOR, true);
@@ -245,6 +259,4 @@ public class ProjectDepartment extends AbstractWebScript {
         permissionService.setPermission(newSiteRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, PermissionService.CONTRIBUTOR, true);
 
     }
-
-
 }

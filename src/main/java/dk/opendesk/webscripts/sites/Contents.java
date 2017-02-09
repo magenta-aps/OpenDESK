@@ -16,6 +16,7 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.sites;
 
+import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
@@ -75,6 +76,8 @@ public class Contents extends AbstractWebScript {
 
             JSONArray result = this.getChildNodes(nodeRef);
             try {
+
+                webScriptResponse.setContentEncoding("UTF-8");
                 result.writeJSONString(webScriptResponse.getWriter());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -107,41 +110,57 @@ public class Contents extends AbstractWebScript {
 
 
                     QName qname = nodeService.getType(childAssociationRef.getChildRef());
+
                     String type;
 
                     if (qname.equals(ContentModel.TYPE_FOLDER)) {
                         type = "cmis:folder";
+                    } else if (qname.equals(OpenDeskModel.TYPE_LINK)) {
+                        type = "cmis:link";
                     } else {
                         type = "cmis:document";
                     }
 
                     json.put("contentType", type);
 
-                    json.put("nodeRef", childAssociationRef.getChildRef());
+                    System.out.println(type);
 
-                    ChildAssociationRef parent = nodeService.getPrimaryParent(childAssociationRef.getChildRef());
+                    if (type != "cmis:link") {
+                        json.put("nodeRef", childAssociationRef.getChildRef());
 
-                    json.put("parentNode'Ref", parent.getParentRef());
-                    json.put("shortRef", childAssociationRef.getChildRef().getId());
+                        ChildAssociationRef parent = nodeService.getPrimaryParent(childAssociationRef.getChildRef());
 
-
-                    String modifier = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_MODIFIER);
-                    NodeRef person = personService.getPerson(modifier);
-
-
-                    json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
+                        json.put("parentNode'Ref", parent.getParentRef());
+                        json.put("shortRef", childAssociationRef.getChildRef().getId());
 
 
-                    Date d = (Date) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_MODIFIED);
-                    json.put("lastChanged", d.getTime());
-
-                    String label = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_VERSION_LABEL);
+                        String modifier = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_MODIFIER);
+                        NodeRef person = personService.getPerson(modifier);
 
 
-                    if (label == null) {
-                        json.put("hasHistory", false);
-                    } else {
-                        json.put("hasHistory", true);
+                        json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
+
+
+                        Date d = (Date) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_MODIFIED);
+                        json.put("lastChanged", d.getTime());
+
+                        String label = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_VERSION_LABEL);
+
+
+                        if (label == null) {
+                            json.put("hasHistory", false);
+                        } else {
+                            json.put("hasHistory", true);
+                        }
+                    }
+                    else {
+                        String link = (String)nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK);
+                        NodeRef link_node = (NodeRef)nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF);
+
+
+                        json.put("nodeid", childAssociationRef.getChildRef().getId());
+                        json.put("destination_link", link);
+                        json.put("destination_nodeid", link_node.getId());
                     }
 
                     result.add(json);
