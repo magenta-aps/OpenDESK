@@ -18,7 +18,7 @@ angular
         var pd = this;
         pd.newPDSite = newPDSite;
         pd.editPDSite = editPDSite;
-        
+		
         
         var membersLoaded = false;
         pd.showProjectMembers = showProjectMembers;
@@ -48,7 +48,17 @@ angular
         
         function getProjectMembers() {
             pd.site.members = {};
-            siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
+            siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTOWNER').then(
+                function(response) {
+                    pd.site.members.pd_projectowner = response[0];
+                }
+            );
+			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTMANAGER').then(
+                function(response) {
+                    pd.site.members.pd_projectmanager = response[0];
+                }
+            );
+			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
                 function(response) {
                     pd.site.members.pd_projectgroup = response;
                 }
