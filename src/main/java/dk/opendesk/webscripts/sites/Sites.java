@@ -19,15 +19,17 @@ package dk.opendesk.webscripts.sites;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.node.archive.NodeArchiveService;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.cmr.security.AuthorityService;
-import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.repo.rendition.executer.AbstractRenderingEngine;
+import org.alfresco.repo.rendition.executer.ReformatRenderingEngine;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileInfo;
+import org.alfresco.service.cmr.rendition.RenditionDefinition;
+import org.alfresco.service.cmr.rendition.RenditionService;
+import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
@@ -41,6 +43,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
+import javax.activation.MimeType;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -65,11 +68,29 @@ public class Sites extends AbstractWebScript {
 
     AuthenticationService authenticationService;
 
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
+
+    FileFolderService fileFolderService;
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
+    ContentService contentService;
+
 
     private NodeArchiveService nodeArchiveService;
     private SiteService siteService;
     private NodeService nodeService;
     private PersonService personService;
+
+    public void setRenditionService(RenditionService renditionService) {
+        this.renditionService = renditionService;
+    }
+
+    private RenditionService renditionService;
 
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
@@ -320,6 +341,30 @@ public class Sites extends AbstractWebScript {
                 je.printStackTrace();
             }
         }
+        else if (method != null && method.equals("createMembersPDF")) {
+
+            String shortName = params.get("shortName");
+
+            this.createMembersPDF(shortName);
+
+            JSONArray result = new JSONArray();
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("result", "success");
+                result.add(json);
+
+                result.writeJSONString(webScriptResponse.getWriter());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+        }
+
+
+
 
 
 
@@ -558,4 +603,70 @@ public class Sites extends AbstractWebScript {
         nodeService.deleteNode(source);
         nodeService.deleteNode(destination);
     }
+
+    private void createMembersPDF(String shortName) {
+
+        SiteInfo site = siteService.getSite(shortName);
+
+        String output = "Oprettet af:\n\n";
+
+        output += siteService.listMembers(shortName,"","",0);
+
+
+
+        String projectGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP;
+        System.out.println(projectGroup);
+
+        output += "\n\n";
+
+        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectGroup, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            System.out.println(person);
+
+
+
+        }
+
+
+        //System.out.println(output);
+
+
+
+
+//
+//        NodeRef documentLib = siteService.getContainer(site.getShortName(), "documentlibrary");
+//
+//        Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
+//        documentLibaryProps.put(ContentModel.PROP_NAME, "Medlemsoversigt.pdf");
+//
+//        ChildAssociationRef child = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "tempfile1"), ContentModel.TYPE_CONTENT);
+//        ChildAssociationRef pdf = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "thePDF"), ContentModel.TYPE_CONTENT, documentLibaryProps);
+//
+//        ContentWriter writer = this.contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
+//        writer.setMimetype(MimetypeMap.MIMETYPE_TEXT_PLAIN);
+//        writer.setEncoding("UTF-8");
+//        writer.putContent("text er der en del af");
+//
+//        writer = this.contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
+//        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
+//        writer.putContent("empty");
+//
+//
+//
+//
+//
+//        ContentReader pptReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
+//        ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
+//        ContentTransformer pptToPdfTransformer =
+//                contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
+//
+
+//        pptToPdfTransformer.transform(pptReader, pdfWriter);
+//
+//        nodeService.deleteNode(child.getChildRef());
+
+
+    }
+
 }

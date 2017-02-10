@@ -84,6 +84,9 @@
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="AuthorityService" ref="authorityService"/>
 		<property name="permissionService" ref="PermissionService"/>
+		<property name="renditionService" ref="RenditionService"/>
+		<property name="fileFolderService" ref="FileFolderService"/>
+		<property name="contentService" ref="ContentService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"
