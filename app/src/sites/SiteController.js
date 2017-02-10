@@ -208,14 +208,39 @@
 				
 				$mdDialog.hide();
 			}
-			
+
+			vm.createLink = function (project) {
+
+				siteService.createLink(vm.project, project).then(function() {
+					$mdDialog.hide();
+				});
+			}
+
+			vm.deleteLink = function (source, destination) {
+
+				siteService.deleteLink(source, destination).then(function() {
+					$mdDialog.hide();
+				});
+			}
+
+
 			vm.newFolderDialog = function (event) {
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/newFolder.tmpl.html',
 					parent: angular.element(document.body),
 					targetEvent: event,
 					scope: $scope,
-        	preserveScope: true,
+					preserveScope: true,
+					clickOutsideToClose: true
+				});
+			};
+			vm.newLinkDialog = function (event) {
+				$mdDialog.show({
+					templateUrl: 'app/src/sites/view/newLink.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: event,
+					scope: $scope,
+					preserveScope: true,
 					clickOutsideToClose: true
 				});
 			};
