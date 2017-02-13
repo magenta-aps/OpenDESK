@@ -10,7 +10,9 @@
             
             vm.sites = [];
 
-			pd_siteService.getAllOrganizationalCenters();
+			//pd_siteService.getAllOrganizationalCenters();
+
+			siteService.createMembersPDF("kagenu2");
 
 			// siteService.removeRole("kage2", "abeecher", "Consumer")
 
