@@ -381,20 +381,34 @@
 			};
 
 			vm.loadSiteRoles = function() {
-				siteService.getSiteRoles(vm.project).then(function(response){
+
+				if (vm.projectType != 'PD-Project') {
+					siteService.getSiteRoles(vm.project).then(function(response){
+
+						$scope.roles_translated = [];
+
+						for (var x in response.siteRoles) {
+
+							if ($scope.role_mapping[response.siteRoles[x]] != null) {
+								$scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
+							}
+
+						}
+
+						//$scope.roles = response.siteRoles;
+					});
+				}
+				else {
 
 					$scope.roles_translated = [];
 
-					for (var x in response.siteRoles) {
+					$scope.roles_translated.push ("Kan læse");
+					$scope.roles_translated.push ("Kan skrive");
 
-						if ($scope.role_mapping[response.siteRoles[x]] != null) {
-							$scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
-						}
+				}
 
-					}
 
-					//$scope.roles = response.siteRoles;
-				});
+
 			};
 			vm.loadSiteRoles();
 
@@ -413,6 +427,8 @@
 			}
 			
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
+
+
 
 				// getTheValue
 				var role_int_value = translation_to_value(role);

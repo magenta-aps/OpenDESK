@@ -60,6 +60,7 @@ angular
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
                 function(response) {
+                    console.log(response)
                     pd.site.members.pd_projectgroup = response;
                 }
             );
@@ -317,7 +318,33 @@ angular
                             .hideDelay(3000)
                 );
             }
-            
+
+            function updateMemberRoleDialog(event, user) {
+                vm.currentDialogUser = user;
+                $mdDialog.show({
+                    templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
+                    parent: angular.element(document.body),
+                    scope: $scope,
+                    preserveScope: true,
+                    targetEvent: event,
+                    clickOutsideToClose: true
+                });
+            }
+
+            function updateRoleOnSiteMember(siteName, userName, role) {
+
+
+
+                // getTheValue
+                var role_int_value = translation_to_value(role);
+                var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
+
+                siteService.updateRoleOnSiteMember(siteName, userName, role_alfresco_value ).then(function(val){
+                    vm.loadMembers();
+                });
+                $mdDialog.hide();
+            };
+
         }
         
 

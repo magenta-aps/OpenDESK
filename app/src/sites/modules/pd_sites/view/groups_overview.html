@@ -1,55 +1,55 @@
     <md-card-content ng-controller="PdSiteController as pd">
-        <h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>
+        <h3 class="od-title-icon"><i class="material-icons">group</i> Styret projekt, projektgrupper</h3>
 
 	<div flex="100" flex-gt-lg="100">     
 		<p>
 			<span style="font-weight: bold;">Projektleder<span><br>
 			<span style="font-weight: normal">{{ pd.site.members.pd_projectmanager.fullName }}</span>
 			<span style="float:right; position: relative; top: -15px;">
-				<!--<md-menu ng-controller="SiteController as vm">-->
-					<!--<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">-->
-						<!--<md-icon md-menu-origin>dehaze</md-icon>-->
-					<!--</md-button>-->
-					<!--&lt;!&ndash;<md-menu-content width="5">&ndash;&gt;-->
-						<!--&lt;!&ndash;<md-menu-item>&ndash;&gt;-->
-							<!--&lt;!&ndash;<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">&ndash;&gt;-->
-								<!--&lt;!&ndash;<md-icon md-menu-align-target>create</md-icon>&ndash;&gt;-->
-								<!--&lt;!&ndash;Redigér rolle&ndash;&gt;-->
-							<!--&lt;!&ndash;</md-button>&ndash;&gt;-->
-						<!--&lt;!&ndash;</md-menu-item>&ndash;&gt;-->
-						<!--&lt;!&ndash;<md-menu-item>&ndash;&gt;-->
-							<!--&lt;!&ndash;<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">&ndash;&gt;-->
-								<!--&lt;!&ndash;<md-icon md-menu-align-target>remove_circle_outline</md-icon>&ndash;&gt;-->
-								<!--&lt;!&ndash;Slet&ndash;&gt;-->
-							<!--&lt;!&ndash;</md-button>&ndash;&gt;-->
-						<!--&lt;!&ndash;</md-menu-item>&ndash;&gt;-->
-					<!--&lt;!&ndash;</md-menu-content>&ndash;&gt;-->
-				<!--</md-menu>-->
+				<md-menu ng-controller="SiteController as vm">
+					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+						<md-icon md-menu-origin>dehaze</md-icon>
+					</md-button>
+					<md-menu-content width="5">
+						<md-menu-item>
+							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+								<md-icon md-menu-align-target>create</md-icon>
+								Redigér rolle
+							</md-button>
+						</md-menu-item>
+						<md-menu-item>
+							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">
+								<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+								Slet
+							</md-button>
+						</md-menu-item>
+					</md-menu-content>
+				</md-menu>
 			</span>
 		</p>
 		<p>
 			<span style="font-weight: bold;">Projektejer<span><br>
 			<span style="font-weight: normal;">{{ pd.site.members.pd_projectowner.fullName }}</span>
 			<span style="float:right; position: relative; top: -15px;">
-				<!--<md-menu ng-controller="SiteController as vm">-->
-					<!--<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">-->
-						<!--<md-icon md-menu-origin>dehaze</md-icon>-->
-					<!--</md-button>-->
-					<!--<md-menu-content width="5">-->
-						<!--<md-menu-item>-->
-							<!--<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">-->
-								<!--<md-icon md-menu-align-target>create</md-icon>-->
-								<!--Redigér rolle-->
-							<!--</md-button>-->
-						<!--</md-menu-item>-->
-						<!--<md-menu-item>-->
-							<!--<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">-->
-								<!--<md-icon md-menu-align-target>remove_circle_outline</md-icon>-->
-								<!--Slet-->
-							<!--</md-button>-->
-						<!--</md-menu-item>-->
-					<!--</md-menu-content>-->
-				<!--</md-menu>-->
+				<md-menu ng-controller="SiteController as vm">
+					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+						<md-icon md-menu-origin>dehaze</md-icon>
+					</md-button>
+					<md-menu-content width="5">
+						<md-menu-item>
+							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+								<md-icon md-menu-align-target>create</md-icon>
+								Redigér rolle
+							</md-button>
+						</md-menu-item>
+						<md-menu-item>
+							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">
+								<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+								Slet
+							</md-button>
+						</md-menu-item>
+					</md-menu-content>
+				</md-menu>
 			</span>
 		</p>
 	</div>

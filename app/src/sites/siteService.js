@@ -95,6 +95,9 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         updateRoleOnSiteMember: function (siteName, member, newRole) {
+
+
+
             return $http.put('/api/sites/' + siteName + '/memberships', {
                 role: newRole,
                 person: {userName: member}
