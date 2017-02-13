@@ -5,7 +5,7 @@ angular
 function FooterController($scope, authService, serverVersionService) {
     var vm = this;
 
-    activate();
+    //activate();
 
     function activate() {
         vm.isDevelopmentMode = document.location.hostname == "localhost" ||

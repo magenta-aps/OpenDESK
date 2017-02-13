@@ -34,7 +34,7 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
     };
 
 
-    $interval(callAtTimeout, 10000);
+    //$interval(callAtTimeout, 10000);
 
     function callAtTimeout() {
         //console.log("Timeout occurred");
