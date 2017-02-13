@@ -222,8 +222,7 @@
 			</md-card-content>											
 		</md-card>
 
-        <!-- Needs an ng-if in order to display on basic sites only -->
-		<md-card flex-gt-sm="30">
+		<md-card flex-gt-sm="30" ng-if="vm.projectType === 'Project'">
 			<md-card-content>
 				<h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>
 				<md-list class="od-members">
@@ -266,10 +265,8 @@
                 </div>
             </md-card-content>
         </md-card>
-
+		<md-card flex-gt-sm="30" ng-if="vm.projectType === 'PD-Project'">
+			<div ng-include="'app/src/sites/modules/pd_sites/view/groups_overview.html'"></div>
+		<md-card>
 	</div>
-    
-    <!-- Needs an ng-if in order to display on advanced sites only -->
-    <div ng-include="'app/src/sites/modules/pd_sites/view/groups_overview.html'"></div>
-
 </div>

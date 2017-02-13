@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SiteController', SiteController);
         
-        function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
+        function SiteController($scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
 								alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
 								searchService, userService) {
 
@@ -36,6 +36,7 @@
 
 			vm.project = $stateParams.projekt;
             vm.userRole = 'siteConsumer';
+			vm.projectType = $location.search().type;;
 
 			siteService.getAllUsers("a");
 
@@ -102,7 +103,11 @@
 			  originatorEv = event;
 			  $mdOpenMenu(event);
 			};
-
+			/*
+			vm.projectType = function () {				
+				return $location.search().type;
+			}
+*/
 			vm.loadSiteData = function () {
 				var r = siteService.loadSiteData(vm.project);
 
