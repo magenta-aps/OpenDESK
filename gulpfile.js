@@ -32,8 +32,8 @@ var environment = {
     },
     staging: {
         chat: 'http://demo.opendesk.dk:5280/http-bind',
-        repo: 'http://178.62.194.129:8080',
-        share: 'http://178.62.194.129:8081'
+        repo: 'http://staging.openDesk.dk:8080',
+        share: 'http://staging.openDesk.dk:8081'
     }
 };
 

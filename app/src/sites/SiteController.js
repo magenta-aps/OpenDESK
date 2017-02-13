@@ -604,6 +604,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
 
     //Goes to the libreOffice online edit page
     vm.goToLOEditPage = function (nodeRef) {
+        console.log('Transitioning to the LOOL page with nodeRef: '+ nodeRef);
         $state.go('lool', {'nodeRef': nodeRef})
     }
 

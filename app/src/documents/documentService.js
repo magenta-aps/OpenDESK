@@ -16,7 +16,6 @@ function documentService($http) {
 
     return service;
 
-
     function getDocument(documentNodeRef) {
         return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
             console.log('doc user access data');
@@ -25,13 +24,11 @@ function documentService($http) {
         });
     }
 
-
     function getPath(documentNodeRef) {
         return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
             return response.data.item.location;
         });
     }
-
 
     function getHistory(documentNodeRef) {
 
@@ -64,7 +61,6 @@ function documentService($http) {
         });
     }
 
-
     function uploadNewVersion(file, destination, nodeRef, major) {
 
         var formData = new FormData();
@@ -81,6 +77,5 @@ function documentService($http) {
             return response;
         });
     }
-
 
 }
