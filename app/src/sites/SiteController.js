@@ -9,13 +9,13 @@
 								searchService, userService) {
 
 			$scope.role_mapping = {};
-			$scope.role_mapping["SiteManager"] = "Projektejer";
+			$scope.role_mapping["SiteManager"] = "Projektleder";
 			$scope.role_mapping["SiteContributor"] = "Kan skrive";
 			$scope.role_mapping["SiteConsumer"] = "Kan læse";
 
 
 			$scope.role_translation = {};
-			$scope.role_translation["1"] = "Projektejer";
+			$scope.role_translation["1"] = "Projektleder";
 			$scope.role_translation["2"] = "Kan skrive";
 			$scope.role_translation["3"] = "Kan læse";
 
