@@ -24,7 +24,7 @@ angular
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
-		'openDeskApp.lool',
+        'openDeskApp.lool',
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',

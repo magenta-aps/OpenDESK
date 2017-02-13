@@ -95,6 +95,8 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         updateRoleOnSiteMember: function (siteName, member, newRole) {
+
+
             return $http.put('/api/sites/' + siteName + '/memberships', {
                 role: newRole,
                 person: {userName: member}
@@ -133,6 +135,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         getAllUsers: function (filter) {
             return userService.getPeople("?filter=" + filter).then(function (result) {
+                console.log(result);
                 return result.people;
             });
         },
@@ -233,17 +236,40 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             return $http.get("/alfresco/service/sites?method=getDBID&siteShortName=" + siteShortName).then(function (response) {
 
                 var dbid = response.data[0].DBID;
-                console.log(dbid)
+                console.log(dbid);
 
                 var requestName = dbid + "_" + groupName;
 
                 return groupService.getGroupMembers(requestName).then(function (r) {
-                    console.log(r);
+                    return r.data;
                 });
-                ;
 
+                return response.data;
+            });
+        },
+        createLink: function (source, destination) {
+            return $http.get("/alfresco/service/sites?method=addLink&source=" + source + "&destination=" + destination).then(function (response) {
+                console.log(response.data)
+                return response.data
+            });
+        },
+        deleteLink: function (source, destination) {
+            return $http.get("/alfresco/service/sites?method=deleteLink&source=" + source + "&destination=" + destination).then(function (response) {
+                console.log(response.data)
+                return response.data
+            });
+        },
+        createMembersPDF: function (shortName) {
+            return $http.get("/alfresco/service/sites?method=createMembersPDF&shortName=" + shortName).then(function (response) {
+
+                // do a get on the returned noderef
+                //alfresco/service/api/node/content/workspace/SpacesStore/90defc67-622f-4bd4-acb2-e20d569b16f4
+
+                console.log(response.data)
                 return response.data
             });
         }
+
+
     }
 });

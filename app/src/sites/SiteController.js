@@ -1,29 +1,27 @@
 'use strict';
+
 angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-function SiteController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
+function SiteController($scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
                         alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-                        searchService, $state) {
+                        searchService, userService) {
 
     $scope.role_mapping = {};
-    $scope.role_mapping["SiteManager"] = "Projektejer";
+    $scope.role_mapping["SiteManager"] = "Projektleder";
     $scope.role_mapping["SiteContributor"] = "Kan skrive";
     $scope.role_mapping["SiteConsumer"] = "Kan læse";
 
-
     $scope.role_translation = {};
-    $scope.role_translation["1"] = "Projektejer";
+    $scope.role_translation["1"] = "Projektleder";
     $scope.role_translation["2"] = "Kan skrive";
     $scope.role_translation["3"] = "Kan læse";
-
 
     $scope.role_mapping_reverse = {};
     $scope.role_mapping_reverse["1"] = "SiteManager";
     $scope.role_mapping_reverse["2"] = "SiteContributor";
     $scope.role_mapping_reverse["3"] = "SiteConsumer";
-
 
     var vm = this;
 
@@ -35,6 +33,10 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
 
     vm.project = $stateParams.projekt;
     vm.userRole = 'siteConsumer';
+    vm.projectType = $location.search().type;
+    ;
+
+    siteService.getAllUsers("a");
 
     //siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
 
@@ -43,7 +45,6 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
             vm.userRole = response;
         }
     );
-
 
     function translation_to_value(translation) {
 
@@ -55,7 +56,6 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
             }
         }
     }
-
 
     function buildBreadCrumbPath(project_title) {
         var paths = [
@@ -84,11 +84,9 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
 
     vm.path = $stateParams.path;
 
-
     vm.cancel = function () {
         $mdDialog.cancel();
     };
-
     vm.reload = function () {
         $window.location.reload();
     };
@@ -98,7 +96,11 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         originatorEv = event;
         $mdOpenMenu(event);
     };
-
+    /*
+     vm.projectType = function () {
+     return $location.search().type;
+     }
+     */
     vm.loadSiteData = function () {
         var r = siteService.loadSiteData(vm.project);
 
@@ -109,7 +111,6 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         });
     };
     vm.loadSiteData();
-
 
     vm.loadContents = function () {
 
@@ -164,9 +165,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         });
     };
 
-
     vm.loadContents();
-
 
     vm.loadHistory = function (doc) {
         $scope.history = [];
@@ -196,11 +195,36 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         });
 
         $mdDialog.hide();
-    }
+    };
+
+    vm.createLink = function (project) {
+
+        siteService.createLink(vm.project, project).then(function () {
+            $mdDialog.hide();
+        });
+    };
+
+    vm.deleteLink = function (source, destination) {
+
+        siteService.deleteLink(source, destination).then(function () {
+            $mdDialog.hide();
+        });
+    };
 
     vm.newFolderDialog = function (event) {
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/newFolder.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    };
+
+    vm.newLinkDialog = function (event) {
+        $mdDialog.show({
+            templateUrl: 'app/src/sites/view/newLink.tmpl.html',
             parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
@@ -291,7 +315,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         });
 
         $mdDialog.hide();
-    }
+    };
 
     vm.createReviewNotification = function (documentNodeRef, receiver, subject, comment) {
 
@@ -303,16 +327,15 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         });
 
 
-    }
-
+    };
 
     vm.loadMembers = function () {
         siteService.getSiteMembers(vm.project).then(function (val) {
             $scope.members = val;
         });
-    }
-    vm.loadMembers();
+    };
 
+    vm.loadMembers();
 
     vm.newMember = function (event) {
         $mdDialog.show({
@@ -345,21 +368,35 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
     };
 
     vm.loadSiteRoles = function () {
-        siteService.getSiteRoles(vm.project).then(function (response) {
+
+        if (vm.projectType != 'PD-Project') {
+            siteService.getSiteRoles(vm.project).then(function (response) {
+
+                $scope.roles_translated = [];
+
+                for (var x in response.siteRoles) {
+
+                    if ($scope.role_mapping[response.siteRoles[x]] != null) {
+                        $scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
+                    }
+
+                }
+
+                //$scope.roles = response.siteRoles;
+            });
+        }
+        else {
 
             $scope.roles_translated = [];
 
-            for (var x in response.siteRoles) {
+            $scope.roles_translated.push("Kan læse");
+            $scope.roles_translated.push("Kan skrive");
 
-                if ($scope.role_mapping[response.siteRoles[x]] != null) {
-                    $scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
-                }
+        }
 
-            }
 
-            //$scope.roles = response.siteRoles;
-        });
     };
+
     vm.loadSiteRoles();
 
     vm.currentDialogUser = '';
@@ -374,9 +411,11 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
             targetEvent: event,
             clickOutsideToClose: true
         });
-    }
+    };
 
     vm.updateRoleOnSiteMember = function (siteName, userName, role) {
+
+
 
         // getTheValue
         var role_int_value = translation_to_value(role);
@@ -429,11 +468,11 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
 
     vm.previewDocument = function previewDocument(nodeRef) {
         documentPreviewService.previewDocument(nodeRef);
-    }
+    };
 
     vm.downloadDocument = function downloadDocument(nodeRef, name) {
         alfrescoDownloadService.downloadFile(nodeRef, name);
-    }
+    };
 
     vm.moveFileDialog = function moveFileDialog(event, nodeRef, parentNodeRef) {
         vm.source = [];
@@ -452,7 +491,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         }, function () {
             console.log('You cancelled a move action');
         });
-    }
+    };
 
     vm.copyFileDialog = function copyFileDialog(event, nodeRef, parentNodeRef) {
         vm.source = [];
@@ -471,7 +510,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         }, function () {
             console.log('You cancelled a copy action');
         });
-    }
+    };
 
     vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
         siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then(function (response) {
@@ -493,7 +532,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
             return response;
 
         });
-    }
+    };
 
     vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
         siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then(function (response) {
@@ -515,7 +554,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
             return response;
 
         });
-    }
+    };
 
     vm.renameDocumentDialog = function (event, docNodeRef) {
         var confirm = $mdDialog.prompt()
@@ -531,7 +570,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
 
         });
 
-    }
+    };
 
     vm.renameDocument = function renameDocument(docNodeRef, newName) {
         var props = {
@@ -543,7 +582,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
         });
 
         $mdDialog.hide();
-    }
+    };
 
     vm.getSearchresults = function getSearchReslts(term) {
         return searchService.getSearchResults(term).then(function (val) {
@@ -559,7 +598,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
                 return [];
             }
         });
-    }
+    };
 
     vm.getAutoSuggestions = function getAutoSuggestions(term) {
         return searchService.getSearchSuggestions(term).then(function (val) {
@@ -571,7 +610,7 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
                 return [];
             }
         });
-    }
+    };
 
     // vm.test = function test() {
     //var nodeRef = "workspace://SpacesStore/7cb5adc4-f18c-42d0-8225-6a00d6c31e68";
@@ -600,15 +639,15 @@ function SiteController($scope, $mdDialog, $window, siteService, cmisService, $s
             $window.location.href = "/#/dokument/" + path;
 
         });
-    }
+    };
 
     //Goes to the libreOffice online edit page
     vm.goToLOEditPage = function (nodeRef) {
-        console.log('Transitioning to the LOOL page with nodeRef: '+ nodeRef);
+        console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
         $state.go('lool', {'nodeRef': nodeRef})
     }
 
-}; // SiteCtrl close
+} // SiteCtrl close
 
 
 //TODO: refactor all the methods that dont belong here to a relevant server- and pass on the call to them in the controller

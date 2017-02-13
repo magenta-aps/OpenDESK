@@ -45,13 +45,14 @@
 
                     <tbody>
                     <tr ng-repeat="project in vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
-                        <td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+                        <td><a class="od-filebrowser-link"
+                               href="#/projekter/{{project.shortName}}?type={{project.type}}">
                             <i class="material-icons">content_paste</i>
                             {{ project.title }}
                         </a></td>
-                        <td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.created
-                            | openeDate }}</a></td>
-                        <td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{
+                        <td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created |
+                            openeDate }}</a></td>
+                        <td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{
                             project.creator.fullName }}</a></td>
                         <td>
                             <md-menu>
@@ -94,8 +95,8 @@
 
                 <md-button class="md-raised md-primary" ng-click="vm.newSite($event)"><i class="material-icons">add</i>
                     Opret nyt Projekt&nbsp;&nbsp;</md-button>
-                <md-button ng-controller="PdSiteController as pc" class="md-raised md-primary"
-                           ng-click="pc.newPDSite($event)"><i class="material-icons">add</i> Opret nyt Avanceret Projekt&nbsp;&nbsp;
+                <md-button ng-controller="PdSiteController as pd" class="md-raised md-primary"
+                           ng-click="pd.newPDSite($event)"><i class="material-icons">add</i> Opret nyt Avanceret Projekt&nbsp;&nbsp;
                 </md-button>
 
             </div>

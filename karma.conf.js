@@ -1,29 +1,29 @@
-module.exports = function(config){
-  config.set({
+module.exports = function (config) {
+    config.set({
 
-    basePath : './',
+        basePath: './',
 
-    files : [
-      'app/bower_components/angular/angular.js',
-      'app/bower_components/angular-route/angular-route.js',
-      'app/bower_components/angular-aria/angular-aria.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-material/angular-material.js',
-      'app/src/**/*.js'
-    ],
+        files: [
+            'app/bower_components/angular/angular.js',
+            'app/bower_components/angular-route/angular-route.js',
+            'app/bower_components/angular-aria/angular-aria.js',
+            'app/bower_components/angular-mocks/angular-mocks.js',
+            'app/bower_components/angular-material/angular-material.js',
+            'app/src/**/*.js'
+        ],
 
-    autoWatch : false,
+        autoWatch: false,
 
-    frameworks: ['jasmine'],
+        frameworks: ['jasmine'],
 
-    browsers : ['PhantomJS'],
+        browsers: ['PhantomJS'],
 
-    singleRun: true,
+        singleRun: true,
 
-    junitReporter : {
-      outputFile: 'test_out/unit.xml',
-      suite: 'unit'
-    }
+        junitReporter: {
+            outputFile: 'test_out/unit.xml',
+            suite: 'unit'
+        }
 
-  });
+    });
 };

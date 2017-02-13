@@ -4,11 +4,31 @@ angular
     .module('openDeskApp.sites')
     .controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, siteService, searchService, $rootScope, documentService, authService) {
+function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
     var vm = this;
 
     vm.sites = [];
+
+    //pd_siteService.getAllOrganizationalCenters();
+
+    siteService.createMembersPDF("kagenu2");
+
+    // siteService.removeRole("kage2", "abeecher", "Consumer")
+
+    //pd_siteService.createPDSite("kage8", "desc", "100", "center_1","fhp", "fhp");
+
+    //pd_siteService.getAllOrganizationalCenters();
+
+
+    //pd_siteService.createPDSite("kage4", "desc", "100", "center_1","admin", "abeecher");
+    //siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
+    //siteService.removeRole("kage2", "abeecher", "Consumer")
+
+    //siteService.addUser("kage8", "abeecher", "PD_MONITORS");
+    //siteService.addUser("TestAvanceretprojekt", "abeecher", "PD_PROJECTOWNER");
+    //siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
+
 
     function getSites() {
         return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function (response) {
@@ -16,9 +36,9 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
                 return response;
             }
         );
-    }
-
+    };
     getSites();
+
 
     vm.newSite = function (event) {
         $mdDialog.show({
@@ -30,6 +50,7 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
             clickOutsideToClose: true
         });
     };
+
 
     vm.createSite = function (name, description) {
 
@@ -67,6 +88,7 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
         });
     };
 
+
     vm.cancel = function () {
         $mdDialog.cancel();
     };
@@ -84,18 +106,6 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
     vm.currentDialogTitle = '';
     vm.currentDialogDescription = '';
     vm.currentDialogShortName = '';
-    vm.currentDialogSite = '';
-    vm.infoSiteDialog = function (site) {
-        vm.currentDialogSite = site;
-        $mdDialog.show({
-            templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
-            parent: angular.element(document.body),
-            //targetEvent: event,
-            scope: $scope,        // use parent scope in template
-            preserveScope: true,  // do not forget this if use parent scope
-            clickOutsideToClose: true
-        });
-    };
     vm.renameSiteDialog = function (event, shortName, title, description) {
         vm.currentDialogTitle = title;
         vm.currentDialogDescription = description;
@@ -110,6 +120,21 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
         });
     };
 
+
+    vm.currentDialogSite = '';
+    vm.infoSiteDialog = function (site) {
+        vm.currentDialogSite = site;
+        $mdDialog.show({
+            templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
+            parent: angular.element(document.body),
+            //targetEvent: event,
+            scope: $scope,        // use parent scope in template
+            preserveScope: true,  // do not forget this if use parent scope
+            clickOutsideToClose: true
+        });
+    };
+
+
     vm.updateSiteName = function (shortName, newName, description) {
         var r = siteService.updateSiteName(shortName, newName, description);
 
@@ -123,6 +148,7 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
             });
         });
     };
+
 
     vm.getSearchresults = function getSearchReslts(term) {
         return searchService.getSearchResults(term).then(function (val) {
@@ -142,6 +168,7 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
         });
     };
 
+
     vm.getAutoSuggestions = function getAutoSuggestions(term) {
         return searchService.getSearchSuggestions(term).then(function (val) {
 
@@ -153,6 +180,7 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
             }
         });
     };
+
 
     vm.gotoPath = function (nodeRef) {
 
@@ -171,5 +199,6 @@ function SitesController($scope, $mdDialog, $window, siteService, searchService,
             console.log("gotoPath");
         });
     };
+
 
 } // SiteCtrl close

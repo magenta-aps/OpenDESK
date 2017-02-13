@@ -1,5 +1,5 @@
 <md-dialog aria-label="Opret nyt avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="submitNewPDSite()">
+    <form ng-submit="submitNewPDSite()" class="pd-site-create-form">
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Opret nyt projekt med styring og følgegrupper</h2>
@@ -12,41 +12,142 @@
 
         <md-dialog-content>
             <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab label="Navn">
+                <md-tab label="Navn og styring">
                     <md-content class="md-padding" layout="column">
                         <md-input-container>
-                            <label>Navn</label>
-                            <input type="text" ng-model="newSite.siteName">
+                            <label>Projektnavn</label>
+                            <input type="text" ng-model="newSite.siteName" required>
                         </md-input-container>
                         <md-input-container>
                             <label>Beskrivelse</label>
-                            <textarea ng-model="newSite.desc"></textarea>
+                            <textarea ng-model="newSite.desc" required></textarea>
                         </md-input-container>
-                    </md-content>
-                </md-tab>
-                <md-tab label="Styring">
-                    <md-content class="md-padding" layout="column">
-                        <md-input-container>
-                            <label>Projektejer</label>
-                            <input type="text" ng-model="newSite.owner">
-                        </md-input-container>
-                        <md-input-container>
-                            <label>Projektleder</label>
-                            <input type="text" ng-model="newSite.manager">
-                        </md-input-container>
+
+                        <md-autocomplete
+                                md-selected-item="newSite.owner"
+                                md-search-text="searchTextOwner"
+                                md-items="item in searchProjectOwners(searchTextOwner)"
+                                md-item-text="item.fullName"
+                                md-min-length="2"
+                                placeholder="Projektejer">
+                            <md-item-template>
+                                <span md-highlight-text="searchTextOwner"
+                                      md-highlight-flags="^i">{{ item.fullName }}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Ingen brugere matcher "{{ searchTextOwner }}".
+                            </md-not-found>
+                        </md-autocomplete>
+
+                        <md-autocomplete
+                                md-selected-item="newSite.manager"
+                                md-search-text="searchTextManager"
+                                md-items="man in searchPeople(searchTextManager)"
+                                md-item-text="man.firstName + ' ' + man.lastName"
+                                md-min-length="2"
+                                placeholder="Projekleder">
+                            <md-item-template>
+                                <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                Ingen brugere matcher "{{ searchTextManager }}".
+                            </md-not-found>
+                        </md-autocomplete>
+
                         <md-input-container>
                             <label>Organisatorisk enhed</label>
-                            <input type="text" ng-model="newSite.center_id">
+                            <md-select ng-model="newSite.center_id" required>
+                                <md-option ng-repeat="org in availOrgs" value="{{ org.shortName }}">
+                                    {{ org.displayName }}
+                                </md-option>
+                            </md-select>
                         </md-input-container>
+
                         <md-input-container>
                             <label>SBSYS sagsnr.</label>
-                            <input type="text" ng-model="newSite.sbsys">
+                            <input type="text" ng-model="newSite.sbsys" required>
                         </md-input-container>
                     </md-content>
                 </md-tab>
                 <md-tab label="Grupper">
                     <md-content class="md-padding" layout="column">
 
+                        <fieldset>
+                            <legend>Projektgruppe</legend>
+                            <md-chips ng-model="projektGruppe"
+                                      md-autocomplete-snap
+                                      md-require-match="true">
+                                <md-autocomplete md-selected-item="selectedProjGrpItem"
+                                                 md-search-text="srchprjgrptxt"
+                                                 md-items="pgitem in searchPeople(srchprjgrptxt)"
+                                                 md-item-text="pgitem.firstName"
+                                                 placeholder="Angiv et medlemmer">
+                                    <span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
+                                </md-autocomplete>
+                                <md-chip-template>
+                                    <span>
+                                        <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
+                                    </span>
+                                </md-chip-template>
+                            </md-chips>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Styregruppe</legend>
+                            <md-chips ng-model="styreGruppe"
+                                      md-autocomplete-snap
+                                      md-require-match="true">
+                                <md-autocomplete md-selected-item="selectedStyreGrpItem"
+                                                 md-search-text="srchstrgrptxt"
+                                                 md-items="sgitem in searchPeople(srchstrgrptxt)"
+                                                 md-item-text="sgitem.firstName"
+                                                 placeholder="Angiv et medlemmer">
+                                    <span md-highlight-text="srchstrgrptxt">{{ sgitem.firstName }} {{ sgitem.lastName }}</span>
+                                </md-autocomplete>
+                                <md-chip-template>
+                                    <span>
+                                        <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
+                                    </span>
+                                </md-chip-template>
+                            </md-chips>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Arbejdsgruppe</legend>
+                            <md-chips ng-model="arbejdsGruppe"
+                                      md-autocomplete-snap
+                                      md-require-match="true">
+                                <md-autocomplete md-selected-item="selectedArbejdsGrpItem"
+                                                 md-search-text="srchrbjdgrptxt"
+                                                 md-items="agitem in searchPeople(srchrbjdgrptxt)"
+                                                 md-item-text="agitem.firstName"
+                                                 placeholder="Angiv et medlemmer">
+                                    <span md-highlight-text="srchrbjdgrptxt">{{ agitem.firstName }} {{ agitem.lastName }}</span>
+                                </md-autocomplete>
+                                <md-chip-template>
+                                    <span>
+                                        <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
+                                    </span>
+                                </md-chip-template>
+                            </md-chips>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Følgegruppe</legend>
+                            <md-chips ng-model="folgeGruppe"
+                                      md-autocomplete-snap
+                                      md-require-match="true">
+                                <md-autocomplete md-selected-item="selectedFolgeGrpItem"
+                                                 md-search-text="srchflggrptxt"
+                                                 md-items="fgitem in searchPeople(srchflggrptxt)"
+                                                 md-item-text="fgitem.firstName"
+                                                 placeholder="Angiv et medlemmer">
+                                    <span md-highlight-text="srchflggrptxt">{{ fgitem.firstName }} {{ fgitem.lastName }}</span>
+                                </md-autocomplete>
+                                <md-chip-template>
+                                    <span>
+                                        <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
+                                    </span>
+                                </md-chip-template>
+                            </md-chips>
+                        </fieldset>
                     </md-content>
                 </md-tab>
             </md-tabs>
