@@ -87,6 +87,7 @@
 		<property name="renditionService" ref="RenditionService"/>
 		<property name="fileFolderService" ref="FileFolderService"/>
 		<property name="contentService" ref="ContentService"/>
+		<property name="searchService" ref="SearchService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"
