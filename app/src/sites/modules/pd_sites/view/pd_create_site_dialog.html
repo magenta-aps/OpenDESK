@@ -28,7 +28,7 @@
                                 md-search-text="searchTextOwner"
                                 md-items="item in searchProjectOwners(searchTextOwner)"
                                 md-item-text="item.fullName"
-                                md-min-length="2"
+                                md-min-length="1"
                                 placeholder="Projektejer">
                             <md-item-template>
                                 <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ item.fullName }}</span>
@@ -43,7 +43,7 @@
                                 md-search-text="searchTextManager"
                                 md-items="man in searchPeople(searchTextManager)"
                                 md-item-text="man.firstName + ' ' + man.lastName"
-                                md-min-length="2"
+                                md-min-length="1"
                                 placeholder="Projekleder">
                             <md-item-template>
                                 <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
