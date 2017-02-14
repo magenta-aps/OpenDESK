@@ -17,7 +17,6 @@ function LoolController($stateParams, loolService) {
 
     loolService.getWopiUrl(vm.nodeRef).then(function (response) {
         var shortRef = vm.nodeRef.substring(vm.nodeRef.lastIndexOf('/') + 1);
-        debugger;
         var wopi_src_url = response.wopi_src_url;
         var wopiFileURL = "wopi/files/" + shortRef;
         var frameSrcURL = wopi_src_url + "WOPISrc=" + encodeURIComponent(wopiFileURL);

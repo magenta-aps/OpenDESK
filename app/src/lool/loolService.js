@@ -3,7 +3,7 @@ angular
     .factory('loolService', loolService);
 
 
-function loolService($http, serialzeJSONObject) {
+function loolService($http, transformRequestAsFormPost) {
 
     return {
         getWopiUrl: getWopiUrl,
@@ -32,14 +32,15 @@ function loolService($http, serialzeJSONObject) {
         return $http({
             method: 'POST',
             url: frameSrcURL,
-            transformRequest: serialzeJSONObject,
-            data: {access_token: access_token},
-            headers: {
+            transformRequest: transformRequestAsFormPost,
+            data: {access_token: access_token}
+            /*headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "X-Requested-With" : ''
-            }
+            }*/
         }).then(
             function (response) {
+                debugger;
                 // How to return this for an iframe
                 return response;
             },
