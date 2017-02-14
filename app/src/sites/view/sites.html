@@ -28,8 +28,33 @@
 			<div layout="row" layout-align="space-between center">
 				<md-input-container>
 					<label>Find projekt</label>
-					<input type="text" ng-model="vm.search">
+					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
+				<md-input-container>
+					<input type="checkbox" ng-model="vm.memberonly"> <label>Vis kun mine projekter</label>
+				</md-input-container>
+
+				<div ng-init="states = [
+				{key:'ACTIVE', name:'Igangværende'},
+				{key:'CLOSED', name:'Afsluttet'},
+				{key:'', name:'Alle'}]"></div>
+
+				<md-input-container>
+					<label>Status</label>
+					<md-select ng-model="vm.search.state">
+						<md-option ng-repeat="x in states" value="{{x.key}}">{{x.name}}</md-option>
+					</md-select>
+				</md-input-container>
+
+				<md-input-container>
+					<label>Center</label>
+					<md-select ng-model="vm.search.center_id" required>
+						<md-option ng-repeat="x in vm.organizationalCenters" value="{{ x.shortName }}">
+							{{ x.displayName }}
+						</md-option>
+					</md-select>
+				</md-input-container>
+
 			</div>
 			<md-list class="sortHead">						
 				<table class="od-members od-members-row">
@@ -43,7 +68,7 @@
 					</thead>
 					
 					<tbody>
-						<tr ng-repeat="project in vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
+						<tr ng-repeat="project in vm.memberonly ? vm.sitesPerUser : vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
 							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}?type={{project.type}}">
 								<i class="material-icons">content_paste</i>
 								{{ project.title }}

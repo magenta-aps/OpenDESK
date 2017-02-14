@@ -9,10 +9,12 @@
 			var vm = this;
             
             vm.sites = [];
+			vm.sitesPerUser = [];
+			vm.organizationalCenters = [];
 
 			//pd_siteService.getAllOrganizationalCenters();
 
-			siteService.createMembersPDF("kagenu2");
+			//siteService.createMembersPDF("kagenu2");
 
 			// siteService.removeRole("kage2", "abeecher", "Consumer")
 
@@ -31,13 +33,31 @@
 
 
             function getSites() {
-                return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
+                return siteService.getSites().then(function(response) {
                         vm.sites = response;
 						return response;
                     }
                 );    
             };
             getSites();
+
+			function getSitesPerUser() {
+				return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
+						vm.sitesPerUser = response;
+						return response;
+					}
+				);
+			};
+			getSitesPerUser();
+
+			function getAllOrganizationalCenters() {
+				pd_siteService.getAllOrganizationalCenters().then(function(response) {
+						vm.organizationalCenters = response.data;
+						vm.organizationalCenters.push({"shortName": "", "displayName": "Alle"});
+					}
+				);
+			};
+			getAllOrganizationalCenters();
 
 
 			vm.newSite = function(event) {
@@ -56,11 +76,15 @@
 
 				siteService.createSite(name, description).then(function(val) {
 
-					getSites().then(function(val) {
-								vm.sites = val;
-								$mdDialog.hide();
-							});
+					$mdDialog.hide();
 
+					getSites().then(function(val) {
+						vm.sites = val;
+					});
+
+					getSitesPerUser().then(function(val) {
+						vm.sitesPerUser = val;
+					});
 
 				});
 			};
@@ -84,6 +108,10 @@
 					
 					getSites().then(function(val) {
 						vm.sites = val;
+					});
+
+					getSitesPerUser().then(function(val) {
+						vm.sitesPerUser = val;
 					});
 				});
 			};
@@ -145,6 +173,10 @@
 					
 					getSites().then(function(val) {
 						vm.sites = val;
+					});
+
+					getSitesPerUser().then(function(val) {
+						vm.sitesPerUser = val;
 					});
 				});
 			};
