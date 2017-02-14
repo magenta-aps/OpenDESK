@@ -156,11 +156,9 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
             console.log(val);
 
             if (val != undefined) {
-
                 $rootScope.searchResults = [];
                 $rootScope.searchResults = val.data.items;
-
-                window.location.href = "#/search";
+                window.location.href = "#!/search";
 
             } else {
                 return [];
@@ -194,7 +192,7 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
             // var path = val.path;
 
             var path = ref.replace("workspace://SpacesStore/", "");
-            $window.location.href = "/#/dokument/" + path;
+            $window.location.href = "/#!/dokument/" + path;
 
             console.log("gotoPath");
         });

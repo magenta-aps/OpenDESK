@@ -4,9 +4,9 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-function SiteController($scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
-                        alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-                        searchService, userService) {
+function SiteController($scope, $mdDialog, $window, $location, $rootScope, $stateParams, $state, alfrescoDownloadService,
+                        documentPreviewService, documentService, notificationsService, authService, siteService, cmisService,
+                        searchService) {
 
     $scope.role_mapping = {};
     $scope.role_mapping["SiteManager"] = "Projektleder";
@@ -61,11 +61,11 @@ function SiteController($scope, $mdDialog, $window, $location, siteService, cmis
         var paths = [
             {
                 title: 'Projekter',
-                link: '#/projekter'
+                link: '#!/projekter'
             },
             {
                 title: project_title,
-                link: '#/projekter/' + vm.project
+                link: '#!/projekter/' + vm.project
             }
         ];
         var pathArr = $stateParams.path.split('/');
@@ -74,7 +74,7 @@ function SiteController($scope, $mdDialog, $window, $location, siteService, cmis
             if (pathArr[a] !== '') {
                 paths.push({
                     title: pathArr[a],
-                    link: '#/projekter/' + vm.project + pathLink + pathArr[a]
+                    link: '#!/projekter/' + vm.project + pathLink + pathArr[a]
                 });
                 pathLink = pathLink + pathArr[a] + '/';
             }
@@ -592,7 +592,7 @@ function SiteController($scope, $mdDialog, $window, $location, siteService, cmis
                 $rootScope.searchResults = [];
                 $rootScope.searchResults = val.data.items;
 
-                window.location.href = "#/search";
+                window.location.href = "#!/search";
 
             } else {
                 return [];
@@ -636,7 +636,7 @@ function SiteController($scope, $mdDialog, $window, $location, siteService, cmis
             // var path = val.path;
 
             var path = ref.replace("workspace://SpacesStore/", "");
-            $window.location.href = "/#/dokument/" + path;
+            $window.location.href = "/#!/dokument/" + path;
 
         });
     };

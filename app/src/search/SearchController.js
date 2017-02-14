@@ -81,7 +81,7 @@ function SearchController($scope, $state, $cookies, $stateParams, searchService,
             // var path = val.path;
 
             var path = ref.replace("workspace://SpacesStore/", "");
-            $window.location.href = "/#/dokument/" + path;
+            $window.location.href = "/#!/dokument/" + path;
 
             console.log("gotoPath");
         });

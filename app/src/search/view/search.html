@@ -3,11 +3,11 @@
     <h1 class="od-title">Søgning</h1>
 
     <!-- <div layout="row" layout-align="space-between center">
-        <a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
+        <a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
     </div> -->
 
     <div layout="row" layout-align="space-between center">
-        <a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
+        <a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 
         <div class="od-search" layout="row">
             <span flex></span>
@@ -47,7 +47,7 @@
                     <!-- <md-list-item flex="100"> -->
                     <md-divider></md-divider>
                     <a class="od-filebrowser-link"
-                       ng-href="#/dokument/{{r.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                       ng-href="#!/dokument/{{r.nodeRef.replace('workspace://SpacesStore/', '')}}">
 
                         <i class="material-icons">insert_drive_file</i>
                         {{ r.name }}, <i>Ændret af</i> {{ r.modifiedBy }}

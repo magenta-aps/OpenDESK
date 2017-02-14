@@ -67,7 +67,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
             notificationUtilsService = $injector.get('notificationUtilsService');
         $mdDialog.cancel();
         sessionService.retainCurrentLocation();
-        $window.location = "/#/login";
+        $window.location = "/#!/login";
         notificationUtilsService.notify($translate.instant('LOGIN.SESSION_TIMEOUT'));
         delete $window._openDeskSessionExpired;
     }
