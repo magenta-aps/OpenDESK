@@ -86,6 +86,9 @@
 						vm.sitesPerUser = val;
 					});
 
+					var shortName = name.replace(new RegExp(" ", 'g'), "");
+					window.location.href = "/#/projekter/" + shortName  + "?type=Project";
+
 				});
 			};
 
