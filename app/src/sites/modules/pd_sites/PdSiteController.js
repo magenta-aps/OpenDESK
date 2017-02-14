@@ -232,8 +232,8 @@ angular
                                     }
                                 );
                             }
+                            window.location.href = "/#/projekter/" + shortName  + "?type=PD-Project";
 
-                            
                             $mdToast.show(
                                 $mdToast.simple()
                                         .textContent('Du har oprettet projekt: ' + $scope.newSite.siteName)
