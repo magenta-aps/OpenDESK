@@ -3,7 +3,7 @@ angular
     .factory('loolService', loolService);
 
 
-function loolService($http, transformRequestAsFormPost) {
+function loolService($http, transformRequestAsFormPost, ALFRESCO_URI) {
 
     return {
         getWopiUrl: getWopiUrl,
@@ -13,9 +13,15 @@ function loolService($http, transformRequestAsFormPost) {
 
     //Just in case this is set. Call the server and see if the service url is set get around proxy issues
     function getLoolServiceUrl() {
-        return $http.get('/lool/host/url').then(function (response) {
-            return response.data.lool_host_url;
-        })
+        return $http.get('/lool/host/url')
+            .then(function (response) {
+                return response.data.lool_host_url;
+            })
+            .catch(function (response) {
+                console.log('WARNING: Unable to get service url for the alfresco backend. Attempt returned with:\n' +
+                    response +'\nResorting to using the set default:' + ALFRESCO_URI.serviceAccessUrl);
+                return ALFRESCO_URI.serviceAccessUrl;
+            })
 
     }
 
@@ -43,7 +49,7 @@ function loolService($http, transformRequestAsFormPost) {
             data: {access_token: access_token},
             headers: {
                 "content-type": "application/x-www-form-urlencoded",
-                "x-requested-with" : ''
+                "x-requested-with": ''
             }
         }).then(
             function (response) {
@@ -56,7 +62,6 @@ function loolService($http, transformRequestAsFormPost) {
             }
         );
     }
-
 
 
 }
