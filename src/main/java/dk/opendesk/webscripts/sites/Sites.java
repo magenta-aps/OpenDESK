@@ -604,7 +604,7 @@ public class Sites extends AbstractWebScript {
         nodeService.deleteNode(destination);
     }
 
-    private void createMembersPDF(String shortName) {
+    private String createMembersPDF(String shortName) {
 
         SiteInfo site = siteService.getSite(shortName);
 
@@ -613,23 +613,67 @@ public class Sites extends AbstractWebScript {
         output += siteService.listMembers(shortName,"","",0);
 
 
-
-        String projectGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP;
-        System.out.println(projectGroup);
-
         output += "\n\n";
 
-        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectGroup, true);
+        System.out.println(output);
+
+
+
+
+        String projectOwnerGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+        String projectOwnerMembers = "PROJEKTGRUPPE: \n\n";
+        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
         for (String authority : authorities) {
             NodeRef person = personService.getPerson(authority);
-            System.out.println(person);
+            projectOwnerMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        }
 
+        String projectManagerGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
+        String projectManagerGroupMembers = "PROJEKTGRUPPE: \n\n";
+        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            projectManagerGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        }
 
+        String projectGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP;
+        String projectGroupMembers = "PROJEKTGRUPPE: \n\n";
+        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectGroup, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            projectGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        }
 
+        String workGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_WORKGROUP;
+        String workGroupMembers = "PROJEKTGRUPPE: \n\n";
+        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, workGroup, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            workGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
         }
 
 
-        //System.out.println(output);
+        String projectMonitors = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_MONITORS;
+        String projectMonitorsMembers = "FØLGEGRUPPE: \n\n";
+        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectMonitors, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            projectMonitorsMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        }
+
+        String steeringGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_STEERING_GROUP;
+        String steeringGroupMembers = "STYREGRUPPE: \n\n";
+        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, steeringGroup, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            steeringGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        }
+
+
+
+
+
+
 
 
 
@@ -665,6 +709,10 @@ public class Sites extends AbstractWebScript {
 //        pptToPdfTransformer.transform(pptReader, pdfWriter);
 //
 //        nodeService.deleteNode(child.getChildRef());
+
+//        http://localhost:8080/alfresco/service/api/node/content/workspace/SpacesStore/90defc67-622f-4bd4-acb2-e20d569b16f4
+
+        return "download_node";
 
 
     }
