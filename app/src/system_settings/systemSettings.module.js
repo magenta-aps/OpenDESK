@@ -27,8 +27,8 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES){
         },
         views: {
             'systemsetting-view': {
-                templateUrl: 'app/src/system_settings/notifications/view/classifValues.html',
-                controller: 'DocumentTypesController',
+                templateUrl: 'app/src/system_settings/notifications/view/notifications.html',
+                controller: 'NotificationsController',
                 controllerAs: 'vm'
             }
         }
