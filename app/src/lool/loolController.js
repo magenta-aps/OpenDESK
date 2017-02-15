@@ -20,7 +20,6 @@ function LoolController($stateParams, loolService) {
 
     function renderIframe(serviceUrl) {
         loolService.getWopiUrl(vm.nodeRef).then(function (response) {
-            debugger;
             var shortRef = vm.nodeRef.substring(vm.nodeRef.lastIndexOf('/') + 1);
             var wopi_src_url = response.wopi_src_url;
             var wopiFileURL = serviceUrl+"/wopi/files/" + shortRef;
