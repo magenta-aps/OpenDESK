@@ -16,8 +16,8 @@ angular
         'openDeskApp.pd_sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
-        'openDeskApp.header',
         'openDeskApp.dashboard',
+        'openDeskApp.lool',
         'openDeskApp.documents',
         'openDeskApp.administration',
         'openDeskApp.groups',
@@ -30,7 +30,6 @@ angular
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
-
         'openDeskApp.notifications',
         'openDeskApp.chat',
         'openDeskApp.user',
