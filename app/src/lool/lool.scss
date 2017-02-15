@@ -8,30 +8,6 @@
   font-size: 1.3em;
 }
 
-.lool__list {
-  background-color: #fff;
-}
-
-.lool__item-case,
-.lool__item-document {
-  display: flex;
-  flex-flow: row nowrap;
-  background-color: #fff;
-  padding: 16px 24px;
-  border-top: solid 1px #eee;
-}
-
-.lool__item__info {
-  height: 100%;
-  flex-grow: 1;
-}
-
-.lool__item__icon {
-  width: auto;
-  margin-right: 8px;
-  height: 100%;
-}
-
 .lool__item__title {
   font-weight: 400;
   margin: 0;
@@ -47,63 +23,9 @@ a.lool__item__link:visited {
   font-size: 0.8em;
 }
 
-.lool__item__bonusinfo {
-  float: right;
-  width: auto;
+.iframe_container{
+  height: 50em;
 }
-
-.lool__item__desc {
-  margin: 0;
-}
-
-.lool__item__changed {
-  float: right;
-  width: auto;
-  font-size: 0.8em;
-}
-
-/*
- * Search filter menu styles
- */
-
-.menu {
-  background-color: #eee;
-}
-
-.filters {
-
-  .filter-title {
-    font-weight: 500;
-    font-size: 0.9em;
-    padding: 16px 24px;
-    display: block;
-  }
-
-  fieldset {
-    display: block;
-    margin: 0;
-    padding: 0;
-    border-top-color: #ccc;
-  }
-
-  .toggle-btn {
-    display: block;
-    margin: 0;
-    padding: 8px 16px 8px 24px;
-    color: rgb(30, 136, 229);
-
-    .material-icons {
-      float: right;
-    }
-  }
-
-  .toggle-obj {
-    margin: 0;
-    padding: 16px 24px 8px;
-    border-top: dashed 1px #ccc;
-  }
-}
-
 /////////////////////
 
 header {

@@ -22,23 +22,19 @@ function config($stateProvider, USER_ROLES) {
         }
     });
 }
-
+/**
+ * Was to be used to apply a transform for non-xhr requests.
+ * Currently doesn't work due to the global interceptor.
+ * @returns {transformRequest}
+ */
 function transformRequestAsFormPost() {
-
-    function transformRequest(data, getHeaders) {
-        var headers = getHeaders();
-        headers["Content-type"] = "application/x-www-form-urlencoded; charset=utf-8";
-        headers['X-Requested-With'] = '';
-        return ( serializeData(data) );
-    }
-    return ( transformRequest );
 
     /**
      * The workhorse; converts an object to x-www-form-urlencoded serialization.
      * @param {Object} obj
      * @return {String}
      */
-    function serializeData(obj) {
+    function transformRequest(obj) {
         var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
 
         for (name in obj) {
@@ -68,4 +64,5 @@ function transformRequestAsFormPost() {
 
         return query.length ? query.substr(0, query.length - 1) : query;
     }
+    return ( transformRequest );
 }

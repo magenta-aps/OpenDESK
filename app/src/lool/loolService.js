@@ -28,19 +28,25 @@ function loolService($http, transformRequestAsFormPost) {
             })
     }
 
+    /**
+     * Currently not in use. The idea of this was to submit a (form) request to the libreoffice online service and
+     * collect the return for use in the iFrame ro render the Loleaflet client.
+     * @param frameSrcURL
+     * @param access_token
+     * @returns {*}
+     */
     function getIframeSrc(frameSrcURL, access_token) {
         return $http({
             method: 'POST',
             url: frameSrcURL,
             transformRequest: transformRequestAsFormPost,
-            data: {access_token: access_token}
-            /*headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-Requested-With" : ''
-            }*/
+            data: {access_token: access_token},
+            headers: {
+                "content-type": "application/x-www-form-urlencoded",
+                "x-requested-with" : ''
+            }
         }).then(
             function (response) {
-                debugger;
                 // How to return this for an iframe
                 return response;
             },

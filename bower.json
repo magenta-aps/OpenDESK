@@ -42,7 +42,7 @@
     "angular-material": "master",
     "bootstrap": "~3.3.6",
     "requirejs": "~2.2.0",
-    "jquery": "1.12.3",
+    "jquery": "^3.1.1",
     "backbone": "1.1.2",
     "angular-translate": "2.14.0"
   }
