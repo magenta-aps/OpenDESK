@@ -232,7 +232,7 @@ function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams) 
                                 }
                             );
                         }
-
+                        window.location.href = "/#/projekter/" + shortName + "?type=PD-Project";
 
                         $mdToast.show(
                             $mdToast.simple()

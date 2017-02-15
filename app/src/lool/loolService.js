@@ -19,7 +19,7 @@ function loolService($http, transformRequestAsFormPost, ALFRESCO_URI) {
             })
             .catch(function (response) {
                 console.log('WARNING: Unable to get service url for the alfresco backend. Attempt returned with:\n' +
-                    response +'\nResorting to using the set default:' + ALFRESCO_URI.serviceAccessUrl);
+                    response + '\nResorting to using the set default:' + ALFRESCO_URI.serviceAccessUrl);
                 return ALFRESCO_URI.serviceAccessUrl;
             })
 

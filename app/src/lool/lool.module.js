@@ -64,5 +64,6 @@ function transformRequestAsFormPost() {
 
         return query.length ? query.substr(0, query.length - 1) : query;
     }
+
     return ( transformRequest );
 }

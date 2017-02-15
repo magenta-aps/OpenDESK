@@ -9,6 +9,10 @@ angular
         };
     });
 
+function goto(path) {
+
+}
+
 function SettingsController($scope, $log) {
     var vm = this;
 

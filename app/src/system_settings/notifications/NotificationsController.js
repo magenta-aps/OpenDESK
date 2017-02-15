@@ -1,9 +1,9 @@
 angular
     .module('openDeskApp.systemsettings')
-    .controller('GeneralConfigurationController', GeneralConfigurationController);
+    .controller('NotificationsController', NotificationsController);
 
-function GeneralConfigurationController($mdDialog, $translate, $state, notificationUtilsService,
-                                        oeParametersService) {
+function NotificationsController($mdDialog, $translate, $state, notificationUtilsService,
+                                 oeParametersService) {
     var vm = this;
     vm.parameters = [];
     vm.loadList = loadList;

@@ -22,7 +22,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         getSitesPerUser: function (userId) {
-            return $http.get("/alfresco/service/sites?q=" + "query" + "&method=getSitesPerUser").then(
+            return $http.get("/alfresco/service/sites?method=getSitesPerUser").then(
                 function (response) {
                     console.log(response);
                     return response.data;

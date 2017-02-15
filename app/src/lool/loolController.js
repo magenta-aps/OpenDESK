@@ -22,7 +22,7 @@ function LoolController($stateParams, loolService) {
         loolService.getWopiUrl(vm.nodeRef).then(function (response) {
             var shortRef = vm.nodeRef.substring(vm.nodeRef.lastIndexOf('/') + 1);
             var wopi_src_url = response.wopi_src_url;
-            var wopiFileURL = serviceUrl+"/wopi/files/" + shortRef;
+            var wopiFileURL = serviceUrl + "/wopi/files/" + shortRef;
             var frameSrcURL = wopi_src_url + "WOPISrc=" + encodeURIComponent(wopiFileURL);
             var access_token = encodeURIComponent(response.access_token);
             //Use JQuery to submit the form and 'target' the iFrame

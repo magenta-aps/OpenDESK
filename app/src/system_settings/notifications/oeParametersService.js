@@ -20,7 +20,7 @@ function oeParametersService($http, $window) {
     }
 
     function getParameters() {
-        return $http.get('/api/opendesk/parameters').then(function (response) {
+        return $http.get('/api/openesdh/parameters').then(function (response) {
             return response.data;
         });
     }
@@ -30,7 +30,7 @@ function oeParametersService($http, $window) {
     }
 
     function saveParameters(oeParams) {
-        return $http.post('/api/opendesk/parameters', oeParams)
+        return $http.post('/api/openesdh/parameters', oeParams)
             .then(function (response) {
                 _saveOEParamsToSession(_transformParameters(oeParams));
                 return response.data;

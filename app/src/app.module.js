@@ -16,6 +16,7 @@ angular
         'openDeskApp.pd_sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
+        'openDeskApp.header',
         'openDeskApp.dashboard',
         'openDeskApp.documents',
         'openDeskApp.administration',
@@ -24,15 +25,17 @@ angular
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
-        'openDeskApp.lool',
+        //'openDeskApp.templates',
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
+
         'openDeskApp.notifications',
         'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',
+
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
@@ -61,13 +64,7 @@ angular
         });
     });
 
-function config($stateProvider, $urlRouterProvider, $sceDelegateProvider, USER_ROLES) {
-    $sceDelegateProvider.resourceUrlWhitelist([
-        // Allow same origin resource loads.
-        'self',
-        // Allow loading from our assets domain.  Notice the difference between * and **.
-        'https://lool.magenta.dk:9980/**'
-    ]);
+function config($stateProvider, $urlRouterProvider, USER_ROLES) {
 
     $urlRouterProvider
         .when('/admin/system-settings', '/admin/system-settings/general-configuration')
@@ -101,26 +98,13 @@ function config($stateProvider, $urlRouterProvider, $sceDelegateProvider, USER_R
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-    }).state('templateList', {
+    }).state('administration', {
         parent: 'site',
-        url: '/skabeloner',
+        url: '/indstillinger',
         views: {
             'content@': {
-                templateUrl: 'app/src/templates/view/templateList.html',
-                controller: 'TemplatesController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('editTemplate', {
-        parent: 'site',
-        url: '/skabelon',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/templates/view/editTemplate.html',
-                controller: 'TemplatesController',
+                templateUrl: 'app/src/admin/view/admin.html',
+                controller: 'AdminController',
                 controllerAs: 'vm'
             }
         },

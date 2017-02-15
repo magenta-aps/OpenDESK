@@ -9,10 +9,12 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
     var vm = this;
 
     vm.sites = [];
+    vm.sitesPerUser = [];
+    vm.organizationalCenters = [];
 
     //pd_siteService.getAllOrganizationalCenters();
 
-    siteService.createMembersPDF("kagenu2");
+    //siteService.createMembersPDF("kagenu2");
 
     // siteService.removeRole("kage2", "abeecher", "Consumer")
 
@@ -31,13 +33,31 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 
 
     function getSites() {
-        return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function (response) {
+        return siteService.getSites().then(function (response) {
                 vm.sites = response;
                 return response;
             }
         );
     };
     getSites();
+
+    function getSitesPerUser() {
+        return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function (response) {
+                vm.sitesPerUser = response;
+                return response;
+            }
+        );
+    };
+    getSitesPerUser();
+
+    function getAllOrganizationalCenters() {
+        pd_siteService.getAllOrganizationalCenters().then(function (response) {
+                vm.organizationalCenters = response.data;
+                vm.organizationalCenters.push({"shortName": "", "displayName": "Alle"});
+            }
+        );
+    };
+    getAllOrganizationalCenters();
 
 
     vm.newSite = function (event) {
@@ -56,11 +76,18 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 
         siteService.createSite(name, description).then(function (val) {
 
+            $mdDialog.hide();
+
             getSites().then(function (val) {
                 vm.sites = val;
-                $mdDialog.hide();
             });
 
+            getSitesPerUser().then(function (val) {
+                vm.sitesPerUser = val;
+            });
+
+            var shortName = name.replace(new RegExp(" ", 'g'), "");
+            window.location.href = "/#/projekter/" + shortName + "?type=Project";
 
         });
     };
@@ -84,6 +111,10 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 
             getSites().then(function (val) {
                 vm.sites = val;
+            });
+
+            getSitesPerUser().then(function (val) {
+                vm.sitesPerUser = val;
             });
         });
     };
@@ -146,6 +177,10 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
             getSites().then(function (val) {
                 vm.sites = val;
             });
+
+            getSitesPerUser().then(function (val) {
+                vm.sitesPerUser = val;
+            });
         });
     };
 
@@ -156,9 +191,11 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
             console.log(val);
 
             if (val != undefined) {
+
                 $rootScope.searchResults = [];
                 $rootScope.searchResults = val.data.items;
-                window.location.href = "#!/search";
+
+                window.location.href = "#/search";
 
             } else {
                 return [];
@@ -192,7 +229,7 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
             // var path = val.path;
 
             var path = ref.replace("workspace://SpacesStore/", "");
-            $window.location.href = "/#!/dokument/" + path;
+            $window.location.href = "/#/dokument/" + path;
 
             console.log("gotoPath");
         });

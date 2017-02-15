@@ -94,7 +94,7 @@ function TemplatesController($window) {
     }
 
     vm.newTemplate = function () {
-        $window.location.href = "/#!/skabelon";
+        $window.location.href = "/#/indstillinger/systemopsætning/skabelon";
         /*return {
          restrict: 'E',
          scope: {},
