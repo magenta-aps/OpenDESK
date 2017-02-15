@@ -97,26 +97,13 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-	}).state('templateList', {
+	}).state('administration', {
         parent: 'site',
-        url: '/skabeloner',
+        url: '/indstillinger',
         views: {
             'content@': {
-                templateUrl: 'app/src/templates/view/templateList.html',
-                controller: 'TemplatesController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-	}).state('editTemplate', {
-        parent: 'site',
-        url: '/skabelon',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/templates/view/editTemplate.html',
-                controller: 'TemplatesController',
+                templateUrl: 'app/src/admin/view/admin.html',
+                controller: 'AdminController',
                 controllerAs: 'vm'
             }
         },
