@@ -135,6 +135,13 @@ public class ProjectDepartment extends AbstractWebScript {
             }
             String site_manager = json.getString("PARAM_MANAGER");
 
+            if (!json.has("PARAM_CENTERID") || json.getString("PARAM_CENTERID").length() == 0)
+            {
+                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
+                        "PARAM_CENTERID 'CENTERID' is a required POST parameter.");
+            }
+            String site_center_id = json.getString("PARAM_CENTERID");
+
 
             if (method.equals("createPDSITE")) {
 
@@ -143,7 +150,7 @@ public class ProjectDepartment extends AbstractWebScript {
                     AuthenticationUtil.setRunAsUserSystem();
                     // ...code to be run as Admin...
 
-                    this.createSite(site_name, site_description, site_sbsys, SiteVisibility.PUBLIC);
+                    this.createSite(site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
 
                     Long id = (Long)nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
 
@@ -193,7 +200,7 @@ public class ProjectDepartment extends AbstractWebScript {
         }
     }
 
-    private void createSite(String name, String description, String sbsys, SiteVisibility siteVisibility) {
+    private void createSite(String name, String description, String sbsys, String center_id, SiteVisibility siteVisibility) {
 
 
         SiteInfo site = siteService.createSite("site-dashboard", name, name, description, siteVisibility);
@@ -207,6 +214,7 @@ public class ProjectDepartment extends AbstractWebScript {
         aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
         aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
         aspectProps.put(OpenDeskModel.PROP_PD_STATE, OpenDeskModel.STATE_ACTIVE);
+        aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
 
         nodeService.addAspect(site.getNodeRef(), OpenDeskModel.ASPECT_PD, aspectProps);
 

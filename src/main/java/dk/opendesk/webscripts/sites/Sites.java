@@ -24,14 +24,18 @@ import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.rendition.executer.AbstractRenderingEngine;
 import org.alfresco.repo.rendition.executer.ReformatRenderingEngine;
+import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.rendition.RenditionDefinition;
 import org.alfresco.service.cmr.rendition.RenditionService;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,6 +84,11 @@ public class Sites extends AbstractWebScript {
 
     ContentService contentService;
 
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    SearchService searchService;
 
     private NodeArchiveService nodeArchiveService;
     private SiteService siteService;
@@ -350,7 +359,6 @@ public class Sites extends AbstractWebScript {
             JSONArray result = new JSONArray();
             JSONObject json = new JSONObject();
 
-
             try {
                 json.put("result", "success");
                 result.add(json);
@@ -362,15 +370,6 @@ public class Sites extends AbstractWebScript {
                 je.printStackTrace();
             }
         }
-
-
-
-
-
-
-
-
-
     }
 
     private JSONArray getAllSites(String q) {
@@ -387,35 +386,12 @@ public class Sites extends AbstractWebScript {
         Iterator i = sites.iterator();
 
         while (i.hasNext()) {
-            JSONObject json = new JSONObject();
-
             SiteInfo s = (SiteInfo)i.next();
 
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                json.put("created", sdf.format( s.getCreatedDate() ));
-                json.put("title", s.getTitle());
-                json.put("shortName", s.getShortName());
-
-                NodeRef n = s.getNodeRef();
-                json.put("nodeRef", n.toString());
-                JSONObject creator = new JSONObject();
-
-                NodeRef cn = this.personService.getPerson((String)nodeService.getProperty(n, ContentModel.PROP_CREATOR));
-
-                creator.put("userName", (String)nodeService.getProperty(n, ContentModel.PROP_CREATOR));
-                creator.put("firstName", (String)nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
-                creator.put("lastName", (String)nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-                creator.put("fullName", (String)nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) +" "+(String)nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-                json.put("creator", creator);
-
-                json.put("description", s.getDescription());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject json = ConvertSiteInfoToJSON(s);
             result.add(json);
         }
+        System.out.println("RESULT" + result);
 
         return result;
         }
@@ -426,58 +402,52 @@ public class Sites extends AbstractWebScript {
 
         List<SiteInfo> currentuser_sites = siteService.listSites(authenticationService.getCurrentUserName());
 
+        //Get Sites nodeRef
+        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+        ResultSet rs = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "PATH:\"/app:company_home/st:sites\"");
+        NodeRef sitesNodeRef = rs.getNodeRef(0);
+
+        //Make a set to keep track of dbids
+        Set<Integer> user_site_dbids = new HashSet<>();
+
+        Set<String> groups = authorityService.getAuthoritiesForUser(authenticationService.getCurrentUserName());
+        Iterator io = groups.iterator();
+
+        // If group is part of Project Department then get their connected site and add them if they have not already been added
+        while (io.hasNext()) {
+
+            String group_name = (String)io.next();
+
+            if (group_name.matches("GROUP_[0-9]+(.*)")) {
+
+                String[] group_name_parts = group_name.split("_");
+                int dbid = Integer.parseInt(group_name_parts[1]);
+
+                if (!user_site_dbids.contains(dbid)) {
+
+                    ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "PATH:\"/app:company_home/st:sites/*\" AND @sys\\:node-dbid:\"" + dbid +"\"");
+                    NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
+                    SiteInfo siteInfo = siteService.getSite(siteNodeRef);
+
+                    if(!currentuser_sites.contains(siteInfo))
+                        currentuser_sites.add(siteInfo);
+
+                    user_site_dbids.add(dbid);
+                }
+            }
+        }
+
         // need to reverse the order of sites as they appear in wrong sort order
         Collections.sort(currentuser_sites, new CustomComparator());
 
         Iterator i = currentuser_sites.iterator();
 
         while (i.hasNext()) {
-            JSONObject json = new JSONObject();
-
             SiteInfo s = (SiteInfo)i.next();
 
             if (currentuser_sites.contains(s)) {
-
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                    json.put("created", sdf.format(s.getCreatedDate()));
-                    json.put("title", s.getTitle());
-                    json.put("shortName", s.getShortName());
-
-
-
-
-                    NodeRef n = s.getNodeRef();
-                    json.put("nodeRef", n.toString());
-
-                    if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-                        json.put("type",OpenDeskModel.pd_project);
-                    }
-                    else {
-                        json.put("type",OpenDeskModel.project);
-                    }
-
-                    JSONObject creator = new JSONObject();
-
-                    NodeRef cn = this.personService.getPerson((String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
-
-                    creator.put("userName", (String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
-                    creator.put("firstName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
-                    creator.put("lastName", (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-                    creator.put("fullName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-
-
-
-
-                    json.put("creator", creator);
-
-                    json.put("description", s.getDescription());
-
-                    result.add(json);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                JSONObject json = ConvertSiteInfoToJSON(s);
+                result.add(json);
             }
         }
 
@@ -717,4 +687,47 @@ public class Sites extends AbstractWebScript {
 
     }
 
+    private JSONObject ConvertSiteInfoToJSON(SiteInfo s)
+    {
+        try {
+            JSONObject json = new JSONObject();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            json.put("created", sdf.format(s.getCreatedDate()));
+            json.put("title", s.getTitle());
+            json.put("shortName", s.getShortName());
+
+            NodeRef n = s.getNodeRef();
+            json.put("nodeRef", n.toString());
+
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+                json.put("type",OpenDeskModel.pd_project);
+                json.put("state", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_STATE));
+                json.put("center_id", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_CENTERID));
+            }
+            else {
+                json.put("type",OpenDeskModel.project);
+                json.put("state", "placeholder");
+                json.put("center_id", "placeholder");
+            }
+
+            JSONObject creator = new JSONObject();
+
+            NodeRef cn = this.personService.getPerson((String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
+
+            creator.put("userName", (String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
+            creator.put("firstName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
+            creator.put("lastName", (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+            creator.put("fullName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+
+            json.put("creator", creator);
+
+            json.put("description", s.getDescription());
+
+            return json;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
