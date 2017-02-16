@@ -9,7 +9,7 @@ angular
         apiProxy: '/alfresco/api/',
         serviceApiProxy: '/api/',
         serviceSlingshotProxy: '/slingshot/',
-        serviceAccessUrl: 'https://staging.opendesk.dk:8080/alfresco/s',
+        serviceAccessUrl: 'https://staging.opendesk.dk/alfresco/s',
         webClientServiceProxy: '/alfresco/service'
     })
     .constant('PATTERNS', {
