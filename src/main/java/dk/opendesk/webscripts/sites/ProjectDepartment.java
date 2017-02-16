@@ -34,6 +34,7 @@ import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.Serializable;
 
+import java.io.Writer;
 import java.util.*;
 
 public class ProjectDepartment extends AbstractWebScript {
@@ -83,121 +85,68 @@ public class ProjectDepartment extends AbstractWebScript {
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
         System.out.println("creating a projectdepartment project....");
-
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
-
+        webScriptResponse.setContentEncoding("UTF-8");
         Content c = webScriptRequest.getContent();
-
-        JSONObject json;
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
         try {
-            json = new JSONObject(c.getContent());
+            JSONObject json = new JSONObject(c.getContent());
 
-            if (!json.has("PARAM_METHOD") || json.getString("PARAM_METHOD").length() == 0)
-            {
-                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                        "PARAM_METHOD 'METHOD' is a required POST parameter.");
-            }
-            String method = json.getString("PARAM_METHOD");
-
-            if (!json.has("PARAM_NAME") || json.getString("PARAM_NAME").length() == 0)
-            {
-                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                        "PARAM_NAME 'NAME' is a required POST parameter.");
-            }
-            String site_name = json.getString("PARAM_NAME");
-
-            if (!json.has("PARAM_DESCRIPTION") || json.getString("PARAM_DESCRIPTION").length() == 0)
-            {
-                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                        "PARAM_DESCRIPTION 'DESCRIPTION' is a required POST parameter.");
-            }
-            String site_description = json.getString("PARAM_DESCRIPTION");
-
-            if (!json.has("PARAM_SBSYS") || json.getString("PARAM_SBSYS").length() == 0)
-            {
-                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                        "PARAM_SBSYS 'SBSYS' is a required POST parameter.");
-            }
-            String site_sbsys = json.getString("PARAM_SBSYS");
-
-            if (!json.has("PARAM_OWNER") || json.getString("PARAM_OWNER").length() == 0)
-            {
-                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                        "PARAM_OWNER 'OWNER' is a required POST parameter.");
-            }
-            String site_owner = json.getString("PARAM_OWNER");
-
-            if (!json.has("PARAM_MANAGER") || json.getString("PARAM_MANAGER").length() == 0)
-            {
-                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                        "PARAM_MANAGER 'MANAGER' is a required POST parameter.");
-            }
-            String site_manager = json.getString("PARAM_MANAGER");
-
-            if (!json.has("PARAM_CENTERID") || json.getString("PARAM_CENTERID").length() == 0)
-            {
-                throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                        "PARAM_CENTERID 'CENTERID' is a required POST parameter.");
-            }
-            String site_center_id = json.getString("PARAM_CENTERID");
+            String method = getJSONObject(json, "PARAM_METHOD");
+            String site_name = getJSONObject(json, "PARAM_NAME");
+            String site_description = getJSONObject(json, "PARAM_DESCRIPTION");
+            String site_sbsys = getJSONObject(json, "PARAM_SBSYS");
+            String site_owner = getJSONObject(json, "PARAM_OWNER");
+            String site_manager = getJSONObject(json, "PARAM_MANAGER");
+            String site_center_id = getJSONObject(json, "PARAM_CENTERID");
 
 
-            if (method.equals("createPDSITE")) {
+            switch (method) {
+                case "createPDSITE":
 
-                AuthenticationUtil.pushAuthentication();
-                try {
-                    AuthenticationUtil.setRunAsUserSystem();
-                    // ...code to be run as Admin...
+                    AuthenticationUtil.pushAuthentication();
+                    try {
+                        AuthenticationUtil.setRunAsUserSystem();
+                        // ...code to be run as Admin...
 
-                    this.createSite(site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
+                        this.createSite(site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
 
-                    Long id = (Long)nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
+                        Long id = (Long) nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
 
-                    this.createGroupAddMembers(Long.toString(id), site_owner, site_manager);
+                        this.createGroupAddMembers(Long.toString(id), site_owner, site_manager);
 
-                    JSONObject return_json = new JSONObject();
+                        JSONObject return_json = new JSONObject();
 
-                    return_json.put("status", "success");
-                    return_json.put("nodeRef", newSiteRef);
-                    return_json.put("shortName", siteService.getSiteShortName(newSiteRef));
+                        return_json.put("status", "success");
+                        return_json.put("nodeRef", newSiteRef);
+                        return_json.put("shortName", siteService.getSiteShortName(newSiteRef));
 
-                    JSONArray result = new JSONArray();
-                    result.add(return_json);
+                        result.add(return_json);
 
-                    webScriptResponse.setContentEncoding("UTF-8");
-                    result.writeJSONString(webScriptResponse.getWriter());
-
-
-                } finally {
-                    AuthenticationUtil.popAuthentication();
-                }
-            }
-            else if (method.equals("addTemplate")) {
-
-            }
-            else if (method.equals("addTemplate")) {
-
+                    } finally {
+                        AuthenticationUtil.popAuthentication();
+                    }
+                    break;
+                case "addTemplate":
+                    break;
             }
         }
         catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
-            JSONObject return_json = new JSONObject();
-            try {
-                return_json.put("status", "failure");
-                return_json.put("error", e.toString());
-
-                JSONArray result = new JSONArray();
-                result.add(return_json);
-
-                webScriptResponse.setContentEncoding("UTF-8");
-                result.writeJSONString(webScriptResponse.getWriter());
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            result = Utils.getJSONError(e);
         }
+        Utils.writeJSONArray(webScriptWriter, result);
+    }
+
+    private String getJSONObject(JSONObject json, String parameter) throws JSONException {
+        if (!json.has(parameter) || json.getString(parameter).length() == 0)
+        {
+            throw new WebScriptException(Status.STATUS_BAD_REQUEST,
+                    parameter + " is a required POST parameter.");
+        }
+        return json.getString(parameter);
     }
 
     private void createSite(String name, String description, String sbsys, String center_id, SiteVisibility siteVisibility) {

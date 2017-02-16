@@ -23,7 +23,7 @@
 		<property name="nodeService" ref="NodeService"/>
 	</bean>
 
-	<bean id="webscript.notifications.get"
+	<bean id="webscript.notifications.post"
 		  class="dk.opendesk.Notifications"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
@@ -74,7 +74,7 @@
 
 
 
-	<bean id="webscript.sites.get"
+	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
