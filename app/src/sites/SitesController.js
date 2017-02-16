@@ -42,7 +42,7 @@
             getSites();
 
 			function getSitesPerUser() {
-				return siteService.getSitesPerUser(authService.getUserInfo().user.userName).then(function(response) {
+				return siteService.getSitesPerUser().then(function(response) {
 						vm.sitesPerUser = response;
 						return response;
 					}
