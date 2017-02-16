@@ -6,7 +6,7 @@ angular
 
 function SiteController($scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
                         alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-                        searchService, userService) {
+                        searchService, $state) {
 
     $scope.role_mapping = {};
     $scope.role_mapping["SiteManager"] = "Projektleder";
