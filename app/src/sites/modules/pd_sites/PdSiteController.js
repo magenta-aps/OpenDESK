@@ -5,15 +5,6 @@ angular
     .controller('PdSiteController', PdSiteController);
     
     function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams) {
-
-        // siteService.removeRole("kage2", "abeecher", "Consumer")
-
-        // pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
-
-        // pd_siteService.getAllOrganizationalCenters();
-
-        // siteService.addUser("kage1", "abeecher", "PD_MONITORS");
-        // siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
     
         var pd = this;
         pd.newPDSite = newPDSite;
@@ -23,12 +14,16 @@ angular
         var membersLoaded = false;
         pd.showProjectMembers = showProjectMembers;
         pd.loadProjectMembers = loadProjectMembers;
+		pd.removeMemberDialog = removeMemberDialog;
+		pd.removeMemberFromSite = removeMemberFromSite;
+		pd.updateMemberRoleDialog = updateMemberRoleDialog;
+		pd.updateRoleOnSiteMember = updateRoleOnSiteMember;
+		
         
         function loadProjectMembers(projectShortname, memberType) {
             pd.projectMembers = [];
             siteService.getGroupMembers(projectShortname, memberType).then (function (val){
                 pd.projectMembers = val;
-                //console.log("member " + val.data[0].fullName);
             });
         }
         
@@ -101,7 +96,51 @@ angular
                 clickOutsideToClose: true
             });
         }
-        
+		
+		function updateMemberRoleDialog(event, user) {
+			vm.currentDialogUser = user.fullName;				
+			$mdDialog.show({
+				templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
+				parent: angular.element(document.body),
+				scope: $scope,
+				preserveScope: true,
+				targetEvent: event,
+				clickOutsideToClose: true
+			});
+		}
+		
+		function updateRoleOnSiteMember(siteName, userName, role) {
+
+			var role_int_value = translation_to_value(role);
+			var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
+
+			siteService.updateRoleOnSiteMember(siteName, userName, role_alfresco_value ).then(function(val){
+				getProjectMembers();
+			});
+			$mdDialog.hide();
+		};
+		
+		function removeMemberDialog(member, group) {
+		   var confirm = $mdDialog.confirm()
+				 .title('Slette dette medlem?')
+				 .textContent('')
+				 .ariaLabel('Slet medlem')
+				 .targetEvent(event)
+				 .ok('Slet')
+				 .cancel('Nej, tak');
+
+		   $mdDialog.show(confirm).then(function() {
+			 removeMemberFromSite(member, group);
+		   });
+		};
+
+		function removeMemberFromSite(member, group) {
+			siteService.removeUser(pd.site.shortName, member.shortName, group).then(function(val){
+				getProjectMembers();
+			});			
+			$mdDialog.hide();
+		};
+       
         
         function PdSiteCreateController($scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
             
@@ -272,6 +311,15 @@ angular
             $scope.updatePDSiteGroups = updatePDSiteGroups;
             $scope.addMember = addMember;
             $scope.removeMember = removeMember;
+			$scope.addMedlemToProjektGrp = addMedlemToProjektGrp;
+			
+			function addMedlemToProjektGrp () {
+				var eksternNavn = $scope.pgexternname;				
+				var eksternEmail = $scope.pgexternemail;				
+				var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
+				$scope.folgeGruppe.push({displayName: eksternMedlem});
+				
+			}
             
             function cancel() {
                 $mdDialog.cancel();

@@ -401,7 +401,7 @@
 			vm.currentDialogUser = '';
 
 			vm.updateMemberRoleDialog = function(event, user) {
-				vm.currentDialogUser = user;				
+				vm.currentDialogUser = user.fullName;				
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
 					parent: angular.element(document.body),

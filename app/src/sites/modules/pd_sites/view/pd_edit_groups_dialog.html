@@ -2,7 +2,7 @@
     <form ng-submit="updatePDSiteGroups()" class="pd-site-create-form">
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2>Tilføj og fjern medlemmer i projektgrupper</h2>
+            <h2>Tilføj og fjern medlemmer</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="cancel()">
                 <i class="material-icons" aria-label="Luk dialogboks">close</i>
@@ -13,8 +13,14 @@
         <md-dialog-content>
             <md-content class="md-padding" layout="column">
                 
-                <fieldset>
-                    <legend>Projektgruppe</legend>
+                <!--fieldset-->
+                    <!--legend>Projektgruppe</legend-->
+					<!--h4>Projektgruppe</h4-->
+					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
+					  <div>
+						<span>Projektgruppe</span>
+					  </div>
+					</md-toolbar>
                     <md-chips ng-model="projektGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -34,9 +40,34 @@
                             </span>
                         </md-chip-template>
                     </md-chips>
-                </fieldset>
-                <fieldset>
-                    <legend>Styregruppe</legend>
+                <!--/fieldset-->
+				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Navn</label>
+						<input type="text" name="pgexternname" ng-model="pgexternname">
+					</md-input-container>					
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Email</label>
+						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<div style="position: relative; top: -25px;" class="btnAlign">
+					     <md-button class="md-raised" ng-click="addMedlemToProjektGrp()">
+							Tilføj
+						 </md-button>
+					</div>
+				</div>
+				<!--/div-->
+                <!--fieldset-->
+                    <!--legend>Styregruppe</legend-->
+					<!--h4>Styregruppe</h4-->
+					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
+					  <div>
+						<span>Styregruppe</span>
+					  </div>
+					</md-toolbar>
                     <md-chips ng-model="styreGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -56,9 +87,33 @@
                             </span>
                         </md-chip-template>
                     </md-chips>
-                </fieldset>
-                <fieldset>
-                    <legend>Arbejdsgruppe</legend>
+                <!--/fieldset-->
+				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Navn</label>
+						<input type="text" name="pgexternname" ng-model="pgexternname">
+					</md-input-container>					
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Email</label>
+						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<div style="position: relative; top: -25px;" class="btnAlign">
+					     <md-button class="md-raised" ng-click="cancel()" >
+							Tilføj
+						 </md-button>
+					</div>
+				</div>
+                <!--fieldset-->
+                    <!--legend>Arbejdsgruppe</legend-->
+					<!--h4>Arbejdsgruppe</h4-->
+					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
+					  <div>
+						<span>Arbejdsgruppe</span>
+					  </div>
+					</md-toolbar>
                     <md-chips ng-model="arbejdsGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -78,9 +133,33 @@
                             </span>
                         </md-chip-template>
                     </md-chips>
-                </fieldset>
-                <fieldset>
-                    <legend>Følgegruppe</legend>
+                <!--/fieldset-->
+				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Navn</label>
+						<input type="text" name="pgexternname" ng-model="pgexternname">
+					</md-input-container>					
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Email</label>
+						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<div style="position: relative; top: -25px;" class="btnAlign">
+					     <md-button class="md-raised" ng-click="cancel()" >
+							Tilføj
+						 </md-button>
+					</div>
+				</div>
+                <!--fieldset-->
+                    <!--legend>Følgegruppe</legend-->
+					<!--h4>Følgegruppe</h4-->
+					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
+					  <div>
+						<span>Følgegruppe</span>
+					  </div>
+					</md-toolbar>
                     <md-chips ng-model="folgeGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -100,7 +179,25 @@
                             </span>
                         </md-chip-template>
                     </md-chips>
-                </fieldset>
+                <!--/fieldset-->
+				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Navn</label>
+						<input type="text" name="pgexternname" ng-model="pgexternname">
+					</md-input-container>					
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Email</label>
+						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<div style="position: relative; top: -25px;" class="btnAlign">
+					     <md-button class="md-raised" ng-click="cancel()" >
+							Tilføj
+						 </md-button>
+					</div>
+				</div>
             </md-content>
         </md-dialog-content>
         

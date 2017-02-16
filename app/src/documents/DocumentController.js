@@ -20,7 +20,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     {
         vm.showArchived = $location.search().archived;
 		parentDocumentNode = $location.search().parent;
-		document.getElementById("historyBox").checked = false;
     }
     else{
         vm.showArchived = false;
@@ -129,7 +128,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		if (elm == "") {
 			 $timeout(vm.highlightVersion, 100);
 		} else {
-			document.getElementById(elm).style.backgroundColor = "#ccc";
+			document.getElementById(elm).style.backgroundColor = "#e1e1e1";
 			document.getElementById(elm).style.lineHeight = "2";
 		}
 	}
