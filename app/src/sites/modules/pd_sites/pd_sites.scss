@@ -1,33 +1,43 @@
 .pd-create-site-diag {
-  min-width: 80vw;
+	min-width: 80vw;
+    
+    md-autocomplete {
+        margin-bottom: $u;    
+    }
 }
 
 .pd-site-create-form {
-  md-content {
-    padding: $u;
-  }
-  md-input-container,
-  md-autocomplete {
-    margin: $u*0.5 0;
-  }
+    md-content {
+        padding: $u;
+    }
+    md-input-container {
+        margin: $u*0.5 0;  
+    }
+    md-autocomplete {
+        margin: $u*0.5 0 $u;
+    }
+    .org-input {
+        margin: $u*0.5 0 $u*2;
+        width: 100%;
+    }
 }
 
 .pd-group-toggle {
-  background-color: #eaeaea;
-  padding: $u*0.5 $u;
-  /*margin: $u 0 0;*/
-  box-shadow: 0 $u*0.25 $u*0.5 rgba(125, 125, 125, 0.3);
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 0 $u*0.5 $u*0.5 rgba(125, 125, 125, 0.3);
-  }
-  &.open {
-    .material-icons {
-      transform: rotate(180deg);
+    background-color: #eaeaea;
+    padding: $u*0.5 $u;
+    /*margin: $u 0 0;*/
+    box-shadow: 0 $u*0.25 $u*0.5 rgba(125,125,125,0.3);
+    cursor: pointer;
+    
+    &:hover {
+        box-shadow: 0 $u*0.5 $u*0.5 rgba(125,125,125,0.3);
     }
-  }
-  &.closed {
-
-  }
+    &.open {
+        .material-icons {
+            transform: rotate(180deg);
+        }
+    }
+    &.closed {
+        
+    }
 }

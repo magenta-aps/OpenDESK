@@ -1,59 +1,61 @@
-angular
-    .module('openDeskApp.notifications')
-    .factory('notificationsService', notificationsService);
 
-var restBaseUrl = '/alfresco/service';
+    angular
+        .module('openDeskApp.notifications')
+        .factory('notificationsService', notificationsService);
 
-function notificationsService($http) {
-    var service = {
-        getNotices: getNotices,
-        addNotice: addNotice,
-        delNotice: delNotice,
-        setReadNotice: setRead,
-        addWFNotice: addWFNotice
+    var restBaseUrl = '/alfresco/service';
+
+    function notificationsService($http) {
+        var service = {
+            getNotices: getNotices,
+            addNotice: addNotice,
+            delNotice: delNotice,
+            setReadNotice: setRead
+        };
+
+        return service;
+
+        function getNotices(userId) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "getAll",
+                PARAM_USERNAME: userId
+            }).then(function(response) {
+              return response.data;
+            })
+        };
+
+
+        function setRead(userId, noticeObj) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "setRead",
+                PARAM_USERNAME: userId,
+                PARAM_NODE_REF : noticeObj
+            }).then(function(response) {
+                return response;
+            })
+        };
+
+        function addNotice(userId, subject, message, link) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "add",
+                PARAM_USERNAME: userId,
+                PARAM_SUBJECT: subject,
+                PARAM_MESSAGE: message,
+                PARAM_LINK: link
+            }).then(function (response) {
+                return response;
+            })
+        };
+        
+        function delNotice(userId, noticeObj) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "remove",
+                PARAM_USERNAME: userId,
+                PARAM_NODE_REF : noticeObj
+            }).then(function(response) {
+                return response;
+            })
+        };
+
     };
-
-    return service;
-
-    function getNotices(userId) {
-        return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&method=getAll").then(function (response) {
-            return response.data;
-        })
-
-    };
-
-
-    function setRead(userId, noticeObj) {
-
-        var s = noticeObj.split("/");
-        var ref = (s[3])
-
-        return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&NODE_ID=" + ref + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=setRead").then(function (response) {
-            return response;
-        })
-    };
-
-    function addNotice(userId, subject, message) {
-        return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&method=add").then(function (response) {
-            return response;
-        })
-    };
-
-    function addWFNotice(creator, userId, subject, message, documentId, type) {
-        return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&message=" + message + "&subject=" + subject + "&creator=" + creator + "&document=" + documentId + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=add" + "&type=" + type).then(function (response) {
-            return response;
-        })
-    };
-
-    function delNotice(userId, noticeObj) {
-
-        var s = noticeObj.split("/");
-        var ref = (s[3])
-
-        return $http.get(restBaseUrl + "/notifications?userName=" + userId + "&NODE_ID=" + ref + "&STORE_TYPE=workspace&STORE_ID=SpacesStore" + "&method=remove").then(function (response) {
-            return response;
-        })
-    };
-
-};
     

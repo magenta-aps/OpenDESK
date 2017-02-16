@@ -53,6 +53,15 @@ dl dd {
   margin: 0;
 }
 
+fieldset {
+    margin-bottom: $u;
+    border: solid 1px #eee;
+}
+
+legend {
+    opacity: 0.66;
+}
+
 // Muted (greyed) text
 .muted {
   opacity: 0.66;
@@ -231,6 +240,9 @@ dl dd {
 .md-button .material-icons {
   vertical-align: middle;
   margin-top: -($u*0.25);
+}
+.md-text-icon-button {
+    padding-right: $u;
 }
 
 /*
