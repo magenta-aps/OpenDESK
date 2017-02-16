@@ -31,7 +31,7 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 				<md-input-container>
-					<input type="checkbox" ng-model="vm.memberonly"> <label>Vis kun mine projekter</label>
+					<input type="checkbox" aria-label="Vis kun mine projekter" ng-model="vm.memberonly"> <label>Vis kun mine projekter</label>
 				</md-input-container>
 
 				<div ng-init="states = [
@@ -112,9 +112,21 @@
 			<md-divider></md-divider>
 			
             <div layout="row" layout-align="start center" class="btnAlign">
-                
-				<md-button class="md-raised md-primary" ng-click="vm.newSite($event)"><i class="material-icons">add</i> Opret nyt Projekt&nbsp;&nbsp;</md-button>
-                <md-button ng-controller="PdSiteController as pd" class="md-raised md-primary" ng-click="pd.newPDSite($event)"><i class="material-icons">add</i> Opret nyt Avanceret Projekt&nbsp;&nbsp;</md-button>
+            
+                <md-menu>
+                    <md-button ng-click="$mdOpenMenu($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nye projekter">
+                        <i class="material-icons">add</i>
+                        <span>Tilføj projekt</span>
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item>
+                            <md-button ng-click="vm.newSite($event)"><i class="material-icons">add</i> Alm. Projekt</md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-controller="PdSiteController as pd" ng-click="pd.newPDSite($event)"><i class="material-icons">add</i> Projekt m. styring</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
                 
 			</div>
             
