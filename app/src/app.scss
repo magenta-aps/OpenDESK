@@ -51,6 +51,15 @@ dl dd {
     margin: 0;
 }
 
+fieldset {
+    margin-bottom: $u;
+    border: solid 1px #eee;
+}
+
+legend {
+    opacity: 0.66;
+}
+
 // Muted (greyed) text
 .muted {
     opacity: 0.66;
