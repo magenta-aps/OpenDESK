@@ -9,6 +9,10 @@
               templateUrl: '/app/src/odSettings/view/settings.html'
             };
         });
+
+    function goto(path) {
+
+    }
 	
 	function SettingsController($scope, $log) {
         var vm = this;

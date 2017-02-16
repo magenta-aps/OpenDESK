@@ -17,12 +17,12 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             }) 
         },
         getSites: function () {
-            return $http.get("/alfresco/service/sites?method=getAll").then(function(response) {
+            return $http.post("/alfresco/service/sites", { PARAM_METHOD : "getAll" }).then(function(response) {
                 return response.data;
             })
         },
-        getSitesPerUser: function (userId) {
-            return $http.get("/alfresco/service/sites?q=" + "query" + "&method=getSitesPerUser").then(
+        getSitesPerUser: function () {
+            return $http.post("/alfresco/service/sites", { PARAM_METHOD : "getSitesPerUser" }).then(
                 function(response) {
                     console.log(response);
                     return response.data;
@@ -33,7 +33,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             )
         },
         getSitesByQuery: function (query) {
-            return $http.get("/alfresco/service/sites?q=" + query + "&method=getSitesPerUser").then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "getSitesPerUser",
+                PARAM_USERNAME: "query"
+            }).then(function(response) {
                 return response.data;
             })
         },
@@ -208,33 +211,56 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             })
         },
         addUser: function (siteShortName, user, group) {
-            return $http.get("/alfresco/service/sites?method=addUser&" + "siteShortName=" + siteShortName + "&user=" + user + "&group=" + group).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "addUser",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_USER: user,
+                PARAM_GROUP: group
+            }).then(function(response) {
 
                 console.log(response.data);
                 return response.data;
             })
         },
         removeUser: function (siteShortName, user, group) {
-            return $http.get("/alfresco/service/sites?method=removeUser&" + "siteShortName=" + siteShortName + "&user=" + user + "&group=" + group).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "removeUser",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_USER: user,
+                PARAM_GROUP: group
+            }).then(function(response) {
 
                 console.log(response.data);
                 return response.data;
             })
         },
         addRole : function (siteShortName, user, role) {
-            return $http.get("/alfresco/service/sites?method=addPermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "addPermission",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_USER: user,
+                PARAM_ROLE: role
+            }).then(function(response) {
                 console.log(response.data)
                 return response.data
             });
         },
         removeRole : function (siteShortName, user, role) {
-            return $http.get("/alfresco/service/sites?method=removePermission&siteShortName=" + siteShortName + "&role=" + role + "&user=" + user).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "removePermission",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_USER: user,
+                PARAM_ROLE: role
+            }).then(function(response) {
                 console.log(response.data)
                 return response.data
             });
         },
         getGroupMembers : function (siteShortName, groupName) {
-            return $http.get("/alfresco/service/sites?method=getDBID&siteShortName=" + siteShortName).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "getDBID",
+                PARAM_SITE_SHORT_NAME: siteShortName
+            }).then(function(response) {
 
                 var dbid = response.data[0].DBID;
                 console.log(dbid);
@@ -249,19 +275,30 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         createLink : function (source, destination) {
-            return $http.get("/alfresco/service/sites?method=addLink&source=" + source + "&destination=" + destination).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "addLink",
+                PARAM_SOURCE: source,
+                PARAM_DESTINATION: destination
+            }).then(function(response) {
                 console.log(response.data)
                 return response.data
             });
         },
         deleteLink : function (source, destination) {
-            return $http.get("/alfresco/service/sites?method=deleteLink&source=" + source + "&destination=" + destination).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "deleteLink",
+                PARAM_SOURCE: source,
+                PARAM_DESTINATION: destination
+            }).then(function(response) {
                 console.log(response.data)
                 return response.data
             });
         },
         createMembersPDF : function (shortName) {
-            return $http.get("/alfresco/service/sites?method=createMembersPDF&shortName=" + shortName).then(function(response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "createMembersPDF",
+                PARAM_SHORT_NAME: shortName
+            }).then(function(response) {
 
                   // do a get on the returned noderef
                 //alfresco/service/api/node/content/workspace/SpacesStore/90defc67-622f-4bd4-acb2-e20d569b16f4

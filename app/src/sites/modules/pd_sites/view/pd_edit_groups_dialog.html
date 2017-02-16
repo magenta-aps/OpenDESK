@@ -1,5 +1,5 @@
 <md-dialog aria-label="Opdatér grupper i projekt" class="pd-create-site-diag">
-    <form ng-submit="updatePDSiteGroups()" class="pd-site-create-form">
+    <form name="membersForm" ng-submit="updatePDSiteGroups()" class="pd-site-create-form">
         <md-toolbar>
           <div class="md-toolbar-tools">
             <h2>Tilføj og fjern medlemmer</h2>
@@ -16,7 +16,7 @@
                 <!--fieldset-->
                     <!--legend>Projektgruppe</legend-->
 					<!--h4>Projektgruppe</h4-->
-					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
+					<md-toolbar layout="row" class="toolbar-small md-hue-3">
 					  <div>
 						<span>Projektgruppe</span>
 					  </div>
@@ -50,11 +50,16 @@
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+						<input type="email" name="pgexternemail" ng-model="pgexternemail" ng-pattern="/^.+@.+\..+$/">
+						 <div ng-messages="membersForm.pgexternemail.$error" role="alert">
+						  <div ng-message-exp="['pattern']">
+							Du skal indtaste en gyldig e-mail adresse.
+						  </div>
+						</div>
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="addMedlemToProjektGrp()">
+					     <md-button class="md-raised" ng-click="addEksternToProjektGrp()">
 							Tilføj
 						 </md-button>
 					</div>
@@ -92,16 +97,21 @@
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Navn</label>
-						<input type="text" name="pgexternname" ng-model="pgexternname">
+						<input type="text" name="stexternname" ng-model="stexternname">
 					</md-input-container>					
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+						<input type="email" name="stexternemail" ng-model="stexternemail">
+						<div ng-messages="membersForm.stexternemail.$error" role="alert">
+						  <div ng-message-exp="['pattern']">
+							Du skal indtaste en gyldig e-mail adresse.
+						  </div>
+						</div>
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="cancel()" >
+					     <md-button class="md-raised" ng-click="addEksternToStyreGrp()" >
 							Tilføj
 						 </md-button>
 					</div>
@@ -138,16 +148,21 @@
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Navn</label>
-						<input type="text" name="pgexternname" ng-model="pgexternname">
+						<input type="text" name="arbexternname" ng-model="arbexternname">
 					</md-input-container>					
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+						<input type="email" name="arbexternemail" ng-model="arbexternemail">
+						<div ng-messages="membersForm.arbexternemail.$error" role="alert">
+						  <div ng-message-exp="['pattern']">
+							Du skal indtaste en gyldig e-mail adresse.
+						  </div>
+						</div>
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="cancel()" >
+					     <md-button class="md-raised" ng-click="addEksternToArbGrp()" >
 							Tilføj
 						 </md-button>
 					</div>
@@ -184,16 +199,21 @@
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Navn</label>
-						<input type="text" name="pgexternname" ng-model="pgexternname">
+						<input type="text" name="flgexternname" ng-model="flgexternname">
 					</md-input-container>					
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="text" name="pgexternemail" ng-model="pgexternemail">
+						<input type="email" name="flgexternemail" ng-model="flgexternemail">
+						<div ng-messages="membersForm.flgexternemail.$error" role="alert">
+						  <div ng-message-exp="['pattern']">
+							Du skal indtaste en gyldig e-mail adresse.
+						  </div>
+						</div>
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="cancel()" >
+					     <md-button class="md-raised" ng-click="addEksternToFlgGrp()" >
 							Tilføj
 						 </md-button>
 					</div>
