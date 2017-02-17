@@ -25,7 +25,6 @@ angular
             pd.projectMembers = [];
             siteService.getGroupMembers(projectShortname, memberType).then (function (val){
                 pd.projectMembers = val;
-                //console.log("member " + val.data[0].fullName);
             });
         }
         
@@ -92,50 +91,52 @@ angular
             });
         }
         
-        /*
-        function editPdSite(ev) {
-            $mdDialog.show({
-                controller: PdSiteGroupEditController,
-                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true
-            });
-        }*/
-        
         
         function PdSiteEditController(project, $scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
             
             var isEditMode = false;
-            // If project data is available, use edit mode
-            if (project) {
-                isEditMode = true;
-            }
-            
             var availProjectOwners = [];
             $scope.newSite = {};
             $scope.availOrgs = [];
+            $scope.projektGruppe = [];
+            $scope.styreGruppe = [];
+            $scope.arbejdsGruppe = [];
+            $scope.folgeGruppe = [];
+            
+            // If project data is available, use edit mode
+            if (project) {
+                pd.site = project;
+                isEditMode = true;
+                getProjectMembers();
+                console.log('project info:');
+                console.log(project);
+                $scope.newSite = {
+                    siteName: pd.site.title,
+                    desc: pd.site.description,
+                    owner: pd.site.members.pd_projectowner,
+                    sbsys: '',
+                    center_id: pd.site.center_id,
+                    manager: pd.site.members.pd_projectmanager
+                };
+                $scope.projektGruppe = pd.site.members.pd_projectgroup;
+                $scope.styreGruppe = pd.site.members.pd_steering_group;
+                $scope.arbejdsGruppe = pd.site.members.pd_workgroup;
+                $scope.folgeGruppe = pd.site.members.pd_monitors;
+            }
             
             $scope.selectedProjGrpItem = null;
             $scope.srchprjgrptxt = null;
-            $scope.projektGruppe = [];
-            
             $scope.selectedStyreGrpItem = null;
             $scope.srchstrgrptxt = null;
-            $scope.styreGruppe = [];
-            
             $scope.selectedArbejdsGrpItem = null;
             $scope.srchrbjdgrptxt = null;
-            $scope.arbejdsGruppe = [];
-            
             $scope.selectedFolgeGrpItem = null;
             $scope.srchflggrptxt = null;
-            $scope.folgeGruppe = [];
             
             $scope.cancel = cancel;
             $scope.searchProjectOwners = searchProjectOwners;
             $scope.searchPeople = searchPeople;
-            $scope.submitNewPDSite = submitNewPDSite;
+            $scope.updatePdSite = updatePdSite;
             
             
             getProjectOwners();
@@ -167,6 +168,7 @@ angular
                 return hitList;
             }
             
+            
             function searchPeople(query) {
                 console.log('searchPeople controller');
                 if (query) {
@@ -196,7 +198,7 @@ angular
             }
             
             
-            function submitNewPDSite() {
+            function updatePdSite() {
                 console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + $scope.newSite.manager.userName);
                 pd_siteService.createPDSite(
                     $scope.newSite.siteName,

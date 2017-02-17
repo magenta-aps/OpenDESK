@@ -73,8 +73,8 @@
 								<i class="material-icons">content_paste</i>
 								{{ project.title }}
 							</a></td>
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>
+							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}?type={{project.type}}">{{ project.created | openeDate }}</a></td>
+							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}?type={{project.type}}">{{ project.creator.fullName }}</a></td>
 							<td>
                                 <project-actions info="project"></project-actions>
 							</td>
