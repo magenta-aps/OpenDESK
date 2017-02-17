@@ -1,8 +1,14 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService, siteModuleService) {
+    
     var restBaseUrl = '/alfresco/s/api/';
+    
+    
+    // Register the standard project's menu actions
+    siteModuleService.registerProjectType('Project', 'app/src/sites/modules/view/sitesActionsMenu.html');
 
+    
     return {
 
         getSiteMembers: function (siteShortName) {
@@ -270,9 +276,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data
             });
         }
-
-
-
 
     }
 });

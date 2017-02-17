@@ -36,11 +36,9 @@
 
 			vm.project = $stateParams.projekt;
             vm.userRole = 'siteConsumer';
-			vm.projectType = $location.search().type;;
-
+			vm.projectType = $location.search().type;
+            
 			siteService.getAllUsers("a");
-
-
 			//siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
             
             siteService.getSiteUserRole(vm.project, authService.getUserInfo().user.userName).then(

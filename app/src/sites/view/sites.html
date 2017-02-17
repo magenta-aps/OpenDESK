@@ -76,32 +76,7 @@
 							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>
 							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>
 							<td>
-								<md-menu>
-									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-									  <md-icon md-menu-origin>dehaze</md-icon>
-									</md-button>
-							
-									<md-menu-content width="6">
-										<md-menu-item>
-											<md-button ng-click="vm.infoSiteDialog(project)">
-												<md-icon md-menu-align-target>info_outline</md-icon>
-												Information
-											</md-button>
-										</md-menu-item>
-										<md-menu-item>											
-											<md-button ng-click="vm.renameSiteDialog($event, project.shortName, project.title, project.description)">
-												<md-icon md-menu-align-target>create</md-icon>
-												Redigér
-											</md-button>
-										</md-menu-item>
-										<md-menu-item>
-											<md-button ng-click="vm.deleteSiteDialog(project.shortName)">
-												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-												Slet
-											</md-button>
-										</md-menu-item>
-									</md-menu-content>
-								</md-menu>
+                                <project-actions info="project"></project-actions>
 							</td>
 						</tr>
 					</tbody>

@@ -154,6 +154,7 @@
             
 			vm.currentDialogSite = '';
 			vm.infoSiteDialog = function (site) {
+                console.log('hit the dialog btn');
 				vm.currentDialogSite = site;		
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/infoSite.tmpl.html',

@@ -24,6 +24,7 @@ angular
         pd.showProjectMembers = showProjectMembers;
         pd.loadProjectMembers = loadProjectMembers;
         
+        
         function loadProjectMembers(projectShortname, memberType) {
             pd.projectMembers = [];
             siteService.getGroupMembers(projectShortname, memberType).then (function (val){
@@ -97,6 +98,17 @@ angular
             $mdDialog.show({
                 controller: PdSiteGroupEditController,
                 templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        }
+        
+        
+        function editSiteDialog(ev, project) {
+            $mdDialog.show({
+                controller: PdSiteEditController,
+                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_site_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
@@ -333,8 +345,6 @@ angular
 
             function updateRoleOnSiteMember(siteName, userName, role) {
 
-
-
                 // getTheValue
                 var role_int_value = translation_to_value(role);
                 var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
@@ -347,5 +357,22 @@ angular
 
         }
         
-
+        
+        function PdSiteEditController($scope, $mdDialog, siteService, $mdToast) {
+            
+            $scope.cancel = cancel;
+            $scope.updatePDSite = updatePDSite;
+            
+            
+            function cancel() {
+                $mdDialog.cancel();
+            }
+            
+            
+            function updatePDSite() {
+                
+            }
+            
+        }
+        
     }

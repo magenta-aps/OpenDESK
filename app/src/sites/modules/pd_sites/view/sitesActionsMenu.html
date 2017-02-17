@@ -1,0 +1,25 @@
+<md-menu>
+    <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <md-icon md-menu-origin>dehaze</md-icon>
+    </md-button>
+    <md-menu-content width="6">
+        <md-menu-item>
+            <md-button ng-controller="SitesController as vm" ng-click="vm.infoSiteDialog(ctrl.project)">
+                <md-icon md-menu-align-target>info_outline</md-icon>
+                Information
+            </md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-controller="PdSiteController as pd" ng-click="pd.editSiteDialog($event, ctrl.project)">
+                <md-icon md-menu-align-target>create</md-icon>
+                Redigér
+            </md-button>
+        </md-menu-item>
+        <md-menu-item>
+            <md-button ng-controller="SitesController as vm" ng-click="vm.deleteSiteDialog(ctrl.project.shortName)">
+                <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+                Slet
+            </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>
