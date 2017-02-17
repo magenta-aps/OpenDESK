@@ -1,4 +1,3 @@
-
 angular
     .module('openDeskApp.systemsettings')
     .factory('oeParametersService', oeParametersService);
@@ -21,7 +20,7 @@ function oeParametersService($http, $window) {
     }
 
     function getParameters() {
-        return $http.get('/api/openesdh/parameters').then(function(response) {
+        return $http.get('/api/openesdh/parameters').then(function (response) {
             return response.data;
         });
     }
@@ -32,7 +31,7 @@ function oeParametersService($http, $window) {
 
     function saveParameters(oeParams) {
         return $http.post('/api/openesdh/parameters', oeParams)
-            .then(function(response) {
+            .then(function (response) {
                 _saveOEParamsToSession(_transformParameters(oeParams));
                 return response.data;
             });
@@ -45,14 +44,14 @@ function oeParametersService($http, $window) {
 
     function _transformParameters(oeParams) {
         var params = {};
-        angular.forEach(oeParams, function(par) {
+        angular.forEach(oeParams, function (par) {
             params[par.name] = par.value;
         });
         return params;
     }
 
     function loadParameters() {
-        getParameters().then(function(oeParams){
+        getParameters().then(function (oeParams) {
             _saveOEParamsToSession(_transformParameters(oeParams));
         });
     }

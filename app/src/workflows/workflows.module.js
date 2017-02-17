@@ -1,34 +1,34 @@
 angular
-        .module('openDeskApp.workflows', ['ngMaterial'])
-        .config(config);
+    .module('openDeskApp.workflows', ['ngMaterial'])
+    .config(config);
 
 function config($provide, startCaseWorkflowServiceProvider) {
 
-    $provide.decorator('mtWizardDirective', function($delegate, $controller) {
+    $provide.decorator('mtWizardDirective', function ($delegate, $controller) {
         var directive = $delegate[0];
 
         angular.extend(directive.scope,
-                {
-                    onCancel: '&',
-                    isValid: '&'
-                });
+            {
+                onCancel: '&',
+                isValid: '&'
+            });
 
         //Customizing mt-wizard template here since there is no other way
-        directive.template = function(scope, element, attributes) {
+        directive.template = function (scope, element, attributes) {
             var template =
-                    '<div layout="column" class="md-whiteframe-z1" layout-padding>' +
-                    ' <div ng-if="curentStepTitle" layout="row" layout-sm="column" layout-align="space-between start" layout-margin>' +
-                    '  <div><h3>{{curentStepTitle}}</h3></div>' +
-                    ' </div>' +
-                    '<md-divider ng-if="curentStepTitle"></md-divider>' +
-                    ' <div layout="row"  class="wizard-container" ng-transclude ></div>' +
-                    ' <div layout="row" layout-align="end center" >' +
-                    '  <md-button class="md-primary" aria-label="cancel" ng-click="onCancel()" ng-show="selectedIndex == 0 ">{{"COMMON.CANCEL" | translate}}</md-button>' +
-                    '  <md-button class="md-primary" aria-label="previous" ng-click="previous()" ng-show="selectedIndex > 0 ">{{"COMMON.BACK" | translate}}</md-button>' +
-                    '  <md-button class="md-primary" aria-label="next" ng-click="next()"  ng-show="selectedIndex < steps.length -1" ng-disabled="(isValid && !isValid({currentStep: selectedIndex}))">{{"COMMON.NEXT" | translate}}</md-button>' +
-                    '  <md-button class="md-primary" aria-label="finish" ng-click="onFinish()"  ng-show="selectedIndex == steps.length -1">{{"COMMON.DONE" | translate}}</md-button>' +
-                    ' </div>' +
-                    '</div>';
+                '<div layout="column" class="md-whiteframe-z1" layout-padding>' +
+                ' <div ng-if="curentStepTitle" layout="row" layout-sm="column" layout-align="space-between start" layout-margin>' +
+                '  <div><h3>{{curentStepTitle}}</h3></div>' +
+                ' </div>' +
+                '<md-divider ng-if="curentStepTitle"></md-divider>' +
+                ' <div layout="row"  class="wizard-container" ng-transclude ></div>' +
+                ' <div layout="row" layout-align="end center" >' +
+                '  <md-button class="md-primary" aria-label="cancel" ng-click="onCancel()" ng-show="selectedIndex == 0 ">{{"COMMON.CANCEL" | translate}}</md-button>' +
+                '  <md-button class="md-primary" aria-label="previous" ng-click="previous()" ng-show="selectedIndex > 0 ">{{"COMMON.BACK" | translate}}</md-button>' +
+                '  <md-button class="md-primary" aria-label="next" ng-click="next()"  ng-show="selectedIndex < steps.length -1" ng-disabled="(isValid && !isValid({currentStep: selectedIndex}))">{{"COMMON.NEXT" | translate}}</md-button>' +
+                '  <md-button class="md-primary" aria-label="finish" ng-click="onFinish()"  ng-show="selectedIndex == steps.length -1">{{"COMMON.DONE" | translate}}</md-button>' +
+                ' </div>' +
+                '</div>';
             return template;
         };
         return $delegate;

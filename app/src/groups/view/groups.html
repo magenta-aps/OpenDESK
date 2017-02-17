@@ -20,12 +20,14 @@
                 <span class="r" flex="25">{{ 'COMMON.ACTIONS' | translate }}</span>
             </div>
             <md-virtual-repeat-container flex-height style="height: 450px;">
-                <div md-virtual-repeat="g in vm.groups | orderObjectBy:orderByAttribute:reverseOrder" class="repeat-item" layout="row">
+                <div md-virtual-repeat="g in vm.groups | orderObjectBy:orderByAttribute:reverseOrder"
+                     class="repeat-item" layout="row">
                     <a class="r-rowlink"
-                        ui-sref="administration.group({'shortName': g.shortName })"
-                        layout="row"
-                        flex="75">
-                        <span class="r" flex="5"><i class="material-icons">{{ g.authorityType == 'USER' ? "person" : "group" }}</i></span>
+                       ui-sref="administration.group({'shortName': g.shortName })"
+                       layout="row"
+                       flex="75">
+                        <span class="r" flex="5"><i class="material-icons">{{ g.authorityType == 'USER' ? "person" :
+                            "group" }}</i></span>
                         <span class="r" flex="25">{{ g.displayName}}</span>
                         <span class="r muted" flex="25">{{ g.shortName}}</span>
                     </a>
@@ -33,7 +35,8 @@
                         <md-button class="md-primary" ui-sref="administration.group({'shortName': g.shortName })">
                             {{ 'COMMON.VIEW_DETAILS' | translate }}
                         </md-button>
-                        <md-button class="md-primary" ng-disabled="false" ng-click="vm.deleteGroup(g.shortName, $event)">
+                        <md-button class="md-primary" ng-disabled="false"
+                                   ng-click="vm.deleteGroup(g.shortName, $event)">
                             {{ 'COMMON.REMOVE' | translate }}
                         </md-button>
                     </span>
@@ -45,12 +48,13 @@
             <md-button aria-label="Create new group" class="md-primary" ng-click="vm.createGroup($event)">
                 <i class="material-icons">group_add</i> {{ 'GROUP.CREATE_NEW_GROUP' | translate }}
             </md-button>
-            
+
             <md-button class="md-primary" ng-click="vm.showCSVUploadDialog($event)" aria-label="Upload users">
                 {{ 'GROUP.UPLOAD_GROUPS' | translate }}
             </md-button>
-            
-            <md-button class="md-primary" href="{{vm.wcsPrefix}}/api/openesdh/groups/upload/sample" aria-label="Example group upload CSV">
+
+            <md-button class="md-primary" href="{{vm.wcsPrefix}}/api/openesdh/groups/upload/sample"
+                       aria-label="Example group upload CSV">
                 {{ 'COMMON.DOWNLOAD_TEMPLATE_CSV' | translate }}
             </md-button>
         </div>

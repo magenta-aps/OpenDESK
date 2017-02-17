@@ -1,7 +1,6 @@
-
 angular
-        .module('openDeskApp')
-        .factory('preferenceService', preferenceService);
+    .module('openDeskApp')
+    .factory('preferenceService', preferenceService);
 
 function preferenceService($http, $q, sessionService) {
 
@@ -20,7 +19,7 @@ function preferenceService($http, $q, sessionService) {
     function getPreferences(params, username) {
         return $http.get(this._url(username), {
             params: params
-        }).then(function(response) {
+        }).then(function (response) {
             return response.data;
         });
     }
@@ -28,7 +27,7 @@ function preferenceService($http, $q, sessionService) {
     function setPreferences(preferences, username) {
         var url = this._url(username);
         if (url) {
-            return $http.post(this._url(username), preferences).then(function(response) {
+            return $http.post(this._url(username), preferences).then(function (response) {
                 return response.data;
             });
         }
@@ -36,7 +35,7 @@ function preferenceService($http, $q, sessionService) {
     }
 
     function isFavouriteCase(caseId) {
-        return this.getPreferences({pf: FAVOURITE_CASE}).then(function(result) {
+        return this.getPreferences({pf: FAVOURITE_CASE}).then(function (result) {
             if (result === undefined) {
                 return false;
             }
@@ -67,7 +66,7 @@ function preferenceService($http, $q, sessionService) {
     function _update(preference) {
         var deferred = $q.defer();
         var _this = this;
-        this.getPreferences().then(function(preferences) {
+        this.getPreferences().then(function (preferences) {
             var values = preferences[preference.name];
             var arrValues = values ? values.split(",") : [];
             if (preference.add === true) {
@@ -80,7 +79,7 @@ function preferenceService($http, $q, sessionService) {
             }
             var preferenceObj = {};
             preferenceObj[preference.name] = arrValues.join(",");
-            _this.setPreferences(preferenceObj).then(function(result) {
+            _this.setPreferences(preferenceObj).then(function (result) {
                 deferred.resolve(result);
             });
         });

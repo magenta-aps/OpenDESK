@@ -2,10 +2,12 @@
  * Sass constants
  */
 
-$main-color: rgb(63,81,181); // Main color. We use lighten() and darken() to make variations of this color
-$u: 16px; // Unit of measurement - usually default font size
-$br-sm-md: $u*40; // Breakpoint between small and medium screens
-
+$main-color: rgb(63, 81, 181);
+// Main color. We use lighten() and darken() to make variations of this color
+$u: 16px;
+// Unit of measurement - usually default font size
+$br-sm-md: $u*40;
+// Breakpoint between small and medium screens
 
 /*
  * Element level (atom) styles
@@ -14,14 +16,14 @@ $br-sm-md: $u*40; // Breakpoint between small and medium screens
 a,
 a:link,
 a:visited {
-    text-decoration: none;
-    color: $main-color;
+  text-decoration: none;
+  color: $main-color;
 }
 
 a:hover,
 a:active {
-    color: darken($main-color, 20%);
-    text-decoration: underline;
+  color: darken($main-color, 20%);
+  text-decoration: underline;
 }
 
 body {
@@ -29,26 +31,26 @@ body {
 }
 
 article {
-    padding: $u $u*2;
+  padding: $u $u*2;
 }
 
 hr {
-    padding: 0;
+  padding: 0;
 }
 
 img {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 dl dt {
-    font-size: $u*0.9;
-    color: lighten($main-color, 20%);
+  font-size: $u*0.9;
+  color: lighten($main-color, 20%);
 }
 
 dl dd {
-    padding: 0 0 $u;
-    margin: 0;
+  padding: 0 0 $u;
+  margin: 0;
 }
 
 fieldset {
@@ -62,8 +64,8 @@ legend {
 
 // Muted (greyed) text
 .muted {
-    opacity: 0.66;
-    font-size: 0.9em;
+  opacity: 0.66;
+  font-size: 0.9em;
 }
 
 /*
@@ -71,178 +73,177 @@ legend {
  */
 
 .od-app {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
 }
 
 .od-body {
-    margin: $u*3 0 auto;
+  margin: $u*3 0 auto;
 }
 
 // Title that is placed in the header
 .od-title {
-    position: fixed;
-    top: 0;
-    left: $u*3;
-    right: $u*6;
-    color: #fff;
-    margin: 0;
-    padding: $u*0.75 $u;
-    font-size: $u*1.5;
-    line-height: 1;
-    z-index: 1;
-    font-weight: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  position: fixed;
+  top: 0;
+  left: $u*3;
+  right: $u*6;
+  color: #fff;
+  margin: 0;
+  padding: $u*0.75 $u;
+  font-size: $u*1.5;
+  line-height: 1;
+  z-index: 1;
+  font-weight: normal;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 // Basic styled list
 .od-list {
-    margin: $u 0;
-    padding: 0;
-    list-style: none;
-    li {
-        display: block;
-        background-color: #eee;
-        margin-top: 1px;
-        padding: $u*0.5 $u;
-    }
+  margin: $u 0;
+  padding: 0;
+  list-style: none;
+  li {
+    display: block;
+    background-color: #eee;
+    margin-top: 1px;
+    padding: $u*0.5 $u;
+  }
 }
 
 // Simple button class can be added to <a> or <button> elements
 .od-btn {
-    &,
-    &:link,
-    &:visited {
-        display: inline-block;
-        box-sizing: border-box;
-        background-color: darken($main-color, 20%);
-        color: #fff;
-        padding: $u*0.5;
-        min-width: $u*3;
-        min-height: $u*3;
-        text-align: center;
-        border: none;
-    }
-    &:hover,
-    &:active {
-        background-color: darken($main-color, 30%);
-        text-decoration: none;
-    }
-    &.disabled {
-        background-color: #999;
-        cursor: inherit;
-    }
-    .material-icons {
-        font-size: $u*2;
-    }
-		
-		&.od-btn-small {
-			transform: scale(.75);
-		}
+  &,
+  &:link,
+  &:visited {
+    display: inline-block;
+    box-sizing: border-box;
+    background-color: darken($main-color, 20%);
+    color: #fff;
+    padding: $u*0.5;
+    min-width: $u*3;
+    min-height: $u*3;
+    text-align: center;
+    border: none;
+  }
+  &:hover,
+  &:active {
+    background-color: darken($main-color, 30%);
+    text-decoration: none;
+  }
+  &.disabled {
+    background-color: #999;
+    cursor: inherit;
+  }
+  .material-icons {
+    font-size: $u*2;
+  }
+
+  &.od-btn-small {
+    transform: scale(.75);
+  }
 }
 
 // Sliding sidebar
 .od-flyout {
-    display: block;
-    position: fixed;
+  display: block;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 5;
+  opacity: 0;
+  transition: all .3s;
+  transition-timing-function: ease-in-out;
+  pointer-events: none;
+
+  .od-flyout--body {
+    background-color: #fff;
+    color: #000;
+    width: $u*20;
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
     top: 0;
     bottom: 0;
-    left: 0;
     right: 0;
-    width: 100%;
-	height: 100%;
-    background-color: rgba(0,0,0,0.3);
-    z-index: 5;
-    opacity: 0;
-    transition: all .3s;
-    transition-timing-function: ease-in-out;	
-    pointer-events: none;
-    
-    .od-flyout--body {
-        background-color: #fff;
-        color: #000;
-        width: $u*20;
-        position: absolute;
-        display: flex;
-        flex-flow: column nowrap;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        height: 100%;
-		transform: translateX(100%);
-    }
-    
-    &.right .od-flyout--body {
-        right: 0;				
-    }
-    
-    &.left .od-flyout--body {
-        left: 0;
-    }
+    height: 100%;
+    transform: translateX(100%);
+  }
 
-    &.open {
-        pointer-events: auto;
-        opacity: 1;
-        transform: translateX(0);
-        .od-flyout--body {
-            transition: all .5s;
-            transform: translateX(0);
-        }
+  &.right .od-flyout--body {
+    right: 0;
+  }
+
+  &.left .od-flyout--body {
+    left: 0;
+  }
+
+  &.open {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateX(0);
+    .od-flyout--body {
+      transition: all .5s;
+      transform: translateX(0);
     }
-    
-    .od-flyout--title {
-        font-size: $u*1.5;
-        background-color: $main-color;
-        color: #fff;
-        padding: $u*0.5 $u;
-        margin: 0;
-        height: $u*3;
-        box-sizing: border-box;
+  }
+
+  .od-flyout--title {
+    font-size: $u*1.5;
+    background-color: $main-color;
+    color: #fff;
+    padding: $u*0.5 $u;
+    margin: 0;
+    height: $u*3;
+    box-sizing: border-box;
+  }
+
+  .od-flyout--close {
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+    &:hover,
+    &:active {
+      background-color: rgba(0, 0, 0, 0.3);
     }
-    
-    .od-flyout--close {
-        background-color: transparent;
-        position: absolute;
-        top: 0;
-        right: 0;
-        &:hover,
-        &:active {
-            background-color: rgba(0,0,0,0.3);
-        }
-     }
+  }
 
 }
 
 // Styles for breadcrumb directive
 .od-filebrowser-breadcrumb {
-	margin: 0;
-	background-color: #eee;
-	font-size: $u*0.9;
-    padding: 0 $u*0.5;
-	
-	a {
-		display: inline-block;
-		padding: $u*0.5 0;
-	}
-	a:after {
-		display: inline-block;
-        padding-left: $u*0.25;
-		content: '/';
-	}
+  margin: 0;
+  background-color: #eee;
+  font-size: $u*0.9;
+  padding: 0 $u*0.5;
+
+  a {
+    display: inline-block;
+    padding: $u*0.5 0;
+  }
+  a:after {
+    display: inline-block;
+    padding-left: $u*0.25;
+    content: '/';
+  }
 }
 
 // Icons in buttons
 .md-button .material-icons {
-    vertical-align: middle;
-    margin-top: -($u*0.25);
+  vertical-align: middle;
+  margin-top: -($u*0.25);
 }
 .md-text-icon-button {
     padding-right: $u;
 }
-
 
 /*
  * General media queries 
@@ -250,5 +251,5 @@ legend {
 
 // Screens larger than small (breaks between small and medium screens)
 @media screen and (min-width: $br-sm-md) {
-    
+
 }

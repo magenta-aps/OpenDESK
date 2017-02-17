@@ -10,8 +10,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     vm.plugin = [];
     vm.paths = [];
 	vm.title = [];
-            
-    
+
 	var parentDocumentNode = "";
 	var firstDocumentNode = "";
 	var selectedDocumentNode = $stateParams.doc;
@@ -25,9 +24,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.showArchived = false;
 		parentDocumentNode = $stateParams.doc;
     }
-
-
-
     
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
@@ -85,10 +81,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 				   
 					siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function(response){
 						var param = vm.showArchived ? parentDocumentNode : selectedDocumentNode;
-						if (window.location.hash == "#/dokument/"+ param) {
+						if (window.location.hash == "#!/dokument/"+ param) {
 							window.location.reload();
 						} else {
-							window.location.replace("/#/dokument/"+ param);
+							window.location.replace("/#!/dokument/"+ param);
 						}
 					} );
 
@@ -117,7 +113,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     
     vm.createWFNotification = function(comment) {
         var creator = authService.getUserInfo().user.userName;
-        var link = "/#/dokument/" + vm.wf_doc + "?dtype=wf-response" + "&from=" + creator + "&doc=" + vm.wf_doc;
+        var link = "/#!/dokument/" + vm.wf_doc + "?dtype=wf-response" + "&from=" + creator + "&doc=" + vm.wf_doc;
 
         notificationsService.addNotice(vm.wf_from, "review svar", comment, link).then (function (val) {
             $mdDialog.hide();
@@ -150,11 +146,11 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                 var paths = [
                     {
                         title: 'Projekter',
-                        link: '#/projekter'
+                        link: '#!/projekter'
                     },
                     {
                         title: response.item.location.siteTitle,
-                        link: '#/projekter/' + response.item.location.site
+                        link: '#!/projekter/' + response.item.location.site
                     }
                 ];
                 var pathArr = response.item.location.path.split('/');
@@ -163,7 +159,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     if (pathArr[a] !== '') {
                         paths.push({
                             title: pathArr[a],
-                            link: '#/projekter/' + response.item.location.site + pathLink + pathArr[a]
+                            link: '#!/projekter/' + response.item.location.site + pathLink + pathArr[a]
                         });
                         pathLink = pathLink + pathArr[a] + '/';
                     };
@@ -206,23 +202,8 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     // delete the temporary node
                 documentService.cleanupThumbnail(response.data[0].nodeRef)
 
-
-
-
-
-
-
-
-
-
-
-
             });
-
         })
-
-
-
 
     }
     else {
@@ -243,10 +224,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
             }
 
         });
-
-
     }
-	
 
 	angular.element(document).ready(function () {
 		vm.highlightVersion();

@@ -1,7 +1,6 @@
-
 angular
-        .module('openDeskApp.users')
-        .controller('UserDialogController', UserDialogController);
+    .module('openDeskApp.users')
+    .controller('UserDialogController', UserDialogController);
 
 function UserDialogController($scope, $mdDialog, $mdToast, $translate, $injector, $timeout, notificationUtilsService, userService, user) {
     var ucd = this;
@@ -19,7 +18,7 @@ function UserDialogController($scope, $mdDialog, $mdToast, $translate, $injector
     if (ucd.useAddo) {
         var addoService = $injector.get('addoService');
         if (ucd.userExists) {
-            addoService.getAddoUserProperties(user.userName).then(function(addoProps) {
+            addoService.getAddoUserProperties(user.userName).then(function (addoProps) {
                 ucd.user.addoUsername = addoProps.addoUsername;
             });
         }
@@ -42,33 +41,32 @@ function UserDialogController($scope, $mdDialog, $mdToast, $translate, $injector
         if (ucd.userExists)
             ucd.user.disableAccount = !u.enabled;
         var promise = (ucd.userExists) ? userService.updateUser(ucd.user) : userService.createUser(ucd.user);
-        promise.then(function(userSaveResponse) {
+        promise.then(function (userSaveResponse) {
             if (ucd.useAddo && ucd.user.addoPassword) {
                 addoService
-                        .saveAddoUser(ucd.user.userName, ucd.user.addoUsername, ucd.user.addoPassword)
-                        .then(function() {
-                            notifyUserSaved(userSaveResponse);
-                        }, function(response) {
-                            ucd.userExists = true;
-                            handleCreateEditError(response);
-                        });
+                    .saveAddoUser(ucd.user.userName, ucd.user.addoUsername, ucd.user.addoPassword)
+                    .then(function () {
+                        notifyUserSaved(userSaveResponse);
+                    }, function (response) {
+                        ucd.userExists = true;
+                        handleCreateEditError(response);
+                    });
             } else {
                 notifyUserSaved(userSaveResponse);
             }
         }, handleCreateEditError)
-        .then(function(){
-            userService.setEmailFeedDisabled(ucd.user);
-        });
+            .then(function () {
+                userService.setEmailFeedDisabled(ucd.user);
+            });
     }
-
 
 
     function getToastPosition() {
         return Object.keys(ucd.toastPosition)
-                .filter(function(pos) {
-                    return ucd.toastPosition[pos];
-                })
-                .join(' ');
+            .filter(function (pos) {
+                return ucd.toastPosition[pos];
+            })
+            .join(' ');
     }
 
     function notifyUserSaved(user) {
@@ -82,11 +80,11 @@ function UserDialogController($scope, $mdDialog, $mdToast, $translate, $injector
 
         $mdDialog.hide(angular.extend(user, {newUser: !ucd.userExists}));
         $mdToast.show(
-                $mdToast.simple()
+            $mdToast.simple()
                 .content(msg)
                 .position(getToastPosition())
                 .hideDelay(3000)
-                );
+        );
     }
 
     function handleCreateEditError(response) {
@@ -112,7 +110,7 @@ function UserDialogController($scope, $mdDialog, $mdToast, $translate, $injector
         if (response.status === 500) {
             // Email already exists
             if (cStack.indexOf('Error updating email: already exists') > -1 ||
-                    cStack.indexOf('Email must be unique and already exists.') > -1) {
+                cStack.indexOf('Email must be unique and already exists.') > -1) {
                 ucd.userForm.email.$setValidity('emailExists', false);
                 return;
             }

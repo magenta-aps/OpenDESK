@@ -3,93 +3,86 @@
     <h1 class="od-title">Søgning</h1>
 
     <!-- <div layout="row" layout-align="space-between center">
-        <a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
+        <a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
     </div> -->
-		
-		<div layout="row" layout-align="space-between center">
-			<a class="md-button" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 
-			<div class="od-search" layout="row">
-				<span flex></span>
-				<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
-					<!-- <md-input-container> -->
-					<i class="material-icons">search</i>
-					<md-autocomplete
-							required
-							md-input-name="autocomplete"
-							md-selected-item="searchQuery"
-							md-search-text="searchText"
-							md-items="r in vm.getAutoSuggestions(searchText)"
-							md-item-text="r.name"
-							md-floating-label="Søg">
-						<md-item-template>
-							<span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
-						</md-item-template>
-						<div ng-messages="autocompleteForm.autocomplete.$error">
-							<div ng-message="required">Dette felt skal udfyldes</div>
-						</div>
-					</md-autocomplete>
+    <div layout="row" layout-align="space-between center">
+        <a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 
-					<!-- </md-input-container> -->
-					<!-- <md-button type="submit" class="md-primary">Søg</md-button> -->
-				</form>
-			</div>
+        <div class="od-search" layout="row">
+            <span flex></span>
 
-		</div>
-			
-	<md-card>
-		<md-card-content>
-			<md-list layout="column" >
+            <form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
+                <!-- <md-input-container> -->
+                <i class="material-icons">search</i>
+                <md-autocomplete
+                        required
+                        md-input-name="autocomplete"
+                        md-selected-item="searchQuery"
+                        md-search-text="searchText"
+                        md-items="r in vm.getAutoSuggestions(searchText)"
+                        md-item-text="r.name"
+                        md-floating-label="Søg">
+                    <md-item-template>
+                        <span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
+                    </md-item-template>
+                    <div ng-messages="autocompleteForm.autocomplete.$error">
+                        <div ng-message="required">Dette felt skal udfyldes</div>
+                    </div>
+                </md-autocomplete>
 
+                <!-- </md-input-container> -->
+                <!-- <md-button type="submit" class="md-primary">Søg</md-button> -->
+            </form>
+        </div>
 
+    </div>
 
-				<md-list-item ng-repeat="r in searchResults" flex="100">
-				<!-- <md-list-item flex="100"> -->
-					<md-divider></md-divider>
-					<a class="od-filebrowser-link" ng-href="#/dokument/{{r.nodeRef.replace('workspace://SpacesStore/', '')}}">
-																								
-						<i class="material-icons">insert_drive_file</i>
-						{{ r.name }}, <i>Ændret af</i> {{ r.modifiedBy }}
-					</a>
-
-					<md-menu>
-					    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-					      <md-icon md-menu-origin>arrow_drop_down</md-icon>
-					    </md-button>
-
-					    <md-menu-content width="6">
-					      <md-menu-item>
-					        <md-button ng-click="vm.downloadDocument(r.nodeRef, r.name)">
-					          <md-icon md-menu-align-target>get_app</md-icon>
-					          Download
-					        </md-button>
-					      </md-menu-item>
-
-					      <md-menu-item>
-					        <md-button ng-click="vm.previewDocument(r.nodeRef)">
-					          <md-icon md-menu-align-target>search</md-icon>
-					          Preview
-					        </md-button>
-					      </md-menu-item>
-					    </md-menu-content>
-					</md-menu>
-				</md-list-item>
-			</md-list>
-			
-			<div ng-show="searchResults.length == 0">
-				Ingen resutater fundet.
-			</div>
-
-		</md-card-content>
-	</md-card>
+    <md-card>
+        <md-card-content>
+            <md-list layout="column">
 
 
+                <md-list-item ng-repeat="r in searchResults" flex="100">
+                    <!-- <md-list-item flex="100"> -->
+                    <md-divider></md-divider>
+                    <a class="od-filebrowser-link"
+                       ng-href="#!/dokument/{{r.nodeRef.replace('workspace://SpacesStore/', '')}}">
 
+                        <i class="material-icons">insert_drive_file</i>
+                        {{ r.name }}, <i>Ændret af</i> {{ r.modifiedBy }}
+                    </a>
 
+                    <md-menu>
+                        <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                            <md-icon md-menu-origin>arrow_drop_down</md-icon>
+                        </md-button>
 
+                        <md-menu-content width="6">
+                            <md-menu-item>
+                                <md-button ng-click="vm.downloadDocument(r.nodeRef, r.name)">
+                                    <md-icon md-menu-align-target>get_app</md-icon>
+                                    Download
+                                </md-button>
+                            </md-menu-item>
 
+                            <md-menu-item>
+                                <md-button ng-click="vm.previewDocument(r.nodeRef)">
+                                    <md-icon md-menu-align-target>search</md-icon>
+                                    Preview
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-list-item>
+            </md-list>
 
+            <div ng-show="searchResults.length == 0">
+                Ingen resutater fundet.
+            </div>
 
+        </md-card-content>
+    </md-card>
 
 
 </div>

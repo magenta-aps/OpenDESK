@@ -1,6 +1,6 @@
 angular
-        .module('openDeskApp.translations.init')
-        .provider('languageFiles', LanguageFilesProvider);
+    .module('openDeskApp.translations.init')
+    .provider('languageFiles', LanguageFilesProvider);
 
 function LanguageFilesProvider() {
     var availableFiles = {files: []};

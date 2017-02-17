@@ -264,7 +264,7 @@ angular
 
                             var siteShortName = response.data[0].shortName;
                             var siteName = $scope.newSite.siteName;
-                            var link = "/#/projekter/" + siteShortName  + "?type=PD-Project";
+                            var link = "/#!/projekter/" + siteShortName  + "?type=PD-Project";
                             var userName;
                             createSiteNotification(siteName, $scope.newSite.owner.shortName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);

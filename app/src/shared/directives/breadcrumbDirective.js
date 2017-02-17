@@ -1,10 +1,9 @@
-
 angular
     .module('openDeskApp')
     .directive('breadcrumb', breadcrumb)
 
 function breadcrumb() {
-    
+
     return {
         restrict: 'E',
         scope: {

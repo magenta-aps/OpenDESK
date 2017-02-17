@@ -3,7 +3,7 @@ angular
         'ngSanitize',
         'ngMaterial',
         'ngMessages',
-		'ngCookies',
+        'ngCookies',
         'material.wizard',
         'ui.router',
         'rt.encodeuri',
@@ -16,8 +16,8 @@ angular
         'openDeskApp.pd_sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
-        'openDeskApp.header',
         'openDeskApp.dashboard',
+        'openDeskApp.lool',
         'openDeskApp.documents',
         'openDeskApp.administration',
         'openDeskApp.groups',
@@ -25,17 +25,16 @@ angular
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
-		//'openDeskApp.templates',
+        //'openDeskApp.templates',
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
-        
         'openDeskApp.notifications',
         'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',
-        
+
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
@@ -73,7 +72,8 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
     $stateProvider.state('site', {
         abstract: true,
         resolve: {
-            authorize: ['authService', function (authService) {}]
+            authorize: ['authService', function (authService) {
+            }]
         },
         views: {
             'footer@': {
@@ -97,7 +97,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         data: {
             authorizedRoles: [USER_ROLES.user]
         }
-	}).state('administration', {
+    }).state('administration', {
         parent: 'site',
         url: '/indstillinger',
         views: {
@@ -184,7 +184,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
                 controller: 'UsersController'
             }
         }
-        
+
     }).state('search', {
         url: '/search',
         views: {

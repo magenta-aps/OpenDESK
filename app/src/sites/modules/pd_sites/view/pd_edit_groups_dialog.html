@@ -1,6 +1,7 @@
 <md-dialog aria-label="Opdatér grupper i projekt" class="pd-create-site-diag">
     <form name="membersForm" ng-submit="updatePDSiteGroups()" class="pd-site-create-form">
         <md-toolbar>
+<<<<<<< HEAD
           <div class="md-toolbar-tools">
             <h2>Tilføj og fjern medlemmer</h2>
             <span flex></span>
@@ -8,10 +9,20 @@
                 <i class="material-icons" aria-label="Luk dialogboks">close</i>
             </md-button>
           </div>
+=======
+            <div class="md-toolbar-tools">
+                <h2>Tilføj og fjern medlemmer i projektgrupper</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
+>>>>>>> feature/OD-16612
         </md-toolbar>
-        
+
         <md-dialog-content>
             <md-content class="md-padding" layout="column">
+<<<<<<< HEAD
                 
                 <!--fieldset-->
                     <!--legend>Projektgruppe</legend-->
@@ -21,6 +32,11 @@
 						<span>Projektgruppe</span>
 					  </div>
 					</md-toolbar>
+=======
+
+                <fieldset>
+                    <legend>Projektgruppe</legend>
+>>>>>>> feature/OD-16612
                     <md-chips ng-model="projektGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -220,14 +236,14 @@
 				</div>
             </md-content>
         </md-dialog-content>
-        
+
         <md-dialog-actions layout="row">
-            <md-button ng-click="cancel()" >
+            <md-button ng-click="cancel()">
                 Annullér
             </md-button>
             <span flex></span>
             <input type="submit" class="md-button md-raised md-primary" value="Opdatér">
         </md-dialog-actions>
-        
+
     </form>
 </md-dialog>

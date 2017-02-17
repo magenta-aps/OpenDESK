@@ -87,7 +87,7 @@
 					});
 
 					var shortName = name.replace(new RegExp(" ", 'g'), "");
-					window.location.href = "/#/projekter/" + shortName  + "?type=Project";
+					window.location.href = "/#!/projekter/" + shortName  + "?type=Project";
 
 				});
 			};
@@ -196,7 +196,7 @@
 						$rootScope.searchResults = [];
 						$rootScope.searchResults = val.data.items;
 
-						window.location.href = "#/search";
+						window.location.href = "#!/search";
 
 					} else {
 						return [];
@@ -230,7 +230,7 @@
 					// var path = val.path;
 
 					var path = ref.replace("workspace://SpacesStore/", "");
-					$window.location.href = "/#/dokument/" + path;
+					$window.location.href = "/#!/dokument/" + path;
 
 					console.log("gotoPath");
 				});

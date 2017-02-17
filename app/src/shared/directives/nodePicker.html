@@ -5,9 +5,11 @@
     <strong>{{ ctrl.currentNode[0].currentNodeRef_name }}</strong>
 </div>
 <md-list class="picker-list">
-    <md-list-item ng-class="ctrl.model === dir.nodeRef ? 'picked' : ''" ng-repeat="dir in ctrl.currentNode[1]" ng-click="ctrl.pickNode(dir.nodeRef)">
+    <md-list-item ng-class="ctrl.model === dir.nodeRef ? 'picked' : ''" ng-repeat="dir in ctrl.currentNode[1]"
+                  ng-click="ctrl.pickNode(dir.nodeRef)">
         <p>{{ dir.name }}</p>
-        <md-button ng-show="dir.hasChildren" class="md-icon-button" ng-click="ctrl.browseChild(dir.nodeRef); $event.stopPropagation();" class="md-raised">
+        <md-button ng-show="dir.hasChildren" class="md-icon-button"
+                   ng-click="ctrl.browseChild(dir.nodeRef); $event.stopPropagation();" class="md-raised">
             <i class="material-icons">navigate_next</i>
         </md-button>
     </md-list-item>
