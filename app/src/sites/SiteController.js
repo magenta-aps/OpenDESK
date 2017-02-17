@@ -6,7 +6,7 @@
         
         function SiteController($scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
 								alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-								searchService, userService) {
+								searchService, userService, groupService) {
 
 			$scope.role_mapping = {};
 			$scope.role_mapping["SiteManager"] = "Projektleder";
@@ -43,6 +43,8 @@
 
 
 			//siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
+
+			//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
             
             siteService.getSiteUserRole(vm.project, vm.currentUserName).then(
                 function (response) {

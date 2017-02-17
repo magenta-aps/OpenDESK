@@ -14,7 +14,8 @@ function GroupService(ALFRESCO_URI, $http, $q) {
         createGroup: createGroup,
         updateGroup: updateGroup,
         deleteGroup: deleteGroup,
-        uploadGroupsCSVFile: uploadGroupsCSVFile
+        uploadGroupsCSVFile: uploadGroupsCSVFile,
+        getGroupInfo: getGroupInfo
     };
 
     /**
@@ -58,6 +59,13 @@ function GroupService(ALFRESCO_URI, $http, $q) {
 
     function findGroup(term) {
         return $http.get(ALFRESCO_URI.serviceApiProxy + "groups?zone=APP.DEFAULT&maxItems=250&sortBy=displayName&shortNameFilter=" + term).then(successOrReject);
+    }
+
+    function getGroupInfo (shortName, groupName) {
+        return $http.get("/alfresco/service/groups?method=getAllMembers&shortName=" + shortName + "&groupName=" + groupName).then(function(response) {
+            console.log(response.data);
+            return response.data;
+        })
     }
 
     /**
@@ -136,8 +144,12 @@ function GroupService(ALFRESCO_URI, $http, $q) {
 
     function successOrReject(response) {
         if (response.status && response.status !== 200) {
+
+
             return $q.reject(response);
         }
+        console.log("members: ");
+        console.log(response);
         return response.data || response;
     }
 
