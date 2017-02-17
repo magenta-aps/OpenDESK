@@ -199,7 +199,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 nodeRefs: sourceNodeRefs,
                 parentId: parentNodeRef
             }).then(function (response) {
-                return response;
+                return response;x
             }, function() {
                 return response;
             });
@@ -262,23 +262,28 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data
             });
         },
+        //getGroupMembers : function (siteShortName, groupName) {
+        //    return $http.post("/alfresco/service/sites", {
+        //        PARAM_METHOD : "getDBID",
+        //        PARAM_SITE_SHORT_NAME: siteShortName
+        //    }).then(function(response) {
+        //
+        //        var dbid = response.data[0].DBID;
+        //        console.log(dbid);
+        //
+        //        var requestName = dbid + "_" + groupName;
+        //
+        //        return groupService.getGroupMembers(requestName).then(function(r) {
+        //            return r.data;
+        //        });
+        //
+        //        return response.data;
+        //    });
+        //},
         getGroupMembers : function (siteShortName, groupName) {
-            return $http.post("/alfresco/service/sites", {
-                PARAM_METHOD : "getDBID",
-                PARAM_SITE_SHORT_NAME: siteShortName
-            }).then(function(response) {
-
-                var dbid = response.data[0].DBID;
-                console.log(dbid);
-
-                var requestName = dbid + "_" + groupName;
-
-                return groupService.getGroupMembers(requestName).then(function(r) {
-                    return r.data;
-                });
-
-                return response.data;
-            });
+           return groupService.getGroupInfo(siteShortName, groupName).then(function(r) {
+                               return r;
+                           });;
         },
         createLink : function (source, destination) {
             return $http.post("/alfresco/service/sites", {

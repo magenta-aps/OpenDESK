@@ -271,23 +271,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 }
 
 
-/*expand collapse*/
-
-.transition {
-	transition: all 0.4s ease-in-out;
-	-webkit-transition: all 0.4s ease-in-out; /* Safari */
-}
-
-.no-select, h2 {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
 .pHeader {
 	  line-height: 30px;
 	  letter-spacing: 1px;
@@ -310,100 +293,19 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {z-index: 0
 		width: 92%; 
 		padding: 0 10px 0 10px; 
 		font-size: 90%;
+		line-height: 28px;
 	  }
 }
 
-.expandCollapse {
-
-	h2 {
-	  font-size: 16px;
-	  line-height: 28px;
-	  font-weight: bold;
-	  letter-spacing: 1px;
-	  display: block;
-	  background-color: #ccc;
-	  margin: 0;
-	  padding: 0 5px;
-	  cursor: pointer;
-	}
-
-	p {
-	  font-size: 15px;
-	  line-height: 28px;
-	  padding-left: 10px;
-	}	
-
-	ul {
-	  list-style: none;
-	  padding: 0;
-	  margin: 0;
-	}
-
-	ul li {
-	  position: relative;
-	  margin: 0;
-	  padding-bottom: 4px;
-	}
-	
-	ul li h2 i {
-	  position: relative;
-	  margin: 0;
-	  top: 6px;
-	}
-
-	ul li:last-of-type {
-		padding-bottom: 0;
-		overflow-x: hidden;
-	}
-	ul li i.check {
-	  position: absolute;
-	  margin-top: 13px;
-	  right: 18px;
-	}
-	
-	ul li i.check:before, ul li i.check:after {
-	  content: "";
-	  position: absolute;
-	  background-color: #6b6b6b;
-	  width: 3px;
-	  height: 9px;
-	}
-	ul li i.check:before {
-	  transform: translate(-2px, 0) rotate(45deg);
-	}
-	ul li i.check:after {
-	  transform: translate(2px, 0) rotate(-45deg);
-	}
-	ul li input[type=checkbox] {
-	  position: absolute;
-	  cursor: pointer;
-	  width: 100%;
-	  height: 28px;
-	  /*z-index: 1;*/
-	  opacity: 0;
-	}
-	ul li input[type=checkbox]:checked ~ p {
-	  margin-top: 0;
-	  max-height: 0;
-	  opacity: 0;
-	}
-	ul li input[type=checkbox]:checked ~ i.check:before {
-	  transform: translate(2px, 0) rotate(45deg);
-	}
-	ul li input[type=checkbox]:checked ~ i.check:after {
-	  transform: translate(-2px, 0) rotate(-45deg);
-	}
+.toolbar-small {
+	height: 32px;
+	min-height: 32px;
+	max-height: 32px;
+	position: relative;
+	margin: 10px 0;
+	padding: 4px 20px 0 20px;
+	vertical-align: middle;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

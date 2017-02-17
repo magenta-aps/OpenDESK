@@ -6,11 +6,6 @@ angular
     
     function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams, notificationsService, authService) {
 
-        // siteService.removeRole("kage2", "abeecher", "Consumer")
-        // pd_siteService.createPDSite("kage4", "desc", "100", "center_1","fhp", "fhp");
-        // pd_siteService.getAllOrganizationalCenters();
-        // siteService.addUser("kage1", "abeecher", "PD_MONITORS");
-        // siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
     
         var pd = this;
         pd.editPdSite = editPdSite;
@@ -19,6 +14,11 @@ angular
         var membersLoaded = false;
         pd.showProjectMembers = showProjectMembers;
         pd.loadProjectMembers = loadProjectMembers;
+		pd.removeMemberDialog = removeMemberDialog;
+		pd.removeMemberFromSite = removeMemberFromSite;
+		pd.updateMemberRoleDialog = updateMemberRoleDialog;
+		pd.updateRoleOnSiteMember = updateRoleOnSiteMember;
+		
         
         
         function loadProjectMembers(projectShortname, memberType) {
@@ -46,33 +46,35 @@ angular
             pd.site.members = {};
             siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTOWNER').then(
                 function(response) {
-                    pd.site.members.pd_projectowner = response[0];
+                    pd.site.members.pd_projectowner = response[1][0];
                 }
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTMANAGER').then(
                 function(response) {
-                    pd.site.members.pd_projectmanager = response[0];
+                    pd.site.members.pd_projectmanager = response[1][0];
                 }
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
                 function(response) {
+                    console.log("response")
                     console.log(response)
-                    pd.site.members.pd_projectgroup = response;
+                    console.log("response")
+                    pd.site.members.pd_projectgroup = response[1];
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_WORKGROUP').then(
                 function(response) {
-                    pd.site.members.pd_workgroup = response;
+                    pd.site.members.pd_workgroup = response[1];
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_STEERING_GROUP').then(
                 function(response) {
-                    pd.site.members.pd_steering_group = response;
+                    pd.site.members.pd_steering_group = response[1];
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_MONITORS').then(
                 function(response) {
-                    pd.site.members.pd_monitors = response;
+                    pd.site.members.pd_monitors = response[1];
                 }
             );
         }
@@ -90,9 +92,57 @@ angular
                 clickOutsideToClose: true
             });
         }
+		
         
+		function updateMemberRoleDialog(event, user) {
+			vm.currentDialogUser = user.fullName;				
+			$mdDialog.show({
+				templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
+				parent: angular.element(document.body),
+				scope: $scope,
+				preserveScope: true,
+				targetEvent: event,
+				clickOutsideToClose: true
+			});
+		}
+		
         
+		function updateRoleOnSiteMember(siteName, userName, role) {
+
+			var role_int_value = translation_to_value(role);
+			var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
+
+			siteService.updateRoleOnSiteMember(siteName, userName, role_alfresco_value ).then(function(val){
+				getProjectMembers();
+			});
+			$mdDialog.hide();
+		};
+		
+        
+		function removeMemberDialog(member, group) {
+            var confirm = $mdDialog.confirm()
+                .title('Slet dette medlem?')
+                .textContent('')
+                .ariaLabel('Slet medlem')
+                .targetEvent(event)
+                .ok('Slet')
+                .cancel('Nej, tak');
+            $mdDialog.show(confirm).then(function() {
+                removeMemberFromSite(member, group);
+            });
+		};
+
+        
+		function removeMemberFromSite(member, group) {
+			siteService.removeUser(pd.site.shortName, member.shortName, group).then(function(val){
+				getProjectMembers();
+			});			
+			$mdDialog.hide();
+		};
+       
+       
         function PdSiteEditController(project, $scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
+            
             
             var isEditMode = false;
             var availProjectOwners = [];
@@ -312,6 +362,38 @@ angular
             $scope.updatePDSiteGroups = updatePDSiteGroups;
             $scope.addMember = addMember;
             $scope.removeMember = removeMember;
+			$scope.addEksternToProjektGrp = addEksternToProjektGrp;
+			$scope.addEksternToStyreGrp = addEksternToStyreGrp;
+			$scope.addEksternToArbGrp = addEksternToArbGrp;
+			$scope.addEksternToFlgGrp = addEksternToFlgGrp
+			
+			function addEksternToProjektGrp () {
+				var eksternNavn = $scope.pgexternname;				
+				var eksternEmail = $scope.pgexternemail;				
+				var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
+				$scope.projektGruppe.push({displayName: eksternMedlem});
+			}
+			
+			function addEksternToStyreGrp () {
+				var eksternNavn = $scope.stexternname;				
+				var eksternEmail = $scope.stexternemail;				
+				var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
+				$scope.styreGruppe.push({displayName: eksternMedlem});
+			}
+			
+			function addEksternToArbGrp () {
+				var eksternNavn = $scope.arbexternname;				
+				var eksternEmail = $scope.arbexternemail;				
+				var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
+				$scope.arbejdsGruppe.push({displayName: eksternMedlem});
+			}
+			
+			function addEksternToFlgGrp () {
+				var eksternNavn = $scope.flgexternname;				
+				var eksternEmail = $scope.flgexternemail;				
+				var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
+				$scope.folgeGruppe.push({displayName: eksternMedlem});
+			}
             
             function cancel() {
                 $mdDialog.cancel();

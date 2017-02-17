@@ -6,7 +6,7 @@
         
         function SiteController($scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
 								alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-								searchService, userService) {
+								searchService, userService, groupService) {
 
 			$scope.role_mapping = {};
 			$scope.role_mapping["SiteManager"] = "Projektleder";
@@ -41,6 +41,8 @@
 
 			siteService.getAllUsers("a");
 			//siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
+
+			//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
             
             siteService.getSiteUserRole(vm.project, vm.currentUserName).then(
                 function (response) {
@@ -423,7 +425,7 @@
 			vm.currentDialogUser = '';
 
 			vm.updateMemberRoleDialog = function(event, user) {
-				vm.currentDialogUser = user;				
+				vm.currentDialogUser = user.fullName;				
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
 					parent: angular.element(document.body),

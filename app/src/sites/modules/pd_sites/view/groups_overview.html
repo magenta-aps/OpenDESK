@@ -3,8 +3,44 @@
 
 	<div flex="100" flex-gt-lg="100">     
 		<p>
-			<span style="font-weight: bold;">Projektleder<span><br>
-			<span style="font-weight: normal">{{ pd.site.members.pd_projectmanager.fullName }}</span>
+			<div style="font-weight: bold;">Projektleder</div>
+			<div layout="row">
+				<div flex="90">{{ pd.site.members.pd_projectmanager.fullName }}</div>
+				<div flex="10" style="position: relative; top: -10px">
+					<md-menu ng-controller="SiteController as vm">
+						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							<md-icon md-menu-origin>info_outline</md-icon>
+						</md-button>
+						<md-menu-content width="5">							
+							<md-menu-item>
+								<div>Email:&nbsp;{{ pd.site.members.pd_projectmanager.email }}</div>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>				
+            </div>
+		</p>
+		<p>
+			<div style="font-weight: bold;">Projektejer</div>
+			<div layout="row">
+				<div flex="90">{{ pd.site.members.pd_projectowner.fullName }}</div>
+				<div flex="10" style="position: relative; top: -10px">
+					<md-menu ng-controller="SiteController as vm">
+						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							<md-icon md-menu-origin>info_outline</md-icon>
+						</md-button>
+						<md-menu-content width="5">							
+							<md-menu-item>
+								<div>Email:&nbsp;{{ pd.site.members.pd_projectmanager.email }}</div>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>				
+            </div>
+
+
+			<!--span style="font-weight: bold;">Projektleder<span><br>
+			<span style="font-weight: normal">{{ pd.site.members.pd_projectmanager.displayName}} - {{ pd.site.members.pd_projectmanager.email}}</span>
 			<span style="float:right; position: relative; top: -15px;">
 				<md-menu ng-controller="SiteController as vm">
 					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -29,7 +65,7 @@
 		</p>
 		<p>
 			<span style="font-weight: bold;">Projektejer<span><br>
-			<span style="font-weight: normal;">{{ pd.site.members.pd_projectowner.fullName }}</span>
+			<span style="font-weight: normal;">{{ pd.site.members.pd_projectowner.displayName }}</span>
 			<span style="float:right; position: relative; top: -15px;">
 				<md-menu ng-controller="SiteController as vm">
 					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -50,7 +86,12 @@
 						</md-menu-item>
 					</md-menu-content>
 				</md-menu>
-			</span>
+			</span-->
+
+			
+			
+			
+			
 		</p>
 	</div>
 	<div flex="100" flex-gt-lg="100">		
@@ -60,25 +101,40 @@
             layout="row">
             <span>Projektgruppe</span>
             <span flex></span>
-            <i class="material-icons">keyboard_arrow_down</i>
+            <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
         </h4>
         <ul ng-show="pd.showProjGroupList">
             <div layout="row" ng-repeat="mem in pd.site.members.pd_projectgroup">
 				<div flex="80">{{ mem.displayName }}</div>
-				<div flex="20" style="position: relative; top: -10px">
+				<div flex="10" style="position: relative; top: -10px">
+					<md-menu ng-controller="SiteController as vm">
+						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							<md-icon md-menu-origin>info_outline</md-icon>
+						</md-button>
+						<md-menu-content width="5">
+							<md-menu-item>
+								<div>Rolle:&nbsp;</div>
+							</md-menu-item>
+							<md-menu-item>
+								<div>Email:&nbsp;{{ mem.email }}</div>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_PROJECTGROUP')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
@@ -95,25 +151,40 @@
             layout="row">
             <span>Styregruppe</span>
             <span flex></span>
-            <i class="material-icons">keyboard_arrow_down</i>
+            <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
         </h4>
         <ul ng-show="pd.showSteerGroupList">
 			<div layout="row" ng-repeat="mem in pd.site.members.pd_steering_group">
 				<div flex="80">{{ mem.displayName }}</div>
-				<div flex="20" style="position: relative; top: -10px">
+				<div flex="10" style="position: relative; top: -10px">
+					<md-menu ng-controller="SiteController as vm">
+						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							<md-icon md-menu-origin>info_outline</md-icon>
+						</md-button>
+						<md-menu-content width="5">
+							<md-menu-item>
+								<div>Rolle:&nbsp;</div>
+							</md-menu-item>
+							<md-menu-item>
+								<div>Email:&nbsp;{{ mem.email }}</div>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_STEERING_GROUP')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
@@ -130,25 +201,40 @@
             layout="row">
             <span>Arbejdsgruppe</span>
             <span flex></span>
-            <i class="material-icons">keyboard_arrow_down</i>
+            <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
         </h4>
         <ul ng-show="pd.showWorkGroupList">
 			<div layout="row" ng-repeat="mem in pd.site.members.pd_workgroup">
 				<div flex="80">{{ mem.displayName }}</div>
-				<div flex="20" style="position: relative; top: -10px">
+				<div flex="10" style="position: relative; top: -10px">
+					<md-menu ng-controller="SiteController as vm">
+						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							<md-icon md-menu-origin>info_outline</md-icon>
+						</md-button>
+						<md-menu-content width="5">
+							<md-menu-item>
+								<div>Rolle:&nbsp;</div>
+							</md-menu-item>
+							<md-menu-item>
+								<div>Email:&nbsp;{{ mem.email }}</div>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_WORKGROUP')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
@@ -165,25 +251,40 @@
             layout="row">
             <span>Følgegruppe</span>
             <span flex></span>
-            <i class="material-icons">keyboard_arrow_down</i>
+            <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
         </h4>
         <ul ng-show="pd.showMonitorsList">
 			<div layout="row" ng-repeat="mem in pd.site.members.pd_monitors">
 				<div flex="80">{{ mem.displayName }}</div>
-				<div flex="20" style="position: relative; top: -10px">
+				<div flex="10" style="position: relative; top: -10px">
+					<md-menu ng-controller="SiteController as vm">
+						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							<md-icon md-menu-origin>info_outline</md-icon>
+						</md-button>
+						<md-menu-content width="5">
+							<md-menu-item>
+								<div>Rolle:&nbsp;</div>
+							</md-menu-item>
+							<md-menu-item>
+								<div>Email:&nbsp;{{ mem.email }}</div>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
 							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.deleteMemberDialog(vm.project, member.authority.userName)">
+								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_MONITORS')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
