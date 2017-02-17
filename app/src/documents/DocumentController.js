@@ -117,7 +117,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
     
     vm.createWFNotification = function(comment) {
-        notificationsService.addWFNotice(authService.getUserInfo().user.userName, vm.wf_from, "review svar", comment, vm.wf_doc, "wf-response").then (function (val) {
+        var creator = authService.getUserInfo().user.userName;
+        var link = "/#/dokument/" + vm.wf_doc + "?dtype=wf-response" + "&from=" + creator + "&doc=" + vm.wf_doc;
+
+        notificationsService.addNotice(vm.wf_from, "review svar", comment, link).then (function (val) {
             $mdDialog.hide();
         });
     }

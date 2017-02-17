@@ -12,6 +12,7 @@
     "gulp-change": "^1.0.0",
     "gulp-concat": "^2.6.0",
     "gulp-git": "1.6.0",
+    "gulp-install": "^0.6.0",
     "gulp-jshint": "^1.11.2",
     "gulp-load-plugins": "^0.10.0",
     "gulp-markdown": "~1.2.0",
@@ -45,6 +46,7 @@
     "test": "protractor app/tests/e2e/conf.js"
   },
   "dependencies": {
+    "gulp-install": "^0.6.0",
     "gulp-nsp": "~2.4.0"
   }
 }

@@ -36,7 +36,8 @@
 
 			vm.project = $stateParams.projekt;
             vm.userRole = 'siteConsumer';
-			vm.projectType = $location.search().type;;
+			vm.projectType = $location.search().type;
+            vm.currentUser = authService.getUserInfo().user;
 
 			siteService.getAllUsers("a");
 
@@ -45,7 +46,7 @@
 
 			//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
             
-            siteService.getSiteUserRole(vm.project, authService.getUserInfo().user.userName).then(
+            siteService.getSiteUserRole(vm.project, vm.currentUserName).then(
                 function (response) {
                     vm.userRole = response;
                 }                                                                   
@@ -91,6 +92,14 @@
 
 			vm.path = $stateParams.path;
 
+            vm.currentFolderNodeRef_cmisQuery = vm.project + "/documentLibrary/" + vm.path;
+
+			cmisService.getNode(vm.currentFolderNodeRef_cmisQuery).then(function (val) {
+				vm.currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                vm.currentFolderUUID = vm.currentFolderNodeRef.split("/")[3];
+                // The loading function for contents depend on the currentFolder variables having been read beforehand
+                vm.loadContents();
+			});
 
 			vm.cancel = function () {
 				$mdDialog.cancel();
@@ -122,64 +131,49 @@
 			vm.loadSiteData();
 			
 
-			vm.loadContents = function() {								
+			vm.loadContents = function() {
+                siteService.getContents(vm.currentFolderUUID).then(function (response) {
+                    $scope.contents = response;
+                });
 
-				var currentFolderNodeRef_cmisQuery = $stateParams.projekt + "/documentLibrary/" + $stateParams.path;
-
-				cmisService.getNode(currentFolderNodeRef_cmisQuery).then(function (val) {
-					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
-
-
-					siteService.getContents(currentFolderNodeRef.split("/")[3]).then (function (response) {
-						$scope.contents = response;
-					})
-
-
-
-
-					//cmisService.getFolderNodes($stateParams.projekt + "/documentLibrary/" + $stateParams.path).then(function (val) {
-                    //
-                    //
-					//	console.log(val);
-                    //
-					//	var result = [];
-                    //
-                    //
-					//	for (let x in val.data.objects) {
-                    //
-					//		userService.getPerson(val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"])
-					//			.then(function(response){
-					//				let ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
-                    //
-					//				documentService.getPath(ref.split("/")[3]).then(function(val) {});
-                    //
-					//				var shortRef = ref.split("/")[3];
-					//
-					//				result.push({
-					//					name: val.data.objects[x].object.succinctProperties["cmis:name"],
-					//					contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
-					//					nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
-					//					parentNodeRef: currentFolderNodeRef,
-					//					shortRef: shortRef,
-					//					userName: response.userName,
-					//					lastChangedBy : response.firstName +" "+ response.lastName,
-					//					lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"]),
-					//					hasHistory : (val.data.objects[x].object.succinctProperties["cmis:versionLabel"] == "1.0" ? false : true)
-                    //
-					//				});
-					//			});
-					//	}
-					//
-					//
-					//
-					//	$scope.contents = result;
-					//});
-				});
-			};
-
-
-			vm.loadContents();
-
+                //cmisService.getFolderNodes(vm.currentFolderNodeRef_cmisQuery).then(function (val) {
+                //
+                //
+                //	console.log(val);
+                //
+                //	var result = [];
+                //
+                //
+                //	for (let x in val.data.objects) {
+                //
+                //		userService.getPerson(val.data.objects[x].object.succinctProperties["cmis:lastModifiedBy"])
+                //			.then(function(response){
+                //				let ref = val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"];
+                //
+                //				documentService.getPath(ref.split("/")[3]).then(function(val) {});
+                //
+                //				var shortRef = ref.split("/")[3];
+                //
+                //				result.push({
+                //					name: val.data.objects[x].object.succinctProperties["cmis:name"],
+                //					contentType: val.data.objects[x].object.succinctProperties["cmis:objectTypeId"],
+                //					nodeRef: val.data.objects[x].object.succinctProperties["alfcmis:nodeRef"],
+                //					parentNodeRef: currentFolderNodeRef,
+                //					shortRef: shortRef,
+                //					userName: response.userName,
+                //					lastChangedBy : response.firstName +" "+ response.lastName,
+                //					lastChanged : new Date(val.data.objects[x].object.succinctProperties["cmis:lastModificationDate"]),
+                //					hasHistory : (val.data.objects[x].object.succinctProperties["cmis:versionLabel"] == "1.0" ? false : true)
+                //
+                //				});
+                //			});
+                //	}
+                //
+                //
+                //
+                //	$scope.contents = result;
+                //});
+            };
 			
 			vm.loadHistory  = function(doc) {
 				$scope.history = [];
@@ -189,27 +183,19 @@
 			};
 
 			vm.createFolder = function (folderName) {
-				var currentFolderNodeRef;
-				var cmisQuery = $stateParams.projekt + "/documentLibrary/" + $stateParams.path;
 
-				cmisService.getNode(cmisQuery).then(function (val) {
-					currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                var props = {
+                    prop_cm_name: folderName,
+                    prop_cm_title: folderName,
+                    alf_destination: vm.currentFolderNodeRef
+                };
 
-					var props = {
-						prop_cm_name: folderName,
-						prop_cm_title: folderName,
-						alf_destination: currentFolderNodeRef
-					};
+                siteService.createFolder("cm:folder", props).then(function (response) {
+                    vm.loadContents();
+                });
 
-					siteService.createFolder("cm:folder", props).then(function(response){
-						vm.loadContents();
-					});
-
-
-				});
-				
-				$mdDialog.hide();
-			}
+                $mdDialog.hide();
+            }
 
 			vm.createLink = function (project) {
 
@@ -331,26 +317,57 @@
 				$mdDialog.hide();
 			}
 
-			vm.createReviewNotification = function (documentNodeRef, receiver, subject, comment) {
-
-				var s = documentNodeRef.split("/");
-				var ref = (s[3])
-
-				notificationsService.addWFNotice(authService.getUserInfo().user.userName, receiver, subject, comment, ref, "wf").then (function (val) {
+			function createNotification (userName, subject, message, link) {
+				notificationsService.addNotice(userName, subject, message, link).then (function (val) {
 					$mdDialog.hide();
 				});
+			}
 
+			function createSiteNotification (userName, site) {
 
+                siteService.loadSiteData(vm.project).then(function(result) {
+                    var site_title = result;
+                    var subject = "Du er blevet tilføjet til " + site_title;
+                    var message = "Du er blevet tilføjet til projektet " + site_title + ".";
+                    var link = "/#/projekter/" + site + "?type=Project";
+                    createNotification(userName, subject, message, link);
+                });
+            }
+
+			function createDocumentNotification (projekt, ref, fileName) {
+				var creatorFirstName = vm.currentUser.firstName;
+				var creatorLastName = vm.currentUser.lastName;
+				var creatorFullName = creatorFirstName + creatorLastName;
+				var subject = "Ny fil i " + projekt;
+				var message = "En ny fil \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
+				var link = "/#/dokument/" + ref;
+
+				//Notify all members
+				for (var member in $scope.members) {
+					var userName = $scope.members[member].authority.userName;
+
+                    if(userName == vm.currentUser.userName)
+                        continue;
+					createNotification(userName, subject, message, link);
+				}
+			}
+
+			vm.createReviewNotification = function (documentNodeRef, userName, subject, message) {
+				var creator = vm.currentUser.userName;
+				var s = documentNodeRef.split("/");
+				var ref = (s[3]);
+				var link = "/#/dokument/" + ref + "?dtype=wf" + "&from=" + creator + "&doc=" + ref;
+				createNotification(userName, subject, message, link);
 			}
 	
 
 			vm.loadMembers = function () {
 				siteService.getSiteMembers(vm.project).then(function (val) {
 					$scope.members = val;
+                    console.log("$scope.members: " + $scope.members);
 				});
 			}
 			vm.loadMembers();
-
 
 			vm.newMember = function (event) {
 				$mdDialog.show({
@@ -365,22 +382,15 @@
 
 			vm.upload = function (files) {
 
-				var cmisQuery = $stateParams.projekt  + "/documentLibrary/" + $stateParams.path;
-
-
-				cmisService.getNode(cmisQuery).then(function (val) {
-
-					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
-
-					for (var i = 0; i < files.length; i++) {
-						siteService.uploadFiles(files[i], currentFolderNodeRef).then(function(response){
-							vm.loadContents();
-							} );
-					}
-					$mdDialog.cancel();
-
-				});
-			};
+                for (var i = 0; i < files.length; i++) {
+                    siteService.uploadFiles(files[i], vm.currentFolderNodeRef).then(function (response) {
+                        vm.loadContents();
+                        var ref = response.data.nodeRef.split("/")[3];
+                        createDocumentNotification(vm.project_title, ref, response.data.fileName);
+                    });
+                }
+                $mdDialog.cancel();
+            };
 
 			vm.loadSiteRoles = function() {
 
@@ -430,8 +440,6 @@
 			
 			vm.updateRoleOnSiteMember = function(siteName, userName, role) {
 
-
-
 				// getTheValue
 				var role_int_value = translation_to_value(role);
 				var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
@@ -450,6 +458,7 @@
 
 
 				siteService.addMemberToSite(siteName, userName, role_alfresco_value).then(function(val){
+					createSiteNotification(userName, siteName);
 					vm.loadMembers();
 				});
 				$mdDialog.hide();
