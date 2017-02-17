@@ -4,7 +4,7 @@
 	<div flex="100" flex-gt-lg="100">     
 		<p>
 			<span style="font-weight: bold;">Projektleder<span><br>
-			<span style="font-weight: normal">{{ pd.site.members.pd_projectmanager.fullName }}</span>
+			<span style="font-weight: normal">{{ pd.site.members.pd_projectmanager.displayName}} - {{ pd.site.members.pd_projectmanager.email}}</span>
 			<span style="float:right; position: relative; top: -15px;">
 				<md-menu ng-controller="SiteController as vm">
 					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -29,7 +29,7 @@
 		</p>
 		<p>
 			<span style="font-weight: bold;">Projektejer<span><br>
-			<span style="font-weight: normal;">{{ pd.site.members.pd_projectowner.fullName }}</span>
+			<span style="font-weight: normal;">{{ pd.site.members.pd_projectowner.displayName }}</span>
 			<span style="float:right; position: relative; top: -15px;">
 				<md-menu ng-controller="SiteController as vm">
 					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">

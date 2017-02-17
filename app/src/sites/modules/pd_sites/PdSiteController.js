@@ -50,33 +50,35 @@ angular
             pd.site.members = {};
             siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTOWNER').then(
                 function(response) {
-                    pd.site.members.pd_projectowner = response[0];
+                    pd.site.members.pd_projectowner = response[1][0];
                 }
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTMANAGER').then(
                 function(response) {
-                    pd.site.members.pd_projectmanager = response[0];
+                    pd.site.members.pd_projectmanager = response[1][0];
                 }
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
                 function(response) {
+                    console.log("response")
                     console.log(response)
-                    pd.site.members.pd_projectgroup = response;
+                    console.log("response")
+                    pd.site.members.pd_projectgroup = response[1];
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_WORKGROUP').then(
                 function(response) {
-                    pd.site.members.pd_workgroup = response;
+                    pd.site.members.pd_workgroup = response[1];
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_STEERING_GROUP').then(
                 function(response) {
-                    pd.site.members.pd_steering_group = response;
+                    pd.site.members.pd_steering_group = response[1];
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_MONITORS').then(
                 function(response) {
-                    pd.site.members.pd_monitors = response;
+                    pd.site.members.pd_monitors = response[1];
                 }
             );
         }
