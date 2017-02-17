@@ -23,7 +23,7 @@
 		<property name="nodeService" ref="NodeService"/>
 	</bean>
 
-	<bean id="webscript.notifications.get"
+	<bean id="webscript.notifications.post"
 		  class="dk.opendesk.Notifications"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
@@ -44,6 +44,9 @@
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="permissionService" ref="PermissionService"/>
 		<property name="personService" ref="PersonService"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="siteService" ref="SiteService"/>
+
 	</bean>
 
 
@@ -83,7 +86,7 @@
 
 
 
-	<bean id="webscript.sites.get"
+	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
@@ -103,5 +106,6 @@
 		  class="dk.opendesk.webscripts.Purge" parent="webscript">
 		<property name="nodeArchiveService" ref="nodeArchiveService"/>
 	</bean>
+
 
 </beans>

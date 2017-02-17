@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -50,6 +51,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import javax.activation.MimeType;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -130,252 +132,87 @@ public class Sites extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
+        webScriptResponse.setContentEncoding("UTF-8");
+        Content c = webScriptRequest.getContent();
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
-        NodeRef nodeRef = null;
-        String storeType = params.get("STORE_TYPE");
-        String storeId = params.get("STORE_ID");
-        String nodeId = params.get("NODE_ID");
+        try {
+            JSONObject json = new JSONObject(c.getContent());
 
-        if (storeType != null && storeId != null && nodeId != null) {
-            nodeRef = new NodeRef(storeType, storeId, nodeId);
-        }
+            // Read all used parameters no matter what method is used.
+            // Those parameters that are not sent are set to an empty string
+            String method = Utils.getJSONObject(json, "PARAM_METHOD");
+            String query = Utils.getJSONObject(json, "PARAM_QUERY");
+            String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
+            String user = Utils.getJSONObject(json, "PARAM_USER");
+            String group = Utils.getJSONObject(json, "PARAM_GROUP");
+            String role = Utils.getJSONObject(json, "PARAM_ROLE");
+            String source = Utils.getJSONObject(json, "PARAM_SOURCE");
+            String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
+            String shortName = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
 
+            if(method != null) {
+                switch (method) {
+                    case "getAll":
+                        result = this.getAllSites(query);
+                        break;
 
-        String q = params.get("q");
-        String method = params.get("method");
+                    case "deleteTestSites":
+                        result = this.removeTestSites();
+                        break;
 
-        System.out.println("method");
-        System.out.println(method);
+                    case "getSitesPerUser":
+                        result = this.getAllSitesForCurrentUser();
+                        break;
 
-        if (method != null && method.equals("getAll")) {
+                    case "addUser":
+                        result = this.addUser(siteShortName, user, group);
+                        break;
 
+                    case "removeUser":
+                        result = this.removeUser(siteShortName, user, group);
+                        break;
 
-            webScriptResponse.setContentEncoding("UTF-8");
+                    case "addPermission":
+                        result = this.addPermission(siteShortName, user, role);
+                        break;
 
-            JSONArray result = this.getAllSites(q);
-            try {
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                    case "removePermission":
+                        result = this.removePermission(siteShortName, user, role);
+                        break;
 
-        } else if (method != null && method.equals("deleteTestSites")) {
+                    case "getDBID":
+                        result = this.getDBID(siteShortName);
+                        break;
 
-            webScriptResponse.setContentEncoding("UTF-8");
+                    case "addLink":
+                        result = this.addLink(source, destination);
+                        break;
 
-            this.removeTestSites();
+                    case "deleteLink":
+                        NodeRef source_n = new NodeRef("workspace://SpacesStore/" + source);
+                        NodeRef destination_n = new NodeRef("workspace://SpacesStore/" + destination);
 
-            JSONObject return_json = new JSONObject();
-            JSONArray result = new JSONArray();
+                        result = this.deleteLink(source_n, destination_n);
+                        break;
 
-            try {
-
-                return_json.put("status", "success");
-                result.add(return_json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (method != null && method.equals("getSitesPerUser")) {
-
-            JSONArray result = this.getAllSitesForCurrentUser();
-            try {
-                webScriptResponse.setContentEncoding("UTF-8");
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-         else if (method != null && method.equals("addUser")) {
-
-            String siteShortName = params.get("siteShortName");
-            String user = params.get("user");
-            String group = params.get("group");
-
-            this.addUser(siteShortName,user,group);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("result", "success");
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
-            }
-         }
-        else if (method != null && method.equals("removeUser")) {
-
-            String siteShortName = params.get("siteShortName");
-            String user = params.get("user");
-            String group = params.get("group");
-
-            this.removeUser(siteShortName,user,group);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("result", "success");
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
+                    case "createMembersPDF":
+                        result = this.createMembersPDF(shortName);
+                        break;
+                }
             }
         }
-        else if (method != null && method.equals("addPermission")) {
-
-            String siteShortName = params.get("siteShortName");
-            String user = params.get("user");
-            String role = params.get("role");
-
-            this.addPermission(siteShortName, user, role);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("result", "success");
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
-            }
+        catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+            result = Utils.getJSONError(e);
         }
-        else if (method != null && method.equals("removePermission")) {
-
-            String siteShortName = params.get("siteShortName");
-            String user = params.get("user");
-            String role = params.get("role");
-
-            this.removePermission(siteShortName, user, role);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("result", "success");
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
-            }
-        }
-        else if (method != null && method.equals("getDBID")) {
-
-            String siteShortName = params.get("siteShortName");
-
-            Long DBID = this.getDBID(siteShortName);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("DBID", DBID);
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
-            }
-        }
-        else if (method != null && method.equals("addLink")) {
-
-            String source = params.get("source");
-            String destination = params.get("destination");
-
-
-            this.addLink(source, destination);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("result", "success");
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
-            }
-        }
-        else if (method != null && method.equals("deleteLink")) {
-
-            String source = params.get("source");
-            String destination = params.get("destination");
-
-            NodeRef source_n = new NodeRef("workspace://SpacesStore/" + source);
-            NodeRef destination_n = new NodeRef("workspace://SpacesStore/" + destination);
-
-
-            this.deleteLink(source_n, destination_n);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("result", "success");
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
-            }
-        }
-        else if (method != null && method.equals("createMembersPDF")) {
-
-            String shortName = params.get("shortName");
-
-            this.createMembersPDF(shortName);
-
-            JSONArray result = new JSONArray();
-            JSONObject json = new JSONObject();
-
-            try {
-                json.put("result", "success");
-                result.add(json);
-
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException je) {
-                je.printStackTrace();
-            }
-        }
+        Utils.writeJSONArray(webScriptWriter, result);
     }
 
     private JSONArray getAllSites(String q) {
         JSONArray result = new JSONArray();
-
-        System.out.println("hvad er q" + q);
 
         //TODO : carefully choose the number of sites to return
         List<SiteInfo> sites = siteService.findSites(q, 2000);
@@ -391,7 +228,6 @@ public class Sites extends AbstractWebScript {
             JSONObject json = ConvertSiteInfoToJSON(s);
             result.add(json);
         }
-        System.out.println("RESULT" + result);
 
         return result;
         }
@@ -426,13 +262,15 @@ public class Sites extends AbstractWebScript {
                 if (!user_site_dbids.contains(dbid)) {
 
                     ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "PATH:\"/app:company_home/st:sites/*\" AND @sys\\:node-dbid:\"" + dbid +"\"");
-                    NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
-                    SiteInfo siteInfo = siteService.getSite(siteNodeRef);
+                    if(siteSearchResult.length() > 0) {
+                        NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
+                        SiteInfo siteInfo = siteService.getSite(siteNodeRef);
 
-                    if(!currentuser_sites.contains(siteInfo))
-                        currentuser_sites.add(siteInfo);
+                        if (!currentuser_sites.contains(siteInfo))
+                            currentuser_sites.add(siteInfo);
 
-                    user_site_dbids.add(dbid);
+                        user_site_dbids.add(dbid);
+                    }
                 }
             }
         }
@@ -454,7 +292,7 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
-    public void removeTestSites() {
+    public JSONArray removeTestSites() {
 
         ArrayList l = new ArrayList();
         l.add(OpenDeskModel.testsite_1);
@@ -473,9 +311,10 @@ public class Sites extends AbstractWebScript {
                   siteService.deleteSite(siteName);
               }
         }
+        return Utils.getJSONSuccess();
     }
 
-    private void addUser(String siteShortName, String user, String group) {
+    private JSONArray addUser(String siteShortName, String user, String group) {
 
         SiteInfo site = siteService.getSite(siteShortName);
 
@@ -486,9 +325,11 @@ public class Sites extends AbstractWebScript {
         String groupName = "GROUP_" + siteID + "_" + group;
 
         authorityService.addAuthority(groupName, user);
+
+        return Utils.getJSONSuccess();
     }
 
-    private void removeUser(String siteShortName, String user, String group) {
+    private JSONArray removeUser(String siteShortName, String user, String group) {
 
         SiteInfo site = siteService.getSite(siteShortName);
 
@@ -499,9 +340,11 @@ public class Sites extends AbstractWebScript {
         String groupName = "GROUP_" + siteID + "_" + group;
 
         authorityService.removeAuthority(groupName, user);
+
+        return Utils.getJSONSuccess();
     }
 
-    private Long getDBID(String siteShortName) {
+    private JSONArray getDBID(String siteShortName) {
 
         SiteInfo site = siteService.getSite(siteShortName);
 
@@ -509,10 +352,10 @@ public class Sites extends AbstractWebScript {
 
         Long siteID = (Long)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
 
-        return siteID;
+        return Utils.getJSONReturnPair("DBID", siteID.toString());
     }
 
-    private void addPermission(String siteShortName, String user, String role) {
+    private JSONArray addPermission(String siteShortName, String user, String role) {
 
         System.out.println(siteShortName);
         System.out.println(user);
@@ -521,9 +364,11 @@ public class Sites extends AbstractWebScript {
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
 
         permissionService.setPermission(ref, user, role, true);
+
+        return Utils.getJSONSuccess();
     }
 
-    private void removePermission(String siteShortName, String user, String role) {
+    private JSONArray removePermission(String siteShortName, String user, String role) {
 
         System.out.println(siteShortName);
         System.out.println(user);
@@ -532,9 +377,11 @@ public class Sites extends AbstractWebScript {
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
 
         permissionService.deletePermission(ref, user, role);
+
+        return Utils.getJSONSuccess();
     }
 
-    private void addLink(String source_project, String destinaion_project) {
+    private JSONArray addLink(String source_project, String destinaion_project) {
 
         SiteInfo source = siteService.getSite(source_project);
         SiteInfo destination = siteService.getSite(destinaion_project);
@@ -567,14 +414,20 @@ public class Sites extends AbstractWebScript {
         // for easy deletion of the links, we do a save of the nodeRefs on each side
         nodeService.setProperty(source_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF, destination_nodeRef.getChildRef());
         nodeService.setProperty(destination_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF, source_nodeRef.getChildRef());
+
+        return Utils.getJSONSuccess();
     }
 
-    private void deleteLink(NodeRef source, NodeRef destination) {
+    private JSONArray deleteLink(NodeRef source, NodeRef destination) {
         nodeService.deleteNode(source);
         nodeService.deleteNode(destination);
+
+        return Utils.getJSONSuccess();
     }
 
-    private String createMembersPDF(String shortName) {
+
+    private JSONArray createMembersPDF(String shortName) {
+
 
       SiteInfo site = siteService.getSite(shortName);
 
@@ -716,7 +569,7 @@ public class Sites extends AbstractWebScript {
 
 //        http://localhost:8080/alfresco/service/api/node/content/workspace/SpacesStore/90defc67-622f-4bd4-acb2-e20d569b16f4
 
-        return pdf.getChildRef().getId();
+        return Utils.getJSONReturnPair("Noderef", pdf.getChildRef().getId());
 
 
     }

@@ -28,6 +28,7 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 
@@ -53,90 +54,60 @@ public class Notifications extends AbstractWebScript {
         this.personService = personService;
     }
 
-
-
-
-
-
-
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
+        webScriptResponse.setContentEncoding("UTF-8");
+        Content c = webScriptRequest.getContent();
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
-        NodeRef nodeRef = null;
-        String storeType = params.get("STORE_TYPE");
-        String storeId = params.get("STORE_ID");
-        String nodeId = params.get("NODE_ID");
-        String creatorName = params.get("creator");
+        try {
+            JSONObject json = new JSONObject(c.getContent());
 
-        String documentId = params.get("document");
-        NodeRef documentNodeRef = null;
+            String userName = Utils.getJSONObject(json, "PARAM_USERNAME");
+            String method = Utils.getJSONObject(json, "PARAM_METHOD");
+            String subject = Utils.getJSONObject(json, "PARAM_SUBJECT");
+            String message = Utils.getJSONObject(json, "PARAM_MESSAGE");
+            String link = Utils.getJSONObject(json, "PARAM_LINK");
+            String nodeRefString = Utils.getJSONObject(json, "PARAM_NODE_REF");
+            NodeRef nodeRef = null;
+            if(NodeRef.isNodeRef(nodeRefString))
+                nodeRef = new NodeRef(nodeRefString);
 
-        if (storeType != null && storeId != null && nodeId != null) {
-            nodeRef = new NodeRef(storeType, storeId, nodeId);
-        }
+            if(method != null) {
+                switch (method) {
+                    case "getAll":
+                        result = this.getNotifications(userName);
+                        break;
 
-        if (storeType != null && storeId != null && documentId != null) {
-            documentNodeRef = new NodeRef(storeType, storeId, documentId);
-        }
+                    case "add":
+                        this.addNotification(userName, message, subject, link);
+                        break;
 
-        String userName = params.get("userName");
-        String method = params.get("method");
-        String subject = params.get("subject");
-        String message = params.get("message");
-        String type = params.get("type");
+                    case "remove":
+                        if (nodeRef != null && !nodeService.exists(nodeRef)) {
+                            throw new AlfrescoRuntimeException("Sorry, " + nodeRef + " doesn't exist, sucker!");
+                        } else {
 
+                            this.removeNotification(nodeRef);
+                        }
+                        break;
 
-        if (method != null && method.equals("getAll")) {
-
-            JSONArray result = this.getNotifications(userName);
-            try {
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
+                    case "setRead":
+                        if(nodeRef != null)
+                            this.setNotificationRead(nodeRef);
+                        break;
+                }
             }
         }
-
-        else if (method != null && method.equals("add")) {
-
-//
-//            System.out.println("type");
-//            System.out.println(type);
-//            System.out.println(type.contains("wf"));
-
-            if (type != null && type.contains("wf")) {
-//
-//                System.out.println("creating wf notification");
-//                System.out.println("documentNodeRef");
-//                System.out.println(documentNodeRef);
-                this.addWFNotification(userName, message, subject, creatorName, documentNodeRef, type);
-            }
-            else {
-                this.addNotification(userName, message, subject);
-            }
+        catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+            result = Utils.getJSONError(e);
         }
-
-        else if (method != null && method.equals("remove")) {
-
-            if (! nodeService.exists(nodeRef)) {
-                throw new AlfrescoRuntimeException("Sorry, " + nodeRef + " doesn't exist, sucker!");
-            }
-            else {
-
-                this.removeNotification(nodeRef);
-            }
-        }
-
-        else if (method != null && method.equals("setRead")) {
-
-            if (storeType != null && storeId != null && nodeId != null) {
-                nodeRef = new NodeRef(storeType, storeId, nodeId);
-                this.setNotificationRead(nodeRef);
-            }
-        }
+        Utils.writeJSONArray(webScriptWriter, result);
     }
-
 
     private JSONArray getNotifications(String userName) {
 
@@ -159,33 +130,17 @@ public class Notifications extends AbstractWebScript {
 
             if (!read) {
                 String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
-                String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
                 String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
-
-                String creator = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_CREATOR);
-                NodeRef document = (NodeRef) props.get(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT);
-
-
-                String documentShortNodeRef = document.toString();
-
-                if (documentShortNodeRef != null) {
-                    documentShortNodeRef = documentShortNodeRef.split("/")[3];
-                }
-                else {
-                    documentShortNodeRef = "";
-                }
-
-
+                String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
 
                 try {
                     json.put("nodeRef", child.getChildRef());
                     json.put("subject", subject);
                     json.put("message", message);
-                    json.put("document", documentShortNodeRef);
-                    json.put("creator", creator);
                     json.put("read", read);
-                    json.put("type", type);
                     json.put("created", nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
+                    if(link != null)
+                        json.put("link", link);
 
                     result.add(json);
 
@@ -215,24 +170,20 @@ public class Notifications extends AbstractWebScript {
             Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
 
             String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
-            String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
             String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
             Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
-            String creator = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_CREATOR);
-            NodeRef document = (NodeRef) props.get(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT);
+            String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
 
 
-            String documentShortNodeRef = document.toString();
-            documentShortNodeRef = documentShortNodeRef.split("/")[3];
+            //String documentShortNodeRef = document.toString();
+            //documentShortNodeRef = documentShortNodeRef.split("/")[3];
 
             try {
                 json.put("nodeRef", child.getChildRef());
                 json.put("subject", subject);
                 json.put("message", message);
-                json.put("document", documentShortNodeRef);
-                json.put("creator", creator);
+                json.put("link", link);
                 json.put("read", read);
-                json.put("type", type);
                 json.put("created", nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
 
                 result.add(json);
@@ -245,12 +196,7 @@ public class Notifications extends AbstractWebScript {
         return result;
     }
 
-
-
-
-
-
-    private Map<String, Object> addNotification(String userName, String message, String subject) {
+    private Map<String, Object> addNotification(String userName, String message, String subject, String link) {
 
         //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
 
@@ -268,65 +214,11 @@ public class Notifications extends AbstractWebScript {
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, "non-wf");
+                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_LINK, link);
 
                 nodeService.setProperties(childAssocRef.getChildRef(),contentProps);
 
                 nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
-
-        return null;
-    }
-
-    private Map<String, Object> addWFNotification(String userName, String message, String subject, String creator, NodeRef document, String type) {
-
-        NodeRef user = personService.getPerson(userName);
-//        System.out.println(user);
-
-        final ChildAssociationRef[] childAssocRef = new ChildAssociationRef[1];
-
-        AuthenticationUtil.RunAsWork<Void> runAsWork = new AuthenticationUtil.RunAsWork<Void>() {
-            @Override
-            public Void doWork() throws Exception {
-                try {
-
-                      childAssocRef[0] = nodeService.createNode(
-                            user,
-                            OpenDeskModel.PROP_NOTIFICATION_ASSOC,
-                            QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(userName)),
-                            OpenDeskModel.PROP_NOTIFICATION,
-                            null);
-
-
-//                    System.out.println(childAssocRef[0]);
-//                    System.out.println(" creator" + creator);
-
-
-                    Map<QName, Serializable> contentProps = new HashMap<QName, Serializable>();
-                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
-                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
-                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
-                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_DOCUMENT, document);
-                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_CREATOR, creator);
-                    contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, type);
-
-                    nodeService.setProperties(childAssocRef[0].getChildRef(), contentProps);
-
-                    nodeService.addAspect(childAssocRef[0].getChildRef(), ContentModel.ASPECT_HIDDEN, null);
-
-
-
-                } catch (Throwable t) {
-//                    LOGGER.severe("ERROR when removing permissions on " + nodeRef.toString());
-//                    LOGGER.severe(t.getMessage() + " caused by: "+ t.getCause().getMessage());
-//                    StringWriter stringWriter = new StringWriter();
-//                    PrintWriter printWriter = new PrintWriter(stringWriter);
-//                    t.printStackTrace(printWriter);
-//                    LOGGER.severe(stringWriter.toString());
-                }
-                return null;
-            }
-        };
-        AuthenticationUtil.runAs(runAsWork, AuthenticationUtil.getAdminUserName());
 
         return null;
     }

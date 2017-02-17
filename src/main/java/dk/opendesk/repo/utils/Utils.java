@@ -1,18 +1,24 @@
 package dk.opendesk.repo.utils;
 
+import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.i18n.MessageLookup;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.I18NUtil;
 
 
@@ -55,5 +61,64 @@ public class Utils {
         List<String> values = paramValues.stream().map(NameValuePair::getValue).collect(Collectors.toList());
         return "[" + StringUtils.join(values, ",") + "]";
     }
+
+    public static String getJSONObject(JSONObject json, String parameter) throws JSONException {
+        if (!json.has(parameter) || json.getString(parameter).length() == 0)
+        {
+            return "";
+        }
+        return json.getString(parameter);
+    }
+
+    public static NodeRef getNodeRef(JSONObject json) throws JSONException {
+        String storeType = getJSONObject(json, "PARAM_STORE_TYPE");
+        String storeId = getJSONObject(json, "PARAM_STORE_ID");
+        String nodeId = getJSONObject(json, "PARAM_NODE_ID");
+
+        if (storeType != null && storeId != null && nodeId != null) {
+            return new NodeRef(storeType, storeId, nodeId);
+        }
+        return null;
+    }
+
+    public static JSONArray getJSONSuccess () {
+        return getJSONReturnPair("status", "success");
+    }
+
+    public static JSONArray getJSONError (Exception e) {
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "failure");
+        map.put("error", e.toString());
+        return getJSONReturnArray(map);
+    }
+
+    public static JSONArray getJSONReturnPair (String key, String value) {
+        Map<String, String> map = new HashMap<>();
+        map.put(key, value);
+        return getJSONReturnArray(map);
+    }
+
+    private static JSONArray getJSONReturnArray(Map<String, String> map) {
+        JSONObject return_json = new JSONObject();
+        JSONArray result = new JSONArray();
+        try {
+            for (Map.Entry<String, String> pair : map.entrySet())
+                return_json.put(pair.getKey(), pair.getValue());
+            result.add(return_json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static void writeJSONArray (Writer writer, JSONArray result) {
+        try {
+            result.writeJSONString(writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }

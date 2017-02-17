@@ -13,10 +13,9 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.security.AuthorityService;
-import org.alfresco.service.cmr.security.AuthorityType;
-import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.json.JSONException;
@@ -27,10 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -39,6 +35,18 @@ import java.util.Set;
 public class Groups extends AbstractWebScript {
 
     final Logger logger = LoggerFactory.getLogger(Groups.class);
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    private SearchService searchService;
+
+    public void setSiteService(SiteService siteService) {
+        this.siteService = siteService;
+    }
+
+    private SiteService siteService;
 
 
     public void setNodeService(NodeService nodeService) {
@@ -70,12 +78,16 @@ public class Groups extends AbstractWebScript {
 
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
+        String shortName = params.get("shortName");
         String groupName = params.get("groupName");
         String method = params.get("method");
 
+        System.out.println(shortName);
+        System.out.println(groupName);
+
         if (method != null && method.equals("getAllMembers")) {
 
-            JSONArray result = this.getAllMembers(groupName);
+            JSONArray result = this.getAllMembers(shortName, groupName);
             try {
                 result.writeJSONString(webScriptResponse.getWriter());
             } catch (IOException e) {
@@ -85,55 +97,85 @@ public class Groups extends AbstractWebScript {
         }
     }
 
+    private long getDBID(String siteShortName) {
+
+        SiteInfo site = siteService.getSite(siteShortName);
+
+        NodeRef nodeRef = site.getNodeRef();
+
+        Long siteID = (Long)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
+
+        return siteID;
+    }
+
     private void errorMessage(Status status, int code, final String message) {
         status.setCode(code);
         status.setMessage(message);
         status.setRedirect(true);
     }
 
-    private JSONArray getAllMembers(String groupName) {
-
-
-
-        String group = "GROUP_" + groupName;
-        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.WILDCARD, group, true);
+    private JSONArray getAllMembers(String shortName, String groupName) {
 
 
 
 
-
-        // permissionService.getPermissions()
-
-
-        // du skal hente rettighed for gruppen - og returnere det i json som en værdi, samt yderligere de personer som er medlem
-
-
-        System.out.println("autoritater");
-        for (String authority : authorities) {
-            System.out.println(authority);
-//            steeringGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-
-
-
-        }
+        NodeRef siteNodeRef = siteService.getSite(shortName).getNodeRef();
 
 
         JSONArray result = new JSONArray();
-        JSONArray children = new JSONArray();
+        JSONArray members = new JSONArray();
         JSONObject json = new JSONObject();
 
-//        try {
-//            json.put("primaryParent_nodeRef", nodeService.getPrimaryParent(nodeRef).getParentRef());
-//            json.put("primaryParent_name", nodeService.getProperty(nodeService.getPrimaryParent(nodeRef).getParentRef(), ContentModel.PROP_NAME));
-//            json.put("currentNodeRef_nodeRef", nodeRef.toString());
-//            json.put("currentNodeRef_name", nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
-//            result.add(json);
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        String group = "GROUP_"  + getDBID(shortName) + "_" + groupName;
+        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
 
 
-        return null;
+
+        Set<AccessPermission> permissions = permissionService.getAllSetPermissions(siteNodeRef);
+
+        Iterator i = permissions.iterator();
+        boolean found = false;
+        String permission = "";
+
+        while (i.hasNext() && !found) {
+            AccessPermission a = (AccessPermission)i.next();
+
+            if (a.getAuthority().equals(group)) {
+                System.out.println("permission");
+                System.out.println(a.getPermission());
+                permission = a.getPermission();
+
+                try {
+                    json.put("permission",permission);
+                    result.add(json);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                found = true;
+            }
+        }
+
+        for (String authority : authorities) {
+            System.out.println(authority);
+            NodeRef person = personService.getPerson(authority);
+            String name  = (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
+            String email  = (String)nodeService.getProperty(person, ContentModel.PROP_EMAIL);
+
+            json = new JSONObject();
+
+            try {
+                json.put("displayName", name);
+                json.put("email", email);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            members.add(json);
+        }
+
+        result.add(members);
+
+        return result;
     }
 }
