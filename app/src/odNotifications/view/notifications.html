@@ -15,15 +15,11 @@
 
             <ul class="od-notifylist">
                 <li ng-repeat="notice in notifications" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
-                    <a ng-show="notice.link" ui-sref="notice.link" class="od-notifylist--item--link">
+                    <span class="od-notifylist--item--nolink">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p  class="od-notifylist--item--desc">{{ notice.message }}</p>
-                    </a>
-                    <span ng-show="!notice.link" class="od-notifylist--item--nolink">
-                        <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
-                        <p  class="od-notifylist--item--desc">{{ notice.message }}</p>
-                        <h3 class="od-notifylist--item--notice">
-                            <a href="/#/dokument/{{ notice.document }}?dtype={{notice.type}}&from={{notice.creator}}&doc={{notice.document}}">dokument</a>
+                        <h3 ng-show="notice.link" class="od-notifylist--item--notice">
+                            <a href="{{ notice.link }}">Link</a>
                         </h3>
                     </span>
 					<div class="od-notify-btns">
