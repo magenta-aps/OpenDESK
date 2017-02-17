@@ -42,6 +42,8 @@
 
 
 			//siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
+
+			//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
             
             siteService.getSiteUserRole(vm.project, authService.getUserInfo().user.userName).then(
                 function (response) {

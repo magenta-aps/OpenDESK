@@ -136,8 +136,12 @@ function GroupService(ALFRESCO_URI, $http, $q) {
 
     function successOrReject(response) {
         if (response.status && response.status !== 200) {
+
+
             return $q.reject(response);
         }
+        console.log("members: ");
+        console.log(response);
         return response.data || response;
     }
 
