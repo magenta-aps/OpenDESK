@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Purge all</shortname>
+    <description>makes it able to get info about groups</description>
+    <url>/groups</url>
+    <authentication>admin</authentication>
+    <transaction>none</transaction>
+</webscript>
