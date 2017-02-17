@@ -6,129 +6,37 @@
 			<div style="font-weight: bold;">Projektleder</div>
 			<div layout="row">
 				<div flex="80">{{ pd.site.members.pd_projectmanager.fullName }}</div>
-				<div flex="10" style="position: relative; top: -10px">
+				<div flex="20" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>info_outline</md-icon>
 						</md-button>
-						<md-menu-content width="5">
+						<md-menu-content width="5">							
 							<md-menu-item>
-								<div>Rolle:&nbsp;</div>
-							</md-menu-item>
-							<md-menu-item>
-								<div>Email:&nbsp;</div>
+								<div>Email:&nbsp;{{ mem.email }}</div>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
-				</div>
-				<div flex="10" style="position: relative; top: -10px">
-					<md-menu ng-controller="SiteController as vm">
-						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-							<md-icon md-menu-origin>dehaze</md-icon>
-						</md-button>
-						<md-menu-content width="5">
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
-									<md-icon md-menu-align-target>create</md-icon>
-									Redigér rolle
-								</md-button>
-							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_PROJECTMANAGER')">
-									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-									Fjern medlem
-								</md-button>
-							</md-menu-item>
-						</md-menu-content>
-					</md-menu>
-				</div>
+				</div>				
             </div>
-			<!--span style="font-weight: normal">{{ pd.site.members.pd_projectmanager.fullName }}</span>
-			<span style="float:right; position: relative; top: -15px;">
-				<md-menu ng-controller="SiteController as vm">
-					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-						<md-icon md-menu-origin>dehaze</md-icon>
-					</md-button>
-					<md-menu-content width="5">
-						<md-menu-item>
-							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
-								<md-icon md-menu-align-target>create</md-icon>
-								Redigér rolle
-							</md-button>
-						</md-menu-item>
-						<md-menu-item>
-							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.removeMemberDialog(vm.project, member.authority.userName)">
-								<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-								Slet
-							</md-button>
-						</md-menu-item>
-					</md-menu-content>
-				</md-menu>
-			</span-->
 		</p>
 		<p>
 			<div style="font-weight: bold;">Projektejer</div>
 			<div layout="row">
 				<div flex="80">{{ pd.site.members.pd_projectowner.fullName }}</div>
-				<div flex="10" style="position: relative; top: -10px">
+				<div flex="20" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>info_outline</md-icon>
 						</md-button>
-						<md-menu-content width="5">
+						<md-menu-content width="5">							
 							<md-menu-item>
-								<div>Rolle:&nbsp;</div>
-							</md-menu-item>
-							<md-menu-item>
-								<div>Email:&nbsp;</div>
+								<div>Email:&nbsp;{{ mem.email }}</div>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
-				</div>
-				<div flex="10" style="position: relative; top: -10px">
-					<md-menu ng-controller="SiteController as vm">
-						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-							<md-icon md-menu-origin>dehaze</md-icon>
-						</md-button>
-						<md-menu-content width="5">
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
-									<md-icon md-menu-align-target>create</md-icon>
-									Redigér rolle
-								</md-button>
-							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_PROJECTOWNER')">
-									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-									Fjern medlem
-								</md-button>
-							</md-menu-item>
-						</md-menu-content>
-					</md-menu>
-				</div>
+				</div>				
             </div>
-			<!--span style="font-weight: normal;">{{ pd.site.members.pd_projectowner.fullName }}</span>
-			<span style="float:right; position: relative; top: -15px;">
-				<md-menu ng-controller="SiteController as vm">
-					<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-						<md-icon md-menu-origin>dehaze</md-icon>
-					</md-button>
-					<md-menu-content width="5">
-						<md-menu-item>
-							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.updateMemberRoleDialog($event, member.authority)">
-								<md-icon md-menu-align-target>create</md-icon>
-								Redigér rolle
-							</md-button>
-						</md-menu-item>
-						<md-menu-item>
-							<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="vm.removeMemberDialog(vm.project, member.authority.userName)">
-								<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-								Slet
-							</md-button>
-						</md-menu-item>
-					</md-menu-content>
-				</md-menu>
-			</span-->
 		</p>
 	</div>
 	<div flex="100" flex-gt-lg="100">		
@@ -153,7 +61,7 @@
 								<div>Rolle:&nbsp;</div>
 							</md-menu-item>
 							<md-menu-item>
-								<div>Email:&nbsp;</div>
+								<div>Email:&nbsp;{{ mem.email }}</div>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
@@ -203,7 +111,7 @@
 								<div>Rolle:&nbsp;</div>
 							</md-menu-item>
 							<md-menu-item>
-								<div>Email:&nbsp;</div>
+								<div>Email:&nbsp;{{ mem.email }}</div>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
@@ -253,7 +161,7 @@
 								<div>Rolle:&nbsp;</div>
 							</md-menu-item>
 							<md-menu-item>
-								<div>Email:&nbsp;</div>
+								<div>Email:&nbsp;{{ mem.email }}</div>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
@@ -303,7 +211,7 @@
 								<div>Rolle:&nbsp;</div>
 							</md-menu-item>
 							<md-menu-item>
-								<div>Email:&nbsp;</div>
+								<div>Email:&nbsp;{{ mem.email }}</div>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
