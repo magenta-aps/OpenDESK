@@ -134,35 +134,6 @@
                                                 <md-icon md-menu-align-target>linux</md-icon>
                                                 Rediger i LOOL
                                             </md-button>
-<<<<<<< HEAD
-                                            </md-menu-item> -->
-										</md-menu-content>
-									</md-menu>
-								</td>
-							</tr>
-						</tbody>						
-					</table>
-				</md-list>
-
-				<p ng-show="contents.length === 0">
-					Denne mappe er tom
-				</p>
-				<md-divider></md-divider>
-				<div layout="row" layout-align="start center" class="btnAlign">
-					<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised md-primary" ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i> Upload dokumenter</md-button>
-					<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised" ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe</md-button>
-					<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised" ng-click="vm.newLinkDialog($event)"><i class="material-icons">link</i> Opret projektlink</md-button>
-				</div>
-			</md-card-content>											
-		</md-card>
-
-		<md-card flex-gt-sm="30" ng-if="vm.projectType === 'Project'">
-			<md-card-content>
-				<h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>
-				<md-list class="od-members">
-					<md-list-item ng-repeat="member in members">	
-						<div flex="50" flex-gt-lg="60">
-=======
                                         </md-menu-item>
 
                                         <md-menu-item>
@@ -181,14 +152,12 @@
                                             </md-button>
                                         </md-menu-item>
 
-
                                         <md-menu-item>
                                             <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                                                 Send til godkendelse
                                             </md-button>
                                         </md-menu-item>
-
 
                                     </md-menu-content>
                                 </md-menu>
@@ -202,9 +171,11 @@
                                 <i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
                                 {{content.name}}
                             </a></td>
-                            <td><a class="od-filebrowser-link"
+                            <td>
+                                <a class="od-filebrowser-link"
                                    ng-href="#!/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">{{content.lastChanged
-                                | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a></td>
+                                | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
+                            </td>
                             <td>
                                 <md-menu>
                                     <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -219,13 +190,6 @@
                                                 Slet
                                             </md-button>
                                         </md-menu-item>
-
-                                        <!-- <md-menu-item>
-                                        <md-button ng-click="">
-                                            <md-icon md-menu-align-target>create</md-icon>
-                                            Rename
-                                        </md-button>
-                                        </md-menu-item> -->
                                     </md-menu-content>
                                 </md-menu>
                             </td>
@@ -243,7 +207,6 @@
                                     <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
-
                                     <md-menu-content width="6">
                                         <md-menu-item>
                                             <md-button ng-disabled="vm.userRole === 'SiteConsumer'"
@@ -252,13 +215,6 @@
                                                 Slet
                                             </md-button>
                                         </md-menu-item>
-
-                                        <!-- <md-menu-item>
-                                        <md-button ng-click="">
-                                            <md-icon md-menu-align-target>create</md-icon>
-                                            Rename
-                                        </md-button>
-                                        </md-menu-item> -->
                                     </md-menu-content>
                                 </md-menu>
                             </td>
@@ -266,7 +222,6 @@
                         </tbody>
                     </table>
                 </md-list>
-
                 <p ng-show="contents.length === 0">
                     Denne mappe er tom
                 </p>
@@ -292,7 +247,6 @@
                 <md-list class="od-members">
                     <md-list-item ng-repeat="member in members">
                         <div flex="50" flex-gt-lg="60">
->>>>>>> feature/OD-16612
                             {{ member.authority.firstName }} {{ member.authority.lastName }}
                         </div>
                         <div flex="30">
