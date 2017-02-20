@@ -86,7 +86,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         loadSiteData: function (shortName) {
             return $http.get('/api/sites/' + shortName).then(function (response) {
-                return response.data.title;
+                return response.data;
             })
         },
         addMemberToSite: function (siteName, member, role) {

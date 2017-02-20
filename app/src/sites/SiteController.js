@@ -119,13 +119,15 @@ angular
          }
          */
         vm.loadSiteData = function () {
-            var r = siteService.loadSiteData(vm.project);
-    
-            r.then(function (result) {
-                vm.project_title = result;
-                // Compile paths for breadcrumb directive
-                vm.paths = buildBreadCrumbPath(vm.project_title);
-            });
+            siteService.loadSiteData(vm.project).then(
+                function (result) {
+                    console.log('Loading site data');
+                    console.log(result);
+                    vm.project_title = result.title;
+                    // Compile paths for breadcrumb directive
+                    vm.paths = buildBreadCrumbPath(vm.project_title);
+                }
+            );
         };
         vm.loadSiteData();
     
