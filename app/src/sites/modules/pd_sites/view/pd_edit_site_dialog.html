@@ -1,5 +1,5 @@
-<md-dialog aria-label="Opret nyt avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="submitNewPDSite()" class="pd-site-create-form" name="pdcreatesite">
+<md-dialog aria-label="Opret/redigér avanceret projekt" class="pd-create-site-diag">
+    <form ng-submit="updatePdSite()" class="pd-site-create-form" name="pdcreatesite">
         <md-toolbar>
           <div class="md-toolbar-tools">
             <h2>Opret nyt projekt med styring og følgegrupper</h2>
@@ -57,7 +57,7 @@
                                     md-items="man in searchPeople(searchTextManager)"
                                     md-item-text="man.firstName + ' ' + man.lastName"
                                     md-min-length="1"
-                                    placeholder="Projekleder">
+                                    placeholder="Projektleder">
                                 <md-item-template>
                                     <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
                                 </md-item-template>
@@ -160,7 +160,7 @@
                 Annullér
             </md-button>
             <span flex></span>
-            <input type="submit" ng-disabled="pdcreatesite.$invalid" class="md-button md-raised md-primary" value="Opret">
+            <input type="submit" ng-disabled="pdcreatesite.$invalid" class="md-button md-raised md-primary" value="Opret/Gem">
         </md-dialog-actions>
         
     </form>

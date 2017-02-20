@@ -1,19 +1,18 @@
+angular
+    .module('openDeskApp')
+    .directive('appHeader', HeaderDirective);
 
-    angular
-        .module('openDeskApp')
-        .directive('appHeader', HeaderDirective);
+function HeaderDirective() {
 
-    function HeaderDirective() {
+    function postlink(scope, elem, attr) {
+        scope.toState = scope.$root.toState.name;
+    }
 
-        function postlink(scope, elem, attr) {
-            scope.toState = scope.$root.toState.name;
-        }
-
-        return {
-            link       : postlink,
-            restrict   : 'E',
-            scope      : {},
-            templateUrl: 'app/src/header/view/header.html'
-        };
+    return {
+        link: postlink,
+        restrict: 'E',
+        scope: {},
+        templateUrl: 'app/src/header/view/header.html'
     };
+};
     

@@ -1,133 +1,106 @@
-	<div class="od-projects">
-    
-	<h1 class="od-title">Projekt: {{ vm.title }}</h1>
-	
-	<div layout="row" layout-align="space-between center">
-		<a class="md-button" style="font-size: 14px" href="#/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
-		
-		<div ng-controller="SearchController as vm" class="od-search" layout="row" style="margin-top:15px;">
-			<span flex></span>
-			<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
-					<i class="material-icons">search</i>
-					<md-autocomplete
-							required
-							md-input-name="autocomplete"
-							md-selected-item="searchQuery"
-							md-search-text="searchText"
-							md-items="r in vm.getAutoSuggestions(searchText)"
-							md-item-text="r.name"
-							md-floating-label="Søg"> 
-						<md-item-template>
-							<span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
-						</md-item-template>
-						<div ng-messages="autocompleteForm.autocomplete.$error">
-							<div ng-message="required">Dette felt skal udfyldes</div>
-						</div>
-					</md-autocomplete>
-			</form>
-		</div>
-	</div>
+<div layout="row" layout-align="space-between center">
+    <a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 
-<!-- <md-card> -->
+    <div ng-controller="SearchController as vm" class="od-search" layout="row" style="margin-top:15px;">
+        <span flex></span>
+
+        <form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
+            <i class="material-icons">search</i>
+            <md-autocomplete
+                    required
+                    md-input-name="autocomplete"
+                    md-selected-item="searchQuery"
+                    md-search-text="searchText"
+                    md-items="r in vm.getAutoSuggestions(searchText)"
+                    md-item-text="r.name"
+                    md-floating-label="Søg">
+                <md-item-template>
+                    <span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
+                </md-item-template>
+                <div ng-messages="autocompleteForm.autocomplete.$error">
+                    <div ng-message="required">Dette felt skal udfyldes</div>
+                </div>
+            </md-autocomplete>
+        </form>
+    </div>
+</div>
+
+
 <md-content layout="column" layout-padding>
 
     <breadcrumb paths="vm.paths"></breadcrumb>
-	<div layout-sm="column" layout-gt-sm="row">
-		<div flex-gt-sm="95">
-			<h1 class="md-headline">
-				{{ vm.doc.fileName }}
-			</h1>
-		</div>
-		<div flex-gt-sm="5">
-			<md-button ng-if="vm.doc.permissions.userAccess.create === true" aria-label="Overfør ny version" class="md-fab md-mini md-primary" style="z-index: 0;" ng-click="vm.uploadNewVersionDialog($event)"><md-tooltip>Overfør ny version</md-tooltip><i class="material-icons">publish</i></md-button>
-		</div>
-	</div>
+
+
+    <h1 class="md-headline">
+        {{ vm.doc.fileName }}
+    </h1>
+
     <div layout-sm="column" layout-gt-sm="row">
-        <div flex-gt-sm="66">
+        <div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
             <ng-include src="viewerTemplateUrl"></ng-include>
         </div>
+
         <div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
+        
+            <h4 ng-click="pd.showMonitorsList = !pd.showMonitorsList"
+                class="pd-group-toggle"
+                ng-class="pd.showMonitorsList ? 'open' : 'closed'"
+                layout="row">
+                <i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">Historik</span>
+                <span flex></span>
+                <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+            </h4>
+            <ul ng-show="pd.showMonitorsList">
+                <p class="transition pHeader">
+                    <span style="width: 164px;">Senest ændret</span>
+                    <span>Senest ændret af&nbsp;</span>
+                    <br>
+                </p>
+                <p class="transition pContent">
+                    <span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>
+                </p>
+            </ul>
             <dl>
-				<!--div class="expandCollapse">					
-					<ul>
-						<li>
-							<input type="checkbox" id="historyBox" checked>
-							<i class="check"></i>
-							
-							<h2><i class="material-icons header">history</i>&nbsp;Historik</h2>
-							<p class="transition pHeader">
-
-								<span style="width: 154px;">Senest ændret</span>
-								<span>Senest ændret af&nbsp;</span>
-								<br>
-							</p>
-							<p class="transition pContent">													
-								<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>										
-							</p>
-						</li>
-					</ul>
-				</div-->
-				
-				<h4 ng-click="pd.showMonitorsList = !pd.showMonitorsList"
-					class="pd-group-toggle"
-					ng-class="pd.showMonitorsList ? 'open' : 'closed'"
-					layout="row">
-					<i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">Historik</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<ul ng-show="pd.showMonitorsList">
-					<p class="transition pHeader">
-						<span style="width: 164px;">Senest ændret</span>
-						<span>Senest ændret af&nbsp;</span>
-						<br>
-					</p>
-					<p class="transition pContent">
-						<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>
-						<!--div id="{{h.nodeRef}}" layout="row" ng-repeat="h in history">
-							<div><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></div>
-						</div-->
-					</p>
-				</ul>
-
-
-
-                 <span ng-show="vm.wf" class="od-notifylist--item--nolink">
-
-
                 <dt>
-                    Review
+                    Oprettet
                 </dt>
-                     <br>
-
-                     <dd> Du er blevet bedt om at reviewe dette dokument:
-
-
-               <md-button ng-click="vm.newFolderDialog($event)">
-                   Godkend
-               </md-button>
-
-
-
-               <md-button ng-click="vm.newFolderDialog($event)">
-                   Afvis
-               </md-button>
-
-                        <!--<h3 class="od-notifylist&#45;&#45;item&#45;&#45;notice">title: {{ notice.subject }}</h3>-->
-                        <!--<h3 class="od-notifylist&#45;&#45;item&#45;&#45;notice"> message:{{ notice.message }}</h3>-->
-                        <!--<h3 class="od-notifylist&#45;&#45;item&#45;&#45;notice"> doc:-->
-                            <!--<a href="http://localhost:8000/#/dokument/{{ notice.document }}?type=wf">dokument navn</a>-->
-                        <!--</h3>-->
-                        <!--<p  class="od-notifylist&#45;&#45;item&#45;&#45;desc" ng-show="notice.desc">{{ notice.message }}</p>-->
-   </dd>
-                    </span>
-
-
-
-
+                <dd>
+                    {{ vm.doc.createdOn }}
+                </dd>
+                <dt>
+                    Oprettet af
+                </dt>
+                <dd>
+                    {{ vm.doc.createdBy }}
+                </dd>
+                <dt>
+                    Senest ændret
+                </dt>
+                <dd>
+                    {{ vm.doc.modifiedOn }}
+                </dd>
+                <dt>
+                    Senest ændret af
+                </dt>
+                <dd>
+                    {{ vm.doc.modifiedBy }}
+                </dd>
+                <ng-if ng-if="vm.wf" class="od-notifylist--item--nolink">
+                    <dt>
+                        Review
+                    </dt>
+                    <dd>
+                        Du er blevet bedt om at reviewe dette dokument:
+                        <md-button ng-click="vm.newFolderDialog($event)">
+                            Godkend
+                        </md-button>
+                        <md-button ng-click="vm.newFolderDialog($event)">
+                            Afvis
+                        </md-button>
+                    </dd>
+                </ng-if>
             </dl>
         </div>
     </div>
+
 </md-content>
-</div>
-	<!-- </md-card> -->

@@ -69,39 +69,32 @@
 					
 					<tbody>
 						<tr ng-repeat="project in vm.memberonly ? vm.sitesPerUser : vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}?type={{project.type}}">
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}?type={{project.type}}">
 								<i class="material-icons">content_paste</i>
 								{{ project.title }}
 							</a></td>
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}?type={{project.type}}">{{ project.created | openeDate }}</a></td>
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}?type={{project.type}}">{{ project.creator.fullName }}</a></td>
 							<td>
-								<md-menu>
-									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-									  <md-icon md-menu-origin>dehaze</md-icon>
-									</md-button>
-							
-									<md-menu-content width="6">
-										<md-menu-item>
-											<md-button ng-click="vm.infoSiteDialog(project)">
-												<md-icon md-menu-align-target>info_outline</md-icon>
-												Information
-											</md-button>
-										</md-menu-item>
-										<md-menu-item>											
-											<md-button ng-click="vm.renameSiteDialog($event, project.shortName, project.title, project.description)">
-												<md-icon md-menu-align-target>create</md-icon>
-												Redigér
-											</md-button>
-										</md-menu-item>
-										<md-menu-item>
-											<md-button ng-click="vm.deleteSiteDialog(project.shortName)">
-												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-												Slet
-											</md-button>
-										</md-menu-item>
-									</md-menu-content>
-								</md-menu>
+                                <md-menu>
+                                    <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                        <md-icon md-menu-origin>dehaze</md-icon>
+                                    </md-button>
+                                    <md-menu-content width="6">
+                                        <md-menu-item>
+                                            <md-button ng-click="vm.infoSiteDialog(ctrl.project)">
+                                                <md-icon md-menu-align-target>info_outline</md-icon>
+                                                Information
+                                            </md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button ng-click="vm.deleteSiteDialog(ctrl.project.shortName)">
+                                                <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+                                                Slet
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
 							</td>
 						</tr>
 					</tbody>
@@ -123,7 +116,7 @@
                             <md-button ng-click="vm.newSite($event)"><i class="material-icons">add</i> Alm. Projekt</md-button>
                         </md-menu-item>
                         <md-menu-item>
-                            <md-button ng-controller="PdSiteController as pd" ng-click="pd.newPDSite($event)"><i class="material-icons">add</i> Projekt m. styring</md-button>
+                            <md-button ng-controller="PdSiteController as pd" ng-click="pd.editPdSite($event)"><i class="material-icons">add</i> Projekt m. styring</md-button>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>

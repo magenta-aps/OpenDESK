@@ -30,11 +30,11 @@ function GroupController($scope, $mdDialog, groupService, $stateParams, $transla
     function loadList() {
         vm.groups.length = [];
         if (vm.groupType.value = 'ALL')
-        groupService.listGroupsByType(vm.groupType.value).then(function (response) {
-            vm.groups = response.data;
-        }, function (error) {
-            console.log(error);
-        });
+            groupService.listGroupsByType(vm.groupType.value).then(function (response) {
+                vm.groups = response.data;
+            }, function (error) {
+                console.log(error);
+            });
     }
 
     function initGroupTypeFilter() {

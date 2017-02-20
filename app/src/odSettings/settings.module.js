@@ -1,1 +1,1 @@
-angular.module('openDeskApp.settings', [ 'ngMaterial' ]);
+angular.module('openDeskApp.settings', ['ngMaterial']);

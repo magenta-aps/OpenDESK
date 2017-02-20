@@ -1,1 +1,1 @@
-angular.module('openDeskApp.common.directives', [ 'ngMaterial', 'pascalprecht.translate']);
+angular.module('openDeskApp.common.directives', ['ngMaterial', 'pascalprecht.translate']);

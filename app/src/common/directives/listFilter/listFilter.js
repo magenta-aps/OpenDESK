@@ -6,11 +6,11 @@ function ListFilterDirective($timeout) {
 
     function postlink(scope, elem, attrs) {
 
-        scope.updateFilter = function(index) {
+        scope.updateFilter = function (index) {
             scope.choice = scope.list[index];
 
             // Timeout angularfix to get scope to update properly
-            $timeout(function() {
+            $timeout(function () {
                 return scope.finished();
             }, 10);
         }
@@ -33,7 +33,7 @@ function ColumnFilterDirective() {
 
     function postlink(scope, elem, attr) {
         var arrayCb = [];
-        scope.selectCheckbox = function(item) {
+        scope.selectCheckbox = function (item) {
             var i = arrayCb.indexOf(item);
             if (i > -1) {
                 arrayCb.splice(i, 1);

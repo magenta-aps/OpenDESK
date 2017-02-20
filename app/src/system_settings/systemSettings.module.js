@@ -1,8 +1,8 @@
 angular
-        .module('openDeskApp.systemsettings', [ 'ngMaterial', 'pascalprecht.translate'])
-        .config(config);
+    .module('openDeskApp.systemsettings', ['ngMaterial', 'pascalprecht.translate'])
+    .config(config);
 
-function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES){
+function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) {
     systemSettingsPagesServiceProvider.addPage('Skabeloner', 'administration.systemsettings.templateList');
     systemSettingsPagesServiceProvider.addPage('Notifikationer', 'administration.systemsettings.notifications');
 

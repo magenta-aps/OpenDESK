@@ -1,6 +1,6 @@
 <div layout class="admin_sub_menu">
-    <md-card flex="20" >
-        <md-card-content layout >
+    <md-card flex="20">
+        <md-card-content layout>
             <md-list>
                 <md-subheader class="md-no-sticky">{{ 'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}</md-subheader>
                 <md-list-item ng-repeat="sysSetPage in vm.pages" ui-sref="{{sysSetPage.sref}}" ui-sref-active="active">
@@ -9,7 +9,7 @@
                 </md-list-item>
             </md-list>
         </md-card-content>
-    </md-card> 
+    </md-card>
 
     <div flex="grow" ui-view="systemsetting-view"></div>
 </div>

@@ -3,23 +3,22 @@
 angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteController', PdSiteController);
-
+    
     function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams, notificationsService, authService) {
 
     
+        var membersLoaded = false;
         var pd = this;
-        pd.newPDSite = newPDSite;
-        pd.editPDSite = editPDSite;
+        pd.editPdSite = editPdSite;
         pd.currentUser = authService.getUserInfo().user.userName;
         
-        var membersLoaded = false;
         pd.showProjectMembers = showProjectMembers;
         pd.loadProjectMembers = loadProjectMembers;
 		pd.removeMemberDialog = removeMemberDialog;
 		pd.removeMemberFromSite = removeMemberFromSite;
 		pd.updateMemberRoleDialog = updateMemberRoleDialog;
 		pd.updateRoleOnSiteMember = updateRoleOnSiteMember;
-		
+        
         
         function loadProjectMembers(projectShortname, memberType) {
             pd.projectMembers = [];
@@ -27,6 +26,7 @@ angular
                 pd.projectMembers = val;
             });
         }
+        
         
         function showProjectMembers(selected, projectShortname, memberType) {
             if (selected && !membersLoaded) {
@@ -80,27 +80,20 @@ angular
         }
         
         
-        function newPDSite(ev) {
+        function editPdSite(ev, site) {
             $mdDialog.show({
-                controller: PdSiteCreateController,
-                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_create_site_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true
-            });
-        }
-        
-        
-        function editPDSite(ev) {
-            $mdDialog.show({
-                controller: PdSiteGroupEditController,
-                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
+                controller: PdSiteEditController,
+                locals: {
+                    project: site
+                },
+                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_site_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
         }
 		
+        
 		function updateMemberRoleDialog(event, user) {
 			vm.currentDialogUser = user.fullName;				
 			$mdDialog.show({
@@ -113,6 +106,7 @@ angular
 			});
 		}
 		
+        
 		function updateRoleOnSiteMember(siteName, userName, role) {
 
 			var role_int_value = translation_to_value(role);
@@ -124,20 +118,21 @@ angular
 			$mdDialog.hide();
 		};
 		
+        
 		function removeMemberDialog(member, group) {
-		   var confirm = $mdDialog.confirm()
-				 .title('Slette dette medlem?')
-				 .textContent('')
-				 .ariaLabel('Slet medlem')
-				 .targetEvent(event)
-				 .ok('Slet')
-				 .cancel('Nej, tak');
-
-		   $mdDialog.show(confirm).then(function() {
-			 removeMemberFromSite(member, group);
-		   });
+            var confirm = $mdDialog.confirm()
+                .title('Slet dette medlem?')
+                .textContent('')
+                .ariaLabel('Slet medlem')
+                .targetEvent(event)
+                .ok('Slet')
+                .cancel('Nej, tak');
+            $mdDialog.show(confirm).then(function() {
+                removeMemberFromSite(member, group);
+            });
 		};
 
+        
 		function removeMemberFromSite(member, group) {
 			siteService.removeUser(pd.site.shortName, member.shortName, group).then(function(val){
 				getProjectMembers();
@@ -145,40 +140,63 @@ angular
 			$mdDialog.hide();
 		};
        
-        
-        function PdSiteCreateController($scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
+       
+        function PdSiteEditController(project, $scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
             
+            
+            var isEditMode = false;
             var availProjectOwners = [];
             $scope.newSite = {};
             $scope.availOrgs = [];
+            $scope.projektGruppe = [];
+            $scope.styreGruppe = [];
+            $scope.arbejdsGruppe = [];
+            $scope.folgeGruppe = [];
+            
+            // If project data is available, use edit mode
+            if (project) {
+                pd.site = project;
+                isEditMode = true;
+                getProjectMembers();
+                console.log('project info:');
+                console.log(project);
+                $scope.newSite = {
+                    siteName: pd.site.title,
+                    desc: pd.site.description,
+                    owner: pd.site.members.pd_projectowner,
+                    sbsys: '',
+                    center_id: pd.site.center_id,
+                    manager: pd.site.members.pd_projectmanager
+                };
+                $scope.projektGruppe = pd.site.members.pd_projectgroup;
+                $scope.styreGruppe = pd.site.members.pd_steering_group;
+                $scope.arbejdsGruppe = pd.site.members.pd_workgroup;
+                $scope.folgeGruppe = pd.site.members.pd_monitors;
+            }
             
             $scope.selectedProjGrpItem = null;
             $scope.srchprjgrptxt = null;
-            $scope.projektGruppe = [];
-            
             $scope.selectedStyreGrpItem = null;
             $scope.srchstrgrptxt = null;
-            $scope.styreGruppe = [];
-            
             $scope.selectedArbejdsGrpItem = null;
             $scope.srchrbjdgrptxt = null;
-            $scope.arbejdsGruppe = [];
-            
             $scope.selectedFolgeGrpItem = null;
             $scope.srchflggrptxt = null;
-            $scope.folgeGruppe = [];
             
             $scope.cancel = cancel;
             $scope.searchProjectOwners = searchProjectOwners;
             $scope.searchPeople = searchPeople;
-            $scope.submitNewPDSite = submitNewPDSite;
+            $scope.updatePdSite = updatePdSite;
+            
             
             getProjectOwners();
             getAvailOrgs();
             
+            
             function cancel() {
                 $mdDialog.cancel();
             }
+            
             
             function getProjectOwners() {
                 pd_siteService.getAllManagers().then(
@@ -194,10 +212,12 @@ angular
                 );
             }
             
+            
             function searchProjectOwners(query) {
                 var hitList = $filter('filter')(availProjectOwners, { fullName: query });
                 return hitList;
             }
+            
             
             function searchPeople(query) {
                 console.log('searchPeople controller');
@@ -205,6 +225,7 @@ angular
                     return siteService.getAllUsers(query);
                 }
             }
+            
             
             function getAvailOrgs() {
                 pd_siteService.getAllOrganizationalCenters().then(
@@ -214,6 +235,7 @@ angular
                 );
             }
 
+            
             function createSiteNotification (siteName, userName, link) {
                     if(userName == pd.currentUser)
                         return;
@@ -225,7 +247,8 @@ angular
                     });
             }
             
-            function submitNewPDSite() {
+            
+            function updatePdSite() {
                 console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + $scope.newSite.manager.userName);
                 pd_siteService.createPDSite(
                     $scope.newSite.siteName,
@@ -241,7 +264,7 @@ angular
 
                             var siteShortName = response.data[0].shortName;
                             var siteName = $scope.newSite.siteName;
-                            var link = "/#/projekter/" + siteShortName  + "?type=PD-Project";
+                            var link = "/#!/projekter/" + siteShortName  + "?type=PD-Project";
                             var userName;
                             createSiteNotification(siteName, $scope.newSite.owner.shortName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);
@@ -431,8 +454,6 @@ angular
 
             function updateRoleOnSiteMember(siteName, userName, role) {
 
-
-
                 // getTheValue
                 var role_int_value = translation_to_value(role);
                 var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
@@ -445,5 +466,4 @@ angular
 
         }
         
-
     }

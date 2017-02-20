@@ -1,7 +1,6 @@
-
 angular
-        .module('openDeskApp')
-        .controller('AuthoritySelectorController', AuthoritySelectorController);
+    .module('openDeskApp')
+    .controller('AuthoritySelectorController', AuthoritySelectorController);
 
 function AuthoritySelectorController(userService) {
     var vm = this;
@@ -9,9 +8,9 @@ function AuthoritySelectorController(userService) {
     vm.querySearch = querySearch;
     vm.selectedItemChange = selectedItemChange;
     loadAuthorities();
-    
+
     function loadAuthorities() {
-        return userService.getAuthorities().then(function(response) {
+        return userService.getAuthorities().then(function (response) {
             vm.authorities = response;
         });
     }

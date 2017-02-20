@@ -1,20 +1,25 @@
 'use strict';
 
 angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+    
     var restBaseUrl = '/alfresco/s/api/';
-
+    
     return {
-
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
             })
         },
         getSiteUserRole: function (siteShortName, userName) {
-            https://frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx/memberships/flemming
-            return $http.get('/api/sites/' + siteShortName + '/memberships/' + userName ).then(function (response) {
-                return response.data.role;
-            }) 
+            //https:frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx/memberships/flemming
+            return $http.get('/api/sites/' + siteShortName + '/memberships/' + userName ).then(
+                function (response) {
+                    return response.data.role;
+                }, function (err) {
+                    // If user isn't registered as a member, grant siteConsumer role
+                    return 'siteConsumer';
+                }
+            ) 
         },
         getSites: function () {
             return $http.post("/alfresco/service/sites", { PARAM_METHOD : "getAll" }).then(function(response) {
@@ -312,9 +317,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data
             });
         }
-
-
-
 
     }
 });

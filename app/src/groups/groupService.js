@@ -42,7 +42,7 @@ function GroupService(ALFRESCO_URI, $http, $q) {
             return listAllSystemGroups();
         else
             return $http.get(ALFRESCO_URI.serviceApiProxy + 'groups/list/' + type, params)
-            .then(successOrReject);
+                .then(successOrReject);
     }
 
     /**

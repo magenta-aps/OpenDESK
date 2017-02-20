@@ -1,58 +1,61 @@
 <div class="od-projects">
-<md-card flex="grow">
-    <md-card-content>
-        <h2 class="od-title-icon"><i class="material-icons">content_copy</i>Administrér Projektskabeloner</h2>						
-				<div class="repeat-table">
-					<div class="repeat-header" layout="row">
-						<div layout="row" flex="100">
-							<div class="r" flex>
-								<div layout="row" layout-align="space-between center">
-									<span>Skabelon navn</span>
-								</div>
-							</div>
-							<div class="r" flex="20">
-								<div layout="row" layout-align="space-between center">
-									<span>Parametre</span>
-								</div>
-							</div>
-							<div class="r" flex="20">
-								<div layout="row" layout-align="space-between center">
-									<span>Dokumenter</span>
-								</div>
-							</div>
-							<div class="r" flex="30">
-								<div layout="row" layout-align="space-between center">
-									<span></span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<md-virtual-repeat-container flex-height style="border-bottom:0">
-						<div md-virtual-repeat="template in vm.templates" class="repeat-item" layout="row">
-							<a class="r-rowlink" ui-sref="{{vm.templateUisref}}(vm.tplNodeRefObj(template))" layout="row" flex="100">
-								<span class="r" flex>{{template.properties['cm:name'].displayValue}}</span>
+    <md-card flex="grow">
+        <md-card-content>
+            <h2 class="od-title-icon"><i class="material-icons">content_copy</i>Administrér Projektskabeloner</h2>
+
+            <div class="repeat-table">
+                <div class="repeat-header" layout="row">
+                    <div layout="row" flex="100">
+                        <div class="r" flex>
+                            <div layout="row" layout-align="space-between center">
+                                <span>Skabelon navn</span>
+                            </div>
+                        </div>
+                        <div class="r" flex="20">
+                            <div layout="row" layout-align="space-between center">
+                                <span>Parametre</span>
+                            </div>
+                        </div>
+                        <div class="r" flex="20">
+                            <div layout="row" layout-align="space-between center">
+                                <span>Dokumenter</span>
+                            </div>
+                        </div>
+                        <div class="r" flex="30">
+                            <div layout="row" layout-align="space-between center">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <md-virtual-repeat-container flex-height style="border-bottom:0">
+                    <div md-virtual-repeat="template in vm.templates" class="repeat-item" layout="row">
+                        <a class="r-rowlink" ui-sref="{{vm.templateUisref}}(vm.tplNodeRefObj(template))" layout="row"
+                           flex="100">
+                            <span class="r" flex>{{template.properties['cm:name'].displayValue}}</span>
 								<span class="r muted" flex="20">
 									<div ng-repeat="prop in template.prefilledProps">
-										{{vm.getPrefilledPropName(prop)}}
-									</div>
+                                        {{vm.getPrefilledPropName(prop)}}
+                                    </div>
 								</span>
 								<span class="r muted" flex="20">
 									<div ng-repeat="doc in template.templateDocs">
-										{{doc.title}}
-									</div>
+                                        {{doc.title}}
+                                    </div>
 								</span>
 								<span class="r muted" flex="30">
 									<div ng-repeat="workflow in template.properties['ct:workflows'].value">
-										{{vm.getWorkflowDisplayName(workflow)}}
-									</div>
+                                        {{vm.getWorkflowDisplayName(workflow)}}
+                                    </div>
 								</span>
-							</a>
-						</div>
-					</md-virtual-repeat-container>
-				</div>
-        <div layout="row" layout-align="start center" class="btnAlign">
-			<md-button class="md-primary md-raised" ng-click="vm.newTemplate()"><i class="material-icons">add</i> Opret ny skabelon&nbsp;&nbsp;</md-button>			
-		</div>
-    </md-card-content>
-</md-card>
+                        </a>
+                    </div>
+                </md-virtual-repeat-container>
+            </div>
+            <div layout="row" layout-align="start center" class="btnAlign">
+                <md-button class="md-primary md-raised" ng-click="vm.newTemplate()"><i class="material-icons">add</i>
+                    Opret ny skabelon&nbsp;&nbsp;</md-button>
+            </div>
+        </md-card-content>
+    </md-card>
 </div>

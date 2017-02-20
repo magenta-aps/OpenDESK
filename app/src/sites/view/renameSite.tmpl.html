@@ -1,35 +1,37 @@
 <md-dialog style="width:360px">
-	<form name="renameFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogShortName, vm.currentDialogTitle, vm.currentDialogDescription);">
-		<div>
-			<md-toolbar>
-				<div class="md-toolbar-tools">
-					<h2>Redigér projekt</h2>
-				</div>
-			</md-toolbar>
-			
-			<md-content class="md-padding">
-				<div layout-margin>
-				  <md-input-container>
-					<label>Navn</label>
-					<input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle" md-autofocus>
-					<div ng-messages="renameFolderForm.newSiteName.$error">
-						<div ng-message="required">Dette felt skal udfyldes</div>
-					</div>
-				  </md-input-container>
-				</div>
-			
-				<div layout-margin>
-					<md-input-container class="md-block">
-					  <label>Beskrivelse</label>
-					  <textarea ng-model="vm.currentDialogDescription" md-maxlength="250"></textarea>
-					</md-input-container>
-				</div>
-			</md-content>
+    <form name="renameFolderForm"
+          ng-submit="vm.updateSiteName(vm.currentDialogShortName, vm.currentDialogTitle, vm.currentDialogDescription);">
+        <div>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Redigér projekt</h2>
+                </div>
+            </md-toolbar>
 
-			<md-dialog-actions>
-				<md-button ng-click="vm.cancel()">Annullér</md-button>
-				<md-button type="submit" class="md-primary">Opdatér</md-button>
-			</md-dialog-actions>
-		</div>
-	</form>
+            <md-content class="md-padding">
+                <div layout-margin>
+                    <md-input-container>
+                        <label>Navn</label>
+                        <input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle" md-autofocus>
+
+                        <div ng-messages="renameFolderForm.newSiteName.$error">
+                            <div ng-message="required">Dette felt skal udfyldes</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-margin>
+                    <md-input-container class="md-block">
+                        <label>Beskrivelse</label>
+                        <textarea ng-model="vm.currentDialogDescription" md-maxlength="250"></textarea>
+                    </md-input-container>
+                </div>
+            </md-content>
+
+            <md-dialog-actions>
+                <md-button ng-click="vm.cancel()">Annullér</md-button>
+                <md-button type="submit" class="md-primary">Opdatér</md-button>
+            </md-dialog-actions>
+        </div>
+    </form>
 </md-dialog>

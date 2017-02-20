@@ -1,0 +1,34 @@
+/*
+ * Search styles
+ */
+
+.lool__header {
+  margin: 8px 16px;
+  padding: 0;
+  font-size: 1.3em;
+}
+
+.lool__item__title {
+  font-weight: 400;
+  margin: 0;
+  font-size: 1.1em;
+}
+
+a.lool__item__link:link,
+a.lool__item__link:visited {
+  color: rgb(30, 136, 229);
+}
+
+.lool__item__title .muted {
+  font-size: 0.8em;
+}
+
+.iframe_container {
+  height: 50em;
+}
+
+/////////////////////
+
+header {
+  height: 50px;
+}
