@@ -37,8 +37,7 @@ angular
         vm.projectType = $location.search().type;
         vm.currentUser = authService.getUserInfo().user;
     
-        siteService.getAllUsers("a");
-            
+        //siteService.getAllUsers("a");
         //siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
 		//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
         
@@ -160,12 +159,14 @@ angular
             $mdDialog.hide();
         }
     
+    
         vm.createLink = function (project) {
     
             siteService.createLink(vm.project, project).then(function () {
                 $mdDialog.hide();
             });
         }
+    
     
         vm.deleteLink = function (source, destination) {
     
@@ -185,6 +186,8 @@ angular
                 clickOutsideToClose: true
             });
         };
+        
+        
         vm.newLinkDialog = function (event) {
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/newLink.tmpl.html',
@@ -195,6 +198,7 @@ angular
                 clickOutsideToClose: true
             });
         };
+    
     
         vm.uploadDocumentsDialog = function (event) {
             $mdDialog.show({
@@ -207,6 +211,7 @@ angular
             });
         };
     
+    
         vm.uploadNewVersionDialog = function (event) {
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/uploadNewVersion.tmpl.html',
@@ -217,6 +222,7 @@ angular
                 clickOutsideToClose: true
             });
         };
+    
     
         vm.reviewDocumentsDialog = function (event, nodeRef) {
     
@@ -396,8 +402,9 @@ angular
             });
         };
     
-        vm.updateRoleOnSiteMember = function (siteName, userName, role) {
     
+        vm.updateRoleOnSiteMember = function (siteName, userName, role) {
+            console.log('updatemember:');
             // getTheValue
             var role_int_value = translation_to_value(role);
             var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
@@ -407,6 +414,7 @@ angular
             });
             $mdDialog.hide();
         };
+        
     
         vm.addMemberToSite = function (siteName, userName, role) {
     
@@ -422,6 +430,7 @@ angular
             $mdDialog.hide();
         };
     
+    
         vm.deleteMemberDialog = function (siteName, userName) {
             var confirm = $mdDialog.confirm()
                 .title('Slette dette medlem?')
@@ -436,6 +445,7 @@ angular
             });
         };
     
+    
         vm.removeMemberFromSite = function (siteName, userName) {
             siteService.removeMemberFromSite(siteName, userName).then(function (val) {
                 vm.loadMembers();
@@ -444,17 +454,21 @@ angular
             $mdDialog.hide();
         };
     
+    
         vm.getAllUsers = function (filter) {
             return siteService.getAllUsers(filter);
         };
+    
     
         vm.previewDocument = function previewDocument(nodeRef) {
             documentPreviewService.previewDocument(nodeRef);
         };
     
+    
         vm.downloadDocument = function downloadDocument(nodeRef, name) {
             alfrescoDownloadService.downloadFile(nodeRef, name);
         };
+    
     
         vm.moveFileDialog = function moveFileDialog(event, nodeRef, parentNodeRef) {
             vm.source = [];
@@ -475,6 +489,7 @@ angular
             });
         };
     
+    
         vm.copyFileDialog = function copyFileDialog(event, nodeRef, parentNodeRef) {
             vm.source = [];
             vm.source.push(nodeRef);
@@ -493,6 +508,7 @@ angular
                 console.log('You cancelled a copy action');
             });
         };
+    
     
         vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
             siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then(function (response) {
@@ -514,6 +530,7 @@ angular
                 return response;
             });
         };
+    
     
         vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
             siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then(function (response) {
@@ -551,6 +568,7 @@ angular
             });
         };
     
+    
         vm.renameDocument = function renameDocument(docNodeRef, newName) {
             var props = {
                 prop_cm_name: newName
@@ -562,6 +580,7 @@ angular
     
             $mdDialog.hide();
         };
+    
     
         vm.getSearchresults = function getSearchReslts(term) {
             return searchService.getSearchResults(term).then(function (val) {
@@ -579,6 +598,7 @@ angular
             });
         };
     
+    
         vm.getAutoSuggestions = function getAutoSuggestions(term) {
             return searchService.getSearchSuggestions(term).then(function (val) {
     
@@ -590,6 +610,7 @@ angular
                 }
             });
         };
+    
     
         vm.gotoPath = function (nodeRef) {
     
@@ -607,6 +628,7 @@ angular
     
             });
         };
+    
     
         //Goes to the libreOffice online edit page
         vm.goToLOEditPage = function (nodeRef) {
@@ -638,256 +660,6 @@ angular
             $scope.roles_translated.push ("Kan skrive");
 
         }
-    
-   
-        vm.loadSiteRoles();
-
-        vm.currentDialogUser = '';
-
-        vm.updateMemberRoleDialog = function(event, user) {
-            vm.currentDialogUser = user.fullName;				
-            $mdDialog.show({
-                templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
-                parent: angular.element(document.body),
-                scope: $scope,
-                preserveScope: true,
-                targetEvent: event,
-                clickOutsideToClose: true
-            });
-        };
-                
-        vm.updateRoleOnSiteMember = function(siteName, userName, role) {
-
-            // getTheValue
-            var role_int_value = translation_to_value(role);
-            var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
-
-            siteService.updateRoleOnSiteMember(siteName, userName, role_alfresco_value ).then(function(val){
-                vm.loadMembers();
-            });
-            $mdDialog.hide();
-        };
-
-        vm.addMemberToSite = function(siteName, userName, role) {
-
-            // getTheValue
-            var role_int_value = translation_to_value(role);
-            var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
-
-
-            siteService.addMemberToSite(siteName, userName, role_alfresco_value).then(function(val){
-                createSiteNotification(userName, siteName);
-                vm.loadMembers();
-            });
-            $mdDialog.hide();
-        };
-        
-        vm.deleteMemberDialog = function (ev, siteName, userName) {
-           var confirm = $mdDialog.confirm()
-                 .title('Slette dette medlem?')
-                 .textContent('')
-                 .ariaLabel('Slet medlem')
-                 .targetEvent(ev)
-                 .ok('Slet')
-                 .cancel('Nej, tak');
-
-           $mdDialog.show(confirm).then(function() {
-             vm.removeMemberFromSite(siteName, userName);
-           });
-        };
-
-        vm.removeMemberFromSite = function(siteName, userName) {
-            siteService.removeMemberFromSite(siteName, userName).then(function(val){
-                vm.loadMembers();
-            });
-            
-            $mdDialog.hide();
-        };
-
-        vm.getAllUsers = function(filter) {
-            return siteService.getAllUsers(filter);
-        };
-
-        vm.previewDocument = function previewDocument(nodeRef){
-            documentPreviewService.previewDocument(nodeRef);
-        };
-
-        vm.downloadDocument = function downloadDocument(nodeRef, name){
-            alfrescoDownloadService.downloadFile(nodeRef, name);
-        };
-        
-        vm.moveFileDialog = function moveFileDialog(event, nodeRef, parentNodeRef) {
-            vm.source = [];
-            vm.source.push(nodeRef);
-            vm.parentId = parentNodeRef;
-            
-            $mdDialog.show({
-                templateUrl: 'app/src/sites/view/moveNodeRefs.tmpl.html',
-                parent: angular.element(document.body),
-                scope: $scope,
-                preserveScope: true,
-                targetEvent: event,
-                clickOutsideToClose: true
-            }).then(function(){
-                console.log('Dispatching move action');
-            }, function(){
-                console.log('You cancelled a move action');
-            });
-        };
-        
-        vm.copyFileDialog = function copyFileDialog(event, nodeRef, parentNodeRef) {
-            vm.source = [];
-            vm.source.push(nodeRef);
-            vm.parentId = parentNodeRef;
-            
-            $mdDialog.show({
-                templateUrl: 'app/src/sites/view/copyNodeRefs.tmpl.html',
-                parent: angular.element(document.body),
-                scope: $scope,
-                preserveScope: true,
-                targetEvent: event,
-                clickOutsideToClose: true
-            }).then(function(){
-                console.log('Dispatching copy action');
-            }, function(){
-                console.log('You cancelled a copy action');
-            });
-        };
-
-        
-        vm.moveNodeRefs = function moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-            siteService.moveNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {									
-                $mdDialog.hide();
-                
-                if (response.data.results[0].fileExist) {
-                    
-                    $mdDialog.show(
-                      $mdDialog.alert()
-                        .parent(angular.element(document.body))
-                        .clickOutsideToClose(true)
-                        .title('Der er allerede en fil med samme navn i mappen du valgte.')
-                        .ariaLabel('Eksisterer allerede')
-                        .ok('Ok')
-                    );
-                } else {
-                    vm.loadContents();
-                }
-                return response;
-
-            });
-        };
-
-        
-        vm.copyNodeRefs = function copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef) {
-            siteService.copyNodeRefs(sourceNodeRefs, destNodeRef, parentNodeRef).then (function (response) {
-                $mdDialog.hide();
-
-                if (response.data.results[0].fileExist) {
-
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                            .parent(angular.element(document.body))
-                            .clickOutsideToClose(true)
-                            .title('Der er allerede en fil med samme navn i mappen du valgte.')
-                            .ariaLabel('Eksisterer allerede')
-                            .ok('Ok')
-                    );
-                } else {
-                    vm.loadContents();
-                }
-                return response;
-
-            });
-        };
-
-        
-        vm.renameDocumentDialog = function(event, docNodeRef) {
-            var confirm = $mdDialog.prompt()
-            .title('Hvordan vil du navngive dette?')
-            .placeholder('Navn')
-            .ariaLabel('Navn')
-            .targetEvent(event)
-            .ok('Omdøb')
-            .cancel('Annullér');
-            $mdDialog.show(confirm).then(function(result) {
-                    var newName = result;					
-                    vm.renameDocument(docNodeRef, newName);
-            
-            });
-            
-        };
-        
-        vm.renameDocument = function renameDocument(docNodeRef, newName) {
-            var props = {
-                prop_cm_name: newName
-            };
-            
-            siteService.updateNode(docNodeRef, props).then(function(val){
-                vm.loadContents();
-            });
-            
-            $mdDialog.hide();
-        };
-
-        vm.getSearchresults = function getSearchReslts(term){
-            return searchService.getSearchResults(term).then(function (val) {
-
-                if (val !== undefined) {
-
-                    $rootScope.searchResults = [];
-                    $rootScope.searchResults = val.data.items;
-
-                    window.location.href = "#/search";
-
-                } else {
-                    return [];
-                }
-            });
-        };
-
-        vm.getAutoSuggestions = function getAutoSuggestions(term) {
-            return searchService.getSearchSuggestions(term).then(function (val) {
-
-                if (val !== undefined) {
-                    return val;
-                }
-                else {
-                    return [];
-                }
-            });
-        };
-
-
-
-        // vm.test = function test() {
-        //var nodeRef = "workspace://SpacesStore/7cb5adc4-f18c-42d0-8225-6a00d6c31e68";
-        // 	var newName = "gufsssssfy.jpg"
-        //
-        // 	vm.renameDocument(nodeRef, newName);
-        // }
-
-
-        //vm.moveNodeRefs([nodeRef], "workspace://SpacesStore/812e33b2-6716-4bd7-a8f1-a792e7e7eef7", "workspace://SpacesStore/d41769e3-704c-4dfd-825b-7b7dbf847bef").then (function (response){
-        //	console.log(response.data.overallSuccess);
-        //	console.log(response.data.results[0].fileExist);
-        //});
-
-        vm.gotoPath = function (nodeRef) {
-
-            var ref = nodeRef;
-
-            documentService.getPath(ref.split("/")[3]).then(function(val) {
-
-                $scope.selectedDocumentPath = val.container;
-                // var project = val.site;
-                // var container = val.container;
-                // var path = val.path;
-
-                var path = ref.replace("workspace://SpacesStore/", "");
-                $window.location.href = "/#/dokument/" + path;
-
-            });
-        };
 
 
     }

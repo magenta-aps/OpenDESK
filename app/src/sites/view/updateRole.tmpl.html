@@ -1,18 +1,12 @@
 <md-dialog aria-label="Edit member role" ng-cloak>
 
-	<form name="editRoleForm" ng-submit="vm.updateRoleOnSiteMember(vm.project, vm.currentDialogUser.userName, newMemberRole);">
+	<form name="editRoleForm" ng-submit="vm.updateRoleOnSiteMember(vm.project, vm.currentDialogUser, newMemberRole);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
 				<h2>Redigér {{vm.currentDialogUser}}'s rolle </h2>
 			</div>
 		</md-toolbar>
-
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>Redigér {{vm.currentDialogUser.firstName}}'s rolle </h2>
-            </div>
-        </md-toolbar>
 
         <md-dialog-content class="md-padding">
             <div>
@@ -30,7 +24,7 @@
 
         <md-dialog-actions>
             <md-button ng-click="vm.cancel()">Annullér</md-button>
-            <md-button ng-click="vm.loadSiteRoles()" type="submit" class="md-primary">Opdatér</md-button>
+            <md-button type="submit" class="md-primary">Opdatér</md-button>
         </md-dialog-actions>
 
     </form>
