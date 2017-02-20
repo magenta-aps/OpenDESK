@@ -403,13 +403,13 @@ angular
         };
     
     
-        vm.updateRoleOnSiteMember = function (siteName, userName, role) {
+        vm.updateRoleOnSiteMember = function (siteName, user, role) {
             console.log('updatemember:');
             // getTheValue
             var role_int_value = translation_to_value(role);
             var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
     
-            siteService.updateRoleOnSiteMember(siteName, userName, role_alfresco_value).then(function (val) {
+            siteService.updateRoleOnSiteMember(siteName, user.userName, role_alfresco_value).then(function (val) {
                 vm.loadMembers();
             });
             $mdDialog.hide();
@@ -431,12 +431,12 @@ angular
         };
     
     
-        vm.deleteMemberDialog = function (siteName, userName) {
+        vm.deleteMemberDialog = function (ev, siteName, userName) {
             var confirm = $mdDialog.confirm()
                 .title('Slette dette medlem?')
                 .textContent('')
                 .ariaLabel('Slet medlem')
-                .targetEvent(event)
+                .targetEvent(ev)
                 .ok('Slet')
                 .cancel('Nej, tak');
     
@@ -635,31 +635,6 @@ angular
             console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
             $state.go('lool', {'nodeRef': nodeRef});
         };
-    
-        if (vm.projectType != 'PD-Project') {
-            siteService.getSiteRoles(vm.project).then(function(response){
-
-                $scope.roles_translated = [];
-
-                for (var x in response.siteRoles) {
-
-                    if ($scope.role_mapping[response.siteRoles[x]] !== null) {
-                        $scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
-                    }
-
-                }
-
-                //$scope.roles = response.siteRoles;
-            });
-            
-        } else {
-
-            $scope.roles_translated = [];
-
-            $scope.roles_translated.push ("Kan læse");
-            $scope.roles_translated.push ("Kan skrive");
-
-        }
 
 
     }

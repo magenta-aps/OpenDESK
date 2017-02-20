@@ -15,7 +15,7 @@
                 <i class="material-icons">search</i>
                 <md-autocomplete
                         required
-                        md-input-name="autocomplete"
+                        md-input-name="searchAutocomplete"
                         md-selected-item="searchQuery"
                         md-search-text="searchText"
                         md-items="r in vm.getAutoSuggestions(searchText)"
@@ -93,7 +93,7 @@
                             </td>
                             <td>
                                 <md-menu>
-                                    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
 
@@ -178,7 +178,7 @@
                             </td>
                             <td>
                                 <md-menu>
-                                    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
 
@@ -204,7 +204,7 @@
                             </a></td>
                             <td>
                                 <md-menu>
-                                    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
                                     <md-menu-content width="6">
@@ -254,7 +254,7 @@
                         </div>
                         <div flex="20" flex-gt-lg="10" style="text-align: right;">
                             <md-menu ng-if="vm.userRole === 'SiteManager'">
-                                <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                     <md-icon md-menu-origin>dehaze</md-icon>
                                 </md-button>
 
