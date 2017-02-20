@@ -2,11 +2,10 @@
 
 angular
     .module('openDeskApp.pd_sites')
-    .factory('pd_siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService, siteModuleService) {
+    .factory('pd_siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+    
     
         var restBaseUrl = '/alfresco/s/api/';
-        
-     
         var service = {
             createPDSite: createPDSite,
             addTemplate: addTemplate,
@@ -14,18 +13,6 @@ angular
             getAllOrganizationalCenters: getAllOrganizationalCenters
         };
         
-        
-        siteModuleService.registerProjectType('PD-Project', 'app/src/sites/modules/pd_sites/view/sitesActionsMenu.html');
-
-
-        var restBaseUrl = '/alfresco/s/api/';
-        var service = {
-            createPDSite: createPDSite,
-            addTemplate: addTemplate,
-            getAllManagers: getAllManagers,
-            getAllOrganizationalCenters: getAllOrganizationalCenters
-        };
-
 
         function createPDSite(siteName, description, sbsys, center_id, owner, manager) {
             return $http.post('/alfresco/service/projectdepartment', {

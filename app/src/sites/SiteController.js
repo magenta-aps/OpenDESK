@@ -39,12 +39,16 @@ angular
     
         siteService.getAllUsers("a");
             
-            
         //siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
-		//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");        
-        siteService.getSiteUserRole(vm.project, vm.currentUserName).then(
+		//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
+        
+        siteService.getSiteUserRole(vm.project, vm.currentUser.userName).then(
             function (response) {
                 vm.userRole = response;
+            },
+            function (err) {
+                console.log('Error getting site user role');
+                console.log(err);
             }
         );
 	

@@ -4,8 +4,8 @@
 
     <div layout="row" layout-align="space-between center">
         <a class="md-button" style="font-size: 14px" href="#!/projekter"><i class="material-icons">arrow_back</i>
-            Tilbage
-            til projekter</a>
+            Tilbage til projekter
+        </a>
 
         <div class="od-search" layout="row">
             <span flex></span>
@@ -282,12 +282,15 @@
 
                 <div layout="row" layout-align="start center" class="btnAlign">
                     <md-button ng-if="vm.userRole === 'SiteManager'" class="md-raised" ng-click="vm.newMember($event)">
-                        <i class="material-icons">add</i> Tilføj medlem&nbsp;&nbsp;</md-button>
+                        <i class="material-icons">add</i>
+                        Tilføj medlem&nbsp;&nbsp;
+                    </md-button>
                 </div>
             </md-card-content>
         </md-card>
+        
         <md-card flex-gt-sm="30" ng-if="vm.projectType === 'PD-Project'">
             <div ng-include="'app/src/sites/modules/pd_sites/view/groups_overview.html'"></div>
-            <md-card>
+        </md-card>
     </div>
 </div>

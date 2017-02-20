@@ -7,18 +7,17 @@ angular
     function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams, notificationsService, authService) {
 
     
+        var membersLoaded = false;
         var pd = this;
         pd.editPdSite = editPdSite;
         pd.currentUser = authService.getUserInfo().user.userName;
         
-        var membersLoaded = false;
         pd.showProjectMembers = showProjectMembers;
         pd.loadProjectMembers = loadProjectMembers;
 		pd.removeMemberDialog = removeMemberDialog;
 		pd.removeMemberFromSite = removeMemberFromSite;
 		pd.updateMemberRoleDialog = updateMemberRoleDialog;
 		pd.updateRoleOnSiteMember = updateRoleOnSiteMember;
-		
         
         
         function loadProjectMembers(projectShortname, memberType) {
@@ -27,6 +26,7 @@ angular
                 pd.projectMembers = val;
             });
         }
+        
         
         function showProjectMembers(selected, projectShortname, memberType) {
             if (selected && !membersLoaded) {
