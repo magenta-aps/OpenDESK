@@ -15,7 +15,7 @@
                 <i class="material-icons">search</i>
                 <md-autocomplete
                         required
-                        md-input-name="autocomplete"
+                        md-input-name="searchAutocomplete"
                         md-selected-item="searchQuery"
                         md-search-text="searchText"
                         md-items="r in vm.getAutoSuggestions(searchText)"
@@ -55,20 +55,20 @@
                         <tr ng-show="content.contentType === 'cmis:document'"
                             ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
-                            <td><a class="od-filebrowser-link" ng-href="#!/dokument/{{content.shortRef}}">
+                            <td><a class="od-filebrowser-link" ng-href="#!/dokument/{{content.shortRef}}?type={{ vm.projectType }}">
                                 <i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
                                 {{content.name}}</a></td>
                             <td>
                                 <table>
                                     <tr>
                                         <td style="border: none; margin: 0; padding: 0">
-                                            <a class="od-filebrowser-link" ng-href="#!/dokument/{{content.shortRef}}">{{content.lastChanged
+                                            <a class="od-filebrowser-link" ng-href="#!/dokument/{{content.shortRef}}?type={{ vm.projectType }}">{{content.lastChanged
                                                 | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                                         </td>
                                         <td ng-show="content.hasHistory" style="border: none; margin: 0; padding: 0">
                                             <md-menu md-position-mode="left bottom">
                                                 <md-button class="md-icon-button" aria-label="Se historik"
-                                                           ng-click="$mdOpenMenu($event); vm.loadHistory(content.shortRef)">
+                                                           ng-click="$mdMenu.open(); vm.loadHistory(content.shortRef)">
                                                     <md-icon md-menu-origin
                                                     " title="Se historik" style="font-size: 22px; position: relative;
                                                     top: 5px">history</md-icon>
@@ -93,7 +93,7 @@
                             </td>
                             <td>
                                 <md-menu>
-                                    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
 
@@ -167,18 +167,18 @@
                             ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
                             <td><a class="od-filebrowser-link"
-                                   ng-href="#!/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">
+                                   ng-href="#!/projekter/{{vm.project}}{{vm.path}}/{{content.name}}?type={{ vm.projectType }}">
                                 <i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
                                 {{content.name}}
                             </a></td>
                             <td>
                                 <a class="od-filebrowser-link"
-                                   ng-href="#!/projekter/{{vm.project}}{{vm.path}}/{{content.name}}">{{content.lastChanged
+                                   ng-href="#!/projekter/{{vm.project}}{{vm.path}}/{{content.name}}?type={{ vm.projectType }}">{{content.lastChanged
                                 | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                             </td>
                             <td>
                                 <md-menu>
-                                    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
 
@@ -197,14 +197,14 @@
                         <tr ng-show="content.contentType === 'cmis:link'"
                             ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
-                            <td><a class="od-filebrowser-link" ng-href="#!/projekter/{{content.destination_link}}">
+                            <td><a class="od-filebrowser-link" ng-href="#!/projekter/{{ content.destination_link }}">
                                 <i class="material-icons"
                                    ng-show="content.contentType === 'cmis:link'">content_paste</i>
                                 {{content.name}}
                             </a></td>
                             <td>
                                 <md-menu>
-                                    <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
                                     <md-menu-content width="6">
@@ -235,7 +235,7 @@
                                ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe
                     </md-button>
                     <md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised"
-                               ng-click="vm.newLinkDialog($event)"><i class="material-icons">add</i> Opret projektlink
+                               ng-click="vm.newLinkDialog($event)"><i class="material-icons">link</i> Opret projektlink
                     </md-button>
                 </div>
             </md-card-content>
@@ -254,7 +254,7 @@
                         </div>
                         <div flex="20" flex-gt-lg="10" style="text-align: right;">
                             <md-menu ng-if="vm.userRole === 'SiteManager'">
-                                <md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                     <md-icon md-menu-origin>dehaze</md-icon>
                                 </md-button>
 
