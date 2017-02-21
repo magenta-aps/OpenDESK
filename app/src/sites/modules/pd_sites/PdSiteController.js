@@ -63,30 +63,40 @@ angular
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
                 function(response) {
-                    console.log("response")
-                    console.log(response)
-                    console.log("response")
                     pd.site.members.pd_projectgroup = response[1];
+					pd.site.members.pd_projectgroup_permission = response[0].permission;
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_WORKGROUP').then(
                 function(response) {
                     pd.site.members.pd_workgroup = response[1];
+					pd.site.members.pd_workgroup_permission = response[0].permission;
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_STEERING_GROUP').then(
                 function(response) {
                     pd.site.members.pd_steering_group = response[1];
+					pd.site.members.pd_steering_group_permission = response[0].permission;
                 }
             );
             siteService.getGroupMembers(pd.site.shortName, 'PD_MONITORS').then(
                 function(response) {
                     pd.site.members.pd_monitors = response[1];
+					pd.site.members.pd_monitors_permission = response[0].permission;
                 }
             );
         }
-        
-        
+
+		function editPdSite(ev) {
+            $mdDialog.show({
+                controller: PdSiteGroupEditController,
+                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        }        
+/*        
         function editPdSite(ev, site) {
             $mdDialog.show({
                 controller: PdSiteEditController,
@@ -98,8 +108,8 @@ angular
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
-        }
-		
+        }	
+*/		
         
 		function updateMemberRoleDialog(event, user) {
 			vm.currentDialogUser = user.fullName;				
