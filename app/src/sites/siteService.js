@@ -6,15 +6,13 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
     
     return {
         getSiteMembers: function (siteShortName) {
-
-            var allMembers = [];
-
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
             });
         },
         getAllMembers: function (siteShortName, siteType) {
 
+            console.log("siteType :" + siteType);
             var allMembers = [];
 
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
