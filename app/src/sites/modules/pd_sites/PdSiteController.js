@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteController', PdSiteController);
     
-    function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams, notificationsService, authService) {
+    function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams, notificationsService, authService, $http, alfrescoDownloadService) {
 
     
         var membersLoaded = false;
@@ -33,6 +33,13 @@ angular
                 loadProjectMembers(projectShortname, memberType);
                 membersLoaded = true;
             }
+        }
+
+        pd.doPDF = function() {
+            siteService.createMembersPDF(pd.site.shortName).then(function(response) {
+                alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
+
+            });
         }
         
         
