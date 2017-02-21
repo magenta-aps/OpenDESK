@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
@@ -116,4 +118,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
+
+
 }

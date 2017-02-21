@@ -26,7 +26,7 @@ public interface OpenDeskModel {
     public static String PD_GROUP_PROJECTGROUP= "PD_PROJECTGROUP"; // projektgruppe
     public static String PD_GROUP_WORKGROUP = "PD_WORKGROUP"; // (arbejdsgruppe)
     public static String PD_GROUP_MONITORS = "PD_MONITORS"; // følgegruppe
-    public static String PD_GROUP_STEERING_GROUP = "PD_STEERING_GROUP"; // følgegruppe
+    public static String PD_GROUP_STEERING_GROUP = "PD_STEERING_GROUP"; // styregruppe
 
     /**
      * project states

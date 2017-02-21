@@ -37,6 +37,18 @@
 		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
+	<bean id="webscript.groups.get"
+		  class="dk.opendesk.webscripts.Groups"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="authorityService" ref="AuthorityService"/>
+		<property name="permissionService" ref="PermissionService"/>
+		<property name="personService" ref="PersonService"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="siteService" ref="SiteService"/>
+
+	</bean>
+
 
 	<bean id="webscript.documents.history.get"
 		  class="dk.opendesk.webscripts.documents.History"
@@ -94,5 +106,6 @@
 		  class="dk.opendesk.webscripts.Purge" parent="webscript">
 		<property name="nodeArchiveService" ref="nodeArchiveService"/>
 	</bean>
+
 
 </beans>
