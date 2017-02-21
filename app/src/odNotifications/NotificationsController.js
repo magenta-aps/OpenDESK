@@ -10,7 +10,7 @@ angular
     });
 
 
-function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService, authService, $interval) {
+function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService, $interval) {
     var vm = this;
 
     var userInfo = sessionService.getUserInfo();
@@ -42,7 +42,7 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
     }
 
     vm.updateNotifications = function updateNotifications() {
-        notificationsService.getNotices(authService.getUserInfo().user.userName).then(function (val) {
+        notificationsService.getNotices(currentUser).then(function (val) {
             $scope.notifications = val;
         });
     }

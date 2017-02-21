@@ -4,9 +4,9 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-    function SiteController($scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
+    function SiteController($q, $scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
                             alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-                            searchService, $state, userService, groupService) {
+                            searchService, $state, userService, groupService, preferenceService) {
 
                             
         $scope.role_mapping = {};
@@ -29,9 +29,11 @@ angular
         $scope.contents = [];
         $scope.history = [];
         $scope.members = [];
+        $scope.allMembers = [];
         $scope.roles = [];
         $scope.roles_translated = [];
 
+        vm.allMembers = [];
         vm.project = $stateParams.projekt;
         vm.userRole = 'siteConsumer';
         vm.projectType = $location.search().type;
@@ -123,7 +125,7 @@ angular
                 function (result) {
                     console.log('Loading site data');
                     console.log(result);
-                    vm.project_title = result.title;
+                    vm.project_title = result;
                     // Compile paths for breadcrumb directive
                     vm.paths = buildBreadCrumbPath(vm.project_title);
                 }
@@ -295,32 +297,42 @@ angular
         }
     
         function createSiteNotification(userName, site) {
-    
-            siteService.loadSiteData(vm.project).then(function (result) {
-                var site_title = result;
-                var subject = "Du er blevet tilføjet til " + site_title;
-                var message = "Du er blevet tilføjet til projektet " + site_title + ".";
+                var subject = "Du er blevet tilføjet til " + vm.project_title;
+                var message = "Du er blevet tilføjet til projektet " + vm.project_title + ".";
                 var link = "/#!/projekter/" + site + "?type=Project";
                 createNotification(userName, subject, message, link);
-            });
         }
     
         function createDocumentNotification(projekt, ref, fileName) {
             var creatorFirstName = vm.currentUser.firstName;
             var creatorLastName = vm.currentUser.lastName;
-            var creatorFullName = creatorFirstName + creatorLastName;
+            var creatorFullName = creatorFirstName + " " + creatorLastName;
             var subject = "Ny fil i " + projekt;
             var message = "En ny fil \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
             var link = "/#!/dokument/" + ref;
-    
-            //Notify all members
-            for (var member in $scope.members) {
-                var userName = $scope.members[member].authority.userName;
-    
-                if (userName == vm.currentUser.userName)
-                    continue;
-                createNotification(userName, subject, message, link);
-            }
+
+            // Creating an empty initial promise that always resolves itself.
+            var promise = $q.all([]);
+
+            // Iterating list of items.
+            angular.forEach(vm.allMembers, function (userName) {
+                if (userName != vm.currentUser.userName) {
+                    var preferenceFilter = "dk.magenta.sites.receiveNotifications";
+
+                    promise = preferenceService.getPreferences(userName, preferenceFilter).then(function (data) {
+                        var receiveNotifications = "true";
+                        if (data[preferenceFilter] != null) {
+                            receiveNotifications = data[preferenceFilter];
+                        }
+                        if (receiveNotifications != null && receiveNotifications == "true") {
+                            createNotification(userName, subject, message, link);
+                        }
+                    });
+                }
+            });
+
+            promise.finally(function () {
+            });
         }
     
         vm.createReviewNotification = function (documentNodeRef, userName, subject, message) {
@@ -336,6 +348,11 @@ angular
             siteService.getSiteMembers(vm.project).then(function (val) {
                 $scope.members = val;
                 console.log("$scope.members: " + $scope.members);
+            });
+            siteService.getAllMembers(vm.project, vm.projectType).then(function (val) {
+                $scope.allMembers = val;
+                vm.allMembers = val;
+                console.log("$scope.allMembers: " + $scope.allMembers);
             });
         }
         vm.loadMembers();

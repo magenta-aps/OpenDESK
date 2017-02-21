@@ -73,7 +73,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
 }
 
-function authService($http, $window, $state, sessionService, userService, oeParametersService) {
+function authService($http, $window, $state, sessionService, userService) {
     var service = {
         login: login,
         logout: logout,
@@ -114,7 +114,7 @@ function authService($http, $window, $state, sessionService, userService, oePara
         }).then(function (response) {
             userInfo.ticket = response.data.data.ticket;
             sessionService.setUserInfo(userInfo);
-            return addUserAndParamsToSession(username);
+            return addUserToSession(username);
         }, function (reason) {
             console.log(reason);
             return reason;
@@ -129,7 +129,6 @@ function authService($http, $window, $state, sessionService, userService, oePara
             return $http.delete('/api/login/ticket/' + userInfo.ticket, {alf_ticket: userInfo.ticket}).then(function (response) {
                 sessionService.setUserInfo(null);
                 sessionService.clearRetainedLocation();
-                oeParametersService.clearOEParameters();
                 return response;
             });
         }
@@ -182,17 +181,16 @@ function authService($http, $window, $state, sessionService, userService, oePara
 
     function revalidateUser() {
         return $http.get('/api/opendesk/currentUser').then(function (response) {
-            return addUserAndParamsToSession(response.data.userName);
+            return addUserToSession(response.data.userName);
         });
     }
 
-    function addUserAndParamsToSession(username) {
+    function addUserToSession(username) {
         return userService.getPerson(username).then(function (user) {
             delete $window._openDeskSessionExpired;
             var userInfo = sessionService.getUserInfo();
             userInfo['user'] = user;
             sessionService.setUserInfo(userInfo);
-            oeParametersService.loadParameters();
             return user;
         });
     }

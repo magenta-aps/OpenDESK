@@ -6,9 +6,40 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
     
     return {
         getSiteMembers: function (siteShortName) {
+
+            var allMembers = [];
+
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
-            })
+            });
+        },
+        getAllMembers: function (siteShortName, siteType) {
+
+            var allMembers = [];
+
+            return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
+                var site_members = response.data;
+
+                for (var i in site_members) {
+                    allMembers.push(site_members[i].authority.userName);
+                }
+
+                if (siteType == "PD-Project") {
+
+                    return $http.get("/alfresco/service/groups?method=getAllMembers&shortName=" + siteShortName).then(function (response) {
+                        var pd_site_members = response.data[0];
+
+                        for (var i in pd_site_members) {
+                            var username = pd_site_members[i].username;
+                            if(allMembers.indexOf(username) == -1)
+                                allMembers.push(username);
+                        }
+                        return allMembers;
+                    })
+                }
+                else
+                    return allMembers;
+            });
         },
         getSiteUserRole: function (siteShortName, userName) {
             //https:frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx/memberships/flemming
@@ -45,34 +76,39 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
-        createSite: function (siteName, siteDescription) {
+        createSite: function (siteShortName, siteName, siteDescription) {
             return $http.post('/api/sites', {
-                shortName: siteName,
+                shortName: siteShortName,
                 sitePreset: "default",
                 title: siteName,
                 description: siteDescription
-            }).then(function (response) {
+            }).then(
+                function (response) {
+                    // create the rootfolder documentLibrary manually as we dont use the siteService on the share side
+                    // TODO: make use of the createFolder
+                    var nodeRef = response.data.node;
+                    nodeRef = nodeRef.replace("/alfresco/service/api/node/", '');
 
-                // create the rootfolder documentLibrary manually as we dont use the siteService on the share side
-                // TODO: make use of the createFolder
-                var nodeRef = response.data.node;
-                nodeRef = nodeRef.replace("/alfresco/service/api/node/",'');
+                    var props = {
+                        prop_cm_name: "documentLibrary",
+                        prop_cm_title: "documentLibrary",
+                        alf_destination: alfrescoNodeUtils.processNodeRef(nodeRef).nodeRef
+                    };
 
-                var props = {
-                    prop_cm_name: "documentLibrary",
-                    prop_cm_title: "documentLibrary",
-                    alf_destination: alfrescoNodeUtils.processNodeRef(nodeRef).nodeRef
-                };
+                    var type = "cm:folder";
 
-                var type = "cm:folder";
+                    $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
+                        var nodeRef = response.data.persistedObject;
+                        return nodeRef;
+                    });
 
-                $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
-                    var nodeRef = response.data.persistedObject;
-                    return nodeRef;
-                });
-
-                return response.data;
-            })
+                    return response.data;
+                },
+                function(error) {
+                    if(error.data.status.code == "400" && error.data.message == "error.duplicateShortName")
+                        return null;
+                }
+            )
         },
         updateSiteName: function (shortName, newName, description) {
             return $http.put('/api/sites/' + shortName, {
@@ -86,7 +122,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         loadSiteData: function (shortName) {
             return $http.get('/api/sites/' + shortName).then(function (response) {
-                return response.data;
+                return response.data.title;
             })
         },
         addMemberToSite: function (siteName, member, role) {
@@ -198,7 +234,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 nodeRefs: sourceNodeRefs,
                 parentId: parentNodeRef
             }).then(function (response) {
-                return response;x
+                return response;
             }, function() {
                 return response;
             });
@@ -282,7 +318,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         getGroupMembers : function (siteShortName, groupName) {
            return groupService.getGroupInfo(siteShortName, groupName).then(function(r) {
                                return r;
-                           });;
+                           });
         },
         createLink : function (source, destination) {
             return $http.post("/alfresco/service/sites", {

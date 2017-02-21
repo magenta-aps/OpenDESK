@@ -14,9 +14,10 @@ angular
         };
         
 
-        function createPDSite(siteName, description, sbsys, center_id, owner, manager) {
+        function createPDSite(shortName, siteName, description, sbsys, center_id, owner, manager) {
             return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
+                PARAM_SHORT_NAME: shortName,
                 PARAM_DESCRIPTION: description,
                 PARAM_SBSYS: sbsys,
                 PARAM_OWNER: owner,

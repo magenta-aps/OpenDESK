@@ -7,7 +7,7 @@
         function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
 			var vm = this;
-            
+
             vm.sites = [];
 			vm.sitesPerUser = [];
 			vm.organizationalCenters = [];
@@ -37,8 +37,8 @@
                         vm.sites = response;
 						return response;
                     }
-                );    
-            };
+                )
+            }
             getSites();
 
 			function getSitesPerUser() {
@@ -47,7 +47,7 @@
 						return response;
 					}
 				);
-			};
+			}
 			getSitesPerUser();
 
 			function getAllOrganizationalCenters() {
@@ -56,7 +56,7 @@
 						vm.organizationalCenters.push({"shortName": "", "displayName": "Alle"});
 					}
 				);
-			};
+			}
 			getAllOrganizationalCenters();
 
 
@@ -71,10 +71,23 @@
 				});
 			};
 
-            
+
 			vm.createSite = function (name, description) {
 
-				siteService.createSite(name, description).then(function(val) {
+				var shortName = name.replace(new RegExp(" ", 'g'), "-");
+				createStandardSite(shortName, name, description, 1).then(function (val) {
+				});
+			};
+
+			function createStandardSite (shortName, name, description, number) {
+
+				if(number > 1)
+					shortName += "-" + number;
+
+				return siteService.createSite(shortName, name, description).then(function(val) {
+
+					if(val == null)
+						return createStandardSite(shortName, name, description, ++number);
 
 					$mdDialog.hide();
 
@@ -86,11 +99,10 @@
 						vm.sitesPerUser = val;
 					});
 
-					var shortName = name.replace(new RegExp(" ", 'g'), "");
 					window.location.href = "/#!/projekter/" + shortName  + "?type=Project";
 
 				});
-			};
+			}
 
 			vm.deleteSiteDialog = function(siteName) {
 				var confirm = $mdDialog.confirm()

@@ -250,7 +250,9 @@ angular
             
             function updatePdSite() {
                 console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + $scope.newSite.manager.userName);
+                var shortName = $scope.newSite.siteName.replace(new RegExp(" ", 'g'), "-");
                 pd_siteService.createPDSite(
+                    shortName,
                     $scope.newSite.siteName,
                     $scope.newSite.desc,
                     $scope.newSite.sbsys,
