@@ -21,6 +21,7 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.domain.permissions.Authority;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -95,6 +96,7 @@ public class ProjectDepartment extends AbstractWebScript {
 
             String method = getJSONObject(json, "PARAM_METHOD");
             String site_name = getJSONObject(json, "PARAM_NAME");
+            String site_short_name = getJSONObject(json, "PARAM_SHORT_NAME");
             String site_description = getJSONObject(json, "PARAM_DESCRIPTION");
             String site_sbsys = getJSONObject(json, "PARAM_SBSYS");
             String site_owner = getJSONObject(json, "PARAM_OWNER");
@@ -110,11 +112,23 @@ public class ProjectDepartment extends AbstractWebScript {
                         AuthenticationUtil.setRunAsUserSystem();
                         // ...code to be run as Admin...
 
-                        this.createSite(site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
+                        String site_short_name_with_version = site_short_name;
+
+                        int i = 1;
+                        do {
+                            try {
+                                newSiteRef = createSite(site_short_name_with_version, site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
+                            }
+                            catch(SiteServiceException e) {
+                                if(e.getMsgId().equals("site_service.unable_to_create"))
+                                    site_short_name_with_version = site_short_name + "-" + ++i;
+                            }
+                        }
+                        while(newSiteRef == null);
 
                         Long id = (Long) nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
 
-                        this.createGroupAddMembers(Long.toString(id), site_owner, site_manager);
+                        createGroupAddMembers(Long.toString(id), site_owner, site_manager);
 
                         JSONObject return_json = new JSONObject();
 
@@ -149,16 +163,12 @@ public class ProjectDepartment extends AbstractWebScript {
         return json.getString(parameter);
     }
 
-    private void createSite(String name, String description, String sbsys, String center_id, SiteVisibility siteVisibility) {
+    private NodeRef createSite(String shortName, String name, String description, String sbsys, String center_id, SiteVisibility siteVisibility) {
 
-
-        SiteInfo site = siteService.createSite("site-dashboard", name, name, description, siteVisibility);
-
-        this.newSiteRef = site.getNodeRef();
-
+        SiteInfo site = siteService.createSite("site-dashboard", shortName, name, description, siteVisibility);
 
         // add the projectdepartment aspect
-        Map<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+        Map<QName, Serializable> aspectProps = new HashMap<>();
         aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
         aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
         aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
@@ -169,11 +179,12 @@ public class ProjectDepartment extends AbstractWebScript {
 
         // create documentLibary
         String defaultFolder = "documentLibrary";
-        Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
+        Map<QName, Serializable> documentLibaryProps = new HashMap<>();
         documentLibaryProps.put(ContentModel.PROP_NAME, defaultFolder);
 
-
         ChildAssociationRef child = nodeService.createNode(site.getNodeRef(), ContentModel.ASSOC_CONTAINS, QName.createQName(OpenDeskModel.OD_PREFIX, "documentLibrary"), ContentModel.TYPE_FOLDER, documentLibaryProps);
+
+        return site.getNodeRef();
     }
 
 
