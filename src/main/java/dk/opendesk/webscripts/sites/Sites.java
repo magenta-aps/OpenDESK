@@ -140,6 +140,8 @@ public class Sites extends AbstractWebScript {
         try {
             JSONObject json = new JSONObject(c.getContent());
 
+            System.out.println(json);
+
             // Read all used parameters no matter what method is used.
             // Those parameters that are not sent are set to an empty string
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
@@ -151,6 +153,14 @@ public class Sites extends AbstractWebScript {
             String source = Utils.getJSONObject(json, "PARAM_SOURCE");
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
             String shortName = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
+
+
+
+
+            System.out.println("method");
+            System.out.println(method);
+            System.out.println("shortname");
+            System.out.println(shortName);
 
             if(method != null) {
                 switch (method) {
@@ -197,7 +207,13 @@ public class Sites extends AbstractWebScript {
                         result = this.deleteLink(source_n, destination_n);
                         break;
 
+                    case "getSiteType":
+
+                        result = this.getSiteType(shortName);
+                        break;
+
                     case "createMembersPDF":
+
                         result = this.createMembersPDF(shortName);
                         break;
                 }
@@ -479,7 +495,7 @@ public class Sites extends AbstractWebScript {
 
         // extra groups for the new projecttype
 
-        String projectOwnerGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+        String projectOwnerGroup = "GROUP_" + this.getDBID(shortName).get(0) + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
         String projectOwnerMembers = "PROJEKTEJERGRUPPE: \n\n";
         authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
         for (String authority : authorities) {
@@ -573,6 +589,22 @@ public class Sites extends AbstractWebScript {
 
 
     }
+
+
+    private JSONArray getSiteType(String shortName) {
+
+        NodeRef n = siteService.getSite(shortName).getNodeRef();
+        JSONObject json = new JSONObject();
+
+
+        if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+            return Utils.getJSONReturnPair("type", OpenDeskModel.pd_project);
+        }
+        else  {
+            return Utils.getJSONReturnPair("type", OpenDeskModel.project);
+        }
+    }
+
 
     private JSONObject ConvertSiteInfoToJSON(SiteInfo s)
     {
