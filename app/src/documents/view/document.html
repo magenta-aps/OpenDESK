@@ -41,50 +41,51 @@
         </div>
 
         <div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
-        
-            <h4 ng-click="pd.showMonitorsList = !pd.showMonitorsList"
-                class="pd-group-toggle"
-                ng-class="pd.showMonitorsList ? 'open' : 'closed'"
-                layout="row">
-                <i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">Historik</span>
-                <span flex></span>
-                <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-            </h4>
-            <ul ng-show="pd.showMonitorsList">
-                <p class="transition pHeader">
-                    <span style="width: 164px;">Senest ændret</span>
-                    <span>Senest ændret af&nbsp;</span>
-                    <br>
-                </p>
-                <p class="transition pContent">
-                    <span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>
-                </p>
-            </ul>
+			<h4 ng-click="showHistoryList = !showHistoryList"
+				class="pd-group-toggle"
+				ng-class="showHistoryList ? 'open' : 'closed'"
+				layout="row">
+				<i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">Historik</span>
+				<span flex></span>
+				<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+			</h4>
+			<ul ng-show="vm.showArchived ? !showHistoryList : showHistoryList">
+				<p class="transition pHeader">
+					<span style="width: 164px;">Senest ændret</span>
+					<span>Senest ændret af&nbsp;</span>
+					<br>
+				</p>
+				<p class="transition pContent">
+					<span id="{{h.nodeRef}}" ng-repeat="h in history"><a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{ h.modifier }}</a></span>
+				</p>
+			</ul>
             <dl>
-                <dt>
-                    Oprettet
-                </dt>
-                <dd>
-                    {{ vm.doc.createdOn }}
-                </dd>
-                <dt>
-                    Oprettet af
-                </dt>
-                <dd>
-                    {{ vm.doc.createdBy }}
-                </dd>
-                <dt>
-                    Senest ændret
-                </dt>
-                <dd>
-                    {{ vm.doc.modifiedOn }}
-                </dd>
-                <dt>
-                    Senest ændret af
-                </dt>
-                <dd>
-                    {{ vm.doc.modifiedBy }}
-                </dd>
+				<!--div>
+					<dt>
+						Oprettet
+					</dt>
+					<dd>
+						{{ vm.doc.createdOn }}
+					</dd>
+					<dt>
+						Oprettet af
+					</dt>
+					<dd>
+						{{ vm.doc.createdBy }}
+					</dd>
+					<dt>
+						Senest ændret
+					</dt>
+					<dd>
+						{{ vm.doc.modifiedOn }}
+					</dd>
+					<dt>
+						Senest ændret af
+					</dt>
+					<dd>
+						{{ vm.doc.modifiedBy }}
+					</dd>
+				</div-->
                 <ng-if ng-if="vm.wf" class="od-notifylist--item--nolink">
                     <dt>
                         Review
