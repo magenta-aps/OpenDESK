@@ -341,6 +341,9 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         createMembersPDF : function (shortName) {
+
+            console.log("hvad er ");
+            console.log(shortName)
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "createMembersPDF",
                 PARAM_SHORT_NAME: shortName
@@ -349,6 +352,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                   // do a get on the returned noderef
                 //alfresco/service/api/node/content/workspace/SpacesStore/90defc67-622f-4bd4-acb2-e20d569b16f4
 
+                console.log("**********");
                 console.log(response.data)
                 return response.data
             });

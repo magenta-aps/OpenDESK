@@ -36,7 +36,21 @@ angular
         vm.allMembers = [];
         vm.project = $stateParams.projekt;
         vm.userRole = 'siteConsumer';
-        vm.projectType = $location.search().type;
+
+
+
+        siteService.getSiteType(vm.project).then (function(response) {
+            vm.projectType = response[0].type;
+        });
+
+
+
+
+        //vm.projectType = $location.search().type;
+
+
+
+
         vm.currentUser = authService.getUserInfo().user;
     
         //siteService.getAllUsers("a");

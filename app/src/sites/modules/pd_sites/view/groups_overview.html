@@ -59,7 +59,7 @@
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<div>Rolle:&nbsp;</div>
+								<div>Rolle:&nbsp;{{ pd.site.members.pd_projectgroup_permission }}</div>
 							</md-menu-item>
 							<md-menu-item>
 								<div>Email:&nbsp;{{ mem.email }}</div>
@@ -109,7 +109,7 @@
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<div>Rolle:&nbsp;</div>
+								<div>Rolle:&nbsp;{{ pd.site.members.pd_steering_group_permission }}</div>
 							</md-menu-item>
 							<md-menu-item>
 								<div>Email:&nbsp;{{ mem.email }}</div>
@@ -159,7 +159,7 @@
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<div>Rolle:&nbsp;</div>
+								<div>Rolle:&nbsp;{{ pd.site.members.pd_workgroup_permission }}</div>
 							</md-menu-item>
 							<md-menu-item>
 								<div>Email:&nbsp;{{ mem.email }}</div>
@@ -209,7 +209,7 @@
 						</md-button>
 						<md-menu-content width="5">
 							<md-menu-item>
-								<div>Rolle:&nbsp;</div>
+								<div>Rolle:&nbsp;{{ pd.site.members.pd_monitors_permission }}</div>
 							</md-menu-item>
 							<md-menu-item>
 								<div>Email:&nbsp;{{ mem.email }}</div>
@@ -244,11 +244,11 @@
 
         <div layout="row" layout-align="start center" class="btnAlign">
             <div flex="15">
-                <md-button class="md-raised md-icon-button" ng-click="pd.editPDSite($event)"
+                <md-button class="md-raised md-icon-button" ng-click="pd.editPdSite($event)"
                            aria-label="Redigér gruppemedlemmer"><i class="material-icons">add</i></md-button>
             </div>
             <div flex="85">
-                <md-button class="md-raised md-icon-button"></md-button>
+                <md-button class="md-raised md-icon-button" ng-click="pd.doPDF()"></md-button>
             </div>
         </div>
     </div>
