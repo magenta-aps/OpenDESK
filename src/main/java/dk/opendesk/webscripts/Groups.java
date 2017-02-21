@@ -116,20 +116,19 @@ public class Groups extends AbstractWebScript {
 
     private JSONArray getAllMembers(String shortName, String groupName) {
 
-
-
-
         NodeRef siteNodeRef = siteService.getSite(shortName).getNodeRef();
-
 
         JSONArray result = new JSONArray();
         JSONArray members = new JSONArray();
         JSONObject json = new JSONObject();
 
-        String group = "GROUP_"  + getDBID(shortName) + "_" + groupName;
-        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
-
-
+        String group = "GROUP_"  + getDBID(shortName);
+        Boolean onlyDirectMembers = true;
+        if(groupName != null)
+            group += "_" + groupName;
+        else
+            onlyDirectMembers = false;
+        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, onlyDirectMembers);
 
         Set<AccessPermission> permissions = permissionService.getAllSetPermissions(siteNodeRef);
 
@@ -159,13 +158,15 @@ public class Groups extends AbstractWebScript {
         for (String authority : authorities) {
             System.out.println(authority);
             NodeRef person = personService.getPerson(authority);
-            String name  = (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
+            String username  = (String)nodeService.getProperty(person, ContentModel.PROP_USERNAME);
+            String displayName  = (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
             String email  = (String)nodeService.getProperty(person, ContentModel.PROP_EMAIL);
 
             json = new JSONObject();
 
             try {
-                json.put("displayName", name);
+                json.put("username", username);
+                json.put("displayName", displayName);
                 json.put("email", email);
             } catch (JSONException e) {
                 e.printStackTrace();
