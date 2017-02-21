@@ -316,6 +316,14 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 console.log(response.data)
                 return response.data
             });
+        },
+        getSiteType : function (shortName) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "getSiteType",
+                PARAM_SHORT_NAME: shortName
+            }).then(function(response) {
+                return response.data
+            });
         }
 
     }
