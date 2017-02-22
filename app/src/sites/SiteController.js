@@ -38,6 +38,12 @@ angular
         vm.userRole = 'siteConsumer';
         vm.projectType = $location.search().type;
         vm.currentUser = authService.getUserInfo().user;
+
+        siteService.getSiteType(vm.project).then (function(response) {
+            vm.projectType = response[0].type;
+            vm.loadMembers();
+            vm.loadSiteRoles();
+        });
     
         //siteService.getAllUsers("a");
         //siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
@@ -116,11 +122,7 @@ angular
             originatorEv = event;
             $mdOpenMenu(event);
         };
-        /*
-         vm.projectType = function () {
-         return $location.search().type;
-         }
-         */
+
         vm.loadSiteData = function () {
             siteService.loadSiteData(vm.project).then(
                 function (result) {
@@ -344,7 +346,7 @@ angular
             var ref = (s[3]);
             var link = "/#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator + "&doc=" + ref;
             createNotification(userName, subject, message, link);
-        }
+        };
     
     
         vm.loadMembers = function () {
@@ -355,8 +357,7 @@ angular
             siteService.getAllMembers(vm.project, vm.projectType).then(function (val) {
                 $scope.allMembers = val;
             });
-        }
-        vm.loadMembers();
+        };
     
         vm.newMember = function (event) {
             $mdDialog.show({
@@ -406,7 +407,6 @@ angular
                 $scope.roles_translated.push("Kan skrive");
             }
         };
-        vm.loadSiteRoles();
     
         vm.currentDialogUser = '';
     
