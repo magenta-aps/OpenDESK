@@ -15,29 +15,36 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             console.log("siteType :" + siteType);
             var allMembers = [];
 
-            return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
-                var site_members = response.data;
-
-                for (var i in site_members) {
-                    allMembers.push(site_members[i].authority.userName);
-                }
-
-                if (siteType == "PD-Project") {
-
-                    return $http.get("/alfresco/service/groups?method=getAllMembers&shortName=" + siteShortName).then(function (response) {
-                        var pd_site_members = response.data[0];
-
-                        for (var i in pd_site_members) {
-                            var username = pd_site_members[i].username;
-                            if(allMembers.indexOf(username) == -1)
-                                allMembers.push(username);
-                        }
+            return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(
+                function (response) {
+                    var site_members = response.data;
+    
+                    for (var i in site_members) {
+                        allMembers.push(site_members[i].authority.userName);
+                    }
+    
+                    if (siteType === "PD-Project") {
+    
+                        return $http.get("/alfresco/service/groups?method=getAllMembers&shortName=" + siteShortName).then(function (response) {
+                            var pd_site_members = response.data[0];
+    
+                            for (var i in pd_site_members) {
+                                var username = pd_site_members[i].username;
+                                if(allMembers.indexOf(username) == -1)
+                                    allMembers.push(username);
+                            }
+                            return allMembers;
+                        })
+                    } else {
                         return allMembers;
-                    })
+                    }
+                },
+                function (err) {
+                    console.log('Error retrieving site members');
+                    console.log(err);
                 }
-                else
-                    return allMembers;
-            });
+                
+            );
         },
         getSiteUserRole: function (siteShortName, userName) {
             //https:frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx/memberships/flemming
@@ -120,7 +127,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         loadSiteData: function (shortName) {
             return $http.get('/api/sites/' + shortName).then(function (response) {
-                return response.data.title;
+                return response.data;
             })
         },
         addMemberToSite: function (siteName, member, role) {
@@ -314,9 +321,9 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         //    });
         //},
         getGroupMembers : function (siteShortName, groupName) {
-           return groupService.getGroupInfo(siteShortName, groupName).then(function(r) {
-                               return r;
-                           });
+            return groupService.getGroupInfo(siteShortName, groupName).then(function(r) {
+                return r;
+            });
         },
         createLink : function (source, destination) {
             return $http.post("/alfresco/service/sites", {

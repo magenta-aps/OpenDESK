@@ -9,6 +9,7 @@ angular
     
         var membersLoaded = false;
         var pd = this;
+        pd.site = {};
         pd.editPdSite = editPdSite;
         pd.currentUser = authService.getUserInfo().user.userName;
         
@@ -40,11 +41,15 @@ angular
                 alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
 
             });
-        }
+        };
         
         
         if ($stateParams.projekt) {
-            pd.site = { shortName: $stateParams.projekt };
+            siteService.loadSiteData($stateParams.projekt).then(
+                function (response) {
+                    pd.site = response;
+                }
+            );            
             getProjectMembers();
         }
         
@@ -87,12 +92,9 @@ angular
             );
         }      
         
-        function editPdSite(ev, site) {
+        function editPdSite(ev) {
             $mdDialog.show({
                 controller: PdSiteEditController,
-                locals: {
-                    project: site
-                },
                 templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_site_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -148,8 +150,7 @@ angular
 		};
        
        
-        function PdSiteEditController(project, $scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
-            
+        function PdSiteEditController($scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
             
             var isEditMode = false;
             var availProjectOwners = [];
@@ -161,12 +162,9 @@ angular
             $scope.folgeGruppe = [];
             
             // If project data is available, use edit mode
-            if (project) {
-                pd.site = project;
+            if (pd.site) {
                 isEditMode = true;
                 getProjectMembers();
-                console.log('project info:');
-                console.log(project);
                 $scope.newSite = {
                     siteName: pd.site.title,
                     desc: pd.site.description,

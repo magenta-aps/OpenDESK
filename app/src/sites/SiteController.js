@@ -127,7 +127,7 @@ angular
                 function (result) {
                     console.log('Loading site data');
                     console.log(result);
-                    vm.project_title = result;
+                    vm.project_title = result.title;
                     // Compile paths for breadcrumb directive
                     vm.paths = buildBreadCrumbPath(vm.project_title);
                 }
