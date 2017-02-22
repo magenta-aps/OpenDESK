@@ -343,7 +343,7 @@ angular
             var creator = vm.currentUser.userName;
             var s = documentNodeRef.split("/");
             var ref = (s[3]);
-            var link = "/#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator + "&doc=" + ref;
+            var link = "/#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator;
             createNotification(userName, subject, message, link);
         };
     

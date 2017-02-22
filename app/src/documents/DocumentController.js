@@ -106,14 +106,13 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
     if (paramValue == "wf") {
         vm.wf_from = $location.search().from;
-        vm.wf_doc = $location.search().doc;
         vm.wf = true;
     }
 
     
     vm.createWFNotification = function(comment) {
         var creator = authService.getUserInfo().user.userName;
-        var link = "/#!/dokument/" + vm.wf_doc + "?dtype=wf-response" + "&from=" + creator + "&doc=" + vm.wf_doc;
+        var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
         notificationsService.addNotice(vm.wf_from, "review svar", comment, link).then (function (val) {
             $mdDialog.hide();
@@ -178,7 +177,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     if (vm.showArchived) {
 
 
-        vm.store = 'versionStore://version2Store/'
+        vm.store = 'versionStore://version2Store/';
 
         documentService.createThumbnail(parentDocumentNode, selectedDocumentNode).then (function(response) {
 
@@ -207,7 +206,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
     }
     else {
-        vm.store = 'workspace://SpacesStore/'
+        vm.store = 'workspace://SpacesStore/';
 
         documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
 
