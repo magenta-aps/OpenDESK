@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package dk.opendesk;
+package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -82,7 +82,7 @@ public class Notifications extends AbstractWebScript {
                         break;
 
                     case "add":
-                        this.addNotification(userName, message, subject, link);
+                        result = addNotification(userName, message, subject, link);
                         break;
 
                     case "remove":
@@ -196,7 +196,12 @@ public class Notifications extends AbstractWebScript {
         return result;
     }
 
-    private Map<String, Object> addNotification(String userName, String message, String subject, String link) {
+    private JSONArray addNotification(String userName, String message, String subject, String link) {
+
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
 
         //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
 
@@ -210,7 +215,7 @@ public class Notifications extends AbstractWebScript {
                 OpenDeskModel.PROP_NOTIFICATION,
                 null);
 
-                Map<QName, Serializable> contentProps = new HashMap<QName, Serializable>();
+                Map<QName, Serializable> contentProps = new HashMap<>();
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
@@ -220,7 +225,10 @@ public class Notifications extends AbstractWebScript {
 
                 nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
 
-        return null;
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
+        return Utils.getJSONSuccess();
     }
 
     private void removeNotification(NodeRef nodeRef) {

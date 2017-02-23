@@ -1,5 +1,6 @@
 package dk.opendesk.repo.utils;
 
+import java.io.Serializable;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -86,24 +87,24 @@ public class Utils {
     }
 
     public static JSONArray getJSONError (Exception e) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Serializable> map = new HashMap<>();
         map.put("status", "failure");
         map.put("error", e.toString());
         return getJSONReturnArray(map);
     }
 
     public static JSONArray getJSONReturnPair (String key, String value) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Serializable> map = new HashMap<>();
         map.put(key, value);
         return getJSONReturnArray(map);
     }
 
-    private static JSONArray getJSONReturnArray(Map<String, String> map) {
+    public static JSONArray getJSONReturnArray(Map<String, Serializable> map) {
         JSONObject return_json = new JSONObject();
         JSONArray result = new JSONArray();
         try {
-            for (Map.Entry<String, String> pair : map.entrySet())
-                return_json.put(pair.getKey(), pair.getValue());
+            for (Map.Entry<String, Serializable> pair : map.entrySet())
+                return_json.put(pair.getKey(), pair.getValue().toString());
             result.add(return_json);
         } catch (Exception e) {
             e.printStackTrace();

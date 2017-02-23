@@ -142,8 +142,6 @@ public class Sites extends AbstractWebScript {
         try {
             JSONObject json = new JSONObject(c.getContent());
 
-            System.out.println(json);
-
             // Read all used parameters no matter what method is used.
             // Those parameters that are not sent are set to an empty string
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
@@ -156,16 +154,12 @@ public class Sites extends AbstractWebScript {
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
             String shortName = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
 
-
-
-
-            System.out.println("method");
-            System.out.println(method);
-            System.out.println("shortname");
-            System.out.println(shortName);
-
             if(method != null) {
                 switch (method) {
+                    case "getSite":
+                        result = this.getSiteInfo(shortName);
+                        break;
+
                     case "getAll":
                         result = this.getAllSites(query);
                         break;
@@ -210,12 +204,10 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "getSiteType":
-
                         result = this.getSiteType(shortName);
                         break;
 
                     case "createMembersPDF":
-
                         result = this.createMembersPDF(shortName);
                         break;
                 }
@@ -650,8 +642,6 @@ public class Sites extends AbstractWebScript {
     private JSONArray getSiteType(String shortName) {
 
         NodeRef n = siteService.getSite(shortName).getNodeRef();
-        JSONObject json = new JSONObject();
-
 
         if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
             return Utils.getJSONReturnPair("type", OpenDeskModel.pd_project);
@@ -668,21 +658,26 @@ public class Sites extends AbstractWebScript {
             JSONObject json = new JSONObject();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             json.put("created", sdf.format(s.getCreatedDate()));
-            json.put("title", s.getTitle());
             json.put("shortName", s.getShortName());
 
             NodeRef n = s.getNodeRef();
             json.put("nodeRef", n.toString());
 
             if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-                json.put("type",OpenDeskModel.pd_project);
+                json.put("title", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_NAME));
+                json.put("description", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_DESCRIPTION));
+                json.put("type", OpenDeskModel.pd_project);
                 json.put("state", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_STATE));
                 json.put("center_id", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_CENTERID));
+                json.put("sbsys", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_SBSYS));
             }
             else {
-                json.put("type",OpenDeskModel.project);
-                json.put("state", "placeholder");
-                json.put("center_id", "placeholder");
+                json.put("title", s.getTitle());
+                json.put("description", s.getDescription());
+                json.put("type", OpenDeskModel.project);
+                json.put("state", "");
+                json.put("center_id", "");
+                json.put("sbsys", "");
             }
 
             JSONObject creator = new JSONObject();
@@ -696,13 +691,19 @@ public class Sites extends AbstractWebScript {
 
             json.put("creator", creator);
 
-            json.put("description", s.getDescription());
-
             return json;
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private JSONArray getSiteInfo(String shortName) {
+
+        SiteInfo siteInfo = siteService.getSite(shortName);
+        JSONArray json = new JSONArray();
+        json.add(ConvertSiteInfoToJSON(siteInfo));
+        return json;
     }
 }
