@@ -142,7 +142,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		vm.title = response.item.location.siteTitle;
         
         function buildBreadCrumbPath(response) {
-				var pathAtt = $location.search().type;
                 var paths = [
                     {
                         title: 'Projekter',
@@ -150,7 +149,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     },
                     {
                         title: response.item.location.siteTitle,
-                        link: '#!/projekter/' + response.item.location.site + '?type=' + pathAtt
+                        link: '#!/projekter/' + response.item.location.site
                     }
                 ];
                 var pathArr = response.item.location.path.split('/');
@@ -159,8 +158,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     if (pathArr[a] !== '') {
                         paths.push({
                             title: pathArr[a],
-                            link: '#!/projekter/' + response.item.location.site + pathLink + pathArr[a] + '?type=' + pathAtt
-							//link: '#!/projekter/' + response.item.location.site + pathLink + pathArr[a]
+							link: '#!/projekter/' + response.item.location.site + pathLink + pathArr[a]
                         });
                         pathLink = pathLink + pathArr[a] + '/';
                     };

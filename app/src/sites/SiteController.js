@@ -73,7 +73,6 @@ angular
 
 			
         function buildBreadCrumbPath(project_title) {
-			var pathAtt = $location.search().type;
             var paths = [
                 {
                     title: 'Projekter',
@@ -81,7 +80,7 @@ angular
                 },
                 {
                     title: project_title,
-                    link: '#!/projekter/' + vm.project + '?type=' + pathAtt
+                    link: '#!/projekter/' + vm.project
                 }
             ];
             var pathArr = $stateParams.path.split('/');
@@ -90,7 +89,7 @@ angular
                 if (pathArr[a] !== '') {
                     paths.push({
                         title: pathArr[a],
-                        link: '#!/projekter/' + vm.project + pathLink + pathArr[a] + '?type=' + pathAtt
+                        link: '#!/projekter/' + vm.project + pathLink + pathArr[a]
                     });
                     pathLink = pathLink + pathArr[a] + '/';
                 }

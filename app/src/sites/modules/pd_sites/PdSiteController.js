@@ -85,18 +85,8 @@ angular
 					pd.site.members.pd_monitors_permission = response[0].permission;
                 }
             );
-        }
-
-		function editPdSite(ev) {
-            $mdDialog.show({
-                controller: PdSiteGroupEditController,
-                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true
-            });
-        }        
-/*        
+        }      
+        
         function editPdSite(ev, site) {
             $mdDialog.show({
                 controller: PdSiteEditController,
@@ -109,7 +99,7 @@ angular
                 clickOutsideToClose: true
             });
         }	
-*/		
+	
         
 		function updateMemberRoleDialog(event, user) {
 			vm.currentDialogUser = user.fullName;				
@@ -428,6 +418,7 @@ angular
                 siteService.addUser( pd.site.shortName, member.userName, group ).then(
                     function(response) {
                         console.log('Added user ' + member.userName + ' to ' + group);
+						getProjectMembers();
                     },
                     function(err) {
                         console.log('ERROR: Problem creating user ' + member.userName + ' in project group ' + group);
