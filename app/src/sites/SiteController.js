@@ -40,6 +40,7 @@ angular
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
 		vm.showProgress = false;
+        vm.editSiteDialog = editSiteDialog;
 
         siteService.getSiteType(vm.project).then (function(response) {
             vm.projectType = response[0].type;
@@ -712,6 +713,18 @@ angular
             $state.go('lool', {'nodeRef': nodeRef});
         };
 
+        
+        function editSiteDialog() {
+            $mdDialog.show({
+                templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                scope: $scope,        // use parent scope in template
+                preserveScope: true,  // do not forget this if use parent scope
+                clickOutsideToClose: true
+            });
+        }
+        
 
     }
             
