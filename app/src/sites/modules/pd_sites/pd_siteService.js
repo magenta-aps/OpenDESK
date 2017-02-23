@@ -14,7 +14,7 @@ angular
         };
         
 
-        function createPDSite(shortName, siteName, description, sbsys, center_id, owner, manager) {
+        function createPDSite(shortName, siteName, description, sbsys, center_id, owner, manager, visibility) {
             return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
                 PARAM_SHORT_NAME: shortName,
@@ -22,6 +22,7 @@ angular
                 PARAM_SBSYS: sbsys,
                 PARAM_OWNER: owner,
                 PARAM_MANAGER: manager,
+                PARAM_VISIBILITY: visibility,
                 PARAM_CENTERID: center_id,
                 PARAM_METHOD: "createPDSITE"
             }).then(function (response) {
@@ -30,6 +31,23 @@ angular
             });
         }
 
+        //All values except shortName can be empty strings to avoid updating those parameters.
+        function updatePDSite(shortName, siteName, description, sbsys, center_id, owner, manager, visibility, state) {
+            return $http.post('/alfresco/service/projectdepartment', {
+                PARAM_NAME: siteName,
+                PARAM_SHORT_NAME: shortName,
+                PARAM_DESCRIPTION: description,
+                PARAM_SBSYS: sbsys,
+                PARAM_OWNER: owner,
+                PARAM_MANAGER: manager,
+                PARAM_CENTERID: center_id,
+                PARAM_VISIBILITY: visibility,
+                PARAM_STATE: state,
+                PARAM_METHOD: "updatePDSite"
+            }).then(function (response) {
+                return response;
+            });
+        }
 
         function addTemplate(siteName, template) {
             return $http.post('/alfresco/service/projectdepartment', {
