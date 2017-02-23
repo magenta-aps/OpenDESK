@@ -66,12 +66,13 @@ angular
             return siteService.getSitesPerUser().then(function(response) {
                     vm.sitesPerUser = response;
                     console.log("response");
-                    console.log("response");
                     console.log(response);
                     return response;
                 }
             );
         }
+        
+        
         getSitesPerUser();
 	
         

@@ -107,7 +107,7 @@
             <div layout="row" layout-align="start center" class="btnAlign">
             
                 <md-menu>
-                    <md-button ng-click="$mdOpenMenu($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nye projekter">
+                    <md-button ng-click="$mdMenu.open()" class="md-text-icon-button md-raised md-primary" aria-label="Opret nye projekter">
                         <i class="material-icons">add</i>
                         <span>Opret nyt projekt</span>
                     </md-button>
@@ -116,7 +116,7 @@
                             <md-button ng-click="vm.newSite($event)"><i class="material-icons">add</i> Alm. Projekt</md-button>
                         </md-menu-item>
                         <md-menu-item>
-                            <md-button ng-controller="PdSiteController as pd" ng-click="pd.editPdSite($event)"><i class="material-icons">add</i> Projekt m. styring</md-button>
+                            <md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)"><i class="material-icons">add</i> Projekt m. styring</md-button>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>

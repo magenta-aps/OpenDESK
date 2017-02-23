@@ -98,7 +98,11 @@ angular
         
         function editPdSite(ev) {
             $mdDialog.show({
+                controller: 'PdSiteEditController',
                 templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_site_dialog.html',
+                locals: {
+                    sitedata: pd.site
+                },
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true

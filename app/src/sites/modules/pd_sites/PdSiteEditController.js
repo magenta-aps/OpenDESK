@@ -4,11 +4,13 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteEditController', PdSiteEditController);
     
-    function PdSiteEditController($scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
+    function PdSiteEditController(sitedata, $scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
         
         var pde = this;
-        
         var availProjectOwners = [];
+        
+        pde.site = sitedata;
+        
         $scope.newSite = {};
         $scope.availOrgs = [];
         $scope.projektGruppe = [];
@@ -16,19 +18,20 @@ angular
         $scope.arbejdsGruppe = [];
         $scope.folgeGruppe = [];
         
-        getProjectMembers();
+        //getProjectMembers();
+        
         $scope.newSite = {
-            siteName: pd.site.title,
-            desc: pd.site.description,
-            owner: pd.site.members.pd_projectowner,
+            siteName: pde.site.title,
+            desc: pde.site.description,
+            owner: pde.site.members.pd_projectowner,
             sbsys: '',
-            center_id: pd.site.center_id,
-            manager: pd.site.members.pd_projectmanager
+            center_id: pde.site.center_id,
+            manager: pde.site.members.pd_projectmanager
         };
-        $scope.projektGruppe = pd.site.members.pd_projectgroup;
-        $scope.styreGruppe = pd.site.members.pd_steering_group;
-        $scope.arbejdsGruppe = pd.site.members.pd_workgroup;
-        $scope.folgeGruppe = pd.site.members.pd_monitors;
+        $scope.projektGruppe = pde.site.members.pd_projectgroup;
+        $scope.styreGruppe = pde.site.members.pd_steering_group;
+        $scope.arbejdsGruppe = pde.site.members.pd_workgroup;
+        $scope.folgeGruppe = pde.site.members.pd_monitors;
         
         $scope.selectedProjGrpItem = null;
         $scope.srchprjgrptxt = null;
