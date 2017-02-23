@@ -111,7 +111,8 @@
 		<property name="nodeArchiveService" ref="nodeArchiveService"/>
 	</bean>
 
-	<bean id="webscript.sbsys.fakesbsys.get" class="dk.opendesk.webscripts.sbsys.FakeSbsysDownload" parent="webscript">
+	<bean id="webscript.sbsys.fakesbsys.post" class="dk.opendesk.webscripts.sbsys.FakeSbsysDownload" parent="webscript">
+		<property name="fileFolderService" ref="FileFolderService"></property>
 	</bean>
 
 </beans>
