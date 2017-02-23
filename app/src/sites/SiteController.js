@@ -197,6 +197,11 @@ angular
 		
 		vm.loadFromSbsys = function() {
 			
+			siteService.loadFromSbsys().then(function() {
+				vm.loadContents();
+				$mdDialog.hide();
+			});
+			
 		}
 		
 		vm.uploadSbsys = function (){
