@@ -24,6 +24,7 @@ import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.rendition.executer.AbstractRenderingEngine;
 import org.alfresco.repo.rendition.executer.ReformatRenderingEngine;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
@@ -37,6 +38,7 @@ import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.ISO9075;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -445,147 +447,201 @@ public class Sites extends AbstractWebScript {
     private JSONArray createMembersPDF(String shortName) {
 
 
-      SiteInfo site = siteService.getSite(shortName);
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
 
-        String siteManagerGroup = "GROUP_site_" + shortName + "_SiteManager";
-        String siteManagerMembers = "SITEManager: \n\n";
-        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, siteManagerGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            siteManagerMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+
+            SiteInfo site = siteService.getSite(shortName);
+            String output = "Medlemsliste for projektet: " + shortName + "\n\n\n\n\n";
+
+
+            // until further noctice, we dont want to make pds for normal projects
+
+//            String siteManagerGroup = "GROUP_site_" + shortName + "_SiteManager";
+//            String siteManagerMembers = "SITEManager: \n\n";
+//            Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, siteManagerGroup, true);
+//
+//            System.out.println(authorities);
+//            for (String authority : authorities) {
+//                NodeRef person = personService.getPerson(authority);
+//                siteManagerMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+//            }
+//
+//            String SiteCollaboratorGroup = "GROUP_site_" + shortName + "_SiteCollaborator";
+//            String SiteCollaboratorMembers = "SITECollaborator: \n\n";
+//            authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteCollaboratorGroup, true);
+//            for (String authority : authorities) {
+//                NodeRef person = personService.getPerson(authority);
+//                SiteCollaboratorMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+//            }
+//
+//            String SiteContributorGroup = "GROUP_site_" + shortName + "_SiteContributor";
+//            String SiteContributorMembers = "SITEContributor: \n\n";
+//            authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteContributorGroup, true);
+//            for (String authority : authorities) {
+//                NodeRef person = personService.getPerson(authority);
+//                SiteContributorMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+//            }
+//
+//            String SiteConsumerGroup = "GROUP_site_" + shortName + "_SiteConsumer";
+//            String SiteConsumerMembers = "SITEConsumer: \n\n";
+//            authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteConsumerGroup, true);
+//            for (String authority : authorities) {
+//                NodeRef person = personService.getPerson(authority);
+//                SiteConsumerMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+//            }
+//
+//
+//
+//
+//            output += siteManagerMembers + "\n\n";
+//
+//            output += SiteCollaboratorMembers + "\n\n";
+//
+//            output += SiteContributorMembers + "\n\n";
+//
+//            output += SiteConsumerMembers + "\n\n";
+
+
+            // extra groups for the new projecttype
+
+            JSONArray a = this.getDBID(shortName);
+            JSONObject dbid = (JSONObject) a.get(0);
+
+            String dbID = "";
+
+            try {
+                dbID = (String) dbid.get("DBID");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            NodeRef n = siteService.getSite(shortName).getNodeRef();
+            JSONObject json = new JSONObject();
+            String type = "";
+
+
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+                type = OpenDeskModel.pd_project;
+            } else {
+                type = OpenDeskModel.project;
+            }
+
+
+            if (type.equals(OpenDeskModel.pd_project)) {
+
+
+
+                String projectManagerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
+                String projectManagerGroupMembers = "PROJEKTLEDER: \n\n";
+                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
+                for (String authority : authorities) {
+                    NodeRef person = personService.getPerson(authority);
+                    projectManagerGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+                }
+
+
+                String projectOwnerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+                String projectOwnerMembers = "PROJEKTEJER: \n\n";
+                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
+                for (String authority : authorities) {
+                    NodeRef person = personService.getPerson(authority);
+                    projectOwnerMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+                }
+
+                String projectGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP;
+                String projectGroupMembers = "PROJEKTGRUPPE: \n\n";
+                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectGroup, true);
+                for (String authority : authorities) {
+                    NodeRef person = personService.getPerson(authority);
+                    projectGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+                }
+
+                String workGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_WORKGROUP;
+                String workGroupMembers = "ARBEJDSGRUPPE: \n\n";
+                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, workGroup, true);
+                for (String authority : authorities) {
+                    NodeRef person = personService.getPerson(authority);
+                    workGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+                }
+
+
+                String projectMonitors = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_MONITORS;
+                String projectMonitorsMembers = "FØLGEGRUPPE: \n\n";
+                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectMonitors, true);
+                for (String authority : authorities) {
+                    NodeRef person = personService.getPerson(authority);
+                    projectMonitorsMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+                }
+
+                String steeringGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_STEERING_GROUP;
+                String steeringGroupMembers = "STYREGRUPPE: \n\n";
+                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, steeringGroup, true);
+                for (String authority : authorities) {
+                    NodeRef person = personService.getPerson(authority);
+                    steeringGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+                }
+
+
+                output += projectOwnerMembers + "\n\n";
+                output += projectManagerGroupMembers + "\n\n";
+                output += projectGroupMembers + "\n\n";
+                output += workGroupMembers + "\n\n";
+                output += projectMonitorsMembers + "\n\n";
+                output += steeringGroupMembers + "\n\n";
+
+            }
+
+            System.out.println(output);
+
+
+            // delete the pdf if it is already present
+            NodeRef documentLib = siteService.getContainer(site.getShortName(), "documentlibrary");
+            NodeRef pdfnode = nodeService.getChildByName(documentLib, ContentModel.ASSOC_CONTAINS, ISO9075.encode("Medlemsoversigt.pdf"));
+
+            if (pdfnode != null) {
+                nodeService.deleteNode(pdfnode);
+            }
+
+
+            Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
+            documentLibaryProps.put(ContentModel.PROP_NAME, "Medlemsoversigt.pdf");
+
+            ChildAssociationRef child = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "tempfile1"), ContentModel.TYPE_CONTENT);
+            ChildAssociationRef pdf = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "thePDF"), ContentModel.TYPE_CONTENT, documentLibaryProps);
+
+            // hide the pdf from the users
+            Map<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+            nodeService.addAspect(pdf.getChildRef(), ContentModel.ASPECT_HIDDEN, aspectProps);
+
+
+            ContentWriter writer = this.contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
+            writer.setMimetype(MimetypeMap.MIMETYPE_TEXT_PLAIN);
+            writer.setEncoding("UTF-8");
+            writer.putContent(output);
+
+            writer = this.contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
+            writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
+            writer.putContent(output);
+
+            ContentReader pptReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
+            ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
+            ContentTransformer pptToPdfTransformer =
+                    contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
+
+
+            pptToPdfTransformer.transform(pptReader, pdfWriter);
+
+            nodeService.deleteNode(child.getChildRef());
+
+            return Utils.getJSONReturnPair("Noderef", pdf.getChildRef().getId());
         }
-
-        String SiteCollaboratorGroup = "GROUP_site_" + shortName + "_SiteCollaborator";
-        String SiteCollaboratorMembers = "SITECollaborator: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteCollaboratorGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            SiteCollaboratorMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        finally {
+        AuthenticationUtil.popAuthentication();
         }
-
-        String SiteContributorGroup = "GROUP_site_" + shortName + "_SiteContributor";
-        String SiteContributorMembers = "SITEContributor: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteContributorGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            SiteContributorMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-        String SiteConsumerGroup = "GROUP_site_" + shortName + "_SiteConsumer";
-        String SiteConsumerMembers = "SITEConsumer: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteConsumerGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            SiteConsumerMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-
-        String output = "";
-
-        output += siteManagerMembers + "\n\n";
-
-        output += SiteCollaboratorMembers + "\n\n";
-
-        output += SiteContributorMembers + "\n\n";
-
-        output += SiteConsumerMembers + "\n\n";
-
-
-
-
-        // extra groups for the new projecttype
-
-        String projectOwnerGroup = "GROUP_" + this.getDBID(shortName).get(0) + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
-        String projectOwnerMembers = "PROJEKTEJERGRUPPE: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            projectOwnerMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-        String projectManagerGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
-        String projectManagerGroupMembers = "PROJEKTLEDERGRUPPE: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            projectManagerGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-        String projectGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP;
-        String projectGroupMembers = "PROJEKTGRUPPE: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            projectGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-        String workGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_WORKGROUP;
-        String workGroupMembers = "ARBEJDSGRUPPE: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, workGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            workGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-
-        String projectMonitors = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_MONITORS;
-        String projectMonitorsMembers = "FØLGEGRUPPE: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectMonitors, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            projectMonitorsMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-        String steeringGroup = "GROUP_" + this.getDBID(shortName) + "_" + OpenDeskModel.PD_GROUP_STEERING_GROUP;
-        String steeringGroupMembers = "STYREGRUPPE: \n\n";
-        authorities = authorityService.getContainedAuthorities(AuthorityType.USER, steeringGroup, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            steeringGroupMembers += (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-
-
-        output += projectOwnerMembers + "\n\n";
-        output += projectManagerGroupMembers + "\n\n";
-        output += projectGroupMembers + "\n\n";
-        output += workGroupMembers + "\n\n";
-        output += projectMonitorsMembers + "\n\n";
-        output += steeringGroupMembers + "\n\n";
-
-        System.out.println(output);
-
-
-
-        NodeRef documentLib = siteService.getContainer(site.getShortName(), "documentlibrary");
-
-        Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
-        documentLibaryProps.put(ContentModel.PROP_NAME, "Medlemsoversigt.pdf");
-
-        ChildAssociationRef child = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "tempfile1"), ContentModel.TYPE_CONTENT);
-        ChildAssociationRef pdf = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "thePDF"), ContentModel.TYPE_CONTENT, documentLibaryProps);
-
-        ContentWriter writer = this.contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
-        writer.setMimetype(MimetypeMap.MIMETYPE_TEXT_PLAIN);
-        writer.setEncoding("UTF-8");
-        writer.putContent("text er der en del af");
-
-        writer = this.contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
-        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
-        writer.putContent(output);
-
-        ContentReader pptReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
-        ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
-        ContentTransformer pptToPdfTransformer =
-        contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
-
-
-        pptToPdfTransformer.transform(pptReader, pdfWriter);
-
-        // nodeService.deleteNode(child.getChildRef());
-
-//        http://localhost:8080/alfresco/service/api/node/content/workspace/SpacesStore/90defc67-622f-4bd4-acb2-e20d569b16f4
-
-        return Utils.getJSONReturnPair("Noderef", pdf.getChildRef().getId());
 
 
     }
