@@ -2,9 +2,13 @@
     <md-card-content>
         <h2>Notifikationer</h2>
         <md-input-container>
-            <input type="checkbox" aria-label="Notifikationer" ng-true-value="'true'" ng-false-value="'false'" ng-model="vm.receiveNotifications"> <label>Send mig notifikationer, når der bliver lagt dokumenter ind i projekter, som jeg er medlem af</label>
+            <!--input type="checkbox" aria-label="Notifikationer" ng-true-value="'true'" ng-false-value="'false'" ng-model="vm.receiveNotifications"> <label>Send mig notifikationer, når der bliver lagt dokumenter ind i projekter, som jeg er medlem af</label-->
+			<md-checkbox aria-label="Notifikationer" ng-true-value="'true'" ng-false-value="'false'" ng-model="vm.receiveNotifications">Send notifikationer</md-checkbox>
         </md-input-container>
-        <div layout="row" layout-align="start center" class="btnAlign">
+		<div layout="row" style="margin: 10px 0 40px 0;">
+			<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Send mig notifikationer, når der bliver lagt dokumenter ind i projekter, som jeg er medlem af.</span>
+		</div>
+        <div layout="row" layout-align="start center" class="btnAlign">			
             <md-button class="md-primary md-raised" ng-click="vm.setNotificationPreferences()">Gem&nbsp;&nbsp;</md-button>
         </div>
     </md-card-content>

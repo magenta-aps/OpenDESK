@@ -1,0 +1,53 @@
+<md-dialog ng-cloak style="min-width:500px">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Hent dokumenter</h2>
+		</div>
+	</md-toolbar>
+
+	<div layout="row" class="md-padding">
+		<h4>Dokumenter for SBSYS sagsnr. 85.00.00-I00-1-14</h4>
+	</div>
+	<div layout="column" class="md-padding">
+		<div>
+			<md-checkbox>Klagesag - Peter Eriksen</md-checkbox>				
+		</div>
+		<div layout="row">
+			<div flex="10" hide-xs hide-sm><!-- Spacer //--></div>
+			<div flex="90">
+				<md-checkbox>Notat over hændelsesforløb</md-checkbox>				
+			</div>
+		</div>
+		<div layout="row">
+			<div flex="10" hide-xs hide-sm><!-- Spacer //--></div>
+			<div flex="90">
+				<md-checkbox>Episode - 9. juli 2016</md-checkbox>				
+			</div>
+		</div>
+		<div layout="row">
+			<div flex="10" hide-xs hide-sm><!-- Spacer //--></div>
+			<div flex="90">
+				<md-checkbox>Episode - 6. maj 2016</md-checkbox>				
+			</div>
+		</div>
+		<div layout="row">
+			<div flex="10" hide-xs hide-sm><!-- Spacer //--></div>
+			<div flex="90">
+				<md-checkbox>Afgørelse - udkast</md-checkbox>				
+			</div>
+		</div>
+		<div layout="row">
+			<div flex="10" hide-xs hide-sm><!-- Spacer //--></div>
+			<div flex="90">
+				<md-checkbox>Afgørelse - endelig</md-checkbox>				
+			</div>
+		</div>
+	</div>
+	<md-divider></md-divider>
+	<div layout="row" layout-align="center" style="margin: 20px 0 20px 0;">
+		<md-dialog-actions>
+			<md-button class="md-raised md-primary" ng-click="vm.loadFromSbsys()" style="margin-right: 10px;">Hent dokumenter</md-button>
+			<md-button class="md-raised" ng-click="vm.cancel()">Annullér</md-button>
+		</md-dialog-actions>
+	</div>
+</md-dialog>

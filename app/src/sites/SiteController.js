@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-    function SiteController($q, $scope, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
+    function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
                             alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
                             searchService, $state, userService, groupService, preferenceService) {
 
@@ -38,6 +38,8 @@ angular
         vm.userRole = 'siteConsumer';
         vm.projectType = $location.search().type;
         vm.currentUser = authService.getUserInfo().user;
+		vm.uploadedToSbsys = false;
+		vm.showProgress = false;
 
         siteService.getSiteType(vm.project).then (function(response) {
             vm.projectType = response[0].type;
@@ -180,7 +182,27 @@ angular
                 $mdDialog.hide();
             });
         }
-    
+		
+		vm.loadFromSbsys = function() {
+			
+		}
+		
+		vm.uploadSbsys = function (){
+			vm.showProgress = true;
+			$timeout(setSbsysShowAttr, 2500);
+		}
+		
+		function setSbsysShowAttr() {
+			vm.showProgress = false;
+			vm.uploadedToSbsys = true;
+		}
+	
+		
+		 vm.cancelSbsysDialog = function () {
+			vm.showProgress = false;
+			vm.uploadedToSbsys = false;
+            $mdDialog.cancel();
+        };
     
         vm.newFolderDialog = function (event) {
             $mdDialog.show({
@@ -192,11 +214,32 @@ angular
                 clickOutsideToClose: true
             });
         };
-        
-        
+               
         vm.newLinkDialog = function (event) {
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/newLink.tmpl.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                scope: $scope,
+                preserveScope: true,
+                clickOutsideToClose: true
+            });
+        };
+		
+		vm.uploadSbsysDialog = function (event) {
+            $mdDialog.show({
+                templateUrl: 'app/src/sites/view/uploadSbsys.tmpl.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                scope: $scope,
+                preserveScope: true,
+                clickOutsideToClose: true
+            });
+        };
+		
+		vm.loadSbsysDialog = function (event) {
+            $mdDialog.show({
+                templateUrl: 'app/src/sites/view/loadSbsys.tmpl.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 scope: $scope,

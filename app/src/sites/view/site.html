@@ -14,13 +14,12 @@
                 <!-- <md-input-container> -->
                 <i class="material-icons">search</i>
                 <md-autocomplete
-                        required
                         md-input-name="searchAutocomplete"
                         md-selected-item="searchQuery"
                         md-search-text="searchText"
                         md-items="r in vm.getAutoSuggestions(searchText)"
                         md-item-text="r.name"
-                        md-floating-label="Søg">
+                        md-floating-label="Søg dokumenter">
                     <md-item-template>
                         <span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
                     </md-item-template>
@@ -237,7 +236,25 @@
                     <md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised"
                                ng-click="vm.newLinkDialog($event)"><i class="material-icons">link</i> Opret projektlink
                     </md-button>
+					<div layout="column">
+						<md-menu>
+							<md-button ng-click="$mdOpenMenu($event)" class="md-raised" aria-label="SBSYS">
+								<i class="material-icons">folder_open</i>
+								<span style="margin-left: 10px; margin-right: 20px;">SBSYS</span>
+							</md-button>
+							<md-menu-content>
+								<md-menu-item>
+									<md-button ng-click="vm.uploadSbsysDialog($event)"><i class="material-icons">unarchive</i> Upload projekt</md-button>
+								</md-menu-item>
+								<md-menu-item>
+									<md-button ng-click="vm.loadSbsysDialog($event)"><i class="material-icons">archive</i> Hent dokumenter</md-button>
+								</md-menu-item>
+							</md-menu-content>
+						</md-menu>
+						 
+					</div>
                 </div>
+				
             </md-card-content>
         </md-card>
 

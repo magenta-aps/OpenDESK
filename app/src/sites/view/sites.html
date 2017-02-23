@@ -7,13 +7,12 @@
 		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
             <i class="material-icons">search</i>
             <md-autocomplete
-                    required
                     md-input-name="autocomplete"
                     md-selected-item="searchQuery"
                     md-search-text="searchText"
                     md-items="r in vm.getAutoSuggestions(searchText)"
                     md-item-text="r.name"
-                    md-floating-label="Søg">
+                    md-floating-label="Søg dokumenter">
                 <md-item-template>
                     <span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
                 </md-item-template>
@@ -31,7 +30,8 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 				<md-input-container>
-					<input type="checkbox" aria-label="Vis kun mine projekter" ng-model="vm.memberonly"> <label>Vis kun mine projekter</label>
+					<!--input type="checkbox" aria-label="Vis kun mine projekter" ng-model="vm.memberonly"> <label>Vis kun mine projekter</label-->
+					<md-checkbox ng-model="vm.memberonly">Vis kun mine projekter</md-checkbox>
 				</md-input-container>
 
 				<div ng-init="states = [
@@ -48,7 +48,7 @@
 
 				<md-input-container>
 					<label>Center</label>
-					<md-select ng-model="vm.search.center_id" required>
+					<md-select ng-model="vm.search.center_id">
 						<md-option ng-repeat="x in vm.organizationalCenters" value="{{ x.shortName }}">
 							{{ x.displayName }}
 						</md-option>
@@ -109,7 +109,7 @@
                 <md-menu>
                     <md-button ng-click="$mdOpenMenu($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nye projekter">
                         <i class="material-icons">add</i>
-                        <span>Tilføj projekt</span>
+                        <span>Opret nyt projekt</span>
                     </md-button>
                     <md-menu-content>
                         <md-menu-item>
