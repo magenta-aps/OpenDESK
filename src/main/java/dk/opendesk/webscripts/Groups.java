@@ -73,6 +73,16 @@ public class Groups extends AbstractWebScript {
 
     private PermissionService permissionService;
 
+
+    // todo to be extended when the proper implementation of change permission for a single user is implemented
+    private String translatePermission(String permission) {
+        if (permission.equals(PermissionService.CONTRIBUTOR)) {
+            return "Kan skrive";
+        }
+        return null;
+    }
+
+
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
@@ -140,12 +150,10 @@ public class Groups extends AbstractWebScript {
             AccessPermission a = (AccessPermission)i.next();
 
             if (a.getAuthority().equals(group)) {
-                System.out.println("permission");
-                System.out.println(a.getPermission());
                 permission = a.getPermission();
 
                 try {
-                    json.put("permission",permission);
+                    json.put("permission",this.translatePermission(permission));
                     result.add(json);
                 } catch (JSONException e) {
                     e.printStackTrace();

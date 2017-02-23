@@ -72,8 +72,6 @@ public class Contents extends AbstractWebScript {
 
             nodeRef = new NodeRef("workspace://SpacesStore/" +  nodeId);
 
-        System.out.println("hey");
-
             JSONArray result = this.getChildNodes(nodeRef);
             try {
 
@@ -123,8 +121,6 @@ public class Contents extends AbstractWebScript {
 
                     json.put("contentType", type);
 
-                    System.out.println(type);
-
                     if (type != "cmis:link") {
                         System.out.println("heyyyyy");
                         json.put("nodeRef", childAssociationRef.getChildRef());
@@ -147,8 +143,6 @@ public class Contents extends AbstractWebScript {
 
                         String label = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_VERSION_LABEL);
 
-                        System.out.println("history");
-                        System.out.println(label);
 
                         if (label != null && label.equals("1.0")) {
                             json.put("hasHistory", false);
