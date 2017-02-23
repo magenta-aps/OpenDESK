@@ -30,6 +30,20 @@ angular
             });
         }
 
+        function updatePDSite(shortName, siteName, description, sbsys, center_id, owner, manager) {
+            return $http.post('/alfresco/service/projectdepartment', {
+                PARAM_NAME: siteName,
+                PARAM_SHORT_NAME: shortName,
+                PARAM_DESCRIPTION: description,
+                PARAM_SBSYS: sbsys,
+                PARAM_OWNER: owner,
+                PARAM_MANAGER: manager,
+                PARAM_CENTERID: center_id,
+                PARAM_METHOD: "updatePDSite"
+            }).then(function (response) {
+                return response;
+            });
+        }
 
         function addTemplate(siteName, template) {
             return $http.post('/alfresco/service/projectdepartment', {
