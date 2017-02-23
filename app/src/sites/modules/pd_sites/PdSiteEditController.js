@@ -11,45 +11,28 @@ angular
         
         pde.site = sitedata;
         
-        $scope.newSite = {};
-        $scope.availOrgs = [];
-        $scope.projektGruppe = [];
-        $scope.styreGruppe = [];
-        $scope.arbejdsGruppe = [];
-        $scope.folgeGruppe = [];
-        
         //getProjectMembers();
+        console.log('pde.site.members.pd_projectmanager');
+        console.log(pde.site.members.pd_projectmanager);
         
         $scope.newSite = {
+            shortName: pde.site.shortName,
             siteName: pde.site.title,
             desc: pde.site.description,
             owner: pde.site.members.pd_projectowner,
-            sbsys: '',
+            sbsys: pde.site.sbsys,
             center_id: pde.site.center_id,
             manager: pde.site.members.pd_projectmanager
         };
-        $scope.projektGruppe = pde.site.members.pd_projectgroup;
-        $scope.styreGruppe = pde.site.members.pd_steering_group;
-        $scope.arbejdsGruppe = pde.site.members.pd_workgroup;
-        $scope.folgeGruppe = pde.site.members.pd_monitors;
-        
-        $scope.selectedProjGrpItem = null;
-        $scope.srchprjgrptxt = null;
-        $scope.selectedStyreGrpItem = null;
-        $scope.srchstrgrptxt = null;
-        $scope.selectedArbejdsGrpItem = null;
-        $scope.srchrbjdgrptxt = null;
-        $scope.selectedFolgeGrpItem = null;
-        $scope.srchflggrptxt = null;
+        $scope.newSite.owner.fullName = pde.site.members.pd_projectowner.displayName;
+        $scope.newSite.owner.shortName = pde.site.members.pd_projectowner.username;
+        $scope.newSite.manager.firstName = pde.site.members.pd_projectmanager.displayName;
+        $scope.newSite.manager.shortName = pde.site.members.pd_projectmanager.username;
         
         $scope.cancel = cancel;
         $scope.searchProjectOwners = searchProjectOwners;
         $scope.searchPeople = searchPeople;
         $scope.updatePdSite = updatePdSite;
-        
-        
-        getProjectOwners();
-        getAvailOrgs();
         
         
         function cancel() {
@@ -65,11 +48,11 @@ angular
                     availProjectOwners = response.data;
                 },
                 function(err) {
-                    console.log('Got error retrieving project owners');
                     console.log(err);
                 }
             );
         }
+        getProjectOwners();
         
         
         function searchProjectOwners(query) {
@@ -79,7 +62,6 @@ angular
         
         
         function searchPeople(query) {
-            console.log('searchPeople controller');
             if (query) {
                 return siteService.getAllUsers(query);
             }
@@ -93,102 +75,31 @@ angular
                 }
             );
         }
+        getAvailOrgs();
 
-        
-        function createSiteNotification (siteName, userName, link) {
-                if(userName == pd.currentUser)
-                    return;
-
-                var subject = "Du er blevet tilføjet til " + siteName;
-                var message = "Du er blevet tilføjet til projektet " + siteName + ".";
-                notificationsService.addNotice(userName, subject, message, link).then(function (val) {
-                    $mdDialog.hide();
-                });
-        }
-        
         
         function updatePdSite() {
-            console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + $scope.newSite.manager.userName);
-            var shortName = $scope.newSite.siteName.replace(new RegExp(" ", 'g'), "-");
+            console.log('Updating site to sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + $scope.newSite.manager.userName);
             var visibility = "PUBLIC"; // Visibility is set to public
-            pd_siteService.createPDSite(
-                shortName,
+            pd_siteService.updatePDSite(
+                $scope.newSite.shortName,
                 $scope.newSite.siteName,
                 $scope.newSite.desc,
                 $scope.newSite.sbsys,
                 $scope.newSite.center_id,
                 $scope.newSite.owner.shortName,
                 $scope.newSite.manager.userName,
-                visibility
+                visibility,
+                ''
             ).then(
                 function(response) {
-                    if(response.data[0].status === 'success') {
+                    console.log('will this ever happen?');
+                    console.log(response);
+                    if(response) {
                         $mdDialog.cancel();
-
-                        var siteShortName = response.data[0].shortName;
-                        var siteName = $scope.newSite.siteName;
-                        var link = "/#!/projekter/" + siteShortName  + "?type=PD-Project";
-                        var userName;
-                        createSiteNotification(siteName, $scope.newSite.owner.shortName, link);
-                        createSiteNotification(siteName, $scope.newSite.manager.userName, link);
-
-                        for (var up in $scope.projektGruppe) {
-                            userName = $scope.projektGruppe[up].userName;
-                            siteService.addUser( $scope.newSite.siteName, userName, 'PD_PROJECTGROUP' ).then(
-                                function(response) {
-                                    createSiteNotification(siteName, userName, link);
-                                    console.log('Added user ' + userName + ' to PD_PROJECTGROUP');
-                                },
-                                function(err) {
-                                    console.log('ERROR: Problem creating user in project group PD_PROJECTGROUP');
-                                    console.log(err);
-                                }
-                            );
-                        }
-                        for (var us in $scope.styreGruppe) {
-                            userName = $scope.projektGruppe[us].userName;
-                            siteService.addUser( $scope.newSite.siteName, userName, 'PD_STEERING_GROUP' ).then(
-                                function(response) {
-                                    createSiteNotification(siteName, userName, link);
-                                    console.log('Added user ' + userName + ' to PD_STEERING_GROUP');
-                                },
-                                function(err) {
-                                    console.log('ERROR: Problem creating user in project group PD_STEERING_GROUP');
-                                    console.log(err);
-                                }
-                            );
-                        }
-                        for (var ua in $scope.arbejdsGruppe) {
-                            userName = $scope.projektGruppe[ua].userName;
-                            siteService.addUser( $scope.newSite.siteName, userName, 'PD_WORKGROUP' ).then(
-                                function(response) {
-                                    createSiteNotification(siteName, userName, link);
-                                    console.log('Added user ' + userName + ' to PD_WORKGROUP');
-                                },
-                                function(err) {
-                                    console.log('ERROR: Problem creating user in project group PD_WORKGROUP');
-                                    console.log(err);
-                                }
-                            );
-                        }
-                        for (var uf in $scope.folgeGruppe) {
-                            userName = $scope.projektGruppe[uf].userName;
-                            siteService.addUser( $scope.newSite.siteName, userName, 'PD_MONITORS' ).then(
-                                function(response) {
-                                    createSiteNotification(siteName, userName, link);
-                                    console.log('Added user ' + userName + ' to PD_MONITORS');
-                                },
-                                function(err) {
-                                    console.log('ERROR: Problem creating user in project group PD_MONITORS');
-                                    console.log(err);
-                                }
-                            );
-                        }
-                        window.location.href = link;
-
                         $mdToast.show(
                             $mdToast.simple()
-                                    .textContent('Du har oprettet projekt: ' + $scope.newSite.siteName)
+                                    .textContent('Du har opdateret projekt: ' + $scope.newSite.siteName)
                                     .hideDelay(3000)
                         );
                     }
