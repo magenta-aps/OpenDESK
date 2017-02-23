@@ -58,6 +58,19 @@ angular
                 console.log(err);
             }
         );
+
+
+        function getSitesPerUser() {
+            return siteService.getSitesPerUser().then(function(response) {
+                    vm.sitesPerUser = response;
+                    console.log("response");
+                    console.log("response");
+                    console.log(response);
+                    return response;
+                }
+            );
+        }
+        getSitesPerUser();
 	
         
         function translation_to_value(translation) {
@@ -165,8 +178,8 @@ angular
     
     
         vm.createLink = function (project) {
-    
-            siteService.createLink(vm.project, project).then(function () {
+            siteService.createLink(vm.project, project.shortName).then(function () {
+                vm.loadContents();
                 $mdDialog.hide();
             });
         }
@@ -175,6 +188,7 @@ angular
         vm.deleteLink = function (source, destination) {
     
             siteService.deleteLink(source, destination).then(function () {
+                vm.loadContents();
                 $mdDialog.hide();
             });
         }
