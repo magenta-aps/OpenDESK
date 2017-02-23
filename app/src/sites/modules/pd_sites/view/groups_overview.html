@@ -1,7 +1,7 @@
 <md-card-content ng-controller="PdSiteController as pd">
     
     <div layout="row" layout-align="space-between"></div>
-        <h3 class="od-title-icon"><i class="material-icons">group</i> Styret projekt, projektgrupper</h3>
+        <h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
         <md-button class="md-raised md-icon-button" ng-click="pd.editPdSite($event)" aria-label="Redigér site">
             <i class="material-icons">edit</i>
         </md-button>
@@ -257,12 +257,13 @@
         <div layout="row" layout-align="start center" class="btnAlign">
             <div flex="15">
                 <md-button class="md-raised md-icon-button" ng-click="pd.editPdSite($event)" aria-label="Redigér gruppemedlemmer">
-                    <i class="material-icons">add</i>
+                    <md-tooltip md-direction="top">Tilføj/fjern gruppemedlemmer</md-tooltip>
+					<i class="material-icons">add</i>
                 </md-button>
             </div>
             <div flex="85">
                 <md-button class="md-raised md-icon-button" ng-click="pd.doPDF()" aria-label="Download PDF med grupper">
-                    <i class="material-icons">pdf</i>
+                    <md-tooltip md-direction="top">Download medlemsoversigt som PDF</md-tooltip>PDF
                 </md-button>
             </div>
         </div>

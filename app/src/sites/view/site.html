@@ -130,8 +130,16 @@
                                         <md-menu-item>
                                             <md-button ng-disabled="vm.userRole === 'SiteConsumer'"
                                                        ng-click="vm.goToLOEditPage(content.nodeRef)">
-                                                <md-icon md-menu-align-target>linux</md-icon>
-                                                Rediger i LOOL
+                                                <md-icon md-menu-align-target>library_books</md-icon>
+                                                Rediger dokument
+                                            </md-button>
+                                        </md-menu-item>
+										
+										<md-menu-item>
+                                            <md-button ng-disabled="vm.userRole === 'SiteConsumer'"
+                                                       ng-click="vm.goToLOEditPagexxx(content.nodeRef)">
+                                                <md-icon md-menu-align-target>unarchive</md-icon>
+                                                Upload til SBSYS
                                             </md-button>
                                         </md-menu-item>
 
@@ -157,7 +165,6 @@
                                                 Send til godkendelse
                                             </md-button>
                                         </md-menu-item>
-
                                     </md-menu-content>
                                 </md-menu>
                             </td>
@@ -169,7 +176,7 @@
                                    ng-href="#!/projekter/{{vm.project}}{{vm.path}}/{{content.name}}?type={{ vm.projectType }}">
                                 <i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
                                 {{content.name}}
-                            </a></td>
+                            </a></td>							
                             <td>
                                 <a class="od-filebrowser-link"
                                    ng-href="#!/projekter/{{vm.project}}{{vm.path}}/{{content.name}}?type={{ vm.projectType }}">{{content.lastChanged
@@ -201,6 +208,7 @@
                                    ng-show="content.contentType === 'cmis:link'">content_paste</i>
                                 {{content.name}}
                             </a></td>
+							<td>&nbsp;</td>
                             <td>
                                 <md-menu>
                                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
@@ -260,7 +268,7 @@
 
         <md-card flex-gt-sm="30" ng-if="vm.projectType === 'Project'">
             <md-card-content>
-                <h3 class="od-title-icon"><i class="material-icons">group</i>Medlemmer tilknyttet projektet</h3>
+                <h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
                 <md-list class="od-members">
                     <md-list-item ng-repeat="member in members">
                         <div flex="50" flex-gt-lg="60">
