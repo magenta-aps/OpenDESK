@@ -125,8 +125,6 @@ angular
         vm.loadSiteData = function () {
             siteService.loadSiteData(vm.project).then(
                 function (result) {
-                    console.log('Loading site data');
-                    console.log(result);
                     vm.project_title = result.title;
                     // Compile paths for breadcrumb directive
                     vm.paths = buildBreadCrumbPath(vm.project_title);
@@ -351,7 +349,7 @@ angular
         vm.loadMembers = function () {
             siteService.getSiteMembers(vm.project).then(function (val) {
                 $scope.members = val;
-                console.log("$scope.members: " + $scope.members);
+                //console.log("$scope.members: " + $scope.members);
             });
             siteService.getAllMembers(vm.project, vm.projectType).then(function (val) {
                 $scope.allMembers = val;

@@ -14,7 +14,25 @@ angular
         };
         
 
-        function createPDSite(shortName, siteName, description, sbsys, center_id, owner, manager) {
+        function createPDSite(shortName, siteName, description, sbsys, center_id, owner, manager, visibility) {
+            return $http.post('/alfresco/service/projectdepartment', {
+                PARAM_NAME: siteName,
+                PARAM_SHORT_NAME: shortName,
+                PARAM_DESCRIPTION: description,
+                PARAM_SBSYS: sbsys,
+                PARAM_OWNER: owner,
+                PARAM_MANAGER: manager,
+                PARAM_VISIBILITY: visibility,
+                PARAM_CENTERID: center_id,
+                PARAM_METHOD: "createPDSITE"
+            }).then(function (response) {
+                //console.log(response);
+                return response;
+            });
+        }
+
+        //All values except shortName can be empty strings to avoid updating those parameters.
+        function updatePDSite(shortName, siteName, description, sbsys, center_id, owner, manager, visibility, state) {
             return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
                 PARAM_SHORT_NAME: shortName,
@@ -23,20 +41,20 @@ angular
                 PARAM_OWNER: owner,
                 PARAM_MANAGER: manager,
                 PARAM_CENTERID: center_id,
-                PARAM_METHOD: "createPDSITE"
+                PARAM_VISIBILITY: visibility,
+                PARAM_STATE: state,
+                PARAM_METHOD: "updatePDSite"
             }).then(function (response) {
-                console.log(response);
                 return response;
             });
         }
-
 
         function addTemplate(siteName, template) {
             return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
                 PARAM_TEMPLATE: template
             }).then(function (response) {
-                console.log(response);
+                //console.log(response);
                 return response;
             });
         }
@@ -45,11 +63,12 @@ angular
         function getAllManagers() {
             return groupService.getGroupMembers("GLOBAL_Projectmanagers").then(
                 function (response) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     return response;
                 },
                 function (err) {
-                    console.log(err);
+                    //console.log(err);
+                    return err;
                 }
             );
         }
@@ -57,7 +76,7 @@ angular
 
         function getAllOrganizationalCenters() {
             return groupService.getGroupMembers("OrganizationalCenters").then(function (response) {
-                console.log(response);
+                //console.log(response);
                 return response;
             });
         }
