@@ -4,3 +4,7 @@ alfresco.iml
 out/
 target/
 *.iml
+.project
+.settings/
+.classpath
+
