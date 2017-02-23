@@ -197,6 +197,11 @@ angular
 		
 		vm.loadFromSbsys = function() {
 			
+			siteService.loadFromSbsys().then(function() {
+				vm.loadContents();
+				$mdDialog.hide();
+			});
+			
 		}
 		
 		vm.uploadSbsys = function (){
@@ -361,7 +366,6 @@ angular
         }
     
         function createDocumentNotification(projekt, ref, fileName) {
-            console.log("Inside notification");
             var creatorFirstName = vm.currentUser.firstName;
             var creatorLastName = vm.currentUser.lastName;
             var creatorFullName = creatorFirstName + " " + creatorLastName;
@@ -369,7 +373,6 @@ angular
             var message = "En ny fil \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
             var link = "/#!/dokument/" + ref;
 
-            console.log("Further notification");
             // Creating an empty initial promise that always resolves itself.
             var promise = $q.all([]);
 
@@ -384,13 +387,11 @@ angular
                             receiveNotifications = data[preferenceFilter];
                         }
                         if (receiveNotifications != null && receiveNotifications == "true") {
+                            console.log("Sending notification to : " + userName);
                             createNotification(userName, subject, message, link);
                         }
                     });
                 }
-            });
-
-            promise.finally(function () {
             });
         }
     

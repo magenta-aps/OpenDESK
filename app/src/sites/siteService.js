@@ -375,6 +375,14 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             }).then(function(response) {
                 return response.data;
             });
+        },
+        loadFromSbsys : function() {
+        	return $http.post("/alfresco/service/sbsys/fakedownload", {
+        		destinationNodeRef : "workspace://SpacesStore/9a85d4fb-472e-4cb4-ba25-a4d7b646387d",
+        		nodeRefs : ["workspace://SpacesStore/bf8a95ef-c6ba-42db-bc49-70dcbbe8ddab","workspace://SpacesStore/52fbbc13-38c0-4daa-8f62-362e319efea3"]
+        	}).then(function(response) {
+        		return response.data;
+        	});
         }
     };
 });
