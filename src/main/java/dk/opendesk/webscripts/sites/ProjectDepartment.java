@@ -21,6 +21,7 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.domain.permissions.Authority;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.site.SiteModel;
 import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -102,15 +103,21 @@ public class ProjectDepartment extends AbstractWebScript {
             String site_manager = Utils.getJSONObject(json, "PARAM_MANAGER");
             String site_state = Utils.getJSONObject(json, "PARAM_STATE");
             String site_center_id = Utils.getJSONObject(json, "PARAM_CENTERID");
+            String site_visibility_str = Utils.getJSONObject(json, "PARAM_VISIBILITY");
+            SiteVisibility site_visibility;
+            if(site_visibility_str.isEmpty())
+                site_visibility = null;
+            else
+                site_visibility = SiteVisibility.valueOf(site_visibility_str);
 
             switch (method) {
                 case "createPDSITE":
-                    createPDSite(site_short_name, site_name, site_description,
-                            site_sbsys, site_center_id, site_owner, site_manager);
+                    result = createPDSite(site_short_name, site_name, site_description,
+                            site_sbsys, site_center_id, site_owner, site_manager, site_visibility);
                     break;
                 case "updatePDSITE":
-                    updatePDSite(site_short_name, site_name, site_description,
-                            site_sbsys, site_center_id, site_owner, site_manager, site_state);
+                    result = updatePDSite(site_short_name, site_name, site_description,
+                            site_sbsys, site_center_id, site_owner, site_manager, site_state, site_visibility);
                     break;
                 case "addTemplate":
                     break;
@@ -124,8 +131,11 @@ public class ProjectDepartment extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private JSONArray createPDSite(String site_short_name, String site_name, String site_description,
-                                   String site_sbsys, String site_center_id, String site_owner, String site_manager) {
+    private JSONArray createPDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
+                                   String site_center_id, String site_owner, String site_manager, SiteVisibility site_visibility) {
+
+        if(site_visibility == null)
+            site_visibility = SiteVisibility.PUBLIC;
 
         JSONArray result = new JSONArray();
         AuthenticationUtil.pushAuthentication();
@@ -138,7 +148,7 @@ public class ProjectDepartment extends AbstractWebScript {
             int i = 1;
             do {
                 try {
-                    newSiteRef = createSite(site_short_name_with_version, site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
+                    newSiteRef = createSite(site_short_name_with_version, site_name, site_description, site_sbsys, site_center_id, site_visibility);
                 }
                 catch(SiteServiceException e) {
                     if(e.getMsgId().equals("site_service.unable_to_create"))
@@ -168,7 +178,8 @@ public class ProjectDepartment extends AbstractWebScript {
     }
 
     private JSONArray updatePDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
-                                   String site_center_id, String site_owner, String site_manager, String site_state) {
+                                   String site_center_id, String site_owner, String site_manager, String site_state,
+                                   SiteVisibility site_visibility) {
 
         AuthenticationUtil.pushAuthentication();
         try {
@@ -176,6 +187,10 @@ public class ProjectDepartment extends AbstractWebScript {
             // ...code to be run as Admin...
 
             SiteInfo site = siteService.getSite(site_short_name);
+
+            if(site_visibility != null)
+                nodeService.setProperty(site.getNodeRef(), SiteModel.PROP_SITE_VISIBILITY, site_visibility);
+
             updateSite(site, site_name, site_description, site_sbsys, site_center_id, site_state);
 
             String dbid = nodeService.getProperty(site.getNodeRef(), ContentModel.PROP_NODE_DBID).toString();
