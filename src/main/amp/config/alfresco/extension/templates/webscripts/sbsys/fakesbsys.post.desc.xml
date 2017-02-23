@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>SBSYS Fake</shortname>
+    <description>Faking download of documents from case in SBSYS</description>
+    <url>/sbsys/fakedownload</url>
+    <authentication>user</authentication>
+    <format default="json"></format>
+</webscript>
