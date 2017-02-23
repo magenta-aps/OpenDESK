@@ -122,7 +122,6 @@ public class Contents extends AbstractWebScript {
                     json.put("contentType", type);
 
                     if (type != "cmis:link") {
-                        System.out.println("heyyyyy");
                         json.put("nodeRef", childAssociationRef.getChildRef());
 
                         ChildAssociationRef parent = nodeService.getPrimaryParent(childAssociationRef.getChildRef());

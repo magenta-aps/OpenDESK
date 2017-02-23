@@ -92,9 +92,6 @@ public class Groups extends AbstractWebScript {
         String groupName = params.get("groupName");
         String method = params.get("method");
 
-        System.out.println(shortName);
-        System.out.println(groupName);
-
         if (method != null && method.equals("getAllMembers")) {
 
             JSONArray result = this.getAllMembers(shortName, groupName);
@@ -164,7 +161,6 @@ public class Groups extends AbstractWebScript {
         }
 
         for (String authority : authorities) {
-            System.out.println(authority);
             NodeRef person = personService.getPerson(authority);
             String username  = (String)nodeService.getProperty(person, ContentModel.PROP_USERNAME);
             String displayName  = (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
