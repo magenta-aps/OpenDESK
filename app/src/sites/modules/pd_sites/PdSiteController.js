@@ -258,6 +258,7 @@ angular
             function updatePdSite() {
                 console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + $scope.newSite.manager.userName);
                 var shortName = $scope.newSite.siteName.replace(new RegExp(" ", 'g'), "-");
+                var visibility = "PUBLIC"; // Visibility is set to public
                 pd_siteService.createPDSite(
                     shortName,
                     $scope.newSite.siteName,
@@ -265,7 +266,8 @@ angular
                     $scope.newSite.sbsys,
                     $scope.newSite.center_id,
                     $scope.newSite.owner.shortName,
-                    $scope.newSite.manager.userName
+                    $scope.newSite.manager.userName,
+                    visibility
                 ).then(
                     function(response) {
                         if(response.data[0].status === 'success') {
