@@ -363,7 +363,7 @@ angular
         vm.loadMembers = function () {
             siteService.getSiteMembers(vm.project).then(function (val) {
                 $scope.members = val;
-                console.log("$scope.members: " + $scope.members);
+                //console.log("$scope.members: " + $scope.members);
             });
             siteService.getAllMembers(vm.project, vm.projectType).then(function (val) {
                 $scope.allMembers = val;

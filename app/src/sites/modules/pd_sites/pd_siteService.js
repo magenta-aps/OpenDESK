@@ -26,7 +26,7 @@ angular
                 PARAM_CENTERID: center_id,
                 PARAM_METHOD: "createPDSITE"
             }).then(function (response) {
-                console.log(response);
+                //console.log(response);
                 return response;
             });
         }
@@ -54,7 +54,7 @@ angular
                 PARAM_NAME: siteName,
                 PARAM_TEMPLATE: template
             }).then(function (response) {
-                console.log(response);
+                //console.log(response);
                 return response;
             });
         }
@@ -63,11 +63,12 @@ angular
         function getAllManagers() {
             return groupService.getGroupMembers("GLOBAL_Projectmanagers").then(
                 function (response) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     return response;
                 },
                 function (err) {
-                    console.log(err);
+                    //console.log(err);
+                    return err;
                 }
             );
         }
@@ -75,7 +76,7 @@ angular
 
         function getAllOrganizationalCenters() {
             return groupService.getGroupMembers("OrganizationalCenters").then(function (response) {
-                console.log(response);
+                //console.log(response);
                 return response;
             });
         }

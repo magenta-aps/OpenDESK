@@ -1,6 +1,12 @@
 <md-card-content ng-controller="PdSiteController as pd">
-    <h3 class="od-title-icon"><i class="material-icons">group</i> Styret projekt, projektgrupper</h3>
-
+    
+    <div layout="row" layout-align="space-between"></div>
+        <h3 class="od-title-icon"><i class="material-icons">group</i> Styret projekt, projektgrupper</h3>
+        <md-button class="md-raised md-icon-button" ng-click="pd.editPdSite($event)" aria-label="Redigér site">
+            <i class="material-icons">edit</i>
+        </md-button>
+    </div>
+    
 	<div flex="100" flex-gt-lg="100">     
 		<p>
 			<div style="font-weight: bold;">Projektleder</div>
@@ -244,11 +250,14 @@
 
         <div layout="row" layout-align="start center" class="btnAlign">
             <div flex="15">
-                <md-button class="md-raised md-icon-button" ng-click="pd.editPdSite($event)"
-                           aria-label="Redigér gruppemedlemmer"><i class="material-icons">add</i></md-button>
+                <md-button class="md-raised md-icon-button" ng-click="pd.editPdSite($event)" aria-label="Redigér gruppemedlemmer">
+                    <i class="material-icons">add</i>
+                </md-button>
             </div>
             <div flex="85">
-                <md-button class="md-raised md-icon-button" ng-click="pd.doPDF()"></md-button>
+                <md-button class="md-raised md-icon-button" ng-click="pd.doPDF()" aria-label="Download PDF med grupper">
+                    <i class="material-icons">pdf</i>
+                </md-button>
             </div>
         </div>
     </div>
