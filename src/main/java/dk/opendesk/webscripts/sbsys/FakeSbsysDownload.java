@@ -21,7 +21,7 @@ public class FakeSbsysDownload extends AbstractWebScript {
 	/**
 	 * Must receive JSON like this:
 	 * {
-	 *   "destinationNodeRef":"workspace://SpacesStore/97ebd9bf-41b2-4e8a-85cc-78a8837abbc,
+	 *   "destinationNodeRef":"workspace://SpacesStore/97ebd9bf-41b2-4e8a-85cc-78a8837abbc",
 	 *   "nodeRefs": ["workspace://SpacesStore/bf8a95ef-c6ba-42db-bc49-70dcbbe8ddab","workspace://SpacesStore/52fbbc13-38c0-4daa-8f62-362e319efea3"]
 	 * }
 	 */
