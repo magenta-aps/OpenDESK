@@ -24,12 +24,12 @@
                     <md-autocomplete
                         md-selected-item="newSite.owner"
                         md-search-text="searchTextOwner"
-                        md-items="item in searchProjectOwners(searchTextOwner)"
-                        md-item-text="item.fullName"
+                        md-items="own in searchProjectOwners(searchTextOwner)"
+                        md-item-text="own.fullName"
                         md-min-length="1"
                         placeholder="Projektejer">
                         <md-item-template>
-                            <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ item.fullName }}</span>
+                            <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ own.fullName }}</span>
                         </md-item-template>
                         <md-not-found>
                             Ingen brugere matcher "{{ searchTextOwner }}".

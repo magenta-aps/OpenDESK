@@ -82,7 +82,6 @@ angular
             }
             
             
-            
             function getAvailOrgs() {
                 pd_siteService.getAllOrganizationalCenters().then(
                     function (response) {

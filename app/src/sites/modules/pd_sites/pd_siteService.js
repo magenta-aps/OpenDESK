@@ -10,7 +10,8 @@ angular
             createPDSite: createPDSite,
             addTemplate: addTemplate,
             getAllManagers: getAllManagers,
-            getAllOrganizationalCenters: getAllOrganizationalCenters
+            getAllOrganizationalCenters: getAllOrganizationalCenters,
+            updatePDSite: updatePDSite
         };
         
 
@@ -31,6 +32,7 @@ angular
             });
         }
 
+        
         //All values except shortName can be empty strings to avoid updating those parameters.
         function updatePDSite(shortName, siteName, description, sbsys, center_id, owner, manager, visibility, state) {
             return $http.post('/alfresco/service/projectdepartment', {
@@ -49,6 +51,7 @@ angular
             });
         }
 
+        
         function addTemplate(siteName, template) {
             return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
