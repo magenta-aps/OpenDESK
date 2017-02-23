@@ -85,7 +85,6 @@ public class ProjectDepartment extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-        System.out.println("creating a projectdepartment project....");
         webScriptResponse.setContentEncoding("UTF-8");
         Content c = webScriptRequest.getContent();
         Writer webScriptWriter = webScriptResponse.getWriter();
@@ -94,53 +93,24 @@ public class ProjectDepartment extends AbstractWebScript {
         try {
             JSONObject json = new JSONObject(c.getContent());
 
-            String method = getJSONObject(json, "PARAM_METHOD");
-            String site_name = getJSONObject(json, "PARAM_NAME");
-            String site_short_name = getJSONObject(json, "PARAM_SHORT_NAME");
-            String site_description = getJSONObject(json, "PARAM_DESCRIPTION");
-            String site_sbsys = getJSONObject(json, "PARAM_SBSYS");
-            String site_owner = getJSONObject(json, "PARAM_OWNER");
-            String site_manager = getJSONObject(json, "PARAM_MANAGER");
-            String site_center_id = getJSONObject(json, "PARAM_CENTERID");
-
+            String method = Utils.getJSONObject(json, "PARAM_METHOD");
+            String site_name = Utils.getJSONObject(json, "PARAM_NAME");
+            String site_short_name = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
+            String site_description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
+            String site_sbsys = Utils.getJSONObject(json, "PARAM_SBSYS");
+            String site_owner = Utils.getJSONObject(json, "PARAM_OWNER");
+            String site_manager = Utils.getJSONObject(json, "PARAM_MANAGER");
+            String site_state = Utils.getJSONObject(json, "PARAM_STATE");
+            String site_center_id = Utils.getJSONObject(json, "PARAM_CENTERID");
 
             switch (method) {
                 case "createPDSITE":
-
-                    AuthenticationUtil.pushAuthentication();
-                    try {
-                        AuthenticationUtil.setRunAsUserSystem();
-                        // ...code to be run as Admin...
-
-                        String site_short_name_with_version = site_short_name;
-
-                        int i = 1;
-                        do {
-                            try {
-                                newSiteRef = createSite(site_short_name_with_version, site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
-                            }
-                            catch(SiteServiceException e) {
-                                if(e.getMsgId().equals("site_service.unable_to_create"))
-                                    site_short_name_with_version = site_short_name + "-" + ++i;
-                            }
-                        }
-                        while(newSiteRef == null);
-
-                        Long id = (Long) nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
-
-                        createGroupAddMembers(Long.toString(id), site_owner, site_manager);
-
-                        JSONObject return_json = new JSONObject();
-
-                        return_json.put("status", "success");
-                        return_json.put("nodeRef", newSiteRef);
-                        return_json.put("shortName", siteService.getSiteShortName(newSiteRef));
-
-                        result.add(return_json);
-
-                    } finally {
-                        AuthenticationUtil.popAuthentication();
-                    }
+                    createPDSite(site_short_name, site_name, site_description,
+                            site_sbsys, site_center_id, site_owner, site_manager);
+                    break;
+                case "updatePDSITE":
+                    updatePDSite(site_short_name, site_name, site_description,
+                            site_sbsys, site_center_id, site_owner, site_manager, site_state);
                     break;
                 case "addTemplate":
                     break;
@@ -154,28 +124,84 @@ public class ProjectDepartment extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private String getJSONObject(JSONObject json, String parameter) throws JSONException {
-        if (!json.has(parameter) || json.getString(parameter).length() == 0)
-        {
-            throw new WebScriptException(Status.STATUS_BAD_REQUEST,
-                    parameter + " is a required POST parameter.");
+    private JSONArray createPDSite(String site_short_name, String site_name, String site_description,
+                                   String site_sbsys, String site_center_id, String site_owner, String site_manager) {
+
+        JSONArray result = new JSONArray();
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
+
+            String site_short_name_with_version = site_short_name;
+
+            int i = 1;
+            do {
+                try {
+                    newSiteRef = createSite(site_short_name_with_version, site_name, site_description, site_sbsys, site_center_id, SiteVisibility.PUBLIC);
+                }
+                catch(SiteServiceException e) {
+                    if(e.getMsgId().equals("site_service.unable_to_create"))
+                        site_short_name_with_version = site_short_name + "-" + ++i;
+                }
+            }
+            while(newSiteRef == null);
+
+            Long id = (Long) nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
+
+            createGroupAddMembers(Long.toString(id), site_owner, site_manager);
+
+            JSONObject return_json = new JSONObject();
+
+            return_json.put("status", "success");
+            return_json.put("nodeRef", newSiteRef);
+            return_json.put("shortName", siteService.getSiteShortName(newSiteRef));
+
+            result.add(return_json);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            AuthenticationUtil.popAuthentication();
         }
-        return json.getString(parameter);
+        return result;
+    }
+
+    private JSONArray updatePDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
+                                   String site_center_id, String site_owner, String site_manager, String site_state) {
+
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
+
+            SiteInfo site = siteService.getSite(site_short_name);
+            updateSite(site, site_name, site_description, site_sbsys, site_center_id, site_state);
+
+            String dbid = nodeService.getProperty(site.getNodeRef(), ContentModel.PROP_NODE_DBID).toString();
+            String parentGroup = "GROUP_"  + dbid;
+
+            if(!site_owner.isEmpty()) {
+                String ownerGroup = parentGroup + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+                updateSingleGroupMember(ownerGroup, site_owner);
+            }
+
+            if(!site_manager.isEmpty()) {
+                String managerGroup = parentGroup + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
+                updateSingleGroupMember(managerGroup, site_manager);
+            }
+
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
+        return Utils.getJSONSuccess();
     }
 
     private NodeRef createSite(String shortName, String name, String description, String sbsys, String center_id, SiteVisibility siteVisibility) {
 
         SiteInfo site = siteService.createSite("site-dashboard", shortName, name, description, siteVisibility);
 
-        // add the projectdepartment aspect
-        Map<QName, Serializable> aspectProps = new HashMap<>();
-        aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
-        aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
-        aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
-        aspectProps.put(OpenDeskModel.PROP_PD_STATE, OpenDeskModel.STATE_ACTIVE);
-        aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
-
-        nodeService.addAspect(site.getNodeRef(), OpenDeskModel.ASPECT_PD, aspectProps);
+        updateSite(site, name, description, sbsys, center_id, OpenDeskModel.STATE_ACTIVE);
 
         // create documentLibary
         String defaultFolder = "documentLibrary";
@@ -187,6 +213,34 @@ public class ProjectDepartment extends AbstractWebScript {
         return site.getNodeRef();
     }
 
+    private void updateSite(SiteInfo site, String name, String description, String sbsys, String center_id, String state) {
+
+        // add the projectdepartment aspect
+        Map<QName, Serializable> aspectProps = new HashMap<>();
+        if (!name.isEmpty())
+            aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
+        if (!description.isEmpty())
+            aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
+        if (!sbsys.isEmpty())
+            aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
+        if(!state.isEmpty())
+            aspectProps.put(OpenDeskModel.PROP_PD_STATE, state);
+        if (!center_id.isEmpty())
+            aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
+
+        nodeService.addAspect(site.getNodeRef(), OpenDeskModel.ASPECT_PD, aspectProps);
+    }
+
+    private void updateSingleGroupMember(String group, String userName) {
+
+        //Clear group
+        Set<String> members = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
+        for (String member : members)
+            authorityService.removeAuthority(group, member);
+
+        //Add member
+        authorityService.addAuthority(group, userName);
+    }
 
     private void createGroupAddMembers(String id, String owner, String site_manager) {
 
@@ -200,8 +254,6 @@ public class ProjectDepartment extends AbstractWebScript {
         String projectmanager = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
         authorityService.addAuthority(parentGroup, projectmanager);
         authorityService.addAuthority(projectmanager,site_manager);
-
-
 
         String monitors = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_MONITORS);
         authorityService.addAuthority(parentGroup, monitors);
@@ -219,7 +271,6 @@ public class ProjectDepartment extends AbstractWebScript {
         System.out.println(steeringgroup);
         authorityService.addAuthority(parentGroup, steeringgroup);
 
-
         permissionService.setPermission(newSiteRef, monitors, "Collaborator", true);
         permissionService.setPermission(newSiteRef, projectowner, "Collaborator", true);
         permissionService.setPermission(newSiteRef, projectgroup, "Collaborator", true);
@@ -230,6 +281,5 @@ public class ProjectDepartment extends AbstractWebScript {
         // allow all other projectmanagers to access this project
 
         permissionService.setPermission(newSiteRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, "Collaborator", true);
-
     }
 }
