@@ -37,7 +37,7 @@
 		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
-	<bean id="webscript.groups.get"
+	<bean id="webscript.groups.post"
 		  class="dk.opendesk.webscripts.Groups"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>

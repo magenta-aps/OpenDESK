@@ -23,9 +23,11 @@ import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 
 /**
@@ -86,22 +88,34 @@ public class Groups extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
+        webScriptResponse.setContentEncoding("UTF-8");
+        Content c = webScriptRequest.getContent();
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
-        String shortName = params.get("shortName");
-        String groupName = params.get("groupName");
-        String method = params.get("method");
+        try {
+            JSONObject json = new JSONObject(c.getContent());
 
-        if (method != null && method.equals("getAllMembers")) {
+            // Read all used parameters no matter what method is used.
+            // Those parameters that are not sent are set to an empty string
+            String method = Utils.getJSONObject(json, "PARAM_METHOD");
+            String groupName = Utils.getJSONObject(json, "PARAM_GROUP_NAME");
+            String shortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
 
-            JSONArray result = this.getAllMembers(shortName, groupName);
-            try {
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(method != null) {
+                switch (method) {
+                    case "getAllMembers":
+                        result = this.getAllMembers(shortName, groupName);
+                        break;
+                }
             }
-
         }
+        catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+            result = Utils.getJSONError(e);
+        }
+        Utils.writeJSONArray(webScriptWriter, result);
     }
 
     private long getDBID(String siteShortName) {
@@ -131,7 +145,7 @@ public class Groups extends AbstractWebScript {
 
         String group = "GROUP_"  + getDBID(shortName);
         Boolean onlyDirectMembers = true;
-        if(groupName != null)
+        if(!groupName.isEmpty())
             group += "_" + groupName;
         else
             onlyDirectMembers = false;
