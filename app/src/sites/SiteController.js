@@ -455,11 +455,11 @@ angular
     
     
         function loadSiteRoles() {
-            if (vm.project.type != 'PD-Project') {
+            if (vm.project.type !== 'PD-Project') {
                 siteService.getSiteRoles(vm.project.shortName).then(function (response) {
                     $scope.roles_translated = [];
                     for (var x in response.siteRoles) {
-                        if ($scope.role_mapping[response.siteRoles[x]] !== null) {
+                        if ($scope.role_mapping[response.siteRoles[x]] !== undefined) {
                             $scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
                         }
                     }
@@ -476,8 +476,9 @@ angular
         vm.currentDialogUser = '';
     
     
-        vm.updateMemberRoleDialog = function (event, user) {
-            vm.currentDialogUser = user;
+        vm.updateMemberRoleDialog = function (event, currentUser, currentRole) {
+            vm.currentDialogUser = currentUser;
+            vm.currentDialogRole = currentRole;
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
                 parent: angular.element(document.body),
@@ -490,7 +491,6 @@ angular
     
     
         vm.updateRoleOnSiteMember = function (siteName, user, role) {
-            console.log('updatemember:');
             // getTheValue
             var role_int_value = translation_to_value(role);
             var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
@@ -526,9 +526,14 @@ angular
                 .ok('Slet')
                 .cancel('Nej, tak');
     
-            $mdDialog.show(confirm).then(function () {
-                vm.removeMemberFromSite(siteName, userName);
-            });
+            $mdDialog.show(confirm).then(
+                function() {
+                    vm.removeMemberFromSite(siteName, userName);
+                },
+                function() {
+                    console.log('cancelled delete');
+                }
+            );
         };
     
     

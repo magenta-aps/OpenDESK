@@ -115,9 +115,14 @@
 					.textContent('Projektet og alle dets filer vil blive slettet')
 					.ok('Ja')
 					.cancel('Annullér');
-				$mdDialog.show(confirm).then(function() {
-					vm.deleteSite(siteName);
-				});
+				$mdDialog.show(confirm).then(
+                    function() {
+                        vm.deleteSite(siteName);
+                    },
+                    function() {
+                        console.log('cancelled delete');    
+                    }
+                );
 			};
 			
 			vm.deleteSite = function (siteName) {
