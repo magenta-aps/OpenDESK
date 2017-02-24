@@ -20,6 +20,7 @@ angular
 		pd.updateMemberRoleDialog = updateMemberRoleDialog;
 		pd.updateRoleOnSiteMember = updateRoleOnSiteMember;
         pd.doPDF = doPDF;
+        pd.editPdSiteGroups = editPdSiteGroups;
 
         function loadSiteData() {
             if ($stateParams.projekt) {
@@ -110,7 +111,7 @@ angular
                 clickOutsideToClose: true
             }).finally(function() {
                 loadSiteData();
-            });;
+            });
         }	
 	
         
@@ -152,13 +153,29 @@ angular
             });
 		}
 
-        
+
 		function removeMemberFromSite(member, group) {
 			siteService.removeUser(pd.site.shortName, member.shortName, group).then( function(val) {
 				getProjectMembers();
 			});			
 			$mdDialog.hide();
 		}
-       
-       
+        
+        
+        function editPdSiteGroups(ev) {
+            $mdDialog.show({
+                controller: 'PdSiteGroupEditController',
+                templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
+                locals: {
+                    sitedata: pd.site
+                },
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            }).finally(function() {
+                getProjectMembers();
+            });
+        }
+
+    
     }
