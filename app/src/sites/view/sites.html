@@ -69,26 +69,26 @@
 					
 					<tbody>
 						<tr ng-repeat="project in vm.memberonly ? vm.sitesPerUser : vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
-							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}?type={{project.type}}">
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
 								<i class="material-icons">content_paste</i>
 								{{ project.title }}
 							</a></td>
-							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}?type={{project.type}}">{{ project.created | openeDate }}</a></td>
-							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}?type={{project.type}}">{{ project.creator.fullName }}</a></td>
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>
 							<td>
                                 <md-menu>
-                                    <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
                                     <md-menu-content width="6">
                                         <md-menu-item>
-                                            <md-button ng-click="vm.infoSiteDialog(ctrl.project)">
+                                            <md-button ng-click="vm.infoSiteDialog(project)">
                                                 <md-icon md-menu-align-target>info_outline</md-icon>
                                                 Information
                                             </md-button>
                                         </md-menu-item>
                                         <md-menu-item>
-                                            <md-button ng-click="vm.deleteSiteDialog(ctrl.project.shortName)">
+                                            <md-button ng-click="vm.deleteSiteDialog(project.shortName)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet
                                             </md-button>
