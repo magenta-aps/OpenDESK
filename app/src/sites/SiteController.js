@@ -338,6 +338,7 @@ angular
             $mdDialog.hide();
         };
     
+    
         vm.deleteFoldereDialog = function (event, nodeRef) {
             var confirm = $mdDialog.confirm()
                 .title('Slette denne mappe?')
@@ -352,13 +353,15 @@ angular
             });
         };
     
+    
         vm.deleteFolder = function (nodeRef) {
             siteService.deleteFolder(nodeRef).then(function (val) {
                 vm.loadContents();
             });
     
             $mdDialog.hide();
-        }
+        };
+    
     
         function createNotification(userName, subject, message, link) {
             notificationsService.addNotice(userName, subject, message, link).then(function (val) {
@@ -366,12 +369,14 @@ angular
             });
         }
     
+    
         function createSiteNotification(userName, site) {
                 var subject = "Du er blevet tilføjet til " + vm.project.title;
                 var message = "Du er blevet tilføjet til projektet " + vm.project.title + ".";
                 var link = "/#!/projekter/" + site + "?type=Project";
                 createNotification(userName, subject, message, link);
         }
+    
     
         function createDocumentNotification(projekt, ref, fileName) {
             var creatorFirstName = vm.currentUser.firstName;

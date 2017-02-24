@@ -6,11 +6,14 @@
 
         function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
+        
 			var vm = this;
 
             vm.sites = [];
 			vm.sitesPerUser = [];
 			vm.organizationalCenters = [];
+            
+            vm.infoSiteDialog = infoSiteDialog;
 
 			//pd_siteService.getAllOrganizationalCenters();
 
@@ -37,10 +40,11 @@
                         vm.sites = response;
 						return response;
                     }
-                )
+                );
             }
             getSites();
 
+            
 			function getSitesPerUser() {
 				return siteService.getSitesPerUser().then(function(response) {
 						vm.sitesPerUser = response;
@@ -50,6 +54,7 @@
 			}
 			getSitesPerUser();
 
+            
 			function getAllOrganizationalCenters() {
 				pd_siteService.getAllOrganizationalCenters().then(function(response) {
 						vm.organizationalCenters = response.data;
@@ -165,9 +170,13 @@
 			
             
 			vm.currentDialogSite = '';
-			vm.infoSiteDialog = function (site) {
+            
+            
+			function infoSiteDialog(site) {
                 console.log('hit the dialog btn');
-				vm.currentDialogSite = site;		
+                console.log(site);
+                
+				vm.currentDialogSite = site;
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
 					parent: angular.element(document.body),
@@ -176,7 +185,7 @@
 					preserveScope: true,  // do not forget this if use parent scope
 					clickOutsideToClose: true
 				});
-			};
+			}
 
             
 			vm.getSearchresults = function getSearchReslts(term){
