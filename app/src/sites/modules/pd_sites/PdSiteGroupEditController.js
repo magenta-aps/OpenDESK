@@ -4,33 +4,38 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteGroupEditController', PdSiteGroupEditController);
     
-    function PdSiteGroupEditController($scope, $mdDialog, siteService, $mdToast) {
+    function PdSiteGroupEditController(sitedata, $scope, $mdDialog, siteService, $mdToast) {
+        
+        var pdg = this;
+        
+        pdg.site = sitedata;
         
         $scope.selectedProjGrpItem = null;
         $scope.srchprjgrptxt = null;
-        $scope.projektGruppe = pd.site.members.pd_projectgroup ? pd.site.members.pd_projectgroup : [];
+        $scope.projektGruppe = pdg.site.members.pd_projectgroup ? pdg.site.members.pd_projectgroup : [];
         
         $scope.selectedStyreGrpItem = null;
         $scope.srchstrgrptxt = null;
-        $scope.styreGruppe = pd.site.members.pd_steering_group ? pd.site.members.pd_steering_group : [];
+        $scope.styreGruppe = pdg.site.members.pd_steering_group ? pdg.site.members.pd_steering_group : [];
         
         $scope.selectedArbejdsGrpItem = null;
         $scope.srchrbjdgrptxt = null;
-        $scope.arbejdsGruppe = pd.site.members.pd_workgroup ? pd.site.members.pd_workgroup : [];
+        $scope.arbejdsGruppe = pdg.site.members.pd_workgroup ? pdg.site.members.pd_workgroup : [];
         
         $scope.selectedFolgeGrpItem = null;
         $scope.srchflggrptxt = null;
-        $scope.folgeGruppe = pd.site.members.pd_monitors ? pd.site.members.pd_monitors : [];
+        $scope.folgeGruppe = pdg.site.members.pd_monitors ? pdg.site.members.pd_monitors : [];
         
         $scope.cancel = cancel;
-        $scope.searchPeople = searchPeople;
         $scope.updatePDSiteGroups = updatePDSiteGroups;
+        $scope.searchPeople = searchPeople;
         $scope.addMember = addMember;
         $scope.removeMember = removeMember;
         $scope.addEksternToProjektGrp = addEksternToProjektGrp;
         $scope.addEksternToStyreGrp = addEksternToStyreGrp;
         $scope.addEksternToArbGrp = addEksternToArbGrp;
         $scope.addEksternToFlgGrp = addEksternToFlgGrp
+        
         
         function addEksternToProjektGrp () {
             var eksternNavn = $scope.pgexternname;				
@@ -39,12 +44,14 @@ angular
             $scope.projektGruppe.push({displayName: eksternMedlem});
         }
         
+        
         function addEksternToStyreGrp () {
             var eksternNavn = $scope.stexternname;				
             var eksternEmail = $scope.stexternemail;				
             var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
             $scope.styreGruppe.push({displayName: eksternMedlem});
         }
+        
         
         function addEksternToArbGrp () {
             var eksternNavn = $scope.arbexternname;				
@@ -53,6 +60,7 @@ angular
             $scope.arbejdsGruppe.push({displayName: eksternMedlem});
         }
         
+        
         function addEksternToFlgGrp () {
             var eksternNavn = $scope.flgexternname;				
             var eksternEmail = $scope.flgexternemail;				
@@ -60,9 +68,11 @@ angular
             $scope.folgeGruppe.push({displayName: eksternMedlem});
         }
         
+        
         function cancel() {
             $mdDialog.cancel();
         }
+        
         
         function searchPeople(query) {
             if (query) {
@@ -70,11 +80,11 @@ angular
             }
         }
         
+        
         function addMember(member, group) {
-            siteService.addUser( pd.site.shortName, member.userName, group ).then(
+            siteService.addUser( pdg.site.shortName, member.userName, group ).then(
                 function(response) {
                     console.log('Added user ' + member.userName + ' to ' + group);
-                    getProjectMembers();
                 },
                 function(err) {
                     console.log('ERROR: Problem creating user ' + member.userName + ' in project group ' + group);
@@ -83,9 +93,10 @@ angular
             );
         }
         
+        
         function removeMember(member, group) {
             var u = member.shortName ? member.shortName : member.userName;
-            siteService.removeUser( pd.site.shortName, u, group ).then(
+            siteService.removeUser( pdg.site.shortName, u, group ).then(
                 function(response) {
                     console.log('Removed user ' + u + ' from ' + group);
                 },
@@ -96,9 +107,9 @@ angular
             );   
         }
         
+        
         function updatePDSiteGroups() { 
             $mdDialog.cancel();
-            getProjectMembers();
             $mdToast.show(
                 $mdToast.simple()
                         .textContent('Grupper er opdateret')
@@ -106,28 +117,5 @@ angular
             );
         }
 
-        function updateMemberRoleDialog(event, user) {
-            vm.currentDialogUser = user;
-            $mdDialog.show({
-                templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
-                parent: angular.element(document.body),
-                scope: $scope,
-                preserveScope: true,
-                targetEvent: event,
-                clickOutsideToClose: true
-            });
-        }
-
-        function updateRoleOnSiteMember(siteName, userName, role) {
-
-            // getTheValue
-            var role_int_value = translation_to_value(role);
-            var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
-
-            siteService.updateRoleOnSiteMember(siteName, userName, role_alfresco_value ).then(function(val){
-                vm.loadMembers();
-            });
-            $mdDialog.hide();
-        };
-
+        
     }
