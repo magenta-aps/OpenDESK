@@ -268,7 +268,12 @@
 
         <md-card flex-gt-sm="30" ng-if="vm.projectType === 'Project'">
             <md-card-content>
-                <h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
+                <div layout="row" layout-align="space-between center">
+                    <h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
+                    <md-button ng-click="vm.editSiteDialog()" class="md-icon-button md-raised">
+                        <i class="material-icons">edit</i>
+                    </md-button>
+                </div>
                 <md-list class="od-members">
                     <md-list-item ng-repeat="member in members">
                         <div flex="50" flex-gt-lg="60">
