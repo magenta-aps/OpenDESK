@@ -85,20 +85,25 @@
 						{{ vm.doc.modifiedBy }}
 					</dd>
 				</div-->
-                <ng-if ng-if="vm.wf" class="od-notifylist--item--nolink">
-                    <dt>
+                <!--ng-if ng-if="vm.wf" class="od-notifylist--item--nolink"-->
+                    <br>
+					<dt>
                         Review
                     </dt>
+					<br>
                     <dd>
-                        Du er blevet bedt om at reviewe dette dokument:
-                        <md-button ng-click="vm.newFolderDialog($event)">
+                        Du er blevet bedt om at reviewe dette dokument:<br>
+                        <md-button ng-controller="SiteController as sc" ng-click="sc.goToLOEditPage(vm.doc.nodeRef)">
+                            Redigér
+                        </md-button>
+						<md-button ng-click="vm.newFolderDialog($event)">
                             Godkend
                         </md-button>
                         <md-button ng-click="vm.newFolderDialog($event)">
                             Afvis
                         </md-button>
                     </dd>
-                </ng-if>
+                <!--/ng-if-->
             </dl>
         </div>
     </div>
