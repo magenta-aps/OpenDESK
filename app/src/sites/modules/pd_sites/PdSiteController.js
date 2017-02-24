@@ -142,11 +142,11 @@ angular
         
 		function removeMemberDialog(member, group) {
             var confirm = $mdDialog.confirm()
-                .title('Slet dette medlem?')
+                .title('Fjern dette medlem?')
                 .textContent('')
-                .ariaLabel('Slet medlem')
+                .ariaLabel('Fjern medlem')
                 .targetEvent(event)
-                .ok('Slet')
+                .ok('Fjern')
                 .cancel('Nej, tak');
             $mdDialog.show(confirm).then(function() {
                 removeMemberFromSite(member, group);
@@ -155,7 +155,7 @@ angular
 
 
 		function removeMemberFromSite(member, group) {
-			siteService.removeUser(pd.site.shortName, member.shortName, group).then( function(val) {
+			siteService.removeUser(pd.site.shortName, member.username, group).then( function(val) {
 				getProjectMembers();
 			});			
 			$mdDialog.hide();
