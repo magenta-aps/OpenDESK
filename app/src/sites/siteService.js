@@ -24,7 +24,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                     }
     
                     if (siteType === "PD-Project") {
-                        return $http.get("/alfresco/service/groups?method=getAllMembers&shortName=" + siteShortName).then(function (response) {
+                        return $http.post("/alfresco/service/groups", {
+                            PARAM_METHOD : "getAllMembers",
+                            PARAM_SITE_SHORT_NAME: siteShortName
+                        }).then(function (response) {
                             var pd_site_members = response.data[0];
     
                             for (var i in pd_site_members) {
