@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteCreateController', PdSiteCreateController);
     
-    function PdSiteCreateController($mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
+    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
         
         var pdc = this;
         
@@ -108,55 +108,20 @@ angular
                 ).then(
                     function(response) {
                         
-                        function grpSuccess(response, uName, grpName) {
-                            createSiteNotification(siteName, uName, link);
-                            console.log('Added user ' + uName + ' to ' + grpName);
-                        }
-                        
-                        function grpErr(err, grpName) {
-                            console.log('ERROR: Problem creating user in project group ' + grpName);
-                            console.log(err);
-                        }
-                        
                         if(response.data[0].status === 'success') {
                             
                             var siteShortName = response.data[0].shortName;
                             var siteName = $scope.newSite.siteName;
-                            var link = "/#!/projekter/" + siteShortName  + "?type=PD-Project";
+                            var link = "/#!/projekter/" + siteShortName;
                             
                             createSiteNotification(siteName, $scope.newSite.projectOwner.shortName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);
-                            
-                            
-    
-                            for (var up in $scope.projektGruppe) {
-                                var puName = $scope.projektGruppe[up].userName;
-                                siteService.addUser( $scope.newSite.siteName, puName, 'PD_PROJECTGROUP' ).then(
-                                    grpSuccess(response, puName, 'PD_PROJECTGROUP'),
-                                    grpErr(err, 'PD_PROJECTGROUP')
-                                );
-                            }
-                            for (var us in $scope.styreGruppe) {
-                                var suName = $scope.styreGruppe[us].userName;
-                                siteService.addUser( $scope.newSite.siteName, suName, 'PD_STEERING_GROUP' ).then(
-                                    grpSuccess(response, suName, 'PD_STEERING_GROUP'),
-                                    grpErr(err, 'PD_STEERING_GROUP')
-                                );
-                            }
-                            for (var ua in $scope.arbejdsGruppe) {
-                                var auName = $scope.arbejdsGruppe[ua].userName;
-                                siteService.addUser( $scope.newSite.siteName, auName, 'PD_WORKGROUP' ).then(
-                                    grpSuccess(response, auName, 'PD_WORKGROUP'),
-                                    grpErr(err, 'PD_WORKGROUP')
-                                );
-                            }
-                            for (var uf in $scope.folgeGruppe) {
-                                var fuName = $scope.folgeGruppe[uf].userName;
-                                siteService.addUser( $scope.newSite.siteName, fuName, 'PD_MONITORS' ).then(
-                                    grpSuccess(response, fuName, 'PD_MONITORS'),
-                                    grpErr(err, 'PD_MONITORS')
-                                );
-                            }
+
+                            addUserToGroup(siteShortName, $scope.projektGruppe, 'PD_PROJECTGROUP', link);
+                            addUserToGroup(siteShortName, $scope.styreGruppe, 'PD_STEERING_GROUP', link);
+                            addUserToGroup(siteShortName, $scope.arbejdsGruppe, 'PD_WORKGROUP', link);
+                            addUserToGroup(siteShortName, $scope.folgeGruppe, 'PD_MONITORS', link);
+
                             $mdDialog.cancel();
                             window.location.href = link;
                             $mdToast.show(
@@ -171,7 +136,26 @@ angular
                     }
                 );
             }
-            
+
+            function addUserToGroup(siteShortName, group, groupName, link) {
+                // Creating an empty initial promise that always resolves itself.
+                var promise = $q.all([]);
+
+                // Iterating list of items sequential instead of async.
+                angular.forEach(group, function (user) {
+                    var userName = user.userName;
+                    promise = siteService.addUser(siteShortName, userName, groupName).then(
+                        function (response) {
+                            createSiteNotification(siteShortName, userName, link);
+                            console.log('Added user ' + userName + ' to ' + groupName);
+                        },
+                        function (err) {
+                            console.log('ERROR: Problem creating user in project group ' + groupName);
+                            console.log(err);
+                        }
+                    );
+                });
+            }
             
             function createSiteNotification (siteName, userName, link) {
                 if(userName !== currentUser) {

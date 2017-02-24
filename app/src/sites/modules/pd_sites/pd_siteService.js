@@ -45,7 +45,7 @@ angular
                 PARAM_CENTERID: center_id,
                 PARAM_VISIBILITY: visibility,
                 PARAM_STATE: state,
-                PARAM_METHOD: "updatePDSite"
+                PARAM_METHOD: "updatePDSITE"
             }).then(function (response) {
                 return response;
             });
