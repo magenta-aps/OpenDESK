@@ -27,6 +27,7 @@
                         md-items="own in searchProjectOwners(searchTextOwner)"
                         md-item-text="own.fullName"
                         md-min-length="1"
+                        md-floating-label="Projektejer"
                         placeholder="Projektejer">
                         <md-item-template>
                             <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ own.fullName }}</span>
@@ -55,6 +56,7 @@
                             md-items="man in searchPeople(searchTextManager)"
                             md-item-text="man.firstName + ' ' + man.lastName"
                             md-min-length="1"
+                            md-floating-label="Projektleder"
                             placeholder="Projektleder">
                         <md-item-template>
                             <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
