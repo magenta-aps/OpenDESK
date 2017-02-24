@@ -95,8 +95,7 @@ angular
         
         
         function removeMember(member, group) {
-            var u = member.shortName ? member.shortName : member.userName;
-            siteService.removeUser( pdg.site.shortName, u, group ).then(
+            siteService.removeUser( pdg.site.shortName, member.username, group ).then(
                 function(response) {
                     console.log('Removed user ' + u + ' from ' + group);
                 },
