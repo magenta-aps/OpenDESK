@@ -23,46 +23,65 @@ angular
         $scope.role_mapping_reverse["1"] = "SiteManager";
         $scope.role_mapping_reverse["2"] = "SiteContributor";
         $scope.role_mapping_reverse["3"] = "SiteConsumer";
-
-        var vm = this;
-
+        
         $scope.contents = [];
         $scope.history = [];
         $scope.members = [];
         $scope.allMembers = [];
         $scope.roles = [];
         $scope.roles_translated = [];
+        
+        var originatorEv;
+        var vm = this;
 
         vm.allMembers = [];
-        vm.project = $stateParams.projekt;
+        vm.project = {};
+        vm.path = $stateParams.path;
         vm.userRole = 'siteConsumer';
-        vm.projectType = $location.search().type;
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
 		vm.showProgress = false;
+        
         vm.editSiteDialog = editSiteDialog;
+        vm.goToLOEditPage = goToLOEditPage;
+        vm.updateSiteName = updateSiteName;
+        
+        
+        function loadSiteData() {
+            siteService.loadSiteData($stateParams.projekt).then(
+                function (result) {
+                    
+                    vm.project = result;
+                    console.log('Project information');
+                    console.log(vm.project);
+                    
+                    //getSitesPerUser();
+                    getSiteUserRole();
+                    loadMembers();
+                    loadSiteRoles();
+                    
+                    // Compile paths for breadcrumb directive
+                    vm.paths = buildBreadCrumbPath(vm.project.title);
+                    
+                    vm.currentFolderNodeRef_cmisQuery = vm.project.shortName + "/documentLibrary/" + vm.path;
+    
+                    cmisService.getNode(vm.currentFolderNodeRef_cmisQuery).then(function (val) {
+                        vm.currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                        vm.currentFolderUUID = vm.currentFolderNodeRef.split("/")[3];
+                        // The loading function for contents depend on the currentFolder variables having been read beforehand
+                        vm.loadContents();
+                    });
+                    
+                }
+            );
+        }
+        loadSiteData();
 
-        siteService.getSiteType(vm.project).then (function(response) {
-            vm.projectType = response[0].type;
-            vm.loadMembers();
-            vm.loadSiteRoles();
-        });
     
         //siteService.getAllUsers("a");
         //siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
 		//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
         
-        siteService.getSiteUserRole(vm.project, vm.currentUser.userName).then(
-            function (response) {
-                vm.userRole = response;
-            },
-            function (err) {
-                console.log('Error getting site user role');
-                console.log(err);
-            }
-        );
-
-
         function getSitesPerUser() {
             return siteService.getSitesPerUser().then(function(response) {
                     vm.sitesPerUser = response;
@@ -72,14 +91,22 @@ angular
         }
         
         
-        getSitesPerUser();
-	
+        function getSiteUserRole() {
+            siteService.getSiteUserRole(vm.project.shortName, vm.currentUser.userName).then(
+                function (response) {
+                    vm.userRole = response;
+                },
+                function (err) {
+                    console.log('Error getting site user role');
+                    console.log(err);
+                }
+            );
+        }
+        
         
         function translation_to_value(translation) {
-
             for (var x in $scope.role_translation) {
                 var v = $scope.role_translation[x];
-
                 if (v === translation) {
                     return x;
                 }
@@ -95,7 +122,7 @@ angular
                 },
                 {
                     title: project_title,
-                    link: '#!/projekter/' + vm.project
+                    link: '#!/projekter/' + vm.project.shortName
                 }
             ];
             var pathArr = $stateParams.path.split('/');
@@ -104,49 +131,29 @@ angular
                 if (pathArr[a] !== '') {
                     paths.push({
                         title: pathArr[a],
-                        link: '#!/projekter/' + vm.project + pathLink + pathArr[a]
+                        link: '#!/projekter/' + vm.project.shortName + pathLink + pathArr[a]
                     });
                     pathLink = pathLink + pathArr[a] + '/';
                 }
             }
             return paths;
         }
-
-        vm.path = $stateParams.path;
-
-        vm.currentFolderNodeRef_cmisQuery = vm.project + "/documentLibrary/" + vm.path;
     
-        cmisService.getNode(vm.currentFolderNodeRef_cmisQuery).then(function (val) {
-            vm.currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
-            vm.currentFolderUUID = vm.currentFolderNodeRef.split("/")[3];
-            // The loading function for contents depend on the currentFolder variables having been read beforehand
-            vm.loadContents();
-        });
     
         vm.cancel = function () {
             $mdDialog.cancel();
         };
     
+    
         vm.reload = function () {
             $window.location.reload();
         };
     
-        var originatorEv;
+        
         vm.openMenu = function ($mdOpenMenu, event) {
             originatorEv = event;
             $mdOpenMenu(event);
         };
-
-        vm.loadSiteData = function () {
-            siteService.loadSiteData(vm.project).then(
-                function (result) {
-                    vm.project_title = result.title;
-                    // Compile paths for breadcrumb directive
-                    vm.paths = buildBreadCrumbPath(vm.project_title);
-                }
-            );
-        };
-        vm.loadSiteData();
     
     
         vm.loadContents = function () {
@@ -156,6 +163,7 @@ angular
     
         };
     
+    
         vm.loadHistory = function (doc) {
             $scope.history = [];
             documentService.getHistory(doc).then(function (val) {
@@ -163,28 +171,26 @@ angular
             });
         };
     
-        vm.createFolder = function (folderName) {
     
+        vm.createFolder = function (folderName) {
             var props = {
                 prop_cm_name: folderName,
                 prop_cm_title: folderName,
                 alf_destination: vm.currentFolderNodeRef
             };
-    
             siteService.createFolder("cm:folder", props).then(function (response) {
                 vm.loadContents();
             });
-    
             $mdDialog.hide();
-        }
+        };
     
     
         vm.createLink = function (project) {
-            siteService.createLink(vm.project, project.shortName).then(function () {
+            siteService.createLink(vm.project.shortName, project.shortName).then(function () {
                 vm.loadContents();
                 $mdDialog.hide();
             });
-        }
+        };
     
     
         vm.deleteLink = function (source, destination) {
@@ -193,22 +199,24 @@ angular
                 vm.loadContents();
                 $mdDialog.hide();
             });
-        }
+        };
 		
+        
 		vm.loadFromSbsys = function() {
 			
 			siteService.loadFromSbsys().then(function() {
 				vm.loadContents();
 				$mdDialog.hide();
 			});
-			
-		}
+		};
 		
+        
 		vm.uploadSbsys = function (){
 			vm.showProgress = true;
 			$timeout(setSbsysShowAttr, 2500);
-		}
+		};
 		
+        
 		function setSbsysShowAttr() {
 			vm.showProgress = false;
 			vm.uploadedToSbsys = true;
@@ -359,8 +367,8 @@ angular
         }
     
         function createSiteNotification(userName, site) {
-                var subject = "Du er blevet tilføjet til " + vm.project_title;
-                var message = "Du er blevet tilføjet til projektet " + vm.project_title + ".";
+                var subject = "Du er blevet tilføjet til " + vm.project.title;
+                var message = "Du er blevet tilføjet til projektet " + vm.project.title + ".";
                 var link = "/#!/projekter/" + site + "?type=Project";
                 createNotification(userName, subject, message, link);
         }
@@ -395,6 +403,7 @@ angular
             });
         }
     
+
         vm.createReviewNotification = function (documentNodeRef, userName, subject, message) {
             var creator = vm.currentUser.userName;
             var s = documentNodeRef.split("/");
@@ -404,15 +413,16 @@ angular
         };
     
     
-        vm.loadMembers = function () {
-            siteService.getSiteMembers(vm.project).then(function (val) {
+        function loadMembers() {
+            siteService.getSiteMembers(vm.project.shortName).then(function (val) {
                 $scope.members = val;
                 //console.log("$scope.members: " + $scope.members);
             });
-            siteService.getAllMembers(vm.project, vm.projectType).then(function (val) {
+            siteService.getAllMembers(vm.project.shortName, vm.project.type).then(function (val) {
                 $scope.allMembers = val;
             });
-        };
+        }
+    
     
         vm.newMember = function (event) {
             $mdDialog.show({
@@ -425,45 +435,41 @@ angular
             });
         };
     
+    
         vm.upload = function (files) {
     
             for (var i = 0; i < files.length; i++) {
                 siteService.uploadFiles(files[i], vm.currentFolderNodeRef).then(function (response) {
                     vm.loadContents();
                     var ref = response.data.nodeRef.split("/")[3];
-                    createDocumentNotification(vm.project_title, ref, response.data.fileName);
+                    createDocumentNotification(vm.project.title, ref, response.data.fileName);
                 });
             }
             $mdDialog.cancel();
         };
     
-        vm.loadSiteRoles = function () {
     
-            if (vm.projectType != 'PD-Project') {
-                siteService.getSiteRoles(vm.project).then(function (response) {
-    
+        function loadSiteRoles() {
+            if (vm.project.type != 'PD-Project') {
+                siteService.getSiteRoles(vm.project.shortName).then(function (response) {
                     $scope.roles_translated = [];
-    
                     for (var x in response.siteRoles) {
-    
-                        if ($scope.role_mapping[response.siteRoles[x]] != null) {
+                        if ($scope.role_mapping[response.siteRoles[x]] !== null) {
                             $scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
                         }
-    
                     }
                     //$scope.roles = response.siteRoles;
                 });
-            }
-            else {
-    
+            } else {
                 $scope.roles_translated = [];
-    
                 $scope.roles_translated.push("Kan læse");
                 $scope.roles_translated.push("Kan skrive");
             }
-        };
+        }
+    
     
         vm.currentDialogUser = '';
+    
     
         vm.updateMemberRoleDialog = function (event, user) {
             vm.currentDialogUser = user;
@@ -485,7 +491,7 @@ angular
             var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
     
             siteService.updateRoleOnSiteMember(siteName, user.userName, role_alfresco_value).then(function (val) {
-                vm.loadMembers();
+                loadMembers();
             });
             $mdDialog.hide();
         };
@@ -500,7 +506,7 @@ angular
     
             siteService.addMemberToSite(siteName, userName, role_alfresco_value).then(function (val) {
                 createSiteNotification(userName, siteName);
-                vm.loadMembers();
+                loadMembers();
             });
             $mdDialog.hide();
         };
@@ -523,7 +529,7 @@ angular
     
         vm.removeMemberFromSite = function (siteName, userName) {
             siteService.removeMemberFromSite(siteName, userName).then(function (val) {
-                vm.loadMembers();
+                loadMembers();
             });
     
             $mdDialog.hide();
@@ -706,7 +712,7 @@ angular
     
     
         //Goes to the libreOffice online edit page
-        vm.goToLOEditPage = function (nodeRef) {
+        function goToLOEditPage(nodeRef) {
             console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
             $state.go('lool', {'nodeRef': nodeRef});
         };
@@ -721,6 +727,17 @@ angular
                 preserveScope: true,  // do not forget this if use parent scope
                 clickOutsideToClose: true
             });
+        }
+        
+        
+        function updateSiteName() {
+            siteService.updateSiteName(vm.project.shortName, vm.project.title, vm.project.description).then(
+                function(result){
+                    vm.project.title = result.title;
+                    vm.project.description = result.description;
+                    $mdDialog.hide();
+                }
+            );
         }
         
 
