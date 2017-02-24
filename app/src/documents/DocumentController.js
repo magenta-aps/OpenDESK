@@ -41,10 +41,20 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		$mdDialog.cancel();
 	};
 
-    
-    vm.newFolderDialog = function (event) {
+    vm.godkendDialog = function (event) {
         $mdDialog.show({
-            templateUrl: 'app/src/documents/view/reviewComment.tmpl.html',
+            templateUrl: 'app/src/documents/view/aproveComment.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    };
+	
+	vm.afvisDialog = function (event) {
+        $mdDialog.show({
+            templateUrl: 'app/src/documents/view/rejectComment.tmpl.html',
             parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,

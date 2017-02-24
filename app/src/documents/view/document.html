@@ -85,25 +85,35 @@
 						{{ vm.doc.modifiedBy }}
 					</dd>
 				</div-->
-                <!--ng-if ng-if="vm.wf" class="od-notifylist--item--nolink"-->
+				
+				
+				
+                <ng-if ng-if="vm.wf" class="od-notifylist--item--nolink">
                     <br>
-					<dt>
-                        Review
-                    </dt>
-					<br>
+					<md-divider></md-divider>
+					<!--dt-->
+                    <h4>Review</h4>
+                    <!--/dt-->
                     <dd>
-                        Du er blevet bedt om at reviewe dette dokument:<br>
-                        <md-button ng-controller="SiteController as sc" ng-click="sc.goToLOEditPage(vm.doc.nodeRef)">
-                            Redigér
+						<div layout="row" style="margin: 10px 0 20px 0;">
+							<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Du er blevet bedt om at reviewe dette dokument:</span>
+						</div>
+						
+						Du kan 
+                        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-controller="SiteController as sc" ng-click="sc.goToLOEditPage(vm.doc.nodeRef)">
+                            Redigere
                         </md-button>
-						<md-button ng-click="vm.newFolderDialog($event)">
-                            Godkend
-                        </md-button>
-                        <md-button ng-click="vm.newFolderDialog($event)">
-                            Afvis
-                        </md-button>
+						dokumentet, inden du godkender eller afviser.
+						<div style="margin-top: 20px" ng-controller="DocumentController as dc">
+							<md-button class="md-raised md-primary" ng-click="dc.godkendDialog($event)">
+								Godkend
+							</md-button>
+							<md-button class="md-raised" ng-click="dc.afvisDialog($event)">
+								Afvis
+							</md-button>
+						</div>
                     </dd>
-                <!--/ng-if-->
+                </ng-if>
             </dl>
         </div>
     </div>

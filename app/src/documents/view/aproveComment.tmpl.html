@@ -3,16 +3,14 @@
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Kommentar</h2>
+                <h2>Godkend dokument</h2>
             </div>
         </md-toolbar>
 
         <md-dialog-content class="md-padding">
-            <p>Kommentar</p>
-
-            <div>
+            <div style="margin-top: 20px;">
                 <md-input-container>
-                    <label>Name</label>
+                    <label>Kommentar</label>
                     <input type="text" name="comment" required ng-model="comment">
 
                     <div ng-messages="createSiteForm.newSiteName.$error">
@@ -24,7 +22,7 @@
 
         <md-dialog-actions>
             <md-button ng-click="vm.cancel()">Fortryd</md-button>
-            <md-button type="submit" class="md-primary">Ok</md-button>
+            <md-button type="submit" class="md-primary">Godkend</md-button>
         </md-dialog-actions>
 
     </form>
