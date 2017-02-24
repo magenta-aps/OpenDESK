@@ -26,8 +26,6 @@ angular
             if ($stateParams.projekt) {
                 siteService.loadSiteData($stateParams.projekt).then(
                     function (response) {
-                        console.log('PD site data');
-                        console.log(response);
                         pd.site = response;
                         getProjectMembers();
                     }
@@ -39,6 +37,8 @@ angular
         function loadProjectMembers(projectShortname, memberType) {
             pd.projectMembers = [];
             siteService.getGroupMembers(projectShortname, memberType).then (function (val){
+
+
                 pd.projectMembers = val;
             });
         }
@@ -74,6 +74,9 @@ angular
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
                 function(response) {
+
+                    console.log("*** memberstype");
+                    console.log(response);
                     pd.site.members.pd_projectgroup = response[1];
 					pd.site.members.pd_projectgroup_permission = response[0].permission;
                 }

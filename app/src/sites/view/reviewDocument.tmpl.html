@@ -15,12 +15,12 @@
                         required
                         md-input-name="autocomplete"
                         md-selected-item="newMemberName"
-                        md-search-text="searchText"
+                        md-search-text="searchTextUser"
                         md-items="user in vm.getAllUsers(searchText)"
                         md-item-text="user.firstName + ' ' + user.lastName"
                         md-floating-label="Hvem vil du tilføje?">
                     <md-item-template>
-                        <span md-highlight-text="searchText">{{ user.firstName }} {{ user.lastName }}</span>
+                        <span md-highlight-text="searchTextUser">{{ user.firstName }} {{ user.lastName }}</span>
                     </md-item-template>
                     <div ng-messages="autocompleteForm.autocomplete.$error">
                         <div ng-message="required">Dette felt skal udfyldes</div>

@@ -66,8 +66,6 @@ angular
         function getSitesPerUser() {
             return siteService.getSitesPerUser().then(function(response) {
                     vm.sitesPerUser = response;
-                    console.log("response");
-                    console.log(response);
                     return response;
                 }
             );
