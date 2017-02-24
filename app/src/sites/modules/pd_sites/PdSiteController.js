@@ -20,18 +20,20 @@ angular
 		pd.updateMemberRoleDialog = updateMemberRoleDialog;
 		pd.updateRoleOnSiteMember = updateRoleOnSiteMember;
         pd.doPDF = doPDF;
-        
-        if ($stateParams.projekt) {
-            siteService.loadSiteData($stateParams.projekt).then(
-                function (response) {
-                    console.log('PD site data');
-                    console.log(response);
-                    pd.site = response;
-                    getProjectMembers();
-                }
-            );            
+
+        function loadSiteData() {
+            if ($stateParams.projekt) {
+                siteService.loadSiteData($stateParams.projekt).then(
+                    function (response) {
+                        console.log('PD site data');
+                        console.log(response);
+                        pd.site = response;
+                        getProjectMembers();
+                    }
+                );
+            }
         }
-        
+        loadSiteData();
         
         function loadProjectMembers(projectShortname, memberType) {
             pd.projectMembers = [];
@@ -106,7 +108,9 @@ angular
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
-            });
+            }).finally(function() {
+                loadSiteData();
+            });;
         }	
 	
         

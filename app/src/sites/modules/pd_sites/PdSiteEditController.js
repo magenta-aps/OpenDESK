@@ -93,10 +93,9 @@ angular
                 ''
             ).then(
                 function(response) {
-                    console.log('will this ever happen?');
-                    console.log(response);
                     if(response) {
                         $mdDialog.cancel();
+
                         $mdToast.show(
                             $mdToast.simple()
                                     .textContent('Du har opdateret projekt: ' + $scope.newSite.siteName)
