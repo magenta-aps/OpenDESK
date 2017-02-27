@@ -446,7 +446,7 @@ public class Sites extends AbstractWebScript {
 
 
             SiteInfo site = siteService.getSite(shortName);
-            String output = "Medlemsliste for projektet: " + shortName + "\n\n\n\n\n";
+            String output = "Medlemsliste for projektet: " + site.getTitle() + "\n\n\n\n\n";
 
 
             // until further noctice, we dont want to make pds for normal projects
@@ -659,6 +659,7 @@ public class Sites extends AbstractWebScript {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             json.put("created", sdf.format(s.getCreatedDate()));
             json.put("shortName", s.getShortName());
+            json.put("visibility", s.getVisibility());
 
             NodeRef n = s.getNodeRef();
             json.put("nodeRef", n.toString());
