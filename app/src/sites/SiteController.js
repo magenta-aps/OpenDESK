@@ -722,9 +722,9 @@ angular
     
     
         //Goes to the libreOffice online edit page
-        function goToLOEditPage(nodeRef) {
-            console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
-            $state.go('lool', {'nodeRef': nodeRef});
+        function goToLOEditPage(nodeRef, fileName) {
+            //console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
+            $state.go('lool', {'nodeRef': nodeRef, 'fileName': fileName});
         };
 
         

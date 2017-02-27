@@ -10,10 +10,12 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     vm.plugin = [];
     vm.paths = [];
 	vm.title = [];
+	vm.fileName = $stateParams.fileName != undefined ? $stateParams.fileName : "";
 
 	var parentDocumentNode = "";
 	var firstDocumentNode = "";
 	var selectedDocumentNode = $stateParams.doc;
+	
 
     if($location.search().archived !=  undefined && $location.search().parent !=  undefined)
     {
@@ -40,6 +42,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	vm.cancel = function() {
 		$mdDialog.cancel();
 	};
+	
+	vm.goBack = function() {
+		$window.history.back();
+	}
 
     vm.godkendDialog = function (event) {
         $mdDialog.show({

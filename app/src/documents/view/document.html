@@ -1,4 +1,7 @@
 <div layout="row" layout-align="space-between center">
+
+	<h1 class="od-title">Projekt: {{ vm.title }}</h1>
+
     <a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 
     <div ng-controller="SearchController as vm" class="od-search" layout="row" style="margin-top:15px;">
@@ -88,7 +91,7 @@
 				
 				
 				
-                <ng-if ng-if="vm.wf" class="od-notifylist--item--nolink">
+                <!--ng-if ng-if="vm.wf" class="od-notifylist--item--nolink"-->
                     <br>
 					<md-divider></md-divider>
 					<!--dt-->
@@ -100,7 +103,7 @@
 						</div>
 						
 						Du kan 
-                        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-controller="SiteController as sc" ng-click="sc.goToLOEditPage(vm.doc.nodeRef)">
+                        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-controller="SiteController as sc" ng-click="sc.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName)">
                             Redigere
                         </md-button>
 						dokumentet, inden du godkender eller afviser.
@@ -113,7 +116,7 @@
 							</md-button>
 						</div>
                     </dd>
-                </ng-if>
+                <!--/ng-if-->
             </dl>
         </div>
     </div>
