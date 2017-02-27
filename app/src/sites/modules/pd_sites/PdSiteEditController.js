@@ -13,8 +13,6 @@ angular
         pde.site = sitedata;
         
         //getProjectMembers();
-        console.log('pde.site.members.pd_projectmanager');
-        console.log(pde.site.members.pd_projectmanager);
         
         $scope.newSite = {
             shortName: pde.site.shortName,
@@ -23,7 +21,7 @@ angular
             owner: pde.site.members.pd_projectowner,
             sbsys: pde.site.sbsys,
             center_id: pde.site.center_id,
-            manager: pde.site.members.pd_projectmanager,
+            manager: pde.site.members.pd_projectmanager
         };
         $scope.newSite.owner.fullName = pde.site.members.pd_projectowner.displayName;
         $scope.newSite.owner.shortName = pde.site.members.pd_projectowner.username;
@@ -32,6 +30,17 @@ angular
         if (pde.site.visibility === 'PRIVATE') {
             $scope.newSite.isPrivate = true;
         }
+        $scope.newSite.availStates = [
+            { stateId: 'ACTIVE', stateStr: 'Igangværende'},
+            { stateId: 'CLOSED', stateStr: 'Afsluttet'}
+        ];
+        for (var s in $scope.newSite.availStates) {
+            if(pde.site.state === $scope.newSite.availStates[s].stateId) {
+                $scope.newSite.state = $scope.newSite.availStates[s];
+            }
+        }
+        console.log('$scope.newSite.state');
+        console.log($scope.newSite.state);
         
         $scope.cancel = cancel;
         $scope.searchProjectOwners = searchProjectOwners;
@@ -84,8 +93,6 @@ angular
         
         function updatePdSite() {
             var manager = pde.site.members.pd_projectmanager.shortName;
-            console.log('get some values:');
-            console.log(pde.site.members.pd_projectmanager);
             if ($scope.newSite.manager.userName !== undefined) {
                 manager = $scope.newSite.manager.userName;
             }
@@ -94,7 +101,14 @@ angular
             } else {
                 visibility = 'PUBLIC';
             }
-            console.log('Updating site to sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.owner.shortName + '; manager: '  + manager + '; visibility: ' + visibility);
+            console.log('Updating site to sitename: ' + $scope.newSite.siteName +
+                '; sbsys: ' + $scope.newSite.sbsys +
+                '; center id: ' + $scope.newSite.center_id +
+                '; owner: ' + $scope.newSite.owner.shortName +
+                '; manager: ' + manager +
+                '; visibility: ' + visibility +
+                '; state: ' + $scope.newSite.state.stateId
+            );
             pd_siteService.updatePDSite(
                 $scope.newSite.shortName,
                 $scope.newSite.siteName,
@@ -104,7 +118,7 @@ angular
                 $scope.newSite.owner.shortName,
                 manager,
                 visibility,
-                ''
+                $scope.newSite.state.stateId
             ).then(
                 function(response) {
                     if(response) {
