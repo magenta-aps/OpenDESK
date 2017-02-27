@@ -55,7 +55,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                     return response.data.role;
                 }, function (err) {
                     // If user isn't registered as a member, grant siteConsumer role
-                    return 'siteConsumer';
+                    return 'SiteConsumer';
                 }
             ) 
         },

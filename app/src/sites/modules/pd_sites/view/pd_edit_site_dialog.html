@@ -36,6 +36,9 @@
                             Ingen brugere matcher "{{ searchTextOwner }}".
                         </md-not-found>
                     </md-autocomplete>
+                    <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
+                        Privat projekt
+                    </md-checkbox>
                 </div>
                 <div flex="50">
                     <md-input-container style="width: 100%;">
@@ -65,6 +68,14 @@
                             Ingen brugere matcher "{{ searchTextManager }}".
                         </md-not-found>
                     </md-autocomplete>
+                    <md-input-container>
+                        <label>Status</label>
+                        <md-select ng-model="newSite.state">
+                            <md-option ng-repeat="state in newSite.availStates" ng-value="state">
+                                {{ state.stateStr }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
                 </div>
             </md-content>
         

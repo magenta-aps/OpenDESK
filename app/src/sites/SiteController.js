@@ -37,7 +37,8 @@ angular
         vm.allMembers = [];
         vm.project = {};
         vm.path = $stateParams.path;
-        vm.userRole = 'siteConsumer';
+        vm.userRole = 'SiteConsumer';
+        
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
 		vm.showProgress = false;
@@ -55,7 +56,7 @@ angular
                     console.log('Project information');
                     console.log(vm.project);
                     
-                    //getSitesPerUser();
+                    getSitesPerUser();
                     getSiteUserRole();
                     loadMembers();
                     loadSiteRoles();

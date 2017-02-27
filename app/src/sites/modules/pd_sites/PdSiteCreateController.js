@@ -30,7 +30,9 @@ angular
         
             $scope.cancel = cancel;
             
-            $scope.newSite = {};
+            $scope.newSite = {
+                isPrivate: false
+            };
             $scope.availOrgs = [];
             $scope.projektGruppe = [];
             $scope.styreGruppe = [];
@@ -96,6 +98,9 @@ angular
                 console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.projectOwner.shortName + '; manager: '  + $scope.newSite.manager.userName);
                 var shortName = $scope.newSite.siteName.replace(new RegExp(" ", 'g'), "-");
                 var visibility = "PUBLIC"; // Visibility is set to public
+                if ($scope.newSite.isPrivate) {
+                    visibility = "PRIVATE";
+                }
                 pd_siteService.createPDSite(
                     shortName,
                     $scope.newSite.siteName,
