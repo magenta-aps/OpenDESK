@@ -56,7 +56,7 @@ angular
                     console.log('Project information');
                     console.log(vm.project);
                     
-                    //getSitesPerUser();
+                    getSitesPerUser();
                     getSiteUserRole();
                     loadMembers();
                     loadSiteRoles();

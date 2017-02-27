@@ -2,7 +2,8 @@
     
     <div layout="row" layout-align="space-between">
         <h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
-        <md-button class="md-raised md-icon-button" ng-click="pd.editPdSite($event)" aria-label="Redigér site">
+        <md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised md-icon-button"
+				   ng-click="pd.editPdSite($event)" aria-label="Redigér site">
             <i class="material-icons">edit</i>
         </md-button>
     </div>
@@ -59,7 +60,7 @@
         </h4>
         <ul ng-show="pd.showProjGroupList">
             <div layout="row" ng-repeat="mem in pd.site.members.pd_projectgroup">
-				<div flex="75">{{ mem.displayName }}</div>
+				<div flex="{{vm.userRole !== 'SiteConsumer' ? 75 : 85}}">{{ mem.displayName }}</div>
 				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -75,20 +76,21 @@
 						</md-menu-content>
 					</md-menu>
 				</div>
-				<div flex="10" style="position: relative; top: -10px">
+				<!--Remove if ng-if="vm.userRole !== 'SiteConsumer'" if there are more actions that site consumers may do-->
+				<div flex="10" style="position: relative; top: -10px" ng-if="vm.userRole !== 'SiteConsumer'">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_PROJECTGROUP')">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.removeMemberDialog(mem, 'PD_PROJECTGROUP')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
@@ -110,7 +112,7 @@
         </h4>
         <ul ng-show="pd.showSteerGroupList">
 			<div layout="row" ng-repeat="mem in pd.site.members.pd_steering_group">
-				<div flex="75">{{ mem.displayName }}</div>
+				<div flex="{{vm.userRole !== 'SiteConsumer' ? 75 : 85}}">{{ mem.displayName }}</div>
 				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -126,20 +128,21 @@
 						</md-menu-content>
 					</md-menu>
 				</div>
-				<div flex="10" style="position: relative; top: -10px">
+				<!--Remove if ng-if="vm.userRole !== 'SiteConsumer'" if there are more actions that site consumers may do-->
+				<div flex="10" style="position: relative; top: -10px" ng-if="vm.userRole !== 'SiteConsumer'">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_STEERING_GROUP')">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.removeMemberDialog(mem, 'PD_STEERING_GROUP')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
@@ -161,7 +164,7 @@
         </h4>
         <ul ng-show="pd.showWorkGroupList">
 			<div layout="row" ng-repeat="mem in pd.site.members.pd_workgroup">
-				<div flex="75">{{ mem.displayName }}</div>
+				<div flex="{{vm.userRole !== 'SiteConsumer' ? 75 : 85}}">{{ mem.displayName }}</div>
 				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -177,20 +180,21 @@
 						</md-menu-content>
 					</md-menu>
 				</div>
-				<div flex="10" style="position: relative; top: -10px">
+				<!--Remove if ng-if="vm.userRole !== 'SiteConsumer'" if there are more actions that site consumers may do-->
+				<div flex="10" style="position: relative; top: -10px" ng-if="vm.userRole !== 'SiteConsumer'">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_WORKGROUP')">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.removeMemberDialog(mem, 'PD_WORKGROUP')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
@@ -212,7 +216,7 @@
         </h4>
         <ul ng-show="pd.showMonitorsList">
 			<div layout="row" ng-repeat="mem in pd.site.members.pd_monitors">
-				<div flex="75">{{ mem.displayName }}</div>
+				<div flex="{{vm.userRole !== 'SiteConsumer' ? 75 : 85}}">{{ mem.displayName }}</div>
 				<div flex="10" style="position: relative; top: -10px">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -228,20 +232,21 @@
 						</md-menu-content>
 					</md-menu>
 				</div>
-				<div flex="10" style="position: relative; top: -10px">
+				<!--Remove if ng-if="vm.userRole !== 'SiteConsumer'" if there are more actions that site consumers may do-->
+				<div flex="10" style="position: relative; top: -10px" ng-if="vm.userRole !== 'SiteConsumer'">
 					<md-menu ng-controller="SiteController as vm">
 						<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 							<md-icon md-menu-origin>dehaze</md-icon>
 						</md-button>
 						<md-menu-content width="5">
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.updateMemberRoleDialog($event, mem)">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 									<md-icon md-menu-align-target>create</md-icon>
 									Redigér rolle
 								</md-button>
 							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-disabled="vm.userRole === 'SiteConsumer'" ng-click="pd.removeMemberDialog(mem, 'PD_MONITORS')">
+							<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+								<md-button ng-click="pd.removeMemberDialog(mem, 'PD_MONITORS')">
 									<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 									Fjern medlem
 								</md-button>
@@ -255,17 +260,15 @@
         <br>
 
         <div layout="row" layout-align="start center" class="btnAlign">
-            <div flex="15">
-                <md-button class="md-raised md-icon-button" ng-click="pd.editPdSiteGroups($event)" aria-label="Tilføj/fjern gruppemedlemmer">
-                    <md-tooltip md-direction="top">Tilføj/fjern gruppemedlemmer</md-tooltip>
-					<i class="material-icons">add</i>
-                </md-button>
-            </div>
-            <div flex="85">
-                <md-button class="md-raised md-icon-button" ng-click="pd.doPDF()" aria-label="Download PDF med grupper">
-                    <md-tooltip md-direction="top">Download medlemsoversigt som PDF</md-tooltip>PDF
-                </md-button>
-            </div>
+			<md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised md-icon-button"
+					   ng-click="pd.editPdSiteGroups($event)" aria-label="Tilføj/fjern gruppemedlemmer">
+            	<md-tooltip md-direction="top">Tilføj/fjern gruppemedlemmer</md-tooltip>
+				<i class="material-icons">add</i>
+			</md-button>
+			<md-button class="md-raised md-icon-button" style="{{vm.userRole !== 'SiteConsumer' ? 'margin-left: 30px;' : ''}}"
+					   ng-click="pd.doPDF()" aria-label="Download PDF med grupper">
+				<md-tooltip md-direction="top">Download medlemsoversigt som PDF</md-tooltip>PDF
+			</md-button>
         </div>
     </div>
 </md-card-content>
