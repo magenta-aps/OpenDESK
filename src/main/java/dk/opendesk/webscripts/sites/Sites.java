@@ -188,6 +188,10 @@ public class Sites extends AbstractWebScript {
                         result = this.removePermission(siteShortName, user, role);
                         break;
 
+                    case "getCurrentUserSiteRole":
+                        result = this.getCurrentUserSiteRole(siteShortName);
+                        break;
+
                     case "getDBID":
                         result = this.getDBID(siteShortName);
                         break;
@@ -367,10 +371,6 @@ public class Sites extends AbstractWebScript {
 
     private JSONArray addPermission(String siteShortName, String user, String role) {
 
-        System.out.println(siteShortName);
-        System.out.println(user);
-        System.out.println(role);
-
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
 
         permissionService.setPermission(ref, user, role, true);
@@ -380,15 +380,55 @@ public class Sites extends AbstractWebScript {
 
     private JSONArray removePermission(String siteShortName, String user, String role) {
 
-        System.out.println(siteShortName);
-        System.out.println(user);
-        System.out.println(role);
-
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
 
         permissionService.deletePermission(ref, user, role);
 
         return Utils.getJSONSuccess();
+    }
+
+    private JSONArray getCurrentUserSiteRole(String siteShortName) {
+
+        NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
+        AccessStatus accessStatus = permissionService.hasPermission(ref, "Write");
+
+        String role;
+        if(accessStatus.equals(AccessStatus.ALLOWED)) {
+            role = OpenDeskModel.COLLABORATOR;
+
+            JSONArray a = this.getDBID(siteShortName);
+            JSONObject dbid = (JSONObject) a.get(0);
+
+            String dbID = "";
+            try {
+                dbID = (String) dbid.get("DBID");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            NodeRef n = siteService.getSite(siteShortName).getNodeRef();
+            String type = "";
+
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+                type = OpenDeskModel.pd_project;
+            } else {
+                type = OpenDeskModel.project;
+            }
+
+            String currentUser = authenticationService.getCurrentUserName();
+
+            if (type.equals(OpenDeskModel.pd_project)) {
+                String projectManagerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
+
+                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
+                if(authorities.contains(currentUser))
+                    role = OpenDeskModel.MANAGER;
+            }
+        }
+        else
+            role = OpenDeskModel.CONSUMER;
+
+        return Utils.getJSONReturnPair("role", role);
     }
 
     private JSONArray addLink(String source_project, String destinaion_project) {
@@ -634,10 +674,7 @@ public class Sites extends AbstractWebScript {
         finally {
         AuthenticationUtil.popAuthentication();
         }
-
-
     }
-
 
     private JSONArray getSiteType(String shortName) {
 
