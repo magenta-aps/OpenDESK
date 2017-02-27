@@ -74,9 +74,6 @@ angular
             );
 			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
                 function(response) {
-
-                    console.log("*** memberstype");
-                    console.log(response);
                     pd.site.members.pd_projectgroup = response[1];
 					pd.site.members.pd_projectgroup_permission = response[0].permission;
                 }

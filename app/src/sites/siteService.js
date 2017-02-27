@@ -48,11 +48,16 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 
             );
         },
-        getSiteUserRole: function (siteShortName, userName) {
-            //https:frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx/memberships/flemming
-            return $http.get('/api/sites/' + siteShortName + '/memberships/' + userName ).then(
+        getCurrentUserSiteRole: function (siteShortName) {
+            //https:frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "getCurrentUserSiteRole",
+                PARAM_SITE_SHORT_NAME: siteShortName
+            }).then(
                 function (response) {
-                    return response.data.role;
+                    if(response.data[0].role == null)
+                        return 'SiteConsumer';
+                    return response.data[0].role;
                 }, function (err) {
                     // If user isn't registered as a member, grant siteConsumer role
                     return 'SiteConsumer';
@@ -311,26 +316,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             });
         },
-        //getGroupMembers : function (siteShortName, groupName) {
-        //    return $http.post("/alfresco/service/sites", {
-        //        PARAM_METHOD : "getDBID",
-        //        PARAM_SITE_SHORT_NAME: siteShortName
-        //    }).then(function(response) {
-        //
-        //        var dbid = response.data[0].DBID;
-        //        console.log(dbid);
-        //
-        //        var requestName = dbid + "_" + groupName;
-        //
-        //        return groupService.getGroupMembers(requestName).then(function(r) {
-        //            return r.data;
-        //        });
-        //
-        //        return response.data;
-        //    });
-        //},
         getGroupMembers : function (siteShortName, groupName) {
             return groupService.getGroupInfo(siteShortName, groupName).then(function(r) {
+                console.log(groupName);
+                console.log(JSON.stringify(r));
                 return r;
             });
         },

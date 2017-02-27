@@ -37,7 +37,11 @@ angular
         vm.allMembers = [];
         vm.project = {};
         vm.path = $stateParams.path;
-        vm.userRole = 'SiteConsumer';
+        vm.userRole = 'Consumer';
+        vm.editRole = 'Collaborator';
+        vm.managerRole = 'Manager';
+        vm.canEdit = false;
+        vm.isManager = false;
         
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
@@ -93,9 +97,11 @@ angular
         
         
         function getSiteUserRole() {
-            siteService.getSiteUserRole(vm.project.shortName, vm.currentUser.userName).then(
+            siteService.getCurrentUserSiteRole(vm.project.shortName).then(
                 function (response) {
                     vm.userRole = response;
+                    vm.isManager = vm.userRole == vm.managerRole;
+                    vm.canEdit = vm.isManager || vm.userRole == vm.editRole;
                 },
                 function (err) {
                     console.log('Error getting site user role');

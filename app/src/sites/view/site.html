@@ -107,49 +107,49 @@
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>create</md-icon>
                                                 Omdøb
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                                                 <md-icon md-menu-align-target>library_books</md-icon>
                                                 Rediger dokument
                                             </md-button>
                                         </md-menu-item>
 										
-										<md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+										<md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                                                 <md-icon md-menu-align-target>unarchive</md-icon>
                                                 Upload til SBSYS
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
                                                 <md-icon md-menu-align-target>content_copy</md-icon>
                                                 Kopiér
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
                                                 <md-icon md-menu-align-target>compare_arrows</md-icon>
                                                 Flyt
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                                                 Send til godkendelse
@@ -173,13 +173,13 @@
                                 | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                             </td>
                             <td>
-                                <md-menu ng-if="vm.userRole !== 'SiteConsumer'">
+                                <md-menu ng-if="vm.canEdit">
                                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
 
                                     <md-menu-content width="6">
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet
@@ -199,12 +199,12 @@
                             </a></td>
 							<td>&nbsp;</td>
                             <td>
-                                <md-menu ng-if="vm.userRole !== 'SiteConsumer'">
+                                <md-menu ng-if="vm.canEdit">
                                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>dehaze</md-icon>
                                     </md-button>
                                     <md-menu-content width="6">
-                                        <md-menu-item ng-if="vm.userRole !== 'SiteConsumer'">
+                                        <md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.deleteLink(content.nodeid, content.destination_nodeid)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet
@@ -222,18 +222,18 @@
                 </p>
                 <md-divider></md-divider>
                 <div layout="row" layout-align="start center" class="btnAlign">
-                    <md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised md-primary"
+                    <md-button ng-if="vm.canEdit" class="md-raised md-primary"
                                ng-click="vm.uploadDocumentsDialog($event)"><i class="material-icons">file_upload</i>
                         Upload dokumenter
                     </md-button>
-                    <md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised"
+                    <md-button ng-if="vm.canEdit" class="md-raised"
                                ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe
                     </md-button>
-                    <md-button ng-if="vm.userRole !== 'SiteConsumer'" class="md-raised"
+                    <md-button ng-if="vm.canEdit" class="md-raised"
                                ng-click="vm.newLinkDialog($event)"><i class="material-icons">link</i> Opret projektlink
                     </md-button>
 					<div layout="column">
-						<md-menu ng-if="vm.userRole !== 'SiteConsumer'">
+						<md-menu ng-if="vm.canEdit">
 							<md-button ng-click="$mdMenu.open($event)" class="md-raised" aria-label="SBSYS">
 								<i class="material-icons">folder_open</i>
 								<span style="margin-left: 10px; margin-right: 20px;">SBSYS</span>
@@ -271,7 +271,7 @@
                             {{ role_mapping[member.role] }}
                         </div>
                         <div flex="20" flex-gt-lg="10" style="text-align: right;">
-                            <md-menu ng-if="vm.userRole === 'SiteManager'">
+                            <md-menu ng-if="vm.isManager">
                                 <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                     <md-icon md-menu-origin>dehaze</md-icon>
                                 </md-button>
@@ -299,7 +299,7 @@
                 </md-list>
 
                 <div layout="row" layout-align="start center" class="btnAlign">
-                    <md-button ng-if="vm.userRole === 'SiteManager'" class="md-raised" ng-click="vm.newMember($event)">
+                    <md-button ng-if="vm.isManager" class="md-raised" ng-click="vm.newMember($event)">
                         <i class="material-icons">add</i>
                         Tilføj medlem&nbsp;&nbsp;
                     </md-button>
