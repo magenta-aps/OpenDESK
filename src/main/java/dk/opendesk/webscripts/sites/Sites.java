@@ -446,7 +446,7 @@ public class Sites extends AbstractWebScript {
 
 
             SiteInfo site = siteService.getSite(shortName);
-            String output = "Medlemsliste for projektet: " + shortName + "\n\n\n\n\n";
+            String output = "Medlemsliste for projektet: " + site.getTitle() + "\n\n\n\n\n";
 
 
             // until further noctice, we dont want to make pds for normal projects
