@@ -10,8 +10,8 @@ function NotificationsSettingsController($mdDialog, $translate, $state, preferen
 
     function loadNotificationPreferences() {
         preferenceService.getPreferences(vm.currentUser, preferenceFilter).then(function(data) {
-            vm.receiveNotifications = data[preferenceFilter];
-            console.log("vm.receiveNotifications: " + vm.receiveNotifications);
+            if(data[preferenceFilter] != null)
+                vm.receiveNotifications = data[preferenceFilter];
             return data[preferenceFilter];
         });
     }

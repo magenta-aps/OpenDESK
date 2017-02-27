@@ -3,9 +3,8 @@ angular
     .config(config);
 
 function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) {
-    systemSettingsPagesServiceProvider.addPage('Skabeloner', 'administration.systemsettings.templateList');
-    systemSettingsPagesServiceProvider.addPage('Notifikationer', 'administration.systemsettings.notifications');
-
+    systemSettingsPagesServiceProvider.addPage('Skabeloner', 'administration.systemsettings.templateList', true);
+    systemSettingsPagesServiceProvider.addPage('Notifikationer', 'administration.systemsettings.notifications', false);
 
     $stateProvider.state('administration.systemsettings', {
         url: '/systemopsætning',
@@ -35,7 +34,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
     }).state('administration.systemsettings.templateList', {
         url: '/skabeloner',
         data: {
-            authorizedRoles: [USER_ROLES.user]
+            authorizedRoles: [USER_ROLES.admin]
         },
         views: {
             'systemsetting-view': {

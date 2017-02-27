@@ -2,9 +2,7 @@ angular.module('openDeskApp.systemsettings').provider('systemSettingsPagesServic
 
 function SystemSettingsPagesServiceProvider() {
     var pages = [];
-    var modulesPages = [];
     this.addPage = addPage;
-    this.addModulePage = addModulePage;
     this.$get = SystemSettingsPagesService;
 
     /**
@@ -13,19 +11,11 @@ function SystemSettingsPagesServiceProvider() {
      * @param icon - material icon name; default: 'content_copy'
      * @returns {SystemSettingsPagesServiceProvider}
      */
-    function addPage(labelKey, sref, icon) {
+    function addPage(labelKey, sref, isAdminOnly, icon) {
         pages.push({
             labelKey: labelKey,
             sref: sref,
-            icon: icon || 'content_copy'
-        });
-        return this;
-    }
-
-    function addModulePage(labelKey, sref, icon) {
-        modulesPages.push({
-            labelKey: labelKey,
-            sref: sref,
+            isAdminOnly: isAdminOnly,
             icon: icon || 'content_copy'
         });
         return this;
@@ -33,17 +23,12 @@ function SystemSettingsPagesServiceProvider() {
 
     function SystemSettingsPagesService() {
         var service = {
-            getPages: getPages,
-            getModulesPages: getModulesPages
+            getPages: getPages
         };
         return service;
 
         function getPages() {
             return pages;
-        }
-
-        function getModulesPages() {
-            return modulesPages;
         }
     }
 }
