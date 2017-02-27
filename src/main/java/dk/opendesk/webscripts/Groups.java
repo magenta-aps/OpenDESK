@@ -78,7 +78,7 @@ public class Groups extends AbstractWebScript {
 
     // todo to be extended when the proper implementation of change permission for a single user is implemented
     private String translatePermission(String permission) {
-        if (permission.equals(PermissionService.CONTRIBUTOR)) {
+        if (permission.equals("Collaborator")) {
             return "Kan skrive";
         }
         return null;
