@@ -40,8 +40,10 @@ angular
         vm.userRole = 'Consumer';
         vm.editRole = 'Collaborator';
         vm.managerRole = 'Manager';
+        vm.outsiderRole = 'Outsider';
         vm.canEdit = false;
         vm.isManager = false;
+        vm.isMember = false;
         
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
@@ -102,6 +104,7 @@ angular
                     vm.userRole = response;
                     vm.isManager = vm.userRole == vm.managerRole;
                     vm.canEdit = vm.isManager || vm.userRole == vm.editRole;
+                    vm.isMember = vm.userRole != vm.outsiderRole;
                 },
                 function (err) {
                     console.log('Error getting site user role');
