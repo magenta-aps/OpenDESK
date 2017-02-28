@@ -3,6 +3,7 @@ package dk.opendesk.repo.model;
 /**
  * Created by flemmingheidepedersen on 25/07/2016.
  */
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
 
 import java.lang.reflect.Array;
@@ -15,6 +16,15 @@ public interface OpenDeskModel {
     public static String OD_URI = "http://www.magenta-aps.dk/model/content/1.0";
     public static String OD_PREFIX = "od";
 
+    // Tilladelser
+    public static String COLLABORATOR_DANISH = "Kan skrive";
+    public static String CONSUMER_DANISH = "Kan læse";
+
+    // Roller
+    public static String COLLABORATOR = "Collaborator";
+    public static String CONSUMER = PermissionService.CONSUMER;
+    public static String MANAGER = "Manager";
+    public static String OUTSIDER = "Outsider";
 
     // Groupnames
 

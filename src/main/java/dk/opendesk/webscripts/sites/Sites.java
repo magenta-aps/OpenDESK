@@ -26,6 +26,7 @@ import org.alfresco.repo.rendition.executer.AbstractRenderingEngine;
 import org.alfresco.repo.rendition.executer.ReformatRenderingEngine;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
+import org.alfresco.repo.site.script.Site;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.rendition.RenditionDefinition;
@@ -36,6 +37,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ISO9075;
@@ -51,6 +53,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import javax.activation.MimeType;
+import java.beans.Visibility;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -188,6 +191,10 @@ public class Sites extends AbstractWebScript {
                         result = this.removePermission(siteShortName, user, role);
                         break;
 
+                    case "getCurrentUserSiteRole":
+                        result = this.getCurrentUserSiteRole(siteShortName);
+                        break;
+
                     case "getDBID":
                         result = this.getDBID(siteShortName);
                         break;
@@ -225,7 +232,21 @@ public class Sites extends AbstractWebScript {
         JSONArray result = new JSONArray();
 
         //TODO : carefully choose the number of sites to return
-        List<SiteInfo> sites = siteService.findSites(q, 2000);
+        List<SiteInfo> allSites = siteService.findSites(q, 2000);
+        List<SiteInfo> sites = new ArrayList<>();
+
+        for (SiteInfo siteInfo : allSites) {
+            String siteShortName = siteInfo.getShortName();
+            JSONArray JSONresult = getCurrentUserSiteRole(siteShortName);
+            JSONObject jsonObject = (JSONObject) JSONresult.get(0);
+            try {
+                String role = Utils.getJSONObject(jsonObject, "role");
+                if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role))
+                    sites.add(siteInfo);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         // need to reverse the order of sites as they appear in wrong sort order
         Collections.sort(sites, new CustomComparator());
@@ -233,14 +254,14 @@ public class Sites extends AbstractWebScript {
         Iterator i = sites.iterator();
 
         while (i.hasNext()) {
-            SiteInfo s = (SiteInfo)i.next();
+            SiteInfo s = (SiteInfo) i.next();
 
             JSONObject json = ConvertSiteInfoToJSON(s);
             result.add(json);
         }
 
         return result;
-        }
+    }
 
     private JSONArray getAllSitesForCurrentUser() {
 
@@ -367,10 +388,6 @@ public class Sites extends AbstractWebScript {
 
     private JSONArray addPermission(String siteShortName, String user, String role) {
 
-        System.out.println(siteShortName);
-        System.out.println(user);
-        System.out.println(role);
-
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
 
         permissionService.setPermission(ref, user, role, true);
@@ -380,15 +397,59 @@ public class Sites extends AbstractWebScript {
 
     private JSONArray removePermission(String siteShortName, String user, String role) {
 
-        System.out.println(siteShortName);
-        System.out.println(user);
-        System.out.println(role);
-
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
 
         permissionService.deletePermission(ref, user, role);
 
         return Utils.getJSONSuccess();
+    }
+
+    private JSONArray getCurrentUserSiteRole(String siteShortName) {
+
+        NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
+        SiteInfo siteInfo = siteService.getSite(siteShortName);
+        AccessStatus writeAccess = permissionService.hasPermission(ref, PermissionService.WRITE);
+        AccessStatus readAccess = permissionService.hasPermission(ref, PermissionService.READ_ASSOCIATIONS);
+
+        String role;
+        if(writeAccess.equals(AccessStatus.ALLOWED)) {
+            role = OpenDeskModel.COLLABORATOR;
+
+            JSONArray a = this.getDBID(siteShortName);
+            JSONObject dbid = (JSONObject) a.get(0);
+
+            String dbID = "";
+            try {
+                dbID = (String) dbid.get("DBID");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            NodeRef n = siteService.getSite(siteShortName).getNodeRef();
+            String type = "";
+
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+                type = OpenDeskModel.pd_project;
+            } else {
+                type = OpenDeskModel.project;
+            }
+
+            String currentUser = authenticationService.getCurrentUserName();
+
+            if (type.equals(OpenDeskModel.pd_project)) {
+                String projectManagerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
+
+                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
+                if(authorities.contains(currentUser))
+                    role = OpenDeskModel.MANAGER;
+            }
+        }
+        else if(readAccess.equals(AccessStatus.ALLOWED))
+            role = OpenDeskModel.CONSUMER;
+        else
+            role = OpenDeskModel.OUTSIDER;
+
+        return Utils.getJSONReturnPair("role", role);
     }
 
     private JSONArray addLink(String source_project, String destinaion_project) {
@@ -634,10 +695,7 @@ public class Sites extends AbstractWebScript {
         finally {
         AuthenticationUtil.popAuthentication();
         }
-
-
     }
-
 
     private JSONArray getSiteType(String shortName) {
 

@@ -339,21 +339,20 @@ public class ProjectDepartment extends AbstractWebScript {
         authorityService.addAuthority(parentGroup, workgroup);
 
         String steeringgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_STEERING_GROUP);
-        System.out.println(steeringgroup);
-        System.out.println(steeringgroup);
-        System.out.println(steeringgroup);
-        System.out.println(steeringgroup);
         authorityService.addAuthority(parentGroup, steeringgroup);
 
-        permissionService.setPermission(newSiteRef, monitors, "Collaborator", true);
-        permissionService.setPermission(newSiteRef, projectowner, "Collaborator", true);
-        permissionService.setPermission(newSiteRef, projectgroup, "Collaborator", true);
-        permissionService.setPermission(newSiteRef, projectmanager, "Collaborator", true);
-        permissionService.setPermission(newSiteRef, steeringgroup, "Collaborator", true);
-        permissionService.setPermission(newSiteRef,workgroup,"Collaborator",true);
+        //Consumers
+        permissionService.setPermission(newSiteRef, steeringgroup, OpenDeskModel.CONSUMER, true);
+        permissionService.setPermission(newSiteRef, monitors, OpenDeskModel.CONSUMER, true);
+
+        //Collaborators
+        permissionService.setPermission(newSiteRef, projectowner, OpenDeskModel.COLLABORATOR, true);
+        permissionService.setPermission(newSiteRef, projectgroup, OpenDeskModel.COLLABORATOR, true);
+        permissionService.setPermission(newSiteRef, projectmanager, OpenDeskModel.COLLABORATOR, true);
+        permissionService.setPermission(newSiteRef, workgroup, OpenDeskModel.COLLABORATOR,true);
 
         // allow all other projectmanagers to access this project
 
-        permissionService.setPermission(newSiteRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, "Collaborator", true);
+        permissionService.setPermission(newSiteRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, OpenDeskModel.COLLABORATOR, true);
     }
 }

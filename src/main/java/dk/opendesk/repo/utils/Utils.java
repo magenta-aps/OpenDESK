@@ -3,16 +3,16 @@ package dk.opendesk.repo.utils;
 import java.io.Serializable;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
@@ -120,6 +120,13 @@ public class Utils {
         }
     }
 
+    public static String getGroupUserRole (Set<AccessPermission> permissions, String group) {
 
-
+        for (AccessPermission a : permissions) {
+            if (a.getAuthority().equals(group)) {
+                return a.getPermission();
+            }
+        }
+        return null;
+    }
 }

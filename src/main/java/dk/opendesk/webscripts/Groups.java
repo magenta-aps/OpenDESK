@@ -78,8 +78,11 @@ public class Groups extends AbstractWebScript {
 
     // todo to be extended when the proper implementation of change permission for a single user is implemented
     private String translatePermission(String permission) {
-        if (permission.equals("Collaborator")) {
-            return "Kan skrive";
+        switch(permission) {
+            case OpenDeskModel.COLLABORATOR:
+                return OpenDeskModel.COLLABORATOR_DANISH;
+            case PermissionService.CONSUMER:
+                return OpenDeskModel.CONSUMER_DANISH;
         }
         return null;
     }
@@ -153,24 +156,14 @@ public class Groups extends AbstractWebScript {
 
         Set<AccessPermission> permissions = permissionService.getAllSetPermissions(siteNodeRef);
 
-        Iterator i = permissions.iterator();
-        boolean found = false;
-        String permission = "";
-
-        while (i.hasNext() && !found) {
-            AccessPermission a = (AccessPermission)i.next();
-
-            if (a.getAuthority().equals(group)) {
-                permission = a.getPermission();
-
-                try {
-                    json.put("permission",this.translatePermission(permission));
-                    result.add(json);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                found = true;
+        String permission = Utils.getGroupUserRole(permissions, group);
+        if(permission != null)
+        {
+            try {
+                json.put("permission",this.translatePermission(permission));
+                result.add(json);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
 
