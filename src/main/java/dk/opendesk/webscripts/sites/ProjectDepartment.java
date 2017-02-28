@@ -23,9 +23,11 @@ import org.alfresco.repo.domain.permissions.Authority;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.repo.site.SiteServiceException;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileNotFoundException;
+import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
@@ -53,6 +55,25 @@ public class ProjectDepartment extends AbstractWebScript {
 
     private NodeRef newSiteRef = null;
     private PermissionService permissionService;
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    private SearchService searchService;
+
+    public void setCopyService(CopyService copyService) {
+        this.copyService = copyService;
+    }
+
+
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
+
+    FileFolderService fileFolderService;
+
+    private CopyService copyService;
 
 
     public class CustomComparator implements Comparator<SiteInfo> {
@@ -104,6 +125,7 @@ public class ProjectDepartment extends AbstractWebScript {
             String site_state = Utils.getJSONObject(json, "PARAM_STATE");
             String site_center_id = Utils.getJSONObject(json, "PARAM_CENTERID");
             String site_visibility_str = Utils.getJSONObject(json, "PARAM_VISIBILITY");
+            String template = Utils.getJSONObject(json, "PARAM_TEMPLATE");
             SiteVisibility site_visibility;
             if(site_visibility_str.isEmpty())
                 site_visibility = null;
@@ -113,7 +135,7 @@ public class ProjectDepartment extends AbstractWebScript {
             switch (method) {
                 case "createPDSITE":
                     result = createPDSite(site_short_name, site_name, site_description,
-                            site_sbsys, site_center_id, site_owner, site_manager, site_visibility);
+                            site_sbsys, site_center_id, site_owner, site_manager, site_visibility, template);
                     break;
                 case "updatePDSITE":
                     result = updatePDSite(site_short_name, site_name, site_description,
@@ -131,8 +153,40 @@ public class ProjectDepartment extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+
+    private void executeTemplate(NodeRef newSite, String template_name) {
+
+        System.out.println(template_name);
+
+        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "@od\\:template_name:\"" + template_name + "\"");
+
+        if (siteSearchResult.length() > 0) {
+
+            System.out.println("yoyoyo");
+            NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
+            SiteInfo templateSite = siteService.getSite(siteNodeRef);
+            SiteInfo newSiteInfo = siteService.getSite(newSiteRef);
+
+            // Get the documentLibrary of the template site.
+            NodeRef template_documentlibrary = siteService.getContainer(templateSite.getShortName(), "documentlibrary");
+
+            // Get the documentLibrary of the new site.
+            NodeRef newSite_documentlibrary = siteService.getContainer(newSiteInfo.getShortName(), "documentlibrary");
+
+             nodeService.deleteNode(newSite_documentlibrary);
+
+            try {
+                fileFolderService.copy(template_documentlibrary, newSite, "documentLibrary");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     private JSONArray createPDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
-                                   String site_center_id, String site_owner, String site_manager, SiteVisibility site_visibility) {
+                                   String site_center_id, String site_owner, String site_manager, SiteVisibility site_visibility, String template) {
 
         if(site_visibility == null)
             site_visibility = SiteVisibility.PUBLIC;
@@ -160,6 +214,11 @@ public class ProjectDepartment extends AbstractWebScript {
             Long id = (Long) nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
 
             createGroupAddMembers(Long.toString(id), site_owner, site_manager);
+
+            if (template != "") {
+                this.executeTemplate(newSiteRef, template);
+
+            }
 
             JSONObject return_json = new JSONObject();
 
