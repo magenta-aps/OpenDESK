@@ -267,12 +267,11 @@ public class Sites extends AbstractWebScript {
 
         JSONArray result = new JSONArray();
 
-        List<SiteInfo> currentuser_sites = siteService.listSites(authenticationService.getCurrentUserName());
+        List<SiteInfo> currentuser_standard_sites = siteService.listSites(authenticationService.getCurrentUserName());
+        List<SiteInfo> currentuser_sites = new ArrayList<>(currentuser_standard_sites);
 
         //Get Sites nodeRef
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        ResultSet rs = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "PATH:\"/app:company_home/st:sites\"");
-        NodeRef sitesNodeRef = rs.getNodeRef(0);
 
         //Make a set to keep track of dbids
         Set<Integer> user_site_dbids = new HashSet<>();
@@ -292,12 +291,14 @@ public class Sites extends AbstractWebScript {
 
                 if (!user_site_dbids.contains(dbid)) {
 
-                    ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "PATH:\"/app:company_home/st:sites/*\" AND @sys\\:node-dbid:\"" + dbid +"\"");
+                    ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE,
+                            "PATH:\"/app:company_home/st:sites/*\" AND TYPE:\"st:site\" AND @sys\\:node-dbid:\"" + dbid +"\"");
+
                     if(siteSearchResult.length() > 0) {
                         NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
                         SiteInfo siteInfo = siteService.getSite(siteNodeRef);
 
-                        if (!currentuser_sites.contains(siteInfo))
+                        if (siteInfo != null && !currentuser_sites.contains(siteInfo))
                             currentuser_sites.add(siteInfo);
 
                         user_site_dbids.add(dbid);
