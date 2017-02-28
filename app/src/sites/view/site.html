@@ -1,4 +1,4 @@
-<div class="od-projects" ng-if="vm.isMember">
+<div class="od-projects" ng-if="vm.isMember || vm.project.visibility == 'PUBLIC'">
 
     <h1 class="od-title">Projekt: {{ vm.project.title }}</h1>
 
@@ -312,3 +312,6 @@
         </div>
     </div>
 </div>
+<div class="od-projects" ng-if="!vm.isMember">
+    Du har ikke adgang til dette projekt.
+    </div>
