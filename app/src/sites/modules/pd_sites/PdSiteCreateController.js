@@ -50,7 +50,13 @@ angular
             $scope.searchProjectOwners = searchProjectOwners;
             $scope.searchPeople = searchPeople;
             $scope.createPdSite = createPdSite;
-            
+
+
+            $scope.templates = [
+                {name : "skabelon"}
+
+            ];
+
             
             function cancel() {
                 $mdDialog.cancel();
@@ -95,7 +101,7 @@ angular
             
             
             function createPdSite() {
-                console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.projectOwner.shortName + '; manager: '  + $scope.newSite.manager.userName);
+                console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.projectOwner.shortName + '; manager: '  + $scope.newSite.manager.userName + " template: " + $scope.newSite.template.name);
                 var shortName = $scope.newSite.siteName.replace(new RegExp(" ", 'g'), "-");
                 var visibility = "PUBLIC"; // Visibility is set to public
                 if ($scope.newSite.isPrivate) {
@@ -109,7 +115,8 @@ angular
                     $scope.newSite.center_id,
                     $scope.newSite.projectOwner.shortName,
                     $scope.newSite.manager.userName,
-                    visibility
+                    visibility,
+                    $scope.newSite.template.name
                 ).then(
                     function(response) {
                         

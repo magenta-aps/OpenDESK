@@ -16,10 +16,15 @@
                     <md-content class="md-padding" layout="row" layout-padding>
                         <div flex="50">
                             {{ variable }}
+                            <label>Skabelon</label>
+                            <select ng-model="newSite.template" ng-options="x.name for x in templates" >
+                            </select>
+
                             <md-input-container style="width: 100%;">
                                 <label>Projektnavn</label>
                                 <input type="text" ng-model="newSite.siteName" required>
                             </md-input-container>
+
                             <md-input-container style="width: 100%;">
                                 <label>Beskrivelse</label>
                                 <textarea ng-model="newSite.desc"></textarea>
