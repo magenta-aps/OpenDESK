@@ -1,37 +1,44 @@
 <div ng-controller="PdSiteController as pd">
-	<md-card>
+    <h3 ng-click="pd.showProjDetails = !pd.showProjDetails"
+        class="pd-group-toggle"
+        ng-class="pd.showProjDetails ? 'open' : 'closed'"
+        layout="row"
+        style="margin: 8px;">
+        <span>{{ pd.site.title }} <span class="muted">detaljer</span></span>
+        <span flex></span>
+        <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+    </h3>
+	<md-card ng-show="pd.showProjDetails">
 		<md-card-content>
-
-			<div layout="row" layout-align="space-between">
-				<h3 class="od-title-icon"><i class="material-icons">info</i> {{ pd.site.title }} <span class="muted">detaljer</span></h3>
-				<md-button ng-if="vm.isManager" class="md-raised md-icon-button"
-						   ng-click="pd.editPdSite($event)" aria-label="Redigér site">
-					<i class="material-icons">edit</i>
-				</md-button>
-			</div>
-			<dl style="margin-bottom: 0;">
-				<dt>Beskrivelse</dt>
-				<dd>{{ pd.site.description }}</dd>
-			</dl>
-			<div layout="row">
-				<dl flex="50">
-					<dt>Oprettet af</dt>
-					<dd>{{ pd.site.creator.fullName }} <br><span class="muted">{{ pd.site.created | date }}</span></dd>
-					<dt>Filnavn</dt>
-					<dd>{{ pd.site.shortName }}</dd>
-					<dt>Status</dt>
-					<dd>{{ pd.site.state }}</dd>
-				</dl>
-				<dl flex="50">
-					<dt>SBSYS ID</dt>
-					<dd>{{ pd.site.sbsys }}</dd>
-					<dt>Center ID</dt>
-					<dd>{{ pd.site.center_id }}</dd>
-					<dt>Synlighed</dt>
-					<dd>{{ pd.site.visibility }}</dd>
-				</dl>
-			</div>
-
+            <div layout="row" layout-align="space-between">
+                <dl style="margin-bottom: 0;">
+                    <dt>Beskrivelse</dt>
+                    <dd>{{ pd.site.description }}</dd>
+                </dl>
+                <md-button ng-if="vm.isManager" class="md-raised md-icon-button"
+                           ng-click="pd.editPdSite($event)" aria-label="Redigér site">
+                    <i class="material-icons">edit</i>
+                </md-button>
+            </div>
+            <div layout="row">
+                <dl flex="50">
+                    <dt>Oprettet af</dt>
+                    <dd>{{ pd.site.creator.fullName }} <br><span class="muted">{{ pd.site.created | date }}</span></dd>
+                    <dt>Filnavn</dt>
+                    <dd>{{ pd.site.shortName }}</dd>
+                    <dt>Status</dt>
+                    <dd>{{ pd.site.state }}</dd>
+                </dl>
+                <dl flex="50">
+                    <dt>SBSYS ID</dt>
+                    <dd>{{ pd.site.sbsys }}</dd>
+                    <dt>Center ID</dt>
+                    <dd>{{ pd.site.center_id }}</dd>
+                    <dt>Synlighed</dt>
+                    <dd>{{ pd.site.visibility }}</dd>
+                </dl>
+            </div>
+        
 		</md-card-content>
 	</md-card>
 
