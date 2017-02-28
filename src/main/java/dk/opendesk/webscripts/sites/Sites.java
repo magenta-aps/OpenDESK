@@ -26,6 +26,7 @@ import org.alfresco.repo.rendition.executer.AbstractRenderingEngine;
 import org.alfresco.repo.rendition.executer.ReformatRenderingEngine;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
+import org.alfresco.repo.site.script.Site;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.rendition.RenditionDefinition;
@@ -36,6 +37,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ISO9075;
@@ -51,6 +53,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import javax.activation.MimeType;
+import java.beans.Visibility;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -229,7 +232,21 @@ public class Sites extends AbstractWebScript {
         JSONArray result = new JSONArray();
 
         //TODO : carefully choose the number of sites to return
-        List<SiteInfo> sites = siteService.findSites(q, 2000);
+        List<SiteInfo> allSites = siteService.findSites(q, 2000);
+        List<SiteInfo> sites = new ArrayList<>();
+
+        for (SiteInfo siteInfo : allSites) {
+            String siteShortName = siteInfo.getShortName();
+            JSONArray JSONresult = getCurrentUserSiteRole(siteShortName);
+            JSONObject jsonObject = (JSONObject) JSONresult.get(0);
+            try {
+                String role = Utils.getJSONObject(jsonObject, "role");
+                if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role))
+                    sites.add(siteInfo);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         // need to reverse the order of sites as they appear in wrong sort order
         Collections.sort(sites, new CustomComparator());
@@ -237,14 +254,14 @@ public class Sites extends AbstractWebScript {
         Iterator i = sites.iterator();
 
         while (i.hasNext()) {
-            SiteInfo s = (SiteInfo)i.next();
+            SiteInfo s = (SiteInfo) i.next();
 
             JSONObject json = ConvertSiteInfoToJSON(s);
             result.add(json);
         }
 
         return result;
-        }
+    }
 
     private JSONArray getAllSitesForCurrentUser() {
 
@@ -390,10 +407,12 @@ public class Sites extends AbstractWebScript {
     private JSONArray getCurrentUserSiteRole(String siteShortName) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
-        AccessStatus accessStatus = permissionService.hasPermission(ref, "Write");
+        SiteInfo siteInfo = siteService.getSite(siteShortName);
+        AccessStatus writeAccess = permissionService.hasPermission(ref, PermissionService.WRITE);
+        AccessStatus readAccess = permissionService.hasPermission(ref, PermissionService.READ_ASSOCIATIONS);
 
         String role;
-        if(accessStatus.equals(AccessStatus.ALLOWED)) {
+        if(writeAccess.equals(AccessStatus.ALLOWED)) {
             role = OpenDeskModel.COLLABORATOR;
 
             JSONArray a = this.getDBID(siteShortName);
@@ -425,8 +444,10 @@ public class Sites extends AbstractWebScript {
                     role = OpenDeskModel.MANAGER;
             }
         }
-        else
+        else if(readAccess.equals(AccessStatus.ALLOWED))
             role = OpenDeskModel.CONSUMER;
+        else
+            role = OpenDeskModel.OUTSIDER;
 
         return Utils.getJSONReturnPair("role", role);
     }
