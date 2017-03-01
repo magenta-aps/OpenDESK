@@ -3,7 +3,7 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, $timeout, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
+function DocumentController($scope, $timeout, documentService, $stateParams, $location, $state, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
     
     var vm = this;
     vm.doc = [];
@@ -11,6 +11,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     vm.paths = [];
 	vm.title = [];
 	vm.fileName = $stateParams.fileName != undefined ? $stateParams.fileName : "";
+	vm.loolDocUpdated = $location.search().loolDocUpdated;
 
 	var parentDocumentNode = "";
 	var firstDocumentNode = "";
@@ -44,9 +45,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	};
 	
 	vm.goBack = function() {
-		$window.history.back();
+		var nodeRef = $stateParams.nodeRef.split('/')[3];
+		window.location.replace("/#!/dokument/"+ nodeRef + "?loolDocUpdated=true");
 	}
-
+	
     vm.godkendDialog = function (event) {
         $mdDialog.show({
             templateUrl: 'app/src/documents/view/aproveComment.tmpl.html',
@@ -240,6 +242,12 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
         });
     }
+	
+	 //Goes to the libreOffice online edit page
+	vm.goToLOEditPage = function(nodeRef, fileName) {
+		//console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
+		$state.go('lool', {'nodeRef': nodeRef, 'fileName': fileName});
+	};
 
 	angular.element(document).ready(function () {
 		vm.highlightVersion();
