@@ -214,6 +214,10 @@ public class Sites extends AbstractWebScript {
                         result = this.getSiteType(shortName);
                         break;
 
+                    case "getTemplates":
+                        result = this.getTemplates();
+                        break;
+
                     case "createMembersPDF":
                         result = this.createMembersPDF(shortName);
                         break;
@@ -764,5 +768,27 @@ public class Sites extends AbstractWebScript {
         JSONArray json = new JSONArray();
         json.add(ConvertSiteInfoToJSON(siteInfo));
         return json;
+    }
+
+    private JSONArray getTemplates() {
+
+        JSONArray result = new JSONArray();
+
+        String query = "ASPECT:\"od:projecttype_templates\" ";
+
+        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+
+
+        for (int i = 0; i <= siteSearchResult.length()-1; i++) {
+            NodeRef siteNodeRef = siteSearchResult.getNodeRef(i);
+            System.out.println(siteNodeRef);
+            SiteInfo siteInfo = siteService.getSite(siteNodeRef);
+
+            JSONObject json = ConvertSiteInfoToJSON(siteInfo);
+            result.add(json);
+        }
+
+        return result;
     }
 }

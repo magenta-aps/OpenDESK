@@ -62,6 +62,7 @@ public interface OpenDeskModel {
      */
 
     public static QName ASPECT_PD = QName.createQName(OD_URI, "projecttype_projectdepartment");
+    public static QName ASPECT_PD_TEMPLATE_SITES = QName.createQName(OD_URI, "projecttype_templates");
 
 
 
