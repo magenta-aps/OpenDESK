@@ -316,22 +316,10 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 }
 
 .toolbar-small {
-	height: 32px;
-	min-height: 32px;
-	max-height: 32px;
-	position: relative;
+	min-height: 25px;
+	background-color: #d9d9d9;	
 	margin: 10px 0;
-	padding: 4px 20px 0 20px;
-	vertical-align: middle;
+	padding: 4px 20px 0;
     letter-spacing: 0.05em;
-    margin-top: 0;
-    max-height: 250px;
-    overflow: auto;
-    width: 98%;
-    span {
-        float: left;
-        width: 92%;
-        padding: 0 10px 0 10px;
-        font-size: 90%;
-    }
+    font-weight: bold;
 }

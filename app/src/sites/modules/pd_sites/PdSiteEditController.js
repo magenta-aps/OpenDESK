@@ -31,7 +31,7 @@ angular
             $scope.newSite.isPrivate = true;
         }
         $scope.newSite.availStates = [
-            { stateId: 'ACTIVE', stateStr: 'Igangværende'},
+            { stateId: 'ACTIVE', stateStr: 'Igang'},
             { stateId: 'CLOSED', stateStr: 'Afsluttet'}
         ];
         for (var s in $scope.newSite.availStates) {
