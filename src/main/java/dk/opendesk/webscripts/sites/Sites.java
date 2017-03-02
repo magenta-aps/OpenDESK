@@ -271,12 +271,11 @@ public class Sites extends AbstractWebScript {
 
         JSONArray result = new JSONArray();
 
-        List<SiteInfo> currentuser_sites = siteService.listSites(authenticationService.getCurrentUserName());
+        List<SiteInfo> currentuser_standard_sites = siteService.listSites(authenticationService.getCurrentUserName());
+        List<SiteInfo> currentuser_sites = new ArrayList<>(currentuser_standard_sites);
 
         //Get Sites nodeRef
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        ResultSet rs = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "PATH:\"/app:company_home/st:sites\"");
-        NodeRef sitesNodeRef = rs.getNodeRef(0);
 
         //Make a set to keep track of dbids
         Set<Integer> user_site_dbids = new HashSet<>();
@@ -296,12 +295,14 @@ public class Sites extends AbstractWebScript {
 
                 if (!user_site_dbids.contains(dbid)) {
 
-                    ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "PATH:\"/app:company_home/st:sites/*\" AND @sys\\:node-dbid:\"" + dbid +"\"");
+                    ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE,
+                            "PATH:\"/app:company_home/st:sites/*\" AND TYPE:\"st:site\" AND @sys\\:node-dbid:\"" + dbid +"\"");
+
                     if(siteSearchResult.length() > 0) {
                         NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
                         SiteInfo siteInfo = siteService.getSite(siteNodeRef);
 
-                        if (!currentuser_sites.contains(siteInfo))
+                        if (siteInfo != null && !currentuser_sites.contains(siteInfo))
                             currentuser_sites.add(siteInfo);
 
                         user_site_dbids.add(dbid);
@@ -442,10 +443,15 @@ public class Sites extends AbstractWebScript {
 
             if (type.equals(OpenDeskModel.pd_project)) {
                 String projectManagerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
-
                 Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
                 if(authorities.contains(currentUser))
                     role = OpenDeskModel.MANAGER;
+                else {
+                    String projectOwnerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+                    authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
+                    if(authorities.contains(currentUser))
+                        role = OpenDeskModel.OWNER;
+                }
             }
         }
         else if(readAccess.equals(AccessStatus.ALLOWED))
@@ -722,6 +728,15 @@ public class Sites extends AbstractWebScript {
             json.put("created", sdf.format(s.getCreatedDate()));
             json.put("shortName", s.getShortName());
             json.put("visibility", s.getVisibility());
+
+            JSONArray JSONresult = getCurrentUserSiteRole(s.getShortName());
+            JSONObject jsonObject = (JSONObject) JSONresult.get(0);
+            try {
+                String role = Utils.getJSONObject(jsonObject, "role");
+                json.put("current_user_role", role);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             NodeRef n = s.getNodeRef();
             json.put("nodeRef", n.toString());
