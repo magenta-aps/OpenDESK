@@ -439,10 +439,15 @@ public class Sites extends AbstractWebScript {
 
             if (type.equals(OpenDeskModel.pd_project)) {
                 String projectManagerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
-
                 Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
                 if(authorities.contains(currentUser))
                     role = OpenDeskModel.MANAGER;
+                else {
+                    String projectOwnerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+                    authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
+                    if(authorities.contains(currentUser))
+                        role = OpenDeskModel.OWNER;
+                }
             }
         }
         else if(readAccess.equals(AccessStatus.ALLOWED))
@@ -719,6 +724,15 @@ public class Sites extends AbstractWebScript {
             json.put("created", sdf.format(s.getCreatedDate()));
             json.put("shortName", s.getShortName());
             json.put("visibility", s.getVisibility());
+
+            JSONArray JSONresult = getCurrentUserSiteRole(s.getShortName());
+            JSONObject jsonObject = (JSONObject) JSONresult.get(0);
+            try {
+                String role = Utils.getJSONObject(jsonObject, "role");
+                json.put("current_user_role", role);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             NodeRef n = s.getNodeRef();
             json.put("nodeRef", n.toString());

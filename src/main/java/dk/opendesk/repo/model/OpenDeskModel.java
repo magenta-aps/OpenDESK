@@ -24,6 +24,7 @@ public interface OpenDeskModel {
     public static String COLLABORATOR = "Collaborator";
     public static String CONSUMER = PermissionService.CONSUMER;
     public static String MANAGER = "Manager";
+    public static String OWNER = "Owner";
     public static String OUTSIDER = "Outsider";
 
     // Groupnames
