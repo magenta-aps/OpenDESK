@@ -368,6 +368,15 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             });
         },
+        makeSiteATemplate : function (shortName, templateName) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "makeSiteATemplate",
+                PARAM_SHORT_NAME: shortName,
+                PARAM_TEMPLATE_NAME: templateName
+            }).then(function(response) {
+                return response.data;
+            });
+        },
         loadFromSbsys : function() {
         	return $http.post("/alfresco/service/sbsys/fakedownload", {
         		destinationNodeRef : "workspace://SpacesStore/22d590d5-99a1-4704-9b70-5f6b1f5e16f7",

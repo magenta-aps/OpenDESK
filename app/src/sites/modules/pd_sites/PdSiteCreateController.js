@@ -51,11 +51,33 @@ angular
             $scope.searchPeople = searchPeople;
             $scope.createPdSite = createPdSite;
 
+            function loadTemplateNames() {
 
-            $scope.templates = [
-                {name : "skabelon1"}
+                pd_siteService.getTemplateNames().then (function (response) {
 
-            ];
+                    console.log("whats")
+
+                    var result = new Array();
+
+                    for (var i in response) {
+
+                        var name = response[i].shortName;
+                        result.push({"name" : name})
+                    }
+
+                    $scope.templates = result;
+
+                    //
+                    //$scope.templates = [
+                    //    {name : "skabelon1"}
+                    //
+                    //];
+
+                })
+
+            }
+
+           loadTemplateNames();
 
             
             function cancel() {

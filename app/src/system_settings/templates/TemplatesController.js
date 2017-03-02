@@ -25,7 +25,7 @@ angular
  vm.propNameKeyPrefixes = ["CASE_TEMPLATES.PREFILLED."];
 
  */
-function TemplatesController($window) {
+function TemplatesController($window, siteService, $mdDialog, $scope, systemSettingsService) {
     var vm = this;
 
     function init() {
@@ -93,26 +93,55 @@ function TemplatesController($window) {
         return true;
     }
 
-    vm.newTemplate = function () {
-        $window.location.href = "/#!/indstillinger/systemopsætning/skabelon";
-        /*return {
-         restrict: 'E',
-         scope: {},
-         templateUrl: '/app/src/odSettings/view/settings.html'
-         };*/
-    }
+    //vm.newTemplate = function () {
+    //    $window.location.href = "/#!/indstillinger/systemopsætning/skabelon";
+    //    /*return {
+    //     restrict: 'E',
+    //     scope: {},
+    //     templateUrl: '/app/src/odSettings/view/settings.html'
+    //     };*/
+    //}
 
-    function createTemplate() {
-        var vm = this;
-        /*
-         caseTemplateDialogService.createTemplate(vm.caseType).then(function(nodeRef){
-         var tplNodeRef = alfrescoNodeUtils.processNodeRef(nodeRef);
-         $state.go(vm.templateUisref, {storeType: tplNodeRef.storeType, storeId: tplNodeRef.storeId, id: tplNodeRef.id});
-         });*/
-    }
+    vm.createTemplate = function(name, description) {
 
-    function tplNodeRefObj(template) {
-        return alfrescoNodeUtils.processNodeRef(template.properties.nodeRef);
-    }
+        console.log("inside create");
+        console.log(name);
+        console.log(description);
+
+
+       siteService.createSite(name, name, description).then (function(response) {
+
+           console.log(response);
+
+           siteService.makeSiteATemplate(name, name).then (function (response) {
+               console.log(response);
+
+               systemSettingsService.getTemplates().then (function(response) {
+
+                   console.log(response)
+
+                   $scope.templateSites = response;
+                   $mdDialog.hide();
+               });
+
+           })
+       });
+    };
+
+    vm.newTemplate = function(event) {
+        $mdDialog.show({
+            templateUrl: 'app/src/system_settings/templates/view/newTemplate.tmpl.html',
+            parent: angular.element(document.body),
+            scope: $scope,
+            preserveScope: true,
+            targetEvent: event,
+            clickOutsideToClose:true
+        });
+    };
+
+
+
+
+
 
 }
