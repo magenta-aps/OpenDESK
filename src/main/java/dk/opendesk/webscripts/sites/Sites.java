@@ -137,6 +137,8 @@ public class Sites extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
+        System.out.println("yoyoyo");
+
         webScriptResponse.setContentEncoding("UTF-8");
         Content c = webScriptRequest.getContent();
         Writer webScriptWriter = webScriptResponse.getWriter();
@@ -156,6 +158,7 @@ public class Sites extends AbstractWebScript {
             String source = Utils.getJSONObject(json, "PARAM_SOURCE");
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
             String shortName = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
+            String templateName = Utils.getJSONObject(json, "PARAM_TEMPLATE_NAME");
 
             if(method != null) {
                 switch (method) {
@@ -216,6 +219,10 @@ public class Sites extends AbstractWebScript {
 
                     case "getTemplates":
                         result = this.getTemplates();
+                        break;
+
+                    case "makeSiteATemplate":
+                        result = this.makeSiteATemplate(shortName, templateName);
                         break;
 
                     case "createMembersPDF":
@@ -805,5 +812,19 @@ public class Sites extends AbstractWebScript {
         }
 
         return result;
+    }
+
+    private JSONArray makeSiteATemplate(String shortName, String templateName) {
+
+        SiteInfo s = siteService.getSite(shortName);
+
+
+        Map<QName, Serializable> aspectProps = new HashMap<>();
+        aspectProps.put(OpenDeskModel.PROP_PROJECTTEMPLATE_NAME, templateName);
+
+
+        nodeService.addAspect(s.getNodeRef(), OpenDeskModel.ASPECT_PD_TEMPLATE_SITES, aspectProps);
+
+        return Utils.getJSONReturnPair("result","Aspect added successfully");
     }
 }
