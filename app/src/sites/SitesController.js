@@ -12,6 +12,7 @@
             vm.sites = [];
 			vm.sitesPerUser = [];
 			vm.organizationalCenters = [];
+			vm.ownerRole = "Owner";
             
             vm.infoSiteDialog = infoSiteDialog;
 
