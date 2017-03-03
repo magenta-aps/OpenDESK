@@ -55,8 +55,6 @@ angular
 
                 pd_siteService.getTemplateNames().then (function (response) {
 
-                    console.log("whats")
-
                     var result = new Array();
 
                     for (var i in response) {
@@ -66,17 +64,9 @@ angular
                     }
 
                     $scope.templates = result;
-
-                    //
-                    //$scope.templates = [
-                    //    {name : "skabelon1"}
-                    //
-                    //];
-
                 })
 
             }
-
            loadTemplateNames();
 
             

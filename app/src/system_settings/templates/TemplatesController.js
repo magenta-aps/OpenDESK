@@ -117,9 +117,6 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
                console.log(response);
 
                systemSettingsService.getTemplates().then (function(response) {
-
-                   console.log(response)
-
                    $scope.templateSites = response;
                    $mdDialog.hide();
                });
@@ -137,6 +134,47 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
             targetEvent: event,
             clickOutsideToClose:true
         });
+    };
+
+    vm.deleteSite = function (shortName) {
+        return siteService.deleteSite(shortName);
+
+
+    }
+
+    vm.deleteSiteDialog = function(siteName) {
+        var confirm = $mdDialog.confirm()
+            .title('Vil du slette denne skabelon?')
+            .textContent('Skabelonen og alle dets filer vil blive slettet')
+            .ok('Ja')
+            .cancel('Annullér');
+        $mdDialog.show(confirm).then(
+            function() {
+                vm.deleteSite(siteName).then (function(response){
+
+                    console.log("hvad er $scope.templateSites")
+                    console.log($scope.templateSites.length);
+
+                    systemSettingsService.getTemplates().then (function(response) {
+
+                        console.log(response)
+
+                        $scope.templateSites = response;
+                        $mdDialog.hide();
+
+                        console.log("hvad er $scope.templateSites")
+                        console.log($scope.templateSites.length);
+                    });
+
+                })
+
+
+
+            },
+            function() {
+                console.log('cancelled delete');
+            }
+        );
     };
 
 
