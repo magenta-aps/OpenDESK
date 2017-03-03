@@ -111,15 +111,25 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
 
        siteService.createSite(name, name, description).then (function(response) {
 
+           var date = new Date();
+
+           var creator = {"fullName" : "Administrator"};
+
+           var obj = {"title" : response.title,
+               "created" : date,
+               "creator" : creator}
+
+           $scope.templateSites.push(obj)
+
+
+
+
            siteService.makeSiteATemplate(name, name).then (function (response) {
-               systemSettingsService.getTemplates().then (function(response) {
-
-                   console.log(response)
-
-                   $scope.templateSites = response;
-               });
                $mdDialog.hide();
+
            })
+
+
        });
 
 
