@@ -137,8 +137,6 @@ public class Sites extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-        System.out.println("yoyoyo");
-
         webScriptResponse.setContentEncoding("UTF-8");
         Content c = webScriptRequest.getContent();
         Writer webScriptWriter = webScriptResponse.getWriter();
@@ -459,6 +457,13 @@ public class Sites extends AbstractWebScript {
                     if(authorities.contains(currentUser))
                         role = OpenDeskModel.OWNER;
                 }
+            }
+            else
+            {
+                String SiteManager = "GROUP_site_" + siteShortName + "_SiteManager";
+                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
+                if(authorities.contains(currentUser))
+                    role = OpenDeskModel.OWNER;
             }
         }
         else if(readAccess.equals(AccessStatus.ALLOWED))
