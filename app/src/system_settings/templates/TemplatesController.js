@@ -111,18 +111,19 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
 
        siteService.createSite(name, name, description).then (function(response) {
 
-           console.log(response);
-
            siteService.makeSiteATemplate(name, name).then (function (response) {
-               console.log(response);
-
                systemSettingsService.getTemplates().then (function(response) {
-                   $scope.templateSites = response;
-                   $mdDialog.hide();
-               });
 
+                   console.log(response)
+
+                   $scope.templateSites = response;
+               });
+               $mdDialog.hide();
            })
        });
+
+
+
     };
 
     vm.newTemplate = function(event) {
