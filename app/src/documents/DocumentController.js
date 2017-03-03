@@ -45,8 +45,11 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	};
 	
 	vm.goBack = function() {
-		var nodeRef = $stateParams.nodeRef.split('/')[3];
-		window.location.replace("/#!/dokument/"+ nodeRef + "?loolDocUpdated=true");
+		//var nodeRef = $stateParams.nodeRef.split('/')[3];
+		//window.location.replace("/#!/dokument/"+ nodeRef + "?loolDocUpdated=true");
+
+        $window.history.back();
+
 	}
 	
     vm.godkendDialog = function (event) {
