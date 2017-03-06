@@ -19,8 +19,8 @@
                             <md-input-container class="template-input">
                                 <label>Skabelon</label>
                                 <md-select ng-model="newSite.template.name">
-                                    <md-option ng-repeat="x in templates" value="{{ x.name }}">
-                                        {{ x.name }}
+                                    <md-option ng-repeat="x in templates" value="{{ x.shortName }}">
+                                        {{ x.displayName }}
                                     </md-option>
                                 </md-select>
                             </md-input-container>
