@@ -59,8 +59,9 @@ angular
 
                     for (var i in response) {
 
-                        var name = response[i].shortName;
-                        result.push({"name" : name})
+                        var shortName = response[i].shortName;
+                        var displayName = response[i].title;
+                        result.push({"shortName" : shortName, "displayName" : displayName})
                     }
 
                     $scope.templates = result;

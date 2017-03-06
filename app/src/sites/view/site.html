@@ -131,7 +131,7 @@
 										<md-menu-item ng-if="vm.canEdit">
                                             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                                                 <md-icon md-menu-align-target>unarchive</md-icon>
-                                                Upload til SBSYS
+                                                Gem til ESDH
                                             </md-button>
                                         </md-menu-item>
 
@@ -236,11 +236,11 @@
 						<md-menu ng-if="vm.canEdit">
 							<md-button ng-click="$mdMenu.open($event)" class="md-raised" aria-label="SBSYS">
 								<i class="material-icons">folder_open</i>
-								<span style="margin-left: 10px; margin-right: 20px;">SBSYS</span>
+								<span style="margin-left: 10px; margin-right: 20px;">ESDH</span>
 							</md-button>
 							<md-menu-content>
 								<md-menu-item>
-									<md-button ng-click="vm.uploadSbsysDialog($event)"><i class="material-icons">unarchive</i> Upload projekt</md-button>
+									<md-button ng-click="vm.uploadSbsysDialog($event)"><i class="material-icons">unarchive</i> Gem projekt</md-button>
 								</md-menu-item>
 								<md-menu-item>
 									<md-button ng-click="vm.loadSbsysDialog($event)"><i class="material-icons">archive</i> Hent dokumenter</md-button>
@@ -273,7 +273,7 @@
                                 <dt>Beskrivelse</dt>
                                 <dd>{{ vm.project.description }}</dd>
                             </dl>
-                            <md-button ng-click="vm.editSiteDialog()" class="md-icon-button md-raised">
+                            <md-button ng-click="vm.editSiteDialog($event)" class="md-icon-button md-raised">
                                 <i class="material-icons">edit</i>
                             </md-button>
                         </div>

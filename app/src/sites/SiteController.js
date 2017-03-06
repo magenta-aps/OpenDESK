@@ -41,6 +41,7 @@ angular
         vm.editRole = 'Collaborator';
         vm.managerRole = 'Manager';
         vm.outsiderRole = 'Outsider';
+        vm.ownerRole = "Owner";
         vm.canEdit = false;
         vm.isManager = false;
         vm.isMember = false;
@@ -103,7 +104,16 @@ angular
                 function (response) {
                     vm.userRole = response;
                     vm.isManager = vm.userRole == vm.managerRole;
-                    vm.canEdit = vm.isManager || vm.userRole == vm.editRole;
+                    switch(vm.userRole) {
+                        case vm.editRole:
+                        case vm.ownerRole:
+                        case vm.managerRole:
+                            vm.canEdit = true;
+                            break;
+                        default:
+                            vm.canEdit = false;
+                            break;
+                    }
                     vm.isMember = vm.userRole != vm.outsiderRole;
                 },
                 function (err) {
@@ -738,11 +748,11 @@ angular
         };
 
         
-        function editSiteDialog() {
+        function editSiteDialog(ev) {
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
                 parent: angular.element(document.body),
-                targetEvent: event,
+                targetEvent: ev,
                 scope: $scope,        // use parent scope in template
                 preserveScope: true,  // do not forget this if use parent scope
                 clickOutsideToClose: true

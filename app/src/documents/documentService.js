@@ -1,7 +1,5 @@
-angular
-    .module('openDeskApp.documents')
-    .factory('documentService', documentService);
-
+angular.module('openDeskApp.documents')
+       .factory('documentService', documentService);
 
 function documentService($http) {
 
@@ -11,7 +9,8 @@ function documentService($http) {
         getHistory: getHistory,
         UploadNewVersion: uploadNewVersion,
         createThumbnail: createThumbnail,
-        cleanupThumbnail: cleanupThumbnail
+        cleanupThumbnail: cleanupThumbnail,
+        revertToVersion: revertToVersion
     };
 
     return service;
@@ -75,6 +74,23 @@ function documentService($http) {
             headers: {'Content-Type': undefined}
         }).then(function (response) {
             return response;
+        });
+    }
+
+    /**
+     *      description : "A text field that servers as the comment for that particular version. Should at least be empty"
+     *      majorVersion : true | false
+     *      nodeRef : "the document nodeRef"
+     *      version : "The version number of the nodeRef to revert to e.g. 1.17"
+     */
+    function revertToVersion(description, majorVersion, nodeRef, version) {
+        $http.post("/api/revert", {
+            description : description,
+            majorVersion: majorVersion,
+            nodeRef: nodeRef,
+            version: version
+        }).then(function (response) {
+            response.data.success ? console.log("Doc was successfully reverted") : console.log("Unable to revert document");
         });
     }
 

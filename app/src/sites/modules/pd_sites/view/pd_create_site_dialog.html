@@ -16,18 +16,24 @@
                     <md-content class="md-padding" layout="row" layout-padding>
                         <div flex="50">
                             {{ variable }}
+                            <md-input-container class="template-input">
+                                <label>Skabelon</label>
+                                <md-select ng-model="newSite.template.name">
+                                    <md-option ng-repeat="x in templates" value="{{ x.shortName }}">
+                                        {{ x.displayName }}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            
+                            <!--
                             <label>Skabelon</label>
                             <select ng-model="newSite.template" ng-options="x.name for x in templates" >
                             </select>
+                            -->
 
                             <md-input-container style="width: 100%;">
                                 <label>Projektnavn</label>
                                 <input type="text" ng-model="newSite.siteName" required>
-                            </md-input-container>
-
-                            <md-input-container style="width: 100%;">
-                                <label>Beskrivelse</label>
-                                <textarea ng-model="newSite.desc"></textarea>
                             </md-input-container>
 
                             <md-autocomplete
@@ -46,16 +52,12 @@
                                 </md-not-found>
                             </md-autocomplete>
                             
-                            <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
-                                Privat projekt
-                            </md-checkbox>
+                            <md-input-container style="width: 100%;">
+                                <label>Beskrivelse</label>
+                                <textarea ng-model="newSite.desc"></textarea>
+                            </md-input-container>
                         </div>
                         <div flex="50">
-                            <md-input-container style="width: 100%;">
-                                <label>SBSYS sagsnr.</label>
-                                <input type="text" ng-model="newSite.sbsys" required>
-                            </md-input-container>
-
                             <md-input-container class="org-input">
                                 <label>Organisatorisk enhed</label>
                                 <md-select ng-model="newSite.center_id" required>
@@ -64,6 +66,12 @@
                                     </md-option>
                                 </md-select>
                             </md-input-container>
+                            
+                            <md-input-container style="width: 100%;">
+                                <label>ESDH sagsnr.</label>
+                                <input type="text" ng-model="newSite.sbsys" required>
+                            </md-input-container>
+
                             <md-autocomplete
                                     md-selected-item="newSite.manager"
                                     md-search-text="searchTextManager"
@@ -79,6 +87,10 @@
                                     Ingen brugere matcher "{{ searchTextManager }}".
                                 </md-not-found>
                             </md-autocomplete>
+                            
+                            <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
+                                Privat projekt
+                            </md-checkbox>
                         </div>
                     </md-content>
                 </md-tab>
