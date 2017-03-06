@@ -39,7 +39,7 @@
 		</h1>
 	</div>
 	<div flex="45" style="position: relative; top: 10px;">
-		<md-button ng-click="vm.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName)" class="md-primary md-raised">
+		<md-button ng-click="vm.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName, vm.topRef, vm.noOfHistory, true)" class="md-primary md-raised">
 			Redigér dokument
 		</md-button>
 	</div>
@@ -115,7 +115,7 @@
 						</div>
 						
 						Du kan 
-                        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName)">
+                        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName, vm.topRef, vm.noOfHistory, false)">
                             Redigere
                         </md-button>
 						dokumentet, inden du godkender eller afviser.

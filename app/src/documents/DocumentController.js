@@ -10,27 +10,39 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     vm.plugin = [];
     vm.paths = [];
 	vm.title = [];
+	vm.noOfHistory = 0;
+	vm.topRef = "";
 	vm.fileName = $stateParams.fileName != undefined ? $stateParams.fileName : "";
 	vm.loolDocUpdated = $location.search().loolDocUpdated;
 
 	var parentDocumentNode = "";
 	var firstDocumentNode = "";
-	var selectedDocumentNode = $stateParams.doc;
+	var selectedDocumentNode = "";
 	
+	if ($stateParams.doc != undefined) {
+		selectedDocumentNode = $stateParams.doc;
+	} else {
+		selectedDocumentNode = $stateParams.nodeRef.split('/')[3];
+	}
+
 
     if($location.search().archived !=  undefined && $location.search().parent !=  undefined)
     {
         vm.showArchived = $location.search().archived;
 		parentDocumentNode = $location.search().parent;
+		vm.topRef = parentDocumentNode;
     }
     else{
         vm.showArchived = false;
-		parentDocumentNode = $stateParams.doc;
+		parentDocumentNode = selectedDocumentNode;
     }
     
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
-		firstDocumentNode = $scope.history[0].nodeRef;
+		vm.noOfHistory = $scope.history.length;
+		if (vm.noOfHistory > 0) {
+			firstDocumentNode = $scope.history[0].nodeRef;
+		}
     });
 
     
@@ -45,8 +57,13 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	};
 	
 	vm.goBack = function() {
-		var nodeRef = $stateParams.nodeRef.split('/')[3];
-		window.location.replace("/#!/dokument/"+ nodeRef + "?loolDocUpdated=true");
+		//var nodeRef = $stateParams.nodeRef.split('/')[3];
+		var nodeRef = $stateParams.topRef != null ? $stateParams.topRef : $stateParams.nodeRef.split('/')[3];
+		if ($stateParams.updateHistory) {
+			window.location.replace("/#!/dokument/"+ nodeRef + "?loolDocUpdated=true");
+		} else {
+			$window.history.back();
+		}
 	}
 	
     vm.godkendDialog = function (event) {
@@ -244,13 +261,20 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     }
 	
 	 //Goes to the libreOffice online edit page
-	vm.goToLOEditPage = function(nodeRef, fileName) {
+	vm.goToLOEditPage = function(nodeRef, fileName, topRef, noOfHistory, updateHistory) {
 		//console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
-		$state.go('lool', {'nodeRef': nodeRef, 'fileName': fileName});
+		var thisNodeRef = nodeRef;
+		var ref = $stateParams.doc;
+		if (vm.showArchived) {
+			thisNodeRef = "versionStore://version2Store/" + ref;
+		}
+		$state.go('lool', {'nodeRef': thisNodeRef, 'fileName': fileName, 'topRef': topRef, 'noOfHistory': noOfHistory, 'updateHistory': updateHistory});
 	};
 
 	angular.element(document).ready(function () {
-		vm.highlightVersion();
+		if ($window.location.href.split('/')[4] != "lool") {
+			vm.highlightVersion();
+		}
 	});
     
 };

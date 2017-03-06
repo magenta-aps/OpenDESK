@@ -9,7 +9,13 @@ function config($stateProvider, USER_ROLES) {
     $stateProvider.state('lool', {
         parent: 'site',
         url: '/lool/',
-        params: {nodeRef: null, fileName: null},
+        params: {
+			nodeRef: null,
+			fileName: null,
+			topRef: null,
+			noOfHistory: null,
+			updateHistory: null
+		},
         views: {
             'content@': {
                 templateUrl: 'app/src/lool/view/lool.html',
