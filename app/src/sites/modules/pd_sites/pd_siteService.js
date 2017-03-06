@@ -2,7 +2,7 @@
 
 angular
     .module('openDeskApp.pd_sites')
-    .factory('pd_siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+    .factory('pd_siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService, systemSettingsService) {
     
     
         var restBaseUrl = '/alfresco/s/api/';
@@ -11,7 +11,8 @@ angular
             addTemplate: addTemplate,
             getAllManagers: getAllManagers,
             getAllOrganizationalCenters: getAllOrganizationalCenters,
-            updatePDSite: updatePDSite
+            updatePDSite: updatePDSite,
+            getTemplateNames: getTemplateNames
         };
         
 
@@ -84,6 +85,21 @@ angular
                 return response;
             });
         }
+
+        function getAllTemplates() {
+            return groupService.getGroupMembers("OrganizationalCenters").then(function (response) {
+                //console.log(response);
+                return response;
+            });
+        }
+
+        function getTemplateNames() {
+
+            return systemSettingsService.getTemplates().then (function(response) {
+                return response;
+            });
+        }
+
 
 
         return service;

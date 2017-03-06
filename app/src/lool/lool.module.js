@@ -14,7 +14,7 @@ function config($stateProvider, USER_ROLES) {
 			fileName: null,
 			topRef: null,
 			noOfHistory: null,
-			updateHistory: null
+			backToDocPreview: null
 		},
         views: {
             'content@': {
