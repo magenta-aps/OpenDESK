@@ -78,18 +78,18 @@ function documentService($http) {
     }
 
     /**
-     * The docVersionProperties should be a json containing the following mandatory properties:
-     *  {
      *      description : "A text field that servers as the comment for that particular version. Should at least be empty"
      *      majorVersion : true | false
      *      nodeRef : "the document nodeRef"
      *      version : "The version number of the nodeRef to revert to e.g. 1.17"
-     *  }
-
-     * @param docVersionProperties
      */
-    function revertToVersion(docVersionProperties) {
-        $http.post("/api/revert", docVersionProperties).then(function (response) {
+    function revertToVersion(description, majorVersion, nodeRef, version) {
+        $http.post("/api/revert", {
+            description : description,
+            majorVersion: majorVersion,
+            nodeRef: nodeRef,
+            version: version
+        }).then(function (response) {
             response.data.success ? console.log("Doc was successfully reverted") : console.log("Unable to revert document");
         });
     }
