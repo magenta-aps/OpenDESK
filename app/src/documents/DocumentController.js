@@ -276,6 +276,8 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		}
 		$state.go('lool', {'nodeRef': thisNodeRef, 'fileName': fileName, 'topRef': topRef, 'noOfHistory': noOfHistory, 'backToDocPreview': backToDocPreview});
 		*/
+		//promote doc to latest version
+		
 		$state.go('lool', {'nodeRef': nodeRef, 'fileName': fileName, 'topRef': topRef, 'noOfHistory': noOfHistory, 'backToDocPreview': backToDocPreview});
 	};
 
