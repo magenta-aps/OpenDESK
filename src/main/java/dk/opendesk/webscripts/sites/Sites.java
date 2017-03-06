@@ -463,7 +463,7 @@ public class Sites extends AbstractWebScript {
                 String SiteManager = "GROUP_site_" + siteShortName + "_SiteManager";
                 Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
                 if(authorities.contains(currentUser))
-                    role = OpenDeskModel.OWNER;
+                    role = OpenDeskModel.MANAGER;
             }
         }
         else if(readAccess.equals(AccessStatus.ALLOWED))
@@ -753,6 +753,19 @@ public class Sites extends AbstractWebScript {
             NodeRef n = s.getNodeRef();
             json.put("nodeRef", n.toString());
 
+            String manager = "";
+            String owner = "";
+
+            JSONArray a = this.getDBID(s.getShortName());
+            JSONObject dbid = (JSONObject) a.get(0);
+
+            String dbID = "";
+            try {
+                dbID = (String) dbid.get("DBID");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
                 json.put("title", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_NAME));
                 json.put("description", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_DESCRIPTION));
@@ -760,6 +773,14 @@ public class Sites extends AbstractWebScript {
                 json.put("state", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_STATE));
                 json.put("center_id", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_CENTERID));
                 json.put("sbsys", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_SBSYS));
+
+                String projectManagerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
+                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
+                manager = authorities.iterator().next();
+
+                String projectOwnerGroup = "GROUP_" + dbID + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
+                owner = authorities.iterator().next();
             }
             else {
                 json.put("title", s.getTitle());
@@ -768,18 +789,21 @@ public class Sites extends AbstractWebScript {
                 json.put("state", "");
                 json.put("center_id", "");
                 json.put("sbsys", "");
+
+                String SiteManager = "GROUP_site_" + s.getShortName() + "_SiteManager";
+                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
+                manager = authorities.iterator().next();
             }
 
-            JSONObject creator = new JSONObject();
+            if(!manager.isEmpty()) {
+                JSONObject managerObj = GetSpecialUser(manager);
+                json.put("manager", managerObj);
+            }
 
-            NodeRef cn = this.personService.getPerson((String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
-
-            creator.put("userName", (String) nodeService.getProperty(n, ContentModel.PROP_CREATOR));
-            creator.put("firstName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
-            creator.put("lastName", (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-            creator.put("fullName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-
-            json.put("creator", creator);
+            if(!owner.isEmpty()) {
+                JSONObject ownerObj = GetSpecialUser(owner);
+                json.put("owner", ownerObj);
+            }
 
             return json;
 
@@ -787,6 +811,19 @@ public class Sites extends AbstractWebScript {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private JSONObject GetSpecialUser(String userName) throws JSONException {
+
+        NodeRef cn = this.personService.getPerson(userName);
+
+        JSONObject user = new JSONObject();
+        user.put("userName", (String) nodeService.getProperty(cn, ContentModel.PROP_USERNAME));
+        user.put("firstName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
+        user.put("lastName", (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+        user.put("fullName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+
+        return user;
     }
 
     private JSONArray getSiteInfo(String shortName) {
