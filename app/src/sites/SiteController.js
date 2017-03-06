@@ -748,11 +748,11 @@ angular
         };
 
         
-        function editSiteDialog() {
+        function editSiteDialog(ev) {
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
                 parent: angular.element(document.body),
-                targetEvent: event,
+                targetEvent: ev,
                 scope: $scope,        // use parent scope in template
                 preserveScope: true,  // do not forget this if use parent scope
                 clickOutsideToClose: true
