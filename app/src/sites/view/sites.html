@@ -62,7 +62,7 @@
 						<tr>
 							<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Projektnavn</th>
 							<th sort-table="created" title="Sortér kolonne">Oprettet</th>
-							<th colspan="2" sort-table="creator" title="Sortér kolonne">Oprettet af</th>
+							<th colspan="2" sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
 						</tr>
 					</thead>
 					
@@ -73,7 +73,7 @@
 								{{ project.title }}
 							</a></td>
 							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>
-							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.manager.fullName }}</a></td>
 							<td>
                                 <md-menu>
                                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
@@ -86,7 +86,7 @@
                                                 Information
                                             </md-button>
                                         </md-menu-item>
-                                        <md-menu-item ng-if="project.current_user_role == vm.ownerRole">
+                                        <md-menu-item ng-if="project.current_user_role == vm.managerRole">
                                             <md-button ng-click="vm.deleteSiteDialog(project.shortName)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet
