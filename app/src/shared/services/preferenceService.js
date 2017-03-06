@@ -1,15 +1,17 @@
-
 angular
-        .module('openDeskApp')
-        .factory('preferenceService', preferenceService);
+    .module('openDeskApp')
+    .factory('preferenceService', preferenceService);
 
 function preferenceService($http, $q, sessionService) {
 
     var FAVOURITE_CASE = "dk_openesdh_cases_favourites";
 
     return {
+        getAllPreferences: getAllPreferences,
         getPreferences: getPreferences,
         setPreferences: setPreferences,
+        removeAllPreferences: removeAllPreferences,
+        removePreferences: removePreferences,
         addFavouriteCase: addFavouriteCase,
         removeFavouriteCase: removeFavouriteCase,
         isFavouriteCase: isFavouriteCase,
@@ -17,26 +19,47 @@ function preferenceService($http, $q, sessionService) {
         _url: _url
     };
 
-    function getPreferences(params, username) {
-        return $http.get(this._url(username), {
-            params: params
-        }).then(function(response) {
-            return response.data;
-        });
+    // Gets all preferences
+    // username: ID of the user
+    function getAllPreferences(username) {
+        return getPreferences(username, "");
     }
 
-    function setPreferences(preferences, username) {
-        var url = this._url(username);
-        if (url) {
-            return $http.post(this._url(username), preferences).then(function(response) {
-                return response.data;
-            });
-        }
-        return $q.resolve({});
+    // Gets preferences matching preferenceFilter
+    // username: ID of the user
+    // preferenceFilter: Can be "namespaced" by using package notation. For example "dk.magenta.sites.<site_name>.notifications"
+    function getPreferences(username, preferenceFilter) {
+        return $http.get("/alfresco/service/preferences?username=" + username + "&pf=" + preferenceFilter).then(function(response) {
+            return response.data[0];
+        })
+    }
+
+    // Sets preferences
+    // username: ID of the user
+    //preferences: JSONArray with namespace(key) and value. For example "dk.magenta.sites.<site_name>.notifications" : "true"
+    function setPreferences(username, preferences) {
+        return $http.post(this._url(username), preferences).then(function (response) {
+            return response.data;
+        })
+    }
+
+    // Removes all preferences
+    // username: ID of the user
+    function removeAllPreferences(username) {
+        return removePreferences(username, "");
+    }
+
+    // Removes preferences matching the filter
+    // username: ID of the user
+    // preferenceFilter: Can be "namespaced" by using package notation. For example "dk.magenta.sites.<site_name>.notifications"
+    function removePreferences(username, preferenceFilter) {
+        return $http.post(this._url(username) + "?pf=" + preferenceFilter).then(function(response) {
+            return response.data;
+        })
     }
 
     function isFavouriteCase(caseId) {
-        return this.getPreferences({pf: FAVOURITE_CASE}).then(function(result) {
+        return this.getPreferences({pf: FAVOURITE_CASE}).then(function (result) {
             if (result === undefined) {
                 return false;
             }
@@ -67,7 +90,7 @@ function preferenceService($http, $q, sessionService) {
     function _update(preference) {
         var deferred = $q.defer();
         var _this = this;
-        this.getPreferences().then(function(preferences) {
+        this.getPreferences().then(function (preferences) {
             var values = preferences[preference.name];
             var arrValues = values ? values.split(",") : [];
             if (preference.add === true) {
@@ -80,7 +103,7 @@ function preferenceService($http, $q, sessionService) {
             }
             var preferenceObj = {};
             preferenceObj[preference.name] = arrValues.join(",");
-            _this.setPreferences(preferenceObj).then(function(result) {
+            _this.setPreferences(preferenceObj).then(function (result) {
                 deferred.resolve(result);
             });
         });

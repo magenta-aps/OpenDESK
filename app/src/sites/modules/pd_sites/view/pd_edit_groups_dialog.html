@@ -1,46 +1,37 @@
 <md-dialog aria-label="Opdatér grupper i projekt" class="pd-create-site-diag">
     <form name="membersForm" ng-submit="updatePDSiteGroups()" class="pd-site-create-form">
         <md-toolbar>
-          <div class="md-toolbar-tools">
-            <h2>Tilføj og fjern medlemmer</h2>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-click="cancel()">
-                <i class="material-icons" aria-label="Luk dialogboks">close</i>
-            </md-button>
-          </div>
+            <div class="md-toolbar-tools">
+                <h2>Tilføj og fjern medlemmer</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
         </md-toolbar>
-        
+
         <md-dialog-content>
             <md-content class="md-padding" layout="column">
-                
-                <!--fieldset-->
-                    <!--legend>Projektgruppe</legend-->
-					<!--h4>Projektgruppe</h4-->
-					<md-toolbar layout="row" class="toolbar-small md-hue-3">
-					  <div>
-						<span>Projektgruppe</span>
-					  </div>
-					</md-toolbar>
-                    <md-chips ng-model="projektGruppe"
-                              md-autocomplete-snap
-                              md-require-match="true"
-                              md-on-remove="removeMember($chip, 'PD_PROJECTGROUP')"
-                              md-on-add="addMember($chip, 'PD_PROJECTGROUP')">
-                        <md-autocomplete md-selected-item="selectedProjGrpItem"
-                                         md-search-text="srchprjgrptxt"
-                                         md-items="pgitem in searchPeople(srchprjgrptxt)"
-                                         md-item-text="pgitem.firstName"
-                                         placeholder="Angiv et medlem">
-                            <span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
-                        </md-autocomplete>
-                        <md-chip-template>
-                            <span>
-                                <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-                                <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chipspanlastName }}</span>
-                            </span>
-                        </md-chip-template>
-                    </md-chips>
-                <!--/fieldset-->
+                <div class="toolbar-small">Projektgruppe</div>
+                <md-chips ng-model="projektGruppe"
+                          md-autocomplete-snap
+                          md-require-match="true"
+                          md-on-remove="removeMember($chip, 'PD_PROJECTGROUP')"
+                          md-on-add="addMember($chip, 'PD_PROJECTGROUP')">
+                    <md-autocomplete md-selected-item="selectedProjGrpItem"
+                                     md-search-text="srchprjgrptxt"
+                                     md-items="pgitem in searchPeople(srchprjgrptxt)"
+                                     md-item-text="pgitem.firstName"
+                                     placeholder="Angiv et medlem">
+                        <span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
+                    </md-autocomplete>
+                    <md-chip-template>
+                        <span>
+                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
+                            <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
+                        </span>
+                    </md-chip-template>
+                </md-chips>
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
@@ -68,11 +59,7 @@
                 <!--fieldset-->
                     <!--legend>Styregruppe</legend-->
 					<!--h4>Styregruppe</h4-->
-					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
-					  <div>
-						<span>Styregruppe</span>
-					  </div>
-					</md-toolbar>
+					<div class="toolbar-small">Styregruppe</div>
                     <md-chips ng-model="styreGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -88,7 +75,7 @@
                         <md-chip-template>
                             <span>
                                 <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-                                <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chipspanlastName }}</span>
+                                <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
                             </span>
                         </md-chip-template>
                     </md-chips>
@@ -119,11 +106,7 @@
                 <!--fieldset-->
                     <!--legend>Arbejdsgruppe</legend-->
 					<!--h4>Arbejdsgruppe</h4-->
-					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
-					  <div>
-						<span>Arbejdsgruppe</span>
-					  </div>
-					</md-toolbar>
+					<div class="toolbar-small">Arbejdsgruppe</div>
                     <md-chips ng-model="arbejdsGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -139,7 +122,7 @@
                         <md-chip-template>
                             <span>
                                 <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-                                <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chipspanlastName }}</span>
+                                <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
                             </span>
                         </md-chip-template>
                     </md-chips>
@@ -170,11 +153,7 @@
                 <!--fieldset-->
                     <!--legend>Følgegruppe</legend-->
 					<!--h4>Følgegruppe</h4-->
-					<md-toolbar layout="row" class="md-hue-3 toolbar-small">
-					  <div>
-						<span>Følgegruppe</span>
-					  </div>
-					</md-toolbar>
+					<div class="toolbar-small">Følgegruppe</div>
                     <md-chips ng-model="folgeGruppe"
                               md-autocomplete-snap
                               md-require-match="true"
@@ -190,7 +169,7 @@
                         <md-chip-template>
                             <span>
                                 <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-                                <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chipspanlastName }}</span>
+                                <span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
                             </span>
                         </md-chip-template>
                     </md-chips>
@@ -220,14 +199,14 @@
 				</div>
             </md-content>
         </md-dialog-content>
-        
+
         <md-dialog-actions layout="row">
-            <md-button ng-click="cancel()" >
+            <md-button ng-click="cancel()">
                 Annullér
             </md-button>
             <span flex></span>
             <input type="submit" class="md-button md-raised md-primary" value="Opdatér">
         </md-dialog-actions>
-        
+
     </form>
 </md-dialog>

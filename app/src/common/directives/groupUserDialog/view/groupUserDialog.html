@@ -1,6 +1,6 @@
-<md-dialog 
-    aria-label="{{ (searchType == 'users' ? 'SEARCH.FIND_USERS' : 'SEARCH.FIND_GROUPS') | translate }} dialog" 
-    style="max-width:800px;max-height:810px;min-width:40%;">
+<md-dialog
+        aria-label="{{ (searchType == 'users' ? 'SEARCH.FIND_USERS' : 'SEARCH.FIND_GROUPS') | translate }} dialog"
+        style="max-width:800px;max-height:810px;min-width:40%;">
     <md-toolbar layout="row">
         <div class="md-toolbar-tools">
             <h2>{{ (searchType == 'users' ? 'SEARCH.FIND_USERS' : 'SEARCH.FIND_GROUPS') | translate }}</h2>
@@ -11,11 +11,11 @@
 
         <md-chips ng-model="selectedItems" md-autocomplete-snap md-require-match="true">
             <md-autocomplete
-                md-selected-item="theSelectedItem"
-                md-search-text="searchTerm"
-                md-items="item in searchItemsByQuery(searchTerm)"
-                md-item-text="item.name"
-                placeholder="{{ (searchType == 'users' ? 'SEARCH.FIND_USERS' : 'SEARCH.FIND_GROUPS') | translate }}">
+                    md-selected-item="theSelectedItem"
+                    md-search-text="searchTerm"
+                    md-items="item in searchItemsByQuery(searchTerm)"
+                    md-item-text="item.name"
+                    placeholder="{{ (searchType == 'users' ? 'SEARCH.FIND_USERS' : 'SEARCH.FIND_GROUPS') | translate }}">
                 <span md-highlight-text="searchTerm">{{item.name}}</span>
             </md-autocomplete>
 
@@ -23,16 +23,17 @@
                 <span ng-bind="$chip.name"></span>
             </md-chip-template>
         </md-chips>
-    
+
     </md-dialog-content>
 
     <div class="md-actions" layout="row">
-        <md-button type="submit" class="md-primary" ng-click="executeCallback()" ng-disabled="selectedItems.length === 0">
+        <md-button type="submit" class="md-primary" ng-click="executeCallback()"
+                   ng-disabled="selectedItems.length === 0">
             {{ 'COMMON.ADD' | translate }}
         </md-button>
         <md-button type="button" ng-click="cancel()">
             {{ 'COMMON.CLOSE' | translate }}
         </md-button>
     </div>
-    
+
 </md-dialog>

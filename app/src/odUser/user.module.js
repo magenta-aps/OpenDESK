@@ -1,1 +1,1 @@
-angular.module('openDeskApp.user', [ 'ngMaterial' ]);
+angular.module('openDeskApp.user', ['ngMaterial']);

@@ -1,16 +1,15 @@
+angular
+    .module('openDeskApp.tasks.common')
+    .controller('simpleTaskController', simpleTaskController);
 
-    angular
-        .module('openDeskApp.tasks.common')
-        .controller('simpleTaskController', simpleTaskController);
-    
-    function simpleTaskController($controller) {
-        angular.extend(this, $controller('baseTaskController', {}));
-        var vm = this;
-        
-        init();
-        
-        function init(){
-            vm.init();
-        }
-        
+function simpleTaskController($controller) {
+    angular.extend(this, $controller('baseTaskController', {}));
+    var vm = this;
+
+    init();
+
+    function init() {
+        vm.init();
     }
+
+}

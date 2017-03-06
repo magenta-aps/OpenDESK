@@ -1,0 +1,31 @@
+<md-dialog style="min-width:360px">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Gem projekt til ESDH</h2>
+		</div>
+	</md-toolbar>
+	<div layout="row" class="md-padding" style="margin-top: 20px;" ng-show="!vm.uploadedToSbsys">
+		<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+		<div flex="90">
+			<label>Valgt projekt: <h4>{{ vm.project.title }}</h4></label>				
+		</div>
+		<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+	</div>
+	<div layout="row" layout-sm="column" layout-align="space-around" ng-show="vm.showProgress" style="margin: 20px 0 20px 0;">
+		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+	</div>
+	<div layout="row" class="md-padding" style="margin: 0 0 40px 20px;" ng-show="vm.uploadedToSbsys">
+		<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 2px;">Projektet er nu gemt</span>
+	</div>
+	<div layout="row" layout-align="center" style="margin-bottom: 20px;" ng-show="!vm.uploadedToSbsys">
+		<md-dialog-actions>
+			<md-button class="md-raised md-primary" ng-click="vm.uploadSbsys()" style="margin-right: 10px;">Gem til ESDH</md-button>
+			<md-button class="md-raised" ng-click="vm.cancel()">Annullér</md-button>
+		</md-dialog-actions>
+	</div>
+	<div layout="row" layout-align="center" style="margin-bottom: 20px;" ng-show="vm.uploadedToSbsys">
+		<md-dialog-actions>
+			<md-button class="md-raised" ng-click="vm.cancelSbsysDialog()">Luk</md-button>
+		</md-dialog-actions>
+	</div>
+</md-dialog>

@@ -6,11 +6,16 @@
 
         function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
 
+        
 			var vm = this;
-            
+
             vm.sites = [];
 			vm.sitesPerUser = [];
 			vm.organizationalCenters = [];
+			vm.managerRole = 'Manager';
+			vm.memberonly = true;
+            
+            vm.infoSiteDialog = infoSiteDialog;
 
 			//pd_siteService.getAllOrganizationalCenters();
 
@@ -27,7 +32,7 @@
 			//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
 			//siteService.removeRole("kage2", "abeecher", "Consumer")
 
-			//siteService.addUser("kage8", "abeecher", "PD_MONITORS");
+			//siteService.addUser("TestAvanceretprojekt", "abeecher", "PD_STEERING_GROUP");
 			//siteService.addUser("TestAvanceretprojekt", "abeecher", "PD_PROJECTOWNER");
 			//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
 
@@ -37,26 +42,28 @@
                         vm.sites = response;
 						return response;
                     }
-                );    
-            };
+                );
+            }
             getSites();
 
+            
 			function getSitesPerUser() {
 				return siteService.getSitesPerUser().then(function(response) {
 						vm.sitesPerUser = response;
 						return response;
 					}
 				);
-			};
+			}
 			getSitesPerUser();
 
+            
 			function getAllOrganizationalCenters() {
 				pd_siteService.getAllOrganizationalCenters().then(function(response) {
 						vm.organizationalCenters = response.data;
 						vm.organizationalCenters.push({"shortName": "", "displayName": "Alle"});
 					}
 				);
-			};
+			}
 			getAllOrganizationalCenters();
 
 
@@ -71,10 +78,23 @@
 				});
 			};
 
-            
+
 			vm.createSite = function (name, description) {
 
-				siteService.createSite(name, description).then(function(val) {
+				var shortName = name.replace(new RegExp(" ", 'g'), "-");
+				createStandardSite(shortName, name, description, 1).then(function (val) {
+				});
+			};
+
+			function createStandardSite (shortName, name, description, number) {
+
+				if(number > 1)
+					shortName += "-" + number;
+
+				return siteService.createSite(shortName, name, description).then(function(val) {
+
+					if(val == null)
+						return createStandardSite(shortName, name, description, ++number);
 
 					$mdDialog.hide();
 
@@ -86,11 +106,10 @@
 						vm.sitesPerUser = val;
 					});
 
-					var shortName = name.replace(new RegExp(" ", 'g'), "");
-					window.location.href = "/#/projekter/" + shortName  + "?type=Project";
+					window.location.href = "/#!/projekter/" + shortName  + "?type=Project";
 
 				});
-			};
+			}
 
 			vm.deleteSiteDialog = function(siteName) {
 				var confirm = $mdDialog.confirm()
@@ -98,9 +117,14 @@
 					.textContent('Projektet og alle dets filer vil blive slettet')
 					.ok('Ja')
 					.cancel('Annullér');
-				$mdDialog.show(confirm).then(function() {
-					vm.deleteSite(siteName);
-				});
+				$mdDialog.show(confirm).then(
+                    function() {
+                        vm.deleteSite(siteName);
+                    },
+                    function() {
+                        console.log('cancelled delete');    
+                    }
+                );
 			};
 			
 			vm.deleteSite = function (siteName) {
@@ -153,8 +177,13 @@
 			
             
 			vm.currentDialogSite = '';
-			vm.infoSiteDialog = function (site) {
-				vm.currentDialogSite = site;		
+            
+            
+			function infoSiteDialog(site) {
+                console.log('hit the dialog btn');
+                console.log(site);
+                
+				vm.currentDialogSite = site;
 				$mdDialog.show({
 					templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
 					parent: angular.element(document.body),
@@ -163,26 +192,7 @@
 					preserveScope: true,  // do not forget this if use parent scope
 					clickOutsideToClose: true
 				});
-			};
-
-            
-			vm.updateSiteName = function (shortName, newName, description) {
-				var r = siteService.updateSiteName(shortName, newName, description);
-
-				r.then(function(result){
-					vm.project_title = result.title;
-					vm.project_description = result.description;
-					$mdDialog.hide();
-					
-					getSites().then(function(val) {
-						vm.sites = val;
-					});
-
-					getSitesPerUser().then(function(val) {
-						vm.sitesPerUser = val;
-					});
-				});
-			};
+			}
 
             
 			vm.getSearchresults = function getSearchReslts(term){
@@ -195,7 +205,7 @@
 						$rootScope.searchResults = [];
 						$rootScope.searchResults = val.data.items;
 
-						window.location.href = "#/search";
+						window.location.href = "#!/search";
 
 					} else {
 						return [];
@@ -229,7 +239,7 @@
 					// var path = val.path;
 
 					var path = ref.replace("workspace://SpacesStore/", "");
-					$window.location.href = "/#/dokument/" + path;
+					$window.location.href = "/#!/dokument/" + path;
 
 					console.log("gotoPath");
 				});

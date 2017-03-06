@@ -1,30 +1,31 @@
-<md-dialog aria-label="Edit member role" ng-cloak>
-	<form name="editRoleForm" ng-submit="vm.updateRoleOnSiteMember(vm.project, vm.currentDialogUser.userName, newMemberRole);">
+<md-dialog aria-label="Edit member role">
+
+	<form name="editRoleForm" ng-submit="vm.updateRoleOnSiteMember(vm.project.shortName, vm.currentDialogUser, vm.currentDialogRole);">
 	
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Redigér {{vm.currentDialogUser}}'s rolle </h2>
+				<h2>Redigér {{vm.currentDialogUser.fullName}}'s rolle </h2>
 			</div>
 		</md-toolbar>
 
-		<md-dialog-content class="md-padding">
-			<div>
-				<md-input-container>
-					<label>Rolle</label>
-					<md-select required ng-model="newMemberRole">
-						<md-option ng-repeat="r in roles_translated">{{ r }}</md-option>
-					</md-select>
-					<div ng-messages="vm.editRoleForm.newMemberRole.$error">
-						<div ng-message="required">Dette felt skal udfyldes</div>
-					</div>
-				</md-input-container>
-			</div>
-		</md-dialog-content>
-		
-		<md-dialog-actions>
-			<md-button ng-click="vm.cancel()">Annullér</md-button>
-			<md-button ng-click="vm.loadSiteRoles()" type="submit" class="md-primary">Opdatér</md-button>
-		</md-dialog-actions>
-		
-	</form>
+        <md-dialog-content class="md-padding">
+            <div>
+                <md-input-container>
+                    <label>Rolle</label>
+                    <md-select required ng-model="vm.currentDialogRole">
+                        <md-option ng-repeat="r in roles_translated" ng-value="r">{{ r }}</md-option>
+                    </md-select>
+                    <div ng-messages="vm.editRoleForm.newMemberRole.$error">
+                        <div ng-message="required">Dette felt skal udfyldes</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button ng-click="vm.cancel()">Annullér</md-button>
+            <md-button type="submit" class="md-primary">Opdatér</md-button>
+        </md-dialog-actions>
+
+    </form>
 </md-dialog>

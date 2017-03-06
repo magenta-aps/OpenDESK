@@ -1,0 +1,93 @@
+<md-dialog aria-label="Opret/redigér avanceret projekt" class="pd-create-site-diag">
+    <form ng-submit="updatePdSite()" class="pd-site-create-form" name="pdcreatesite">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>Redigér projekt</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+            </md-button>
+          </div>
+        </md-toolbar>
+        
+        <md-dialog-content>
+            <md-content class="md-padding" layout="row" layout-padding>
+                <div flex="50">
+                    <md-input-container style="width: 100%;">
+                        <label>Projektnavn</label>
+                        <input type="text" ng-model="newSite.siteName" required>
+                    </md-input-container>
+                    <md-input-container style="width: 100%;">
+                        <label>Beskrivelse</label>
+                        <textarea ng-model="newSite.desc" required></textarea>
+                    </md-input-container>
+                    <md-autocomplete
+                        md-selected-item="newSite.owner"
+                        md-search-text="searchTextOwner"
+                        md-items="own in searchProjectOwners(searchTextOwner)"
+                        md-item-text="own.fullName"
+                        md-min-length="1"
+                        md-floating-label="Projektejer"
+                        placeholder="Projektejer">
+                        <md-item-template>
+                            <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ own.fullName }}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            Ingen brugere matcher "{{ searchTextOwner }}".
+                        </md-not-found>
+                    </md-autocomplete>
+                    <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
+                        Privat projekt
+                    </md-checkbox>
+                </div>
+                <div flex="50">
+                    <md-input-container style="width: 100%;">
+                        <label>ESDH sagsnr.</label>
+                        <input type="text" ng-model="newSite.sbsys" required>
+                    </md-input-container>
+                    <md-input-container class="org-input">
+                        <label>Organisatorisk enhed</label>
+                        <md-select ng-model="newSite.center_id" required>
+                            <md-option ng-repeat="org in availOrgs" value="{{ org.shortName }}">
+                                {{ org.displayName }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-autocomplete
+                            md-selected-item="newSite.manager"
+                            md-search-text="searchTextManager"
+                            md-items="man in searchPeople(searchTextManager)"
+                            md-item-text="man.firstName + ' ' + man.lastName"
+                            md-min-length="1"
+                            md-floating-label="Projektleder"
+                            placeholder="Projektleder">
+                        <md-item-template>
+                            <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            Ingen brugere matcher "{{ searchTextManager }}".
+                        </md-not-found>
+                    </md-autocomplete>
+                    <md-input-container>
+                        <label>Status</label>
+                        <md-select ng-model="newSite.state">
+                            <md-option ng-repeat="state in newSite.availStates" ng-value="state">
+                                {{ state.stateStr }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </md-content>
+        
+        </md-dialog-content>
+        
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" >
+                Annullér
+            </md-button>
+            <span flex></span>
+            <input type="submit" class="md-button md-raised md-primary" value="Gem">
+        </md-dialog-actions>
+        
+    </form>
+</md-dialog>

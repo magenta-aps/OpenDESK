@@ -7,13 +7,12 @@
 		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
             <i class="material-icons">search</i>
             <md-autocomplete
-                    required
                     md-input-name="autocomplete"
                     md-selected-item="searchQuery"
                     md-search-text="searchText"
                     md-items="r in vm.getAutoSuggestions(searchText)"
                     md-item-text="r.name"
-                    md-floating-label="Søg">
+                    md-floating-label="Søg dokumenter">
                 <md-item-template>
                     <span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
                 </md-item-template>
@@ -31,11 +30,11 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 				<md-input-container>
-					<input type="checkbox" aria-label="Vis kun mine projekter" ng-model="vm.memberonly"> <label>Vis kun mine projekter</label>
+					<md-checkbox ng-model="vm.memberonly">Vis kun mine projekter</md-checkbox>
 				</md-input-container>
 
 				<div ng-init="states = [
-				{key:'ACTIVE', name:'Igangværende'},
+				{key:'ACTIVE', name:'Igang'},
 				{key:'CLOSED', name:'Afsluttet'},
 				{key:'', name:'Alle'}]"></div>
 
@@ -48,7 +47,7 @@
 
 				<md-input-container>
 					<label>Center</label>
-					<md-select ng-model="vm.search.center_id" required>
+					<md-select ng-model="vm.search.center_id">
 						<md-option ng-repeat="x in vm.organizationalCenters" value="{{ x.shortName }}">
 							{{ x.displayName }}
 						</md-option>
@@ -63,67 +62,61 @@
 						<tr>
 							<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Projektnavn</th>
 							<th sort-table="created" title="Sortér kolonne">Oprettet</th>
-							<th colspan="2" sort-table="creator" title="Sortér kolonne">Oprettet af</th>
+							<th colspan="2" sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
 						</tr>
 					</thead>
 					
 					<tbody>
 						<tr ng-repeat="project in vm.memberonly ? vm.sitesPerUser : vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}?type={{project.type}}">
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
 								<i class="material-icons">content_paste</i>
 								{{ project.title }}
 							</a></td>
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>
-							<td><a class="od-filebrowser-link" href="#/projekter/{{project.shortName}}">{{ project.creator.fullName }}</a></td>
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.created | openeDate }}</a></td>
+							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.manager.fullName }}</a></td>
 							<td>
-								<md-menu>
-									<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-									  <md-icon md-menu-origin>dehaze</md-icon>
-									</md-button>
-							
-									<md-menu-content width="6">
-										<md-menu-item>
-											<md-button ng-click="vm.infoSiteDialog(project)">
-												<md-icon md-menu-align-target>info_outline</md-icon>
-												Information
-											</md-button>
-										</md-menu-item>
-										<md-menu-item>											
-											<md-button ng-click="vm.renameSiteDialog($event, project.shortName, project.title, project.description)">
-												<md-icon md-menu-align-target>create</md-icon>
-												Redigér
-											</md-button>
-										</md-menu-item>
-										<md-menu-item>
-											<md-button ng-click="vm.deleteSiteDialog(project.shortName)">
-												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-												Slet
-											</md-button>
-										</md-menu-item>
-									</md-menu-content>
-								</md-menu>
+                                <md-menu>
+                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+                                        <md-icon md-menu-origin>dehaze</md-icon>
+                                    </md-button>
+                                    <md-menu-content width="6">
+                                        <md-menu-item>
+                                            <md-button ng-click="vm.infoSiteDialog(project)">
+                                                <md-icon md-menu-align-target>info_outline</md-icon>
+                                                Information
+                                            </md-button>
+                                        </md-menu-item>
+                                        <md-menu-item ng-if="project.current_user_role == vm.managerRole">
+                                            <md-button ng-click="vm.deleteSiteDialog(project.shortName)">
+                                                <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+                                                Slet
+                                            </md-button>
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
 							</td>
 						</tr>
 					</tbody>
-				</table>											
-				
+				</table>
+
 			</md-list>
-            
+
 			<md-divider></md-divider>
 			
             <div layout="row" layout-align="start center" class="btnAlign">
             
                 <md-menu>
-                    <md-button ng-click="$mdOpenMenu($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nye projekter">
+                    <md-button ng-click="$mdMenu.open()" class="md-text-icon-button md-raised md-primary" aria-label="Opret nye projekter">
                         <i class="material-icons">add</i>
-                        <span>Tilføj projekt</span>
+                        <span>Opret nyt projekt</span>
                     </md-button>
                     <md-menu-content>
                         <md-menu-item>
                             <md-button ng-click="vm.newSite($event)"><i class="material-icons">add</i> Alm. Projekt</md-button>
                         </md-menu-item>
                         <md-menu-item>
-                            <md-button ng-controller="PdSiteController as pd" ng-click="pd.newPDSite($event)"><i class="material-icons">add</i> Projekt m. styring</md-button>
+                            <md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)"><i class="material-icons">add</i> Projekt m. styring</md-button>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>

@@ -3,27 +3,27 @@
     <button ng-click="vm.toggleUser()" class="od-btn od-user--toggle">
         <i class="material-icons">person</i>
     </button>
-    
+
     <div class="od-flyout right fixed" ng-class="{ open: vm.on }" ng-click="vm.toggleUser()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
             <button ng-click="vm.toggleUser()" class="od-btn od-flyout--close">
                 <i class="material-icons">keyboard_arrow_right</i>
             </button>
-        
+
             <div class="od-me" ng-controller="AuthController as vm">
                 <h2><i class="material-icons">person</i> {{ vm.getUserInfo().user.userName }}</h2>
                 <dl>
                     <dt>Navn</dt>
                     <dd>{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}</dd>
                 </dl>
-                
+
                 <button class="od-btn" ng-click="vm.logout()">
 
                     {{ 'MENU.LOGOUT' | translate }}
                 </button>
             </div>
-            
+
         </div>
     </div>
-    
+
 </section>

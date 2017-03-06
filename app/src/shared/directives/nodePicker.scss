@@ -1,36 +1,36 @@
 .picker-header {
-    background-color: #eee;
-    color: #666;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    
-    .md-icon-button {
-        border-right: solid 1px #ddd;
-        border-radius: 0;
-    }
-    .md-icon-button:hover,
-    .md-icon-button:active {
-        border: solid 1px #ccc;
-    }
+  background-color: #eee;
+  color: #666;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  .md-icon-button {
+    border-right: solid 1px #ddd;
+    border-radius: 0;
+  }
+  .md-icon-button:hover,
+  .md-icon-button:active {
+    border: solid 1px #ccc;
+  }
 }
 
 .picker-list {
-    
-    .picked {
-        background-color: rgb(63,81,181);
-        color: rgba(255,255,255,0.87);
-    }
-    md-list-item:hover:not(.md-icon-button) {
-        background-color: transparent;
-    }
-    .md-icon-button {
-        border-left: solid 1px #ddd;
-        border-radius: 0;
-    }
-    .md-icon-button:hover,
-    .md-icon-button:active {
-        border: solid 1px #ccc;
-    }
+
+  .picked {
+    background-color: rgb(63, 81, 181);
+    color: rgba(255, 255, 255, 0.87);
+  }
+  md-list-item:hover:not(.md-icon-button) {
+    background-color: transparent;
+  }
+  .md-icon-button {
+    border-left: solid 1px #ddd;
+    border-radius: 0;
+  }
+  .md-icon-button:hover,
+  .md-icon-button:active {
+    border: solid 1px #ccc;
+  }
 }
 

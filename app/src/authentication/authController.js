@@ -15,26 +15,26 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     vm.updateValidator = updateValidator;
 
     /*if ( !authService.isAuthenticated()) {
-        authService.login().then(function (response) {
-            if (response.status == 401) {
-                return;
-            }
-            if (response.userName) {
-                userService.getPerson(response.userName).then(function (response) {
-                    vm.user = response;
-                    restoreLocation();
-                });
-            }
-        });
-    }*/
+     authService.login().then(function (response) {
+     if (response.status == 401) {
+     return;
+     }
+     if (response.userName) {
+     userService.getPerson(response.userName).then(function (response) {
+     vm.user = response;
+     restoreLocation();
+     });
+     }
+     });
+     }*/
 
     function login(credentials) {
         authService.login(credentials.username, credentials.password).then(function (response) {
-	    // Logged in
+            // Logged in
             if (response.userName) {
-	        chatService.initialize();
+                chatService.initialize();
                 chatService.login(credentials.username, credentials.password);
-	        userService.getPerson(credentials.username).then(function (response) {
+                userService.getPerson(credentials.username).then(function (response) {
                     vm.user = response;
                     restoreLocation();
                 });
@@ -53,9 +53,10 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     function restoreLocation() {
         var retainedLocation = sessionService.getRetainedLocation();
         if (!retainedLocation || retainedLocation === undefined) {
-            $state.go('dashboard');
+            $state.go('projects');
         } else {
-            $window.location = retainedLocation;
+            $state.go('projects');
+            //$window.location = retainedLocation;
         }
     }
 

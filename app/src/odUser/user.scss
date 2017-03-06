@@ -2,23 +2,23 @@
 }
 
 .od-user--toggle {
-	top: 0;
-	right: $u*3;
-	position: fixed;
-	z-index: 1;
-	height: $u*3;
-	width: $u*3;
-	padding: 0;
-	&::-moz-focus-inner {
-		padding: 0;
-		border: 0;
-	}
+  top: 0;
+  right: $u*3;
+  position: fixed;
+  z-index: 1;
+  height: $u*3;
+  width: $u*3;
+  padding: 0;
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
 }
 
 .od-user .od-flyout--close {
-    color: $main-color;
+  color: $main-color;
 }
 
 .od-me {
-    padding: $u; 
+  padding: $u;
 }

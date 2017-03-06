@@ -1,8 +1,8 @@
 angular
-        .module('openDeskApp')
-        .config(config)
-        .factory('httpTicketInterceptor', httpTicketInterceptor)
-        .factory('authService', authService);
+    .module('openDeskApp')
+    .config(config)
+    .factory('httpTicketInterceptor', httpTicketInterceptor)
+    .factory('authService', authService);
 
 function config($httpProvider) {
     $httpProvider.interceptors.push('httpTicketInterceptor');
@@ -18,31 +18,31 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     };
 
     function request(config) {
-        
-        config.url = prefixAlfrescoServiceUrl(config.url); 
-        
+
+        config.url = prefixAlfrescoServiceUrl(config.url);
+
         if (sessionService.getUserInfo()) {
             config.params = config.params || {};
             config.params.alf_ticket = sessionService.getUserInfo().ticket;
         }
-        
+
         return config;
-        
+
     }
-    
-    function prefixAlfrescoServiceUrl(url){
-        if(url.indexOf("/api/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
-                || url == "/touch"){
+
+    function prefixAlfrescoServiceUrl(url) {
+        if (url.indexOf("/api/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
+            || url.indexOf("/lool") == 0 || url.indexOf("/wopi") == 0 || url == "/touch") {
             return ALFRESCO_URI.webClientServiceProxy + url;
         }
-        else if(url.indexOf("/share/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
-            || url == "/touch"){
+        else if (url.indexOf("/share/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
+            || url == "/touch") {
             return ALFRESCO_URI.webClientServiceProxy + url;
         }
         return url;
     }
 
-    function response(response) {        
+    function response(response) {
         if (response.status == 401 && typeof $window._openDeskSessionExpired === 'undefined') {
             sessionExpired();
         }
@@ -52,7 +52,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     function responseError(rejection) {
         //Prevent from popping up the message on failed SSO attempt
         if (rejection.status == 401 && rejection.config.url.indexOf("/touch") == -1) {
-            sessionExpired();    
+            sessionExpired();
         }
         return $q.reject(rejection);
     }
@@ -64,16 +64,16 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
         $window._openDeskSessionExpired = true;
         sessionService.setUserInfo(null);
         var $mdDialog = $injector.get('$mdDialog'),
-                notificationUtilsService = $injector.get('notificationUtilsService');
+            notificationUtilsService = $injector.get('notificationUtilsService');
         $mdDialog.cancel();
         sessionService.retainCurrentLocation();
-        $window.location = "/#/login";
+        $window.location = "/#!/login";
         notificationUtilsService.notify($translate.instant('LOGIN.SESSION_TIMEOUT'));
         delete $window._openDeskSessionExpired;
     }
 }
 
-function authService($http, $window, $state, sessionService, userService, oeParametersService) {
+function authService($http, $window, $state, sessionService, userService) {
     var service = {
         login: login,
         logout: logout,
@@ -91,18 +91,18 @@ function authService($http, $window, $state, sessionService, userService, oePara
     function getUserInfo() {
         return sessionService.getUserInfo();
     }
-    
-    function ssoLogin(){
-        return $http.get("/touch").then(function(response){
-            if(response.status == 401 || authFailedSafari(response)){
+
+    function ssoLogin() {
+        return $http.get("/touch").then(function (response) {
+            if (response.status == 401 || authFailedSafari(response)) {
                 return response;
             }
             sessionService.setUserInfo({});
             return revalidateUser();
         });
     }
-    
-    function authFailedSafari(response){
+
+    function authFailedSafari(response) {
         return response.data && response.data.indexOf('Safari') != -1;
     }
 
@@ -111,11 +111,11 @@ function authService($http, $window, $state, sessionService, userService, oePara
         return $http.post("/api/login", {
             username: username,
             password: password
-        }).then(function(response) {
+        }).then(function (response) {
             userInfo.ticket = response.data.data.ticket;
             sessionService.setUserInfo(userInfo);
-            return addUserAndParamsToSession(username);
-        }, function(reason) {
+            return addUserToSession(username);
+        }, function (reason) {
             console.log(reason);
             return reason;
         });
@@ -124,13 +124,12 @@ function authService($http, $window, $state, sessionService, userService, oePara
     function logout() {
         var userInfo = sessionService.getUserInfo();
 
-        
-        if (userInfo){
-            return $http.delete('/api/login/ticket/' + userInfo.ticket, {alf_ticket:userInfo.ticket}).then(function(response) {
-              sessionService.setUserInfo(null);
-              sessionService.clearRetainedLocation();
-              oeParametersService.clearOEParameters();
-              return response;
+
+        if (userInfo) {
+            return $http.delete('/api/login/ticket/' + userInfo.ticket, {alf_ticket: userInfo.ticket}).then(function (response) {
+                sessionService.setUserInfo(null);
+                sessionService.clearRetainedLocation();
+                return response;
             });
         }
 
@@ -147,7 +146,7 @@ function authService($http, $window, $state, sessionService, userService, oePara
      * @returns {*}
      */
     function changePassword(email) {
-        return $http.post("/api/opendesk/reset-user-password", {email: email}).then(function(response) {
+        return $http.post("/api/opendesk/reset-user-password", {email: email}).then(function (response) {
             return response;
         });
     }
@@ -177,22 +176,21 @@ function authService($http, $window, $state, sessionService, userService, oePara
 //                return !userInfo.user.capabilities.isAdmin;
 //        }
         return userInfo.user.capabilities.isAdmin ||
-                (authorizedRoles.length > 0 && authorizedRoles.indexOf('user') > -1);
+            (authorizedRoles.length > 0 && authorizedRoles.indexOf('user') > -1);
     }
 
     function revalidateUser() {
-        return $http.get('/api/opendesk/currentUser').then(function(response) {
-            return addUserAndParamsToSession(response.data.userName);
+        return $http.get('/api/opendesk/currentUser').then(function (response) {
+            return addUserToSession(response.data.userName);
         });
     }
 
-    function addUserAndParamsToSession(username) {
-        return userService.getPerson(username).then(function(user) {
+    function addUserToSession(username) {
+        return userService.getPerson(username).then(function (user) {
             delete $window._openDeskSessionExpired;
             var userInfo = sessionService.getUserInfo();
             userInfo['user'] = user;
             sessionService.setUserInfo(userInfo);
-            oeParametersService.loadParameters();
             return user;
         });
     }

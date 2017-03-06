@@ -42,7 +42,7 @@ function GroupService(ALFRESCO_URI, $http, $q) {
             return listAllSystemGroups();
         else
             return $http.get(ALFRESCO_URI.serviceApiProxy + 'groups/list/' + type, params)
-            .then(successOrReject);
+                .then(successOrReject);
     }
 
     /**
@@ -62,10 +62,13 @@ function GroupService(ALFRESCO_URI, $http, $q) {
     }
 
     function getGroupInfo (shortName, groupName) {
-        return $http.get("/alfresco/service/groups?method=getAllMembers&shortName=" + shortName + "&groupName=" + groupName).then(function(response) {
-            console.log(response.data);
+        return $http.post("/alfresco/service/groups", {
+            PARAM_METHOD : "getAllMembers",
+            PARAM_SITE_SHORT_NAME: shortName,
+            PARAM_GROUP_NAME: groupName
+        }).then(function(response) {
             return response.data;
-        })
+        });
     }
 
     /**
@@ -148,8 +151,8 @@ function GroupService(ALFRESCO_URI, $http, $q) {
 
             return $q.reject(response);
         }
-        console.log("members: ");
-        console.log(response);
+        //console.log("members: ");
+        //console.log(response);
         return response.data || response;
     }
 

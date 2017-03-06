@@ -2,28 +2,29 @@
     <header>
         <h1 class="title">Projekter og dokumenter</h1>
     </header>
-    
+
     <div class="project-tabs">
-        
+
     </div>
-    
+
     <div id="project-docs">
-        
+
         <button><i class="material-icons">file_upload</i> Upload</button>
         <button ng-click="newDocument()"><i class="material-icons">create</i> Nyt dokument</button>
         <button ng-show="selectedItems.length"
                 ng-click="journalizeToESDH(selectedItems)">
-            <i class="material-icons">archive</i> Journalisér til SBSYS</button>
-        
-        
+            <i class="material-icons">archive</i> Journalisér til ESDH
+        </button>
+
+
         <div class="project-docs__nav window">
             <ol class="breadcrumb">
                 <li ng-repeat="parent in parents">
-                    <a ng-if="!$last" href="" ng-click="breadcrumb($index)" >{{parent.name}}</a>
+                    <a ng-if="!$last" href="" ng-click="breadcrumb($index)">{{parent.name}}</a>
                     <span ng-if="$last" class="active">{{parent.name}}</span>
                 </li>
             </ol>
-        
+
             <ul class="list-plain" ng-repeat="node in nodes">
                 <cmis-object click-handler="openFolder(path, name)"
                              properties="node.object.succinctProperties"
@@ -32,15 +33,17 @@
 
             <p class="project-docs__no-docs" ng-show="!nodes || nodes.length === 0">Der er ingen filer her</p>
         </div>
-        
+
     </div>
     <div id="project-members" ng-show="site">
         <h2>Medlemmer</h2>
         <ul class="list-plain" ng-repeat="node in siteMembers">
             <li><i class="material-icons">person</i>
-            {{node.authority.firstName}} {{node.authority.lastName}}</li>
+                {{node.authority.firstName}} {{node.authority.lastName}}
+            </li>
         </ul>
         <br>
-        <p><a class="btn" href="#"><i class="material-icons">add</i> Tilføj medlem</a></p>
+
+        <p><a class="btn" href="#!"><i class="material-icons">add</i> Tilføj medlem</a></p>
     </div>
 </div>

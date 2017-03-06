@@ -1,19 +1,22 @@
 'use strict';
 
 angular.module('openDeskApp.documents').factory('cmisService', function ($http) {
-  var cmisBaseUrl = '/alfresco/api/-default-/public/cmis/versions/1.1/browser/',
-      callback = 'callback=JSON_CALLBACK';
+    var cmisBaseUrl = '/alfresco/api/-default-/public/cmis/versions/1.1/browser/',
+        callback = 'callback=JSON_CALLBACK';
 
-  return {
+    return {
 
-    getChildren: function (path) {
+        getChildren: function ($sce, path) {
 
-      return $http.jsonp(cmisBaseUrl + 'root/' + path + '?cmisselector=children&succinct=true&' + callback);
-    },
+            var url = cmisBaseUrl + 'root/' + path + '?cmisselector=children&succinct=true';
+            $sce.trustAsResourceUrl(url);
 
-    getCMISBaseUrl : function(){
-      return cmisBaseUrl;
-    }
+            return $http.jsonp(url, {jsonpCallbackParam: 'callback'});
+        },
 
-  };
+        getCMISBaseUrl: function () {
+            return cmisBaseUrl;
+        }
+
+    };
 });

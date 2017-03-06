@@ -1,29 +1,29 @@
 <div class="proj-item" ng-switch on="properties['cmis:objectTypeId']">
-  <li class="proj-item_1" ng-switch-when="cmis:folder">
-    <input type="checkbox" checklist-model="selectedItems"
-           checklist-value="properties">
-    <a href=""
-       ng-click="click()">
-      <i class="material-icons">folder</i>
-      <span class="proj-item__title">{{properties['cmis:name']}}</span>
-    </a>
-  </li>
-  <li class="proj-item_2" ng-switch-when="F:st:site">
-    <a href=""
-       ng-click="click(true)">
-      <i class="material-icons">work</i>
-      <span class="proj-item__title">{{properties['cm:title']}}</span>
-    </a>
-  </li>
-  <li class="proj-item_3" ng-switch-when="cmis:document">
-    <input type="checkbox" checklist-model="selectedItems"
-           checklist-value="properties">
-    <a href="#/projects/edit-online/{{properties['cmis:name']}}">
-    <!--<a href="{{properties['cmis:objectId'] | downloadUrl:true}}">-->
-      <i class="material-icons">description</i> {{properties['cmis:name']}}
-    </a>
-  </li>
-  <li class="proj-item_4" ng-switch-default>
-    {{properties['cmis:name']}}
-  </li>
+    <li class="proj-item_1" ng-switch-when="cmis:folder">
+        <input type="checkbox" checklist-model="selectedItems"
+               checklist-value="properties">
+        <a href=""
+           ng-click="click()">
+            <i class="material-icons">folder</i>
+            <span class="proj-item__title">{{properties['cmis:name']}}</span>
+        </a>
+    </li>
+    <li class="proj-item_2" ng-switch-when="F:st:site">
+        <a href=""
+           ng-click="click(true)">
+            <i class="material-icons">work</i>
+            <span class="proj-item__title">{{properties['cm:title']}}</span>
+        </a>
+    </li>
+    <li class="proj-item_3" ng-switch-when="cmis:document">
+        <input type="checkbox" checklist-model="selectedItems"
+               checklist-value="properties">
+        <a href="#!/projects/edit-online/{{properties['cmis:name']}}">
+            <!--<a href="{{properties['cmis:objectId'] | downloadUrl:true}}">-->
+            <i class="material-icons">description</i> {{properties['cmis:name']}}
+        </a>
+    </li>
+    <li class="proj-item_4" ng-switch-default>
+        {{properties['cmis:name']}}
+    </li>
 </div>

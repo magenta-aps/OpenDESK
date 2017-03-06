@@ -3,18 +3,20 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, $timeout, documentService, $stateParams, $location, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
+function DocumentController($scope, $timeout, documentService, $stateParams, $location, $state, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService,siteService, $window) {
     
     var vm = this;
     vm.doc = [];
     vm.plugin = [];
     vm.paths = [];
 	vm.title = [];
-            
-    
+	vm.fileName = $stateParams.fileName != undefined ? $stateParams.fileName : "";
+	vm.loolDocUpdated = $location.search().loolDocUpdated;
+
 	var parentDocumentNode = "";
 	var firstDocumentNode = "";
 	var selectedDocumentNode = $stateParams.doc;
+	
 
     if($location.search().archived !=  undefined && $location.search().parent !=  undefined)
     {
@@ -25,9 +27,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.showArchived = false;
 		parentDocumentNode = $stateParams.doc;
     }
-
-
-
     
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
@@ -44,11 +43,29 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	vm.cancel = function() {
 		$mdDialog.cancel();
 	};
+	
+	vm.goBack = function() {
+		//var nodeRef = $stateParams.nodeRef.split('/')[3];
+		//window.location.replace("/#!/dokument/"+ nodeRef + "?loolDocUpdated=true");
 
-    
-    vm.newFolderDialog = function (event) {
+        $window.history.back();
+
+	}
+	
+    vm.godkendDialog = function (event) {
         $mdDialog.show({
-            templateUrl: 'app/src/documents/view/reviewComment.tmpl.html',
+            templateUrl: 'app/src/documents/view/aproveComment.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    };
+	
+	vm.afvisDialog = function (event) {
+        $mdDialog.show({
+            templateUrl: 'app/src/documents/view/rejectComment.tmpl.html',
             parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
@@ -85,10 +102,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 				   
 					siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function(response){
 						var param = vm.showArchived ? parentDocumentNode : selectedDocumentNode;
-						if (window.location.hash == "#/dokument/"+ param) {
+						if (window.location.hash == "#!/dokument/"+ param) {
 							window.location.reload();
 						} else {
-							window.location.replace("/#/dokument/"+ param);
+							window.location.replace("/#!/dokument/"+ param);
 						}
 					} );
 
@@ -110,14 +127,13 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
     if (paramValue == "wf") {
         vm.wf_from = $location.search().from;
-        vm.wf_doc = $location.search().doc;
         vm.wf = true;
     }
 
     
     vm.createWFNotification = function(comment) {
         var creator = authService.getUserInfo().user.userName;
-        var link = "/#/dokument/" + vm.wf_doc + "?dtype=wf-response" + "&from=" + creator + "&doc=" + vm.wf_doc;
+        var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
         notificationsService.addNotice(vm.wf_from, "review svar", comment, link).then (function (val) {
             $mdDialog.hide();
@@ -150,11 +166,11 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                 var paths = [
                     {
                         title: 'Projekter',
-                        link: '#/projekter'
+                        link: '#!/projekter'
                     },
                     {
                         title: response.item.location.siteTitle,
-                        link: '#/projekter/' + response.item.location.site
+                        link: '#!/projekter/' + response.item.location.site
                     }
                 ];
                 var pathArr = response.item.location.path.split('/');
@@ -163,7 +179,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     if (pathArr[a] !== '') {
                         paths.push({
                             title: pathArr[a],
-                            link: '#/projekter/' + response.item.location.site + pathLink + pathArr[a]
+							link: '#!/projekter/' + response.item.location.site + pathLink + pathArr[a]
                         });
                         pathLink = pathLink + pathArr[a] + '/';
                     };
@@ -182,7 +198,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     if (vm.showArchived) {
 
 
-        vm.store = 'versionStore://version2Store/'
+        vm.store = 'versionStore://version2Store/';
 
         documentService.createThumbnail(parentDocumentNode, selectedDocumentNode).then (function(response) {
 
@@ -206,27 +222,12 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
                     // delete the temporary node
                 documentService.cleanupThumbnail(response.data[0].nodeRef)
 
-
-
-
-
-
-
-
-
-
-
-
             });
-
         })
-
-
-
 
     }
     else {
-        vm.store = 'workspace://SpacesStore/'
+        vm.store = 'workspace://SpacesStore/';
 
         documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function(plugin){
 
@@ -243,10 +244,13 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
             }
 
         });
-
-
     }
 	
+	 //Goes to the libreOffice online edit page
+	vm.goToLOEditPage = function(nodeRef, fileName) {
+		//console.log('Transitioning to the LOOL page with nodeRef: ' + nodeRef);
+		$state.go('lool', {'nodeRef': nodeRef, 'fileName': fileName});
+	};
 
 	angular.element(document).ready(function () {
 		vm.highlightVersion();

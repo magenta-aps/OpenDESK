@@ -1,5 +1,5 @@
-<md-dialog aria-label="Opret nyt avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="submitNewPDSite()" class="pd-site-create-form" name="pdcreatesite">
+<md-dialog aria-label="Opret/redigér avanceret projekt" class="pd-create-site-diag">
+    <form ng-submit="createPdSite()" class="pd-site-create-form" name="pdcreatesite">
         <md-toolbar>
           <div class="md-toolbar-tools">
             <h2>Opret nyt projekt med styring og følgegrupper</h2>
@@ -15,34 +15,49 @@
                 <md-tab label="Navn og styring">
                     <md-content class="md-padding" layout="row" layout-padding>
                         <div flex="50">
+                            {{ variable }}
+                            <md-input-container class="template-input">
+                                <label>Skabelon</label>
+                                <md-select ng-model="newSite.template.name">
+                                    <md-option ng-repeat="x in templates" value="{{ x }}">
+                                        {{ x.name }}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            
+                            <!--
+                            <label>Skabelon</label>
+                            <select ng-model="newSite.template" ng-options="x.name for x in templates" >
+                            </select>
+                            -->
+
                             <md-input-container style="width: 100%;">
                                 <label>Projektnavn</label>
                                 <input type="text" ng-model="newSite.siteName" required>
                             </md-input-container>
-                            <md-input-container style="width: 100%;">
-                                <label>Beskrivelse</label>
-                                <textarea ng-model="newSite.desc" required></textarea>
-                            </md-input-container>
+
                             <md-autocomplete
-                                md-selected-item="newSite.owner"
-                                md-search-text="searchTextOwner"
-                                md-items="item in searchProjectOwners(searchTextOwner)"
-                                md-item-text="item.fullName"
-                                md-min-length="1"
-                                placeholder="Projektejer">
+                                    md-selected-item="newSite.projectOwner"
+                                    md-search-text="prjownsrchtxt"
+                                    md-items="own in searchProjectOwners(prjownsrchtxt)"
+                                    md-item-text="own.fullName"
+                                    md-min-length="1"
+                                    md-floating-label="Projektejer"
+                                    placeholder="Projektejer">
                                 <md-item-template>
-                                    <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ item.fullName }}</span>
+                                    <span md-highlight-text="prjownsrchtxt" md-highlight-flags="^i">{{ own.fullName }}</span>
                                 </md-item-template>
                                 <md-not-found>
-                                    Ingen brugere matcher "{{ searchTextOwner }}".
+                                    Ingen brugere matcher "{{ prjownsrchtxt }}".
                                 </md-not-found>
                             </md-autocomplete>
+                            
+                            <md-input-container style="width: 100%;">
+                                <label>Beskrivelse</label>
+                                <textarea ng-model="newSite.desc"></textarea>
+                            </md-input-container>
                         </div>
                         <div flex="50">
-                            <md-input-container style="width: 100%;">
-                                <label>SBSYS sagsnr.</label>
-                                <input type="text" ng-model="newSite.sbsys" required>
-                            </md-input-container>
                             <md-input-container class="org-input">
                                 <label>Organisatorisk enhed</label>
                                 <md-select ng-model="newSite.center_id" required>
@@ -51,13 +66,20 @@
                                     </md-option>
                                 </md-select>
                             </md-input-container>
+                            
+                            <md-input-container style="width: 100%;">
+                                <label>ESDH sagsnr.</label>
+                                <input type="text" ng-model="newSite.sbsys" required>
+                            </md-input-container>
+
                             <md-autocomplete
                                     md-selected-item="newSite.manager"
                                     md-search-text="searchTextManager"
                                     md-items="man in searchPeople(searchTextManager)"
                                     md-item-text="man.firstName + ' ' + man.lastName"
                                     md-min-length="1"
-                                    placeholder="Projekleder">
+                                    md-floating-label="Projektleder"
+                                    placeholder="Projektleder">
                                 <md-item-template>
                                     <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
                                 </md-item-template>
@@ -65,6 +87,10 @@
                                     Ingen brugere matcher "{{ searchTextManager }}".
                                 </md-not-found>
                             </md-autocomplete>
+                            
+                            <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
+                                Privat projekt
+                            </md-checkbox>
                         </div>
                     </md-content>
                 </md-tab>

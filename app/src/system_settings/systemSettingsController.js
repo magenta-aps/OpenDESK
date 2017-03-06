@@ -1,17 +1,31 @@
-
 angular
-        .module('openDeskApp.systemsettings')
-        .controller('SystemSettingsController', SystemSettingsCtrl);
+    .module('openDeskApp.systemsettings')
+    .controller('SystemSettingsController', SystemSettingsCtrl);
 
-function SystemSettingsCtrl(systemSettingsPagesService, authService) {
+function SystemSettingsCtrl(systemSettingsPagesService, sessionService, systemSettingsService, $scope) {
     var vm = this;
-    var isTenant = authService.getUserInfo().user.userName.indexOf("@") !== -1;
+
+    $scope.templateSites = [];
+
+
+    function loadTemplates() {
+
+        systemSettingsService.getTemplates().then (function(response) {
+
+            console.log(response)
+
+            $scope.templateSites = response;
+        });
+
+
+    }
+    loadTemplates();
+
+
+
+    vm.isAdmin = sessionService.isAdmin();
     vm.pages = systemSettingsPagesService.getPages()
-            .filter(function(page) {
-                if (isTenant) {
-                    return page.sref !== 'administration.systemsettings.tenantsmodules';
-                }
-                return true;
-            });
-    vm.modulesPages = systemSettingsPagesService.getModulesPages();
+        .filter(function (page) {
+            return true;
+        });
 }
