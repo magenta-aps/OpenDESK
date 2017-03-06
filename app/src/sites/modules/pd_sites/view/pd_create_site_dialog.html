@@ -18,12 +18,18 @@
                             {{ variable }}
                             <md-input-container class="template-input">
                                 <label>Skabelon</label>
-                                <md-select ng-model="newSite.template">
-                                    <md-option ng-repeat="x in templates" value="{{ x.name }}">
+                                <md-select ng-model="newSite.template.name">
+                                    <md-option ng-repeat="x in templates" value="{{ x }}">
                                         {{ x.name }}
                                     </md-option>
                                 </md-select>
                             </md-input-container>
+                            
+                            <!--
+                            <label>Skabelon</label>
+                            <select ng-model="newSite.template" ng-options="x.name for x in templates" >
+                            </select>
+                            -->
 
                             <md-input-container style="width: 100%;">
                                 <label>Projektnavn</label>
