@@ -6,7 +6,7 @@ angular
 
     function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
                             alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-                            searchService, $state, userService, groupService, preferenceService) {
+                            searchService, $state, userService, groupService, preferenceService, sessionService) {
 
                             
         $scope.role_mapping = {};
@@ -45,6 +45,7 @@ angular
         vm.canEdit = false;
         vm.isManager = false;
         vm.isMember = false;
+        vm.isAdmin = sessionService.isAdmin();
         
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
@@ -100,27 +101,36 @@ angular
         
         
         function getSiteUserRole() {
-            siteService.getCurrentUserSiteRole(vm.project.shortName).then(
-                function (response) {
-                    vm.userRole = response;
-                    vm.isManager = vm.userRole == vm.managerRole;
-                    switch(vm.userRole) {
-                        case vm.editRole:
-                        case vm.ownerRole:
-                        case vm.managerRole:
-                            vm.canEdit = true;
-                            break;
-                        default:
-                            vm.canEdit = false;
-                            break;
+            if(vm.isAdmin)
+            {
+                vm.isManager = true;
+                vm.isMember = true;
+                vm.canEdit = true;
+                vm.userRole = vm.managerRole;
+            }
+            else {
+                siteService.getCurrentUserSiteRole(vm.project.shortName).then(
+                    function (response) {
+                        vm.userRole = response;
+                        vm.isManager = vm.userRole == vm.managerRole;
+                        switch (vm.userRole) {
+                            case vm.editRole:
+                            case vm.ownerRole:
+                            case vm.managerRole:
+                                vm.canEdit = true;
+                                break;
+                            default:
+                                vm.canEdit = false;
+                                break;
+                        }
+                        vm.isMember = vm.userRole != vm.outsiderRole;
+                    },
+                    function (err) {
+                        console.log('Error getting site user role');
+                        console.log(err);
                     }
-                    vm.isMember = vm.userRole != vm.outsiderRole;
-                },
-                function (err) {
-                    console.log('Error getting site user role');
-                    console.log(err);
-                }
-            );
+                );
+            }
         }
         
         
