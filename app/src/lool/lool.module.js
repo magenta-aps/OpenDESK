@@ -11,10 +11,7 @@ function config($stateProvider, USER_ROLES) {
         url: '/lool/',
         params: {
 			nodeRef: null,
-			//fileName: null,
-			//topRef: null,
-			//noOfHistory: null,
-			//docObj: null,
+			showArchived: null,
 			backToDocPreview: null
 		},
         views: {

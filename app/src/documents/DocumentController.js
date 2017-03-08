@@ -10,41 +10,17 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     vm.plugin = [];
     vm.paths = [];
 	vm.title = [];
-	vm.topRef = "";
-	vm.loolDocUpdated = false;
-	//vm.fileName = $stateParams.fileName != undefined ? $stateParams.fileName : "";
 
-	var parentDocumentNode = "";
-	var firstDocumentNode = "";
-	var selectedDocumentNode = "";
-	
-	if ($stateParams.doc != undefined) {
-		selectedDocumentNode = $stateParams.doc;
-	} else {
-		selectedDocumentNode = $stateParams.nodeRef.split('/')[3];
-	}
+	vm.showArchived = $location.search().archived !=  undefined ? $location.search().archived : false;
 
-
-    if($location.search().archived !=  undefined && $location.search().parent !=  undefined)
-    {
-        vm.showArchived = $location.search().archived || $location.search().showDocPreview;;
-		parentDocumentNode = $location.search().parent;
-		vm.topRef = parentDocumentNode;
-    }
-    else{
-        vm.showArchived = false;
-		parentDocumentNode = selectedDocumentNode;
-    }
+	var selectedDocumentNode = $stateParams.doc != undefined ? selectedDocumentNode = $stateParams.doc : $stateParams.nodeRef.split('/')[3]; 
+	var parentDocumentNode = $location.search().parent !=  undefined ? $location.search().parent : selectedDocumentNode;
+	var docHasParent = $location.search().parent !=  undefined ? $location.search().parent : false;
     
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
 		var currentNoOfHistory = $scope.history.length;
 		var orgNoOfHistory = $location.search().noOfHist;
-		/*//if a doc has been added to the history list, doc has been updated in lool
-		if (orgNoOfHistory != undefined && currentNoOfHistory > orgNoOfHistory) {
-			vm.loolDocUpdated = true;
-		}
-		*/
 		if (currentNoOfHistory > 0) {
 			firstDocumentNode = $scope.history[0].nodeRef;
 		}
@@ -62,12 +38,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	};
 	
 	vm.goBack = function() {
-		//var nodeRef = $stateParams.topRef != null ? $stateParams.topRef : $stateParams.nodeRef.split('/')[3];
 		var nodeRef = vm.doc.nodeRef.split('/')[3];
 		if ($stateParams.backToDocPreview) {
 			//came from edit doc in documentpreviewer, before goBack in lool
-			//window.location.replace("/#!/dokument/"+ nodeRef + "?showDocPreview=true&noOfHist=" + $stateParams.noOfHistory);
-			window.location.replace("/#!/dokument/"+ nodeRef + "?showDocPreview=true");
+			window.location.replace("/#!/dokument/"+ nodeRef + "?archived=" + $stateParams.showArchived);
 		} else {
 			//came from review doc or edit doc from the documentlist, before goBack in lool
 			$window.history.back();
@@ -114,7 +88,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		if(vm.paths[vm.paths.length -1].title != file.name){
 			document.getElementById("uploadFile").innerHTML = "<i class='material-icons'>warning</i>&nbsp;Du skal vælge et dokument, der hedder<br>det samme som det eksisterende dokument. ";				
 		} else {
-			documentService.getDocument(vm.showArchived ? parentDocumentNode : selectedDocumentNode).then(function(response) {
+			documentService.getDocument(docHasParent ? parentDocumentNode : selectedDocumentNode).then(function(response) {
 
 				var cmisQuery = response.item.location.site + "/documentLibrary/" + response.item.location.path
 
@@ -124,7 +98,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 					var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
 				   
 					siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function(response){
-						var param = vm.showArchived ? parentDocumentNode : selectedDocumentNode;
+						var param = docHasParent ? parentDocumentNode : selectedDocumentNode;
 						if (window.location.hash == "#!/dokument/"+ param) {
 							window.location.reload();
 						} else {
@@ -139,12 +113,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		}
     };
 
-    
-    vm.getVersion = function (version) {
-
-    }
-
-
     // prepare to handle a preview of a document to review
     var paramValue = $location.search().dtype;
 
@@ -152,7 +120,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.wf_from = $location.search().from;
         vm.wf = true;
     }
-
     
     vm.createWFNotification = function(comment) {
         var creator = authService.getUserInfo().user.userName;
@@ -218,7 +185,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
 
     // todo check if not ok type like pdf, jpg and png - then skip this step
-    if (vm.showArchived) {
+    if (docHasParent) {
 
 
         vm.store = 'versionStore://version2Store/';
@@ -257,7 +224,6 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
             vm.plugin = plugin;
             $scope.config = plugin;
             $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
-
             $scope.download = function(){
                 alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
             };
@@ -268,23 +234,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
         });
     }
-	/*
-	vm.confirmLoolEditDocDialog = function (ev, siteName, userName) {
-		var confirm = $mdDialog.confirm()
-			.title('Vil du redigere dette dokument?')
-			.textContent('')
-			.ariaLabel('Slet medlem')
-			.targetEvent(ev)
-			.ok('Slet')
-			.cancel('Nej, tak');
 
-		$mdDialog.show(confirm).then(
-			function() {
-				vm.removeMemberFromSite(siteName, userName);
-			},
-		);
-	};
-	*/
 	function confirmLoolEditDocDialog(backToDocPreview) {
 		var confirm = $mdDialog.confirm()
 			.title('Vil du redigere dette dokument?')
@@ -294,51 +244,24 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 			.ok('OK')
 			.cancel('Fortryd');
 		$mdDialog.show(confirm).then(function() {
-			//console.log("revertToVersion");
-			/*
-			var ref = $stateParams.doc;
-			var thisNodeRef = "versionStore://version2Store/" + ref;
-			documentService.revertToVersion(vm.doc.description, true, thisNodeRef, vm.doc.version);
-			*/
-			
-			documentService.revertToVersion(vm.doc.description, true, vm.doc.nodeRef, vm.doc.version).then(function(response) {
-				var newNodeRef = response.config.data.nodeRef;
-				console.log("vm.doc.nodeRef = " + vm.doc.nodeRef);
-				console.log("respopnse nodeRef = " + newNodeRef);
-				//$state.go('lool', {'nodeRef': vm.doc.nodeRef, 'backToDocPreview': backToDocPreview});			
-				$state.go('lool', {'nodeRef': newNodeRef, 'backToDocPreview': backToDocPreview});			
-				vm.loolDocUpdated = true;
+			var selectedVersion = $location.search().version;	
+			documentService.revertToVersion(vm.doc.description, true, vm.doc.nodeRef, selectedVersion).then(function(response) {	
+				$state.go('lool', {'nodeRef': vm.doc.nodeRef, 'backToDocPreview': backToDocPreview, 'showArchived': true});			
 			});
 		});
 	}
 
 	
 	 //Goes to the libreOffice online edit page
-	//vm.goToLOEditPage = function(nodeRef, fileName, topRef, backToDocPreview) {
 	vm.goToLOEditPage = function(backToDocPreview) {
-		/*
-		var thisNodeRef = nodeRef;
-		var ref = $stateParams.doc;
-		if (vm.showArchived) {
-			thisNodeRef = "versionStore://version2Store/" + ref;
-		}
-		$state.go('lool', {'nodeRef': thisNodeRef, 'fileName': fileName, 'topRef': topRef, 'backToDocPreview': backToDocPreview});
-		*/
-		//promote doc to latest version
 		var ref = $stateParams.doc;
 		var isFirstInHistory = ref == firstDocumentNode;
-		//vm.doc.nodeRef = isFirstInHistory ?
-		//var thisNodeRef
-		if (vm.showArchived && !isFirstInHistory) {
+		if (docHasParent && !isFirstInHistory) {
+			//first promote doc to latest version
 			confirmLoolEditDocDialog(backToDocPreview);
 		} else {
-			//console.log("state.go");
-			$state.go('lool', {'nodeRef': vm.doc.nodeRef, 'backToDocPreview': backToDocPreview});
-			vm.loolDocUpdated = true;
+			$state.go('lool', {'nodeRef': vm.doc.nodeRef, 'backToDocPreview': backToDocPreview, 'showArchived': false});
 		}
-		
-		//documentService.revertToVersion(vm.doc.description, true, vm.doc.nodeRef, vm.doc.version);
-		//$state.go('lool', {'nodeRef': nodeRef, 'fileName': fileName, 'topRef': topRef, 'noOfHistory': noOfHistory, 'backToDocPreview': backToDocPreview});
 	};
 
 	angular.element(document).ready(function () {
