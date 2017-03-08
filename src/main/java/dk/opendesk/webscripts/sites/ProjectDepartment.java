@@ -211,13 +211,10 @@ public class ProjectDepartment extends AbstractWebScript {
             }
             while(newSiteRef == null);
 
-            Long id = (Long) nodeService.getProperty(newSiteRef, ContentModel.PROP_NODE_DBID);
+            createGroupAddMembers(site_short_name_with_version, site_owner, site_manager);
 
-            createGroupAddMembers(Long.toString(id), site_owner, site_manager);
-
-            if (template != "") {
+            if (!"".equals(template)) {
                 this.executeTemplate(newSiteRef, template);
-
             }
 
             JSONObject return_json = new JSONObject();
@@ -252,16 +249,14 @@ public class ProjectDepartment extends AbstractWebScript {
 
             updateSite(site, site_name, site_description, site_sbsys, site_center_id, site_state);
 
-            String dbid = nodeService.getProperty(site.getNodeRef(), ContentModel.PROP_NODE_DBID).toString();
-            String parentGroup = "GROUP_"  + dbid;
 
             if(!site_owner.isEmpty()) {
-                String ownerGroup = parentGroup + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER;
+                String ownerGroup = Utils.getPDGroupName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTOWNER);
                 updateSingleGroupMember(ownerGroup, site_owner);
             }
 
             if(!site_manager.isEmpty()) {
-                String managerGroup = parentGroup + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER;
+                String managerGroup = Utils.getPDGroupName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
                 updateSingleGroupMember(managerGroup, site_manager);
             }
 
@@ -316,30 +311,15 @@ public class ProjectDepartment extends AbstractWebScript {
         authorityService.addAuthority(group, userName);
     }
 
-    private void createGroupAddMembers(String id, String owner, String site_manager) {
+    private void createGroupAddMembers(String siteShortName, String owner, String site_manager) {
 
-        // create groups and add permissions
-        String parentGroup = authorityService.createAuthority(AuthorityType.GROUP,  id);
-
-        String projectowner = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTOWNER);
-        authorityService.addAuthority(parentGroup, projectowner);
-        authorityService.addAuthority(projectowner, owner);
-
-        String projectmanager = authorityService.createAuthority(AuthorityType.GROUP, id + "_" + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
-        authorityService.addAuthority(parentGroup, projectmanager);
-        authorityService.addAuthority(projectmanager,site_manager);
-
-        String monitors = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_MONITORS);
-        authorityService.addAuthority(parentGroup, monitors);
-
-        String projectgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_PROJECTGROUP);
-        authorityService.addAuthority(parentGroup, projectgroup);
-
-        String workgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_WORKGROUP);
-        authorityService.addAuthority(parentGroup, workgroup);
-
-        String steeringgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_STEERING_GROUP);
-        authorityService.addAuthority(parentGroup, steeringgroup);
+        String prefix = "site_" + siteShortName + "_";
+        String projectowner = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTOWNER);
+        String projectmanager = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
+        String monitors = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_MONITORS);
+        String projectgroup = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTGROUP);
+        String workgroup = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_WORKGROUP);
+        String steeringgroup = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_STEERING_GROUP);
 
         /*
             Setup permissions
@@ -350,18 +330,30 @@ public class ProjectDepartment extends AbstractWebScript {
             Coordinator - full access
          */
 
-        //Consumers
-        permissionService.setPermission(newSiteRef, steeringgroup, OpenDeskModel.CONSUMER, true);
-        permissionService.setPermission(newSiteRef, monitors, OpenDeskModel.CONSUMER, true);
+        Map<String, String> authorities = new HashMap<>();
+        authorities.put(OpenDeskModel.MANAGER, "");
+        authorities.put(OpenDeskModel.COLLABORATOR, "");
+        authorities.put(OpenDeskModel.CONTRIBUTOR, "");
+        authorities.put(OpenDeskModel.CONSUMER, "");
 
-        //Collaborators
-        permissionService.setPermission(newSiteRef, projectowner, OpenDeskModel.COLLABORATOR, true);
-        permissionService.setPermission(newSiteRef, projectgroup, OpenDeskModel.COLLABORATOR, true);
-        permissionService.setPermission(newSiteRef, projectmanager, PermissionService.COORDINATOR, true);
-        permissionService.setPermission(newSiteRef, workgroup, OpenDeskModel.COLLABORATOR,true);
+        for (Map.Entry<String, String> authority : authorities.entrySet()) {
+            authority.setValue("GROUP_site_" + siteShortName + "_Site" + authority.getKey());
+        }
+
+        authorityService.addAuthority(authorities.get(OpenDeskModel.MANAGER), projectmanager);
+
+        authorityService.addAuthority(authorities.get(OpenDeskModel.COLLABORATOR), projectowner);
+        authorityService.addAuthority(authorities.get(OpenDeskModel.COLLABORATOR), projectgroup);
+        authorityService.addAuthority(authorities.get(OpenDeskModel.COLLABORATOR), workgroup);
+
+        authorityService.addAuthority(authorities.get(OpenDeskModel.CONSUMER), steeringgroup);
+        authorityService.addAuthority(authorities.get(OpenDeskModel.CONSUMER), monitors);
 
         // allow all other projectmanagers to access this project
-
         permissionService.setPermission(newSiteRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, OpenDeskModel.COLLABORATOR, true);
+
+        // Add Owner and Manager to their groups
+        authorityService.addAuthority(projectowner, owner);
+        authorityService.addAuthority(projectmanager, site_manager);
     }
 }

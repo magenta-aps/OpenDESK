@@ -8,15 +8,10 @@ package dk.opendesk.webscripts;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.node.archive.NodeArchiveService;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
-import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,10 +73,12 @@ public class Groups extends AbstractWebScript {
 
     // todo to be extended when the proper implementation of change permission for a single user is implemented
     private String translatePermission(String permission) {
-        switch(permission) {
+        switch(permission.replaceFirst("Site", "")) {
             case OpenDeskModel.COLLABORATOR:
+            case OpenDeskModel.MANAGER:
+            case OpenDeskModel.OWNER:
                 return OpenDeskModel.COLLABORATOR_DANISH;
-            case PermissionService.CONSUMER:
+            case OpenDeskModel.CONSUMER:
                 return OpenDeskModel.CONSUMER_DANISH;
         }
         return null;
@@ -121,17 +118,6 @@ public class Groups extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private long getDBID(String siteShortName) {
-
-        SiteInfo site = siteService.getSite(siteShortName);
-
-        NodeRef nodeRef = site.getNodeRef();
-
-        Long siteID = (Long)nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
-
-        return siteID;
-    }
-
     private void errorMessage(Status status, int code, final String message) {
         status.setCode(code);
         status.setMessage(message);
@@ -146,17 +132,16 @@ public class Groups extends AbstractWebScript {
         JSONArray members = new JSONArray();
         JSONObject json = new JSONObject();
 
-        String group = "GROUP_"  + getDBID(shortName);
+        String group = Utils.getPDGroupName(shortName, groupName);
         Boolean onlyDirectMembers = true;
-        if(!groupName.isEmpty())
-            group += "_" + groupName;
-        else
+        if(groupName.isEmpty())
             onlyDirectMembers = false;
+
         Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, onlyDirectMembers);
 
         Set<AccessPermission> permissions = permissionService.getAllSetPermissions(siteNodeRef);
 
-        String permission = Utils.getGroupUserRole(permissions, group);
+        String permission = Utils.getGroupUserRole(authorityService, permissions, group);
         if(permission != null)
         {
             try {

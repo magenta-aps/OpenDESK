@@ -23,6 +23,7 @@ public interface OpenDeskModel {
     // Roller
     public static String COLLABORATOR = "Collaborator";
     public static String CONSUMER = PermissionService.CONSUMER;
+    public static String CONTRIBUTOR = PermissionService.CONTRIBUTOR;
     public static String MANAGER = "Manager";
     public static String OWNER = "Owner";
     public static String OUTSIDER = "Outsider";

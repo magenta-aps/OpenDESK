@@ -13,6 +13,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.AuthorityType;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
@@ -88,7 +91,6 @@ public class Utils {
 
     public static JSONArray getJSONError (Exception e) {
         Map<String, Serializable> map = new HashMap<>();
-        map.put("status", "failure");
         map.put("error", e.toString());
         return getJSONReturnArray(map);
     }
@@ -120,13 +122,26 @@ public class Utils {
         }
     }
 
-    public static String getGroupUserRole (Set<AccessPermission> permissions, String group) {
+    public static String getGroupUserRole (AuthorityService authorityService, Set<AccessPermission> permissions, String group) {
 
         for (AccessPermission a : permissions) {
-            if (a.getAuthority().equals(group)) {
+            if(a.getAuthority().equals(PermissionService.ALL_AUTHORITIES))
+                continue;
+
+            Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.GROUP, a.getAuthority(), true);
+            if (authorities.contains(group)) {
                 return a.getPermission();
             }
         }
         return null;
+    }
+
+    public static String getPDGroupName (String siteShortName, String groupName)
+    {
+        String siteGroup = "GROUP_site_" + siteShortName;
+        if("".equals(groupName))
+            return siteGroup;
+        else
+            return siteGroup + "_" + groupName;
     }
 }
