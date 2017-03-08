@@ -86,7 +86,7 @@
                                                 Information
                                             </md-button>
                                         </md-menu-item>
-                                        <md-menu-item ng-if="project.current_user_role == vm.managerRole">
+                                        <md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
                                             <md-button ng-click="vm.deleteSiteDialog(project.shortName)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet

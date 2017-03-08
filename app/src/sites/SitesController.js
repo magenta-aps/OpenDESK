@@ -4,7 +4,7 @@
         .module('openDeskApp.sites')
         .controller('SitesController', SitesController);
 
-        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService) {
+        function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService, sessionService) {
 
         
 			var vm = this;
@@ -14,6 +14,7 @@
 			vm.organizationalCenters = [];
 			vm.managerRole = 'Manager';
 			vm.memberonly = true;
+			vm.isAdmin = sessionService.isAdmin();
             
             vm.infoSiteDialog = infoSiteDialog;
 
