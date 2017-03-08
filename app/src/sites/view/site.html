@@ -273,7 +273,7 @@
                                 <dt>Beskrivelse</dt>
                                 <dd>{{ vm.project.description }}</dd>
                             </dl>
-                            <md-button ng-click="vm.editSiteDialog($event)" class="md-icon-button md-raised">
+                            <md-button ng-if="vm.isManager" ng-click="vm.editSiteDialog($event)" class="md-icon-button md-raised">
                                 <i class="material-icons">edit</i>
                             </md-button>
                         </div>
