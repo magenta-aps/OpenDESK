@@ -345,6 +345,6 @@
         </div>
     </div>
 </div>
-<div class="od-projects" ng-if="!vm.isMember">
+<div class="od-projects" ng-if="vm.isMember != null && !vm.isMember && vm.project.visibility == 'PRIVATE'">
     Du har ikke adgang til dette projekt.
-    </div>
+</div>
