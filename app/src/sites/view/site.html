@@ -3,8 +3,8 @@
     <h1 class="od-title">Projekt: {{ vm.project.title }}</h1>
 
     <div layout="row" layout-align="space-between center">
-        <a class="md-button" style="font-size: 14px" href="#!/projekter"><i class="material-icons">arrow_back</i>
-            Tilbage til projekter
+        <a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
+            Tilbage til {{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}
         </a>
 
         <div class="od-search" layout="row">
@@ -254,7 +254,7 @@
 
         
 
-        <div flex-gt-sm="30" ng-if="vm.project.type === 'Project'">
+        <div flex-gt-sm="30" ng-if="vm.project.type === vm.strings.project || vm.project.type === vm.strings.templateProject ">
             
             <div>
                 <h3 ng-click="vm.showProjDetails = !vm.showProjDetails"

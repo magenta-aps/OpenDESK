@@ -46,6 +46,10 @@ angular
         vm.isManager = false;
         vm.isMember = false;
         vm.isAdmin = sessionService.isAdmin();
+
+        vm.strings = {};
+        vm.strings.templateProject = "Template-Project";
+        vm.strings.project = "Project";
         
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
