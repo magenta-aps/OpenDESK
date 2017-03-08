@@ -11,7 +11,7 @@ angular
                             
         $scope.role_mapping = {};
         $scope.role_mapping["SiteManager"] = "Projektleder";
-        $scope.role_mapping["SiteContributor"] = "Kan skrive";
+        $scope.role_mapping["SiteCollaborator"] = "Kan skrive";
         $scope.role_mapping["SiteConsumer"] = "Kan læse";
 
         $scope.role_translation = {};
@@ -21,7 +21,7 @@ angular
 
         $scope.role_mapping_reverse = {};
         $scope.role_mapping_reverse["1"] = "SiteManager";
-        $scope.role_mapping_reverse["2"] = "SiteContributor";
+        $scope.role_mapping_reverse["2"] = "SiteCollaborator";
         $scope.role_mapping_reverse["3"] = "SiteConsumer";
         
         $scope.contents = [];
