@@ -341,6 +341,15 @@ public class ProjectDepartment extends AbstractWebScript {
         String steeringgroup = authorityService.createAuthority(AuthorityType.GROUP,  id + "_" + OpenDeskModel.PD_GROUP_STEERING_GROUP);
         authorityService.addAuthority(parentGroup, steeringgroup);
 
+        /*
+            Setup permissions
+            Consumer - can read content
+            Contributor - can create and upload content
+            Editor - can read and update content
+            Collaborator - can do everything except moving and deleting other users content
+            Coordinator - full access
+         */
+
         //Consumers
         permissionService.setPermission(newSiteRef, steeringgroup, OpenDeskModel.CONSUMER, true);
         permissionService.setPermission(newSiteRef, monitors, OpenDeskModel.CONSUMER, true);
@@ -348,7 +357,7 @@ public class ProjectDepartment extends AbstractWebScript {
         //Collaborators
         permissionService.setPermission(newSiteRef, projectowner, OpenDeskModel.COLLABORATOR, true);
         permissionService.setPermission(newSiteRef, projectgroup, OpenDeskModel.COLLABORATOR, true);
-        permissionService.setPermission(newSiteRef, projectmanager, OpenDeskModel.COLLABORATOR, true);
+        permissionService.setPermission(newSiteRef, projectmanager, PermissionService.COORDINATOR, true);
         permissionService.setPermission(newSiteRef, workgroup, OpenDeskModel.COLLABORATOR,true);
 
         // allow all other projectmanagers to access this project
