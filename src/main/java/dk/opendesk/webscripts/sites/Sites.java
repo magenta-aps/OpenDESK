@@ -253,7 +253,7 @@ public class Sites extends AbstractWebScript {
                 {
                     if (CheckIfSiteIsTemplate(siteInfo))
                         continue;
-                    JSONObject json = ConvertSiteInfoToJSON(siteInfo);
+                    JSONObject json = convertSiteInfoToJSON(siteInfo);
                     result.add(json);
                 }
             } catch (JSONException e) {
@@ -311,7 +311,7 @@ public class Sites extends AbstractWebScript {
         for (SiteInfo siteInfo : currentuser_sites) {
             if (CheckIfSiteIsTemplate(siteInfo))
                 continue;
-            JSONObject json = ConvertSiteInfoToJSON(siteInfo);
+            JSONObject json = convertSiteInfoToJSON(siteInfo);
             result.add(json);
         }
 
@@ -723,7 +723,7 @@ public class Sites extends AbstractWebScript {
     }
 
 
-    private JSONObject ConvertSiteInfoToJSON(SiteInfo s)
+    private JSONObject convertSiteInfoToJSON(SiteInfo s)
     {
         try {
             JSONObject json = new JSONObject();
@@ -790,12 +790,12 @@ public class Sites extends AbstractWebScript {
             }
 
             if(!manager.isEmpty()) {
-                JSONObject managerObj = GetSpecialUser(manager);
+                JSONObject managerObj = getSpecialUser(manager);
                 json.put("manager", managerObj);
             }
 
             if(!owner.isEmpty()) {
-                JSONObject ownerObj = GetSpecialUser(owner);
+                JSONObject ownerObj = getSpecialUser(owner);
                 json.put("owner", ownerObj);
             }
 
@@ -807,7 +807,7 @@ public class Sites extends AbstractWebScript {
         return null;
     }
 
-    private JSONObject GetSpecialUser(String userName) throws JSONException {
+    private JSONObject getSpecialUser(String userName) throws JSONException {
 
         NodeRef cn = this.personService.getPerson(userName);
 
@@ -824,7 +824,7 @@ public class Sites extends AbstractWebScript {
 
         SiteInfo siteInfo = siteService.getSite(shortName);
         JSONArray json = new JSONArray();
-        json.add(ConvertSiteInfoToJSON(siteInfo));
+        json.add(convertSiteInfoToJSON(siteInfo));
         return json;
     }
 
@@ -843,7 +843,7 @@ public class Sites extends AbstractWebScript {
             System.out.println(siteNodeRef);
             SiteInfo siteInfo = siteService.getSite(siteNodeRef);
 
-            JSONObject json = ConvertSiteInfoToJSON(siteInfo);
+            JSONObject json = convertSiteInfoToJSON(siteInfo);
             result.add(json);
         }
 
