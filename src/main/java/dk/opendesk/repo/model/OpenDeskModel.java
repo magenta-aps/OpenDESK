@@ -126,6 +126,7 @@ public interface OpenDeskModel {
 
     String project = "Project";
     String pd_project = "PD-Project";
+    String template_project = "Template-Project";
 
 
 

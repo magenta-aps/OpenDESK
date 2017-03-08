@@ -776,7 +776,10 @@ public class Sites extends AbstractWebScript {
             else {
                 json.put("title", s.getTitle());
                 json.put("description", s.getDescription());
-                json.put("type", OpenDeskModel.project);
+                if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES))
+                    json.put("type", OpenDeskModel.template_project);
+                else
+                    json.put("type", OpenDeskModel.project);
                 json.put("state", "");
                 json.put("center_id", "");
                 json.put("sbsys", "");
