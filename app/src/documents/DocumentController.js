@@ -11,11 +11,16 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     vm.paths = [];
 	vm.title = [];
 
-	vm.showArchived = $location.search().archived !=  undefined ? $location.search().archived : false;
+	vm.showArchived = false;
 
+	if ($location.search().archived !=  undefined  && $location.search().archived == "true") {
+		vm.showArchived = true;
+	}
+	
 	var selectedDocumentNode = $stateParams.doc != undefined ? selectedDocumentNode = $stateParams.doc : $stateParams.nodeRef.split('/')[3]; 
 	var parentDocumentNode = $location.search().parent !=  undefined ? $location.search().parent : selectedDocumentNode;
-	var docHasParent = $location.search().parent !=  undefined ? $location.search().parent : false;
+	var docHasParent = $location.search().parent !=  undefined ? true : false;
+	var firstDocumentNode = "";
     
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
@@ -238,7 +243,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	function confirmLoolEditDocDialog(backToDocPreview) {
 		var confirm = $mdDialog.confirm()
 			.title('Vil du redigere dette dokument?')
-			.htmlContent('<i class="material-icons">info_outline</i><br>Du er nu i gang med at redigere et dokument fra historikken.<br>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.<br>')
+			.htmlContent('<i class="material-icons">info_outline</i><p>Du er nu i gang med at redigere et dokument fra historikken.</p><p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
 			.ariaLabel('Fjern medlem')
 			.targetEvent(event)
 			.ok('OK')

@@ -51,15 +51,15 @@
         </div>
 
         <div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
-			<h4 ng-click="showHistoryList = !showHistoryList"
+			<h4 ng-click="vm.showArchived = !vm.showArchived"
 				class="pd-group-toggle"
-				ng-class="showHistoryList ? 'open' : 'closed'"
+				ng-class="vm.showArchived ? 'open' : 'closed'"
 				layout="row">
 				<i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">Historik</span>
 				<span flex></span>
 				<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 			</h4>
-			<ul ng-show="vm.showArchived ? !showHistoryList : showHistoryList">
+			<ul ng-show="vm.showArchived">
 				<p class="transition pHeader">
 					<span style="width: 164px;">Senest ændret</span>
 					<span>Senest ændret af&nbsp;</span>
