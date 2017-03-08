@@ -242,7 +242,6 @@ public class Sites extends AbstractWebScript {
 
         //TODO : carefully choose the number of sites to return
         List<SiteInfo> allSites = siteService.findSites(q, 2000);
-        List<SiteInfo> sites = new ArrayList<>();
 
         for (SiteInfo siteInfo : allSites) {
             String siteShortName = siteInfo.getShortName();
@@ -251,22 +250,15 @@ public class Sites extends AbstractWebScript {
             try {
                 String role = Utils.getJSONObject(jsonObject, "role");
                 if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role))
-                    sites.add(siteInfo);
+                {
+                    if (CheckIfSiteIsTemplate(siteInfo))
+                        continue;
+                    JSONObject json = ConvertSiteInfoToJSON(siteInfo);
+                    result.add(json);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-
-        // need to reverse the order of sites as they appear in wrong sort order
-        Collections.sort(sites, new CustomComparator());
-
-        Iterator i = sites.iterator();
-
-        while (i.hasNext()) {
-            SiteInfo s = (SiteInfo) i.next();
-
-            JSONObject json = ConvertSiteInfoToJSON(s);
-            result.add(json);
         }
 
         return result;
@@ -316,21 +308,20 @@ public class Sites extends AbstractWebScript {
             }
         }
 
-        // need to reverse the order of sites as they appear in wrong sort order
-        Collections.sort(currentuser_sites, new CustomComparator());
-
-        Iterator i = currentuser_sites.iterator();
-
-        while (i.hasNext()) {
-            SiteInfo s = (SiteInfo)i.next();
-
-            if (currentuser_sites.contains(s)) {
-                JSONObject json = ConvertSiteInfoToJSON(s);
-                result.add(json);
-            }
+        for (SiteInfo siteInfo : currentuser_sites) {
+            if (CheckIfSiteIsTemplate(siteInfo))
+                continue;
+            JSONObject json = ConvertSiteInfoToJSON(siteInfo);
+            result.add(json);
         }
 
         return result;
+    }
+
+    private boolean CheckIfSiteIsTemplate(SiteInfo siteInfo)
+    {
+        NodeRef n = siteInfo.getNodeRef();
+        return nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES);
     }
 
     public JSONArray removeTestSites() {
