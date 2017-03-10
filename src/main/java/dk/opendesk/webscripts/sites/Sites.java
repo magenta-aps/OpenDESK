@@ -331,7 +331,7 @@ public class Sites extends AbstractWebScript {
         authorities.put(OpenDeskModel.CONSUMER, false);
 
         for(Map.Entry<String, Boolean> authority : authorities.entrySet()) {
-            String group = Utils.getPDGroupName(siteShortName, "_Site" + authority.getKey());
+            String group = Utils.getPDGroupName(siteShortName, "Site" + authority.getKey());
             Set<String> tempAuthorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
             String userName = authenticationService.getCurrentUserName();
             if(tempAuthorities.contains(userName))
@@ -658,15 +658,22 @@ public class Sites extends AbstractWebScript {
                 manager = authorities.iterator().next();
             }
 
+            //Get Manager
             if(!manager.isEmpty()) {
                 JSONObject managerObj = getSpecialUser(manager);
                 json.put("manager", managerObj);
             }
 
+            //Get Owner
             if(!owner.isEmpty()) {
                 JSONObject ownerObj = getSpecialUser(owner);
                 json.put("owner", ownerObj);
             }
+
+            //Get Creator
+            String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
+            JSONObject creatorObj = getSpecialUser(creator);
+            json.put("creator", creatorObj);
 
             return json;
 
