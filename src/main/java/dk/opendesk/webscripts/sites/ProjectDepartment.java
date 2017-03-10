@@ -28,10 +28,7 @@ import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.AuthorityService;
-import org.alfresco.service.cmr.security.AuthorityType;
-import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 
@@ -74,6 +71,12 @@ public class ProjectDepartment extends AbstractWebScript {
     FileFolderService fileFolderService;
 
     private CopyService copyService;
+
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    AuthenticationService authenticationService;
 
 
     public class CustomComparator implements Comparator<SiteInfo> {
@@ -211,7 +214,8 @@ public class ProjectDepartment extends AbstractWebScript {
             }
             while(newSiteRef == null);
 
-            createGroupAddMembers(site_short_name_with_version, site_owner, site_manager);
+            String creator = authenticationService.getCurrentUserName();
+            createGroupAddMembers(site_short_name_with_version, site_owner, site_manager, creator);
 
             if (!"".equals(template)) {
                 this.executeTemplate(newSiteRef, template);
@@ -311,7 +315,7 @@ public class ProjectDepartment extends AbstractWebScript {
         authorityService.addAuthority(group, userName);
     }
 
-    private void createGroupAddMembers(String siteShortName, String owner, String site_manager) {
+    private void createGroupAddMembers(String siteShortName, String owner, String site_manager, String creator) {
 
         String prefix = "site_" + siteShortName + "_";
         String projectowner = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTOWNER);
@@ -355,5 +359,8 @@ public class ProjectDepartment extends AbstractWebScript {
         // Add Owner and Manager to their groups
         authorityService.addAuthority(projectowner, owner);
         authorityService.addAuthority(projectmanager, site_manager);
+
+        //Remove Project creator from SiteManager-group
+        authorityService.removeAuthority(authorities.get(OpenDeskModel.MANAGER), creator);
     }
 }
