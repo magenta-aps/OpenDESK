@@ -12,6 +12,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 	vm.title = [];
 	vm.fileName = $stateParams.fileName != undefined ? $stateParams.fileName : "";
 	vm.loolDocUpdated = $location.search().loolDocUpdated;
+    vm.canEdit = false;
 
 	var parentDocumentNode = "";
 	var firstDocumentNode = "";
@@ -31,6 +32,10 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     documentService.getHistory(parentDocumentNode).then (function (val){
         $scope.history = val;
 		firstDocumentNode = $scope.history[0].nodeRef;
+    });
+
+    documentService.getEditPermission(parentDocumentNode).then (function (val){
+        vm.canEdit = val;
     });
 
     

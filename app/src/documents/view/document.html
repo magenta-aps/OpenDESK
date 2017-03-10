@@ -38,7 +38,7 @@
 			{{ vm.doc.fileName }}
 		</h1>
 	</div>
-	<div flex="45" style="position: relative; top: 10px;">
+	<div ng-show="vm.canEdit" flex="45" style="position: relative; top: 10px;">
 		<md-button ng-click="vm.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName)" class="md-primary md-raised">
 			Redigér dokument
 		</md-button>
