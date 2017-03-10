@@ -62,6 +62,13 @@
 		<property name="personService" ref="PersonService"/>
 	</bean>
 
+	<bean id="webscript.documents.permissions.get"
+		  class="dk.opendesk.webscripts.documents.Permissions"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="permissionService" ref="PermissionService"/>
+	</bean>
+
 	<bean id="webscript.documents.previewhelper.get"
 		  class="dk.opendesk.webscripts.documents.PreviewHelper"
 		  parent="webscript">
