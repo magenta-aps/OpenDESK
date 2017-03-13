@@ -39,7 +39,7 @@
 		</h1>
 	</div>
 	<div ng-show="vm.canEdit" flex="45" style="position: relative; top: 10px;">
-		<md-button ng-click="vm.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName)" class="md-primary md-raised">
+		<md-button ng-click="vm.goToLOEditPage(true)" class="md-primary md-raised">
 			Redigér dokument
 		</md-button>
 	</div>
@@ -51,15 +51,15 @@
         </div>
 
         <div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
-			<h4 ng-click="showHistoryList = !showHistoryList"
+			<h4 ng-click="vm.showArchived = !vm.showArchived"
 				class="pd-group-toggle"
-				ng-class="showHistoryList ? 'open' : 'closed'"
+				ng-class="vm.showArchived ? 'open' : 'closed'"
 				layout="row">
 				<i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">Historik</span>
 				<span flex></span>
 				<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 			</h4>
-			<ul ng-show="vm.showArchived || vm.loolDocUpdated ? !showHistoryList : showHistoryList">
+			<ul ng-show="vm.showArchived">
 				<p class="transition pHeader">
 					<span style="width: 164px;">Senest ændret</span>
 					<span>Senest ændret af&nbsp;</span>
@@ -67,7 +67,7 @@
 				</p>
 				<p class="transition pContent">
 					<span id="{{h.nodeRef}}" ng-repeat="h in history">
-						<a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">
+						<a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
 							<span style="width: 138px;">{{ h.created | openeDate }}</span>{{ h.modifier }}
 						</a>
 					</span>
@@ -115,7 +115,7 @@
 						</div>
 						
 						Du kan 
-                        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage(vm.doc.nodeRef, vm.doc.fileName)">
+						<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage(false)">
                             Redigere
                         </md-button>
 						dokumentet, inden du godkender eller afviser.
