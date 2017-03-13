@@ -93,12 +93,17 @@ function authService($http, $window, $state, sessionService, userService) {
     }
 
     function ssoLogin() {
-        return $http.get("/touch").then(function (response) {
-            if (response.status == 401 || authFailedSafari(response)) {
-                return response;
-            }
-            sessionService.setUserInfo({});
-            return revalidateUser();
+        var userInfo = {};
+        return $http.get("alfresco/s/ssologin").then(function (response) {
+            var username = response.data;
+            return $http.get("/api/people/" + username).then(function (response) {
+                userInfo.user = response.data;
+                sessionService.setUserInfo(userInfo);
+                return addUserToSession(username);
+            }, function (error) {
+                console.log(error);
+                return error;
+            });
         });
     }
 
