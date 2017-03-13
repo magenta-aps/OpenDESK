@@ -258,11 +258,11 @@
             
             <div>
                 <h3 ng-click="vm.showProjDetails = !vm.showProjDetails"
-                    class="pd-group-toggle"
+                    class="pd-group-toggle white"
                     ng-class="vm.showProjDetails ? 'open' : 'closed'"
                     layout="row"
                     style="margin: 8px;">
-                    <span>{{ vm.project.title }} <span class="muted">detaljer</span></span>
+                    <span><i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>Detaljer</span>
                     <span flex></span>
                     <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
                 </h3>
@@ -271,20 +271,17 @@
                         <div layout="row" layout-align="space-between">
                             <dl style="margin-bottom: 0;">
                                 <dt>Beskrivelse</dt>
-                                <dd>{{ vm.project.description }}</dd>
+                                <dd ng-if="vm.hasDescription">{{ vm.project.description }}</dd>
+								<dd ng-if="!vm.hasDescription"><i>Ingen beskrivelse</i></dd>
                             </dl>
                             <md-button ng-click="vm.editSiteDialog($event)" class="md-icon-button md-raised">
                                 <i class="material-icons">edit</i>
                             </md-button>
                         </div>
                         <div layout="row">
-                            <dl flex="50">
+                            <dl>
                                 <dt>Oprettet af</dt>
                                 <dd>{{ vm.project.creator.fullName }} <br><span class="muted">{{ vm.project.created | date }}</span></dd>
-                            </dl>
-                            <dl flex="50">
-                                <dt>Filnavn</dt>
-                                <dd>{{ vm.project.shortName }}</dd>
                             </dl>
                         </div>
                     </md-card-content>

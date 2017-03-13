@@ -49,6 +49,7 @@ angular
         vm.currentUser = authService.getUserInfo().user;
 		vm.uploadedToSbsys = false;
 		vm.showProgress = false;
+		vm.hasDescription = false;
         
         vm.editSiteDialog = editSiteDialog;
         vm.goToLOEditPage = goToLOEditPage;
@@ -60,6 +61,7 @@ angular
                 function (result) {
                     
                     vm.project = result;
+					vm.hasDescription = vm.project.description.trim() === "" ? false : true;
                     console.log('Project information');
                     console.log(vm.project);
                     
@@ -766,6 +768,7 @@ angular
                     vm.project.title = result.title;
                     vm.project.description = result.description;
                     $mdDialog.hide();
+					loadSiteData();
                 }
             );
         }
