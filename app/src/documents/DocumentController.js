@@ -17,7 +17,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 		vm.showArchived = true;
 	}
 	
-	var selectedDocumentNode = $stateParams.doc != undefined ? selectedDocumentNode = $stateParams.doc : $stateParams.nodeRef.split('/')[3]; 
+	var selectedDocumentNode = $stateParams.doc != undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3]; 
 	var parentDocumentNode = $location.search().parent !=  undefined ? $location.search().parent : selectedDocumentNode;
 	var docHasParent = $location.search().parent !=  undefined ? true : false;
 	var firstDocumentNode = "";
