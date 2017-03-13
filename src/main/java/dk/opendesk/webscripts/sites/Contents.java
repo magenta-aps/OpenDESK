@@ -65,23 +65,18 @@ public class Contents extends AbstractWebScript {
 
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-        NodeRef nodeRef = null;
-
         String nodeId = params.get("node");
 
+        NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
 
-            nodeRef = new NodeRef("workspace://SpacesStore/" +  nodeId);
+        JSONArray result = this.getChildNodes(nodeRef);
+        try {
 
-            JSONArray result = this.getChildNodes(nodeRef);
-            try {
-
-                webScriptResponse.setContentEncoding("UTF-8");
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
+            webScriptResponse.setContentEncoding("UTF-8");
+            result.writeJSONString(webScriptResponse.getWriter());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -90,9 +85,6 @@ public class Contents extends AbstractWebScript {
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
 
         JSONArray result = new JSONArray();
-        JSONArray children = new JSONArray();
-
-
 
         Iterator i = childAssociationRefs.iterator();
 
@@ -106,11 +98,9 @@ public class Contents extends AbstractWebScript {
                 try {
                     json.put("name", nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_NAME));
 
-
                     QName qname = nodeService.getType(childAssociationRef.getChildRef());
 
                     String type;
-
                     if (qname.equals(ContentModel.TYPE_FOLDER)) {
                         type = "cmis:folder";
                     } else if (qname.equals(OpenDeskModel.TYPE_LINK)) {
@@ -121,7 +111,7 @@ public class Contents extends AbstractWebScript {
 
                     json.put("contentType", type);
 
-                    if (type != "cmis:link") {
+                    if (!"cmis:link".equals(type)) {
                         json.put("nodeRef", childAssociationRef.getChildRef());
 
                         ChildAssociationRef parent = nodeService.getPrimaryParent(childAssociationRef.getChildRef());
@@ -150,13 +140,14 @@ public class Contents extends AbstractWebScript {
                         }
                     }
                     else {
-                        String link = (String)nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK);
-                        NodeRef link_node = (NodeRef)nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF);
-
+                        String link = (String) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK);
+                        NodeRef link_node = (NodeRef) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF);
 
                         json.put("nodeid", childAssociationRef.getChildRef().getId());
                         json.put("destination_link", link);
-                        json.put("destination_nodeid", link_node.getId());
+
+                        if (link_node != null)
+                            json.put("destination_nodeid", link_node.getId());
                     }
 
                     result.add(json);
