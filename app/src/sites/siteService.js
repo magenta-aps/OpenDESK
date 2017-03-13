@@ -170,7 +170,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         deleteSite: function (siteName) {
-            return $http.delete('/api/sites/' + siteName).then(function (response) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "deleteSite",
+                PARAM_SITE_SHORT_NAME : siteName
+            }).then(function (response) {
                 return response.data;
             });
         },
