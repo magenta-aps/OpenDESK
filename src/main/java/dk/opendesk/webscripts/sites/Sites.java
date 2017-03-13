@@ -631,7 +631,10 @@ public class Sites extends AbstractWebScript {
                 json.put("description", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_DESCRIPTION));
                 json.put("type", OpenDeskModel.pd_project);
                 json.put("state", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_STATE));
-                json.put("center_id", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_CENTERID));
+                String centerID = (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_CENTERID);
+                json.put("center_id", centerID);
+                String centerName = authorityService.getAuthorityDisplayName("GROUP_" + centerID);
+                json.put("center_name", centerName);
                 json.put("sbsys", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_SBSYS));
 
                 String projectManagerGroup = Utils.getPDGroupName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
@@ -651,6 +654,7 @@ public class Sites extends AbstractWebScript {
                     json.put("type", OpenDeskModel.project);
                 json.put("state", "");
                 json.put("center_id", "");
+                json.put("center_name", "");
                 json.put("sbsys", "");
 
                 String SiteManager = Utils.getPDGroupName(siteShortName, "SiteManager");
