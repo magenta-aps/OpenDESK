@@ -21,12 +21,18 @@ angular
 		pd.updateRoleOnSiteMember = updateRoleOnSiteMember;
         pd.doPDF = doPDF;
         pd.editPdSiteGroups = editPdSiteGroups;
+		pd.stateStr = "";
+		pd.visibilityStr = "";
+		pd.hasDescription = false;
 
         function loadSiteData() {
             if ($stateParams.projekt) {
                 siteService.loadSiteData($stateParams.projekt).then(
                     function (response) {
                         pd.site = response;
+						pd.stateStr = pd.site.state === "ACTIVE" ? "Igang" : "Afsluttet";
+						pd.visibilityStr = pd.site.visibility === "PUBLIC" ? "Offentlig" : "Privat";
+						pd.hasDescription = pd.site.description.trim() === "" ? false : true;
                         getProjectMembers();
                     }
                 );

@@ -1,10 +1,10 @@
 <div ng-controller="PdSiteController as pd">
     <h3 ng-click="pd.showProjDetails = !pd.showProjDetails"
-        class="pd-group-toggle"
+        class="pd-group-toggle white"
         ng-class="pd.showProjDetails ? 'open' : 'closed'"
         layout="row"
         style="margin: 8px;">
-        <span>{{ pd.site.title }} <span class="muted">detaljer</span></span>
+		<span><i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>Detaljer</span>
         <span flex></span>
         <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
     </h3>
@@ -13,7 +13,8 @@
             <div layout="row" layout-align="space-between">
                 <dl style="margin-bottom: 0;">
                     <dt>Beskrivelse</dt>
-                    <dd>{{ pd.site.description }}</dd>
+                    <dd ng-if="pd.hasDescription">{{ pd.site.description }}</dd>
+					<dd ng-if="!pd.hasDescription"><i>Ingen beskrivelse</i></dd>
                 </dl>
                 <md-button ng-if="vm.isManager" class="md-raised md-icon-button"
                            ng-click="pd.editPdSite($event)" aria-label="Redigér site">
@@ -21,21 +22,25 @@
                 </md-button>
             </div>
             <div layout="row">
-                <dl flex="50">
+                <dl flex="55">
                     <dt>Oprettet af</dt>
                     <dd>{{ pd.site.creator.fullName }} <br><span class="muted">{{ pd.site.created | date }}</span></dd>
-                    <dt>Filnavn</dt>
-                    <dd>{{ pd.site.shortName }}</dd>
-                    <dt>Status</dt>
-                    <dd>{{ pd.site.state }}</dd>
+                    <!--dt>Filnavn</dt>
+                    <dd>{{ pd.site.shortName }}</dd-->                    
+					<dt>Org. enhed</dt>
+                    <dd>{{ pd.site.center_name }}</dd>
                 </dl>
-                <dl flex="50">
-                    <dt>ESDH ID</dt>
+                <dl flex="30">
+					<dt>Synlighed</dt>
+                    <dd>{{ pd.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>    
+					<dt>ESDH sagsnr.</dt>
                     <dd>{{ pd.site.sbsys }}</dd>
-                    <dt>Center ID</dt>
-                    <dd>{{ pd.site.center_id }}</dd>
-                    <dt>Synlighed</dt>
-                    <dd>{{ pd.site.visibility }}</dd>
+                    
+                </dl>
+				<dl flex="15">
+					<dt>Status</dt>
+                    <dd>{{ pd.stateStr }}</dd>
+                    
                 </dl>
             </div>
         

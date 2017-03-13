@@ -37,6 +37,7 @@
                             </md-input-container>
 
                             <md-autocomplete
+									required
                                     md-selected-item="newSite.projectOwner"
                                     md-search-text="prjownsrchtxt"
                                     md-items="own in searchProjectOwners(prjownsrchtxt)"
@@ -73,6 +74,7 @@
                             </md-input-container>
 
                             <md-autocomplete
+									required
                                     md-selected-item="newSite.manager"
                                     md-search-text="searchTextManager"
                                     md-items="man in searchPeople(searchTextManager)"
