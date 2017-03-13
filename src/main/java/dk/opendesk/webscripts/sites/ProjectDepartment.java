@@ -290,16 +290,11 @@ public class ProjectDepartment extends AbstractWebScript {
 
         // add the projectdepartment aspect
         Map<QName, Serializable> aspectProps = new HashMap<>();
-        if (!name.isEmpty())
-            aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
-        if (!description.isEmpty())
-            aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
-        if (!sbsys.isEmpty())
-            aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
-        if(!state.isEmpty())
-            aspectProps.put(OpenDeskModel.PROP_PD_STATE, state);
-        if (!center_id.isEmpty())
-            aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
+        aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
+        aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
+        aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
+        aspectProps.put(OpenDeskModel.PROP_PD_STATE, state);
+        aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
 
         nodeService.addAspect(site.getNodeRef(), OpenDeskModel.ASPECT_PD, aspectProps);
     }
