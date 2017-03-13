@@ -103,7 +103,7 @@ public class Contents extends AbstractWebScript {
                     String type;
                     if (qname.equals(ContentModel.TYPE_FOLDER)) {
                         type = "cmis:folder";
-                    } else if (qname.equals(OpenDeskModel.TYPE_LINK)) {
+                    } else if (qname.equals(OpenDeskModel.PROP_LINK)) {
                         type = "cmis:link";
                     } else {
                         type = "cmis:document";
@@ -140,8 +140,8 @@ public class Contents extends AbstractWebScript {
                         }
                     }
                     else {
-                        String link = (String) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK);
-                        NodeRef link_node = (NodeRef) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF);
+                        String link = (String) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET);
+                        NodeRef link_node = (NodeRef) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF);
 
                         json.put("nodeid", childAssociationRef.getChildRef().getId());
                         json.put("destination_link", link);

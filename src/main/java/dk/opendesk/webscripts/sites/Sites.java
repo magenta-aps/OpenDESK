@@ -23,6 +23,7 @@ import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.rendition.RenditionService;
 import org.alfresco.service.cmr.repository.*;
@@ -33,6 +34,7 @@ import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.util.ISO9075;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,9 +107,11 @@ public class Sites extends AbstractWebScript {
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
+
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
@@ -140,7 +144,7 @@ public class Sites extends AbstractWebScript {
             String shortName = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
             String templateName = Utils.getJSONObject(json, "PARAM_TEMPLATE_NAME");
 
-            if(method != null) {
+            if (method != null) {
                 switch (method) {
                     case "getSite":
                         result = this.getSiteInfo(shortName);
@@ -204,10 +208,13 @@ public class Sites extends AbstractWebScript {
                     case "createMembersPDF":
                         result = this.createMembersPDF(shortName);
                         break;
+
+                    case "deleteSite":
+                        result = this.deleteSite(siteShortName);
+                        break;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
@@ -227,8 +234,7 @@ public class Sites extends AbstractWebScript {
             JSONObject jsonObject = (JSONObject) JSONresult.get(0);
             try {
                 String role = Utils.getJSONObject(jsonObject, "role");
-                if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role))
-                {
+                if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role)) {
                     JSONObject json = convertSiteInfoToJSON(siteInfo);
                     if (CheckIfSiteIsTemplate(siteInfo))
                         continue;
@@ -258,8 +264,7 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
-    private boolean CheckIfSiteIsTemplate(SiteInfo siteInfo)
-    {
+    private boolean CheckIfSiteIsTemplate(SiteInfo siteInfo) {
         NodeRef n = siteInfo.getNodeRef();
         return nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES);
     }
@@ -275,13 +280,13 @@ public class Sites extends AbstractWebScript {
         Iterator i = l.iterator();
 
         while (i.hasNext()) {
-            String siteName = (String)i.next();
+            String siteName = (String) i.next();
 
             SiteInfo site = siteService.getSite(siteName);
 
-              if (site != null) {
-                  siteService.deleteSite(siteName);
-              }
+            if (site != null) {
+                siteService.deleteSite(siteName);
+            }
         }
         return Utils.getJSONSuccess();
     }
@@ -330,17 +335,16 @@ public class Sites extends AbstractWebScript {
         authorities.put(OpenDeskModel.CONTRIBUTOR, false);
         authorities.put(OpenDeskModel.CONSUMER, false);
 
-        for(Map.Entry<String, Boolean> authority : authorities.entrySet()) {
+        for (Map.Entry<String, Boolean> authority : authorities.entrySet()) {
             String group = Utils.getPDGroupName(siteShortName, "Site" + authority.getKey());
             Set<String> tempAuthorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
             String userName = authenticationService.getCurrentUserName();
-            if(tempAuthorities.contains(userName))
+            if (tempAuthorities.contains(userName))
                 authority.setValue(true);
         }
 
         String role;
-        if(authorities.get(OpenDeskModel.MANAGER))
-        {
+        if (authorities.get(OpenDeskModel.MANAGER)) {
             role = OpenDeskModel.MANAGER;
 
             NodeRef n = siteService.getSite(siteShortName).getNodeRef();
@@ -354,16 +358,11 @@ public class Sites extends AbstractWebScript {
                 if (tempAuthorities.contains(currentUser))
                     role = OpenDeskModel.OWNER;
             }
-        }
-        else if(authorities.get(OpenDeskModel.COLLABORATOR) || authorities.get(OpenDeskModel.CONTRIBUTOR))
-        {
+        } else if (authorities.get(OpenDeskModel.COLLABORATOR) || authorities.get(OpenDeskModel.CONTRIBUTOR)) {
             role = OpenDeskModel.COLLABORATOR;
-        }
-        else if(authorities.get(OpenDeskModel.CONSUMER))
-        {
+        } else if (authorities.get(OpenDeskModel.CONSUMER)) {
             role = OpenDeskModel.CONSUMER;
-        }
-        else
+        } else
             role = OpenDeskModel.OUTSIDER;
 
         return Utils.getJSONReturnPair("role", role);
@@ -384,24 +383,24 @@ public class Sites extends AbstractWebScript {
         // create link for source
         Map<QName, Serializable> linkProperties = new HashMap<QName, Serializable>();
         linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(destination.getNodeRef(), ContentModel.PROP_NAME));
-        linkProperties.put(OpenDeskModel.PROP_LINK, destination.getShortName());
+        linkProperties.put(OpenDeskModel.PROP_LINK_TARGET, destination.getShortName());
 
 
+        ChildAssociationRef source_nodeRef = nodeService.createNode(source_documentLib, ContentModel.ASSOC_CONTAINS,
+                OpenDeskModel.PROP_LINK, OpenDeskModel.PROP_LINK, linkProperties);
 
-        ChildAssociationRef source_nodeRef = nodeService.createNode(source_documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(OpenDeskModel.OD_PREFIX, "link"), OpenDeskModel.TYPE_LINK, linkProperties);
+        // create link for destination
+        linkProperties = new HashMap<QName, Serializable>();
+        linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(source.getNodeRef(), ContentModel.PROP_NAME));
+        linkProperties.put(OpenDeskModel.PROP_LINK_TARGET, source.getShortName());
 
 
-         // create link for destination
-         linkProperties = new HashMap<QName, Serializable>();
-         linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(source.getNodeRef(), ContentModel.PROP_NAME));
-         linkProperties.put(OpenDeskModel.PROP_LINK, source.getShortName());
-
-
-        ChildAssociationRef destination_nodeRef = nodeService.createNode(dest_documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(OpenDeskModel.OD_PREFIX, "link"), OpenDeskModel.TYPE_LINK, linkProperties);
+        ChildAssociationRef destination_nodeRef = nodeService.createNode(dest_documentLib, ContentModel.ASSOC_CONTAINS,
+                OpenDeskModel.PROP_LINK, OpenDeskModel.PROP_LINK, linkProperties);
 
         // for easy deletion of the links, we do a save of the nodeRefs on each side
-        nodeService.setProperty(source_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF, destination_nodeRef.getChildRef());
-        nodeService.setProperty(destination_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_NODEREF, source_nodeRef.getChildRef());
+        nodeService.setProperty(source_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF, destination_nodeRef.getChildRef());
+        nodeService.setProperty(destination_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF, source_nodeRef.getChildRef());
 
         return Utils.getJSONSuccess();
     }
@@ -581,9 +580,8 @@ public class Sites extends AbstractWebScript {
             nodeService.deleteNode(child.getChildRef());
 
             return Utils.getJSONReturnPair("Noderef", pdf.getChildRef().getId());
-        }
-        finally {
-        AuthenticationUtil.popAuthentication();
+        } finally {
+            AuthenticationUtil.popAuthentication();
         }
     }
 
@@ -593,15 +591,13 @@ public class Sites extends AbstractWebScript {
 
         if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
             return Utils.getJSONReturnPair("type", OpenDeskModel.pd_project);
-        }
-        else  {
+        } else {
             return Utils.getJSONReturnPair("type", OpenDeskModel.project);
         }
     }
 
 
-    private JSONObject convertSiteInfoToJSON(SiteInfo s)
-    {
+    private JSONObject convertSiteInfoToJSON(SiteInfo s) {
         try {
             JSONObject json = new JSONObject();
             String siteShortName = s.getShortName();
@@ -644,8 +640,7 @@ public class Sites extends AbstractWebScript {
                 String projectOwnerGroup = Utils.getPDGroupName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
                 authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
                 owner = authorities.iterator().next();
-            }
-            else {
+            } else {
                 json.put("title", s.getTitle());
                 json.put("description", s.getDescription());
                 if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES))
@@ -663,13 +658,13 @@ public class Sites extends AbstractWebScript {
             }
 
             //Get Manager
-            if(!manager.isEmpty()) {
+            if (!manager.isEmpty()) {
                 JSONObject managerObj = getSpecialUser(manager);
                 json.put("manager", managerObj);
             }
 
             //Get Owner
-            if(!owner.isEmpty()) {
+            if (!owner.isEmpty()) {
                 JSONObject ownerObj = getSpecialUser(owner);
                 json.put("owner", ownerObj);
             }
@@ -718,7 +713,7 @@ public class Sites extends AbstractWebScript {
         ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
 
 
-        for (int i = 0; i <= siteSearchResult.length()-1; i++) {
+        for (int i = 0; i <= siteSearchResult.length() - 1; i++) {
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(i);
             System.out.println(siteNodeRef);
             SiteInfo siteInfo = siteService.getSite(siteNodeRef);
@@ -734,13 +729,50 @@ public class Sites extends AbstractWebScript {
 
         SiteInfo s = siteService.getSite(shortName);
 
-
         Map<QName, Serializable> aspectProps = new HashMap<>();
         aspectProps.put(OpenDeskModel.PROP_PROJECTTEMPLATE_NAME, templateName);
 
 
         nodeService.addAspect(s.getNodeRef(), OpenDeskModel.ASPECT_PD_TEMPLATE_SITES, aspectProps);
 
-        return Utils.getJSONReturnPair("result","Aspect added successfully");
+        return Utils.getJSONReturnPair("result", "Aspect added successfully");
     }
+
+    public JSONArray deleteSite(String siteShortName) {
+
+        SiteInfo site = siteService.getSite(siteShortName);
+
+        if (site != null) {
+            // Find all links pointing from this site
+            NodeRef documentLibrary = siteService.getContainer(siteShortName, SiteService.DOCUMENT_LIBRARY);
+
+            Set<QName> childNodeTypeQNames = new HashSet<>(Collections.singletonList(OpenDeskModel.PROP_LINK));
+            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(documentLibrary, childNodeTypeQNames);
+
+            // Delete the counterpart links linking to this site
+            for (ChildAssociationRef assoc : childAssocs)
+            {
+                NodeRef n = assoc.getChildRef();
+                if (n != null)
+                {
+                    String query = "TYPE:\"od:link\" AND @od\\:targetproject_noderef:\"" + n + "\"";
+                    StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+                    ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+                    NodeRef ln = siteSearchResult.getNodeRef(0);
+                    nodeService.deleteNode(ln);
+                }
+            }
+
+            // Delete the site
+            siteService.deleteSite(siteShortName);
+
+            // Delete all groups/authorities of the site
+            String authority = Utils.getPDGroupName(siteShortName, "");
+            authorityService.deleteAuthority(authority, true);
+
+            return Utils.getJSONSuccess();
+        }
+        return Utils.getJSONError(new Exception());
+    }
+
 }

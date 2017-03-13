@@ -54,10 +54,7 @@ public interface OpenDeskModel {
      */
 
     public static QName PROP_NOTIFICATION = QName.createQName(OD_URI, "notification");
-
-    public static QName TYPE_LINK = QName.createQName(OD_URI, "link");
-
-
+    public static QName PROP_LINK = QName.createQName(OD_URI, "link");
 
     /**
      * aspects
@@ -96,8 +93,8 @@ public interface OpenDeskModel {
     /**
      * projectlink properties
      */
-    public static QName PROP_LINK = QName.createQName(OD_URI, "targetproject");
-    public static QName PROP_LINK_NODEREF = QName.createQName(OD_URI, "targetproject_noderef");
+    public static QName PROP_LINK_TARGET = QName.createQName(OD_URI, "targetproject");
+    public static QName PROP_LINK_TARGET_NODEREF = QName.createQName(OD_URI, "targetproject_noderef");
 
     /**
      * Association Names
@@ -128,13 +125,5 @@ public interface OpenDeskModel {
     String project = "Project";
     String pd_project = "PD-Project";
     String template_project = "Template-Project";
-
-
-
-
-
-
-
-
 
 }
