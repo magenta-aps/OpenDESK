@@ -104,36 +104,10 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
 
     vm.createTemplate = function(name, description) {
 
-        console.log("inside create");
-        console.log(name);
-        console.log(description);
-
-
-       siteService.createSite(name, name, description).then (function(response) {
-
-           var date = new Date();
-
-           var creator = {"fullName" : "Administrator"};
-
-           var obj = {"title" : response.title,
-               "created" : date,
-               "creator" : creator}
-
-           $scope.templateSites.push(obj)
-
-
-
-
-           siteService.makeSiteATemplate(name, name).then (function (response) {
+           siteService.createTemplate(name, name, description).then (function (response) {
+               $scope.templateSites.push(response[0]);
                $mdDialog.hide();
-
-           })
-
-
-       });
-
-
-
+           });
     };
 
     vm.newTemplate = function(event) {
