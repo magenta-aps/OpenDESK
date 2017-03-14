@@ -20,19 +20,22 @@
             <!--</div>-->
         <!--</md-dialog-content>-->
 
-
         <md-autocomplete
                 autofocus
                 required
                 md-input-name="addMemberAutocomplete"
                 md-selected-item="project"
                 md-search-text="searchMemText"
-                md-items="site in vm.sitesPerUser"
-                md-item-text="site.shortName"
-                md-floating-label="Vælg site">
+                md-items="site in searchProjects(searchMemText)"
+                md-item-text="site.title"
+                md-min-length="1"
+                md-floating-label="Vælg projekt">
             <md-item-template>
-                <span md-highlight-text="searchMemText">{{ site.shortName}}</span>
+                <span md-highlight-text="searchMemText">{{ site.title}}</span>
             </md-item-template>
+            <md-not-found>
+                Ingen projekter matcher "{{ prjownsrchtxt }}".
+            </md-not-found>
             <div ng-messages="autocompleteForm.autocomplete.$error">
                 <div ng-message="required">Dette felt skal udfyldes</div>
             </div>

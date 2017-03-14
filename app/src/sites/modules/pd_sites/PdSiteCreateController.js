@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteCreateController', PdSiteCreateController);
     
-    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
+    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, $mdToast) {
         
         var pdc = this;
         
@@ -91,8 +91,7 @@ angular
             
             
             function searchProjectOwners(query) {
-                var hitList = $filter('filter')(availProjectOwners, { fullName: query });
-                return hitList;
+                return filterService.search(availProjectOwners, { fullName: query });
             }
             
             

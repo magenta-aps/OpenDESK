@@ -6,7 +6,7 @@ angular
 
     function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
                             alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-                            searchService, $state, userService, groupService, preferenceService, sessionService) {
+                            searchService, $state, userService, groupService, preferenceService, sessionService, filterService) {
 
                             
         $scope.role_mapping = {};
@@ -36,6 +36,7 @@ angular
 
         vm.allMembers = [];
         vm.project = {};
+        vm.sitesPerUser = [];
         vm.path = $stateParams.path;
         vm.userRole = 'Consumer';
         vm.editRole = 'Collaborator';
@@ -59,7 +60,8 @@ angular
         vm.editSiteDialog = editSiteDialog;
         vm.goToLOEditPage = goToLOEditPage;
         vm.updateSiteName = updateSiteName;
-        
+
+        $scope.searchProjects = searchProjects;
         
         function loadSiteData() {
             siteService.loadSiteData($stateParams.projekt).then(
@@ -99,12 +101,18 @@ angular
         
         function getSitesPerUser() {
             return siteService.getSitesPerUser().then(function(response) {
-                    vm.sitesPerUser = response;
-                    return response;
+                for(var i in response) {
+                    if(response[i].shortName !== vm.project.shortName)
+                        vm.sitesPerUser.push(response[i]);
+                }
+                return vm.sitesPerUser;
                 }
             );
         }
-        
+
+        function searchProjects(query) {
+            return filterService.search(vm.sitesPerUser, { title: query });
+        }
         
         function getSiteUserRole() {
             if(vm.isAdmin)
