@@ -15,7 +15,7 @@
                     </thead>
 
                     <tbody>
-                    <tr ng-repeat="project in templateSites">
+                    <tr ng-repeat="project in templateSites | orderObjectBy:orderByAttribute:reverseOrder">
 
                         <td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
                             <i class="material-icons">content_paste</i>
