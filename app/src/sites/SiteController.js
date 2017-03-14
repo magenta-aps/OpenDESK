@@ -36,7 +36,7 @@ angular
 
         vm.allMembers = [];
         vm.project = {};
-        vm.sitesPerUser = [];
+        vm.userManagedProjects = [];
         vm.path = $stateParams.path;
         vm.userRole = 'Consumer';
         vm.editRole = 'Collaborator';
@@ -71,8 +71,8 @@ angular
 					vm.hasDescription = vm.project.description.trim() === "" ? false : true;
                     console.log('Project information');
                     console.log(vm.project);
-                    
-                    getSitesPerUser();
+
+                    getUserManagedProjects();
                     getSiteUserRole();
                     loadMembers();
                     loadSiteRoles();
@@ -99,19 +99,19 @@ angular
         //siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
 		//siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
         
-        function getSitesPerUser() {
+        function getUserManagedProjects() {
             return siteService.getSitesPerUser().then(function(response) {
                 for(var i in response) {
-                    if(response[i].shortName !== vm.project.shortName)
-                        vm.sitesPerUser.push(response[i]);
+                    if(response[i].shortName !== vm.project.shortName && response[i].current_user_role == vm.managerRole)
+                        vm.userManagedProjects.push(response[i]);
                 }
-                return vm.sitesPerUser;
+                return vm.userManagedProjects;
                 }
             );
         }
 
         function searchProjects(query) {
-            return filterService.search(vm.sitesPerUser, { title: query });
+            return filterService.search(vm.userManagedProjects, { title: query });
         }
         
         function getSiteUserRole() {

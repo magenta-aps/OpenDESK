@@ -229,7 +229,7 @@
                     <md-button ng-if="vm.canEdit" class="md-raised"
                                ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe
                     </md-button>
-                    <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit" class="md-raised"
+                    <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.isManager" class="md-raised"
                                ng-click="vm.newLinkDialog($event)"><i class="material-icons">link</i> Opret projektlink
                     </md-button>
 					<div layout="column">
