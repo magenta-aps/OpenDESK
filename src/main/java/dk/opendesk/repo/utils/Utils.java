@@ -7,15 +7,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import dk.opendesk.repo.model.OpenDeskModel;
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.i18n.MessageLookup;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.cmr.site.SiteInfo;
+import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.cmr.site.SiteVisibility;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
@@ -143,5 +151,40 @@ public class Utils {
             return siteGroup;
         else
             return siteGroup + "_" + groupName;
+    }
+
+    // NOTICE: Sites created this way does not work in Share as they lack dashboards.
+    public static NodeRef createSite(NodeService nodeService, SiteService siteService, String displayName,
+                              String description, SiteVisibility siteVisibility) {
+
+        String shortName = displayName.replaceAll(" ", "-");
+        String shortNameWithVersion = shortName;
+        SiteInfo site = null;
+
+        // Iterate through possible short names for the new site until a vacant is found
+        int i = 1;
+        do {
+            try {
+                // Create site
+                site = siteService.createSite("site-dashboard", shortNameWithVersion, displayName, description,
+                        siteVisibility);
+
+                // Create documentLibary
+                String defaultFolder = "documentLibrary";
+                Map<QName, Serializable> documentLibaryProps = new HashMap<>();
+                documentLibaryProps.put(ContentModel.PROP_NAME, defaultFolder);
+
+                nodeService.createNode(site.getNodeRef(), ContentModel.ASSOC_CONTAINS,
+                        QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "documentLibrary"),
+                        ContentModel.TYPE_FOLDER, documentLibaryProps);
+            }
+            catch(SiteServiceException e) {
+                if(e.getMsgId().equals("site_service.unable_to_create"))
+                    shortNameWithVersion = shortName + "-" + ++i;
+            }
+        }
+        while(site == null);
+
+        return site.getNodeRef();
     }
 }

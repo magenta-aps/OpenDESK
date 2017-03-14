@@ -50,7 +50,6 @@ import java.util.*;
 
 public class ProjectDepartment extends AbstractWebScript {
 
-    private NodeRef newSiteRef = null;
     private PermissionService permissionService;
 
     public void setSearchService(SearchService searchService) {
@@ -120,7 +119,7 @@ public class ProjectDepartment extends AbstractWebScript {
 
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
             String site_name = Utils.getJSONObject(json, "PARAM_NAME");
-            String site_short_name = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
+            String site_short_name = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
             String site_description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
             String site_sbsys = Utils.getJSONObject(json, "PARAM_SBSYS");
             String site_owner = Utils.getJSONObject(json, "PARAM_OWNER");
@@ -137,8 +136,8 @@ public class ProjectDepartment extends AbstractWebScript {
 
             switch (method) {
                 case "createPDSITE":
-                    result = createPDSite(site_short_name, site_name, site_description,
-                            site_sbsys, site_center_id, site_owner, site_manager, site_visibility, template);
+                    result = createPDSite(site_name, site_description, site_sbsys, site_center_id, site_owner,
+                            site_manager, site_visibility, template);
                     break;
                 case "updatePDSITE":
                     result = updatePDSite(site_short_name, site_name, site_description,
@@ -157,7 +156,7 @@ public class ProjectDepartment extends AbstractWebScript {
     }
 
 
-    private void executeTemplate(NodeRef newSite, String template_name) {
+    private void executeTemplate(NodeRef newSiteRef, String template_name) {
 
         System.out.println(template_name);
 
@@ -180,7 +179,7 @@ public class ProjectDepartment extends AbstractWebScript {
              nodeService.deleteNode(newSite_documentlibrary);
 
             try {
-                fileFolderService.copy(template_documentlibrary, newSite, "documentLibrary");
+                fileFolderService.copy(template_documentlibrary, newSiteRef, "documentLibrary");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -188,8 +187,8 @@ public class ProjectDepartment extends AbstractWebScript {
 
     }
 
-    private JSONArray createPDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
-                                   String site_center_id, String site_owner, String site_manager, SiteVisibility site_visibility, String template) {
+    private JSONArray createPDSite(String site_name, String site_description, String site_sbsys, String site_center_id,
+                                   String site_owner, String site_manager, SiteVisibility site_visibility, String template) {
 
         if(site_visibility == null)
             site_visibility = SiteVisibility.PUBLIC;
@@ -200,22 +199,11 @@ public class ProjectDepartment extends AbstractWebScript {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-            String site_short_name_with_version = site_short_name;
-
-            int i = 1;
-            do {
-                try {
-                    newSiteRef = createSite(site_short_name_with_version, site_name, site_description, site_sbsys, site_center_id, site_visibility);
-                }
-                catch(SiteServiceException e) {
-                    if(e.getMsgId().equals("site_service.unable_to_create"))
-                        site_short_name_with_version = site_short_name + "-" + ++i;
-                }
-            }
-            while(newSiteRef == null);
+            NodeRef newSiteRef = Utils.createSite(nodeService, siteService, site_name, site_description, site_visibility);
+            updateSite(newSiteRef , site_name, site_description, site_sbsys, site_center_id, OpenDeskModel.STATE_ACTIVE);
 
             String creator = authenticationService.getCurrentUserName();
-            createGroupAddMembers(site_short_name_with_version, site_owner, site_manager, creator);
+            createGroupAddMembers(newSiteRef, site_owner, site_manager, creator);
 
             if (!"".equals(template)) {
                 this.executeTemplate(newSiteRef, template);
@@ -247,11 +235,12 @@ public class ProjectDepartment extends AbstractWebScript {
             // ...code to be run as Admin...
 
             SiteInfo site = siteService.getSite(site_short_name);
+            NodeRef nodeRef = site.getNodeRef();
 
             if(site_visibility != null)
-                nodeService.setProperty(site.getNodeRef(), SiteModel.PROP_SITE_VISIBILITY, site_visibility);
+                nodeService.setProperty(nodeRef, SiteModel.PROP_SITE_VISIBILITY, site_visibility);
 
-            updateSite(site, site_name, site_description, site_sbsys, site_center_id, site_state);
+            updateSite(nodeRef, site_name, site_description, site_sbsys, site_center_id, site_state);
 
 
             if(!site_owner.isEmpty()) {
@@ -270,23 +259,7 @@ public class ProjectDepartment extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
-    private NodeRef createSite(String shortName, String name, String description, String sbsys, String center_id, SiteVisibility siteVisibility) {
-
-        SiteInfo site = siteService.createSite("site-dashboard", shortName, name, description, siteVisibility);
-
-        updateSite(site, name, description, sbsys, center_id, OpenDeskModel.STATE_ACTIVE);
-
-        // create documentLibary
-        String defaultFolder = "documentLibrary";
-        Map<QName, Serializable> documentLibaryProps = new HashMap<>();
-        documentLibaryProps.put(ContentModel.PROP_NAME, defaultFolder);
-
-        ChildAssociationRef child = nodeService.createNode(site.getNodeRef(), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "documentLibrary"), ContentModel.TYPE_FOLDER, documentLibaryProps);
-
-        return site.getNodeRef();
-    }
-
-    private void updateSite(SiteInfo site, String name, String description, String sbsys, String center_id, String state) {
+    private void updateSite(NodeRef nodeRef, String name, String description, String sbsys, String center_id, String state) {
 
         // add the projectdepartment aspect
         Map<QName, Serializable> aspectProps = new HashMap<>();
@@ -296,7 +269,7 @@ public class ProjectDepartment extends AbstractWebScript {
         aspectProps.put(OpenDeskModel.PROP_PD_STATE, state);
         aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
 
-        nodeService.addAspect(site.getNodeRef(), OpenDeskModel.ASPECT_PD, aspectProps);
+        nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_PD, aspectProps);
     }
 
     private void updateSingleGroupMember(String group, String userName) {
@@ -310,8 +283,9 @@ public class ProjectDepartment extends AbstractWebScript {
         authorityService.addAuthority(group, userName);
     }
 
-    private void createGroupAddMembers(String siteShortName, String owner, String site_manager, String creator) {
+    private void createGroupAddMembers(NodeRef nodeRef, String owner, String site_manager, String creator) {
 
+        String siteShortName = siteService.getSiteShortName(nodeRef);
         String prefix = "site_" + siteShortName + "_";
         String projectowner = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTOWNER);
         String projectmanager = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
@@ -349,7 +323,7 @@ public class ProjectDepartment extends AbstractWebScript {
         authorityService.addAuthority(authorities.get(OpenDeskModel.CONSUMER), monitors);
 
         // allow all other projectmanagers to access this project
-        permissionService.setPermission(newSiteRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, OpenDeskModel.COLLABORATOR, true);
+        permissionService.setPermission(nodeRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, OpenDeskModel.COLLABORATOR, true);
 
         // Add Owner and Manager to their groups
         authorityService.addAuthority(projectowner, owner);

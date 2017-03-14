@@ -141,13 +141,13 @@ public class Sites extends AbstractWebScript {
             String role = Utils.getJSONObject(json, "PARAM_ROLE");
             String source = Utils.getJSONObject(json, "PARAM_SOURCE");
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
-            String shortName = Utils.getJSONObject(json, "PARAM_SHORT_NAME");
             String templateName = Utils.getJSONObject(json, "PARAM_TEMPLATE_NAME");
+            String description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
 
             if (method != null) {
                 switch (method) {
                     case "getSite":
-                        result = this.getSiteInfo(shortName);
+                        result = this.getSiteInfo(siteShortName);
                         break;
 
                     case "getAll":
@@ -194,19 +194,23 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "getSiteType":
-                        result = this.getSiteType(shortName);
+                        result = this.getSiteType(siteShortName);
                         break;
 
                     case "getTemplates":
                         result = this.getTemplates();
                         break;
 
+                    case "createTemplate":
+                        result = this.createTemplate(siteShortName, templateName, description);
+                        break;
+
                     case "makeSiteATemplate":
-                        result = this.makeSiteATemplate(shortName, templateName);
+                        result = this.makeSiteATemplate(siteShortName, templateName);
                         break;
 
                     case "createMembersPDF":
-                        result = this.createMembersPDF(shortName);
+                        result = this.createMembersPDF(siteShortName);
                         break;
 
                     case "deleteSite":
@@ -725,17 +729,26 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
+    private JSONArray createTemplate(String shortName, String templateName, String description) {
+
+        NodeRef nodeRef = Utils.createSite(nodeService, siteService, shortName, description, SiteVisibility.PUBLIC);
+        makeSiteATemplate(nodeRef, templateName);
+        return getSiteInfo(siteService.getSiteShortName(nodeRef));
+    }
+
     private JSONArray makeSiteATemplate(String shortName, String templateName) {
 
         SiteInfo s = siteService.getSite(shortName);
+        return makeSiteATemplate(s.getNodeRef(), templateName);
+    }
+
+    private JSONArray makeSiteATemplate(NodeRef nodeRef, String templateName) {
 
         Map<QName, Serializable> aspectProps = new HashMap<>();
         aspectProps.put(OpenDeskModel.PROP_PROJECTTEMPLATE_NAME, templateName);
+        nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES, aspectProps);
 
-
-        nodeService.addAspect(s.getNodeRef(), OpenDeskModel.ASPECT_PD_TEMPLATE_SITES, aspectProps);
-
-        return Utils.getJSONReturnPair("result", "Aspect added successfully");
+        return Utils.getJSONSuccess();
     }
 
     public JSONArray deleteSite(String siteShortName) {
