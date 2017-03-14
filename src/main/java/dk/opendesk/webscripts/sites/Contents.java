@@ -96,7 +96,8 @@ public class Contents extends AbstractWebScript {
             if (!nodeService.hasAspect(childAssociationRef.getChildRef(), ContentModel.ASPECT_HIDDEN)) {
 
                 try {
-                    json.put("name", nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_NAME));
+                    String name = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_NAME);
+                    json.put("name", name);
 
                     QName qname = nodeService.getType(childAssociationRef.getChildRef());
 
@@ -107,6 +108,11 @@ public class Contents extends AbstractWebScript {
                         type = "cmis:link";
                     } else {
                         type = "cmis:document";
+                        if(name.contains(".")) {
+                            String[] nameParts = name.split("[.]");
+                            String fileType = nameParts[nameParts.length - 1];
+                            json.put("fileType", fileType);
+                        }
                     }
 
                     json.put("contentType", type);
