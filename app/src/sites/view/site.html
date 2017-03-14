@@ -51,7 +51,10 @@
                             ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
                             <td><a class="od-filebrowser-link" ng-href="#!/dokument/{{content.shortRef}}">
-                                <i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
+                                <i class="material-icons" ng-show="content.contentType === 'cmis:document'">
+                                    <img class="md-avatar" ng-src="app/assets/images/filetypes/{{content.fileType}}-file-24.png"
+                                         onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
+                                </i>
                                 {{content.name}}</a></td>
                             <td>
                                 <table>
