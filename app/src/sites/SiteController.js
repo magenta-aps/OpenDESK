@@ -159,10 +159,20 @@ angular
 
 			
         function buildBreadCrumbPath(project_title) {
+            var title, link;
+            if(vm.project.type == vm.strings.templateProject)
+            {
+                title = 'Skabeloner';
+                link = '#!/indstillinger/systemopsætning/skabeloner';
+            }
+            else {
+                title = 'Projekter';
+                link = '#!/projekter';
+            }
             var paths = [
                 {
-                    title: 'Projekter',
-                    link: '#!/projekter'
+                    title: title,
+                    link: link
                 },
                 {
                     title: project_title,

@@ -1,6 +1,6 @@
 <div class="od-projects" ng-show="vm.isMember || vm.project.visibility == 'PUBLIC'">
 
-    <h1 class="od-title">Projekt: {{ vm.project.title }}</h1>
+    <h1 class="od-title">{{vm.project.type == vm.strings.templateProject ? "Projektskabelon" : "Projekt"}}: {{ vm.project.title }}</h1>
 
     <div layout="row" layout-align="space-between center">
         <a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
@@ -229,11 +229,11 @@
                     <md-button ng-if="vm.canEdit" class="md-raised"
                                ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe
                     </md-button>
-                    <md-button ng-if="vm.canEdit" class="md-raised"
+                    <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit" class="md-raised"
                                ng-click="vm.newLinkDialog($event)"><i class="material-icons">link</i> Opret projektlink
                     </md-button>
 					<div layout="column">
-						<md-menu ng-if="vm.canEdit">
+						<md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
 							<md-button ng-click="$mdMenu.open($event)" class="md-raised" aria-label="SBSYS">
 								<i class="material-icons">folder_open</i>
 								<span style="margin-left: 10px; margin-right: 20px;">ESDH</span>
