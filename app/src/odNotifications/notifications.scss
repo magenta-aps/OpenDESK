@@ -13,10 +13,12 @@
 }
 
 .od-notify-btns {
-  position: absolute;
   right: 0;
   padding-top: $u;
+  padding-right: $u * 0.5;
+  padding-left: $u * 0.5;
   display: block;
+  width: 30px;
 
   button {
     font-size: $u/2 !important;
@@ -24,6 +26,7 @@
     border: none;
     background: transparent;
     color: $main-color;
+    float: right;
   }
 }
 
@@ -47,6 +50,7 @@
 
 .od-notifylist {
   list-style: none;
+  overflow: scroll;
 }
 
 .od-notifylist,
@@ -68,6 +72,7 @@
 .od-notifylist--item--link,
 .od-notifylist--item--nolink {
   padding: $u;
+  width: 100%;
 }
 
 .od-notifylist--item--link {
@@ -77,16 +82,22 @@
     background-color: #ccc;
     text-decoration: none;
   }
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .od-notifylist--item--notice {
   font-size: $u;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 .od-notifylist--item--desc {
   font-size: $u*0.9;
   color: #666;
+  padding-top: $u*0.25;
+  padding-bottom: $u*0.25;
 }
 
 .od-notifylist--item--close {

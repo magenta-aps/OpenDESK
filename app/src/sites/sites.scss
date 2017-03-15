@@ -323,3 +323,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
     letter-spacing: 0.05em;
     font-weight: bold;
 }
+
+.md-select-value {
+  z-index: 0 !important;
+}
