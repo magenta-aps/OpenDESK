@@ -12,7 +12,9 @@ angular
             getAllManagers: getAllManagers,
             getAllOrganizationalCenters: getAllOrganizationalCenters,
             updatePDSite: updatePDSite,
-            getTemplateNames: getTemplateNames
+            getTemplateNames: getTemplateNames,
+            getPDGroupName: getPDGroupName,
+            getPDGroupFullName: getPDGroupFullName
         };
         
 
@@ -99,7 +101,18 @@ angular
             });
         }
 
+        function getPDGroupName(siteShortName, groupShortName) {
 
+            var siteGroup = "site_" + siteShortName;
+            if(groupShortName === "")
+                return siteGroup;
+            else
+                return siteGroup + "_" + groupShortName;
+        }
+
+        function getPDGroupFullName(groupName) {
+            return "GROUP_" + groupName;
+        }
 
         return service;
 

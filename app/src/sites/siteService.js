@@ -150,6 +150,11 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             });
         },
+        getMemberFromSite: function (siteName, member) {
+            return $http.get('/api/sites/' + siteName + '/memberships/' + member).then(function(response) {
+                return response.data;
+            });
+        },
         removeMemberFromSite: function (siteName, member) {
             return $http.delete('/api/sites/' + siteName + '/memberships/' + member).then(function(response) {
                 return response.data;
@@ -317,13 +322,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             }).then(function(response) {
                 //console.log(response.data)
                 return response.data;
-            });
-        },
-        getGroupMembers : function (siteShortName, groupName) {
-            return groupService.getGroupInfo(siteShortName, groupName).then(function(r) {
-                console.log(groupName);
-                console.log(JSON.stringify(r));
-                return r;
             });
         },
         createLink : function (source, destination) {
