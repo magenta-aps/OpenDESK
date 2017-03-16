@@ -141,7 +141,6 @@ public class Sites extends AbstractWebScript {
             String role = Utils.getJSONObject(json, "PARAM_ROLE");
             String source = Utils.getJSONObject(json, "PARAM_SOURCE");
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
-            String templateName = Utils.getJSONObject(json, "PARAM_TEMPLATE_NAME");
             String description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
 
             if (method != null) {
@@ -202,11 +201,11 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "createTemplate":
-                        result = this.createTemplate(siteShortName, templateName, description);
+                        result = this.createTemplate(siteShortName, description);
                         break;
 
                     case "makeSiteATemplate":
-                        result = this.makeSiteATemplate(siteShortName, templateName);
+                        result = this.makeSiteATemplate(siteShortName);
                         break;
 
                     case "createMembersPDF":
@@ -729,23 +728,22 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
-    private JSONArray createTemplate(String shortName, String templateName, String description) {
+    private JSONArray createTemplate(String shortName, String description) {
 
         NodeRef nodeRef = Utils.createSite(nodeService, siteService, shortName, description, SiteVisibility.PUBLIC);
-        makeSiteATemplate(nodeRef, templateName);
+        makeSiteATemplate(nodeRef);
         return getSiteInfo(siteService.getSiteShortName(nodeRef));
     }
 
-    private JSONArray makeSiteATemplate(String shortName, String templateName) {
+    private JSONArray makeSiteATemplate(String shortName) {
 
         SiteInfo s = siteService.getSite(shortName);
-        return makeSiteATemplate(s.getNodeRef(), templateName);
+        return makeSiteATemplate(s.getNodeRef());
     }
 
-    private JSONArray makeSiteATemplate(NodeRef nodeRef, String templateName) {
+    private JSONArray makeSiteATemplate(NodeRef nodeRef) {
 
         Map<QName, Serializable> aspectProps = new HashMap<>();
-        aspectProps.put(OpenDeskModel.PROP_PROJECTTEMPLATE_NAME, templateName);
         nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES, aspectProps);
 
         return Utils.getJSONSuccess();

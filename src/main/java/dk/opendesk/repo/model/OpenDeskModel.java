@@ -78,8 +78,6 @@ public interface OpenDeskModel {
      * Properties for the template aspect
      */
 
-    public static QName PROP_PROJECTTEMPLATE_NAME = QName.createQName(OD_URI, "template_name");
-
 
     /**
      * projectDepartment properties

@@ -161,11 +161,10 @@ public class ProjectDepartment extends AbstractWebScript {
         System.out.println(template_name);
 
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "@od\\:template_name:\"" + template_name + "\"");
+        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "ASPECT:\"od:projecttype_templates\" AND @cm\\:name:\"" + template_name + "\"");
 
         if (siteSearchResult.length() > 0) {
 
-            System.out.println("yoyoyo");
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
             SiteInfo templateSite = siteService.getSite(siteNodeRef);
             SiteInfo newSiteInfo = siteService.getSite(newSiteRef);
