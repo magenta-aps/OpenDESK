@@ -24,6 +24,8 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AccessStatus;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
@@ -60,6 +62,12 @@ public class Contents extends AbstractWebScript {
         this.fileFolderService = fileFolderService;
     }
 
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
+    private PermissionService permissionService;
+
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
@@ -80,9 +88,9 @@ public class Contents extends AbstractWebScript {
     }
 
 
-    private JSONArray getChildNodes(NodeRef nodeRef) {
+    private JSONArray getChildNodes(NodeRef parentNodeRef) {
 
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(parentNodeRef);
 
         JSONArray result = new JSONArray();
 
@@ -92,14 +100,15 @@ public class Contents extends AbstractWebScript {
             JSONObject json = new JSONObject();
 
             ChildAssociationRef childAssociationRef = (ChildAssociationRef)i.next();
+            NodeRef childNodeRef = childAssociationRef.getChildRef();
 
-            if (!nodeService.hasAspect(childAssociationRef.getChildRef(), ContentModel.ASPECT_HIDDEN)) {
+            if (!nodeService.hasAspect(childNodeRef, ContentModel.ASPECT_HIDDEN)) {
 
                 try {
-                    String name = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_NAME);
+                    String name = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_NAME);
                     json.put("name", name);
 
-                    QName qname = nodeService.getType(childAssociationRef.getChildRef());
+                    QName qname = nodeService.getType(childNodeRef);
 
                     String type;
                     if (qname.equals(ContentModel.TYPE_FOLDER)) {
@@ -115,28 +124,31 @@ public class Contents extends AbstractWebScript {
                         }
                     }
 
+                    AccessStatus accessStatus = permissionService.hasPermission(childNodeRef, PermissionService.DELETE);
+                    json.put("canMoveAndDelete", accessStatus == AccessStatus.ALLOWED);
+
                     json.put("contentType", type);
 
                     if (!"cmis:link".equals(type)) {
-                        json.put("nodeRef", childAssociationRef.getChildRef());
+                        json.put("nodeRef", childNodeRef);
 
-                        ChildAssociationRef parent = nodeService.getPrimaryParent(childAssociationRef.getChildRef());
+                        ChildAssociationRef parent = nodeService.getPrimaryParent(childNodeRef);
 
                         json.put("parentNode'Ref", parent.getParentRef());
-                        json.put("shortRef", childAssociationRef.getChildRef().getId());
+                        json.put("shortRef", childNodeRef.getId());
 
 
-                        String modifier = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_MODIFIER);
+                        String modifier = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIER);
                         NodeRef person = personService.getPerson(modifier);
 
 
                         json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
 
 
-                        Date d = (Date) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_MODIFIED);
+                        Date d = (Date) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIED);
                         json.put("lastChanged", d.getTime());
 
-                        String label = (String) nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_VERSION_LABEL);
+                        String label = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_VERSION_LABEL);
 
 
                         if (label != null && label.equals("1.0")) {
@@ -146,10 +158,10 @@ public class Contents extends AbstractWebScript {
                         }
                     }
                     else {
-                        String link = (String) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET);
-                        NodeRef link_node = (NodeRef) nodeService.getProperty(childAssociationRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF);
+                        String link = (String) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET);
+                        NodeRef link_node = (NodeRef) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
 
-                        json.put("nodeid", childAssociationRef.getChildRef().getId());
+                        json.put("nodeid", childNodeRef.getId());
                         json.put("destination_link", link);
 
                         if (link_node != null)
