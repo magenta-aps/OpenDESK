@@ -4,7 +4,7 @@
         <i class="material-icons">person</i>
     </button>
 
-    <div class="od-flyout right fixed" ng-class="{ open: vm.on }" ng-click="vm.toggleUser()">
+    <div class="od-flyout right fixed" ng-class="{ open: vm.on, closed: !vm.on }" ng-click="vm.toggleUser()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
             <button ng-click="vm.toggleUser()" class="od-btn od-flyout--close">
                 <i class="material-icons">keyboard_arrow_right</i>

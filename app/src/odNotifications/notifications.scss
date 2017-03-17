@@ -100,6 +100,11 @@
   padding-bottom: $u*0.25;
 }
 
+.od-notifylist--item--date {
+  color: #999;
+  padding-top: 0px;
+}
+
 .od-notifylist--item--close {
   flex: 0 0 auto;
   background-color: transparent;

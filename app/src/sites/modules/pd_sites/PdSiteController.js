@@ -147,8 +147,9 @@ angular
 		
         
 		function removeMemberDialog(member, group) {
+            console.log(member);
             var confirm = $mdDialog.confirm()
-                .title('Fjern dette medlem?')
+                .title('Fjern '+member.displayName+'?')
                 .textContent('')
                 .ariaLabel('Fjern medlem')
                 .targetEvent(event)
