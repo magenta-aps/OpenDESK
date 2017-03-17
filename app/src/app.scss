@@ -261,3 +261,8 @@ legend {
 @media screen and (min-width: $br-sm-md) {
 
 }
+
+//make the chat window appear behind notifcation slide out
+#conversejs {
+  z-index:0 !important;
+}

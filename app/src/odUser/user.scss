@@ -1,6 +1,11 @@
 .od-user {
 }
 
+.od-avatar {
+  width:50%;
+  border-radius: 50%;
+}
+
 .od-user--toggle {
   top: 0;
   right: $u*3;
@@ -21,4 +26,15 @@
 
 .od-me {
   padding: $u;
+}
+
+.od-btn {
+
+}
+
+#logout {
+  position: absolute;
+  bottom: 0;
+  left:0;
+  width: 100%;
 }
