@@ -111,7 +111,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.groups['PD_PROJECTGROUP'].permissions }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_PROJECTGROUP'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>
@@ -163,7 +163,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.groups['PD_STEERING_GROUP'].permissions }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_STEERING_GROUP'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>
@@ -215,7 +215,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.groups['PD_WORKGROUP'].permissions }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_WORKGROUP'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>
@@ -267,7 +267,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.groups['PD_MONITORS'].permissions }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_MONITORS'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>
