@@ -110,7 +110,9 @@
 						<tr ng-repeat="project in vm.memberonly ? vm.sitesPerUser : vm.sites | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
 							<td>
 								<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
-									<i class="material-icons">content_paste</i> {{ project.title }}
+									<i class="material-icons" >{{project.type === "Project" ? "forum" : "content_paste"}}</i> 
+									
+									{{ project.title }}
 								</a>
 							</td>
 							<td class="description-label">
