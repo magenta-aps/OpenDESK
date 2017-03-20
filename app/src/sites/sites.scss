@@ -7,19 +7,15 @@
   margin: 1rem auto;
   background: #eee;
   padding-top: 1rem;
-
   h3 {
     margin: 0 1rem;
   }
-
   ul {
     padding-left: 0;
-
     li {
       list-style: none;
       padding: 1rem;
       border-top: 1px solid #ddd;
-
       md-icon {
         margin-right: 1rem;
       }
@@ -30,7 +26,6 @@
 .project-buttons-wrap {
   width: 90%;
   margin: 1rem auto;
-
   button {
     border: none;
     background: #eee;
@@ -48,7 +43,6 @@
   display: block;
   width: 100%;
   padding: $u*0.75 0 $u*0.5;
-
   .material-icons {
     vertical-align: middle;
     margin-top: -($u*0.25);
@@ -58,7 +52,6 @@
 .od-title-icon {
   @extend .od-filebrowser-link;
   margin-top: 0;
-
   .material-icons {
     margin-right: $u/2;
   }
@@ -69,7 +62,8 @@ md-input-container {
   padding: 0 !important;
 }
 
-md-input-container.md-input-focused label, md-input-container.md-input-has-value label {
+md-input-container.md-input-focused label,
+md-input-container.md-input-has-value label {
   font-size: 120%;
 }
 
@@ -112,23 +106,18 @@ md-card {
     border-radius: 0.25em;
     margin-right: $u/2;
     margin-bottom: $u;
-    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-    0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   }
-
   i {
     position: absolute;
     left: 5px;
     top: 3px;
     color: rgba(0, 0, 0, 0.25);
   }
-
   input {
     padding: 0.5rem 0.5rem 0.5rem 2rem;
     border-radius: 0.25em;
   }
-
   label {
     padding-left: $u*2 !important;
     padding-bottom: 3px;
@@ -146,6 +135,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
     cursor: hand;
     cursor: pointer;
     padding: 10px 0 5px 5px;
+    width: 20%;
     i.material-icons {
       font-size: 15px;
     }
@@ -158,10 +148,16 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
       }
     }
   }
+  .description {
+    width: 30% !important;
+  }
+
+  .description-label {
+    padding-right: 10px;
+  }
 }
 
 .od-members-row {
-
   border-collapse: collapse;
   tr {
     td {
@@ -206,7 +202,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   /*z-index: 1;*/
   box-shadow: 2px -2px 0px #fff;
   border-radius: 0 5px 0 50px;
-
 }
 
 .data {
@@ -240,7 +235,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   background-color: #fff;
   border: none;
   padding: 0 10px 40px 20px;
-
   i {
     position: relative;
     top: 5px;
@@ -272,13 +266,17 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 }
 
+
 /*expand collapse*/
+
 .transition {
   transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out; /* Safari */
+  -webkit-transition: all 0.4s ease-in-out;
+  /* Safari */
 }
 
-.no-select, h2 {
+.no-select,
+h2 {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -289,39 +287,39 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 }
 
 .pHeader {
-    line-height: 30px;
-    letter-spacing: 1px;
-    margin: 12px 0 12px 0;
-    span {
-        float: left;
-        font-size: 90%;
-        font-weight: bold;
-        border-bottom: 1px solid #ccc;
-    }
+  line-height: 30px;
+  letter-spacing: 1px;
+  margin: 12px 0 12px 0;
+  span {
+    float: left;
+    font-size: 90%;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+  }
 }
 
 .pContent {
-    letter-spacing: 0.05em;
-    margin-top: 0;
-    max-height: 250px; 
-    overflow: auto; 
-    width: 98%;
-    span {
-        float: left; 
-        width: 92%; 
-        padding: 0 10px 0 10px; 
-        font-size: 90%;
-        line-height: 28px;
-    }
+  letter-spacing: 0.05em;
+  margin-top: 0;
+  max-height: 250px;
+  overflow: auto;
+  width: 98%;
+  span {
+    float: left;
+    width: 92%;
+    padding: 0 10px 0 10px;
+    font-size: 90%;
+    line-height: 28px;
+  }
 }
 
 .toolbar-small {
-	min-height: 25px;
-	background-color: #d9d9d9;	
-	margin: 10px 0;
-	padding: 4px 20px 0;
-    letter-spacing: 0.05em;
-    font-weight: bold;
+  min-height: 25px;
+  background-color: #d9d9d9;
+  margin: 10px 0;
+  padding: 4px 20px 0;
+  letter-spacing: 0.05em;
+  font-weight: bold;
 }
 
 .md-select-value {
