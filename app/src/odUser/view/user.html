@@ -1,29 +1,70 @@
 <section class="od-user" ng-controller="UserController as vm">
+    <div ng-controller="AuthController as ac">
+        <div class="od-user-header-menu">
+            <h2 class="od-user-name">{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h2>
+            <button ng-click="vm.toggleUser()" class="od-btn od-user--toggle">
+                <i class="material-icons">person</i>
+             </button>
+        </div>
 
-    <button ng-click="vm.toggleUser()" class="od-btn od-user--toggle">
-        <i class="material-icons">person</i>
-    </button>
-
-    <div class="od-flyout right fixed" ng-class="{ open: vm.on }" ng-click="vm.toggleUser()">
-        <div class="od-flyout--body" ng-click="$event.stopPropagation()">
-            <button ng-click="vm.toggleUser()" class="od-btn od-flyout--close">
+        <div class="od-flyout right fixed" ng-class="{ open: vm.on, closed: !vm.on }" ng-click="vm.toggleUser()">
+            <div class="od-flyout--body" ng-click="$event.stopPropagation()">
+                <button ng-click="vm.toggleUser()" class="od-btn od-flyout--close">
                 <i class="material-icons">keyboard_arrow_right</i>
             </button>
 
-            <div class="od-me" ng-controller="AuthController as vm">
-                <h2><i class="material-icons">person</i> {{ vm.getUserInfo().user.userName }}</h2>
-                <dl>
-                    <dt>Navn</dt>
-                    <dd>{{ vm.getUserInfo().user.firstName }} {{ vm.getUserInfo().user.lastName }}</dd>
-                </dl>
+                <div class="od-me">
+                    <div layout="column" layout-align="center center">
+                        <img src="http://placehold.it/300x300" class="od-avatar">
+                        <h1>{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h1>
+                    </div>
+                    <md-subheader>Brugerinfo</md-subheader>
+                    <md-list>
+                        <md-list-item>
+                            <div class="md-list-item-text">
+                                Brugernavn:
+                            </div>
+                            <div class="md-secondary">
+                                {{ ac.getUserInfo().user.userName }}
+                            </div>
+                        </md-list-item>
+                        <md-list-item>
+                            <div class="md-list-item-text">
+                                Email:
+                            </div>
+                            <div class="md-secondary">
+                                {{ ac.getUserInfo().user.email }}
+                            </div>
+                        </md-list-item>
+                        <md-list-item>
+                            <div class="md-list-item-text">
+                                Telefon:
+                            </div>
+                            <div class="md-secondary">
+                                {{ ac.getUserInfo().user.telephone }}
+                            </div>
+                        </md-list-item>
+                    </md-list>
 
-                <button class="od-btn" ng-click="vm.logout()">
+                    <div ng-controller="NotificationsSettingsController as nsc">
+                        <md-subheader>Notifikationer</md-subheader>
+                        <md-list>
+                            <md-list-item>
+                                <p> Send notifikationer</p>
+                                <md-input-container>
+                                    <md-switch class="md-secondary" aria-label="Notifikationer" ng-true-value="'true'" ng-false-value="'false'" ng-model="nsc.receiveNotifications"
+                                        ng-change='nsc.setNotificationPreferences()'></md-switch>
+                                </md-input-container>
+                            </md-list-item>
+                        </md-list>
+                    </div>
 
+                    <button class="od-btn" id='logout' ng-click="ac.logout()">
                     {{ 'MENU.LOGOUT' | translate }}
                 </button>
-            </div>
+                </div>
 
+            </div>
         </div>
     </div>
-
 </section>

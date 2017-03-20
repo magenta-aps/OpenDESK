@@ -42,9 +42,11 @@
 
                 <md-dialog-content class="md-padding">
                     <div>
-                        <md-input-container>
+                        <md-input-container class="md-block">
                             <label>Kommentar</label>
-                            <input type="text" name="comment" required ng-model="comment">
+                            <!--<input type="text" name="comment" required ng-model="comment">-->
+
+                            <textarea name='comment' required ng-model="comment" md-maxlength="250" rows="2" md-select-on-focus=""></textarea>
 
                             <div ng-messages="createSiteForm.newSiteName.$error">
                                 <div ng-message="required">Dette felt skal udfyldes</div>

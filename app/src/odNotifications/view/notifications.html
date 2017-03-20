@@ -14,11 +14,12 @@
             </button>
 
             <ul class="od-notifylist">
-                <li ng-repeat="notice in notifications" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
+                <li ng-repeat="notice in notifications | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                     <span class="od-notifylist--item--link">
                         <a href="{{ notice.link }}" ng-click="vm.toggleNotices()">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p  class="od-notifylist--item--desc">{{ notice.message }}</p>
+                        <p  class="od-notifylist--item--desc od-notifylist--item--date">{{notice.created | date:'dd. MMMM kl. HH:mm'}}</p>
                         </a>
                     </span>
                 </li>

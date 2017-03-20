@@ -1,10 +1,35 @@
 .od-user {
 }
 
+.od-avatar {
+  width:50%;
+  border-radius: 50%;
+}
+
+.od-user-header-menu {
+  position: fixed;
+  right: $u*3;
+  top: 0;
+
+  h2 {
+    display: inline-block;
+    line-height:  $u*3;
+    margin: 0;
+    padding-right: $u;
+    font-size: $u*1.5;
+    font-weight: 400;
+  }
+}
+
+.od-user-name {
+  // position: fixed;
+}
+
 .od-user--toggle {
   top: 0;
-  right: $u*3;
-  position: fixed;
+  // right: $u*3;
+  // position: fixed;
+  float: right;
   z-index: 1;
   height: $u*3;
   width: $u*3;
@@ -21,4 +46,15 @@
 
 .od-me {
   padding: $u;
+}
+
+.od-btn {
+
+}
+
+#logout {
+  position: absolute;
+  bottom: 0;
+  left:0;
+  width: 100%;
 }
