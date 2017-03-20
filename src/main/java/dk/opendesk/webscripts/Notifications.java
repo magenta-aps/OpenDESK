@@ -138,7 +138,10 @@ public class Notifications extends AbstractWebScript {
                     json.put("subject", subject);
                     json.put("message", message);
                     json.put("read", read);
-                    json.put("created", nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
+
+                    Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
+                    json.put("created", d.getTime());
+
                     if(link != null)
                         json.put("link", link);
 
