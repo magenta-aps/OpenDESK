@@ -1,6 +1,6 @@
 angular.module('openDeskApp.groups').factory('groupService', GroupService);
 
-function GroupService(ALFRESCO_URI, $http, $q) {
+function GroupService(ALFRESCO_URI, $http, $q, userService) {
     var GROUP_PROXY_URI = ALFRESCO_URI.serviceApiProxy + 'groups/';
     return {
         listAllSystemGroups: listAllSystemGroups,
@@ -86,7 +86,26 @@ function GroupService(ALFRESCO_URI, $http, $q) {
      * @returns [authorities]
      */
     function getGroupMembers(groupShortName) {
-        return $http.get(GROUP_PROXY_URI + groupShortName + '/children?maxItems=500').then(successOrReject);
+        return $http.get(GROUP_PROXY_URI + groupShortName + '/children?maxItems=500').then(
+            function(response) {
+
+                var members = [];
+
+                // Creating an empty initial promise that always resolves itself.
+                var promises = [];
+
+                // Iterating list of items.
+                angular.forEach(response.data.data, function (member) {
+                    promises.push(userService.getPerson(member.shortName).then(function (val) {
+                        val.displayName = member.fullName;
+                        members.push(val);
+                    }));
+                });
+                return $q.all(promises).then(function(){
+                    return members;
+                });
+            }
+        );
     }
 
     /**

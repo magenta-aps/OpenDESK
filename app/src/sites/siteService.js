@@ -150,6 +150,11 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             });
         },
+        getMemberFromSite: function (siteName, member) {
+            return $http.get('/api/sites/' + siteName + '/memberships/' + member).then(function(response) {
+                return response.data;
+            });
+        },
         removeMemberFromSite: function (siteName, member) {
             return $http.delete('/api/sites/' + siteName + '/memberships/' + member).then(function(response) {
                 return response.data;
@@ -319,13 +324,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             });
         },
-        getGroupMembers : function (siteShortName, groupName) {
-            return groupService.getGroupInfo(siteShortName, groupName).then(function(r) {
-                console.log(groupName);
-                console.log(JSON.stringify(r));
-                return r;
-            });
-        },
         createLink : function (source, destination) {
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "addLink",
@@ -374,17 +372,15 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         makeSiteATemplate : function (shortName, templateName) {
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "makeSiteATemplate",
-                PARAM_SITE_SHORT_NAME: shortName,
-                PARAM_TEMPLATE_NAME: templateName
+                PARAM_SITE_SHORT_NAME: shortName
             }).then(function(response) {
                 return response.data;
             });
         },
-        createTemplate : function (shortName, templateName, description) {
+        createTemplate : function (shortName, description) {
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "createTemplate",
                 PARAM_SITE_SHORT_NAME: shortName,
-                PARAM_TEMPLATE_NAME: templateName,
                 PARAM_DESCRIPTION: description
             }).then(function(response) {
                 return response.data;

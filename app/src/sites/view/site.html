@@ -110,7 +110,7 @@
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.canEdit">
+                                        <md-menu-item ng-if="content.canMoveAndDelete">
                                             <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet
@@ -145,7 +145,7 @@
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.canEdit">
+                                        <md-menu-item ng-if="content.canMoveAndDelete">
                                             <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
                                                 <md-icon md-menu-align-target>compare_arrows</md-icon>
                                                 Flyt
@@ -176,13 +176,13 @@
                                 | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                             </td>
                             <td>
-                                <md-menu ng-if="vm.canEdit">
+                                <md-menu ng-if="content.canMoveAndDelete">
                                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>more_vert</md-icon>
                                     </md-button>
 
                                     <md-menu-content width="6">
-                                        <md-menu-item ng-if="vm.canEdit">
+                                        <md-menu-item ng-if="content.canMoveAndDelete">
                                             <md-button ng-click="vm.deleteFoldereDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet
@@ -202,12 +202,12 @@
                             </a></td>
 							<td>&nbsp;</td>
                             <td>
-                                <md-menu ng-if="vm.canEdit">
+                                <md-menu ng-if="content.canMoveAndDelete">
                                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                                         <md-icon md-menu-origin>more_vert</md-icon>
                                     </md-button>
                                     <md-menu-content width="6">
-                                        <md-menu-item ng-if="vm.canEdit">
+                                        <md-menu-item ng-if="content.canMoveAndDelete">
                                             <md-button ng-click="vm.deleteLink(content.nodeid, content.destination_nodeid)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                                                 Slet

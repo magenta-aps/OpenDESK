@@ -126,7 +126,7 @@ angular
                 siteService.getCurrentUserSiteRole(vm.project.shortName).then(
                     function (response) {
                         vm.userRole = response;
-                        vm.isManager = vm.userRole == vm.managerRole;
+                        vm.isManager = vm.userRole ==    vm.managerRole;
                         switch (vm.userRole) {
                             case vm.editRole:
                             case vm.ownerRole:

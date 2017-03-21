@@ -54,8 +54,8 @@
 			<div flex="100" flex-gt-lg="100">
 				<p>
 				<div style="font-weight: bold;">Projektleder</div>
-				<div layout="row" >
-					<div flex="85">{{ pd.site.members.pd_projectmanager.displayName }}</div>
+				<div layout="row">
+					<div flex="85">{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].displayName }}</div>
 					<div flex="10" style="position: relative; top: -10px">
 						<md-menu ng-controller="SiteController as vm">
 							<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -63,7 +63,7 @@
 							</md-button>
 							<md-menu-content width="5">
 								<md-menu-item>
-									<div>Email:&nbsp;{{ pd.site.members.pd_projectmanager.email }}</div>
+									<div>Email:&nbsp;{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].email }}</div>
 								</md-menu-item>
 							</md-menu-content>
 						</md-menu>
@@ -74,7 +74,7 @@
 				<p>
 				<div style="font-weight: bold;">Projektejer</div>
 				<div layout="row">
-					<div flex="85">{{ pd.site.members.pd_projectowner.displayName }}</div>
+					<div flex="85">{{ pd.site.groups['PD_PROJECTOWNER'].members[0].displayName }}</div>
 					<div flex="10" style="position: relative; top: -10px">
 						<md-menu ng-controller="SiteController as vm">
 							<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
@@ -82,7 +82,7 @@
 							</md-button>
 							<md-menu-content width="5">
 								<md-menu-item>
-									<div>Email:&nbsp;{{ pd.site.members.pd_projectowner.email }}</div>
+									<div>Email:&nbsp;{{ pd.site.groups['PD_PROJECTOWNER'].members[0].email }}</div>
 								</md-menu-item>
 							</md-menu-content>
 						</md-menu>
@@ -102,7 +102,7 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showProjGroupList">
-					<div layout="row" ng-repeat="mem in pd.site.members.pd_projectgroup">
+					<div layout="row" ng-repeat="mem in pd.site.groups['PD_PROJECTGROUP'].members">
 						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
 						<div flex="10" style="position: relative; top: -10px">
 							<md-menu ng-controller="SiteController as vm">
@@ -111,7 +111,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.members.pd_projectgroup_permission }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_PROJECTGROUP'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>
@@ -154,7 +154,7 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showSteerGroupList">
-					<div layout="row" ng-repeat="mem in pd.site.members.pd_steering_group">
+					<div layout="row" ng-repeat="mem in pd.site.groups['PD_STEERING_GROUP'].members">
 						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
 						<div flex="10" style="position: relative; top: -10px">
 							<md-menu ng-controller="SiteController as vm">
@@ -163,7 +163,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.members.pd_steering_group_permission }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_STEERING_GROUP'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>
@@ -206,7 +206,7 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showWorkGroupList">
-					<div layout="row" ng-repeat="mem in pd.site.members.pd_workgroup">
+					<div layout="row" ng-repeat="mem in pd.site.groups['PD_WORKGROUP'].members">
 						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
 						<div flex="10" style="position: relative; top: -10px">
 							<md-menu ng-controller="SiteController as vm">
@@ -215,7 +215,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.members.pd_workgroup_permission }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_WORKGROUP'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>
@@ -258,7 +258,7 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showMonitorsList">
-					<div layout="row" ng-repeat="mem in pd.site.members.pd_monitors">
+					<div layout="row" ng-repeat="mem in pd.site.groups['PD_MONITORS'].members">
 						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
 						<div flex="10" style="position: relative; top: -10px">
 							<md-menu ng-controller="SiteController as vm">
@@ -267,7 +267,7 @@
 								</md-button>
 								<md-menu-content width="5">
 									<md-menu-item>
-										<div>Rolle:&nbsp;{{ pd.site.members.pd_monitors_permission }}</div>
+										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_MONITORS'].permissions] }}</div>
 									</md-menu-item>
 									<md-menu-item>
 										<div>Email:&nbsp;{{ mem.email }}</div>

@@ -4,7 +4,8 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteController', PdSiteController);
     
-    function PdSiteController($mdDialog, siteService, pd_siteService, $stateParams, notificationsService, authService, $http, alfrescoDownloadService) {
+    function PdSiteController($q, $mdDialog, siteService, pd_siteService, groupService, $stateParams, authService,
+                              alfrescoDownloadService) {
 
     
         var membersLoaded = false;
@@ -24,6 +25,9 @@ angular
 		pd.stateStr = "";
 		pd.visibilityStr = "";
 		pd.hasDescription = false;
+
+        pd.groups = [   'PD_PROJECTOWNER', 'PD_PROJECTMANAGER', 'PD_PROJECTGROUP',
+                        'PD_WORKGROUP', 'PD_STEERING_GROUP', 'PD_MONITORS'];
 
         function loadSiteData() {
             if ($stateParams.projekt) {
@@ -67,42 +71,32 @@ angular
         
         
         function getProjectMembers() {
-            pd.site.members = {};
-            siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTOWNER').then(
-                function(response) {
-                    pd.site.members.pd_projectowner = response[1][0];
-                }
-            );
-			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTMANAGER').then(
-                function(response) {
-                    pd.site.members.pd_projectmanager = response[1][0];
-                }
-            );
-			siteService.getGroupMembers(pd.site.shortName, 'PD_PROJECTGROUP').then(
-                function(response) {
-                    pd.site.members.pd_projectgroup = response[1];
-					pd.site.members.pd_projectgroup_permission = response[0].permission;
-                }
-            );
-            siteService.getGroupMembers(pd.site.shortName, 'PD_WORKGROUP').then(
-                function(response) {
-                    pd.site.members.pd_workgroup = response[1];
-					pd.site.members.pd_workgroup_permission = response[0].permission;
-                }
-            );
-            siteService.getGroupMembers(pd.site.shortName, 'PD_STEERING_GROUP').then(
-                function(response) {
-                    pd.site.members.pd_steering_group = response[1];
-					pd.site.members.pd_steering_group_permission = response[0].permission;
-                }
-            );
-            siteService.getGroupMembers(pd.site.shortName, 'PD_MONITORS').then(
-                function(response) {
-                    pd.site.members.pd_monitors = response[1];
-					pd.site.members.pd_monitors_permission = response[0].permission;
-                }
-            );
-        }      
+            pd.site.groups = {};
+
+            // Creating an empty initial promise that always resolves itself.
+            var promise = $q.all([]);
+
+            // Iterating list of items.
+            angular.forEach(pd.groups, function (groupName) {
+
+                var siteShortName = pd.site.shortName;
+                var groupShortName = pd_siteService.getPDGroupName(siteShortName, groupName);
+                promise = groupService.getGroupMembers(groupShortName).then(
+                    function (response) {
+                        var groupFullName = pd_siteService.getPDGroupFullName(groupShortName);
+                        var members = response;
+
+                        pd.site.groups[groupName] = {};
+                        pd.site.groups[groupName].members = members;
+                        siteService.getMemberFromSite(siteShortName, groupFullName).then(
+                            function (response) {
+                                pd.site.groups[groupName].permissions = response.role;
+                            }
+                        );
+                    }
+                );
+            });
+        }
         
         
         function editPdSite(ev) {
@@ -122,7 +116,8 @@ angular
 	
         
 		function updateMemberRoleDialog(event, user) {
-			vm.currentDialogUser = user.fullName;				
+            vm.currentDialogUser = user;
+            vm.currentDialogRole = user;
 			$mdDialog.show({
 				templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
 				parent: angular.element(document.body),

@@ -104,7 +104,7 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
 
     vm.createTemplate = function(name, description) {
 
-           siteService.createTemplate(name, name, description).then (function (response) {
+           siteService.createTemplate(name, description).then (function (response) {
                $scope.templateSites.push(response[0]);
                $mdDialog.hide();
            });
