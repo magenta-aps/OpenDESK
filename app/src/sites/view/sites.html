@@ -20,7 +20,7 @@
 	<md-card>
 		<md-card-content>
 			<!--<div class="od-filter-toolbar" layout-gt-sm="row"></div>-->
-				
+
 
 			<md-list class="sortHead">
 				<table class="od-members od-members-row">
@@ -75,14 +75,14 @@
 								</md-input-container>
 							</th>
 						</tr>
-					<tr>
-						<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
-						<!--<th class="description" sort-table="description" title="Sortér kolonne">Beskrivelse</th>-->
-						<th class='project-lead' sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
-						<th sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
-						<th sort-table="status" title="Sortér kolonne">Status</th>
-						<th colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
-					</tr>
+						<tr>
+							<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
+							<!--<th class="description" sort-table="description" title="Sortér kolonne">Beskrivelse</th>-->
+							<th class='project-lead' sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
+							<th sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
+							<th sort-table="status" title="Sortér kolonne">Status</th>
+							<th colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
+						</tr>
 					</thead>
 
 					<tbody>
@@ -141,19 +141,18 @@
 
 			<div layout="row" layout-align="start center" class="btnAlign">
 
-				<md-menu>
-					<md-button ng-click="vm.newSite($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nyt grupperum">
-						<i class="material-icons">add</i>
-						<span>Opret nyt grupperum</span>
-					</md-button>
-				</md-menu>
-				<md-menu>
-					<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-text-icon-button md-raised md-primary"
-					    aria-label="Opret nyt projekt">
-						<i class="material-icons">add</i>
-						<span>Opret nyt projekt</span>
-					</md-button>
-				</md-menu>
+
+				<md-button ng-click="vm.newSite($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nyt grupperum">
+					<i class="material-icons">add</i>
+					<span>Opret nyt grupperum</span>
+				</md-button>
+
+				<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-text-icon-button md-raised md-primary"
+				    aria-label="Opret nyt projekt">
+					<i class="material-icons">add</i>
+					<span>Opret nyt projekt</span>
+				</md-button>
+
 
 			</div>
 
