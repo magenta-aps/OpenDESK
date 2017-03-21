@@ -15,7 +15,8 @@ function GroupService(ALFRESCO_URI, $http, $q, userService) {
         updateGroup: updateGroup,
         deleteGroup: deleteGroup,
         uploadGroupsCSVFile: uploadGroupsCSVFile,
-        getGroupInfo: getGroupInfo
+        getGroupInfo: getGroupInfo,
+        getSubGroups: getSubGroups
     };
 
     /**
@@ -106,6 +107,13 @@ function GroupService(ALFRESCO_URI, $http, $q, userService) {
                 });
             }
         );
+    }
+
+
+    // use this for groups that contain groups
+
+    function getSubGroups(groupShortName) {
+        return $http.get(GROUP_PROXY_URI + groupShortName + '/children?maxItems=500').then(successOrReject);
     }
 
     /**
