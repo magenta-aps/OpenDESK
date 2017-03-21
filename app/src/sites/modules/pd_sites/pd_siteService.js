@@ -81,7 +81,7 @@ angular
 
 
         function getAllOrganizationalCenters() {
-            return groupService.getGroupMembers("OrganizationalCenters").then(function (response) {
+            return groupService.getSubGroups("OrganizationalCenters").then(function (response) {
                 //console.log(response);
                 return response;
             });
