@@ -9,7 +9,6 @@ function NotificationsSettingsController($mdDialog, $translate, $state, preferen
     vm.currentUser = authService.getUserInfo().user.userName;
 
     function loadNotificationPreferences() {
-        console.log('load Notification Preferences');
         preferenceService.getPreferences(vm.currentUser, preferenceFilter).then(function(data) {
             if(data[preferenceFilter] != null)
                 vm.receiveNotifications = data[preferenceFilter];
@@ -20,7 +19,6 @@ function NotificationsSettingsController($mdDialog, $translate, $state, preferen
     vm.loadNotificationPreferences();
 
     function setNotificationPreferences() {
-        console.log('set notification preferences');
         var preferences = { "dk.magenta.sites.receiveNotifications" : vm.receiveNotifications };
 
         preferenceService.setPreferences(vm.currentUser, preferences).then(function(data) {

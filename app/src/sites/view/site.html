@@ -30,7 +30,7 @@
     </div>
 
     <div layout-gt-sm="row">
-        <md-card flex-gt-sm="70">
+        <md-card flex-gt-sm="75">
             <md-card-content>
                 <h2 class="od-title-icon"><i class="material-icons">library_books</i>Dokumenter</h2>
 
@@ -257,7 +257,7 @@
 
         
 
-        <div flex-gt-sm="30" ng-if="vm.project.type === vm.strings.project || vm.project.type === vm.strings.templateProject ">
+        <div flex-gt-sm="25" ng-if="vm.project.type === vm.strings.project || vm.project.type === vm.strings.templateProject ">
             
             <div>
                 <h3 ng-click="vm.showProjDetails = !vm.showProjDetails"
@@ -340,7 +340,7 @@
             </md-card>
         </div>
         
-        <div flex-gt-sm="30" ng-if="vm.project.type === 'PD-Project'">
+        <div flex-gt-sm="25" ng-if="vm.project.type === 'PD-Project'">
             <div ng-include="'app/src/sites/modules/pd_sites/view/groups_overview.html'"></div>
         </div>
     </div>

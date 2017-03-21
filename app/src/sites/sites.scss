@@ -68,7 +68,11 @@ md-input-container.md-input-has-value label {
 }
 
 md-input-container:not(.md-input-focused, .md-input-has-value) label {
-  color: #797979;
+  color: #797979; // rgba(255,255,255,0.87);
+}
+
+.md-select-placeholder {
+  //color: rgba(255,255,255,0.87) !important;
 }
 
 md-list {
@@ -149,7 +153,11 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
     }
   }
   .description {
-    width: 30% !important;
+    width: 35% !important;
+  }
+
+  .project-lead {
+    width: 15% !important;
   }
 
   .description-label {
@@ -325,3 +333,28 @@ h2 {
 .md-select-value {
   z-index: 0 !important;
 }
+
+.od-filter-toolbar {
+  // height: $u*3;
+  th {
+    font-weight: 400 !important;
+  }
+
+  .show-all {
+    padding-top: 10px !important;
+  }
+
+  md-input-container {
+    padding: 2px 10px 2px 0 !important;
+  }
+//   z-index: 0;
+
+//   md-input-container:not(.md-input-focused, .md-input-has-value) label {
+//   color: rgba(255,255,255,0.87);
+// }
+
+// .md-select-placeholder {
+//   color: rgba(255,255,255,0.87) !important;
+// }
+}
+
