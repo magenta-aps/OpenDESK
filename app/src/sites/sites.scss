@@ -336,8 +336,13 @@ h2 {
 
 .od-filter-toolbar {
   // height: $u*3;
+  // border-bottom: 5px solid #d5d5d5;
+  md-input-container {
+    width: 40%;
+  }
   th {
     font-weight: 400 !important;
+    padding-bottom: 50px;
   }
 
   .show-all {
