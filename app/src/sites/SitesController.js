@@ -13,7 +13,7 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 	vm.sitesPerUser = [];
 	vm.organizationalCenters = [];
 	vm.managerRole = 'Manager';
-	vm.memberonly = true;
+	vm.showall = false;
 	vm.isAdmin = sessionService.isAdmin();
 
 	vm.infoSiteDialog = infoSiteDialog;
