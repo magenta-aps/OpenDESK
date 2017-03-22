@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteEditController', PdSiteEditController);
     
-    function PdSiteEditController(sitedata, $scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast) {
+    function PdSiteEditController(sitedata, $scope, $mdDialog, pd_siteService, $state, $filter, siteService, $mdToast, filterService) {
         
         var pde = this;
         var availProjectOwners = [];
@@ -18,15 +18,15 @@ angular
             shortName: pde.site.shortName,
             siteName: pde.site.title,
             desc: pde.site.description,
-            owner: pde.site.members.pd_projectowner,
+            owner: pde.site.groups['PD_PROJECTOWNER'].members[0],
             sbsys: pde.site.sbsys,
             center_id: pde.site.center_id,
-            manager: pde.site.members.pd_projectmanager
+            manager: pde.site.groups['PD_PROJECTMANAGER'].members[0]
         };
-        $scope.newSite.owner.fullName = pde.site.members.pd_projectowner.displayName;
-        $scope.newSite.owner.shortName = pde.site.members.pd_projectowner.username;
-        $scope.newSite.manager.firstName = pde.site.members.pd_projectmanager.displayName;
-        $scope.newSite.manager.shortName = pde.site.members.pd_projectmanager.username;
+        //$scope.newSite.owner.fullName = pde.site.groups['PD_PROJECTOWNER'].displayName;
+        //$scope.newSite.owner.shortName = pde.site.members.pd_projectowner.username;
+        //$scope.newSite.manager.firstName = pde.site.members.pd_projectmanager.displayName;
+        //$scope.newSite.manager.shortName = pde.site.members.pd_projectmanager.username;
         if (pde.site.visibility === 'PRIVATE') {
             $scope.newSite.isPrivate = true;
         }
@@ -57,8 +57,8 @@ angular
             pd_siteService.getAllManagers().then(
                 function(response) {
                     console.log('Got available project owners');
-                    console.log(response.data);
-                    availProjectOwners = response.data;
+                    console.log(response);
+                    availProjectOwners = response;
                 },
                 function(err) {
                     console.log(err);
@@ -69,8 +69,7 @@ angular
         
         
         function searchProjectOwners(query) {
-            var hitList = $filter('filter')(availProjectOwners, { fullName: query });
-            return hitList;
+            return filterService.search(availProjectOwners, { displayName: query });
         }
         
         
@@ -92,7 +91,7 @@ angular
 
         
         function updatePdSite() {
-            var manager = pde.site.members.pd_projectmanager.shortName;
+            var manager = pde.site.groups['PD_PROJECTMANAGER'].members[0].userName;
             if ($scope.newSite.manager.userName !== undefined) {
                 manager = $scope.newSite.manager.userName;
             }
@@ -104,7 +103,7 @@ angular
             console.log('Updating site to sitename: ' + $scope.newSite.siteName +
                 '; sbsys: ' + $scope.newSite.sbsys +
                 '; center id: ' + $scope.newSite.center_id +
-                '; owner: ' + $scope.newSite.owner.shortName +
+                '; owner: ' + $scope.newSite.owner.userName +
                 '; manager: ' + manager +
                 '; visibility: ' + visibility +
                 '; state: ' + $scope.newSite.state.stateId
@@ -115,7 +114,7 @@ angular
                 $scope.newSite.desc,
                 $scope.newSite.sbsys,
                 $scope.newSite.center_id,
-                $scope.newSite.owner.shortName,
+                $scope.newSite.owner.userName,
                 manager,
                 visibility,
                 $scope.newSite.state.stateId

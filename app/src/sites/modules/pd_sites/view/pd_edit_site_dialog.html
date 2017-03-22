@@ -25,12 +25,12 @@
                         md-selected-item="newSite.owner"
                         md-search-text="searchTextOwner"
                         md-items="own in searchProjectOwners(searchTextOwner)"
-                        md-item-text="own.fullName"
+                        md-item-text="own.displayName"
                         md-min-length="1"
                         md-floating-label="Projektejer"
                         placeholder="Projektejer">
                         <md-item-template>
-                            <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ own.fullName }}</span>
+                            <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ own.displayName }}</span>
                         </md-item-template>
                         <md-not-found>
                             Ingen brugere matcher "{{ searchTextOwner }}".
@@ -57,12 +57,12 @@
                             md-selected-item="newSite.manager"
                             md-search-text="searchTextManager"
                             md-items="man in searchPeople(searchTextManager)"
-                            md-item-text="man.firstName + ' ' + man.lastName"
+                            md-item-text="man.displayName"
                             md-min-length="1"
                             md-floating-label="Projektleder"
                             placeholder="Projektleder">
                         <md-item-template>
-                            <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
+                            <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.displayName }}</span>
                         </md-item-template>
                         <md-not-found>
                             Ingen brugere matcher "{{ searchTextManager }}".

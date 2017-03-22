@@ -41,12 +41,12 @@
                                     md-selected-item="newSite.projectOwner"
                                     md-search-text="prjownsrchtxt"
                                     md-items="own in searchProjectOwners(prjownsrchtxt)"
-                                    md-item-text="own.fullName"
+                                    md-item-text="own.displayName"
                                     md-min-length="1"
                                     md-floating-label="Projektejer"
                                     placeholder="Projektejer">
                                 <md-item-template>
-                                    <span md-highlight-text="prjownsrchtxt" md-highlight-flags="^i">{{ own.fullName }}</span>
+                                    <span md-highlight-text="prjownsrchtxt" md-highlight-flags="^i">{{ own.displayName }}</span>
                                 </md-item-template>
                                 <md-not-found>
                                     Ingen brugere matcher "{{ prjownsrchtxt }}".
