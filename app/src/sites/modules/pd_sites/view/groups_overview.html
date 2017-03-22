@@ -47,7 +47,7 @@
 		</md-card-content>
 	</md-card>
 
-	<md-card>
+	<md-card ng-controller="SiteController as sc">
 		<md-card-content>
 
 			<h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
@@ -55,39 +55,23 @@
 				<p>
 				<div style="font-weight: bold;">Projektleder</div>
 				<div layout="row">
-					<div flex="85" ng-click='pd.openUserInfo()'>{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].displayName }}</div>
-					<div flex="10" style="position: relative; top: -10px">
-						<md-menu ng-controller="SiteController as sc">
-							<md-button class="md-icon-button" ng-click="sc.openMenu($mdMenu.open, $event)"> 
-								<md-icon md-menu-origin>info_outline</md-icon>
-							</md-button>
-							<md-menu-content width="5">
-								<md-menu-item>
-									<div>Email:&nbsp;{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].email }}</div>
-								</md-menu-item>
-							</md-menu-content>
-						</md-menu>
+					<div flex="85" class="pd-manager">
+						<span ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTMANAGER'].members[0])">
+						{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].displayName }}
+						</span>
 					</div>
-					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<div flex="15" hide-xs hide-sm><!-- Spacer //--></div>
 				</div>
 				</p>
 				<p>
 				<div style="font-weight: bold;">Projektejer</div>
 				<div layout="row">
-					<div flex="85">{{ pd.site.groups['PD_PROJECTOWNER'].members[0].displayName }}</div>
-					<div flex="10" style="position: relative; top: -10px">
-						<md-menu ng-controller="SiteController as vm">
-							<md-button class="md-icon-button" ng-click="vm.openMenu($mdMenu.open, $event)">
-								<md-icon md-menu-origin>info_outline</md-icon>
-							</md-button>
-							<md-menu-content width="5">
-								<md-menu-item>
-									<div>Email:&nbsp;{{ pd.site.groups['PD_PROJECTOWNER'].members[0].email }}</div>
-								</md-menu-item>
-							</md-menu-content>
-						</md-menu>
+					<div flex="85" class="pd-owner">
+						<span ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTOWNER'].members[0])">
+							{{ pd.site.groups['PD_PROJECTOWNER'].members[0].displayName }}
+						</span>
 					</div>
-					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<div flex="15" hide-xs hide-sm><!-- Spacer //--></div>
 				</div>
 				</p>
 			</div>
@@ -102,27 +86,15 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showProjGroupList">
-					<div layout="row" ng-repeat="mem in pd.site.groups['PD_PROJECTGROUP'].members">
-						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
-						<div flex="10" style="position: relative; top: -10px">
-							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-									<md-icon md-menu-origin>info_outline</md-icon>
-								</md-button>
-								<md-menu-content width="5">
-									<md-menu-item>
-										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_PROJECTGROUP'].permissions] }}</div>
-									</md-menu-item>
-									<md-menu-item>
-										<div>Email:&nbsp;{{ mem.email }}</div>
-									</md-menu-item>
-								</md-menu-content>
-							</md-menu>
+					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_PROJECTGROUP'].members">
+						<div flex="{{vm.canEdit ? 85 : 95}}" >
+							 <span ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</span>
 						</div>
+
 						<!--Remove if ng-if="vm.isManager" if there are more actions that site consumers may do-->
 						<div flex="10" style="position: relative; top: -10px" ng-if="vm.isManager">
 							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+								<md-button class="md-icon-button" ng-click="vm.openMenu($mdMenu.open, $event)">
 									<md-icon md-menu-origin>more_vert</md-icon>
 								</md-button>
 								<md-menu-content width="5">
@@ -154,27 +126,14 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showSteerGroupList">
-					<div layout="row" ng-repeat="mem in pd.site.groups['PD_STEERING_GROUP'].members">
-						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
-						<div flex="10" style="position: relative; top: -10px">
-							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-									<md-icon md-menu-origin>info_outline</md-icon>
-								</md-button>
-								<md-menu-content width="5">
-									<md-menu-item>
-										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_STEERING_GROUP'].permissions] }}</div>
-									</md-menu-item>
-									<md-menu-item>
-										<div>Email:&nbsp;{{ mem.email }}</div>
-									</md-menu-item>
-								</md-menu-content>
-							</md-menu>
-						</div>
+					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_STEERING_GROUP'].members">
+						<div flex="{{vm.canEdit ? 85 : 95}}">
+							<span ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</span>
+							</div>
 						<!--Remove if ng-if="vm.isManager" if there are more actions that site consumers may do-->
 						<div flex="10" style="position: relative; top: -10px" ng-if="vm.isManager">
 							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+								<md-button class="md-icon-button" ng-click="vm.openMenu($mdMenu.open, $event)">
 									<md-icon md-menu-origin>more_vert</md-icon>
 								</md-button>
 								<md-menu-content width="5">
@@ -206,27 +165,14 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showWorkGroupList">
-					<div layout="row" ng-repeat="mem in pd.site.groups['PD_WORKGROUP'].members">
-						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
-						<div flex="10" style="position: relative; top: -10px">
-							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-									<md-icon md-menu-origin>info_outline</md-icon>
-								</md-button>
-								<md-menu-content width="5">
-									<md-menu-item>
-										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_WORKGROUP'].permissions] }}</div>
-									</md-menu-item>
-									<md-menu-item>
-										<div>Email:&nbsp;{{ mem.email }}</div>
-									</md-menu-item>
-								</md-menu-content>
-							</md-menu>
+					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_WORKGROUP'].members">
+						<div flex="{{vm.canEdit ? 85 : 95}}">
+							<span ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</span>
 						</div>
 						<!--Remove if ng-if="vm.isManager" if there are more actions that site consumers may do-->
 						<div flex="10" style="position: relative; top: -10px" ng-if="vm.isManager">
 							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+								<md-button class="md-icon-button" ng-click="vm.openMenu($mdMenu.open, $event)">
 									<md-icon md-menu-origin>more_vert</md-icon>
 								</md-button>
 								<md-menu-content width="5">
@@ -258,27 +204,16 @@
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
 				<ul ng-show="pd.showMonitorsList">
-					<div layout="row" ng-repeat="mem in pd.site.groups['PD_MONITORS'].members">
-						<div flex="{{vm.canEdit ? 75 : 85}}">{{ mem.displayName }}</div>
-						<div flex="10" style="position: relative; top: -10px">
-							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-									<md-icon md-menu-origin>info_outline</md-icon>
-								</md-button>
-								<md-menu-content width="5">
-									<md-menu-item>
-										<div>Rolle:&nbsp;{{ role_mapping[pd.site.groups['PD_MONITORS'].permissions] }}</div>
-									</md-menu-item>
-									<md-menu-item>
-										<div>Email:&nbsp;{{ mem.email }}</div>
-									</md-menu-item>
-								</md-menu-content>
-							</md-menu>
+					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_MONITORS'].members">
+						<div flex="{{vm.canEdit ? 85 : 95}}">
+							<span ng-click="sc.openMemberInfo(mem)">
+							{{ mem.displayName }}
+							</span>
 						</div>
 						<!--Remove if ng-if="vm.isManager" if there are more actions that site consumers may do-->
 						<div flex="10" style="position: relative; top: -10px" ng-if="vm.isManager">
 							<md-menu ng-controller="SiteController as vm">
-								<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+								<md-button class="md-icon-button" ng-click="vm.openMenu($mdMenu.open, $event)">
 									<md-icon md-menu-origin>more_vert</md-icon>
 								</md-button>
 								<md-menu-content width="5">
@@ -308,7 +243,7 @@
 						<md-tooltip md-direction="top">Tilføj/fjern gruppemedlemmer</md-tooltip>
 						<i class="material-icons">add</i>
 					</md-button>
-					<md-button class="md-raised md-icon-button" style="{{vm.isManager ? 'margin-left: 30px;' : ''}}"
+					<md-button class="md-raised md-icon-button" ng-style="vm.isManager ? 'margin-left: 30px;' : ''"
 							   ng-click="pd.doPDF()" aria-label="Download PDF med grupper">
 						<md-tooltip md-direction="top">Download medlemsoversigt som PDF</md-tooltip>PDF
 					</md-button>
