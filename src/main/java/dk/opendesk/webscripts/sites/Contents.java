@@ -22,6 +22,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.ContentData;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessStatus;
@@ -117,11 +118,9 @@ public class Contents extends AbstractWebScript {
                         type = "cmis:link";
                     } else {
                         type = "cmis:document";
-                        if(name.contains(".")) {
-                            String[] nameParts = name.split("[.]");
-                            String fileType = nameParts[nameParts.length - 1];
-                            json.put("fileType", fileType);
-                        }
+                        ContentData contentData = (ContentData) nodeService.getProperty(childNodeRef, ContentModel.PROP_CONTENT);
+                        String mimeType = contentData.getMimetype();
+                        json.put("mimeType", mimeType);
                     }
 
                     AccessStatus accessStatus = permissionService.hasPermission(childNodeRef, PermissionService.DELETE);
