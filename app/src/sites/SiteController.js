@@ -60,8 +60,17 @@ angular
         vm.editSiteDialog = editSiteDialog;
         vm.goToLOEditPage = goToLOEditPage;
         vm.updateSiteName = updateSiteName;
+        vm.createDocumentFromTemplate = createDocumentFromTemplate;
 
         $scope.searchProjects = searchProjects;
+
+
+        siteService.getTemplateDocuments().then(function(response) {
+            $scope.templateDocuments = response;
+
+        })
+
+
         
         function loadSiteData() {
             siteService.loadSiteData($stateParams.projekt).then(
@@ -227,6 +236,8 @@ angular
         vm.loadContents = function () {
             siteService.getContents(vm.currentFolderUUID).then(function (response) {
                 $scope.contents = response;
+                console.log("contents");
+                console.log(response);
             });
     
         };
@@ -817,8 +828,12 @@ angular
                 }
             );
         }
-        
 
+        function createDocumentFromTemplate(template_id) {
+            siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef).then (function (response) {
+                loadSiteData();
+            });
+        }
     }
             
 

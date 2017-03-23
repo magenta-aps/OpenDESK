@@ -393,6 +393,22 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         	}).then(function(response) {
         		return response.data;
         	});
+        },
+        getTemplateDocuments : function() {
+            return $http.get("/alfresco/service/template?method=getAllTemplateDocuments", {
+            }).then(function(response) {
+                return response.data[0];
+            });
+        },
+        createDocumentFromTemplate : function(nodeid, currentfolder) {
+            return $http.get("/alfresco/service/template?method=makeNewDocumentFromTemplate&template_nodeid=" + nodeid + "&destination_nodeRefid=" + currentfolder, {
+            }).then(function(response) {
+                return response;
+            });
         }
+
+
+
+
     };
 });

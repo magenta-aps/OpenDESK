@@ -24,8 +24,19 @@ function SystemSettingsCtrl(systemSettingsPagesService, sessionService, systemSe
 
 
     vm.isAdmin = sessionService.isAdmin();
+
+
+
+
+    systemSettingsService.getDocumentTemplateSite().then(function (response) {
+        vm.shortName = response.shortName;
+    });
+
     vm.pages = systemSettingsPagesService.getPages()
         .filter(function (page) {
             return true;
         });
+
+
+
 }

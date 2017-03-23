@@ -23,7 +23,8 @@ function SystemSettingsPagesServiceProvider() {
 
     function SystemSettingsPagesService() {
         var service = {
-            getPages: getPages
+            getPages: getPages,
+            addPage: addPage
         };
         return service;
 

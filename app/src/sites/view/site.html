@@ -232,9 +232,13 @@
                     <md-button ng-if="vm.canEdit" class="md-raised"
                                ng-click="vm.newFolderDialog($event)"><i class="material-icons">add</i> Opret ny mappe
                     </md-button>
+
+
                     <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.isManager" class="md-raised"
                                ng-click="vm.newLinkDialog($event)"><i class="material-icons">link</i> Opret projektlink
                     </md-button>
+
+
 					<div layout="column">
 						<md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
 							<md-button ng-click="$mdMenu.open($event)" class="md-raised" aria-label="SBSYS">
@@ -251,6 +255,25 @@
 							</md-menu-content>
 						</md-menu>
 					</div>
+
+                    <div layout="column">
+                        <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
+                            <md-button ng-click="$mdMenu.open($event)" class="md-raised" aria-label="SBSYS">
+                                <i class="material-icons">folder_open</i>
+                                <span style="margin-left: 10px; margin-right: 20px;">Opret nyt dokument</span>
+                            </md-button>
+                            <md-menu-content>
+                                        <md-menu-item ng-repeat="template in templateDocuments">
+                                        <md-button ng-click="vm.createDocumentFromTemplate(template.nodeRef)"><i class="material-icons">unarchive</i> {{template.name}}</md-button>
+                                        </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </div>
+
+
+
+
+
                 </div>
             </md-card-content>
         </md-card>
