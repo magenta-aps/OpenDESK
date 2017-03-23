@@ -12,19 +12,19 @@ angular
         
         $scope.selectedProjGrpItem = null;
         $scope.srchprjgrptxt = null;
-        $scope.projektGruppe = pdg.site.members.pd_projectgroup ? pdg.site.members.pd_projectgroup : [];
+        $scope.projektGruppe = pdg.site.groups['PD_PROJECTGROUP'].members ? pdg.site.groups['PD_PROJECTGROUP'].members : [];
         
         $scope.selectedStyreGrpItem = null;
         $scope.srchstrgrptxt = null;
-        $scope.styreGruppe = pdg.site.members.pd_steering_group ? pdg.site.members.pd_steering_group : [];
+        $scope.styreGruppe = pdg.site.groups['PD_STEERING_GROUP'].members ? pdg.site.groups['PD_STEERING_GROUP'].members : [];
         
         $scope.selectedArbejdsGrpItem = null;
         $scope.srchrbjdgrptxt = null;
-        $scope.arbejdsGruppe = pdg.site.members.pd_workgroup ? pdg.site.members.pd_workgroup : [];
+        $scope.arbejdsGruppe = pdg.site.groups['PD_WORKGROUP'].members ? pdg.site.groups['PD_WORKGROUP'].members : [];
         
         $scope.selectedFolgeGrpItem = null;
         $scope.srchflggrptxt = null;
-        $scope.folgeGruppe = pdg.site.members.pd_monitors ? pdg.site.members.pd_monitors : [];
+        $scope.folgeGruppe = pdg.site.groups['PD_MONITORS'].members ? pdg.site.groups['PD_MONITORS'].members : [];
         
         $scope.cancel = cancel;
         $scope.updatePDSiteGroups = updatePDSiteGroups;

@@ -55,10 +55,10 @@
 				<p>
 				<div style="font-weight: bold;">Projektleder</div>
 				<div layout="row">
-					<div flex="85" ng-click='vm.openUserInfo($event)'>{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].displayName }}</div>
+					<div flex="85" ng-click='pd.openUserInfo()'>{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].displayName }}</div>
 					<div flex="10" style="position: relative; top: -10px">
-						<md-menu ng-controller="SiteController as vm">
-							<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+						<md-menu ng-controller="SiteController as sc">
+							<md-button class="md-icon-button" ng-click="sc.openMenu($mdMenu.open, $event)"> 
 								<md-icon md-menu-origin>info_outline</md-icon>
 							</md-button>
 							<md-menu-content width="5">
@@ -77,7 +77,7 @@
 					<div flex="85">{{ pd.site.groups['PD_PROJECTOWNER'].members[0].displayName }}</div>
 					<div flex="10" style="position: relative; top: -10px">
 						<md-menu ng-controller="SiteController as vm">
-							<md-button class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+							<md-button class="md-icon-button" ng-click="vm.openMenu($mdMenu.open, $event)">
 								<md-icon md-menu-origin>info_outline</md-icon>
 							</md-button>
 							<md-menu-content width="5">

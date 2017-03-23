@@ -179,5 +179,9 @@ angular
             });
         }
 
+        function openUserInfo() {
+            console.log('show dialog now!');
+        }
+
     
     }

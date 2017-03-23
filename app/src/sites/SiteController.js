@@ -217,7 +217,10 @@ angular
             originatorEv = event;
             $mdOpenMenu(event);
         };
-    
+
+        vm.openUserInfo = function() {
+            console.log('hello world');
+        }
     
         vm.loadContents = function () {
             siteService.getContents(vm.currentFolderUUID).then(function (response) {
@@ -227,7 +230,6 @@ angular
             });
     
         };
-    
     
         vm.loadHistory = function (doc) {
             $scope.history = [];

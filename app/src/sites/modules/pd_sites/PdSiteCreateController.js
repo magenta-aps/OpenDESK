@@ -80,7 +80,7 @@ angular
                 pd_siteService.getAllManagers().then(
                     function(response) {
                         console.log(response);
-                        availProjectOwners = response.data;
+                        availProjectOwners = response;
                     },
                     function(err) {
                         console.log(err);
@@ -91,7 +91,7 @@ angular
             
             
             function searchProjectOwners(query) {
-                return filterService.search(availProjectOwners, { fullName: query });
+                return filterService.search(availProjectOwners, { displayName: query });
             }
             
             
@@ -130,7 +130,7 @@ angular
                     $scope.newSite.desc,
                     $scope.newSite.sbsys,
                     $scope.newSite.center_id,
-                    $scope.newSite.projectOwner.shortName,
+                    $scope.newSite.projectOwner.userName,
                     $scope.newSite.manager.userName,
                     visibility,
                     $scope.newSite.template.name
