@@ -16,6 +16,8 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 	vm.showall = false;
 	vm.isAdmin = sessionService.isAdmin();
 
+	vm.showFilters = false;
+
 	vm.infoSiteDialog = infoSiteDialog;
 
 	//pd_siteService.getAllOrganizationalCenters();
@@ -157,6 +159,11 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 		originatorEv = event;
 		$mdOpenMenu(event);
 	};
+
+	vm.toggleFilters = function () {
+		console.log('toggle');
+		vm.showFilters = !vm.showFilters;
+	}
 
 	vm.currentDialogTitle = '';
 	vm.currentDialogDescription = '';
