@@ -10,7 +10,8 @@
             getNotices: getNotices,
             addNotice: addNotice,
             delNotice: delNotice,
-            setReadNotice: setRead
+            setReadNotice: setRead,
+            setSeenNotice: setSeen
         };
 
         return service;
@@ -28,6 +29,16 @@
         function setRead(userId, noticeObj) {
             return $http.post(restBaseUrl + "/notifications", {
                 PARAM_METHOD : "setRead",
+                PARAM_USERNAME: userId,
+                PARAM_NODE_REF : noticeObj
+            }).then(function(response) {
+                return response;
+            })
+        };
+
+        function setSeen(userId, noticeObj) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "setSeen",
                 PARAM_USERNAME: userId,
                 PARAM_NODE_REF : noticeObj
             }).then(function(response) {

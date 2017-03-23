@@ -61,4 +61,10 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
         });
     };
 
+    vm.setSeen = function (noticeObj) {
+        notificationsService.setSeenNotice(currentUser, noticeObj).then(function (val) {
+            vm.updateNotifications();
+        });
+    };
+
 };
