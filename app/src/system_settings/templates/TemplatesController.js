@@ -152,19 +152,10 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
                     });
 
                 })
-
-
-
             },
             function() {
                 console.log('cancelled delete');
             }
         );
     };
-
-
-
-
-
-
 }

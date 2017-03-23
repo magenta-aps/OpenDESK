@@ -31,6 +31,21 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 controllerAs: 'vm'
             }
         }
+    }).state('administration.systemsettings.document', {
+        parent: 'site',
+        url: '/projekter/:projekt{path:.*}',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/sites/view/site.html',
+                controller: 'SiteController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user],
+            selectedTab: 0
+        }
+
     }).state('administration.systemsettings.templateList', {
         url: '/skabeloner',
         data: {

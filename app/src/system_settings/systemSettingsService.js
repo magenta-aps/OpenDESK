@@ -20,7 +20,13 @@ angular.module('openDeskApp.systemsettings').factory('systemSettingsService', fu
 
                 return response.data;
             });
-    }
+        },
+        getDocumentTemplateSite: function() {
+            return $http.post("/alfresco/service/sites", { PARAM_METHOD : "getDocumentTemplateSite"
+            }).then(function(response) {
+                return response.data[0];
+            });
+        }
 
 
     };
