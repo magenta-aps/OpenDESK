@@ -161,7 +161,6 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 	};
 
 	vm.toggleFilters = function () {
-		console.log('toggle');
 		vm.showFilters = !vm.showFilters;
 	}
 

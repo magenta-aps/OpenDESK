@@ -31,7 +31,7 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 
-				<md-autocomplete flex=m d-input-name="autocompleteField" md-input-minlength="2" md-input-maxlength="18" md-no-cache="ctrl.noCache"
+				<md-autocomplete flex md-input-name="autocompleteField" md-input-minlength="2" md-input-maxlength="18" md-no-cache="ctrl.noCache"
 				    md-selected-item="ctrl.selectedItem" md-search-text="ctrl.searchText" md-items="item in ctrl.querySearch(ctrl.searchText)"
 				    md-item-text="item.display" md-require-match="" md-floating-label="Projektleder">
 					<md-item-template>
@@ -69,50 +69,36 @@
 					</md-select>
 				</md-input-container>
 
-				<md-input-container class="md-block">
+				<!--<md-input-container class="md-block">
 					<label>Type</label>
 					<md-select ng-model="">
 						<md-option>Grupperum</md-option>
 						<md-option>Projekt</md-option>
 					</md-select>
-				</md-input-container>
+				</md-input-container>-->
 			</md-card-content>
-			<div layout='row'>
-				<md-input-container>
-					<label>Fra</label>
-					<md-datepicker ng-model="user.fromDate"></md-datepicker>
-				</md-input-container>
-				<md-input-container>
-					<label>Til</label>
-					<md-datepicker ng-model="user.toDate"></md-datepicker>
-				</md-input-container>
-			</div>
 		</md-card>
+
 		<md-card flex>
 			<md-card-content>
-				<!--<div class="od-filter-toolbar" layout-gt-sm="row"></div>-->
-
 				<md-button aria-label="filter" class="md-icon-button md-primary" ng-click="vm.toggleFilters()">
 					<md-icon>filter_list</md-icon>
 				</md-button>
 
-
 				<md-list class="sortHead">
 					<table class="od-members od-members-row">
-
-						<thead fix-head>
-
+						<thead> <!-- fix-head -->
 							<tr>
-								<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
-								<th class="description" sort-table="description" title="Sortér kolonne">Beskrivelse</th>
-								<th class='project-lead' sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
-								<th sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
-								<th sort-table="status" title="Sortér kolonne">Status</th>
-								<th colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
+								<th flex='15' sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
+								<th flex='35' sort-table="description" title="Sortér kolonne">Beskrivelse</th>
+								<th flex='15' sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
+								<th flex='15' sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
+								<th flex='10' sort-table="status" title="Sortér kolonne">Status</th>
+								<th flex='10' colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
 							</tr>
 						</thead>
 
-						<tbody>
+						<tbody style="overflow: auto">
 							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
