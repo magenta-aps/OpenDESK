@@ -111,24 +111,49 @@
                     <!--/dt-->
                     <dd>
 						<div layout="row" style="margin: 10px 0 20px 0;">
-							<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Du er blevet bedt om at reviewe dette dokument:</span>
+							<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Du er blevet bedt om at reviewe dette dokument med følgende kommentar: {{wf_comment}} </span>
 						</div>
+
+
 						
 						Du kan 
 						<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage(false)">
                             Redigere
                         </md-button>
 						dokumentet, inden du godkender eller afviser.
+
 						<div style="margin-top: 20px" ng-controller="DocumentController as dc">
+
 							<md-button class="md-raised md-primary" ng-click="dc.godkendDialog($event)">
 								Godkend
 							</md-button>
+
+
+
 							<md-button class="md-raised" ng-click="dc.afvisDialog($event)">
 								Afvis
 							</md-button>
 						</div>
                     </dd>
                 </ng-if>
+
+				<ng-if ng-if="vm.wfr" class="od-notifylist--item--nolink">
+					<br>
+					<md-divider></md-divider>
+					<!--dt-->
+					<h4>Review</h4>
+					<!--/dt-->
+					<dd>
+						<div layout="row" style="margin: 10px 0 20px 0;">
+							<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Dokumentet er besvaret med følgende kommentar: {{wf_comment}} </span>
+						</div>
+
+
+
+
+					</dd>
+				</ng-if>
+
             </dl>
         </div>
     </div>

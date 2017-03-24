@@ -129,6 +129,23 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
     if (paramValue == "wf") {
         vm.wf_from = $location.search().from;
         vm.wf = true;
+
+        var NID = $location.search().NID;
+
+        notificationsService.getComment(NID).then (function(response) {
+            $scope.wf_comment = response;
+        })
+
+
+    }
+    else if (paramValue == "wf-response") {
+
+        vm.wfr = true;
+
+        var NID = $location.search().NID;
+        notificationsService.getComment(NID).then (function(response) {
+            $scope.wf_comment = response;
+        })
     }
     
     vm.createWFNotification = function(comment) {

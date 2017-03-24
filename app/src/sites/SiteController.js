@@ -6,7 +6,7 @@ angular
 
     function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
                             alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
-                            searchService, $state, userService, groupService, preferenceService, sessionService, filterService) {
+                            searchService, $state, userService, groupService, preferenceService, sessionService, filterService, fileUtilsService) {
 
                             
         $scope.role_mapping = {};
@@ -238,8 +238,19 @@ angular
                 $scope.contents = response;
                 console.log("contents");
                 console.log(response);
+                vm.addThumbnailUrl();
             });
     
+        };
+
+        vm.addThumbnailUrl = function () {
+            $scope.contents.forEach(function(item) {
+                if(item.contentType === "cmis:folder"){
+                    item.thumbNailURL = fileUtilsService.getFolderIcon(24);
+                }else{
+                    item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
+                }
+            });
         };
     
         vm.loadHistory = function (doc) {
