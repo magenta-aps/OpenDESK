@@ -6,7 +6,7 @@
         <span ng-if="notifications.length > 0" class="od-notifications--counter">{{ notifications.length }}</span>
     </button>
 
-    <div class="od-flyout right" ng-class="{ open: nc.on, closed: !nc.on }" ng-click="nc.toggleNotices()">
+    <div class="od-flyout right" ng-class="{ open: nc.on, closed: !nc.on }" ng-click="nc.toggleNotices();nc.setAllSeen()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
             <h2 class="od-flyout--title">Beskeder</h2>
             <button ng-click="nc.toggleNotices()" class="od-btn od-flyout--close">

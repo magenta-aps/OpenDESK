@@ -18,7 +18,7 @@
 		</form>
 	</div>
 	<div layout='row'>
-		<md-card class="od-filter-sidebar" flex='15' ng-show="vm.showFilters">
+		<md-card class="od-filter-sidebar transition" flex='15' ng-show="vm.showFilters">
 			<md-card-content>
 				<md-input-container class="md-block show-all">
 					<md-checkbox name="show-all" ng-model="vm.showall">
@@ -31,21 +31,37 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 
-				<md-autocomplete flex md-input-name="autocompleteField" md-input-minlength="2" md-input-maxlength="18" md-no-cache="ctrl.noCache"
-				    md-selected-item="ctrl.selectedItem" md-search-text="ctrl.searchText" md-items="item in ctrl.querySearch(ctrl.searchText)"
-				    md-item-text="item.display" md-require-match="" md-floating-label="Projektleder">
+				<md-input-container class="md-block">
+					<label>Projektleder</label>
+					<input type="text" ng-model="vm.search.manager.fullName">
+				</md-input-container>
+				<!--<md-autocomplete 
+					md-selected-item="vm.search.manager.fullName" 
+					md-search-text="searchTextManager" 
+					md-items="man in vm.searchPeople(searchTextManager)"
+				    md-item-text="man.firstName + ' ' + man.lastName" 
+					md-min-length="1" 
+					md-floating-label="Projektleder" 
+					placeholder="Projektleder">
 					<md-item-template>
-						<span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+						<span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
 					</md-item-template>
-				</md-autocomplete>
+					<md-not-found>
+						Ingen brugere matcher "{{ searchTextManager }}".
+					</md-not-found>
+				</md-autocomplete>-->
 
-				<md-autocomplete flex md-input-name="autocompleteField" md-input-minlength="2" md-input-maxlength="18" md-no-cache="ctrl.noCache"
-				    md-selected-item="ctrl.selectedItem" md-search-text="ctrl.searchText" md-items="item in ctrl.querySearch(ctrl.searchText)"
-				    md-item-text="item.display" md-require-match="" md-floating-label="Medlemmer">
-					<md-item-template>
-						<span md-highlight-text="ctrl.searchText">{{item.display}}</span>
-					</md-item-template>
-				</md-autocomplete>
+					<md-chips ng-model="projektGruppe" md-autocomplete-snap md-require-match="true">
+						<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="srchprjgrptxt" md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
+						    md-item-text="pgitem.firstName" placeholder="Angiv et medlem">
+							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
+						</md-autocomplete>
+						<md-chip-template>
+							<span>
+                                <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
+                            </span>
+						</md-chip-template>
+					</md-chips>
 
 				<md-input-container class="md-block">
 					<label>Org. enhed</label>
@@ -86,19 +102,20 @@
 				</md-button>
 
 				<md-list class="sortHead">
-					<table class="od-members od-members-row">
-						<thead> <!-- fix-head -->
+					<table class="od-members">
+						<thead>
+							<!-- fix-head -->
 							<tr>
-								<th flex='15' sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
-								<th flex='35' sort-table="description" title="Sortér kolonne">Beskrivelse</th>
-								<th flex='15' sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
-								<th flex='15' sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
-								<th flex='10' sort-table="status" title="Sortér kolonne">Status</th>
-								<th flex='10' colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
+								<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
+								<th sort-table="description" title="Sortér kolonne">Beskrivelse</th>
+								<th sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
+								<th sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
+								<th sort-table="status" title="Sortér kolonne">Status</th>
+								<th colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
 							</tr>
 						</thead>
 
-						<tbody style="overflow: auto">
+						<tbody>
 							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">

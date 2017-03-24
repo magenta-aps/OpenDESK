@@ -250,5 +250,12 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 		});
 	};
 
+	vm.searchPeople = function (query) {
+		console.log('search people');
+		if (query) {
+			return siteService.getAllUsers(query);
+		}
+	}
+
 
 } // SiteCtrl close
