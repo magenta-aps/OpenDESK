@@ -139,7 +139,7 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
     }
     else if (paramValue == "wf-response") {
-
+        vm.wf_from = $location.search().from;
         vm.wfr = true;
 
         var NID = $location.search().NID;
