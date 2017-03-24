@@ -49,6 +49,10 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="od:seen">
+                <type>d:boolean</type>
+                <default>false</default>
+            </property>
                 <property name="od:document">
                     <type>d:noderef</type>
                 </property>
@@ -150,6 +154,16 @@
             <title>Attributes related to a template</title>
             <properties>
                 <property name="od:template_name">
+                    <title>template_name</title>
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+
+        <aspect name="od:document_template">
+            <title>Marks a project a placeholder for document templates</title>
+            <properties>
+                <property name="od:document_template">
                     <title>template_name</title>
                     <type>d:text</type>
                 </property>

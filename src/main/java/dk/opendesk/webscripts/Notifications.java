@@ -78,7 +78,7 @@ public class Notifications extends AbstractWebScript {
             if(method != null) {
                 switch (method) {
                     case "getAll":
-                        result = this.getNotifications(userName);
+                        result = this.getAllNotifications(userName);
                         break;
 
                     case "add":
@@ -98,11 +98,22 @@ public class Notifications extends AbstractWebScript {
                         if(nodeRef != null)
                             this.setNotificationRead(nodeRef);
                         break;
+
+
+                    case "setSeen":
+                        if(nodeRef != null)
+                            this.setNotificationSeen(nodeRef);
+                        break;
+
+
+                    case "getComment":
+                        if(nodeRef != null)
+                            result =  this.getComment(nodeRef);
+                        break;
                 }
             }
         }
         catch (Exception e) {
-            System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
         }
@@ -175,6 +186,7 @@ public class Notifications extends AbstractWebScript {
             String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
             String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
             Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
+            Boolean seen = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
             String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
 
 
@@ -185,10 +197,12 @@ public class Notifications extends AbstractWebScript {
                 json.put("nodeRef", child.getChildRef());
                 json.put("subject", subject);
                 json.put("message", message);
-                json.put("link", link);
+                json.put("link", link + "&NID=" + child.getChildRef());
                 json.put("read", read);
-                json.put("created", nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED));
+                json.put("seen", seen);
 
+                Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
+                json.put("created", d.getTime());
                 result.add(json);
 
             } catch (JSONException e) {
@@ -222,6 +236,7 @@ public class Notifications extends AbstractWebScript {
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
+                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_LINK, link);
 
                 nodeService.setProperties(childAssocRef.getChildRef(),contentProps);
@@ -239,9 +254,17 @@ public class Notifications extends AbstractWebScript {
     }
 
     private void setNotificationRead (NodeRef nodeRef) {
-        nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_READ, true);
+        nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
+    }
+    private void setNotificationSeen (NodeRef nodeRef) {
+        nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
     }
 
+    private JSONArray getComment (NodeRef nodeRef) {
+        String comment = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
+
+        return Utils.getJSONReturnPair("comment", comment);
+    }
 }
 
 // create

@@ -20,6 +20,7 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.invitation.InvitationService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 
 import org.alfresco.service.cmr.security.PersonService;
@@ -47,7 +48,6 @@ import dk.opendesk.repo.utils.Utils;
 
 public class FileBrowser extends AbstractWebScript {
 
-
     private NodeService nodeService;
     private PersonService personService;
     private FileFolderService fileFolderService;
@@ -58,6 +58,7 @@ public class FileBrowser extends AbstractWebScript {
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
+
     }
 
     @Override

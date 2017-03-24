@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Template documents</shortname>
+    <description>service to work with document templates</description>
+    <url>/template</url>
+    <authentication>user</authentication>
+    <format default="html"></format>
+</webscript>

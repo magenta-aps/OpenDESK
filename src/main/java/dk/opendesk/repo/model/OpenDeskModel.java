@@ -62,6 +62,7 @@ public interface OpenDeskModel {
 
     public static QName ASPECT_PD = QName.createQName(OD_URI, "projecttype_projectdepartment");
     public static QName ASPECT_PD_TEMPLATE_SITES = QName.createQName(OD_URI, "projecttype_templates");
+    public static QName ASPECT_PD_DOCUMENT = QName.createQName(OD_URI, "document_template");
 
 
 
@@ -72,6 +73,7 @@ public interface OpenDeskModel {
     public static QName PROP_NOTIFICATION_MESSAGE = QName.createQName(OD_URI, "message");
     public static QName PROP_NOTIFICATION_READ = QName.createQName(OD_URI, "read");
     public static QName PROP_NOTIFICATION_LINK = QName.createQName(OD_URI, "link");
+    public static QName PROP_NOTIFICATION_SEEN = QName.createQName(OD_URI, "seen");
 
 
     /**
