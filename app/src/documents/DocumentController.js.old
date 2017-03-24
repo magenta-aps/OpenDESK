@@ -31,6 +31,7 @@ function DocumentController($scope, documentService, $stateParams, $location, do
         vm.wf_doc = $location.search().doc;
         vm.wf = true;
     }
+    else if (
 
     vm.createWFNotification = function(comment) {
 

@@ -10,7 +10,8 @@
             getNotices: getNotices,
             addNotice: addNotice,
             delNotice: delNotice,
-            setReadNotice: setRead
+            setReadNotice: setRead,
+            getComment: getComment
         };
 
         return service;
@@ -32,6 +33,16 @@
                 PARAM_NODE_REF : noticeObj
             }).then(function(response) {
                 return response;
+            })
+        };
+
+        function getComment(nodeRef) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "getComment",
+                PARAM_NODE_REF : nodeRef
+            }).then(function(response) {
+
+                return response.data[0].comment;
             })
         };
 
