@@ -70,4 +70,12 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
         });
     };
 
+    vm.setAllSeen = function () {
+        notificationsService.setAllSeen(currentUser).then(function (val) {
+            vm.updateNotifications();
+        });
+    };
+
+
+
 };
