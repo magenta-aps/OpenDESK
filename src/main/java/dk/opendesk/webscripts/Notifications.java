@@ -21,6 +21,9 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -110,6 +113,15 @@ public class Notifications extends AbstractWebScript {
                         if(nodeRef != null)
                             result =  this.getComment(nodeRef);
                         break;
+
+
+                    case "setAllNotificationsSeen":
+
+                           this.setAllNotificationsSeen(userName);
+
+
+
+
                 }
             }
         }
@@ -167,7 +179,9 @@ public class Notifications extends AbstractWebScript {
     }
 
     // also returns read notifications
-    private JSONArray getAllNotifications(String userName) {
+    private JSONArray getAllNotifications(String userName) throws JSONException {
+
+        int size = this.countUnSeenNotifications(userName);
 
         NodeRef user = personService.getPerson(userName);
 
@@ -176,6 +190,11 @@ public class Notifications extends AbstractWebScript {
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
         JSONArray result = new JSONArray();
+        JSONArray children = new JSONArray();
+        JSONObject unseen = new JSONObject();
+
+        unseen.put("unseen", size);
+        result.add(unseen);
 
         for (ChildAssociationRef child : childAssociationRefs) {
             JSONObject json = new JSONObject();
@@ -203,12 +222,13 @@ public class Notifications extends AbstractWebScript {
 
                 Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
                 json.put("created", d.getTime());
-                result.add(json);
+                children.add(json);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        result.add(children);
 
         return result;
     }
@@ -256,14 +276,44 @@ public class Notifications extends AbstractWebScript {
     private void setNotificationRead (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
     }
+
     private void setNotificationSeen (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
+    }
+
+    private void setAllNotificationsSeen (String userName) {
+
+        NodeRef user = personService.getPerson(userName);
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocsByPropertyValue(user, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
+
+        for (ChildAssociationRef child : childAssociationRefs) {
+
+            NodeRef n = child.getChildRef();
+
+            this.setNotificationSeen(n);
+        }
     }
 
     private JSONArray getComment (NodeRef nodeRef) {
         String comment = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
 
         return Utils.getJSONReturnPair("comment", comment);
+    }
+
+
+    private int countUnSeenNotifications(String userName) {
+
+        NodeRef user = personService.getPerson(userName);
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocsByPropertyValue(user, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
+
+        int count = 0;
+        for (ChildAssociationRef child : childAssociationRefs) {
+            count++;
+        }
+
+        return count;
     }
 }
 
