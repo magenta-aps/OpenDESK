@@ -127,7 +127,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 .od-members {
   width: 99%;
   // table-layout: fixed;
-  // border-collapse: collapse;
 
   th {
     text-align: left;
@@ -148,17 +147,18 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 
   // td:nth-child(1), th:nth-child(1) { min-width: 15% }
-  // td:nth-child(2), th:nth-child(2) { width: 35% }
-  // td:nth-child(3), th:nth-child(3) { width: 15% }
-  // td:nth-child(4), th:nth-child(4) { width: 15% }
-  // td:nth-child(5), th:nth-child(5) { width: 10% }
-  // td:nth-child(6), th:nth-child(6) { width: 10% }
+  // td:nth-child(2), th:nth-child(2) { min-width: 35% }
+  // td:nth-child(3), th:nth-child(3) { min-width: 15% }
+  // td:nth-child(4), th:nth-child(4) { min-width: 15% }
+  // td:nth-child(5), th:nth-child(5) { min-width: 10% }
+  // td:nth-child(6), th:nth-child(6) { min-width: 10% }
 
   // thead {
+  //   display: block;
   //   tr {
-  //     display: block;
-  //     position: relative;
-  //     height: $u * 1.5;
+  //     // display: block;
+  //     // position: relative;
+  //     // height: $u * 1.5;
   //   }
   // }
 
@@ -348,6 +348,7 @@ h2 {
 }
 
 .od-filter-sidebar {
+
   md-input-container {
     height: 56px;
     label {
@@ -358,6 +359,7 @@ h2 {
     height: auto;
     padding-left: 3px !important;
     color: rgba(0, 0, 0, 0.38) !important; //54
+    text-overflow: ellipsis;
     md-checkbox {
       margin-bottom: $u * 2;
     }

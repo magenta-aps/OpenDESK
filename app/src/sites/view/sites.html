@@ -18,7 +18,7 @@
 		</form>
 	</div>
 	<div layout='row'>
-		<md-card class="od-filter-sidebar transition" flex='15' ng-show="vm.showFilters">
+		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0'>
 			<md-card-content>
 				<md-input-container class="md-block show-all">
 					<md-checkbox name="show-all" ng-model="vm.showall">
@@ -103,7 +103,7 @@
 
 				<md-list class="sortHead">
 					<table class="od-members od-members-row">
-						<thead>
+						<thead fix-head>
 							<!-- fix-head -->
 							<tr>
 								<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
