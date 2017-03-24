@@ -61,4 +61,18 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
         });
     };
 
+    vm.setSeen = function (noticeObj) {
+        notificationsService.setSeenNotice(currentUser, noticeObj).then(function (val) {
+            vm.updateNotifications();
+        });
+    };
+
+    vm.setAllSeen = function () {
+        notificationsService.setAllSeen(currentUser).then(function (val) {
+            vm.updateNotifications();
+        });
+    };
+
+
+
 };

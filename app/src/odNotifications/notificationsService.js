@@ -11,7 +11,9 @@
             addNotice: addNotice,
             delNotice: delNotice,
             setReadNotice: setRead,
-            getComment: getComment
+            getComment: getComment,
+            setSeenNotice: setSeen,
+            setAllSeen: setAllSeen
         };
 
         return service;
@@ -46,6 +48,26 @@
             })
         };
 
+
+        function setSeen(userId, noticeObj) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "setSeen",
+                PARAM_USERNAME: userId,
+                PARAM_NODE_REF : noticeObj
+            }).then(function(response) {
+                return response;
+            })
+        };
+
+        function setAllSeen(userId) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "setAllNotificationsSeen",
+                PARAM_USERNAME: userId
+            }).then(function(response) {
+                return response;
+            })
+        };
+
         function addNotice(userId, subject, message, link) {
             return $http.post(restBaseUrl + "/notifications", {
                 PARAM_METHOD : "add",
@@ -68,5 +90,5 @@
             })
         };
 
-    };
+    }
     
