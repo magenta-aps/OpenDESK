@@ -126,8 +126,8 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 
 .od-members {
   width: 99%;
-  table-layout: fixed;
-  border-collapse: collapse;
+  // table-layout: fixed;
+  // border-collapse: collapse;
 
   th {
     text-align: left;
@@ -147,27 +147,27 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
     }
   }
 
-  td:nth-child(1), th:nth-child(1) { min-width: 15% }
-  td:nth-child(2), th:nth-child(2) { width: 35% }
-  td:nth-child(3), th:nth-child(3) { width: 15% }
-  td:nth-child(4), th:nth-child(4) { width: 15% }
-  td:nth-child(5), th:nth-child(5) { width: 10% }
-  td:nth-child(6), th:nth-child(6) { width: 10% }
+  // td:nth-child(1), th:nth-child(1) { min-width: 15% }
+  // td:nth-child(2), th:nth-child(2) { width: 35% }
+  // td:nth-child(3), th:nth-child(3) { width: 15% }
+  // td:nth-child(4), th:nth-child(4) { width: 15% }
+  // td:nth-child(5), th:nth-child(5) { width: 10% }
+  // td:nth-child(6), th:nth-child(6) { width: 10% }
 
-  thead {
-    tr {
-      display: block;
-      position: relative;
-      height: $u * 1.5;
-    }
-  }
+  // thead {
+  //   tr {
+  //     display: block;
+  //     position: relative;
+  //     height: $u * 1.5;
+  //   }
+  // }
 
-  tbody {
-    display: block;
-    overflow: auto;
-    width: 100%;
-    max-height: 300px - $u * 1.5; //match the height of md-list
-  }
+  // tbody {
+  //   display: block;
+  //   overflow: auto;
+  //   width: 100%;
+  //   max-height: 300px - $u * 1.5; //match the height of md-list
+  // }
 
   .description-label {
     padding-right: 10px;
