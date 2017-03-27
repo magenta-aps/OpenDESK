@@ -349,6 +349,12 @@ h2 {
 
 .od-filter-sidebar {
 
+  overflow: hidden;
+
+  md-card-content {
+    min-width: 200px;
+  }
+
   md-input-container {
     height: 56px;
     label {

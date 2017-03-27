@@ -20,6 +20,16 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 
 	vm.infoSiteDialog = infoSiteDialog;
 
+	vm.states = [
+		  		{key:'ACTIVE', name:'Igang'},
+				{key:'CLOSED', name:'Afsluttet'},
+				{key:'', name:'Alle'}];
+	
+	vm.types = [
+		  		{key:'Project', name:'Grupperum'},
+				{key:'PD-Project', name:'Projekt'},
+				{key:'', name:'Alle'}];
+
 	//pd_siteService.getAllOrganizationalCenters();
 
 	//siteService.createMembersPDF("kagenu2");

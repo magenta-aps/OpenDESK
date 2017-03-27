@@ -72,26 +72,19 @@
 					</md-select>
 				</md-input-container>
 
-				<div ng-init="states = [
-		  							{key:'ACTIVE', name:'Igang'},
-									{key:'CLOSED', name:'Afsluttet'},
-									{key:'', name:'Alle'}]">
-				</div>
-
 				<md-input-container class="md-block">
 					<label>Status</label>
 					<md-select ng-model="vm.search.state">
-						<md-option ng-repeat="x in states" value="{{x.key}}">{{x.name}}</md-option>
+						<md-option ng-repeat="x in vm.states" value="{{x.key}}">{{x.name}}</md-option>
 					</md-select>
 				</md-input-container>
 
-				<!--<md-input-container class="md-block">
+				<md-input-container class="md-block">
 					<label>Type</label>
-					<md-select ng-model="">
-						<md-option>Grupperum</md-option>
-						<md-option>Projekt</md-option>
+					<md-select ng-model="vm.search.type">
+						<md-option ng-repeat="x in vm.types" value="{{x.key}}">{{x.name}}</md-option>
 					</md-select>
-				</md-input-container>-->
+				</md-input-container>
 			</md-card-content>
 		</md-card>
 
