@@ -17,149 +17,161 @@
 			</md-autocomplete>
 		</form>
 	</div>
-	<!--<md-card>
-		<md-card-content>
-		</md-card-content>
-	</md-card>-->
-	<md-card>
-		<md-card-content>
-			<!--<div class="od-filter-toolbar" layout-gt-sm="row"></div>-->
+	<div layout='row'>
+		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0'>
+			<md-card-content>
+				<md-input-container class="md-block show-all">
+					<md-checkbox name="show-all" ng-model="vm.showall">
+						Vis alle
+					</md-checkbox>
+				</md-input-container>
 
+				<md-input-container class="md-block">
+					<label>Titel</label>
+					<input type="text" ng-model="vm.search.title">
+				</md-input-container>
 
-			<md-list class="sortHead">
-				<table class="od-members od-members-row">
+				<md-input-container class="md-block">
+					<label>Projektleder</label>
+					<input type="text" ng-model="vm.search.manager.fullName">
+				</md-input-container>
+				<!--<md-autocomplete 
+					md-selected-item="vm.search.manager.fullName" 
+					md-search-text="searchTextManager" 
+					md-items="man in vm.searchPeople(searchTextManager)"
+				    md-item-text="man.firstName + ' ' + man.lastName" 
+					md-min-length="1" 
+					md-floating-label="Projektleder" 
+					placeholder="Projektleder">
+					<md-item-template>
+						<span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
+					</md-item-template>
+					<md-not-found>
+						Ingen brugere matcher "{{ searchTextManager }}".
+					</md-not-found>
+				</md-autocomplete>-->
 
-					<thead fix-head>
-						<tr class="od-filter-toolbar">
-							<th>
-								<md-input-container class="md-block">
-									<label>Titel</label>
-									<input type="text" ng-model="vm.search.title">
-								</md-input-container>
-							</th>
-							<!--<th class="description" sort-table="description" title="Sortér kolonne">Beskrivelse</th>-->
-							<th>
-								<!--<md-autocomplete flex="" required="" md-input-name="autocompleteField" md-input-minlength="2" md-input-maxlength="18" md-no-cache="ctrl.noCache"
-								    md-selected-item="ctrl.selectedItem" md-search-text="ctrl.searchText" md-items="item in ctrl.querySearch(ctrl.searchText)"
-								    md-item-text="item.display" md-require-match="" md-floating-label="Projektleder">
-									<md-item-template>
-										<span md-highlight-text="ctrl.searchText">{{item.display}}</span>
-									</md-item-template>
-								</md-autocomplete>-->
-							</th>
-							<th>
-								<md-input-container class="md-block" flex>
-									<label>Org. enhed</label>
-									<md-select ng-model="vm.search.center_id">
-										<md-option ng-repeat="x in vm.organizationalCenters" value="{{ x.shortName }}">
-											{{ x.displayName }}
-										</md-option>
-									</md-select>
-								</md-input-container>
-							</th>
-							<th>
-								<div ng-init="states = [
-		  							{key:'ACTIVE', name:'Igang'},
-									{key:'CLOSED', name:'Afsluttet'},
-									{key:'', name:'Alle'}]">
-								</div>
+					<md-chips ng-model="projektGruppe" md-autocomplete-snap md-require-match="true">
+						<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="srchprjgrptxt" md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
+						    md-item-text="pgitem.firstName" placeholder="Angiv et medlem">
+							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
+						</md-autocomplete>
+						<md-chip-template>
+							<span>
+                                <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
+                            </span>
+						</md-chip-template>
+					</md-chips>
 
-								<md-input-container class="md-block">
-									<label>Status</label>
-									<md-select ng-model="vm.search.state">
-										<md-option ng-repeat="x in states" value="{{x.key}}">{{x.name}}</md-option>
-									</md-select>
-								</md-input-container>
-							</th>
-							<th colspan="2">
-								<md-input-container class="md-block show-all" style="float:right">
-									<md-checkbox name="show-all" ng-model="vm.showall">
-										Vis alle
-									</md-checkbox>
-								</md-input-container>
-							</th>
-						</tr>
-						<tr>
-							<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
-							<!--<th class="description" sort-table="description" title="Sortér kolonne">Beskrivelse</th>-->
-							<th class='project-lead' sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
-							<th sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
-							<th sort-table="status" title="Sortér kolonne">Status</th>
-							<th colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
-						</tr>
-					</thead>
+				<md-input-container class="md-block">
+					<label>Org. enhed</label>
+					<md-select ng-model="vm.search.center_id">
+						<md-option ng-repeat="x in vm.organizationalCenters" value="{{ x.shortName }}">
+							{{ x.displayName }}
+						</md-option>
+					</md-select>
+				</md-input-container>
 
-					<tbody>
-						<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
-							<td>
-								<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
-									<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> {{ project.title }}
-								</a>
-							</td>
-							<!--<td class="description-label">
-								<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}" title="{{ project.description }}">
-									{{ project.description | limitTo:60 }}<span ng-if="project.description.length>60">…</span>
-								</a>
-							</td>-->
-							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.manager.fullName }}</a></td>
-							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.center_name }}</a></td>
-							<td>
-								<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
-									<div ng-switch on="project.state">
-										<span ng-switch-when="ACTIVE">Igang</span>
-										<span ng-switch-when="CLOSED">Afsluttet</span>
-										<span ng-switch-default></span>
-									</div>
-								</a>
-							</td>
-							<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.created | date:'dd. MMMM yyyy' }}</a></td>
-							<td>
-								<md-menu>
-									<md-button class="md-icon-button" ng-click="$mdMenu.open()">
-										<md-icon md-menu-origin>more_vert</md-icon>
-									</md-button>
-									<md-menu-content width="6">
-										<md-menu-item>
-											<md-button ng-click="vm.infoSiteDialog(project)">
-												<md-icon md-menu-align-target>info_outline</md-icon>
-												Information
-											</md-button>
-										</md-menu-item>
-										<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
-											<md-button ng-click="vm.deleteSiteDialog(project.shortName)">
-												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-												Slet
-											</md-button>
-											</md-button>
-										</md-menu-item>
-									</md-menu-content>
-								</md-menu>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<md-input-container class="md-block">
+					<label>Status</label>
+					<md-select ng-model="vm.search.state">
+						<md-option ng-repeat="x in vm.states" value="{{x.key}}">{{x.name}}</md-option>
+					</md-select>
+				</md-input-container>
 
-			</md-list>
+				<md-input-container class="md-block">
+					<label>Type</label>
+					<md-select ng-model="vm.search.type">
+						<md-option ng-repeat="x in vm.types" value="{{x.key}}">{{x.name}}</md-option>
+					</md-select>
+				</md-input-container>
+			</md-card-content>
+		</md-card>
 
-			<md-divider></md-divider>
-
-			<div layout="row" layout-align="start center" class="btnAlign">
-
-
-				<md-button ng-click="vm.newSite($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nyt grupperum">
-					<i class="material-icons">add</i>
-					<span>Opret nyt grupperum</span>
+		<md-card flex>
+			<md-card-content>
+				<md-button aria-label="filter" class="md-icon-button md-primary" ng-click="vm.toggleFilters()">
+					<md-icon>filter_list</md-icon>
 				</md-button>
 
-				<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-text-icon-button md-raised md-primary"
-				    aria-label="Opret nyt projekt">
-					<i class="material-icons">add</i>
-					<span>Opret nyt projekt</span>
-				</md-button>
+				<md-list class="sortHead">
+					<table class="od-members od-members-row">
+						<thead fix-head>
+							<!-- fix-head -->
+							<tr>
+								<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">Titel</th>
+								<th sort-table="description" title="Sortér kolonne">Beskrivelse</th>
+								<th sort-table="manager.fullName" title="Sortér kolonne">Projektleder</th>
+								<th sort-table="center-name" title="Sortér kolonne">Org. enhed</th>
+								<th sort-table="status" title="Sortér kolonne">Status</th>
+								<th colspan="2" sort-table="created" title="Sortér kolonne">Oprettet</th>
+							</tr>
+						</thead>
 
+						<tbody>
+							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
+								<td>
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> {{ project.title }}
+									</a>
+								</td>
+								<td class="description-label">
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}" title="{{ project.description }}">
+										{{ project.description | limitTo:60 }}<span ng-if="project.description.length>60">…</span>
+									</a>
+								</td>
+								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.manager.fullName }}</a></td>
+								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.center_name }}</a></td>
+								<td>
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+										<div ng-switch on="project.state">
+											<span ng-switch-when="ACTIVE">Igang</span>
+											<span ng-switch-when="CLOSED">Afsluttet</span>
+											<span ng-switch-default></span>
+										</div>
+									</a>
+								</td>
+								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.created | date:'dd. MMMM yyyy' }}</a></td>
+								<td>
+									<md-menu>
+										<md-button class="md-icon-button" ng-click="$mdMenu.open()">
+											<md-icon md-menu-origin>more_vert</md-icon>
+										</md-button>
+										<md-menu-content width="3">
+											<md-menu-item>
+												<md-button ng-click="vm.infoSiteDialog(project)">
+													<md-icon md-menu-align-target>info_outline</md-icon>
+													Information
+												</md-button>
+											</md-menu-item>
+											<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
+												<md-button ng-click="vm.deleteSiteDialog(project.shortName)">
+													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+													Slet
+												</md-button>
+											</md-menu-item>
+										</md-menu-content>
+									</md-menu>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</md-list>
+				<md-divider></md-divider>
 
-			</div>
+				<div layout="row" layout-align="start center" class="btnAlign">
+					<md-button ng-click="vm.newSite($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nyt grupperum">
+						<i class="material-icons">add</i>
+						<span>Opret nyt grupperum</span>
+					</md-button>
 
-		</md-card-content>
-	</md-card>
+					<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-text-icon-button md-raised md-primary"
+					    aria-label="Opret nyt projekt">
+						<i class="material-icons">add</i>
+						<span>Opret nyt projekt</span>
+					</md-button>
+				</div>
+			</md-card-content>
+		</md-card>
+	</div>
 </div>

@@ -56,6 +56,8 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
     };
 
     vm.setRead = function (noticeObj) {
+        console.log('set read');
+        console.log(noticeObj);
         notificationsService.setReadNotice(currentUser, noticeObj).then(function (val) {
             vm.updateNotifications();
         });

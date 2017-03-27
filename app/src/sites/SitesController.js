@@ -16,7 +16,19 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 	vm.showall = false;
 	vm.isAdmin = sessionService.isAdmin();
 
+	vm.showFilters = false;
+
 	vm.infoSiteDialog = infoSiteDialog;
+
+	vm.states = [
+		  		{key:'ACTIVE', name:'Igang'},
+				{key:'CLOSED', name:'Afsluttet'},
+				{key:'', name:'Alle'}];
+	
+	vm.types = [
+		  		{key:'Project', name:'Grupperum'},
+				{key:'PD-Project', name:'Projekt'},
+				{key:'', name:'Alle'}];
 
 	//pd_siteService.getAllOrganizationalCenters();
 
@@ -158,6 +170,10 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 		$mdOpenMenu(event);
 	};
 
+	vm.toggleFilters = function () {
+		vm.showFilters = !vm.showFilters;
+	}
+
 	vm.currentDialogTitle = '';
 	vm.currentDialogDescription = '';
 	vm.currentDialogShortName = '';
@@ -243,6 +259,13 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 			console.log("gotoPath");
 		});
 	};
+
+	vm.searchPeople = function (query) {
+		console.log('search people');
+		if (query) {
+			return siteService.getAllUsers(query);
+		}
+	}
 
 
 } // SiteCtrl close
