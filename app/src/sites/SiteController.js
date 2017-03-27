@@ -503,7 +503,11 @@ angular
             var s = documentNodeRef.split("/");
             var ref = (s[3]);
             var link = "/#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator;
-            createNotification(userName, subject, message, link);
+
+            var from = vm.currentUser.firstName + ' ' + vm.currentUser.lastName;
+            var sub = 'Review forespørgsel';
+            var msg =  from + ' har bedt dig om at reviewe ...';
+            createNotification(userName, sub, msg, link);
         };
     
     

@@ -1,24 +1,20 @@
 <md-dialog aria-label="New member" ng-cloak>
-    <form name="addMemberForm"
-          ng-submit="vm.createReviewNotification(nodeRef, newMemberName.userName, subject, comment);">
+    <form name="addMemberForm" ng-submit="vm.createReviewNotification(nodeRef, newMemberName.userName, subject, comment);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Tilføj reviewer</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
             </div>
         </md-toolbar>
 
         <md-dialog-content class="md-padding">
             <div>
-
-                <md-autocomplete
-                        required
-                        md-input-name="autocomplete"
-                        md-selected-item="newMemberName"
-                        md-search-text="searchTextUser"
-                        md-items="user in vm.getAllUsers(searchTextUser)"
-                        md-item-text="user.firstName + ' ' + user.lastName"
-                        md-floating-label="Hvem vil du tilføje?">
+                <md-autocomplete required md-input-name="autocomplete" md-selected-item="newMemberName" md-search-text="searchTextUser" md-items="user in vm.getAllUsers(searchTextUser)"
+                    md-item-text="user.firstName + ' ' + user.lastName" md-floating-label="Hvem vil du tilføje?">
                     <md-item-template>
                         <span md-highlight-text="searchTextUser">{{ user.firstName }} {{ user.lastName }}</span>
                     </md-item-template>
@@ -62,7 +58,7 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button ng-click="vm.cancel()">Annullér</md-button>
+            <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
             <md-button type="submit" class="md-primary">Tilføj</md-button>
         </md-dialog-actions>
 
