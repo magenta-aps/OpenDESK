@@ -4,20 +4,18 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Tilføj medlem til projekt</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
             </div>
         </md-toolbar>
 
         <md-dialog-content class="md-padding">
             <div>
 
-                <md-autocomplete
-                        required
-                        md-input-name="addMemberAutocomplete"
-                        md-selected-item="newMemberName"
-                        md-search-text="searchMemText"
-                        md-items="user in vm.getAllUsers(searchMemText)"
-                        md-item-text="user.firstName + ' ' + user.lastName"
-                        md-floating-label="Hvem vil du tilføje?">
+                <md-autocomplete required md-input-name="addMemberAutocomplete" md-selected-item="newMemberName" md-search-text="searchMemText"
+                    md-items="user in vm.getAllUsers(searchMemText)" md-item-text="user.firstName + ' ' + user.lastName" md-floating-label="Hvem vil du tilføje?">
                     <md-item-template>
                         <span md-highlight-text="searchMemText">{{ user.firstName }} {{ user.lastName }}</span>
                     </md-item-template>
@@ -35,12 +33,12 @@
                         <div ng-message="required">Dette felt skal udfyldes</div>
                     </div>
                 </md-input-container>
-                
+
             </div>
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button ng-click="vm.cancel()">Annullér</md-button>
+            <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
             <md-button type="submit" class="md-primary">Tilføj</md-button>
         </md-dialog-actions>
 

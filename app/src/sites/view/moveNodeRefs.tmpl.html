@@ -4,6 +4,10 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Flyt til ...</h2>
+                <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+            </md-button>
             </div>
         </md-toolbar>
 
@@ -15,7 +19,7 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button ng-click="vm.cancel()">Annullér</md-button>
+            <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
             <md-button ng-disabled="!destination" type="submit" class="md-primary md-raised">Flyt hertil</md-button>
         </md-dialog-actions>
 
