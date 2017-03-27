@@ -2,59 +2,52 @@
 
 	<h1 class="od-title">Projekt: {{ vm.title }}</h1>
 
-    <a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
+	<a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>
 
-    <div ng-controller="SearchController as vm" class="od-search" layout="row" style="margin-top:15px;">
-        <span flex></span>
+	<div ng-controller="SearchController as vm" class="od-search" layout="row" style="margin-top:15px;">
+		<span flex></span>
 
-        <form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
-            <i class="material-icons">search</i>
-            <md-autocomplete
-                    md-input-name="autocomplete"
-                    md-selected-item="searchQuery"
-                    md-search-text="searchText"
-                    md-items="r in vm.getAutoSuggestions(searchText)"
-                    md-item-text="r.name"
-                    md-floating-label="Søg dokumenter">
-                <md-item-template>
-                    <span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
-                </md-item-template>
-                <div ng-messages="autocompleteForm.autocomplete.$error">
-                    <div ng-message="required">Dette felt skal udfyldes</div>
-                </div>
-            </md-autocomplete>
-        </form>
-    </div>
+		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
+			<i class="material-icons">search</i>
+			<md-autocomplete md-input-name="autocomplete" md-selected-item="searchQuery" md-search-text="searchText" md-items="r in vm.getAutoSuggestions(searchText)"
+			    md-item-text="r.name" md-floating-label="Søg dokumenter">
+				<md-item-template>
+					<span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
+				</md-item-template>
+				<div ng-messages="autocompleteForm.autocomplete.$error">
+					<div ng-message="required">Dette felt skal udfyldes</div>
+				</div>
+			</md-autocomplete>
+		</form>
+	</div>
 </div>
 
 
 <md-content layout="column" layout-padding>
 
-    <breadcrumb paths="vm.paths"></breadcrumb>
+	<breadcrumb paths="vm.paths"></breadcrumb>
 
-<div layout="row">
-	<div flex="55">
-		<h1 class="md-headline">
-			{{ vm.doc.fileName }}
-		</h1>
+	<div layout="row">
+		<div flex="55">
+			<h1 class="md-headline">
+				{{ vm.doc.fileName }}
+			</h1>
+		</div>
+		<div ng-show="vm.canEdit" flex="45" style="position: relative; top: 10px;">
+			<md-button ng-click="vm.goToLOEditPage(true)" class="md-primary md-raised">
+				Redigér dokument
+			</md-button>
+		</div>
 	</div>
-	<div ng-show="vm.canEdit" flex="45" style="position: relative; top: 10px;">
-		<md-button ng-click="vm.goToLOEditPage(true)" class="md-primary md-raised">
-			Redigér dokument
-		</md-button>
-	</div>
-</div>
 
-    <div layout-sm="column" layout-gt-sm="row">
-        <div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
-            <ng-include src="viewerTemplateUrl"></ng-include>
-        </div>
+	<div layout-sm="column" layout-gt-sm="row">
+		<div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
+			<ng-include src="viewerTemplateUrl"></ng-include>
+		</div>
 
-        <div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
-			<h4 ng-click="vm.showArchived = !vm.showArchived"
-				class="pd-group-toggle"
-				ng-class="vm.showArchived ? 'open' : 'closed'"
-				layout="row">
+		<div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
+			<h4 ng-click="vm.showArchived = !vm.showArchived" class="pd-group-toggle" ng-class="vm.showArchived ? 'open' : 'closed'"
+			    layout="row">
 				<i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">Historik</span>
 				<span flex></span>
 				<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
@@ -69,11 +62,11 @@
 					<span id="{{h.nodeRef}}" ng-repeat="h in history">
 						<a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
 							<span style="width: 138px;">{{ h.created | openeDate }}</span>{{ h.modifier }}
-						</a>
+					</a>
 					</span>
 				</p>
 			</ul>
-            <dl>
+			<dl>
 				<!--div>
 					<dt>
 						Oprettet
@@ -100,26 +93,43 @@
 						{{ vm.doc.modifiedBy }}
 					</dd>
 				</div-->
-				
-				
-				
-                <ng-if ng-if="vm.wf" class="od-notifylist--item--nolink">
-                    <br>
+
+
+
+				<div class="od-notifylist--item--nolink">
+					<br>
 					<md-divider></md-divider>
 					<!--dt-->
-                    <h4>Review</h4>
-                    <!--/dt-->
-                    <dd>
+					<h4 ng-if="vm.wfr || vm.wf">Review</h4>
+					<!--/dt-->
+
+					<!--{{vm.getPerson(vm.wf_from)}}-->
+
+					<dd ng-if="vm.wfr">
 						<div layout="row" style="margin: 10px 0 20px 0;">
-							<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Du er blevet bedt om at reviewe dette dokument af {{vm.wf_from}} med følgende kommentar: {{wf_comment}} </span>
+							<span style="position:relative; top: 4px;">
+								{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har svaret: 
+								<p><i>{{wf_comment}}</i></p>
+							</span>
+						</div>
+					</dd>
+
+					<dd ng-if="vm.wf">
+						<div layout="row" style="margin: 10px 0 20px 0;">
+							<span style="position:relative; top: 4px;">
+								{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har bedt dig om at reviewe: 
+								<p><i>{{wf_comment}}</i></p>
+							</span>
 						</div>
 
+						<!--<div layout="row" style="margin: 10px 0 20px 0;">
+							<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Du er blevet bedt om at reviewe dette dokument af {{vm.wf_from}} med følgende kommentar: {{wf_comment}} </span>
+						</div>-->
 
-						
-						Du kan 
+						Du kan
 						<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage(false)">
-                            Redigere
-                        </md-button>
+							Redigere
+						</md-button>
 						dokumentet, inden du godkender eller afviser.
 
 						<div style="margin-top: 20px" ng-controller="DocumentController as dc">
@@ -128,34 +138,14 @@
 								Godkend
 							</md-button>
 
-
-
 							<md-button class="md-raised" ng-click="dc.afvisDialog($event)">
 								Afvis
 							</md-button>
 						</div>
-                    </dd>
-                </ng-if>
-
-				<ng-if ng-if="vm.wfr" class="od-notifylist--item--nolink">
-					<br>
-					<md-divider></md-divider>
-					<!--dt-->
-					<h4>Review</h4>
-					<!--/dt-->
-					<dd>
-						<div layout="row" style="margin: 10px 0 20px 0;">
-							<i class="material-icons">info_outline</i>&nbsp;&nbsp;<span style="position:relative; top: 4px;">Dokumentet er besvaret af {{vm.wf_from}} med følgende kommentar: {{wf_comment}} </span>
-						</div>
-
-
-
-
 					</dd>
-				</ng-if>
-
-            </dl>
-        </div>
-    </div>
+				</div>
+			</dl>
+		</div>
+	</div>
 
 </md-content>

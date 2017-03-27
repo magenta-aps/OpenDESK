@@ -9,7 +9,7 @@ function UsersController($scope, $mdDialog, userService) {
     var vm = this;
 
     vm.getPerson = function (name) {
-        userService.getPerson(name).then(function (val) {
+        userService.getPerson(vm.wf_from).then(function (val) {
             vm.person = val;
         });
     };
