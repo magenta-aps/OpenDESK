@@ -218,8 +218,19 @@ angular
             $mdOpenMenu(event);
         };
 
-        vm.openUserInfo = function() {
-            console.log('hello world');
+        vm.openMemberInfo = function(member) {
+            $mdDialog.show({
+                controller: ['$scope', 'member', function($scope, member) { 
+                  $scope.member = member;
+                }],
+                templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
+                locals: { member: member },
+                parent: angular.element(document.body),
+                targetEvent: event,
+                scope: $scope,
+                preserveScope: true,
+                clickOutsideToClose: true
+            });
         }
     
         vm.loadContents = function () {

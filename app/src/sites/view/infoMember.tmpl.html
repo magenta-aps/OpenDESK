@@ -1,0 +1,29 @@
+<md-dialog aria-label="Information for bruger" ng-controller="SiteController as sc" class="">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>{{member.displayName}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="sc.cancel()">
+                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <md-content class="md-padding" layout="row" layout-padding>
+            <div flex="30">
+                <img class="od-avatar" style="width:100%" src='https://placehold.it/300x300'>
+            </div>
+            <div flex="70">
+                <p class="md-icon-float md-block">
+                    <md-icon>email</md-icon>
+                    <label>{{member.email}}</label>
+                </p>
+                <p class="md-icon-float md-block">
+                    <md-icon>phone</md-icon>
+                    <label>{{member.telephone}}</label>
+                </p>
+            </div>
+        </md-content>
+    </md-dialog-content>
+</md-dialog>

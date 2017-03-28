@@ -1,25 +1,25 @@
 
-<section  class="od-notifications" ng-controller="NotificationsController as vm">
+<section  class="od-notifications" ng-controller="NotificationsController as nc">
 
-    <button ng-click="vm.toggleNotices()" class="od-btn od-notifications--toggle">
+    <button ng-click="nc.toggleNotices();nc.setAllSeen()" class="od-btn od-notifications--toggle">
         <i class="material-icons">notifications</i>
-        <span ng-if="notifications.length > 0" class="od-notifications--counter">{{ notifications.length }}</span>
+        <span ng-if="notifications[0].unseen > 0" class="od-notifications--counter">{{ notifications[0].unseen }}</span>
     </button>
 
-    <div class="od-flyout right" ng-class="{ open: vm.on, closed: !vm.on }" ng-click="vm.toggleNotices()">
+    <div class="od-flyout right" ng-class="{ open: nc.on, closed: !nc.on }" ng-click="nc.toggleNotices()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
             <h2 class="od-flyout--title">Beskeder</h2>
-            <button ng-click="vm.toggleNotices()" class="od-btn od-flyout--close">
+            <button ng-click="nc.toggleNotices()" class="od-btn od-flyout--close">
                 <i class="material-icons">keyboard_arrow_right</i>
             </button>
 
             <ul class="od-notifylist">
-                <li ng-repeat="notice in notifications | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
+                <li ng-repeat="notice in notifications[1] | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                     <span class="od-notifylist--item--link">
-                        <a href="{{ notice.link }}" ng-click="vm.toggleNotices()">
+                        <a href="{{ notice.link }}" ng-click="nc.toggleNotices();nc.setRead(notice.nodeRef)">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p  class="od-notifylist--item--desc">{{ notice.message }}</p>
-                        <p  class="od-notifylist--item--desc od-notifylist--item--date">{{notice.created | date:'dd. MMMM kl. HH:mm'}}</p>
+                        <p  class="od-notifylist--item--desc od-notifylist--item--date">{{notice.created | customDate}}</p> 
                         </a>
                     </span>
                 </li>
