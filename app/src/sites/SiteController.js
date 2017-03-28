@@ -289,7 +289,18 @@ angular
                 $mdDialog.hide();
             });
         };
-		
+
+        vm.getLink = function (content) {
+            if(content.contentType === 'cmis:document'){
+                return '#!/dokument/' + content.shortRef;
+            }
+            if(content.contentType === 'cmis:folder') {
+                return '#!/projekter/'+ vm.project.shortName + vm.path + '/' +content.name;
+            }
+            if(content.contentType === 'cmis:link') {
+                return '#!/projekter/' + content.destination_link;
+            }
+        }		
         
 		vm.loadFromSbsys = function() {
 			

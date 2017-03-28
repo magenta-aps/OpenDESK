@@ -2,14 +2,21 @@
 
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <h2>Upload filer</h2>
+            <h2>Upload dokumenter</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+            </md-button>
         </div>
     </md-toolbar>
 
     <md-dialog-content class="md-padding">
         <input id="upload" file-model="files" multiple="" type="file">
-        <button class="md-button" ng-click="vm.upload(files)"><i class="material-icons">file_upload</i>upload dokumenter
-        </button>
     </md-dialog-content>
+
+    <md-dialog-actions>
+        <button class="md-button md-primary" ng-click="vm.upload(files)"><i class="material-icons">file_upload</i>upload dokumenter
+        </button>
+    </md-dialog-actions>
     </form>
 </md-dialog>
