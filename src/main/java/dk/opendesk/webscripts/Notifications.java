@@ -20,11 +20,11 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
@@ -34,9 +34,6 @@ import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.AbstractWebScript;
-
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 
 import java.io.*;
 import java.util.*;
@@ -48,6 +45,7 @@ public class Notifications extends AbstractWebScript {
 
     private NodeService nodeService;
     private PersonService personService;
+    private SiteService siteService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -109,9 +107,9 @@ public class Notifications extends AbstractWebScript {
                         break;
 
 
-                    case "getComment":
+                    case "getInfo":
                         if(nodeRef != null)
-                            result =  this.getComment(nodeRef);
+                            result =  this.getInfo(nodeRef);
                         break;
 
 
@@ -243,7 +241,6 @@ public class Notifications extends AbstractWebScript {
         //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
 
         NodeRef user = personService.getPerson(userName);
-//        System.out.println(user);
 
         ChildAssociationRef childAssocRef = this.nodeService.createNode(
                 user,
@@ -283,11 +280,13 @@ public class Notifications extends AbstractWebScript {
 
     private void setAllNotificationsSeen (String userName) {
 
+
         NodeRef user = personService.getPerson(userName);
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocsByPropertyValue(user, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
 
         for (ChildAssociationRef child : childAssociationRefs) {
+
 
             NodeRef n = child.getChildRef();
 
@@ -295,10 +294,22 @@ public class Notifications extends AbstractWebScript {
         }
     }
 
-    private JSONArray getComment (NodeRef nodeRef) {
+    private JSONArray getInfo (NodeRef nodeRef) {
         String comment = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
+        String link = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_LINK);
 
-        return Utils.getJSONReturnPair("comment", comment);
+        NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
+        String fileName = (String)nodeService.getProperty(document, ContentModel.PROP_NAME);
+
+        org.alfresco.service.cmr.repository.Path path = nodeService.getPath(document);
+        String siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
+
+        Map<String, Serializable> map = new HashMap<>();
+        map.put("comment", comment);
+        map.put("project", siteName);
+        map.put("filename", fileName);
+
+        return Utils.getJSONReturnArray(map);
     }
 
 
