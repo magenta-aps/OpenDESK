@@ -245,11 +245,8 @@ angular
 
         vm.addThumbnailUrl = function () {
             $scope.contents.forEach(function(item) {
-                if(item.contentType === "cmis:folder"){
-                    item.thumbNailURL = fileUtilsService.getFolderIcon(24);
-                }else{
+
                     item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
-                }
             });
         };
     
