@@ -196,12 +196,10 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         }
 
     }).state('search', {
-        url: '/search',
+        url: '/search/:searchTerm',
         views: {
             'content@': {
-                templateUrl: 'app/src/search/view/search.html',
-                controller: 'SearchController',
-                controllerAs: 'vm'
+                templateUrl: 'app/src/search/view/search.html'
             }
         },
         data: {

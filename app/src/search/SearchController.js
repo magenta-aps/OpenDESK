@@ -1,91 +1,222 @@
 angular
-    .module('openDeskApp.search', ['ngCookies'])
-    .controller('SearchController', SearchController, ['$cookies', function ($cookies) {
-        //$cookies.searchResult = "";
-
-    }])
-
+    .module('openDeskApp')
+    .controller('SearchController', SearchController)
+    .filter('count', function() {
+        return function (collection, key) {
+            return out;
+        }
+    });
 
 /**
  * Main Controller for the Search module
  * @param $scope
  * @constructor
  */
-function SearchController($scope, $state, $cookies, $stateParams, searchService, documentPreviewService, alfrescoDownloadService, documentService, $window) {
-    var vm = this;
+function SearchController($q, $scope, $stateParams, searchService, fileUtilsService, siteService) {
+    $scope.searchTerm = $stateParams.searchTerm;
+    $scope.selectedFilters = {}; //Keep track of the selected filters
+    $scope.filtersQueryString=""; // the selected filters as query string
+    $scope.definedFacets = searchService.getConfiguredFacets();
+    $scope.layout = 'grid';
 
-    var originatorEv;
-    vm.openMenu = function ($mdOpenMenu, event) {
-        originatorEv = event;
-        $mdOpenMenu(event);
-
-
+    $scope.count = function (prop, value) {
+        return function (el) {
+            return el[prop] == value;
+        };
     };
 
+    function initFacets(){
+        searchService.getConfiguredFacets().then(function(data){
+            $scope.definedFacets = data;
+            executeSearch();
+        });
+    }
+    initFacets();
 
-    //$scope.searchResults = [];
-    //	 $scope.searchResults.push(JSON.parse($cookies.get("searchResult")));
+    /**
+     * Executes the main search function to search for cases and case documents in the repository
+     * @param term
+     */
+    function executeSearch() {
 
-    //if ($cookies.get("searchResult")) {
-    //	$scope.searchResults = JSON.parse($cookies.get("searchResult"));
-    //}
+        var queryObj = {
+            facetFields: parseFacetsForQueryFilter(),
+            filters: $scope.filtersQueryString, //"{http://www.alfresco.org/model/content/1.0}creator|abeecher"
+            maxResults: 0,
+            noCache: new Date().getTime(),
+            pageSize: 25,
+            query: "",
+            repo: true,
+            rootNode: "", // openesdh://cases/home
+            site: "",
+            sort: "",
+            spellcheck: true,
+            startIndex: 0,
+            tag: "",
+            term: $scope.searchTerm+'*'
+        };
+        var objQuerified = objectToQueryString(queryObj);
+        getSearchQuery(objQuerified);
+    }
 
+    function getSearchQuery(query){
 
-    vm.getAutoSuggestions = function (term) {
-        return searchService.getSearchSuggestions(term).then(function (val) {
+        searchService.search(query).then(function(response){
+            $scope.queryResult = response;
+            $scope.search = {};
 
-            if (val != undefined) {
-                return val;
-            }
-            else {
-                return [];
+            $scope.facets = [];
+
+            var fileType = {};
+            var modifiedBy = {};
+            var site = {};
+
+            fileType.array = [];
+            modifiedBy.array = [];
+            site.array = [];
+
+            fileType.title = 'fileType';
+            modifiedBy.title = 'modifiedBy';
+            site.title = 'site';
+
+            // Creating an empty initial promise that always resolves itself.
+            var promises = [];
+
+            if (response.numberFound > 0) {
+                var displayedItems = [];
+
+                for (var i = 0, len = response.items.length; i < len; i++) {
+
+                    var value = response.items[i];
+
+                    // Break if the result is not a document
+                    if (value.type != 'document')
+                        continue;
+
+                    // Break if the document is not belonging to a site
+                    if (value.site == undefined)
+                        continue;
+
+                    // Get file type
+                    value.fileType = fileUtilsService.getFiletypeByMimetype(value.mimetype);
+                    if (fileType.array.indexOf(value.fileType) == -1)
+                        fileType.array.push(value.fileType);
+
+                    // Get last modified by
+                    if (modifiedBy.array.indexOf(value.modifiedBy) == -1)
+                        modifiedBy.array.push(value.modifiedBy);
+
+                    // Get site title
+                    if (site.array.indexOf(value.site.title) == -1)
+                        site.array.push(value.site.title);
+                    value.site = value.site.title;
+
+                    displayedItems.push(value);
+                }
+
+                $q.all(promises).then(function(){
+
+                    $scope.fullSearchResults = {
+                        results: displayedItems
+                    };
+                    setActiveFacets();
+
+                    $scope.facets.push(fileType);
+                    $scope.facets.push(modifiedBy);
+                    $scope.facets.push(site);
+                });
             }
         });
     }
 
-    vm.getSearchresults = function (term) {
-        return searchService.getSearchResults(term).then(function (val) {
+    function setActiveFacets() {
+        // If object is empty
+        if(Object.getOwnPropertyNames($scope.selectedFilters).length == 0) return;
 
-            console.log(val);
+        angular.forEach($scope.selectedFilters, function (value, key) {
+            var facet = $scope.fullSearchResults.facets[key];
+            angular.forEach(facet, function (facetObject) {
+                if(facetObject.value === value) facetObject.selected = true;
+            })
+        })
+    }
 
-            if (val != undefined) {
-
-                $scope.searchResults = [];
-                $scope.searchResults = val.data.items;
-
+    /**
+     * summary:
+     *		takes a name/value mapping object and returns a string representing
+     *		a URL-encoded version of that object.
+     * example:
+     *		this object:
+     *	{
+         *		blah: "blah",
+         *		multi: [
+         *			"thud",
+         *			"thonk"
+         *	    ]
+         *	};
+     *
+     *	yields the following query string: "blah=blah&multi=thud&multi=thonk"
+     *
+     * credit to alfresco Aikau developers.
+     * @param map
+     * @returns {string}
+     */
+    function objectToQueryString(map) {
+        // FIXME: need to implement encodeAscii!!
+        var enc = encodeURIComponent, pairs = [];
+        for (var name in map) {
+            var value = map[name];
+            var assign = enc(name) + "=";
+            if (Array.isArray(value)) {
+                for (var i = 0, l = value.length; i < l; ++i) {
+                    pairs.push(assign + enc(value[i]));
+                }
             } else {
-                return [];
+                pairs.push(assign + enc(value));
             }
+        }
+        return pairs.join("&"); // String
+    }
+
+    /**
+     * Extracts the QName from each defined facet and 'stringifies' them for the query object
+     * @returns {string}
+     */
+    function parseFacetsForQueryFilter(){
+        var stringFacet="";
+        $scope.definedFacets.forEach(function(item){stringFacet ==""? stringFacet+= item.facetQName : stringFacet = stringFacet+','+item.facetQName});
+        return stringFacet;
+    }
+
+    $scope.filterResults = function(filterKey, filterValue) {
+        //console.log("The filter value : "+ filterKey +" ==> "+filterValue);
+        //selectedFilters is to be used to track what is checked then on every addition or removal, we rebuild the
+        //filter query string and re-execute the search
+        if($scope.selectedFilters[filterKey])
+            delete ($scope.selectedFilters[filterKey]);
+        else
+            $scope.selectedFilters[filterKey] = filterValue;
+
+        rebuildFilterQueryString();
+    };
+
+    function rebuildFilterQueryString(){
+        //console.log("Rebuilding filter Query string");
+        var filterQueryStringArr  = [];
+        Object.keys($scope.selectedFilters).forEach(function(key){
+            var bufStr = "";
+            var value = $scope.selectedFilters[key];
+            //strip the @ at the start of the string just in case
+            if(key.startsWith("@"))
+                bufStr = key.substring(1)+"|"+value;
+            else
+                bufStr = key+"|"+value;
+
+            filterQueryStringArr.push(bufStr);
         });
-    }
 
-    vm.previewDocument = function previewDocument(nodeRef) {
-        documentPreviewService.previewDocument(nodeRef);
-    }
-
-    vm.downloadDocument = function downloadDocument(nodeRef, name) {
-        alfrescoDownloadService.downloadFile(nodeRef, name);
-    }
-
-    $scope.selectedDocumentPath = "";
-
-    vm.gotoPath = function (nodeRef) {
-
-        var ref = nodeRef;
-
-        documentService.getPath(ref.split("/")[3]).then(function (val) {
-
-            $scope.selectedDocumentPath = val.container
-            // var project = val.site;
-            // var container = val.container;
-            // var path = val.path;
-
-            var path = ref.replace("workspace://SpacesStore/", "");
-            $window.location.href = "/#!/dokument/" + path;
-
-            console.log("gotoPath");
-        });
+        $scope.filtersQueryString = filterQueryStringArr.toString();
+        executeSearch();
     }
 
 }
-
