@@ -837,5 +837,31 @@
   "@{http://openesdh.dk/model/case/base/1.0}startDate": "Startdato",
   "@{http://openesdh.dk/model/case/base/1.0}endDate": "Slutdato",
   "@{http://openesdh.dk/model/openesdh/1.0}journalKeyIndexed": "Journalnøgle",
-  "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journalfacet"
+  "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journalfacet",
+
+  "PROJECT": {
+    "TITLE": "Projekter/Grupperum",
+    "PROJECT": "Projekt",
+    "PROJECTS": "Projekter",
+    "GROUPROOM": "Grupperum",
+    "NAME": "Navn",
+    "DESCRIPTION": "Beskrivelse",
+    "PROJECTLEAD": "Projektleder",
+    "ORG_UNIT": "Org. enhed",
+    "STATUS": "Status",
+    "CREATED": "Oprettet",
+    "HISTORY": "Historik",
+
+    "GROUPS": {
+      "PROJECT_GROUP": "Projektgruppe",
+      "CONTROL_GROUP": "Styregruppe",
+      "WORK_GROUP": "Arbejdsgruppe",
+      "FOLLOW_GROUP": "Følgegruppe"
+    }
+  },
+  "ESDH": {
+    "ESDH": "SBSYS",
+    "SEND_TO": "Send til SBSYS",
+    "GET_FROM": "Hent fra SBSYS"
+  }
 }
