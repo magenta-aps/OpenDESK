@@ -109,6 +109,7 @@
 		<property name="fileFolderService" ref="FileFolderService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="permissionService" ref="PermissionService"/>
+		<property name="siteService" ref="SiteService"/>
 	</bean>
 
 

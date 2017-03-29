@@ -28,6 +28,8 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessStatus;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.site.SiteInfo;
+import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.service.namespace.RegexQNamePattern;
@@ -37,6 +39,7 @@ import org.json.simple.JSONArray;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.w3c.dom.Node;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -69,6 +72,12 @@ public class Contents extends AbstractWebScript {
 
     private PermissionService permissionService;
 
+    public void setSiteService(SiteService siteService) {
+        this.siteService = siteService;
+    }
+
+    private SiteService siteService;
+
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
@@ -100,7 +109,7 @@ public class Contents extends AbstractWebScript {
         while (i.hasNext()) {
             JSONObject json = new JSONObject();
 
-            ChildAssociationRef childAssociationRef = (ChildAssociationRef)i.next();
+            ChildAssociationRef childAssociationRef = (ChildAssociationRef) i.next();
             NodeRef childNodeRef = childAssociationRef.getChildRef();
 
             if (!nodeService.hasAspect(childNodeRef, ContentModel.ASPECT_HIDDEN)) {
@@ -155,16 +164,20 @@ public class Contents extends AbstractWebScript {
                         } else {
                             json.put("hasHistory", true);
                         }
-                    }
-                    else {
-                        String link = (String) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET);
-                        NodeRef link_node = (NodeRef) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
+                    } else {
+                        String linkSiteShortName = (String) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET);
+                        NodeRef linkNodeRef = (NodeRef) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
 
                         json.put("nodeid", childNodeRef.getId());
-                        json.put("destination_link", link);
+                        json.put("destination_link", linkSiteShortName);
 
-                        if (link_node != null)
-                            json.put("destination_nodeid", link_node.getId());
+                        if (linkNodeRef != null) {
+                            json.put("destination_nodeid", linkNodeRef.getId());
+
+                            SiteInfo linkSiteInfo = siteService.getSite(linkSiteShortName);
+                            String linkSiteDisplayName = linkSiteInfo.getTitle();
+                            json.put("name", linkSiteDisplayName);
+                        }
                     }
 
                     result.add(json);
@@ -178,4 +191,4 @@ public class Contents extends AbstractWebScript {
 
         return result;
     }
-    }
+}
