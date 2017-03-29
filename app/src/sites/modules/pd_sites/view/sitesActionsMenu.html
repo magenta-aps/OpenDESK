@@ -6,19 +6,19 @@
         <md-menu-item>
             <md-button ng-controller="SitesController as vm" ng-click="vm.infoSiteDialog(ctrl.project)">
                 <md-icon md-menu-align-target>info_outline</md-icon>
-                Information
+                {{'COMMON.INFORMATION' | translate}}
             </md-button>
         </md-menu-item>
         <md-menu-item>
             <md-button ng-controller="PdSiteController as pd" ng-click="pd.editPdSite($event, ctrl.project)">
                 <md-icon md-menu-align-target>create</md-icon>
-                Redigér
+                {{'COMMON.EDIT' | translate}}
             </md-button>
         </md-menu-item>
         <md-menu-item>
             <md-button ng-controller="SitesController as vm" ng-click="vm.deleteSiteDialog(ctrl.project.shortName)">
                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
-                Slet
+                {{'COMMON.REMOVE' | translate}}
             </md-button>
         </md-menu-item>
     </md-menu-content>

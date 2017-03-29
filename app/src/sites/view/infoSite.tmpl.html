@@ -2,14 +2,14 @@
 
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <h2>Information om projekt</h2>
+            <h2>{{'COMMON.INFORMATION' | translate}} {{'COMMON.ABOUT' | translate | lowercase}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
         </div>
     </md-toolbar>
 
     <md-dialog-content class="md-padding">
         <div layout="row" layout-xs="column" layout-margin>
             <div flex="25">
-                Navn:
+                {{'PROJECT.NAME' | translate}}:
             </div>
             <div flex class="data">
                 {{ vm.currentDialogSite.title }}
@@ -17,7 +17,7 @@
         </div>
         <div layout="row" layout-xs="column" layout-margin>
             <div flex="25">
-                Oprettet:
+                {{'PROJECT.CREATED' | translate}}:
             </div>
             <div flex class="data">
                 {{ vm.currentDialogSite.created | openeDate}}
@@ -25,7 +25,7 @@
         </div>
         <div layout="row" layout-xs="column" layout-margin>
             <div flex="25">
-                Oprettet af:
+                {{'PROJECT.CREATED' | translate}} {{'COMMON.BY' | translate}}:
             </div>
             <div flex class="data">
                 {{ vm.currentDialogSite.creator.fullName }}
@@ -33,7 +33,7 @@
         </div>
         <div layout="row" layout-xs="column" layout-margin>
             <div flex="25">
-                Beskrivelse:
+                {{'PROJECT.DESCRIPTION' | translate}}:
             </div>
             <div flex class="data">
                 {{ vm.currentDialogSite.description }}

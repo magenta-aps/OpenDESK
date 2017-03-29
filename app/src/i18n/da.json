@@ -19,12 +19,14 @@
     "SEND": "Send",
     "NAME": "Navn",
     "INFORMATION": "Information",
+    "ABOUT": "Om",
     "ID": "ID",
     "TITLE": "Titel",
     "STATUS": "Status",
     "CREATEDBY": "Oprettet af",
     "CREATED": "Oprettet",
     "CREATE": "Opret",
+    "CREATE_NEW": "Opret nyt",
     "MODIFIED": "Ændret",
     "DESCRIPTION": "Beskrivelse",
     "TYPE": "Type",
@@ -42,6 +44,7 @@
     "SAVE": "Gem",
     "SAVE_EMAIL": "Arkiver e-mail",
     "VIEW_DETAILS": "Vis detaljer",
+    "DETAILS": "Detaljer",
     "SHOW": "Vis",
     "DELETE": "Slet",
     "EDIT": "Redigér",
@@ -56,7 +59,7 @@
     "DUE_DATE": "Forfaldsdato",
     "PRIORITY": "Prioritet",
     "CREATED_ON": "Oprettet d.",
-    "NO": "Nr",
+    "NO": "Nej",
     "STATE": "Status",
     "COMMENT": "Kommentar",
     "OPEN": "Åbne",
@@ -67,13 +70,16 @@
     "GRID_VIEW": "Gittervisning",
     "DOWNLOAD_TEMPLATE_CSV": "Hent CSV skabelon",
     "LOCKED_BY": "Låst af {{locked_by}}",
-    "CONGRATULATIONS": "Tillykke!"
+    "CONGRATULATIONS": "Tillykke!",
+    "ALL": "Alle",
+    "RENAME": "Rename",
+    "COPY": "Kopiér",
+    "MOVE": "Flyt",
+    "REVIEW": "Godkendelse",
+    "VISIBILITY": "Synlighed"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
-  },
-  "PROJECT": {
-    "PROJECT": "Projekt"
   },
   "CASE": {
     "CONFIRM_CLOSE_CASE": "Vil du lukke denne sag?",
@@ -103,6 +109,7 @@
     "PRINT_CASE": "Print sag",
     "START_WORKFLOW": "Start opgave",
     "CASE_HISTORY": "Sagshistorik",
+    "CASE_NUMBER": "Sagsnr.",
     "CREATE_CASE": "Opret sag",
     "EDIT_PROPERTIES": "Redigér sag",
     "TITLE": "Titel",
@@ -570,7 +577,8 @@
     "FAILED_TO_UPLOAD_MSG": "{{failedNumberOfUsers}} bruger(e) blev ikke tilføjet af følgende grunde:",
     "ARE_YOU_SURE_YOU_WANT_TO_DELETE_USER": "Er du sikker på, at du vil slette '{{user}}'?",
     "CAN_NOT_DELETE_ADMIN_USER": "Sletning af admin brugeren er ikke tilladt",
-    "EMAIL_FEED_ENABLED": "E-mail-feed aktiveret"
+    "EMAIL_FEED_ENABLED": "E-mail-feed aktiveret",
+    "USERINFO": "Brugerinfo"
   },
   "GROUP": {
     "GROUPS": "Grupper",
@@ -674,6 +682,7 @@
     "ROLE": "Rolle",
     "CHANGE": "Skift",
     "ADD_MEMBERS": "Tilføj medlemmer",
+    "EDIT_MEMBER": "Redigér medlem",
     "CHOOSE_AUTHORITIES": "Vælg autoriteter",
     "CHANGE_MEMBER_ROLE": "Skift medlemsrolle",
     "OLD_ROLE": "Fra rolle",
@@ -843,17 +852,25 @@
   "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journalfacet",
 
   "PROJECT": {
-    "TITLE": "Projekter/Grupperum",
+    "HEADER": "Projekter/Grupperum",
     "PROJECT": "Projekt",
     "PROJECTS": "Projekter",
     "GROUPROOM": "Grupperum",
     "NAME": "Navn",
     "DESCRIPTION": "Beskrivelse",
     "PROJECTLEAD": "Projektleder",
+    "PROJECTOWNER": "Projektejer",
+    "MEMBER": "Medlem",
+    "MEMBERS": "Medlemmer",
     "ORG_UNIT": "Org. enhed",
-    "STATUS": "Status",
     "CREATED": "Oprettet",
     "HISTORY": "Historik",
+
+    "STATUS": {
+      "STATUS": "Status",
+      "COMPLETED": "Afsluttet",
+      "IN_PROGRESS": "Igang"
+    },
 
     "GROUPS": {
       "PROJECT_GROUP": "Projektgruppe",
@@ -862,9 +879,15 @@
       "FOLLOW_GROUP": "Følgegruppe"
     }
   },
-  "ESDH": {
-    "ESDH": "SBSYS",
-    "SEND_TO": "Send til SBSYS",
-    "GET_FROM": "Hent fra SBSYS"
-  }
+  "NOTIFICATION": {
+    "NOTIFICATION": "Besked",
+    "NOTIFICATIONS": "Beskeder",
+
+    "LABEL": {
+      "REVIEW_REQUEST": "Review forespørgsel",
+      "REVIEW_RESPONSE": "Review svar",
+      "NEW_FILE_IN": "Ny fil i"
+    }
+  },
+  "ESDH": "SBSYS"
 }

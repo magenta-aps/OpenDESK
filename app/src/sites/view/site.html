@@ -4,7 +4,7 @@
 
     <div layout="row" layout-align="space-between center">
         <a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
-            Tilbage til {{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}
+            {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }} {{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}
         </a>
 
         <div class="od-search" layout="row">
@@ -32,7 +32,7 @@
     <div layout-gt-sm="row">
         <md-card flex-gt-sm="75">
             <md-card-content>
-                <h2 class="od-title-icon"><i class="material-icons">library_books</i>Dokumenter</h2>
+                <h2 class="od-title-icon"><i class="material-icons">library_books</i>{{'DOCUMENTS' | translate }}</h2>
 
                 <breadcrumb paths="vm.paths"></breadcrumb>
 
@@ -41,8 +41,8 @@
                     <table class="od-members od-members-row">
                         <thead fix-head>
                         <tr>
-                            <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">Navn</th>
-                            <th sort-table="lastChanged" title="Sortér kolonne">Historik</th>
+                            <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
+                            <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
                             <th colspan="2">
                                 <md-checkbox name="all-to-esdh"></md-checkbox>
                             </th>
@@ -112,63 +112,63 @@
                                         <md-menu-item ng-if="content.contentType == 'cmis:document'">
                                             <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
                                                 <md-icon md-menu-align-target>get_app</md-icon>
-                                                Download
+                                                {{'COMMON.DOWNLOAD' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
                                         <md-menu-item ng-if="content.contentType == 'cmis:document'">
                                             <md-button ng-click="vm.previewDocument(content.nodeRef)">
                                                 <md-icon md-menu-align-target>search</md-icon>
-                                                Preview
+                                                {{'COMMON.PREVIEW' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
                                         <md-menu-item ng-if="content.canMoveAndDelete">
                                             <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
-                                                Slet
+                                                {{'COMMON.REMOVE' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
                                         <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
                                             <md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>create</md-icon>
-                                                Omdøb
+                                                {{'COMMON.RENAME' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
                                         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
                                             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                                                 <md-icon md-menu-align-target>library_books</md-icon>
-                                                Rediger dokument
+                                                {{'COMMON.EDIT' | translate }}
                                             </md-button>
                                         </md-menu-item>
 										
 										<md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
                                             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                                                 <md-icon md-menu-align-target>unarchive</md-icon>
-                                                Gem til ESDH
+                                                {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
                                         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
                                             <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
                                                 <md-icon md-menu-align-target>content_copy</md-icon>
-                                                Kopiér
+                                                {{'COMMON.COPY' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
                                         <md-menu-item ng-if="content.canMoveAndDelete">
                                             <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
                                                 <md-icon md-menu-align-target>compare_arrows</md-icon>
-                                                Flyt
+                                                {{'COMMON.MOVE' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
                                         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
                                             <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
-                                                Send til godkendelse
+                                                {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
                                             </md-button>
                                         </md-menu-item>
                                     </md-menu-content>
@@ -231,7 +231,9 @@
                     <span flex></span>
                     <md-button ng-click="vm.uploadSbsysDialog($event)" class="md-raised" aria-label="SBSYS">
 						<i class="material-icons">device_hub</i>
-						<span style="margin-left: 10px; margin-right: 20px;">Send til SBSYS</span>
+						<span style="margin-left: 10px; margin-right: 20px;">
+                            {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
+                        </span>
 					</md-button>
 
 					<!--<div layout="column">
@@ -290,7 +292,7 @@
             
             <md-card>
                 <md-card-content>
-                    <h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
+                    <h3 class="od-title-icon"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
                     <md-list class="od-members">
                         <md-list-item ng-repeat="member in members">
                             <div flex="50" flex-gt-lg="60">
@@ -309,7 +311,7 @@
                                         <md-menu-item>
                                             <md-button ng-click="vm.updateMemberRoleDialog($event, member.authority, member.role)">
                                                 <md-icon md-menu-align-target>create</md-icon>
-                                                Redigér medlem
+                                                {{'MEMBER.EDIT_MEMBER' | translate }}
                                             </md-button>
                                         </md-menu-item>
     
@@ -317,7 +319,7 @@
                                             <md-button
                                                     ng-click="vm.deleteMemberDialog($event, vm.project.shortName, member.authority.userName);">
                                                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
-                                                Slet
+                                                {{'COMMON.REMOVE' | translate }}
                                             </md-button>
                                         </md-menu-item>
                                     </md-menu-content>
@@ -330,7 +332,7 @@
                     <div layout="row" layout-align="start center" class="btnAlign">
                         <md-button ng-if="vm.isManager" class="md-raised" ng-click="vm.newMember($event)">
                             <i class="material-icons">add</i>
-                            Tilføj medlem&nbsp;&nbsp;
+                            Tilføj medlem
                         </md-button>
                     </div>
                 </md-card-content>

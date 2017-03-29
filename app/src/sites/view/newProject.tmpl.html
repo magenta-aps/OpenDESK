@@ -3,7 +3,7 @@
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Opret nyt grupperum</h2>
+                <h2>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.cancel()">
                     <i class="material-icons" aria-label="Luk dialogboks">close</i>
@@ -14,7 +14,7 @@
         <md-dialog-content class="md-padding">
             <div layout='column'>
                 <md-input-container>
-                    <label>Titel</label>
+                    <label>{{'PROJECT.NAME' | translate}}</label>
                     <input type="text" name="newSiteName" required ng-model="newSiteName">
 
                     <!--<div ng-messages="createSiteForm.newSiteName.$error">
@@ -22,7 +22,7 @@
                     </div>-->
                 </md-input-container>
                 <md-input-container>
-                    <label>Beskrivelse</label>
+                    <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
                     <textarea required name="newSiteDesc" md-maxlength='250' maxlength="250" ng-model="newSiteDescription"></textarea>
 
                     <!--<div ng-messages="createSiteForm.newSiteDesc.$error">
@@ -34,7 +34,7 @@
 
         <md-dialog-actions>
             <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
-            <md-button type="submit" class="md-primary">Tilføj</md-button>
+            <md-button type="submit" class="md-primary">{{'COMMON.ADD' | translate}}</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>

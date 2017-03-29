@@ -203,9 +203,6 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 
 
 	function infoSiteDialog(site) {
-		console.log('hit the dialog btn');
-		console.log(site);
-
 		vm.currentDialogSite = site;
 		$mdDialog.show({
 			templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
@@ -265,8 +262,6 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 
 			var path = ref.replace("workspace://SpacesStore/", "");
 			$window.location.href = "/#!/dokument/" + path;
-
-			console.log("gotoPath");
 		});
 	};
 

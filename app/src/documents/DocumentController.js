@@ -135,7 +135,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         var NID = $location.search().NID;
 
         notificationsService.getInfo(NID).then (function(response) {
-            console.log(response);
             $scope.wf_comment = response.comment;
         });
 
@@ -152,7 +151,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     vm.getNotificationFrom = function () {
         userService.getPerson(vm.wf_from).then(function (val) {
-            console.log(val);
             vm.notificationFrom = val;
         });
     };

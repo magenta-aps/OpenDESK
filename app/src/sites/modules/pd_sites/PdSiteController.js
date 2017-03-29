@@ -142,7 +142,6 @@ angular
 		
         
 		function removeMemberDialog(member, group) {
-            console.log(member);
             var confirm = $mdDialog.confirm()
                 .title('Fjern '+member.displayName+'?')
                 .textContent('')
@@ -178,10 +177,5 @@ angular
                 getProjectMembers();
             });
         }
-
-        function openUserInfo() {
-            console.log('show dialog now!');
-        }
-
     
     }

@@ -19,12 +19,14 @@
     "SEND": "Send",
     "NAME": "Name",
     "INFORMATION": "Information",
+    "ABOUT": "About",
     "ID": "ID",
     "TITLE": "Title",
     "STATUS": "Status",
     "CREATEDBY": "Created by",
     "CREATED": "Created",
     "CREATE": "Create",
+    "CREATE_NEW": "Create new",
     "MODIFIED": "Modified",
     "DESCRIPTION": "Description",
     "TYPE": "Type",
@@ -40,7 +42,9 @@
     "NO_MATCHES": "No results",
     "EMAIL": "Email",
     "SAVE": "Save",
+    "SAVE_EMAIL": "Save e-mail",
     "VIEW_DETAILS": "View details",
+    "DETAILS": "Details",
     "SHOW": "Show",
     "DELETE": "Delete",
     "EDIT": "Edit",
@@ -66,7 +70,13 @@
     "GRID_VIEW": "Grid view",
     "DOWNLOAD_TEMPLATE_CSV": "Download template CSV",
     "LOCKED_BY": "Locked by {{locked_by}}",
-    "CONGRATULATIONS": "Congratulations!"
+    "CONGRATULATIONS": "Congratulations!",
+    "ALL": "All",
+    "RENAME": "Rename",
+    "COPY": "Copy",
+    "MOVE": "Move",
+    "REVIEW": "Review",
+    "VISIBILITY": "Visibility"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -99,6 +109,7 @@
     "PRINT_CASE": "Print case",
     "START_WORKFLOW": "Start workflow",
     "CASE_HISTORY": "Case history",
+    "CASE_NUMBER": "Case No.",
     "CREATE_CASE": "Create case",
     "EDIT_PROPERTIES": "Edit properties",
     "TITLE": "Title",
@@ -583,7 +594,8 @@
     "ARE_YOU_SURE_YOU_WANT_TO_DELETE_USER": "Are you sure you want to delete '{{user}}'?",
     "CAN_NOT_DELETE_ADMIN_USER": "Deletion of the admin user is not permitted.",
     "SAVE_USER_FAILURE": "User could not be saved",
-    "EMAIL_FEED_ENABLED": "Email feed enabled"
+    "EMAIL_FEED_ENABLED": "Email feed enabled",
+    "USERINFO": "User info"
   },
   "GROUP": {
     "GROUPS": "Groups",
@@ -688,6 +700,7 @@
     "ROLE": "Role",
     "CHANGE": "Change",
     "ADD_MEMBERS": "Add members",
+    "EDIT_MEMBER": "Edit member",
     "CHOOSE_AUTHORITIES": "Choose authorities",
     "CHANGE_MEMBER_ROLE": "Change member role",
     "OLD_ROLE": "Old role",
@@ -864,5 +877,45 @@
   "@{http://openesdh.dk/model/case/base/1.0}startDate": "Start Date",
   "@{http://openesdh.dk/model/case/base/1.0}endDate": "End Date",
   "@{http://openesdh.dk/model/openesdh/1.0}journalKeyIndexed": "Journal key",
-  "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journal facet"
+  "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journal facet",
+
+  "PROJECT": {
+    "HEADER": "Projects/Group Rooms",
+    "PROJECT": "Project",
+    "PROJECTS": "Projects",
+    "GROUPROOM": "Group Room",
+    "NAME": "Name",
+    "DESCRIPTION": "Description",
+    "PROJECTLEAD": "Project Lead",
+    "PROJECTOWNER": "Project Owner",
+    "MEMBER": "Member",
+    "MEMBERS": "Members",
+    "ORG_UNIT": "Org. Unit",
+    "CREATED": "Created",
+    "HISTORY": "History",
+
+    "STATUS": {
+      "STATUS": "Status",
+      "COMPLETED": "Completed",
+      "IN_PROGRESS": "In progress"
+    },
+
+    "GROUPS": {
+      "PROJECT_GROUP": "Project Group",
+      "CONTROL_GROUP": "Control Group",
+      "WORK_GROUP": "Work Group",
+      "FOLLOW_GROUP": "Follow Group"
+    }
+  },
+  "NOTIFICATION": {
+    "NOTIFICATION": "Notification",
+    "NOTIFICATIONS": "Notifications",
+
+    "LABEL": {
+      "REVIEW_REQUEST": "Review request",
+      "REVIEW_RESPONSE": "Review response",
+      "NEW_FILE_IN": "New file in"
+    }
+  },
+  "ESDH": "SBSYS"
 }

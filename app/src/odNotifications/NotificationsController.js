@@ -37,7 +37,6 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
     $interval(callAtTimeout, 10000);
 
     function callAtTimeout() {
-        //console.log("Timeout occurred");
         vm.updateNotifications();
     }
 
@@ -56,8 +55,6 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
     };
 
     vm.setRead = function (noticeObj) {
-        console.log('set read');
-        console.log(noticeObj);
         notificationsService.setReadNotice(currentUser, noticeObj).then(function (val) {
             vm.updateNotifications();
         });

@@ -178,8 +178,6 @@ function GroupService(ALFRESCO_URI, $http, $q, userService) {
 
             return $q.reject(response);
         }
-        //console.log("members: ");
-        //console.log(response);
         return response.data || response;
     }
 

@@ -18,11 +18,11 @@
                         <img src="https://placehold.it/300x300" class="od-avatar">
                         <h1>{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h1>
                     </div>
-                    <md-subheader>Brugerinfo</md-subheader>
+                    <md-subheader>{{'USER.USERINFO' | translate}}</md-subheader>
                     <md-list>
                         <md-list-item>
                             <div class="md-list-item-text">
-                                Brugernavn:
+                                {{'USER.USERNAME' | translate}}:
                             </div>
                             <div class="md-secondary">
                                 {{ ac.getUserInfo().user.userName }}
@@ -38,7 +38,7 @@
                         </md-list-item>
                         <md-list-item>
                             <div class="md-list-item-text">
-                                Telefon:
+                                {{'CONTACT.PHONE' | translate}}:
                             </div>
                             <div class="md-secondary">
                                 {{ ac.getUserInfo().user.telephone }}
@@ -47,10 +47,10 @@
                     </md-list>
 
                     <div ng-controller="NotificationsSettingsController as nsc">
-                        <md-subheader>Notifikationer</md-subheader>
+                        <md-subheader>{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-subheader>
                         <md-list>
                             <md-list-item>
-                                <p> Send notifikationer</p>
+                                <p>{{'COMMON.SEND' | translate}} {{'NOTIFICATION.NOTIFICATIONS' | translate | lowercase}}</p>
                                 <md-input-container>
                                     <md-switch class="md-secondary" aria-label="Notifikationer" ng-true-value="'true'" ng-false-value="'false'" ng-model="nsc.receiveNotifications"
                                         ng-change='nsc.setNotificationPreferences()'></md-switch>

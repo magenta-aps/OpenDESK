@@ -4,7 +4,7 @@
         ng-class="pd.showProjDetails ? 'open' : 'closed'"
         layout="row"
         style="margin: 8px;">
-		<span><i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>Detaljer</span>
+		<span><i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>{{'COMMON.DETAILS' | translate }}</span>
         <span flex></span>
         <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
     </h3>
@@ -12,7 +12,7 @@
 		<md-card-content>
             <div layout="row" layout-align="space-between">
                 <dl style="margin-bottom: 0;">
-                    <dt>Beskrivelse</dt>
+                    <dt>{{'PROJECT.DESCRIPTION' | translate }}</dt>
                     <dd ng-if="pd.hasDescription">{{ pd.site.description }}</dd>
 					<dd ng-if="!pd.hasDescription"><i>Ingen beskrivelse</i></dd>
                 </dl>
@@ -23,22 +23,22 @@
             </div>
             <div layout="row">
                 <dl flex="55">
-                    <dt>Oprettet af</dt>
+                    <dt>{{'COMMON.CREATED' | translate }} {{'COMMON.BY' | translate | lowercase }}</dt>
                     <dd>{{ pd.site.creator.fullName }} <br><span class="muted">{{ pd.site.created | date }}</span></dd>
                     <!--dt>Filnavn</dt>
                     <dd>{{ pd.site.shortName }}</dd-->                    
-					<dt>Org. enhed</dt>
+					<dt>{{'PROJECT.ORG_UNIT' | translate }}</dt>
                     <dd>{{ pd.site.center_name }}</dd>
                 </dl>
                 <dl flex="30">
-					<dt>Synlighed</dt>
+					<dt>{{'COMMON.VISIBILITY' | translate }}</dt>
                     <dd>{{ pd.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>    
-					<dt>ESDH sagsnr.</dt>
+					<dt>{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
                     <dd>{{ pd.site.sbsys }}</dd>
                     
                 </dl>
 				<dl flex="15">
-					<dt>Status</dt>
+					<dt>{{'COMMON.STATUS' | translate }}</dt>
                     <dd>{{ pd.stateStr }}</dd>
                     
                 </dl>
