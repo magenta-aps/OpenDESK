@@ -49,6 +49,14 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 	//siteService.addUser("TestAvanceretprojekt", "abeecher", "PD_PROJECTOWNER");
 	//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
 
+	vm.exactMatchFilter = function (project) { 
+		if(vm.search == undefined || vm.search.type == '') {
+			return true;
+		}
+
+		return vm.search.type == project.type;
+	}
+
 
 	function getSites() {
 		return siteService.getSites().then(function (response) {
@@ -57,7 +65,6 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 		});
 	}
 	getSites();
-
 
 	function getSitesPerUser() {
 		return siteService.getSitesPerUser().then(function (response) {

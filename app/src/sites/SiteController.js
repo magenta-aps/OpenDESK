@@ -245,8 +245,7 @@ angular
 
         vm.addThumbnailUrl = function () {
             $scope.contents.forEach(function(item) {
-
-                    item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
+                item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
             });
         };
     
@@ -529,7 +528,6 @@ angular
             });
         }
     
-    
         vm.newMember = function (event) {
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/newMember.tmpl.html',
@@ -540,7 +538,6 @@ angular
                 clickOutsideToClose: true
             });
         };
-    
     
         vm.upload = function (files) {
     
@@ -575,7 +572,6 @@ angular
     
     
         vm.currentDialogUser = '';
-    
     
         vm.updateMemberRoleDialog = function (event, currentUser, currentRole) {
             vm.currentDialogUser = currentUser;

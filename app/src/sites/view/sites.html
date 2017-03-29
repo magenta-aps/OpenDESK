@@ -35,21 +35,6 @@
 					<label>Projektleder</label>
 					<input type="text" ng-model="vm.search.manager.fullName">
 				</md-input-container>
-				<!--<md-autocomplete 
-					md-selected-item="vm.search.manager.fullName" 
-					md-search-text="searchTextManager" 
-					md-items="man in vm.searchPeople(searchTextManager)"
-				    md-item-text="man.firstName + ' ' + man.lastName" 
-					md-min-length="1" 
-					md-floating-label="Projektleder" 
-					placeholder="Projektleder">
-					<md-item-template>
-						<span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
-					</md-item-template>
-					<md-not-found>
-						Ingen brugere matcher "{{ searchTextManager }}".
-					</md-not-found>
-				</md-autocomplete>-->
 
 					<md-chips ng-model="projektGruppe" md-autocomplete-snap md-require-match="true">
 						<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="srchprjgrptxt" md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
@@ -109,7 +94,7 @@
 						</thead>
 
 						<tbody>
-							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | filter: vm.search">
+							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | exactMatch:['type','status']:[vm.search.type,vm.search.status] | filter: vm.search">
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
 										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> {{ project.title }}

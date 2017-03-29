@@ -134,9 +134,10 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
         var NID = $location.search().NID;
 
-        notificationsService.getComment(NID).then(function (response) {
-            $scope.wf_comment = response;
-        })
+        notificationsService.getInfo(NID).then (function(response) {
+            console.log(response);
+            $scope.wf_comment = response.comment;
+        });
 
 
     } else if (paramValue == "wf-response") {
@@ -144,9 +145,9 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         vm.wfr = true;
 
         var NID = $location.search().NID;
-        notificationsService.getComment(NID).then(function (response) {
-            $scope.wf_comment = response;
-        })
+        notificationsService.getInfo(NID).then (function(response) {
+            $scope.wf_comment = response.comment;
+        });
     }
 
     vm.getNotificationFrom = function () {

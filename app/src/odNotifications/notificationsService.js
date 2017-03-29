@@ -11,7 +11,7 @@
             addNotice: addNotice,
             delNotice: delNotice,
             setReadNotice: setRead,
-            getComment: getComment,
+            getInfo: getInfo,
             setSeenNotice: setSeen,
             setAllSeen: setAllSeen
         };
@@ -23,7 +23,8 @@
                 PARAM_METHOD : "getAll",
                 PARAM_USERNAME: userId
             }).then(function(response) {
-              return response.data;
+                console.log(response);
+                return response.data;
             })
         };
 
@@ -38,13 +39,13 @@
             })
         };
 
-        function getComment(nodeRef) {
+        function getInfo(nodeRef) {
             return $http.post(restBaseUrl + "/notifications", {
-                PARAM_METHOD : "getComment",
+                PARAM_METHOD : "getInfo",
                 PARAM_NODE_REF : nodeRef
             }).then(function(response) {
 
-                return response.data[0].comment;
+                return response.data[0];;
             })
         };
 
