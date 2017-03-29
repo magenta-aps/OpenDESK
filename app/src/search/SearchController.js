@@ -12,7 +12,7 @@ angular
  * @param $scope
  * @constructor
  */
-function SearchController($q, $scope, $stateParams, searchService, fileUtilsService, siteService) {
+function SearchController($scope, $stateParams, searchService, fileUtilsService, siteService) {
     $scope.searchTerm = $stateParams.searchTerm;
     $scope.selectedFilters = {}; //Keep track of the selected filters
     $scope.filtersQueryString=""; // the selected filters as query string
@@ -67,20 +67,9 @@ function SearchController($q, $scope, $stateParams, searchService, fileUtilsServ
 
             $scope.facets = [];
 
-            var fileType = {};
-            var modifiedBy = {};
-            var site = {};
-
-            fileType.array = [];
-            modifiedBy.array = [];
-            site.array = [];
-
-            fileType.title = 'fileType';
-            modifiedBy.title = 'modifiedBy';
-            site.title = 'site';
-
-            // Creating an empty initial promise that always resolves itself.
-            var promises = [];
+            var fileType = {array: [], title: 'fileType'};
+            var modifiedBy = {array: [], title: 'modifiedBy'};
+            var site = {array: [], title: 'site'};
 
             if (response.numberFound > 0) {
                 var displayedItems = [];
@@ -114,18 +103,15 @@ function SearchController($q, $scope, $stateParams, searchService, fileUtilsServ
                     displayedItems.push(value);
                 }
 
-                $q.all(promises).then(function(){
-
-                    $scope.fullSearchResults = {
-                        results: displayedItems
-                    };
-                    setActiveFacets();
-
-                    $scope.facets.push(fileType);
-                    $scope.facets.push(modifiedBy);
-                    $scope.facets.push(site);
-                });
+                $scope.fullSearchResults = {
+                    results: displayedItems
+                };
+                setActiveFacets();
             }
+
+            $scope.facets.push(fileType);
+            $scope.facets.push(modifiedBy);
+            $scope.facets.push(site);
         });
     }
 
