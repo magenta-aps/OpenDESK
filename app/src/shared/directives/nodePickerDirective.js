@@ -14,8 +14,15 @@ function nodePicker() {
 
             var ctrl = this;
 
+            alert(ctrl.currentNodeRef);
+
             alfrescoDocumentService.retrieveNodeInfo(ctrl.currentNodeRef).then(function (currentNode) {
+
+                console.log("ctrl.currentNode");
+                console.log(ctrl.currentNode);
+
                 ctrl.currentNode = currentNode;
+
             });
 
             ctrl.getNode = function (nRef) {

@@ -660,7 +660,12 @@ angular
             vm.source = [];
             vm.source.push(nodeRef);
             vm.parentId = parentNodeRef;
-    
+            console.log("vm.parentId");
+            console.log(vm.parentId);
+
+            console.log("nodeRef");
+            console.log(nodeRef);
+
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/moveNodeRefs.tmpl.html',
                 parent: angular.element(document.body),
