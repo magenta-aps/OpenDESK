@@ -132,8 +132,9 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
 
         var NID = $location.search().NID;
 
-        notificationsService.getComment(NID).then (function(response) {
-            $scope.wf_comment = response;
+        notificationsService.getInfo(NID).then (function(response) {
+            console.log(response);
+            $scope.wf_comment = response.comment;
         })
 
 
@@ -143,8 +144,8 @@ function DocumentController($scope, $timeout, documentService, $stateParams, $lo
         vm.wfr = true;
 
         var NID = $location.search().NID;
-        notificationsService.getComment(NID).then (function(response) {
-            $scope.wf_comment = response;
+        notificationsService.getInfo(NID).then (function(response) {
+            $scope.wf_comment = response.comment;
         })
     }
     

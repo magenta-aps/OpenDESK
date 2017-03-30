@@ -245,8 +245,13 @@ angular
 
         vm.addThumbnailUrl = function () {
             $scope.contents.forEach(function(item) {
+                console.log("crapoware");
+                console.log("crapoware");
+                console.log("crapoware");
+                console.log("crapoware");
+                console.log(item.mimeType);
                 if(item.contentType === "cmis:folder"){
-                    item.thumbNailURL = fileUtilsService.getFolderIcon(24);
+                    // item.thumbNailURL = fileUtilsService.getFolderIcon(24);
                 }else{
                     item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
                 }
