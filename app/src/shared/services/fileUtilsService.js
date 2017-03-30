@@ -5,15 +5,13 @@ angular
 function fileUtilsService() {
     return {
         getFileIconByMimetype: getFileIconByMimetype,
+        getFiletypeByMimetype: getFiletypeByMimetype,
         getFileExtension: getFileExtension,
         getMsProtocolForFileExtension: getMsProtocolForFileExtension,
         getMsProtocolForFile: getMsProtocolForFile
     };
 
-    /**
-     * Copied and adapted from Alfresco share for use in opendesk. The next 3 functions that is.
-     */
-    function getFileIconByMimetype(mimetype, p_iconSize) {
+    function getFiletypeByMimetype(mimetype) {
         var extns =
         {
             "text/css": "css",
@@ -72,12 +70,18 @@ function fileUtilsService() {
             "application/eps": "eps",
             "audio/basic": "au"
         };
+        if (mimetype in extns)
+            return extns[mimetype];
+        return "generic";
+    }
 
-        var prefix = "generic",
-            iconSize = typeof p_iconSize === "number" ? p_iconSize : 32;
-        if (mimetype in extns) {
-            prefix = extns[mimetype];
-        }
+    /**
+     * Copied and adapted from Alfresco share for use in opendesk. The next 3 functions that is.
+     */
+    function getFileIconByMimetype(mimetype, p_iconSize) {
+
+        var iconSize = typeof p_iconSize === "number" ? p_iconSize : 32;
+        var prefix = getFiletypeByMimetype(mimetype);
 
         return prefix + "-file-" + iconSize + ".png";
     }

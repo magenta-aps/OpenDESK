@@ -72,6 +72,9 @@
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
   },
+  "PROJECT": {
+    "PROJECT": "Projekt"
+  },
   "CASE": {
     "CONFIRM_CLOSE_CASE": "Vil du lukke denne sag?",
     "STATUS_CHANGED_SUCCESS": "Status er ændret",

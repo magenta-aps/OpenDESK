@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService, sessionService) {
+function SitesController($scope, $mdDialog, $window, $state, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService, sessionService) {
 
 
 	var vm = this;
@@ -212,6 +212,8 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 
 
 	vm.getSearchresults = function getSearchReslts(term) {
+		$state.go('search', {'searchTerm': term});
+		/*
 		return searchService.getSearchResults(term).then(function (val) {
 
 			console.log(val);
@@ -227,6 +229,7 @@ function SitesController($scope, $mdDialog, $window, siteService, cmisService, $
 				return [];
 			}
 		});
+		*/
 	};
 
 
