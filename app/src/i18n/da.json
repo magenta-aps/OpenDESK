@@ -81,7 +81,9 @@
     "PRIVATE": "Privat",
     "AND": "Og",
     "MANAGEMENT": "Styring",
-    "WITH": "Med"
+    "WITH": "Med",
+    "UPDATE": "Opdatér",
+    "FOLDER": "Mappe"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -667,7 +669,8 @@
     "USERNAME_EXISTS": "Brugernavn findes allerede",
     "AUTH_FAILURE": "Forkerte loginoplysninger",
     "AUTH_ERROR": "Fejl",
-    "NOT_EQUAL_PATTERN": "Forkert format"
+    "NOT_EQUAL_PATTERN": "Forkert format",
+    "NO_USERS_MATCHES": "Ingen brugere matcher"
   },
   "LOGIN": {
     "LOGIN": "Log ind",
@@ -687,16 +690,20 @@
     "ROLE": "Rolle",
     "CHANGE": "Skift",
     "ADD_MEMBERS": "Tilføj medlemmer",
+    "ADD_MEMBER": "Tilføj medlem",
+    "REMOVE_MEMBER": "Fjern medlem",
     "EDIT_MEMBER": "Redigér medlem",
     "CHOOSE_AUTHORITIES": "Vælg autoriteter",
     "CHANGE_MEMBER_ROLE": "Skift medlemsrolle",
+    "EDIT_ROLE": "Redigér rolle",
     "OLD_ROLE": "Fra rolle",
     "TO_ROLE": "Til rolle",
     "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_MEMBER": "Vil du fjerne medlem \"{{displayName}}\", som er \"{{role}}\"?",
     "MEMBER_ADDED_SUCCESSFULLY": "Medlem tilføjet",
     "MEMBERS_ADDED_SUCCESSFULLY": "{{count}} medlemmer tilføjet",
     "MEMBER_CHANGED_SUCCESSFULLY": "Medlem ændret",
-    "MEMBER_REMOVED_SUCCESSFULLY": "Medlem fjernet"
+    "MEMBER_REMOVED_SUCCESSFULLY": "Medlem fjernet",
+    "DOWNLOAD_PDF": "Hent medlemsoversigt som PDF"
   },
   "NOTE": {
     "NOTES": "Noter",
@@ -873,6 +880,7 @@
     "HISTORY": "Historik",
     "SURE_TO_DELETE": "Vil du slette dette projekt?",
     "SURE_TO_DELETE_MSG": "Projektet og alle dets filer vil blive slettet",
+    "PROJECTLINK": "PROJEKTLINK",
 
     "STATUS": {
       "STATUS": "Status",

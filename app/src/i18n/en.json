@@ -81,7 +81,9 @@
     "PRIVATE": "Private",
     "AND": "And",
     "MANAGEMENT": "Management",
-    "WITH": "With"
+    "WITH": "With",
+    "UPDATE": "Update",
+    "FOLDER": "Folder"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -685,7 +687,8 @@
     "USERNAME_EXISTS": "Username already exists",
     "AUTH_FAILURE": "Incorrect authentication details",
     "AUTH_ERROR": "Internal login error",
-    "NOT_EQUAL_PATTERN": "Wrong input format"
+    "NOT_EQUAL_PATTERN": "Wrong input format",
+    "NO_USERS_MATCHES": "No users matches"
   },
   "LOGIN": {
     "LOGIN": "Login",
@@ -705,16 +708,20 @@
     "ROLE": "Role",
     "CHANGE": "Change",
     "ADD_MEMBERS": "Add members",
+    "ADD_MEMBER": "Add member",
+    "REMOVE_MEMBER": "Remove member",
     "EDIT_MEMBER": "Edit member",
     "CHOOSE_AUTHORITIES": "Choose authorities",
     "CHANGE_MEMBER_ROLE": "Change member role",
+    "EDIT_ROLE": "Edit role",
     "OLD_ROLE": "Old role",
     "TO_ROLE": "New role",
     "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_MEMBER": "Are you sure you want to remove case member \"{{displayName}}\" as \"{{role}}\"?",
     "MEMBER_ADDED_SUCCESSFULLY": "Case member added successfully",
     "MEMBERS_ADDED_SUCCESSFULLY": "{{count}} case members added successfully",
     "MEMBER_CHANGED_SUCCESSFULLY": "Case member changed successfully",
-    "MEMBER_REMOVED_SUCCESSFULLY": "Case member removed successfully"
+    "MEMBER_REMOVED_SUCCESSFULLY": "Case member removed successfully",
+    "DOWNLOAD_PDF": "Download member overview as PDF"
   },
   "NOTE": {
     "NOTES": "Notes",
@@ -901,6 +908,7 @@
     "HISTORY": "History",
     "SURE_TO_DELETE": "Do you want to remove this project?",
     "SURE_TO_DELETE_MSG": "The project and all its files will be removed",
+    "PROJECTLINK": "Project link",
 
     "STATUS": {
       "STATUS": "Status",

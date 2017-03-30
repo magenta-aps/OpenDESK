@@ -49,7 +49,7 @@
                                     <span md-highlight-text="prjownsrchtxt" md-highlight-flags="^i">{{ own.displayName }}</span>
                                 </md-item-template>
                                 <md-not-found>
-                                    Ingen brugere matcher "{{ prjownsrchtxt }}".
+                                    {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ prjownsrchtxt }}".
                                 </md-not-found>
                             </md-autocomplete>
                             
@@ -86,7 +86,7 @@
                                     <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
                                 </md-item-template>
                                 <md-not-found>
-                                    Ingen brugere matcher "{{ searchTextManager }}".
+                                    {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".
                                 </md-not-found>
                             </md-autocomplete>
                             

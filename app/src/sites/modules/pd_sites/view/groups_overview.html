@@ -50,10 +50,10 @@
 	<md-card ng-controller="SiteController as sc">
 		<md-card-content>
 
-			<h3 class="od-title-icon"><i class="material-icons">group</i> Medlemmer</h3>
+			<h3 class="od-title-icon"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate}}</h3>
 			<div flex="100" flex-gt-lg="100">
 				<p>
-				<div style="font-weight: bold;">Projektleder</div>
+				<div style="font-weight: bold;">{{'PROJECT.PROJECTLEAD' | translate}}</div>
 				<div layout="row">
 					<div flex="85" class="pd-manager">
 						<span ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTMANAGER'].members[0])">
@@ -64,7 +64,7 @@
 				</div>
 				</p>
 				<p>
-				<div style="font-weight: bold;">Projektejer</div>
+				<div style="font-weight: bold;">{{'PROJECT.PROJECTOWNER' | translate}}</div>
 				<div layout="row">
 					<div flex="85" class="pd-owner">
 						<span ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTOWNER'].members[0])">
@@ -81,7 +81,7 @@
 					class="pd-group-toggle"
 					ng-class="pd.showProjGroupList ? 'open' : 'closed'"
 					layout="row">
-					<span>Projektgruppe</span>
+					<span>{{'PROJECT.GROUPS.PROJECT_GROUP' | translate}}</span>
 					<span flex></span>
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
@@ -101,13 +101,13 @@
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 											<md-icon md-menu-align-target>create</md-icon>
-											Redigér rolle
+											{{'MEMBER.EDIT_ROLE' | translate}}
 										</md-button>
 									</md-menu-item>
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.removeMemberDialog(mem, 'PD_PROJECTGROUP')">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Fjern medlem
+											{{'MEMBER.REMOVE_MEMBER' | translate}}
 										</md-button>
 									</md-menu-item>
 								</md-menu-content>
@@ -121,7 +121,7 @@
 					class="pd-group-toggle"
 					ng-class="pd.showSteerGroupList ? 'open' : 'closed'"
 					layout="row">
-					<span>Styregruppe</span>
+					<span>{{'PROJECT.GROUPS.MANAGEMENT_GROUP' | translate}}</span>
 					<span flex></span>
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
@@ -140,13 +140,13 @@
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 											<md-icon md-menu-align-target>create</md-icon>
-											Redigér rolle
+											{{'MEMBER.EDIT_ROLE' | translate}}
 										</md-button>
 									</md-menu-item>
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.removeMemberDialog(mem, 'PD_STEERING_GROUP')">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Fjern medlem
+											{{'MEMBER.REMOVE_MEMBER' | translate}}
 										</md-button>
 									</md-menu-item>
 								</md-menu-content>
@@ -160,7 +160,7 @@
 					class="pd-group-toggle"
 					ng-class="pd.showWorkGroupList ? 'open' : 'closed'"
 					layout="row">
-					<span>Arbejdsgruppe</span>
+					<span>{{'PROJECT.GROUPS.WORK_GROUP' | translate}}</span>
 					<span flex></span>
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
@@ -179,13 +179,13 @@
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 											<md-icon md-menu-align-target>create</md-icon>
-											Redigér rolle
+											{{'MEMBER.EDIT_ROLE' | translate}}
 										</md-button>
 									</md-menu-item>
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.removeMemberDialog(mem, 'PD_WORKGROUP')">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Fjern medlem
+											{{'MEMBER.REMOVE_MEMBER' | translate}}
 										</md-button>
 									</md-menu-item>
 								</md-menu-content>
@@ -199,7 +199,7 @@
 					class="pd-group-toggle"
 					ng-class="pd.showMonitorsList ? 'open' : 'closed'"
 					layout="row">
-					<span>Følgegruppe</span>
+					<span>{{'PROJECT.GROUPS.FOLLOW_GROUP' | translate}}</span>
 					<span flex></span>
 					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 				</h4>
@@ -220,13 +220,13 @@
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.updateMemberRoleDialog($event, mem)">
 											<md-icon md-menu-align-target>create</md-icon>
-											Redigér rolle
+											{{'MEMBER.EDIT_ROLE' | translate}}
 										</md-button>
 									</md-menu-item>
 									<md-menu-item ng-if="vm.isManager">
 										<md-button ng-click="pd.removeMemberDialog(mem, 'PD_MONITORS')">
 											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											Fjern medlem
+											{{'MEMBER.REMOVE_MEMBER' | translate}}
 										</md-button>
 									</md-menu-item>
 								</md-menu-content>
@@ -240,12 +240,12 @@
 				<div layout="row" layout-align="start center" class="btnAlign">
 					<md-button ng-if="vm.isManager" class="md-raised md-icon-button"
 							   ng-click="pd.editPdSiteGroups($event)" aria-label="Tilføj/fjern gruppemedlemmer">
-						<md-tooltip md-direction="top">Tilføj/fjern gruppemedlemmer</md-tooltip>
+						<md-tooltip md-direction="top">{{'COMMON.ADD' | translate}}/{{'COMMON.REMOVE' | translate | lowercase}} {{'MEMBER.MEMBERS' | translate | lowercase}}</md-tooltip>
 						<i class="material-icons">add</i>
 					</md-button>
 					<md-button class="md-raised md-icon-button" ng-style="vm.isManager ? 'margin-left: 30px;' : ''"
 							   ng-click="pd.doPDF()" aria-label="Download PDF med grupper">
-						<md-tooltip md-direction="top">Download medlemsoversigt som PDF</md-tooltip>PDF
+						<md-tooltip md-direction="top">{{'MEMBER.DOWNLOAD_PDF' | translate}}</md-tooltip>PDF
 					</md-button>
 				</div>
 			</div>

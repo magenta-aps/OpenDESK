@@ -4,7 +4,7 @@
         <div>
             <md-toolbar>
                 <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
-                    <h2>Redigér projekt</h2>
+                    <h2>{{'COMMON.EDIT' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</h2>
                     <md-button ng-click="vm.cancel()" class="md-icon-button">
                         <i class="material-icons">close</i>
                     </md-button>
@@ -14,7 +14,7 @@
             <md-content class="md-padding">
                 <div layout-margin>
                     <md-input-container>
-                        <label>Navn</label>
+                        <label>{{'COMMON.NAME' | translate}}</label>
                         <input type="text" name="newSiteName" required ng-model="vm.project.title" md-autofocus>
                         <div ng-messages="renameFolderForm.newSiteName.$error">
                             <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
@@ -32,7 +32,7 @@
 
             <md-dialog-actions>
                 <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
-                <md-button type="submit" class="md-primary">Opdatér</md-button>
+                <md-button type="submit" class="md-primary">{{'COMMON.UPDATE' | translate}}</md-button>
             </md-dialog-actions>
         </div>
     </form>

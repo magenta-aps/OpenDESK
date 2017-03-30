@@ -36,7 +36,7 @@
 
     </div>
     <div id="project-members" ng-show="site">
-        <h2>Medlemmer</h2>
+        <h2>{{'MEMBER.MEMBERS' | translate}}</h2>
         <ul class="list-plain" ng-repeat="node in siteMembers">
             <li><i class="material-icons">person</i>
                 {{node.authority.firstName}} {{node.authority.lastName}}
@@ -44,6 +44,6 @@
         </ul>
         <br>
 
-        <p><a class="btn" href="#!"><i class="material-icons">add</i> Tilføj medlem</a></p>
+        <p><a class="btn" href="#!"><i class="material-icons">add</i> Tilføj {{'MEMBER.ADD_MEMBER' | translate}}</a></p>
     </div>
 </div>
