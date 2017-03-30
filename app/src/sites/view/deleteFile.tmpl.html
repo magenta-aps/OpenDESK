@@ -17,7 +17,7 @@ newFolder.tmpl.htm
                     <input type="text" name="newFolderName" required ng-model="nodeRef">
 
                     <div ng-messages="createSiteForm.newSiteName.$error">
-                        <div ng-message="required">Dette felt skal udfyldes</div>
+                        <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                     </div>
                 </md-input-container>
             </div>

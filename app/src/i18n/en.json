@@ -76,7 +76,12 @@
     "COPY": "Copy",
     "MOVE": "Move",
     "REVIEW": "Review",
-    "VISIBILITY": "Visibility"
+    "VISIBILITY": "Visibility",
+    "TEMPLATE": "Template",
+    "PRIVATE": "Private",
+    "AND": "And",
+    "MANAGEMENT": "Management",
+    "WITH": "With"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -813,7 +818,8 @@
     "FIND_USERS": "Find users",
     "FIND_GROUPS": "Find groups",
     "FIND_PERSON": "Find persons",
-    "FIND_ORGANISATION": "Find organizations"
+    "FIND_ORGANISATION": "Find organizations",
+    "DOCUMENTS": "Search Documents"
   },
   "ACTIVITIES": {
     "NOTIFICATIONS": "Notifications",
@@ -893,6 +899,8 @@
     "ORG_UNIT": "Org. Unit",
     "CREATED": "Created",
     "HISTORY": "History",
+    "SURE_TO_DELETE": "Do you want to remove this project?",
+    "SURE_TO_DELETE_MSG": "The project and all its files will be removed",
 
     "STATUS": {
       "STATUS": "Status",
@@ -902,7 +910,7 @@
 
     "GROUPS": {
       "PROJECT_GROUP": "Project Group",
-      "CONTROL_GROUP": "Control Group",
+      "MANAGEMENT_GROUP": "Management Group",
       "WORK_GROUP": "Work Group",
       "FOLLOW_GROUP": "Follow Group"
     }

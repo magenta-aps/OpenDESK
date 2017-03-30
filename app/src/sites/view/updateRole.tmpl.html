@@ -20,7 +20,7 @@
                         <md-option ng-repeat="r in roles_translated" ng-value="r">{{ r }}</md-option>
                     </md-select>
                     <div ng-messages="vm.editRoleForm.newMemberRole.$error">
-                        <div ng-message="required">Dette felt skal udfyldes</div>
+                        <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                     </div>
                 </md-input-container>
             </div>

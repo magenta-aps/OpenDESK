@@ -7,12 +7,12 @@
 		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
 			<i class="material-icons">search</i>
 			<md-autocomplete md-input-name="autocomplete" md-selected-item="searchQuery" md-search-text="searchText" md-items="r in vm.getAutoSuggestions(searchText)"
-			    md-item-text="r.name" md-floating-label="Søg dokumenter">
+			    md-item-text="r.name" md-floating-label="{{'SEARCH.DOCUMENTS' | translate }}">
 				<md-item-template>
 					<span md-highlight-text="searchText" ng-click="vm.gotoPath(r.nodeRef);">{{r.name}}</span>
 				</md-item-template>
 				<div ng-messages="autocompleteForm.autocomplete.$error">
-					<div ng-message="required">Dette felt skal udfyldes</div>
+					<div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
 				</div>
 			</md-autocomplete>
 		</form>

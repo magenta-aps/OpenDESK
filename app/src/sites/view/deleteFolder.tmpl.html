@@ -16,7 +16,7 @@
                     <input type="text" name="deleteFileName" required ng-model="nodeRef">
 
                     <div ng-messages="createSiteForm.newSiteName.$error">
-                        <div ng-message="required">Dette felt skal udfyldes</div>
+                        <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                     </div>
                 </md-input-container>
             </div>

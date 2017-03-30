@@ -17,14 +17,14 @@
                         <label>Navn</label>
                         <input type="text" name="newSiteName" required ng-model="vm.project.title" md-autofocus>
                         <div ng-messages="renameFolderForm.newSiteName.$error">
-                            <div ng-message="required">Dette felt skal udfyldes</div>
+                            <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                         </div>
                     </md-input-container>
                 </div>
 
                 <div layout-margin>
                     <md-input-container class="md-block">
-                        <label>Beskrivelse</label>
+                        <label>{{'COMMON.DESCRIPTION' | translate}}</label>
                         <textarea ng-model="vm.project.description" md-maxlength="250" maxlength="250"></textarea>
                     </md-input-container>
                 </div>

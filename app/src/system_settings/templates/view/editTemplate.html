@@ -39,7 +39,7 @@
                         <input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle" md-autofocus>
 
                         <div ng-messages="renameFolderForm.newSiteName.$error">
-                            <div ng-message="required">Dette felt skal udfyldes</div>
+                            <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -49,7 +49,7 @@
                         <input type="text" name="newSiteName" required ng-model="vm.currentDialogTitle">
 
                         <div ng-messages="renameFolderForm.newSiteName.$error">
-                            <div ng-message="required">Dette felt skal udfyldes</div>
+                            <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                         </div>
                     </md-input-container>
                 </div>

@@ -23,6 +23,7 @@
                 PARAM_METHOD : "getAll",
                 PARAM_USERNAME: userId
             }).then(function(response) {
+                console.log(response.data);
                 return response.data;
             })
         };

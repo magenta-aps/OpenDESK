@@ -76,7 +76,12 @@
     "COPY": "Kopiér",
     "MOVE": "Flyt",
     "REVIEW": "Godkendelse",
-    "VISIBILITY": "Synlighed"
+    "VISIBILITY": "Synlighed",
+    "TEMPLATE": "Skabelon",
+    "PRIVATE": "Privat",
+    "AND": "Og",
+    "MANAGEMENT": "Styring",
+    "WITH": "Med"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -652,7 +657,7 @@
     "ORGANIZATION": "Organisation"
   },
   "ERROR": {
-    "REQUIRED": "Obligatorisk felt",
+    "REQUIRED": "Dette felt skal udfyldes",
     "TOO_SHORT": "Indhold for kort",
     "TOO_LONG": "Indhold for langt",
     "INVALID_EMAIL": "Invalid email-adresse",
@@ -785,7 +790,8 @@
     "FIND_USERS": "Find brugere",
     "FIND_GROUPS": "Find grupper",
     "FIND_PERSON": "Find personer",
-    "FIND_ORGANISATION": "Find organisationer"
+    "FIND_ORGANISATION": "Find organisationer",
+    "DOCUMENTS": "Søg dokumenter"
   },
   "ACTIVITIES": {
     "NOTIFICATIONS": "Notifikationer",
@@ -865,6 +871,8 @@
     "ORG_UNIT": "Org. enhed",
     "CREATED": "Oprettet",
     "HISTORY": "Historik",
+    "SURE_TO_DELETE": "Vil du slette dette projekt?",
+    "SURE_TO_DELETE_MSG": "Projektet og alle dets filer vil blive slettet",
 
     "STATUS": {
       "STATUS": "Status",
@@ -874,7 +882,7 @@
 
     "GROUPS": {
       "PROJECT_GROUP": "Projektgruppe",
-      "CONTROL_GROUP": "Styregruppe",
+      "MANAGEMENT_GROUP": "Styregruppe",
       "WORK_GROUP": "Arbejdsgruppe",
       "FOLLOW_GROUP": "Følgegruppe"
     }

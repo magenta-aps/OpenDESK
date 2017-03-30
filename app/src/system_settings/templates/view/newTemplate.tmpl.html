@@ -14,7 +14,7 @@
                     <input type="text" name="newSiteName" required ng-model="newSiteName">
 
                     <div ng-messages="createSiteForm.newSiteName.$error">
-                        <div ng-message="required">Dette felt skal udfyldes</div>
+                        <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                     </div>
                 </md-input-container>
 
@@ -23,7 +23,7 @@
                     <textarea required name="newSiteDesc" ng-model="newSiteDescription"></textarea>
 
                     <div ng-messages="createSiteForm.newSiteDesc.$error">
-                        <div ng-message="required">Dette felt skal udfyldes</div>
+                        <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                     </div>
                 </md-input-container>
 

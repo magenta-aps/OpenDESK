@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, $state, siteService, cmisService, $stateParams, searchService, $rootScope, documentService, authService, pd_siteService, sessionService) {
+function SitesController($scope, $mdDialog, $window, $state, siteService, cmisService, $stateParams, searchService, $rootScope, $translate, documentService, authService, pd_siteService, sessionService) {
 
 
 	var vm = this;
@@ -29,25 +29,6 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 		  		{key:'Project', name:'Grupperum'},
 				{key:'PD-Project', name:'Projekt'},
 				{key:'', name:'Alle'}];
-
-	//pd_siteService.getAllOrganizationalCenters();
-
-	//siteService.createMembersPDF("kagenu2");
-
-	// siteService.removeRole("kage2", "abeecher", "Consumer")
-
-	//pd_siteService.createPDSite("kage8", "desc", "100", "center_1","fhp", "fhp");
-
-	//pd_siteService.getAllOrganizationalCenters();
-
-
-	//pd_siteService.createPDSite("kage4", "desc", "100", "center_1","admin", "abeecher");
-	//siteService.getGroupMembers("kage2", "PD_PROJECTMANAGER");
-	//siteService.removeRole("kage2", "abeecher", "Consumer")
-
-	//siteService.addUser("TestAvanceretprojekt", "abeecher", "PD_STEERING_GROUP");
-	//siteService.addUser("TestAvanceretprojekt", "abeecher", "PD_PROJECTOWNER");
-	//siteService.removeUser("kage1", "abeecher", "PD_MONITORS");
 
 	vm.exactMatchFilter = function (project) { 
 		if(vm.search == undefined || vm.search.type == '') {
@@ -132,10 +113,10 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 
 	vm.deleteSiteDialog = function (siteName) {
 		var confirm = $mdDialog.confirm()
-			.title('Vil du slette dette projekt?')
-			.textContent('Projektet og alle dets filer vil blive slettet')
-			.ok('Ja')
-			.cancel('Annullér');
+			.title($translate.instant('PROJECT.SURE_TO_DELETE'))
+			.textContent($translate.instant('PROJECT.SURE_TO_DELETE_MSG'))
+			.ok($translate.instant('COMMON.YES'))
+			.cancel($translate.instant('COMMON.CANCEL'));
 		$mdDialog.show(confirm).then(
 			function () {
 				vm.deleteSite(siteName);
