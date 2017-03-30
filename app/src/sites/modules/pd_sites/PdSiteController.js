@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteController', PdSiteController);
     
-    function PdSiteController($q, $mdDialog, siteService, pd_siteService, groupService, $stateParams, authService,
+    function PdSiteController($q, $scope, $mdDialog, siteService, pd_siteService, groupService, $stateParams, authService,
                               alfrescoDownloadService) {
 
     
@@ -116,8 +116,8 @@ angular
 	
         
 		function updateMemberRoleDialog(event, user) {
-            vm.currentDialogUser = user;
-            vm.currentDialogRole = user;
+            pd.currentDialogUser = user;
+            pd.currentDialogRole = user;
 			$mdDialog.show({
 				templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
 				parent: angular.element(document.body),
