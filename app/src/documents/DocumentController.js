@@ -160,7 +160,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         var creator = authService.getUserInfo().user.userName;
         var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
-        notificationsService.addNotice(vm.wf_from, "review svar", comment, link).then(function (val) {
+        notificationsService.addNotice(vm.wf_from, "Review svar", comment, link).then(function (val) {
             $mdDialog.hide();
         });
     }

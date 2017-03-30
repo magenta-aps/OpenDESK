@@ -1,10 +1,18 @@
 <div class="od-projects" ng-show="vm.isMember || vm.project.visibility == 'PUBLIC'">
 
-    <h1 class="od-title">{{vm.project.type == vm.strings.templateProject ? "Projektskabelon" : "Projekt"}}: {{ vm.project.title }}</h1>
+    <h1 class="od-title">
+        <!--{{vm.project.type == vm.strings.templateProject ? "Projektskabelon" : "Projekt"}}-->
+        <span ng-if="vm.project.type == vm.strings.templateProject">{{COMMON.TEMPLATEPROJECT | translate | lowercase}} :</span>
+        <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
+        <span ng-if="vm.project.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span>
+        {{ vm.project.title }}</h1>
 
     <div layout="row" layout-align="space-between center">
         <a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
-            {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }} {{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}
+            {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }}
+            <span ng-if="vm.project.type == vm.strings.templateProject">{{COMMON.TEMPLATES | translate | lowercase}}</span>
+            <span ng-if="vm.project.type != vm.strings.templateProject">{{'PROJECT.PROJECTS' | translate | lowercase}}</span>  
+            <!--{{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}-->
         </a>
 
         <div class="od-search" layout="row">
@@ -269,7 +277,7 @@
                     ng-class="vm.showProjDetails ? 'open' : 'closed'"
                     layout="row"
                     style="margin: 8px;">
-                    <span><i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>Detaljer</span>
+                    <span><i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>{{'COMMON.DETAILS' | translate}}</span>
                     <span flex></span>
                     <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
                 </h3>
@@ -277,9 +285,9 @@
                     <md-card-content>
                         <div layout="row" layout-align="space-between">
                             <dl style="margin-bottom: 0;">
-                                <dt>Beskrivelse</dt>
+                                <dt>{{'COMMON.DESCRIPTION' | translate}}</dt>
                                 <dd ng-if="vm.hasDescription">{{ vm.project.description }}</dd>
-								<dd ng-if="!vm.hasDescription"><i>Ingen beskrivelse</i></dd>
+								<dd ng-if="!vm.hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
                             </dl>
                             <md-button ng-if="vm.isManager" ng-click="vm.editSiteDialog($event)" class="md-icon-button md-raised">
                                 <i class="material-icons">edit</i>
@@ -287,7 +295,7 @@
                         </div>
                         <div layout="row">
                             <dl>
-                                <dt>Oprettet af</dt>
+                                <dt>{{'COMMON.CREATEDBY' | translate}}</dt>
                                 <dd>{{ vm.project.creator.fullName }} <br><span class="muted">{{ vm.project.created | date }}</span></dd>
                             </dl>
                         </div>
@@ -335,10 +343,11 @@
                     </md-list>
     
                     <div layout="row" layout-align="start center" class="btnAlign">
-                        <md-button ng-if="vm.isManager" class="md-raised" ng-click="vm.newMember($event)">
-                            <i class="material-icons">add</i>
-                            Tilføj medlem
-                        </md-button>
+                        <md-button ng-if="vm.isManager" class="md-raised md-icon-button"
+							   ng-click="vm.newMember($event)">
+						<md-tooltip md-direction="top">{{'MEMBER.ADD_MEMBER' | translate}}</md-tooltip>
+						<i class="material-icons">add</i>
+					</md-button>
                     </div>
                 </md-card-content>
             </md-card>
@@ -350,5 +359,6 @@
     </div>
 </div>
 <div class="od-projects" ng-if="vm.isMember != null && !vm.isMember && vm.project.visibility == 'PRIVATE'">
-    Du har ikke adgang til dette projekt.
+    <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.NO_ACCESS_PROJECT' | translate}}</span>
+    <span ng-if="vm.project.type == 'Project'">{{'PROJECT.NO_ACCESS_GROUPROOM' | translate}}</span>
 </div>

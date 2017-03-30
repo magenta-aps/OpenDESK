@@ -29,6 +29,7 @@
     "CREATE_NEW": "Create new",
     "MODIFIED": "Modified",
     "DESCRIPTION": "Description",
+    "NODESCRIPTION": "No description",
     "TYPE": "Type",
     "CATEGORY": "Category",
     "PREVIEW": "Preview",
@@ -78,12 +79,15 @@
     "REVIEW": "Review",
     "VISIBILITY": "Visibility",
     "TEMPLATE": "Template",
+    "TEMPLATES": "Templates",
+    "TEMPLATEPROJECT": "Template project",
     "PRIVATE": "Private",
     "AND": "And",
     "MANAGEMENT": "Management",
     "WITH": "With",
     "UPDATE": "Update",
-    "FOLDER": "Folder"
+    "FOLDER": "Folder",
+    "CHOOSE": "Choose"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -721,7 +725,8 @@
     "MEMBERS_ADDED_SUCCESSFULLY": "{{count}} case members added successfully",
     "MEMBER_CHANGED_SUCCESSFULLY": "Case member changed successfully",
     "MEMBER_REMOVED_SUCCESSFULLY": "Case member removed successfully",
-    "DOWNLOAD_PDF": "Download member overview as PDF"
+    "DOWNLOAD_PDF": "Download member overview as PDF",
+    "WHO_TO_ADD": "Who do you want to add?"
   },
   "NOTE": {
     "NOTES": "Notes",
@@ -907,8 +912,10 @@
     "CREATED": "Created",
     "HISTORY": "History",
     "SURE_TO_DELETE": "Do you want to remove this project?",
-    "SURE_TO_DELETE_MSG": "The project and all its files will be removed",
+    "SURE_TO_DELETE_MSG": "The project and all its files will be removed.",
     "PROJECTLINK": "Project link",
+    "NO_ACCESS_PROJECT": "You don't have access to this project.",
+    "NO_ACCESS_GROUPROOM": "You don't have access to this group room.",
 
     "STATUS": {
       "STATUS": "Status",

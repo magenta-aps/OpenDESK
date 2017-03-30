@@ -3,7 +3,7 @@
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Tilføj medlem til projekt</h2>
+                <h2>{{'MEMBER.ADD_MEMBER' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.cancel()">
                     <i class="material-icons" aria-label="Luk dialogboks">close</i>
@@ -15,7 +15,7 @@
             <div>
 
                 <md-autocomplete required md-input-name="addMemberAutocomplete" md-selected-item="newMemberName" md-search-text="searchMemText"
-                    md-items="user in vm.getAllUsers(searchMemText)" md-item-text="user.firstName + ' ' + user.lastName" md-floating-label="Hvem vil du tilføje?">
+                    md-items="user in vm.getAllUsers(searchMemText)" md-item-text="user.firstName + ' ' + user.lastName" md-floating-label="{{'MEMBER.WHO_TO_ADD' | translate}}">
                     <md-item-template>
                         <span md-highlight-text="searchMemText">{{ user.firstName }} {{ user.lastName }}</span>
                     </md-item-template>
@@ -25,7 +25,7 @@
                 </md-autocomplete>
 
                 <md-input-container>
-                    <label>Rolle</label>
+                    <label>{{'MEMBER.ROLE' | translate}}</label>
                     <md-select required ng-model="newMemberRole">
                         <md-option ng-repeat="r in roles_translated" ng-value="r">{{ r }}</md-option>
                     </md-select>

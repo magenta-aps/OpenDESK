@@ -29,6 +29,7 @@
     "CREATE_NEW": "Opret nyt",
     "MODIFIED": "Ændret",
     "DESCRIPTION": "Beskrivelse",
+    "NODESCRIPTION": "Ingen beskrivelse",
     "TYPE": "Type",
     "CATEGORY": "Kategori",
     "PREVIEW": "Preview",
@@ -78,12 +79,15 @@
     "REVIEW": "Godkendelse",
     "VISIBILITY": "Synlighed",
     "TEMPLATE": "Skabelon",
+    "TEMPLATEPROJECT": "Skabelonprojekt",
+    "TEMPLATES": "Skabeloner",
     "PRIVATE": "Privat",
     "AND": "Og",
     "MANAGEMENT": "Styring",
     "WITH": "Med",
     "UPDATE": "Opdatér",
-    "FOLDER": "Mappe"
+    "FOLDER": "Mappe",
+    "CHOOSE": "Vælg"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -703,7 +707,8 @@
     "MEMBERS_ADDED_SUCCESSFULLY": "{{count}} medlemmer tilføjet",
     "MEMBER_CHANGED_SUCCESSFULLY": "Medlem ændret",
     "MEMBER_REMOVED_SUCCESSFULLY": "Medlem fjernet",
-    "DOWNLOAD_PDF": "Hent medlemsoversigt som PDF"
+    "DOWNLOAD_PDF": "Hent medlemsoversigt som PDF",
+    "WHO_TO_ADD": "Hvem vil du tilføje?"
   },
   "NOTE": {
     "NOTES": "Noter",
@@ -879,8 +884,10 @@
     "CREATED": "Oprettet",
     "HISTORY": "Historik",
     "SURE_TO_DELETE": "Vil du slette dette projekt?",
-    "SURE_TO_DELETE_MSG": "Projektet og alle dets filer vil blive slettet",
+    "SURE_TO_DELETE_MSG": "Projektet og alle dets filer vil blive slettet.",
     "PROJECTLINK": "PROJEKTLINK",
+    "NO_ACCESS_PROJECT": "Du har ikke adgang til dette projekt.",
+    "NO_ACCESS_GROUPROOM": "Du har ikke adgang til dette grupperum.",
 
     "STATUS": {
       "STATUS": "Status",
