@@ -133,7 +133,7 @@ public class Contents extends AbstractWebScript {
 
                         ChildAssociationRef parent = nodeService.getPrimaryParent(childNodeRef);
 
-                        json.put("parentNode'Ref", parent.getParentRef());
+                        json.put("parentNodeRef", parent.getParentRef());
                         json.put("shortRef", childNodeRef.getId());
 
 

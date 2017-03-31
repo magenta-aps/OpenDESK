@@ -52,7 +52,7 @@
                 <property name="od:seen">
                 <type>d:boolean</type>
                 <default>false</default>
-            </property>
+               </property>
                 <property name="od:document">
                     <type>d:noderef</type>
                 </property>
