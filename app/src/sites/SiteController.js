@@ -78,8 +78,6 @@ angular
                     
                     vm.project = result;
 					vm.hasDescription = vm.project.description.trim() === "" ? false : true;
-                    console.log('Project information');
-                    console.log(vm.project);
 
                     getUserManagedProjects();
                     getSiteUserRole();
@@ -236,8 +234,6 @@ angular
         vm.loadContents = function () {
             siteService.getContents(vm.currentFolderUUID).then(function (response) {
                 $scope.contents = response;
-                console.log("contents");
-                console.log(response);
                 vm.addThumbnailUrl();
             });
     
@@ -459,8 +455,8 @@ angular
         };
     
     
-        function createNotification(userName, subject, message, link) {
-            notificationsService.addNotice(userName, subject, message, link).then(function (val) {
+        function createNotification(userName, subject, message, link, wtype) {
+            notificationsService.addNotice(userName, subject, message, link, wtype).then(function (val) {
                 $mdDialog.hide();
             });
         }
@@ -468,9 +464,9 @@ angular
     
         function createSiteNotification(userName, site) {
                 var subject = "Du er blevet tilføjet til " + vm.project.title;
-                var message = "Du er blevet tilføjet til projektet " + vm.project.title + ".";
+                var message = "har tilføjet dig til projektet " + vm.project.title + ".";
                 var link = "/#!/projekter/" + site + "?type=Project";
-                createNotification(userName, subject, message, link);
+                createNotification(userName, subject, message, link, 'project');
         }
     
     
@@ -478,8 +474,8 @@ angular
             var creatorFirstName = vm.currentUser.firstName;
             var creatorLastName = vm.currentUser.lastName;
             var creatorFullName = creatorFirstName + " " + creatorLastName;
-            var subject = "Ny fil i " + projekt;
-            var message = "En ny fil \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
+            var subject = "Nyt dokument i " + projekt;
+            var message = "Et nyt dokument \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
             var link = "/#!/dokument/" + ref;
 
             // Creating an empty initial promise that always resolves itself.
@@ -497,7 +493,7 @@ angular
                         }
                         if (receiveNotifications != null && receiveNotifications == "true") {
                             console.log("Sending notification to : " + userName);
-                            createNotification(userName, subject, message, link);
+                            createNotification(userName, subject, message, link,'new-doc');
                         }
                     });
                 }
@@ -512,7 +508,7 @@ angular
             var link = "/#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator;
 
             var sub = "Review forespørgsel";
-            createNotification(userName, sub, message, link);
+            createNotification(userName, sub, message, link,'review-request');
         };
     
     
@@ -853,8 +849,11 @@ angular
 
         function createDocumentFromTemplate(template_id) {
             siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef).then (function (response) {
+                // var ref = response.data.nodeRef.split("/")[3];
+                // createDocumentNotification(vm.project.title, ref, response.data.fileName);
                 loadSiteData();
             });
+            
         }
     }
             

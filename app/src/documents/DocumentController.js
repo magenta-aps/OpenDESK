@@ -156,12 +156,14 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         });
     };
     vm.getNotificationFrom();
-
-    vm.createWFNotification = function (comment) {
+    
+    vm.createWFNotification = function(comment, wtype) {
         var creator = authService.getUserInfo().user.userName;
         var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
-        notificationsService.addNotice(vm.wf_from, "Review svar", comment, link).then(function (val) {
+        var status = wtype == 'review-approved' ? 'godkendt' : 'afvist';
+
+        notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype).then (function (val) {
             $mdDialog.hide();
         });
     }

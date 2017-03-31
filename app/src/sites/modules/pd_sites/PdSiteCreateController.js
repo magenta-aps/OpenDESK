@@ -189,8 +189,8 @@ angular
             function createSiteNotification (siteName, userName, link) {
                 if(userName !== currentUser) {
                     var subject = "Du er blevet tilføjet til " + siteName;
-                    var message = "Du er blevet tilføjet til projektet " + siteName + ".";
-                    notificationsService.addNotice(userName, subject, message, link).then(function (val) {
+                    var message = "har tilføjet dig til projektet " + siteName + ".";
+                    notificationsService.addNotice(userName, subject, message, link,'project').then(function (val) {
                         $mdDialog.cancel();
                     });
                 }

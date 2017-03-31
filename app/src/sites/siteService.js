@@ -291,14 +291,14 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         removeUser: function (siteShortName, user, group) {
+            console.log("remove user" + user);
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "removeUser",
                 PARAM_SITE_SHORT_NAME: siteShortName,
                 PARAM_USER: user,
                 PARAM_GROUP: group
             }).then(function(response) {
-
-                //console.log(response.data);
+                console.log(response);
                 return response.data;
             });
         },

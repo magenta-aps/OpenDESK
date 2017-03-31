@@ -156,7 +156,7 @@ angular
 
 
 		function removeMemberFromSite(member, group) {
-			siteService.removeUser(pd.site.shortName, member.username, group).then( function(val) {
+			siteService.removeUser(pd.site.shortName, member.userName, group).then( function(val) {
 				getProjectMembers();
 			});			
 			$mdDialog.hide();
