@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteCreateController', PdSiteCreateController);
     
-    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, $mdToast) {
+    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, authService, $mdToast) {
         
         var pdc = this;
         
@@ -25,13 +25,17 @@ angular
         
         function PdSiteCreateDiaglogController($scope, notificationsService, authService) {
 
-            var currentUser = authService.getUserInfo().user.userName;
+            var user = authService.getUserInfo().user;
+            var currentUser = user.userName;
+            var userName = user.firstName + ' ' + user.lastName;
             var availProjectOwners = [];
         
             $scope.cancel = cancel;
             
             $scope.newSite = {
-                isPrivate: false
+                isPrivate: false,
+                manager: user,
+                presetManager: userName
             };
             $scope.availOrgs = [];
             $scope.projektGruppe = [];
@@ -195,9 +199,5 @@ angular
                     });
                 }
             }
-        
-       
         }
-        
-        
     }

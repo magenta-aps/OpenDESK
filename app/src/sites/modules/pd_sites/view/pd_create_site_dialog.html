@@ -73,20 +73,21 @@
                                 <input type="text" ng-model="newSite.sbsys" required>
                             </md-input-container>
 
+                            <!--searchTextManager-->
                             <md-autocomplete
 									required
                                     md-selected-item="newSite.manager"
-                                    md-search-text="searchTextManager"
-                                    md-items="man in searchPeople(searchTextManager)"
+                                    md-search-text="newSite.presetManager" 
+                                    md-items="man in searchPeople(newSite.presetManager)"
                                     md-item-text="man.firstName + ' ' + man.lastName"
                                     md-min-length="1"
                                     md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
                                     placeholder="{{'PROJECT.PROJECTLEAD' | translate}}">
                                 <md-item-template>
-                                    <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
+                                    <span md-highlight-text="newSite.presetManager" md-highlight-flags="^i">{{ man.firstName }} {{ man.lastName }}</span>
                                 </md-item-template>
                                 <md-not-found>
-                                    {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".
+                                    {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ newSite.presetManager }}".
                                 </md-not-found>
                             </md-autocomplete>
                             
