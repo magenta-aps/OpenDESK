@@ -72,6 +72,8 @@ public class Notifications extends AbstractWebScript {
             String message = Utils.getJSONObject(json, "PARAM_MESSAGE");
             String link = Utils.getJSONObject(json, "PARAM_LINK");
             String nodeRefString = Utils.getJSONObject(json, "PARAM_NODE_REF");
+            String type = Utils.getJSONObject(json, "PARAM_TYPE");
+
             NodeRef nodeRef = null;
             if(NodeRef.isNodeRef(nodeRefString))
                 nodeRef = new NodeRef(nodeRefString);
@@ -83,7 +85,7 @@ public class Notifications extends AbstractWebScript {
                         break;
 
                     case "add":
-                        result = addNotification(userName, message, subject, link);
+                        result = addNotification(userName, message, subject, link, type);
                         break;
 
                     case "remove":
@@ -205,6 +207,28 @@ public class Notifications extends AbstractWebScript {
             Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
             Boolean seen = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
             String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
+            String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
+
+            String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATOR);
+            NodeRef from = personService.getPerson(name);
+
+            String from_name = (String)nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME)  + " " + (String)nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
+
+
+            String fileName;
+            String siteName;
+            if (link.contains("dokument")) {
+                NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
+
+                fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
+                org.alfresco.service.cmr.repository.Path path = nodeService.getPath(document);
+                siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
+
+            }
+            else {
+                fileName = "";
+                siteName = "";
+            }
 
 
             //String documentShortNodeRef = document.toString();
@@ -217,6 +241,11 @@ public class Notifications extends AbstractWebScript {
                 json.put("link", link + "&NID=" + child.getChildRef());
                 json.put("read", read);
                 json.put("seen", seen);
+                json.put("filename", fileName);
+                json.put("project", siteName);
+                json.put("from", from_name);
+                json.put("type", type);
+
 
                 Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
                 json.put("created", d.getTime());
@@ -231,7 +260,7 @@ public class Notifications extends AbstractWebScript {
         return result;
     }
 
-    private JSONArray addNotification(String userName, String message, String subject, String link) {
+    private JSONArray addNotification(String userName, String message, String subject, String link, String type) {
 
         AuthenticationUtil.pushAuthentication();
         try {
@@ -241,6 +270,7 @@ public class Notifications extends AbstractWebScript {
         //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
 
         NodeRef user = personService.getPerson(userName);
+
 
         ChildAssociationRef childAssocRef = this.nodeService.createNode(
                 user,
@@ -255,6 +285,7 @@ public class Notifications extends AbstractWebScript {
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_LINK, link);
+                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, type);
 
                 nodeService.setProperties(childAssocRef.getChildRef(),contentProps);
 

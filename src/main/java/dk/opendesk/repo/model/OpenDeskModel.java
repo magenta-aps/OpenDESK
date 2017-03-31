@@ -74,6 +74,10 @@ public interface OpenDeskModel {
     public static QName PROP_NOTIFICATION_READ = QName.createQName(OD_URI, "read");
     public static QName PROP_NOTIFICATION_LINK = QName.createQName(OD_URI, "link");
     public static QName PROP_NOTIFICATION_SEEN = QName.createQName(OD_URI, "seen");
+    public static QName PROP_NOTIFICATION_TYPE = QName.createQName(OD_URI, "type");
+    public static QName PROP_NOTIFICATION_CREATOR = QName.createQName(OD_URI, "creator");
+    public static QName PROP_NOTIFICATION_DOCUMENT = QName.createQName(OD_URI, "document");
+
 
 
     /**
