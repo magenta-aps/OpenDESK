@@ -1,7 +1,7 @@
 <div layout="row" layout-align="space-between center">
 
 	    <h1 class="od-title">
-        <span ng-if="vm.type == vm.strings.templateProject">{{COMMON.TEMPLATEPROJECT | translate | lowercase}} :</span>
+        <span ng-if="vm.type == vm.strings.templateProject">{{'COMMON.TEMPLATEPROJECT' | translate}} :</span>
         <span ng-if="vm.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
         <span ng-if="vm.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span>
         {{ vm.title }}</h1>
@@ -10,7 +10,7 @@
 
 	<a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
             {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }}
-            <span ng-if="vm.project.type == vm.strings.templateProject">{{COMMON.TEMPLATES | translate | lowercase}}</span>
+            <span ng-if="vm.project.type == vm.strings.templateProject">{{'COMMON.TEMPLATES' | translate | lowercase}}</span>
             <span ng-if="vm.project.type != vm.strings.templateProject">{{'PROJECT.PROJECTS' | translate | lowercase}}</span>  
             <!--{{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}-->
         </a>
