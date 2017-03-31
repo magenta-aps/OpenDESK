@@ -214,15 +214,21 @@ public class Notifications extends AbstractWebScript {
 
             String from_name = (String)nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME)  + " " + (String)nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
 
-            NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
 
+            String fileName;
+            String siteName;
+            if (link.contains("dokument")) {
+                NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
 
-            String fileName = (String)nodeService.getProperty(document, ContentModel.PROP_NAME);
+                fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
+                org.alfresco.service.cmr.repository.Path path = nodeService.getPath(document);
+                siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
 
-            org.alfresco.service.cmr.repository.Path path = nodeService.getPath(document);
-            String siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
-
-
+            }
+            else {
+                fileName = "";
+                siteName = "";
+            }
 
 
             //String documentShortNodeRef = document.toString();
