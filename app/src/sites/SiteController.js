@@ -452,8 +452,8 @@ angular
         };
     
     
-        function createNotification(userName, subject, message, link) {
-            notificationsService.addNotice(userName, subject, message, link).then(function (val) {
+        function createNotification(userName, subject, message, link, wtype) {
+            notificationsService.addNotice(userName, subject, message, link, wtype).then(function (val) {
                 $mdDialog.hide();
             });
         }
