@@ -152,6 +152,8 @@
     "COMMENTS": "Journalnoter",
     "CREATED_BY": "Oprettet {{at}} af {{by}}",
     "MODIFIED_BY": "Senest ændret {{at}} af {{by}}",
+    "LAST_MODIFIED": "Senest ændret",
+    "LAST_MODIFIED_BY": "Senest ændret af",
     "CASE_NOT_FOUND": "CASE_NOT_FOUND",
     "SEARCH_CASE": "Søg sag",
     "CREATE_FROM": "Opret en",

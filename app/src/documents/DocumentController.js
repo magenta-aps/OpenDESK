@@ -10,6 +10,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.plugin = [];
     vm.paths = [];
     vm.title = [];
+    vm.type = [];
     vm.canEdit = false;
 
     vm.showArchived = false;
@@ -186,6 +187,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         vm.paths = buildBreadCrumbPath(response);
 
         vm.title = response.item.location.siteTitle;
+
+        console.log(response.item);
 
         function buildBreadCrumbPath(response) {
             var paths = [{

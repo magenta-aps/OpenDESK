@@ -1,7 +1,6 @@
 <div class="od-projects" ng-show="vm.isMember || vm.project.visibility == 'PUBLIC'">
 
     <h1 class="od-title">
-        <!--{{vm.project.type == vm.strings.templateProject ? "Projektskabelon" : "Projekt"}}-->
         <span ng-if="vm.project.type == vm.strings.templateProject">{{COMMON.TEMPLATEPROJECT | translate | lowercase}} :</span>
         <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
         <span ng-if="vm.project.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span>

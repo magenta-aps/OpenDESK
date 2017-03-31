@@ -50,6 +50,8 @@
     "DELETE": "Delete",
     "EDIT": "Edit",
     "MODIFIED_BY": "Modified by",
+    "LAST_MODIFIED": "Last modified",
+    "LAST_MODIFIED_BY": "Last modified by",
     "OWNER": "Owner",
     "DOWNLOAD": "Download",
     "ADDED": "Added",
