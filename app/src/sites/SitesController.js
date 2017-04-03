@@ -15,6 +15,7 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 	vm.managerRole = 'Manager';
 	vm.showall = false;
 	vm.isAdmin = sessionService.isAdmin();
+	vm.searchMembers = [];
 
 	vm.showFilters = false;
 
@@ -50,6 +51,7 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 	function getSitesPerUser() {
 		return siteService.getSitesPerUser().then(function (response) {
 			vm.sitesPerUser = response;
+			console.log(response);
 			return response;
 		});
 	}

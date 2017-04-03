@@ -36,7 +36,7 @@
 					<input type="text" ng-model="vm.search.manager.fullName">
 				</md-input-container>
 
-					<md-chips ng-model="projektGruppe" md-autocomplete-snap md-require-match="true">
+					<md-chips ng-model="vm.searchMembers" md-autocomplete-snap md-require-match="true">
 						<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="srchprjgrptxt" md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
 						    md-item-text="pgitem.firstName" placeholder="{{'PROJECT.MEMBERS' | translate}}">
 							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
@@ -94,7 +94,11 @@
 						</thead>
 
 						<tbody>
-							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | exactMatch:['type','status']:[vm.search.type,vm.search.status] | filter: vm.search">
+							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser |
+							orderObjectBy:orderByAttribute:reverseOrder |
+							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
+							isContained:vm.searchMembers |
+							filter: vm.search">
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
 										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> {{ project.title }}
