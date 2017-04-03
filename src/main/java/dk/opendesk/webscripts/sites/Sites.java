@@ -680,20 +680,30 @@ public class Sites extends AbstractWebScript {
 
             //Get Manager
             if (!manager.isEmpty()) {
-                JSONObject managerObj = getSpecialUser(manager);
+                JSONObject managerObj = getUserInfo(manager);
                 json.put("manager", managerObj);
             }
 
             //Get Owner
             if (!owner.isEmpty()) {
-                JSONObject ownerObj = getSpecialUser(owner);
+                JSONObject ownerObj = getUserInfo(owner);
                 json.put("owner", ownerObj);
             }
 
             //Get Creator
             String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
-            JSONObject creatorObj = getSpecialUser(creator);
+            JSONObject creatorObj = getUserInfo(creator);
             json.put("creator", creatorObj);
+
+            //Get Member list
+            JSONArray membersArray = new JSONArray();
+            String group = Utils.getPDGroupName(siteShortName, "");
+            Set<String> members = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
+
+            for (String username : members) {
+                membersArray.add(username);
+            }
+            json.put("members", membersArray);
 
             return json;
 
@@ -703,7 +713,7 @@ public class Sites extends AbstractWebScript {
         return null;
     }
 
-    private JSONObject getSpecialUser(String userName) throws JSONException {
+    private JSONObject getUserInfo(String userName) throws JSONException {
 
         NodeRef cn = this.personService.getPerson(userName);
 
