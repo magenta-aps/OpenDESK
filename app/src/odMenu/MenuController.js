@@ -5,7 +5,7 @@ angular
         return {
             restrict: 'E',
             scope: {},
-            templateUrl: '/app/src/odMenu/view/menu.html'
+            templateUrl: 'app/src/odMenu/view/menu.html'
         };
     });
 

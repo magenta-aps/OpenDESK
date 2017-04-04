@@ -5,7 +5,7 @@ angular
         return {
             restrict: 'E',
             scope: {},
-            templateUrl: '/app/src/odChat/view/chat.html'
+            templateUrl: 'app/src/odChat/view/chat.html'
         };
     });
 
