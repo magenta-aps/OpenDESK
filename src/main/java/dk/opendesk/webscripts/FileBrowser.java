@@ -19,6 +19,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +53,7 @@ public class FileBrowser extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
+        webScriptResponse.setContentEncoding("UTF-8");
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
         NodeRef nodeRef = null;
@@ -79,7 +81,6 @@ public class FileBrowser extends AbstractWebScript {
         }
     }
 
-
     private JSONArray getChildNodes(NodeRef nodeRef) {
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
@@ -89,48 +90,65 @@ public class FileBrowser extends AbstractWebScript {
         JSONObject json = new JSONObject();
 
         try {
-            json.put("primaryParent_nodeRef", nodeService.getPrimaryParent(nodeRef).getParentRef());
-            json.put("primaryParent_name", nodeService.getProperty(nodeService.getPrimaryParent(nodeRef).getParentRef(), ContentModel.PROP_NAME));
+            String nodeName = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+            QName nodeType = nodeService.getType(nodeRef);
+            NodeRef parentNodeRef = nodeService.getPrimaryParent(nodeRef).getParentRef();
+            QName parentNodeType = nodeService.getType(parentNodeRef);
+
+            // Users should not be able to go further up the folder hierarchy than the Sites folder
+            if (nodeType.equals(SiteModel.TYPE_SITES)) {
+                parentNodeRef = null;
+            }
+            // Document Libraries should link to Sites directly as parent and have their name
+            else if (parentNodeType.equals(SiteModel.TYPE_SITE)) {
+                nodeName = (String)nodeService.getProperty(parentNodeRef, ContentModel.PROP_NAME);
+                parentNodeRef = nodeService.getPrimaryParent(parentNodeRef).getParentRef();
+            }
+
+            if (parentNodeRef != null) {
+                json.put("primaryParent_nodeRef", parentNodeRef);
+                json.put("primaryParent_name", nodeName);
+            }
+
             json.put("currentNodeRef_nodeRef", nodeRef.toString());
-            json.put("currentNodeRef_name", nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
+            json.put("currentNodeRef_name", nodeName);
+
             result.add(json);
+
+            for (ChildAssociationRef child : childAssociationRefs) {
+                JSONObject childJson = new JSONObject();
+
+                NodeRef childRef = child.getChildRef();
+
+                Map<QName, Serializable> props = nodeService.getProperties(childRef);
+                String name = (String) props.get(ContentModel.PROP_NAME);
+                QName childNodeType = nodeService.getType(childRef);
+
+                // If the child is a site then link directly to its document library
+                if (childNodeType.equals(SiteModel.TYPE_SITE)) {
+                    childRef = nodeService.getChildByName(childRef, ContentModel.ASSOC_CONTAINS, SiteService.DOCUMENT_LIBRARY);
+                    childNodeType = ContentModel.TYPE_FOLDER;
+                }
+                // If the child is not a site and the current node is Sites folder then it is not to be displayed
+                else if (nodeType.equals(SiteModel.TYPE_SITES)) {
+                    continue;
+                }
+
+                // Only folders will be displayed
+                if (childNodeType.equals(ContentModel.TYPE_FOLDER)) {
+
+                    childJson.put("nodeRef", childRef);
+                    childJson.put("name", name);
+
+                    children.add(childJson);
+                }
+            }
+
+            result.add(children);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        for (ChildAssociationRef child : childAssociationRefs) {
-             json = new JSONObject();
-
-            Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
-
-            String name = (String) props.get(ContentModel.PROP_NAME);
-            Boolean hasChildren = false;
-
-            QName nodeType = nodeService.getType(child.getChildRef());
-
-            if (nodeType.equals(ContentModel.TYPE_FOLDER) || nodeType.equals(SiteModel.TYPE_SITE)) {
-                List<FileInfo> folderChilds = fileFolderService.list(child.getChildRef());
-                if (folderChilds.size() > 0) {
-                    hasChildren = true;
-                }
-            }
-
-
-            try {
-                json.put("nodeRef", child.getChildRef());
-                json.put("name", name);
-                json.put("hasChildren", hasChildren);
-
-                children.add(json);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        result.add(children);
-
         return result;
-        }
     }
+}
