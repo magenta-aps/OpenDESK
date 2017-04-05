@@ -15,35 +15,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 package dk.opendesk.webscripts;
-
-import dk.opendesk.repo.model.OpenDeskModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.invitation.InvitationService;
+import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
-
 import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.namespace.RegexQNamePattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.AbstractWebScript;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.util.*;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
-
 import dk.opendesk.repo.utils.Utils;
 
 public class FileBrowser extends AbstractWebScript {
@@ -114,9 +102,6 @@ public class FileBrowser extends AbstractWebScript {
         for (ChildAssociationRef child : childAssociationRefs) {
              json = new JSONObject();
 
-            nodeService.getType(child.getChildRef());
-
-
             Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
 
             String name = (String) props.get(ContentModel.PROP_NAME);
@@ -124,7 +109,7 @@ public class FileBrowser extends AbstractWebScript {
 
             QName nodeType = nodeService.getType(child.getChildRef());
 
-            if (nodeType.equals(ContentModel.TYPE_FOLDER)) {
+            if (nodeType.equals(ContentModel.TYPE_FOLDER) || nodeType.equals(SiteModel.TYPE_SITE)) {
                 List<FileInfo> folderChilds = fileFolderService.list(child.getChildRef());
                 if (folderChilds.size() > 0) {
                     hasChildren = true;
@@ -149,5 +134,3 @@ public class FileBrowser extends AbstractWebScript {
         return result;
         }
     }
-
-//http://localhost:8080/alfresco/s/filebrowser?&method=getAll&NODE_ID=bbf34889-6eed-4027-9e9d-aa6fb82ef922&STORE_TYPE=workspace&STORE_ID=SpacesStore
