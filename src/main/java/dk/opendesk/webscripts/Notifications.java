@@ -21,6 +21,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.Path;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -220,9 +221,13 @@ public class Notifications extends AbstractWebScript {
             if (link.contains("dokument")) {
                 NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
 
-                fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-                org.alfresco.service.cmr.repository.Path path = nodeService.getPath(document);
-                siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
+                try {
+                    fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
+                    Path path = nodeService.getPath(document);
+                    siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
+                } catch (InvalidNodeRefException e) {
+                    continue; // Skip this notification if the document is no longer available.
+                }
 
             }
             else {
