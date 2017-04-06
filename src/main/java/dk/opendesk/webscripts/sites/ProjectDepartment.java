@@ -77,6 +77,11 @@ public class ProjectDepartment extends AbstractWebScript {
 
     AuthenticationService authenticationService;
 
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
+    ContentService contentService;
 
     public class CustomComparator implements Comparator<SiteInfo> {
         @Override
@@ -198,7 +203,8 @@ public class ProjectDepartment extends AbstractWebScript {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-            NodeRef newSiteRef = Utils.createSite(nodeService, siteService, site_name, site_description, site_visibility);
+            NodeRef newSiteRef = Utils.createSite(nodeService, contentService, siteService, site_name,
+                    site_description, site_visibility);
             updateSite(newSiteRef , site_name, site_description, site_sbsys, site_center_id, OpenDeskModel.STATE_ACTIVE);
 
             String creator = authenticationService.getCurrentUserName();

@@ -99,6 +99,7 @@
 		<property name="copyService" ref="CopyService"/>
 		<property name="fileFolderService" ref="FileFolderService"/>
 		<property name="authenticationService" ref="authenticationService"/>
+		<property name="contentService" ref="ContentService"/>
 	</bean>
 
 

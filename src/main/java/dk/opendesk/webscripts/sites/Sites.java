@@ -144,6 +144,7 @@ public class Sites extends AbstractWebScript {
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
             String query = Utils.getJSONObject(json, "PARAM_QUERY");
             String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
+            String siteDisplayName = Utils.getJSONObject(json, "PARAM_SITE_DISPLAY_NAME");
             String user = Utils.getJSONObject(json, "PARAM_USER");
             String group = Utils.getJSONObject(json, "PARAM_GROUP");
             String role = Utils.getJSONObject(json, "PARAM_ROLE");
@@ -162,6 +163,10 @@ public class Sites extends AbstractWebScript {
 
                     case "getAll":
                         result = this.getAllSites(query);
+                        break;
+
+                    case "createSite":
+                        result = this.createSite(siteDisplayName, description);
                         break;
 
                     case "deleteTestSites":
@@ -756,9 +761,18 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
-    private JSONArray createTemplate(String shortName, String description) {
+    private JSONArray createSite(String displayName, String description) {
 
-        NodeRef nodeRef = Utils.createSite(nodeService, siteService, shortName, description, SiteVisibility.PUBLIC);
+        NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
+                description, SiteVisibility.PUBLIC);
+
+        return getSiteInfo(siteService.getSiteShortName(nodeRef));
+    }
+
+    private JSONArray createTemplate(String displayName, String description) {
+
+        NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
+                description, SiteVisibility.PUBLIC);
         makeSiteATemplate(nodeRef);
         return getSiteInfo(siteService.getSiteShortName(nodeRef));
     }
