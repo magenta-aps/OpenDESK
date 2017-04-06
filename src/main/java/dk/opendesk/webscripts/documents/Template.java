@@ -102,6 +102,8 @@ public class Template extends AbstractWebScript {
             StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
             ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
 
+            if(siteSearchResult.length() == 0)
+                return;
 
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
             SiteInfo siteInfo = siteService.getSite(siteNodeRef);
