@@ -88,16 +88,16 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             })
         },
-        createSite: function (siteShortName, siteName, siteDescription) {
-            return $http.post('/api/sites', {
-                shortName: siteShortName,
-                sitePreset: "default",
-                title: siteName,
-                description: siteDescription
+        createSite: function (siteName, siteDescription) {
+            return $http.post('/alfresco/service/sites', {
+                PARAM_METHOD : "createSite",
+                PARAM_SITE_DISPLAY_NAME: siteName,
+                PARAM_DESCRIPTION: siteDescription
             }).then(
                 function (response) {
                     // create the rootfolder documentLibrary manually as we dont use the siteService on the share side
                     // TODO: make use of the createFolder
+                    /*
                     var nodeRef = response.data.node;
                     nodeRef = nodeRef.replace("/alfresco/service/api/node/", '');
 
@@ -113,7 +113,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                         var nodeRef = response.data.persistedObject;
                         return nodeRef;
                     });
-
+*/
                     return response.data;
                 },
                 function(error) {
