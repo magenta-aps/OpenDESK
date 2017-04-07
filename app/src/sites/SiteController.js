@@ -216,7 +216,7 @@ angular
             $mdOpenMenu(event);
         };
 
-        vm.openMemberInfo = function(member) {
+        vm.openMemberInfo = function(member, event) {
             $mdDialog.show({
                 controller: ['$scope', 'member', function($scope, member) { 
                   $scope.member = member;

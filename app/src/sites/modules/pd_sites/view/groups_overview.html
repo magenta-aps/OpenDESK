@@ -88,7 +88,7 @@
 				<ul ng-show="pd.showProjGroupList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_PROJECTGROUP'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}" >
-							 <span ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</span>
+							 <span ng-click="sc.openMemberInfo(mem, $event)">{{ mem.displayName }}</span>
 						</div>
 
 						<!--Remove if ng-if="vm.isManager" if there are more actions that site consumers may do-->
@@ -128,7 +128,7 @@
 				<ul ng-show="pd.showSteerGroupList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_STEERING_GROUP'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<span ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</span>
+							<span ng-click="sc.openMemberInfo(mem, $event)">{{ mem.displayName }}</span>
 							</div>
 						<!--Remove if ng-if="vm.isManager" if there are more actions that site consumers may do-->
 						<!--div flex="10" style="position: relative; top: -10px" ng-if="vm.isManager">
@@ -167,7 +167,7 @@
 				<ul ng-show="pd.showWorkGroupList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_WORKGROUP'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<span ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</span>
+							<span ng-click="sc.openMemberInfo(mem, $event)">{{ mem.displayName }}</span>
 						</div>
 						<!--Remove if ng-if="vm.isManager" if there are more actions that site consumers may do-->
 						<!--div flex="10" style="position: relative; top: -10px" ng-if="vm.isManager">
@@ -206,7 +206,7 @@
 				<ul ng-show="pd.showMonitorsList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_MONITORS'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<span ng-click="sc.openMemberInfo(mem)">
+							<span ng-click="sc.openMemberInfo(mem, $event)">
 							{{ mem.displayName }}
 							</span>
 						</div>
