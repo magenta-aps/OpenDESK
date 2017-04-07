@@ -14,7 +14,7 @@
             <!--{{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}-->
         </a>
 
-        <div class="od-search" layout="row">
+        <div class="od-search" ng-if="vm.project.type != vm.strings.templateProject" layout="row">
             <span flex></span>
             <form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
                 <i class="material-icons">search</i>
@@ -116,14 +116,14 @@
                                     </md-button>
 
                                     <md-menu-content width="6">
-                                        <md-menu-item ng-if="content.contentType == 'cmis:document'">
+                                        <md-menu-item ng-if="content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
                                             <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
                                                 <md-icon md-menu-align-target>get_app</md-icon>
                                                 {{'COMMON.DOWNLOAD' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="content.contentType == 'cmis:document'">
+                                        <md-menu-item ng-if="content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
                                             <md-button ng-click="vm.previewDocument(content.nodeRef)">
                                                 <md-icon md-menu-align-target>search</md-icon>
                                                 {{'COMMON.PREVIEW' | translate }}
@@ -144,35 +144,35 @@
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
                                             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                                                 <md-icon md-menu-align-target>library_books</md-icon>
                                                 {{'COMMON.EDIT' | translate }}
                                             </md-button>
                                         </md-menu-item>
 										
-										<md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+										<md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
                                             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                                                 <md-icon md-menu-align-target>unarchive</md-icon>
                                                 {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
                                             <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
                                                 <md-icon md-menu-align-target>content_copy</md-icon>
                                                 {{'COMMON.COPY' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="content.canMoveAndDelete">
+                                        <md-menu-item ng-if="content.canMoveAndDelete && vm.project.type != vm.strings.templateProject">
                                             <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
                                                 <md-icon md-menu-align-target>compare_arrows</md-icon>
                                                 {{'COMMON.MOVE' | translate }}
                                             </md-button>
                                         </md-menu-item>
 
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
                                             <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
                                                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                                                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
@@ -203,7 +203,7 @@
                                 <md-menu-item>
                                     <md-button ng-click="vm.uploadDocumentsDialog($event)">Hent fra computer</md-button>
                                 </md-menu-item>
-                                <md-menu-item>
+                                <md-menu-item ng-if="vm.project.type != vm.strings.templateProject">
                                     <md-button ng-click="vm.loadSbsysDialog($event)">Hent fra SBSYS</md-button>
                                 </md-menu-item>
                             </md-menu-content>
@@ -240,7 +240,7 @@
                     </div>
 
                     <span flex></span>
-                    <md-button ng-click="vm.uploadSbsysDialog($event)" class="md-raised" aria-label="SBSYS">
+                    <md-button ng-if="vm.project.type != vm.strings.templateProject"  ng-click="vm.uploadSbsysDialog($event)" class="md-raised" aria-label="SBSYS">
 						<i class="material-icons">device_hub</i>
 						<span style="margin-left: 10px; margin-right: 20px;">
                             {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
@@ -267,7 +267,7 @@
             </md-card-content>
         </md-card>
 
-        <div flex-gt-sm="25" ng-if="vm.project.type === vm.strings.project || vm.project.type === vm.strings.templateProject ">
+        <div flex-gt-sm="25" ng-if="vm.project.type === vm.strings.project  ">
             
             <div>
                 <h3 ng-click="vm.showProjDetails = !vm.showProjDetails"
