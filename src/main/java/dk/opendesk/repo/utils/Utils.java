@@ -1,5 +1,7 @@
 package dk.opendesk.repo.utils;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -8,12 +10,12 @@ import java.util.stream.Collectors;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.action.evaluator.HasTagEvaluator;
+import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.i18n.MessageLookup;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AccessPermission;
@@ -32,7 +34,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.I18NUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import javax.print.Doc;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import static org.alfresco.model.ContentModel.*;
+import static org.alfresco.service.namespace.NamespaceService.CONTENT_MODEL_1_0_URI;
 
 
 /**
@@ -144,7 +158,7 @@ public class Utils {
         return null;
     }
 
-    public static String getPDGroupName (String siteShortName, String groupName)
+    public static String getAuthorityName (String siteShortName, String groupName)
     {
         String siteGroup = "GROUP_site_" + siteShortName;
         if("".equals(groupName))
@@ -154,8 +168,8 @@ public class Utils {
     }
 
     // NOTICE: Sites created this way does not work in Share as they lack dashboards.
-    public static NodeRef createSite(NodeService nodeService, SiteService siteService, String displayName,
-                              String description, SiteVisibility siteVisibility) {
+    public static NodeRef createSite(NodeService nodeService, ContentService contentService,  SiteService siteService,
+                                     String displayName, String description, SiteVisibility siteVisibility) {
 
         String shortName = displayName.replaceAll(" ", "-");
         String shortNameWithVersion = shortName;
@@ -168,15 +182,13 @@ public class Utils {
                 // Create site
                 site = siteService.createSite("site-dashboard", shortNameWithVersion, displayName, description,
                         siteVisibility);
+                NodeRef n = site.getNodeRef();
 
                 // Create documentLibary
-                String defaultFolder = "documentLibrary";
-                Map<QName, Serializable> documentLibaryProps = new HashMap<>();
-                documentLibaryProps.put(ContentModel.PROP_NAME, defaultFolder);
+                createChildNode(nodeService, n, "documentLibrary", ContentModel.TYPE_FOLDER);
 
-                nodeService.createNode(site.getNodeRef(), ContentModel.ASSOC_CONTAINS,
-                        QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "documentLibrary"),
-                        ContentModel.TYPE_FOLDER, documentLibaryProps);
+                // Create site dashboard
+                createSiteDashboard(nodeService, contentService, n, shortNameWithVersion);
             }
             catch(SiteServiceException e) {
                 if(e.getMsgId().equals("site_service.unable_to_create"))
@@ -186,5 +198,151 @@ public class Utils {
         while(site == null);
 
         return site.getNodeRef();
+    }
+
+    private static NodeRef createChildNode(NodeService nodeService, NodeRef n, String name, QName type) {
+        Map<QName, Serializable> props = new HashMap<>();
+        props.put(ContentModel.PROP_NAME, name);
+
+        return nodeService.createNode(n, ContentModel.ASSOC_CONTAINS,
+                QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
+                ContentModel.TYPE_FOLDER, props).getChildRef();
+    }
+
+    private static void createSiteDashboard(NodeService nodeService, ContentService contentService,
+                                            NodeRef siteNodeRef, String siteShortName) {
+
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder;
+        try {
+            docBuilder = docBuilderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Create surf-config folder
+        NodeRef surfConfigRef = createChildNode(nodeService, siteNodeRef, "surf-config", ContentModel.TYPE_FOLDER);
+        Map<QName, Serializable> aspectProps = new HashMap<>();
+        nodeService.addAspect(surfConfigRef, ContentModel.ASPECT_HIDDEN, aspectProps);
+
+        // Create components folder
+        NodeRef componentsRef = createChildNode(nodeService, surfConfigRef, "components", ContentModel.TYPE_FOLDER);
+        
+        Map<String, String> components = new HashMap<>();
+        components.put("title", "title/collaboration-title");
+        components.put("navigation", "navigation/collaboration-navigation");
+        components.put("component-1-1", "dashlets/colleagues");
+        components.put("component-2-1", "dashlets/activityfeed");
+        components.put("component-3-1", "dashlets/docsummary");
+
+        for (Map.Entry<String, String> component : components.entrySet()) {
+            Document doc = createComponentXML(docBuilder, siteShortName, component.getKey(), component.getValue(), "");
+            String name = "page." + component.getKey() + ".site~" + siteShortName + "~dashboard";
+            createXMLFile(nodeService, contentService, componentsRef, name, doc);
+        }
+
+        // Create pages folder
+        NodeRef pagesRef = createChildNode(nodeService, surfConfigRef, "pages", ContentModel.TYPE_FOLDER);
+        NodeRef siteRef = createChildNode(nodeService, pagesRef, "site", ContentModel.TYPE_FOLDER);
+        NodeRef siteShortNameRef = createChildNode(nodeService, siteRef, siteShortName, ContentModel.TYPE_FOLDER);
+
+        Document dashboardDoc = createPageXML(docBuilder);
+        createXMLFile(nodeService, contentService, siteShortNameRef, "dashboard", dashboardDoc);
+    }
+
+    private static Document createComponentXML(DocumentBuilder docBuilder, String siteShortName, String region_id,
+                                               String url, String height) {
+        Document doc = docBuilder.newDocument();
+        Element rootElement = doc.createElement("component");
+        doc.appendChild(rootElement);
+
+        addXMLChild(doc, rootElement, "guid", "page." + region_id + ".site~" + siteShortName + "~dashboard");
+        addXMLChild(doc, rootElement, "scope", "page");
+        addXMLChild(doc, rootElement, "region-id", region_id);
+        addXMLChild(doc, rootElement, "source-id", "site/" + siteShortName + "/dashboard");
+        addXMLChild(doc, rootElement, "url", "/components/" + url);
+
+        if(!"".equals(height)) {
+            Element propertiesElement = doc.createElement("properties");
+            doc.appendChild(propertiesElement);
+
+            addXMLChild(doc, propertiesElement, "height", height);
+        }
+
+        return doc;
+    }
+
+    private static Document createPageXML(DocumentBuilder docBuilder) {
+        Document doc = docBuilder.newDocument();
+        Element rootElement = doc.createElement("page");
+        doc.appendChild(rootElement);
+
+        addXMLChild(doc, rootElement, "title", "Collaboration Site Dashboard");
+        addXMLChild(doc, rootElement, "title-id", "page.siteDashboard.title");
+        addXMLChild(doc, rootElement, "description", "Collaboration site's dashboard page");
+        addXMLChild(doc, rootElement, "description-id", "page.siteDashboard.description");
+        addXMLChild(doc, rootElement, "authentication", "user");
+        addXMLChild(doc, rootElement, "template-instance", "dashboard-2-columns-wide-right");
+
+        Element propertiesElement = doc.createElement("properties");
+        rootElement.appendChild(propertiesElement);
+
+        addXMLChild(doc, propertiesElement, "sitePages", "[{\"pageId\":\"documentlibrary\"}]");
+
+        return doc;
+    }
+
+    private static void addXMLChild(Document doc, Element parent, String name, String textContent) {
+        Element e = doc.createElement(name);
+        e.setTextContent(textContent);
+        parent.appendChild(e);
+    }
+
+    private static void createXMLFile(NodeService nodeService, ContentService contentService, NodeRef parent,
+                                      String fileName, Document xmlDoc) {
+        fileName += ".xml";
+
+        Map<QName, Serializable> properties = new HashMap<>();
+        properties.put(PROP_NAME, fileName);
+        NodeRef n = nodeService.createNode(parent, ASSOC_CONTAINS,
+                QName.createQName(CONTENT_MODEL_1_0_URI, fileName), TYPE_CONTENT, properties).getChildRef();
+
+        ContentWriter contentWriter = contentService.getWriter(n, ContentModel.PROP_CONTENT, true);
+        contentWriter.setMimetype(MimetypeMap.MIMETYPE_XML);
+        OutputStream s = contentWriter.getContentOutputStream();
+
+        // Write to new preset file
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = null;
+        try {
+            transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            StreamResult result = new StreamResult(s);
+            DOMSource source = new DOMSource(xmlDoc);
+            transformer.transform(source, result);
+            s.close();
+        } catch (IOException | TransformerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Map<QName, Serializable> createPersonProperties(String userName, String firstName, String lastName,
+                                                            String email) {
+        Map<QName, Serializable> properties = new HashMap<>();
+        properties.put(ContentModel.PROP_USERNAME, userName);
+        properties.put(ContentModel.PROP_FIRSTNAME, firstName);
+        properties.put(ContentModel.PROP_LASTNAME, lastName);
+        properties.put(ContentModel.PROP_EMAIL, email);
+
+        PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
+                .useDigits(true)
+                .useLower(true)
+                .useUpper(true)
+                .build();
+        String password = passwordGenerator.generate(8); // output ex.: lrU12fmM 75iwI90o
+        properties.put(ContentModel.PROP_PASSWORD, password);
+        return properties;
     }
 }

@@ -102,6 +102,8 @@ public class Template extends AbstractWebScript {
             StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
             ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
 
+            if(siteSearchResult.length() == 0)
+                return;
 
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
             SiteInfo siteInfo = siteService.getSite(siteNodeRef);
@@ -147,8 +149,10 @@ public class Template extends AbstractWebScript {
 
             String fileName = (String )nodeService.getProperty(template_nodeRef, ContentModel.PROP_NAME);
 
+            FileInfo newFile = null;
+
             try {
-                fileFolderService.copy(template_nodeRef, destination_nodeRef, fileName);
+                newFile = fileFolderService.copy(template_nodeRef, destination_nodeRef, fileName);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -156,6 +160,8 @@ public class Template extends AbstractWebScript {
             try {
                 JSONObject json = new JSONObject();
                 json.put("status", "success");
+                json.put("nodeRef", newFile.getNodeRef());
+                json.put("fileName", fileName);
                 response.add(json);
                 response.writeJSONString(webScriptResponse.getWriter());
             } catch (IOException e) {

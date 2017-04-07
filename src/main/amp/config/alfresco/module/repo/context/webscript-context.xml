@@ -99,6 +99,7 @@
 		<property name="copyService" ref="CopyService"/>
 		<property name="fileFolderService" ref="FileFolderService"/>
 		<property name="authenticationService" ref="authenticationService"/>
+		<property name="contentService" ref="ContentService"/>
 	</bean>
 
 
@@ -109,9 +110,8 @@
 		<property name="fileFolderService" ref="FileFolderService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="permissionService" ref="PermissionService"/>
+		<property name="siteService" ref="SiteService"/>
 	</bean>
-
-
 
 	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
@@ -128,6 +128,14 @@
 		<property name="contentService" ref="ContentService"/>
 		<property name="searchService" ref="SearchService"/>
 		<property name="invitationService" ref="InvitationService"/>
+	</bean>
+
+	<bean id="webscript.users.post"
+		  class="dk.opendesk.webscripts.users.Users"
+		  parent="webscript">
+		<property name="personService" ref="PersonService"/>
+		<property name="nodeService" ref="NodeService"/>
+		<property name="authorityService" ref="AuthorityService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"
