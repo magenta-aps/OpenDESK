@@ -249,12 +249,12 @@ public class ProjectDepartment extends AbstractWebScript {
 
 
             if(!site_owner.isEmpty()) {
-                String ownerGroup = Utils.getPDGroupName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTOWNER);
+                String ownerGroup = Utils.getAuthorityName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTOWNER);
                 updateSingleGroupMember(ownerGroup, site_owner);
             }
 
             if(!site_manager.isEmpty()) {
-                String managerGroup = Utils.getPDGroupName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
+                String managerGroup = Utils.getAuthorityName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
                 updateSingleGroupMember(managerGroup, site_manager);
             }
 

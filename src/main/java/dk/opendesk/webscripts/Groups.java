@@ -132,7 +132,7 @@ public class Groups extends AbstractWebScript {
         JSONArray members = new JSONArray();
         JSONObject json = new JSONObject();
 
-        String group = Utils.getPDGroupName(shortName, groupName);
+        String group = Utils.getAuthorityName(shortName, groupName);
         Boolean onlyDirectMembers = true;
         if(groupName.isEmpty())
             onlyDirectMembers = false;

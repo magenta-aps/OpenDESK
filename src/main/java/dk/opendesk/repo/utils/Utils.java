@@ -158,7 +158,7 @@ public class Utils {
         return null;
     }
 
-    public static String getPDGroupName (String siteShortName, String groupName)
+    public static String getAuthorityName (String siteShortName, String groupName)
     {
         String siteGroup = "GROUP_site_" + siteShortName;
         if("".equals(groupName))
@@ -326,5 +326,23 @@ public class Utils {
         } catch (IOException | TransformerException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Map<QName, Serializable> createPersonProperties(String userName, String firstName, String lastName,
+                                                            String email) {
+        Map<QName, Serializable> properties = new HashMap<>();
+        properties.put(ContentModel.PROP_USERNAME, userName);
+        properties.put(ContentModel.PROP_FIRSTNAME, firstName);
+        properties.put(ContentModel.PROP_LASTNAME, lastName);
+        properties.put(ContentModel.PROP_EMAIL, email);
+
+        PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
+                .useDigits(true)
+                .useLower(true)
+                .useUpper(true)
+                .build();
+        String password = passwordGenerator.generate(8); // output ex.: lrU12fmM 75iwI90o
+        properties.put(ContentModel.PROP_PASSWORD, password);
+        return properties;
     }
 }

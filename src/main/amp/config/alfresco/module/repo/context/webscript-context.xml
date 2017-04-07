@@ -113,8 +113,6 @@
 		<property name="siteService" ref="SiteService"/>
 	</bean>
 
-
-
 	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
@@ -130,6 +128,14 @@
 		<property name="contentService" ref="ContentService"/>
 		<property name="searchService" ref="SearchService"/>
 		<property name="invitationService" ref="InvitationService"/>
+	</bean>
+
+	<bean id="webscript.users.post"
+		  class="dk.opendesk.webscripts.users.Users"
+		  parent="webscript">
+		<property name="personService" ref="PersonService"/>
+		<property name="nodeService" ref="NodeService"/>
+		<property name="authorityService" ref="AuthorityService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"
