@@ -133,11 +133,7 @@ public class ProjectDepartment extends AbstractWebScript {
             String site_center_id = Utils.getJSONObject(json, "PARAM_CENTERID");
             String site_visibility_str = Utils.getJSONObject(json, "PARAM_VISIBILITY");
             String template = Utils.getJSONObject(json, "PARAM_TEMPLATE");
-            SiteVisibility site_visibility;
-            if(site_visibility_str.isEmpty())
-                site_visibility = null;
-            else
-                site_visibility = SiteVisibility.valueOf(site_visibility_str);
+            SiteVisibility site_visibility = Utils.getVisibility(site_visibility_str);
 
             switch (method) {
                 case "createPDSITE":

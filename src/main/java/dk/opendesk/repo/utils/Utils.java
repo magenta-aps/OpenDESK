@@ -345,4 +345,12 @@ public class Utils {
         properties.put(ContentModel.PROP_PASSWORD, password);
         return properties;
     }
+
+    public static SiteVisibility getVisibility(String visibilityStr)
+    {
+        if(visibilityStr.isEmpty())
+            return null;
+        else
+            return SiteVisibility.valueOf(visibilityStr);
+    }
 }
