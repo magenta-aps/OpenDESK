@@ -217,8 +217,11 @@ public class Notifications extends AbstractWebScript {
 
             String fileName;
             String siteName;
+            System.out.println("*****link");
+            System.out.println(link);
             if (link.contains("dokument")) {
                 NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
+
 
                 fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
                 org.alfresco.service.cmr.repository.Path path = nodeService.getPath(document);

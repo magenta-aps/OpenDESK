@@ -216,6 +216,13 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "makeSiteATemplate":
+
+
+                        System.out.println(siteShortName);
+                        System.out.println(siteShortName);
+                        System.out.println(siteShortName);
+                        System.out.println(siteShortName);
+                        System.out.println(siteShortName);
                         result = this.makeSiteATemplate(siteShortName);
                         break;
 
@@ -610,7 +617,7 @@ public class Sites extends AbstractWebScript {
 
         NodeRef n = siteService.getSite(shortName).getNodeRef();
 
-        if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
             return Utils.getJSONReturnPair("type", OpenDeskModel.pd_project);
         } else {
             return Utils.getJSONReturnPair("type", OpenDeskModel.project);
@@ -643,6 +650,14 @@ public class Sites extends AbstractWebScript {
             String manager = "";
             String owner = "";
 
+            boolean templateSite = false;
+
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES) || nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT)) {
+                templateSite = true;
+            }
+
+
+
             if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
                 json.put("title", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_NAME));
                 json.put("description", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_DESCRIPTION));
@@ -653,6 +668,7 @@ public class Sites extends AbstractWebScript {
                 String centerName = authorityService.getAuthorityDisplayName("GROUP_" + centerID);
                 json.put("center_name", centerName);
                 json.put("sbsys", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_SBSYS));
+                json.put("templateSite", false); // only grupperum can be used as templateSites
 
                 String projectManagerGroup = Utils.getPDGroupName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
                 Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
@@ -672,6 +688,7 @@ public class Sites extends AbstractWebScript {
                 json.put("center_id", "");
                 json.put("center_name", "");
                 json.put("sbsys", "");
+                json.put("templateSite", templateSite);
 
                 String SiteManager = Utils.getPDGroupName(siteShortName, "SiteManager");
                 Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
