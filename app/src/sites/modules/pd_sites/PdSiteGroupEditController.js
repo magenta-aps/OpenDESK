@@ -4,70 +4,55 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteGroupEditController', PdSiteGroupEditController);
     
-    function PdSiteGroupEditController(sitedata, $scope, $mdDialog, siteService, $mdToast) {
+    function PdSiteGroupEditController(sitedata, $scope, $mdDialog, siteService, $mdToast, pd_siteService) {
         
         var pdg = this;
         
         pdg.site = sitedata;
+
+        $scope.groups = [];
         
         $scope.selectedProjGrpItem = null;
         $scope.srchprjgrptxt = null;
-        $scope.projektGruppe = pdg.site.groups['PD_PROJECTGROUP'].members ? pdg.site.groups['PD_PROJECTGROUP'].members : [];
+        $scope.groups['PD_PROJECTGROUP'] = pdg.site.groups['PD_PROJECTGROUP'].members ? pdg.site.groups['PD_PROJECTGROUP'].members : [];
         
         $scope.selectedStyreGrpItem = null;
         $scope.srchstrgrptxt = null;
-        $scope.styreGruppe = pdg.site.groups['PD_STEERING_GROUP'].members ? pdg.site.groups['PD_STEERING_GROUP'].members : [];
+        $scope.groups['PD_STEERING_GROUP'] = pdg.site.groups['PD_STEERING_GROUP'].members ? pdg.site.groups['PD_STEERING_GROUP'].members : [];
         
         $scope.selectedArbejdsGrpItem = null;
         $scope.srchrbjdgrptxt = null;
-        $scope.arbejdsGruppe = pdg.site.groups['PD_WORKGROUP'].members ? pdg.site.groups['PD_WORKGROUP'].members : [];
+        $scope.groups['PD_WORKGROUP'] = pdg.site.groups['PD_WORKGROUP'].members ? pdg.site.groups['PD_WORKGROUP'].members : [];
         
         $scope.selectedFolgeGrpItem = null;
         $scope.srchflggrptxt = null;
-        $scope.folgeGruppe = pdg.site.groups['PD_MONITORS'].members ? pdg.site.groups['PD_MONITORS'].members : [];
+        $scope.groups['PD_MONITORS'] = pdg.site.groups['PD_MONITORS'].members ? pdg.site.groups['PD_MONITORS'].members : [];
         
         $scope.cancel = cancel;
         $scope.updatePDSiteGroups = updatePDSiteGroups;
         $scope.searchPeople = searchPeople;
         $scope.addMember = addMember;
         $scope.removeMember = removeMember;
-        $scope.addEksternToProjektGrp = addEksternToProjektGrp;
-        $scope.addEksternToStyreGrp = addEksternToStyreGrp;
-        $scope.addEksternToArbGrp = addEksternToArbGrp;
-        $scope.addEksternToFlgGrp = addEksternToFlgGrp
-        
-        
-        function addEksternToProjektGrp () {
-            var eksternNavn = $scope.pgexternname;				
-            var eksternEmail = $scope.pgexternemail;				
-            var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
-            $scope.projektGruppe.push({displayName: eksternMedlem});
+        $scope.addExternalUserToGroup = addExternalUserToGroup;
+
+        function addExternalUserToGroup (firstName, lastName, email, groupName) {
+            pd_siteService.createExternalUser(pdg.site.shortName, firstName, lastName, email, groupName).then(
+                function (response) {
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent('Den eksterne bruger, ' + firstName + " " + lastName + ', er blevet oprettet.')
+                            .hideDelay(3000)
+                    );
+                    $scope.groups[groupName].push({firstName: firstName, lastName: lastName});
+                },
+                function (err) {
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent('Brugeren kunne oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
+                            .hideDelay(3000)
+                    );
+                });
         }
-        
-        
-        function addEksternToStyreGrp () {
-            var eksternNavn = $scope.stexternname;				
-            var eksternEmail = $scope.stexternemail;				
-            var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
-            $scope.styreGruppe.push({displayName: eksternMedlem});
-        }
-        
-        
-        function addEksternToArbGrp () {
-            var eksternNavn = $scope.arbexternname;				
-            var eksternEmail = $scope.arbexternemail;				
-            var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
-            $scope.arbejdsGruppe.push({displayName: eksternMedlem});
-        }
-        
-        
-        function addEksternToFlgGrp () {
-            var eksternNavn = $scope.flgexternname;				
-            var eksternEmail = $scope.flgexternemail;				
-            var eksternMedlem = eksternNavn + " (" + eksternEmail + ")";
-            $scope.folgeGruppe.push({displayName: eksternMedlem});
-        }
-        
         
         function cancel() {
             $mdDialog.cancel();
