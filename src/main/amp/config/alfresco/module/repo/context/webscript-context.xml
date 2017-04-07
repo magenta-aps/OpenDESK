@@ -136,6 +136,7 @@
 		<property name="personService" ref="PersonService"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
+		<property name="mutableAuthenticationService" ref="authenticationService"/>
 	</bean>
 
 	<bean id="webscript.purge.get"

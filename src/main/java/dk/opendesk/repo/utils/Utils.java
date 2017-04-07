@@ -18,10 +18,7 @@ import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.AccessPermission;
-import org.alfresco.service.cmr.security.AuthorityService;
-import org.alfresco.service.cmr.security.AuthorityType;
-import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
@@ -329,20 +326,30 @@ public class Utils {
     }
 
     public static Map<QName, Serializable> createPersonProperties(String userName, String firstName, String lastName,
-                                                            String email) {
+                                                                  String email) {
         Map<QName, Serializable> properties = new HashMap<>();
         properties.put(ContentModel.PROP_USERNAME, userName);
         properties.put(ContentModel.PROP_FIRSTNAME, firstName);
         properties.put(ContentModel.PROP_LASTNAME, lastName);
         properties.put(ContentModel.PROP_EMAIL, email);
+        return properties;
+    }
 
+    public static String generateNewPassword()
+    {
         PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
                 .useDigits(true)
                 .useLower(true)
                 .useUpper(true)
                 .build();
-        String password = passwordGenerator.generate(8); // output ex.: lrU12fmM 75iwI90o
-        properties.put(ContentModel.PROP_PASSWORD, password);
-        return properties;
+        return passwordGenerator.generate(8); // output ex.: lrU12fmM 75iwI90o
+    }
+
+    public static SiteVisibility getVisibility(String visibilityStr)
+    {
+        if(visibilityStr.isEmpty())
+            return null;
+        else
+            return SiteVisibility.valueOf(visibilityStr);
     }
 }

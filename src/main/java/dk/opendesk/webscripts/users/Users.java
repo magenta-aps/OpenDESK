@@ -17,13 +17,9 @@ limitations under the License.
 package dk.opendesk.webscripts.users;
 
 import dk.opendesk.repo.utils.Utils;
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.AuthorityService;
-import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +49,11 @@ public class Users extends AbstractWebScript {
     private AuthorityService authorityService;
     public void setAuthorityService (AuthorityService authorityService) {
         this.authorityService = authorityService;
+    }
+
+    private MutableAuthenticationService mutableAuthenticationService;
+    public void setMutableAuthenticationService(MutableAuthenticationService mutableAuthenticationService) {
+        this.mutableAuthenticationService = mutableAuthenticationService;
     }
 
     @Override
@@ -104,20 +105,18 @@ public class Users extends AbstractWebScript {
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
-            // Create new external user
+            // Create new external user and set password
             Map<QName, Serializable> props = Utils.createPersonProperties(userName, firstName, lastName, email);
-            NodeRef personRef = personService.createPerson(props);
+            personService.createPerson(props);
+            String password = Utils.generateNewPassword();
+            mutableAuthenticationService.createAuthentication(userName, password.toCharArray());
 
             // Notify new external user
-            String password = (String) nodeService.getProperty(personRef, ContentModel.PROP_PASSWORD);
             personService.notifyPerson(userName, password);
 
             // Add external user to PDSite group
             String authority = Utils.getAuthorityName(siteShortName, groupName);
             authorityService.addAuthority(authority, userName);
-
-            // Remove external user from GROUP_EVERYONE
-            // authorityService.removeAuthority(PermissionService.ALL_AUTHORITIES, userName);
 
         } finally {
             AuthenticationUtil.popAuthentication();

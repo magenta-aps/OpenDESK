@@ -154,6 +154,8 @@ public class Sites extends AbstractWebScript {
             String firstName = Utils.getJSONObject(json, "PARAM_FIRSTNAME");
             String lastName = Utils.getJSONObject(json, "PARAM_LASTNAME");
             String email = Utils.getJSONObject(json, "PARAM_EMAIL");
+            String site_visibility_str = Utils.getJSONObject(json, "PARAM_VISIBILITY");
+            SiteVisibility site_visibility = Utils.getVisibility(site_visibility_str);
 
             if (method != null) {
                 switch (method) {
@@ -166,7 +168,7 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "createSite":
-                        result = this.createSite(siteDisplayName, description);
+                        result = this.createSite(siteDisplayName, description, site_visibility);
                         break;
 
                     case "deleteTestSites":
@@ -783,10 +785,10 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
-    private JSONArray createSite(String displayName, String description) {
+    private JSONArray createSite(String displayName, String description, SiteVisibility site_visibility) {
 
         NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
-                description, SiteVisibility.PUBLIC);
+                description, site_visibility);
 
         return getSiteInfo(siteService.getSiteShortName(nodeRef));
     }
