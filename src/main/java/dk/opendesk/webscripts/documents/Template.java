@@ -20,6 +20,7 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.model.FileExistsException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
@@ -90,6 +91,7 @@ public class Template extends AbstractWebScript {
 
 
         String method = params.get("method");
+        String fileName = params.get("fileName");
 
         if (method.equals("getAllTemplateDocuments")) {
 
@@ -147,7 +149,22 @@ public class Template extends AbstractWebScript {
             NodeRef template_nodeRef = new NodeRef("workspace://SpacesStore/" + template_nodeid);
             NodeRef destination_nodeRef = new NodeRef(destination_nodeid);
 
-            String fileName = (String )nodeService.getProperty(template_nodeRef, ContentModel.PROP_NAME);
+
+            List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_nodeRef);
+
+            int count = 0;
+            for (ChildAssociationRef child : childAssociationRefs) {
+
+                String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+
+                if (file.contains(fileName)) {
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                fileName = fileName + "(" + count + ")";
+            }
 
             FileInfo newFile = null;
 
@@ -156,6 +173,11 @@ public class Template extends AbstractWebScript {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
+
+
+
+
 
             try {
                 JSONObject json = new JSONObject();
