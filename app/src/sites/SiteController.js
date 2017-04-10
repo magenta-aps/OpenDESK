@@ -848,11 +848,26 @@ angular
         }
 
         function createDocumentFromTemplate(template_id) {
-            siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef).then (function (response) {
-                // var ref = response.data.nodeRef.split("/")[3];
-                // createDocumentNotification(vm.project.title, ref, response.data.fileName);
-                loadSiteData();
+
+
+            var confirm = $mdDialog.prompt()
+                .title('Hvordan vil du navngive dette?')
+                .placeholder('Navn')
+                .ariaLabel('Navn')
+                .targetEvent(event)
+                .ok('Omdøb')
+                .cancel('Annullér');
+            $mdDialog.show(confirm).then(function (result) {
+
+                var newName = result;
+                siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef,newName).then (function (response) {
+                    // var ref = response.data.nodeRef.split("/")[3];
+                    // createDocumentNotification(vm.project.title, ref, response.data.fileName);
+                    loadSiteData();
+                });
             });
+
+
             
         }
     }
