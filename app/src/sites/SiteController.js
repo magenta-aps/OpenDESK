@@ -855,7 +855,7 @@ angular
                 .placeholder('Navn')
                 .ariaLabel('Navn')
                 .targetEvent(event)
-                .ok('Omdøb')
+                .ok('Ok')
                 .cancel('Annullér');
             $mdDialog.show(confirm).then(function (result) {
 
