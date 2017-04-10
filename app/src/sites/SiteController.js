@@ -223,7 +223,7 @@ angular
             $mdOpenMenu(event);
         };
 
-        vm.openMemberInfo = function(member) {
+        vm.openMemberInfo = function(member, event) {
             $mdDialog.show({
                 controller: ['$scope', 'member', function($scope, member) { 
                   $scope.member = member;
@@ -855,11 +855,26 @@ angular
         }
 
         function createDocumentFromTemplate(template_id) {
-            siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef).then (function (response) {
-                // var ref = response.data.nodeRef.split("/")[3];
-                // createDocumentNotification(vm.project.title, ref, response.data.fileName);
-                loadSiteData();
+
+
+            var confirm = $mdDialog.prompt()
+                .title('Hvordan vil du navngive dette?')
+                .placeholder('Navn')
+                .ariaLabel('Navn')
+                .targetEvent(event)
+                .ok('Omdøb')
+                .cancel('Annullér');
+            $mdDialog.show(confirm).then(function (result) {
+
+                var newName = result;
+                siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef,newName).then (function (response) {
+                    // var ref = response.data.nodeRef.split("/")[3];
+                    // createDocumentNotification(vm.project.title, ref, response.data.fileName);
+                    loadSiteData();
+                });
             });
+
+
             
         }
     }

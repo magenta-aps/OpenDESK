@@ -1,5 +1,5 @@
 <md-dialog aria-label="New site" ng-cloak>
-    <form name="createSiteForm" ng-submit="vm.createSite(newSiteName, newSiteDescription);">
+    <form name="createSiteForm" ng-submit="vm.createSite(newSiteName, newSiteDescription, newSiteIsPrivate);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -29,6 +29,10 @@
                         <div ng-message="required">Dette felt skal udfyldes</div>
                     </div>-->
                 </md-input-container>
+
+                <md-checkbox ng-model="newSiteIsPrivate" aria-label="Gør grupperummet privat">
+                    {{'COMMON.PRIVATE' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
+                </md-checkbox>
             </div>
         </md-dialog-content>
 

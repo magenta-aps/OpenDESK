@@ -14,7 +14,8 @@ angular
             updatePDSite: updatePDSite,
             getTemplateNames: getTemplateNames,
             getPDGroupName: getPDGroupName,
-            getPDGroupFullName: getPDGroupFullName
+            getPDGroupFullName: getPDGroupFullName,
+            createExternalUser: createExternalUser
         };
         
 
@@ -112,6 +113,19 @@ angular
 
         function getPDGroupFullName(groupName) {
             return "GROUP_" + groupName;
+        }
+
+        function createExternalUser(siteShortName, firstName, lastName, email, groupName) {
+            return $http.post('/alfresco/service/users', {
+                PARAM_METHOD: "createExternalUser",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_FIRSTNAME: firstName,
+                PARAM_LASTNAME: lastName,
+                PARAM_EMAIL: email,
+                PARAM_GROUP_NAME: groupName
+            }).then(function (response) {
+                return response;
+            });
         }
 
         return service;

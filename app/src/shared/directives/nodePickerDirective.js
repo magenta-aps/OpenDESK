@@ -10,51 +10,42 @@ function nodePicker() {
             currentNodeRef: '=root',
             model: '=model'
         },
-        controller: function (alfrescoDocumentService) {
+        controller: function ($scope, alfrescoDocumentService) {
 
-            var ctrl = this;
-
-            alert(ctrl.currentNodeRef);
-
-            alfrescoDocumentService.retrieveNodeInfo(ctrl.currentNodeRef).then(function (currentNode) {
-
-                console.log("ctrl.currentNode");
-                console.log(ctrl.currentNode);
-
-                ctrl.currentNode = currentNode;
-
+            alfrescoDocumentService.retrieveNodeInfo($scope.currentNodeRef).then(function (currentNode) {
+                console.log("currentNode");
+                console.log(currentNode);
+                $scope.currentNode = currentNode;
             });
 
-            ctrl.getNode = function (nRef) {
+            $scope.getNode = function (nRef) {
                 return alfrescoDocumentService.retrieveNodeInfo(nRef);
             };
 
-            ctrl.browseParent = function () {
-                ctrl.model = undefined;
-                alfrescoDocumentService.retrieveNodeInfo(ctrl.currentNode[0].primaryParent_nodeRef).then(function (currentNode) {
-                    ctrl.currentNode = currentNode;
+            $scope.browseParent = function () {
+                $scope.model = undefined;
+                alfrescoDocumentService.retrieveNodeInfo($scope.currentNode[0].primaryParent_nodeRef).then(function (currentNode) {
+                    $scope.currentNode = currentNode;
                 });
             };
 
-            ctrl.browseChild = function (childNodeRef) {
-                ctrl.model = undefined;
+            $scope.browseChild = function (childNodeRef) {
+                $scope.model = undefined;
                 alfrescoDocumentService.retrieveNodeInfo(childNodeRef).then(function (currentNode) {
-                    ctrl.currentNode = currentNode;
+                    $scope.currentNode = currentNode;
                 });
             };
 
-            ctrl.pickNode = function (nRef) {
-                if (ctrl.model === nRef) {
-                    ctrl.model = undefined;
+            $scope.pickNode = function (nRef) {
+                if ($scope.model === nRef) {
+                    $scope.model = undefined;
                 } else {
-                    ctrl.model = nRef;
+                    $scope.model = nRef;
                 }
 
             };
 
         },
-        controllerAs: 'ctrl',
-        bindToController: true,
         templateUrl: '/app/src/shared/directives/nodePicker.html'
     }
 }

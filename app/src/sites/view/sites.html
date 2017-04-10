@@ -36,7 +36,7 @@
 					<input type="text" ng-model="vm.search.manager.fullName">
 				</md-input-container>
 
-					<md-chips ng-model="projektGruppe" md-autocomplete-snap md-require-match="true">
+					<md-chips ng-model="vm.searchMembers" md-autocomplete-snap md-require-match="true">
 						<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="srchprjgrptxt" md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
 						    md-item-text="pgitem.firstName" placeholder="{{'PROJECT.MEMBERS' | translate}}">
 							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
@@ -87,14 +87,18 @@
 								<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
 								<th sort-table="description" title="Sortér kolonne">{{'PROJECT.DESCRIPTION' | translate}}</th>
 								<th sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
-								<th sort-table="center-name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
-								<th sort-table="status" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
 								<th colspan="2" sort-table="created" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
 							</tr>
 						</thead>
 
 						<tbody>
-							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser | orderObjectBy:orderByAttribute:reverseOrder | exactMatch:['type','status']:[vm.search.type,vm.search.status] | filter: vm.search">
+							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser |
+							orderObjectBy:orderByAttribute:reverseOrder |
+							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
+							isContained:vm.searchMembers |
+							filter: vm.search">
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
 										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> {{ project.title }}

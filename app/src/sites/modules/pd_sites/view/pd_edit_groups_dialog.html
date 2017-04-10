@@ -13,7 +13,7 @@
         <md-dialog-content>
             <md-content class="md-padding" layout="column">
                 <div class="toolbar-small">Projektgruppe</div>
-                <md-chips ng-model="projektGruppe"
+                <md-chips ng-model="groups['PD_PROJECTGROUP']"
                           md-autocomplete-snap
                           md-require-match="true"
                           md-on-remove="removeMember($chip, 'PD_PROJECTGROUP')"
@@ -35,14 +35,19 @@
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
-						<label>Navn</label>
-						<input type="text" name="pgexternname" ng-model="pgexternname">
-					</md-input-container>					
+						<label>Fornavn</label>
+						<input type="text" name="pgxfirstname" ng-model="pgxfirstname">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Efternavn</label>
+						<input type="text" name="pgxlastname" ng-model="pgxlastname">
+					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="email" name="pgexternemail" ng-model="pgexternemail" ng-pattern="/^.+@.+\..+$/">
-						 <div ng-messages="membersForm.pgexternemail.$error" role="alert">
+						<input type="email" name="pgxemail" ng-model="pgxemail" ng-pattern="/^.+@.+\..+$/">
+						 <div ng-messages="membersForm.pgxemail.$error" role="alert">
 						  <div ng-message-exp="['pattern']">
 							Du skal indtaste en gyldig e-mail adresse.
 						  </div>
@@ -50,13 +55,14 @@
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="addEksternToProjektGrp()">
+					     <md-button class="md-raised"
+									ng-click="addExternalUserToGroup (pgxfirstname, pgxlastname, pgxemail, 'PD_PROJECTGROUP')">
 							Tilføj
 						 </md-button>
 					</div>
 				</div>
 					<div class="toolbar-small">Styregruppe</div>
-                    <md-chips ng-model="styreGruppe"
+                    <md-chips ng-model="groups['PD_STEERING_GROUP']"
                               md-autocomplete-snap
                               md-require-match="true"
                               md-on-remove="removeMember($chip, 'PD_STEERING_GROUP')"
@@ -78,14 +84,19 @@
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
-						<label>Navn</label>
-						<input type="text" name="stexternname" ng-model="stexternname">
-					</md-input-container>					
+						<label>Fornavn</label>
+						<input type="text" name="stxfirstname" ng-model="stxfirstname">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Efternavn</label>
+						<input type="text" name="stxlastname" ng-model="stxlastname">
+					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="email" name="stexternemail" ng-model="stexternemail">
-						<div ng-messages="membersForm.stexternemail.$error" role="alert">
+						<input type="email" name="stxemail" ng-model="stxemail">
+						<div ng-messages="membersForm.stxemail.$error" role="alert">
 						  <div ng-message-exp="['pattern']">
 							Du skal indtaste en gyldig e-mail adresse.
 						  </div>
@@ -93,13 +104,14 @@
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="addEksternToStyreGrp()" >
+					     <md-button class="md-raised"
+									ng-click="addExternalUserToGroup (stxfirstname, stxlastname, stxemail, 'PD_STEERING_GROUP')">
 							Tilføj
 						 </md-button>
 					</div>
 				</div>
 					<div class="toolbar-small">Arbejdsgruppe</div>
-                    <md-chips ng-model="arbejdsGruppe"
+                    <md-chips ng-model="groups['PD_WORKGROUP']"
                               md-autocomplete-snap
                               md-require-match="true"
                               md-on-remove="removeMember($chip, 'PD_WORKGROUP')"
@@ -121,14 +133,19 @@
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
-						<label>Navn</label>
-						<input type="text" name="arbexternname" ng-model="arbexternname">
-					</md-input-container>					
+						<label>Fornavn</label>
+						<input type="text" name="arbxfirstname" ng-model="arbxfirstname">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Efternavn</label>
+						<input type="text" name="arbxlastname" ng-model="arbxlastname">
+					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="email" name="arbexternemail" ng-model="arbexternemail">
-						<div ng-messages="membersForm.arbexternemail.$error" role="alert">
+						<input type="email" name="arbxemail" ng-model="arbxemail">
+						<div ng-messages="membersForm.arbxemail.$error" role="alert">
 						  <div ng-message-exp="['pattern']">
 							Du skal indtaste en gyldig e-mail adresse.
 						  </div>
@@ -136,13 +153,14 @@
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="addEksternToArbGrp()" >
+					     <md-button class="md-raised"
+									ng-click="addExternalUserToGroup (arbxfirstname, arbxlastname, arbxemail, 'PD_WORKGROUP')">
 							Tilføj
 						 </md-button>
 					</div>
 				</div>
 					<div class="toolbar-small">Følgegruppe</div>
-                    <md-chips ng-model="folgeGruppe"
+                    <md-chips ng-model="groups['PD_MONITORS']"
                               md-autocomplete-snap
                               md-require-match="true"
                               md-on-remove="removeMember($chip, 'PD_MONITORS')"
@@ -164,14 +182,19 @@
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">Tilføj eksterne medlemmer</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
-						<label>Navn</label>
-						<input type="text" name="flgexternname" ng-model="flgexternname">
-					</md-input-container>					
+						<label>Fornavn</label>
+						<input type="text" name="flgxfirstname" ng-model="flgxfirstname">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Efternavn</label>
+						<input type="text" name="flgxlastname" ng-model="flgxlastname">
+					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Email</label>
-						<input type="email" name="flgexternemail" ng-model="flgexternemail">
-						<div ng-messages="membersForm.flgexternemail.$error" role="alert">
+						<input type="email" name="flgxemail" ng-model="flgxemail">
+						<div ng-messages="membersForm.flgxemail.$error" role="alert">
 						  <div ng-message-exp="['pattern']">
 							Du skal indtaste en gyldig e-mail adresse.
 						  </div>
@@ -179,7 +202,8 @@
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm><!-- Spacer //--></div>
 					<div style="position: relative; top: -25px;" class="btnAlign">
-					     <md-button class="md-raised" ng-click="addEksternToFlgGrp()" >
+					     <md-button class="md-raised"
+									ng-click="addExternalUserToGroup (flgxfirstname, flgxlastname, flgxemail, 'PD_MONITORS')">
 							Tilføj
 						 </md-button>
 					</div>

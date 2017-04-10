@@ -15,6 +15,7 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 	vm.managerRole = 'Manager';
 	vm.showall = false;
 	vm.isAdmin = sessionService.isAdmin();
+	vm.searchMembers = [];
 
 	vm.showFilters = false;
 
@@ -50,6 +51,7 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 	function getSitesPerUser() {
 		return siteService.getSitesPerUser().then(function (response) {
 			vm.sitesPerUser = response;
+			console.log(response);
 			return response;
 		});
 	}
@@ -80,21 +82,14 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 	};
 
 
-	vm.createSite = function (name, description) {
+	vm.createSite = function (name, description, isPrivateVisibility) {
 
-		var shortName = name.replace(new RegExp(" ", 'g'), "-");
-		createStandardSite(shortName, name, description, 1).then(function (val) {});
-	};
+		var visibility = "PUBLIC"; // Visibility is set to public
+		if (isPrivateVisibility) {
+			visibility = "PRIVATE";
+		}
 
-	function createStandardSite(shortName, name, description, number) {
-
-		if (number > 1)
-			shortName += "-" + number;
-
-		return siteService.createSite(shortName, name, description).then(function (val) {
-
-			if (val == null)
-				return createStandardSite(shortName, name, description, ++number);
+		return siteService.createSite(name, description, visibility).then(function (val) {
 
 			$mdDialog.hide();
 
@@ -106,10 +101,10 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 				vm.sitesPerUser = val;
 			});
 
-			window.location.href = "/#!/projekter/" + shortName + "?type=Project";
+			window.location.href = "/#!/projekter/" + val[0].shortName + "?type=Project";
 
 		});
-	}
+	};
 
 	vm.deleteSiteDialog = function (siteName) {
 		var confirm = $mdDialog.confirm()

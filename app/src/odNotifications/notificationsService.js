@@ -69,7 +69,6 @@
         };
 
         function addNotice(userId, subject, message, link, wtype) {
-            alert(wtype);
             return $http.post(restBaseUrl + "/notifications", {
                 PARAM_METHOD : "add",
                 PARAM_USERNAME: userId,
