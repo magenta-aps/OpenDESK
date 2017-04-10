@@ -87,7 +87,8 @@
     "WITH": "Med",
     "UPDATE": "Opdatér",
     "FOLDER": "Mappe",
-    "CHOOSE": "Vælg"
+    "CHOOSE": "Vælg",
+    "EMPTY_FOLDER": "Denne mappe er tom"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"

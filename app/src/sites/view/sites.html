@@ -145,12 +145,12 @@
 				<md-divider></md-divider>
 
 				<div layout="row" layout-align="start center" class="btnAlign">
-					<md-button ng-click="vm.newSite($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nyt grupperum">
+					<md-button ng-click="vm.newSite($event)" class="md-text-icon-button md-primary" aria-label="Opret nyt grupperum">
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate}}</span>
 					</md-button>
 
-					<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-text-icon-button md-raised md-primary"
+					<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-text-icon-button md-primary"
 					    aria-label="Opret nyt projekt">
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate}}</span>

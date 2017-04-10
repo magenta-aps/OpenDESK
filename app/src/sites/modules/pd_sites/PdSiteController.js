@@ -78,7 +78,7 @@ angular
 
             // Iterating list of items.
             angular.forEach(pd.groups, function (groupName) {
-
+                console.log('get project members');
                 var siteShortName = pd.site.shortName;
                 var groupShortName = pd_siteService.getPDGroupName(siteShortName, groupName);
                 promise = groupService.getGroupMembers(groupShortName).then(

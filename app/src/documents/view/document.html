@@ -8,8 +8,9 @@
 
 	<!--<a class="md-button" href="#!/projekter"><i class="material-icons">arrow_back</i> Tilbage til projekter</a>-->
 
-	<a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
-            {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }}
+	<!--<a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>-->
+	<a class="md-button" style="font-size: 14px" href="#!/projekter"><i class="material-icons">arrow_back</i>
+            {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }} [fix me]
             <span ng-if="vm.project.type == vm.strings.templateProject">{{COMMON.TEMPLATES | translate | lowercase}}</span>
             <span ng-if="vm.project.type != vm.strings.templateProject">{{'PROJECT.PROJECTS' | translate | lowercase}}</span>  
             <!--{{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}-->
@@ -45,8 +46,9 @@
 			</h1>
 		</div>
 		<div ng-show="vm.canEdit" flex="45" style="position: relative; top: 10px;">
-			<md-button ng-click="vm.goToLOEditPage(true)" class="md-primary md-raised">
-				{{'DOCUMENT.EDIT_DOCUMENT' | translate}}
+			<md-button ng-click="vm.goToLOEditPage(true)" class="md-text-icon-button md-primary">
+				<i class='material-icons'>edit</i>
+				<span>{{'DOCUMENT.EDIT_DOCUMENT' | translate}}</span>
 			</md-button>
 		</div>
 	</div>

@@ -70,6 +70,13 @@ angular
 
         })
 
+        function roleComparator() {
+            //sort roles by
+            //projektleder
+            //kan skrive
+            //kan læse
+        }
+
 
         
         function loadSiteData() {

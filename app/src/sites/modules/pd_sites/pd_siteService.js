@@ -30,7 +30,7 @@ angular
                 PARAM_METHOD: "createPDSITE",
                 PARAM_TEMPLATE: template
             }).then(function (response) {
-                //console.log(response);
+                // console.log(response);
                 return response;
             });
         }

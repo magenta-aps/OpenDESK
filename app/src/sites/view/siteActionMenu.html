@@ -1,0 +1,70 @@
+<md-menu>
+    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+        <md-icon md-menu-origin>more_vert</md-icon>
+    </md-button>
+
+    <md-menu-content width="6">
+        <md-menu-item ng-if="content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
+                <md-icon md-menu-align-target>get_app</md-icon>
+                {{'COMMON.DOWNLOAD' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.previewDocument(content.nodeRef)">
+                <md-icon md-menu-align-target>search</md-icon>
+                {{'COMMON.PREVIEW' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="content.canMoveAndDelete">
+            <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
+                <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+                {{'COMMON.REMOVE' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
+            <md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
+                <md-icon md-menu-align-target>create</md-icon>
+                {{'COMMON.RENAME' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
+                <md-icon md-menu-align-target>library_books</md-icon>
+                {{'COMMON.EDIT' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
+                <md-icon md-menu-align-target>unarchive</md-icon>
+                {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
+                <md-icon md-menu-align-target>content_copy</md-icon>
+                {{'COMMON.COPY' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="content.canMoveAndDelete">
+            <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
+                <md-icon md-menu-align-target>compare_arrows</md-icon>
+                {{'COMMON.MOVE' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
+                <md-icon md-menu-align-target>playlist_add_check</md-icon>
+                {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
+            </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>
