@@ -75,7 +75,8 @@
 
 		<md-card flex>
 			<md-card-content>
-				<md-button aria-label="filter" class="md-icon-button md-primary" ng-click="vm.toggleFilters()">
+				<md-button aria-label="filter" class="md-icon-button" ng-click="vm.toggleFilters()">
+					<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
 					<md-icon>filter_list</md-icon>
 				</md-button>
 
@@ -84,12 +85,12 @@
 						<thead fix-head>
 							<!-- fix-head -->
 							<tr>
-								<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
-								<th sort-table="description" title="Sortér kolonne">{{'PROJECT.DESCRIPTION' | translate}}</th>
-								<th sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
-								<th sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
-								<th sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
-								<th colspan="2" sort-table="created" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
+								<th class="od-secondary" colspan="2" sort-table="title" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
+								<!--<th sort-table="description" title="Sortér kolonne">{{'PROJECT.DESCRIPTION' | translate}}</th>-->
+								<th class="od-secondary" sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
+								<th class="od-secondary" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th class="od-secondary" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th class="od-secondary" colspan="2" sort-table="created" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
 							</tr>
 						</thead>
 
@@ -101,14 +102,26 @@
 							filter: vm.search">
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
-										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> {{ project.title }}
+									<i class="material-icons od-primary">{{project.type === "Project" ? "forum" : "content_paste"}}</i>
 									</a>
 								</td>
-								<td class="description-label">
+								<td>
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+            								 	<h4 class="od-primary">{{ project.title }}</h4>
+            									<p>{{ project.description | limitTo:60 }}<span ng-if="project.description.length>60">…</span></p>
+          									 
+										<!--<div class="">
+											<h4>{{ project.title }}</h4>
+											<p>{{ project.description | limitTo:60 }}<span ng-if="project.description.length>60">…</span></p>
+										</div>
+										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> -->
+									</a>
+								</td>
+								<!--<td class="description-label">
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}" title="{{ project.description }}">
 										{{ project.description | limitTo:60 }}<span ng-if="project.description.length>60">…</span>
 									</a>
-								</td>
+								</td>-->
 								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.manager.fullName }}</a></td>
 								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.center_name }}</a></td>
 								<td>

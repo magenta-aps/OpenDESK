@@ -87,7 +87,6 @@ function GroupService(ALFRESCO_URI, $http, $q, userService) {
      * @returns [authorities]
      */
     function getGroupMembers(groupShortName) {
-        console.log('get group members');
         return $http.get(GROUP_PROXY_URI + groupShortName + '/children?maxItems=500').then(
             function(response) {
 

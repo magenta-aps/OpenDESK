@@ -42,11 +42,27 @@
 .od-filebrowser-link {
   display: block;
   width: 100%;
-  padding: $u*0.75 0 $u*0.5;
+  //padding: $u*0.75 0 $u*0.5;
+  color: rgba(0,0,0,0.54) !important;
   .material-icons {
     vertical-align: middle;
     margin-top: -($u*0.25);
   }
+  h4,p {
+    padding: 0;
+    line-height: 0;
+  }
+  p {
+    font-size: $u * 0.9;
+  }
+}
+
+.od-primary {
+  color: rgba(0,0,0,0.87) !important;
+}
+
+.od-secondary {
+  color: rgba(0,0,0,0.54) !important;
 }
 
 .od-title-icon {
@@ -204,7 +220,8 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   box-shadow: 1px 2px 1px #bdbdbd;
   a {
     padding: 0 0 2px 0;
-    color: #333399;
+    color: rgba(0,0,0,0.54);
+    //color: #333399;
   }
 }
 

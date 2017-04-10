@@ -14,6 +14,11 @@ angular
         $scope.role_mapping["SiteCollaborator"] = "Kan skrive";
         $scope.role_mapping["SiteConsumer"] = "Kan læse";
 
+        $scope.role_mapping_id = {};
+        $scope.role_mapping_id["SiteManager"] = 1;
+        $scope.role_mapping_id["SiteCollaborator"] = 2;
+        $scope.role_mapping_id["SiteConsumer"] = 3;
+
         $scope.role_translation = {};
         $scope.role_translation["1"] = "Projektleder";
         $scope.role_translation["2"] = "Kan skrive";
@@ -67,17 +72,8 @@ angular
 
         siteService.getTemplateDocuments().then(function(response) {
             $scope.templateDocuments = response;
-
+            vm.addThumbnailUrl($scope.templateDocuments);
         })
-
-        function roleComparator() {
-            //sort roles by
-            //projektleder
-            //kan skrive
-            //kan læse
-        }
-
-
         
         function loadSiteData() {
             siteService.loadSiteData($stateParams.projekt).then(
@@ -237,17 +233,38 @@ angular
                 clickOutsideToClose: true
             });
         }
+
+        vm.roleComparator = function(user) {
+            return $scope.role_mapping_id[user.role];
+        }
+
+        vm.fileComparator = function(files) {
+            console.log('hello');
+            switch (files.contentType) {
+            case 'cmis:document':
+                return 1;
+
+            case 'cmis:folder':
+                return 2;
+
+            case 'cmis:link':
+                return 3;
+        }
+            //return files;
+
+            //.contentType == 'cmis:folder'
+        }
     
         vm.loadContents = function () {
             siteService.getContents(vm.currentFolderUUID).then(function (response) {
                 $scope.contents = response;
-                vm.addThumbnailUrl();
+                vm.addThumbnailUrl($scope.contents);
             });
     
         };
 
-        vm.addThumbnailUrl = function () {
-            $scope.contents.forEach(function(item) {
+        vm.addThumbnailUrl = function (files) {
+            files.forEach(function(item) {
                 item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
             });
         };

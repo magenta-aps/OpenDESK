@@ -10,11 +10,11 @@
 		<md-card-content>
 			<div layout="row" layout-align="space-between">
 				<dl style="margin-bottom: 0;">
-					<dt>{{'PROJECT.DESCRIPTION' | translate }}</dt>
-					<dd ng-if="pd.hasDescription || vm.hasDescription">
+					<dt class="od-secondary">{{'PROJECT.DESCRIPTION' | translate }}</dt>
+					<dd class="od-primary" ng-if="pd.hasDescription || vm.hasDescription">
 						{{ vm.project.type == 'PD-Project' ? pd.site.description : vm.project.description }}
 					</dd>
-					<dd ng-if="!pd.hasDescription || !vm.hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
+					<dd class="od-primary" ng-if="!pd.hasDescription || !vm.hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
 				</dl>
 				<md-button ng-if="vm.isManager && vm.project.type == 'PD-Project'" class="md-primary md-icon-button" ng-click="pd.editPdSite($event)"
 				    aria-label="Redigér site">
@@ -27,23 +27,23 @@
 			</div>
 			<div layout="row">
 				<dl flex="55">
-					<dt>{{'COMMON.CREATEDBY' | translate }}</dt>
-					<dd>{{ pd.site.creator.fullName }} <br><span class="muted">{{ pd.site.created | date }}</span></dd>
+					<dt class="od-secondary">{{'COMMON.CREATEDBY' | translate }}</dt>
+					<dd class="od-primary">{{ pd.site.creator.fullName }} <br><span class="muted">{{ pd.site.created | date }}</span></dd>
 					<span ng-if="vm.project.type === 'PD-Project'">
-						<dt>{{'PROJECT.ORG_UNIT' | translate }}</dt>
-						<dd>{{ pd.site.center_name }}</dd>
+						<dt class="od-secondary">{{'PROJECT.ORG_UNIT' | translate }}</dt>
+						<dd class="od-primary">{{ pd.site.center_name }}</dd>
 					</span>
 				</dl>
 				<dl flex="30" ng-if="vm.project.type === 'PD-Project'">
-					<dt>{{'COMMON.VISIBILITY' | translate }}</dt>
-					<dd>{{ pd.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>
-					<dt>{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
-					<dd>{{ pd.site.sbsys }}</dd>
+					<dt class="od-secondary">{{'COMMON.VISIBILITY' | translate }}</dt>
+					<dd class="od-primary">{{ pd.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>
+					<dt class="od-secondary">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
+					<dd class="od-primary">{{ pd.site.sbsys }}</dd>
 
 				</dl>
 				<dl flex="15" ng-if="vm.project.type === 'PD-Project'">
-					<dt>{{'COMMON.STATUS' | translate }}</dt>
-					<dd>{{ pd.stateStr }}</dd>
+					<dt class="od-secondary">{{'COMMON.STATUS' | translate }}</dt>
+					<dd class="od-primary">{{ pd.stateStr }}</dd>
 
 				</dl>
 			</div>
@@ -54,15 +54,15 @@
 
 <md-card ng-controller="SiteController as sc">
 	<md-card-content ng-controller="PdSiteController as pd">
-		<h3 class="od-title-icon"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
+		<h3 class="od-title-icon od-primary"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
 
 		<div ng-if="vm.project.type != 'PD-Project'">
 			<md-list class="od-members">
-				<md-list-item ng-repeat="member in members | orderBy:'role':false">
+				<md-list-item ng-repeat="member in members | orderBy:sc.roleComparator">
 					<div flex="50" flex-gt-lg="60">
-						<a ng-click="sc.openMemberInfo(member)">{{ member.authority.firstName }} {{ member.authority.lastName }}</a>
+						<a class="od-primary" ng-click="sc.openMemberInfo(member)">{{ member.authority.firstName }} {{ member.authority.lastName }}</a>
 					</div>
-					<div flex="30">
+					<div flex="30" class="od-secondary">
 						{{ role_mapping[member.role] }}
 					</div>
 					<div flex="10" flex-gt-lg="10" style="text-align: right;">
@@ -96,22 +96,22 @@
 		<div ng-if="vm.project.type === 'PD-Project'">
 			<div flex="100" flex-gt-lg="100">
 				<p>
-					<div style="font-weight: bold;">{{'PROJECT.PROJECTLEAD' | translate}}</div>
+					<div class="od-secondary" style="font-weight: bold;">{{'PROJECT.PROJECTLEAD' | translate}}</div>
 					<div layout="row">
 						<div flex="85" class="pd-manager">
-							<span ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTMANAGER'].members[0])">
+							<a class="od-primary" ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTMANAGER'].members[0])">
 						{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].displayName }}
-						</span>
+						</a>
 						</div>
 					</div>
 				</p>
 				<p>
-					<div style="font-weight: bold;">{{'PROJECT.PROJECTOWNER' | translate}}</div>
+					<div class="od-secondary" style="font-weight: bold;">{{'PROJECT.PROJECTOWNER' | translate}}</div>
 					<div layout="row">
 						<div flex="85" class="pd-owner">
-							<span ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTOWNER'].members[0])">
+							<a class="od-primary" ng-click="sc.openMemberInfo(pd.site.groups['PD_PROJECTOWNER'].members[0])">
 							{{ pd.site.groups['PD_PROJECTOWNER'].members[0].displayName }}
-						</span>
+						</a>
 						</div>
 
 					</div>
@@ -128,7 +128,7 @@
 				<ul ng-show="pd.showProjGroupList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_PROJECTGROUP'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</a>
+							<a class="od-primary" ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</a>
 						</div>
 
 						<div ng-include="'app/src/sites/modules/pd_sites/view/groupsActionMenu.html'"></div>
@@ -146,7 +146,7 @@
 				<ul ng-show="pd.showSteerGroupList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_STEERING_GROUP'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</a>
+							<a class="od-primary" ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</a>
 						</div>
 						<div ng-include="'app/src/sites/modules/pd_sites/view/groupsActionMenu.html'"></div>
 					</div>
@@ -161,7 +161,7 @@
 				<ul ng-show="pd.showWorkGroupList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_WORKGROUP'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</a>
+							<a class="od-primary" ng-click="sc.openMemberInfo(mem)">{{ mem.displayName }}</a>
 						</div>
 						<div ng-include="'app/src/sites/modules/pd_sites/view/groupsActionMenu.html'"></div>
 					</div>
@@ -176,7 +176,7 @@
 				<ul ng-show="pd.showMonitorsList">
 					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_MONITORS'].members">
 						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a ng-click="sc.openMemberInfo(mem)">
+							<a class="od-primary" ng-click="sc.openMemberInfo(mem)">
 							{{ mem.displayName }}
 							</a>
 						</div>

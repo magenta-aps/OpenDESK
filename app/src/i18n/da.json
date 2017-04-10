@@ -73,7 +73,7 @@
     "LOCKED_BY": "Låst af {{locked_by}}",
     "CONGRATULATIONS": "Tillykke!",
     "ALL": "Alle",
-    "RENAME": "Rename",
+    "RENAME": "Omdøb",
     "COPY": "Kopiér",
     "MOVE": "Flyt",
     "REVIEW": "Godkendelse",
@@ -88,7 +88,10 @@
     "UPDATE": "Opdatér",
     "FOLDER": "Mappe",
     "CHOOSE": "Vælg",
-    "EMPTY_FOLDER": "Denne mappe er tom"
+    "EMPTY_FOLDER": "Denne mappe er tom",
+    "FILTER": "Filtre",
+    "LAST_MODIFIED": "Senest ændret",
+    "LAST_MODIFIED_BY": "Senest ændret af"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"

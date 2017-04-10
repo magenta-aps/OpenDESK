@@ -90,7 +90,8 @@
     "UPDATE": "Update",
     "FOLDER": "Folder",
     "CHOOSE": "Choose",
-    "EMPTY_FOLDER": "This folder is empty"
+    "EMPTY_FOLDER": "This folder is empty",
+    "FILTER": "Filters"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
