@@ -59,6 +59,9 @@
                 <property name="od:creator">
                     <type>d:text</type>
                 </property>
+                <property name="od:project">
+                    <type>d:text</type>
+                </property>
             </properties>
         </type>
 

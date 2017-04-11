@@ -151,6 +151,7 @@ public class Sites extends AbstractWebScript {
             String source = Utils.getJSONObject(json, "PARAM_SOURCE");
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
             String description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
+            String fileName = Utils.getJSONObject(json, "PARAM_FILENAME");
             String firstName = Utils.getJSONObject(json, "PARAM_FIRSTNAME");
             String lastName = Utils.getJSONObject(json, "PARAM_LASTNAME");
             String email = Utils.getJSONObject(json, "PARAM_EMAIL");
@@ -223,13 +224,6 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "makeSiteATemplate":
-
-
-                        System.out.println(siteShortName);
-                        System.out.println(siteShortName);
-                        System.out.println(siteShortName);
-                        System.out.println(siteShortName);
-                        System.out.println(siteShortName);
                         result = this.makeSiteATemplate(siteShortName);
                         break;
 
@@ -246,6 +240,10 @@ public class Sites extends AbstractWebScript {
 
                     case "getDocumentTemplateSite":
                         result = this.getDocumentTemplateSite();
+                        break;
+
+                    case "returnFileName":
+                        result = this.returnFileName(destination, fileName);
                         break;
                 }
             }
@@ -410,10 +408,8 @@ public class Sites extends AbstractWebScript {
 
         // Get the documentLibrary of the site.
         NodeRef source_documentLib = siteService.getContainer(source.getShortName(), "documentlibrary");
-        System.out.println(source_documentLib); // Get the documentLibrary of the site.
 
         NodeRef dest_documentLib = siteService.getContainer(destination.getShortName(), "documentlibrary");
-        System.out.println(source_documentLib);
 
         // create link for source
         Map<QName, Serializable> linkProperties = new HashMap<QName, Serializable>();
@@ -572,7 +568,6 @@ public class Sites extends AbstractWebScript {
 
             }
 
-            System.out.println(output);
 
 
             // delete the pdf if it is already present
@@ -775,7 +770,6 @@ public class Sites extends AbstractWebScript {
 
         for (int i = 0; i <= siteSearchResult.length() - 1; i++) {
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(i);
-            System.out.println(siteNodeRef);
             SiteInfo siteInfo = siteService.getSite(siteNodeRef);
 
             JSONObject json = convertSiteInfoToJSON(siteInfo);
@@ -874,5 +868,35 @@ public class Sites extends AbstractWebScript {
 
         return Utils.getJSONReturnPair("shortName", siteInfo.getShortName());
     }
+
+    private JSONArray returnFileName (String destination, String fileName) {
+
+
+        NodeRef destination_n = new NodeRef(destination);
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_n);
+
+        int count = 0;
+        for (ChildAssociationRef child : childAssociationRefs) {
+
+            String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+
+            if (file.contains(fileName)) {
+                count++;
+            }
+        }
+
+        if (count > 0) {
+
+            String name = fileName.split("\\.")[0];
+            String ext = fileName.split("\\.")[1];
+
+            fileName = name + "(" + count + ")." + ext;
+        }
+
+        return Utils.getJSONReturnPair("fileName", fileName);
+    }
+
+
 
 }

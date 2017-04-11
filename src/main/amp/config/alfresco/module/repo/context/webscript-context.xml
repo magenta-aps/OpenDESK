@@ -28,6 +28,7 @@
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
 		<property name="personService" ref="PersonService"/>
+		<property name="siteService" ref="SiteService"/>
 	</bean>
 
 	<bean id="webscript.filebrowser.get"

@@ -54,6 +54,11 @@ public interface OpenDeskModel {
      */
 
     public static QName PROP_NOTIFICATION = QName.createQName(OD_URI, "notification");
+    public static String PD_NOTIFICATION_REVIEW_REQUEST = "review-request";
+    public static String PD_NOTIFICATION_REVIEW_APPROVED = "review-approved";
+
+
+
     public static QName PROP_LINK = QName.createQName(OD_URI, "link");
 
     /**
@@ -77,6 +82,7 @@ public interface OpenDeskModel {
     public static QName PROP_NOTIFICATION_TYPE = QName.createQName(OD_URI, "type");
     public static QName PROP_NOTIFICATION_CREATOR = QName.createQName(OD_URI, "creator");
     public static QName PROP_NOTIFICATION_DOCUMENT = QName.createQName(OD_URI, "document");
+    public static QName PROP_NOTIFICATION_PROJECT = QName.createQName(OD_URI, "project");
 
 
 
