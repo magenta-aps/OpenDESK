@@ -124,7 +124,7 @@ public class Template extends AbstractWebScript {
             try {
                 json.put("nodeRef", child.getChildRef().getId());
                 json.put("name", name);
-                json.put("mimetype", originalMimeType);
+                json.put("mimeType", originalMimeType);
 
                 children.add(json);
 
