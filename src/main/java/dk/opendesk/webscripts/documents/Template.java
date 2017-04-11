@@ -24,10 +24,7 @@ import org.alfresco.service.cmr.model.FileExistsException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -117,6 +114,9 @@ public class Template extends AbstractWebScript {
             for (ChildAssociationRef child : childAssociationRefs) {
                 json = new JSONObject();
 
+                ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
+                String originalMimeType = contentData.getMimetype();
+
                 Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
                 String name = (String) props.get(ContentModel.PROP_NAME);
 
@@ -124,6 +124,7 @@ public class Template extends AbstractWebScript {
             try {
                 json.put("nodeRef", child.getChildRef().getId());
                 json.put("name", name);
+                json.put("mimetype", originalMimeType);
 
                 children.add(json);
 
