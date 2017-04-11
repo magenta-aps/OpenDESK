@@ -455,8 +455,8 @@ angular
         };
     
     
-        function createNotification(userName, subject, message, link, wtype) {
-            notificationsService.addNotice(userName, subject, message, link, wtype).then(function (val) {
+        function createNotification(userName, subject, message, link, wtype, project) {
+            notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
                 $mdDialog.hide();
             });
         }
@@ -466,11 +466,11 @@ angular
                 var subject = "Du er blevet tilføjet til " + vm.project.title;
                 var message = "har tilføjet dig til projektet " + vm.project.title + ".";
                 var link = "/#!/projekter/" + site + "?type=Project";
-                createNotification(userName, subject, message, link, 'project');
+                createNotification(userName, subject, message, link, 'project', site);
         }
     
     
-        function createDocumentNotification(projekt, ref, fileName) {
+        function createDocumentNotification(projekt, shortName, ref, fileName) {
             var creatorFirstName = vm.currentUser.firstName;
             var creatorLastName = vm.currentUser.lastName;
             var creatorFullName = creatorFirstName + " " + creatorLastName;
@@ -493,7 +493,7 @@ angular
                         }
                         if (receiveNotifications != null && receiveNotifications == "true") {
                             console.log("Sending notification to : " + userName);
-                            createNotification(userName, subject, message, link,'new-doc');
+                            createNotification(userName, subject, message, link,'new-doc', shortName);
                         }
                     });
                 }
@@ -501,14 +501,14 @@ angular
         }
     
 
-        vm.createReviewNotification = function (documentNodeRef, userName, subject, message) {
+        vm.createReviewNotification = function (documentNodeRef, userName, subject, message, project) {
             var creator = vm.currentUser.userName;
             var s = documentNodeRef.split("/");
             var ref = (s[3]);
             var link = "/#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator;
 
             var sub = "Review forespørgsel";
-            createNotification(userName, sub, message, link,'review-request');
+            createNotification(userName, sub, message, link,'review-request', project.shortName);
         };
     
     
@@ -539,7 +539,10 @@ angular
                 siteService.uploadFiles(files[i], vm.currentFolderNodeRef).then(function (response) {
                     vm.loadContents();
                     var ref = response.data.nodeRef.split("/")[3];
-                    createDocumentNotification(vm.project.title, ref, response.data.fileName);
+                    console.log(response.data.fileName);
+
+                    // dont use the project title - it will fail if there is more than one project with that name - and we allow that...
+                    createDocumentNotification(vm.project.title, vm.project.shortName, ref, response.data.fileName);
                 });
             }
             $mdDialog.cancel();
