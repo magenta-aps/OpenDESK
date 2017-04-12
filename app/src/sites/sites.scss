@@ -313,6 +313,27 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 }
 
+.detail-header-container {
+  padding: 0 8px;
+  margin: 8px;
+
+  .detail-header {
+    display: block;
+    width: 100%;
+    font-size: 1.17em;
+    font-weight: bold;
+  }
+
+  &.open {
+    #rotateArrow {
+      transform: rotate(180deg);
+      }
+  }
+  &.closed {
+        
+  }
+}
+
 
 /*expand collapse*/
 

@@ -1,13 +1,14 @@
 
 <div ng-controller="PdSiteController as pd">
-	<h3 ng-click="pd.showProjDetails = !pd.showProjDetails" class="pd-group-toggle white" ng-class="pd.showProjDetails ? 'open' : 'closed'"
-	    layout="row" style="margin: 8px;">
-		<span><i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>{{'COMMON.DETAILS' | translate }}</span>
-		<span flex></span>
-		<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-	</h3>
-	<md-card ng-show="pd.showProjDetails">
-		<md-card-content>
+	<md-card>
+		<md-card-title class="detail-header-container" ng-click="pd.showProjDetails = !pd.showProjDetails" ng-class="pd.showProjDetails ? 'open' : 'closed'">
+			<div class="detail-header">
+				<i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>{{'COMMON.DETAILS' | translate }}
+			</div>
+			<span flex></span>
+				<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+		</md-card-title>
+		<md-card-content ng-show="pd.showProjDetails">
 			<div layout="row" layout-align="space-between">
 				<dl style="margin-bottom: 0;">
 					<dt class="od-secondary">{{'PROJECT.DESCRIPTION' | translate }}</dt>
