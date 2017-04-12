@@ -31,26 +31,6 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 
-				<!--<md-input-container class="md-block">
-					<label>{{'PROJECT.PROJECTLEAD' | translate}}</label>
-					<input type="text" ng-model="vm.search.manager.fullName">
-				</md-input-container>-->
-
-					<!--<md-chips ng-model="vm.searchMembers" md-require-match="true">
-						<md-autocomplete 
-							md-selected-item="selectedProjGrpItem" 
-							md-search-text="srchprjgrptxt" 
-							md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
-						    md-item-text="pgitem.firstName" 
-							md-floating-label="{{'PROJECT.MEMBERS' | translate}}">
-							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
-						</md-autocomplete>
-						<md-chip-template>
-							<span>
-                                <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
-                            </span>
-						</md-chip-template>
-					</md-chips>-->
 				<md-autocomplete 
 					md-selected-item="selectedLead"
 					md-selected-item-change="vm.search.manager.fullName = vm.getFullName(lead)" 

@@ -481,6 +481,7 @@ angular
     
     
         function createNotification(userName, subject, message, link, wtype, project) {
+            console.log('creating notification...');
             notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
                 $mdDialog.hide();
             });
@@ -889,8 +890,10 @@ angular
 
                 var newName = result;
                 siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef,newName).then (function (response) {
-                    // var ref = response.data.nodeRef.split("/")[3];
-                    // createDocumentNotification(vm.project.title, ref, response.data.fileName);
+                    console.log('response');
+                    console.log(response.data[0]);
+                    var ref = response.data[0].nodeRef.split("/")[3];
+                    createDocumentNotification(vm.project.title, ref, response.data.fileName);
                     loadSiteData();
                 });
             });
