@@ -72,6 +72,7 @@ angular
 
         siteService.getTemplateDocuments().then(function(response) {
             $scope.templateDocuments = response;
+            console.log(response);
             vm.addThumbnailUrl($scope.templateDocuments);
         })
         

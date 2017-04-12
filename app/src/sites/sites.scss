@@ -48,7 +48,7 @@
     vertical-align: middle;
     margin-top: -($u*0.25);
   }
-  h4,p {
+  h3,p {
     padding: 0;
     line-height: 0;
   }
@@ -140,18 +140,34 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   z-index: 0;
 }
 
+.od-project-table {
+  td {
+    max-width: 0;
+  }
+}
+
 .od-members {
   width: 99%;
-  // table-layout: fixed;
+
+  td {
+
+    a.overflow {
+      display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 85%;
+    }
+  }
 
   th {
     text-align: left;
     cursor: hand;
-    padding: 10px 0 5px 5px;
-    // width: 20%;
+    padding: 10px 0 5px 0;
     i.material-icons {
       font-size: 15px;
     }
+    // width: 20%;
   }
   tr {
     td:last-child {
@@ -162,28 +178,13 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
     }
   }
 
-  // td:nth-child(1), th:nth-child(1) { min-width: 15% }
-  // td:nth-child(2), th:nth-child(2) { min-width: 35% }
-  // td:nth-child(3), th:nth-child(3) { min-width: 15% }
-  // td:nth-child(4), th:nth-child(4) { min-width: 15% }
-  // td:nth-child(5), th:nth-child(5) { min-width: 10% }
-  // td:nth-child(6), th:nth-child(6) { min-width: 10% }
+  i.material-icons {
+    font-size: $u*1.5;
+  }
 
-  // thead {
-  //   display: block;
-  //   tr {
-  //     // display: block;
-  //     // position: relative;
-  //     // height: $u * 1.5;
-  //   }
-  // }
-
-  // tbody {
-  //   display: block;
-  //   overflow: auto;
-  //   width: 100%;
-  //   max-height: 300px - $u * 1.5; //match the height of md-list
-  // }
+  .icon {
+    width: $u*2;
+  }
 
   .description-label {
     padding-right: 10px;
@@ -199,6 +200,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
       padding-bottom: 2px;
     }
   }
+
   tbody {
     tr:hover {
       background-color: #efefef;
@@ -207,6 +209,17 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   a:hover {
     text-decoration: none;
   }
+
+  .col1,.col2,.col3,.col4,.col5 {
+    width: 200px;
+  }
+}
+
+.od-ellipsis-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .od-add-member {
@@ -292,7 +305,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   letter-spacing: 0.04em;
   line-height: 50px;
   a {
-    color: #333399;
+    color: rgba(0,0,0,0.54);
   }
   a:hover {
     background-color: #efefef;
