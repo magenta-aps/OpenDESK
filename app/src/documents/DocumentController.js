@@ -10,14 +10,12 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.plugin = [];
     vm.paths = [];
     vm.title = [];
-    vm.type = [];
+    vm.type = siteService.getType();
     vm.canEdit = false;
 
     vm.showArchived = false;
 
     vm.notificationFrom = '';
-
-    alert(siteService.getType());
 
     if ($location.search().archived != undefined && $location.search().archived == "true") {
         vm.showArchived = true;
