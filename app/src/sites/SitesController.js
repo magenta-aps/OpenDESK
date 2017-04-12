@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, $state, $interval, siteService, cmisService, $stateParams, searchService, $rootScope, $translate, documentService, authService, pd_siteService, sessionService) {
+function SitesController($scope, $mdDialog, $window, $state, $interval, siteService, cmisService, $stateParams, searchService, $rootScope, $translate, documentService, authService, pd_siteService, sessionService,fileUtilsService) {
 
 
 	var vm = this;
@@ -219,6 +219,9 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		return searchService.getSearchSuggestions(term).then(function (val) {
 
 			if (val != undefined) {
+				val.forEach(function(item) {
+                	item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24);
+            	});
 				return val;
 			} else {
 				return [];

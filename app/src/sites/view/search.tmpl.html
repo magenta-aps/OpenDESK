@@ -1,0 +1,34 @@
+<div class="od-search" layout="row">
+		<span flex></span>
+		<form name="doSearch" ng-submit="vm.getSearchresults(searchText);">
+			<i class="material-icons">search</i>
+			<md-autocomplete 
+				md-input-name="autocomplete" 
+				md-selected-item="searchQuery" 
+				md-search-text="searchText" 
+				md-items="r in vm.getAutoSuggestions(searchText)"
+			    md-item-text="r.name" 
+				md-floating-label="{{'SEARCH.DOCUMENTS' | translate }}"
+				md-dropdown-items="5"
+				md-menu-class="search-documents">
+				<md-item-template>
+					<span ng-click="vm.gotoPath(r.nodeRef);">
+						<md-icon>
+							<img class="md-avatar" 
+                                ng-src="app/assets/images/filetypes/{{r.thumbNailURL}}"
+                                onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
+						</md-icon>
+          			<span class="item-title">
+           				 <span>{{r.name}}</span>
+						<span class="item-metadata">
+            				<strong>{{'PROJECT' | translate}}</strong> {{r.site.title}}
+            			</span>
+         			 </span>
+					</span>
+        		</md-item-template>
+				<div ng-messages="autocompleteForm.autocomplete.$error">
+					<div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
+				</div>
+			</md-autocomplete>
+		</form>
+	</div>

@@ -270,3 +270,28 @@ legend {
 #conversejs {
   z-index:0 !important;
 }
+
+//Search results
+.search-documents-container, .search-documents {
+  width: 400px;
+}
+.search-documents li {
+  border-bottom: 1px solid #ccc;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal;
+  min-width: 200px;
+}
+.search-documents li:last-child {
+  border-bottom-width: 0;
+}
+.search-documents.item-title,
+.search-documents .item-metadata {
+  display: block;
+  line-height: 2;
+}
+.search-documents .item-title md-icon {
+  height: 18px;
+  width: 18px;
+}
