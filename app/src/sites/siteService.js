@@ -191,17 +191,34 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         uploadFiles: function (file, destination, extras) {
 
-            var formData = new FormData();
-            formData.append("filedata", file);
-            formData.append("filename", file.name);
-            formData.append("destination", destination ? destination : null);
 
-            return $http.post("/api/upload", formData, {
-                transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
-            }).then(function (response) {
-                return response;
+
+
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "returnFileName",
+                PARAM_FILENAME: file.name,
+                PARAM_DESTINATION: destination
+            }).then(function(response) {
+                console.log(response);
+
+                var formData = new FormData();
+                formData.append("filedata", file);
+                formData.append("filename", response.data[0].fileName);
+                formData.append("destination", destination ? destination : null);
+
+
+
+                return $http.post("/api/upload", formData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }).then(function (response) {
+                    return response;
+                });
             });
+
+
+
+
         },
         uploadNewVersion: function (file, destination, existingNodeRef, extras) {
 

@@ -23,6 +23,7 @@
                 PARAM_METHOD : "getAll",
                 PARAM_USERNAME: userId
             }).then(function(response) {
+                console.log(response)
                 return response.data;
             })
         };
@@ -68,14 +69,15 @@
             })
         };
 
-        function addNotice(userId, subject, message, link, wtype) {
+        function addNotice(userId, subject, message, link, wtype, project) {
             return $http.post(restBaseUrl + "/notifications", {
                 PARAM_METHOD : "add",
                 PARAM_USERNAME: userId,
                 PARAM_SUBJECT: subject,
                 PARAM_MESSAGE: message,
                 PARAM_LINK: link,
-                PARAM_TYPE: wtype
+                PARAM_TYPE: wtype,
+                PARAM_PROJECT: project
             }).then(function (response) {
                 return response;
             })

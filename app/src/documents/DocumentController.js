@@ -158,14 +158,27 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.getNotificationFrom();
     
     vm.createWFNotification = function(comment, wtype) {
+
+        console.log($stateParams);
+
         var creator = authService.getUserInfo().user.userName;
         var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
         var status = wtype == 'review-approved' ? 'godkendt' : 'afvist';
 
-        notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype).then (function (val) {
-            $mdDialog.hide();
+        var NID = $location.search().NID;
+        notificationsService.getInfo(NID).then (function(response) {
+            var project = response.project;
+
+            notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then (function (val) {
+                $mdDialog.hide();
+            });
+
+
         });
+
+
+
     }
 
 
