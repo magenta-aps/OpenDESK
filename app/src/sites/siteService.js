@@ -3,8 +3,20 @@
 angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
     
     var restBaseUrl = '/alfresco/s/api/';
+
+    var _currentSiteType = "";
     
     return {
+
+
+        setType: function (t){
+            _currentSiteType = t;
+        },
+        getType: function() {
+            return _currentSiteType;
+        },
+
+
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
@@ -401,6 +413,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         createDocumentFromTemplate : function(nodeid, currentfolder, newName) {
             return $http.get("/alfresco/service/template?method=makeNewDocumentFromTemplate&template_nodeid=" + nodeid + "&destination_nodeRefid=" + currentfolder + "&fileName=" + newName, {
             }).then(function(response) {
+                console.log(response);
                 return response;
             });
         }

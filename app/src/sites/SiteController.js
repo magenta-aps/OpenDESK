@@ -79,9 +79,11 @@ angular
         function loadSiteData() {
             siteService.loadSiteData($stateParams.projekt).then(
                 function (result) {
-                    
+
                     vm.project = result;
 					vm.hasDescription = vm.project.description.trim() === "" ? false : true;
+
+                    siteService.setType(vm.project.type);
 
                     getUserManagedProjects();
                     getSiteUserRole();
