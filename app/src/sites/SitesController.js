@@ -250,5 +250,12 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		}
 	}
 
+	vm.getFullName = function(user) {
+		try {
+			return user.firstName + " " + user.lastName;
+		}
+		catch(err) {	}
+	}
+
 
 } // SiteCtrl close
