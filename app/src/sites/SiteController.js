@@ -14,6 +14,11 @@ angular
         $scope.role_mapping["SiteCollaborator"] = "Kan skrive";
         $scope.role_mapping["SiteConsumer"] = "Kan læse";
 
+        $scope.role_mapping_id = {};
+        $scope.role_mapping_id["SiteManager"] = 1;
+        $scope.role_mapping_id["SiteCollaborator"] = 2;
+        $scope.role_mapping_id["SiteConsumer"] = 3;
+
         $scope.role_translation = {};
         $scope.role_translation["1"] = "Projektleder";
         $scope.role_translation["2"] = "Kan skrive";
@@ -72,17 +77,18 @@ angular
 
         siteService.getTemplateDocuments().then(function(response) {
             $scope.templateDocuments = response;
-
+            console.log(response);
+            vm.addThumbnailUrl($scope.templateDocuments);
         })
-
-
         
         function loadSiteData() {
             siteService.loadSiteData($stateParams.projekt).then(
                 function (result) {
-                    
+
                     vm.project = result;
 					vm.hasDescription = vm.project.description.trim() === "" ? false : true;
+
+                    siteService.setType(vm.project.type);
 
                     getUserManagedProjects();
                     getSiteUserRole();
@@ -235,17 +241,38 @@ angular
                 clickOutsideToClose: true
             });
         }
+
+        vm.roleComparator = function(user) {
+            return $scope.role_mapping_id[user.role];
+        }
+
+        vm.fileComparator = function(files) {
+            console.log('hello');
+            switch (files.contentType) {
+            case 'cmis:document':
+                return 1;
+
+            case 'cmis:folder':
+                return 2;
+
+            case 'cmis:link':
+                return 3;
+        }
+            //return files;
+
+            //.contentType == 'cmis:folder'
+        }
     
         vm.loadContents = function () {
             siteService.getContents(vm.currentFolderUUID).then(function (response) {
                 $scope.contents = response;
-                vm.addThumbnailUrl();
+                vm.addThumbnailUrl($scope.contents);
             });
     
         };
 
-        vm.addThumbnailUrl = function () {
-            $scope.contents.forEach(function(item) {
+        vm.addThumbnailUrl = function (files) {
+            files.forEach(function(item) {
                 item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
             });
         };
@@ -490,6 +517,7 @@ angular
     
     
         function createNotification(userName, subject, message, link, wtype, project) {
+            console.log('creating notification...');
             notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
                 $mdDialog.hide();
             });
@@ -898,8 +926,10 @@ angular
 
                 var newName = result;
                 siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef,newName).then (function (response) {
-                    // var ref = response.data.nodeRef.split("/")[3];
-                    // createDocumentNotification(vm.project.title, ref, response.data.fileName);
+                    console.log('response');
+                    console.log(response.data[0]);
+                    var ref = response.data[0].nodeRef.split("/")[3];
+                    createDocumentNotification(vm.project.title, ref, response.data.fileName);
                     loadSiteData();
                 });
             });

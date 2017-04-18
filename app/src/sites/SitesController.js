@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, $state, siteService, cmisService, $stateParams, searchService, $rootScope, $translate, documentService, authService, pd_siteService, sessionService) {
+function SitesController($scope, $mdDialog, $window, $state, $interval, siteService, cmisService, $stateParams, searchService, $rootScope, $translate, documentService, authService, pd_siteService, sessionService) {
 
 
 	var vm = this;
@@ -155,6 +155,8 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 
 	vm.toggleFilters = function () {
 		vm.showFilters = !vm.showFilters;
+
+		$interval(function(){}, 1,1000);
 	}
 
 	vm.currentDialogTitle = '';
@@ -246,6 +248,13 @@ function SitesController($scope, $mdDialog, $window, $state, siteService, cmisSe
 		if (query) {
 			return siteService.getAllUsers(query);
 		}
+	}
+
+	vm.getFullName = function(user) {
+		try {
+			return user.firstName + " " + user.lastName;
+		}
+		catch(err) {	}
 	}
 
 

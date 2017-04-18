@@ -31,22 +31,25 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 
-				<md-input-container class="md-block">
-					<label>{{'PROJECT.PROJECTLEAD' | translate}}</label>
-					<input type="text" ng-model="vm.search.manager.fullName">
-				</md-input-container>
+				<md-autocomplete 
+					md-selected-item="selectedLead"
+					md-selected-item-change="vm.search.manager.fullName = vm.getFullName(lead)" 
+					md-search-text="searchlead" 
+					md-items="lead in vm.searchPeople(searchlead)"
+					md-item-text="vm.getFullName(lead)" 
+					md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}">
+					<span md-highlight-text="searchlead">{{ lead.firstName }} {{ lead.lastName }}</span>
+				</md-autocomplete>
 
-					<md-chips ng-model="vm.searchMembers" md-autocomplete-snap md-require-match="true">
-						<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="srchprjgrptxt" md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
-						    md-item-text="pgitem.firstName" placeholder="{{'PROJECT.MEMBERS' | translate}}">
-							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
-						</md-autocomplete>
-						<md-chip-template>
-							<span>
-                                <strong>{{ $chip.firstName }}</strong> {{ $chip.lastName }}
-                            </span>
-						</md-chip-template>
-					</md-chips>
+				<md-autocomplete 
+					md-selected-item="selectedProjGrpItem"
+					md-selected-item-change="vm.searchMembers = [pgitem]" 
+					md-search-text="srchprjgrptxt" 
+					md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
+					md-item-text="vm.getFullName(pgitem)" 
+					md-floating-label="{{'PROJECT.MEMBER' | translate}}">
+					<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
+				</md-autocomplete>
 
 				<md-input-container class="md-block">
 					<label>{{'PROJECT.ORG_UNIT' | translate}}</label>
@@ -75,42 +78,58 @@
 
 		<md-card flex>
 			<md-card-content>
-				<md-button aria-label="filter" class="md-icon-button md-primary" ng-click="vm.toggleFilters()">
+				<md-button aria-label="filter" class="md-icon-button" ng-click="vm.toggleFilters()">
+					<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
 					<md-icon>filter_list</md-icon>
 				</md-button>
 
-				<md-list class="sortHead">
-					<table class="od-members od-members-row">
+				<md-list class="">
+				<table class="od-members od-members-row od-project-table">
+					<col style="width:32px">
+					<col style="width:40%">
+        			<col style="width:15%">
+        			<col style="width:20%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:32px">
 						<thead fix-head>
-							<!-- fix-head -->
 							<tr>
-								<th sort-table="title" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
-								<th sort-table="description" title="Sortér kolonne">{{'PROJECT.DESCRIPTION' | translate}}</th>
-								<th sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
-								<th sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
-								<th sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
-								<th colspan="2" sort-table="created" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
+								<th class="od-secondary" colspan="2" sort-table="title" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
+								<th class="od-secondary" sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
+								<th class="od-secondary" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th class="od-secondary" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th class="od-secondary" colspan="2" sort-table="created" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
 							</tr>
 						</thead>
-
 						<tbody>
 							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser |
 							orderObjectBy:orderByAttribute:reverseOrder |
 							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
 							isContained:vm.searchMembers |
 							filter: vm.search">
+								<td class="icon">
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+										<i class="material-icons od-primary">{{project.type === "Project" ? "forum" : "content_paste"}}</i>
+									</a>
+								</td>
+								<td>
+									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}">
+            							<h3 class="od-primary">{{ project.title }}</h3>
+										
+										{{ project.description }}
+									</a>
+									
+								</td>
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
-										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i> {{ project.title }}
+										{{ project.manager.fullName }}
+									<a>
+								</td>
+								<td>
+									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}">
+										{{ project.center_name }}
 									</a>
 								</td>
-								<td class="description-label">
-									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}" title="{{ project.description }}">
-										{{ project.description | limitTo:60 }}<span ng-if="project.description.length>60">…</span>
-									</a>
-								</td>
-								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.manager.fullName }}</a></td>
-								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.center_name }}</a></td>
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
 										<div ng-switch on="project.state">
@@ -120,7 +139,11 @@
 										</div>
 									</a>
 								</td>
-								<td><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">{{ project.created | date:'dd. MMMM yyyy' }}</a></td>
+								<td>
+									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}">
+										{{ project.created | date:'dd. MMMM yyyy' }}
+									</a>
+								</td>
 								<td>
 									<md-menu>
 										<md-button class="md-icon-button" ng-click="$mdMenu.open()">
@@ -144,17 +167,17 @@
 								</td>
 							</tr>
 						</tbody>
-					</table>
+				</table>
 				</md-list>
 				<md-divider></md-divider>
 
 				<div layout="row" layout-align="start center" class="btnAlign">
-					<md-button ng-click="vm.newSite($event)" class="md-text-icon-button md-raised md-primary" aria-label="Opret nyt grupperum">
+					<md-button ng-click="vm.newSite($event)" class="md-primary" aria-label="Opret nyt grupperum">
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate}}</span>
 					</md-button>
 
-					<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-text-icon-button md-raised md-primary"
+					<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-primary"
 					    aria-label="Opret nyt projekt">
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate}}</span>

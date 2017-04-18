@@ -10,7 +10,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.plugin = [];
     vm.paths = [];
     vm.title = [];
-    vm.type = [];
+    vm.type = siteService.getType();
     vm.canEdit = false;
 
     vm.showArchived = false;
@@ -25,6 +25,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     var parentDocumentNode = $location.search().parent != undefined ? $location.search().parent : selectedDocumentNode;
     var docHasParent = $location.search().parent != undefined ? true : false;
     var firstDocumentNode = "";
+
+
 
     documentService.getHistory(parentDocumentNode).then(function (val) {
         $scope.history = val;
