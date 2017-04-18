@@ -329,9 +329,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
       transform: rotate(180deg);
       }
   }
-  &.closed {
-        
-  }
 }
 
 
@@ -401,6 +398,10 @@ h2 {
 .od-filter-sidebar {
 
   overflow: hidden;
+
+  button {
+    top: 0 !important;
+  }
 
   md-card-content {
     min-width: 200px;

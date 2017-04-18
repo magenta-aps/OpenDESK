@@ -1,7 +1,7 @@
 <td>
     <a class="od-filebrowser-link od-primary" ng-href="{{vm.getLink(content)}}">
         <i class="material-icons">
-                                    {{content.contentType == 'cmis:folder' ? 'folder' : ''}}
+                                    {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
                                     {{content.contentType == 'cmis:link' ? 'link' : ''}}
                                     <img class="md-avatar" 
                                          ng-show="content.contentType === 'cmis:document'" 

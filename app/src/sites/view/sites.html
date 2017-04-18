@@ -24,7 +24,8 @@
 					md-search-text="searchlead" 
 					md-items="lead in vm.searchPeople(searchlead)"
 					md-item-text="vm.getFullName(lead)" 
-					md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}">
+					md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
+					md-clear-button=true>
 					<span md-highlight-text="searchlead">{{ lead.firstName }} {{ lead.lastName }}</span>
 				</md-autocomplete>
 
@@ -34,7 +35,8 @@
 					md-search-text="srchprjgrptxt" 
 					md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
 					md-item-text="vm.getFullName(pgitem)" 
-					md-floating-label="{{'PROJECT.MEMBER' | translate}}">
+					md-floating-label="{{'PROJECT.MEMBER' | translate}}"
+					md-clear-button=true>
 					<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
 				</md-autocomplete>
 
