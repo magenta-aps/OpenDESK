@@ -210,7 +210,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 PARAM_FILENAME: file.name,
                 PARAM_DESTINATION: destination
             }).then(function(response) {
-                console.log(response);
+                alert(response.data[0].fileName);
 
                 var formData = new FormData();
                 formData.append("filedata", file);
@@ -223,6 +223,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                     transformRequest: angular.identity,
                     headers: {'Content-Type': undefined}
                 }).then(function (response) {
+                    alert("done");
                     return response;
                 });
             });
@@ -232,6 +233,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
 
         },
         uploadNewVersion: function (file, destination, existingNodeRef, extras) {
+            console.log("inside uploadNewVersion");
 
             var formData = new FormData();
             formData.append("filedata", file);
@@ -407,6 +409,7 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         getTemplateDocuments : function() {
             return $http.get("/alfresco/service/template?method=getAllTemplateDocuments", {
             }).then(function(response) {
+                console.log(response);
                 return response.data[0];
             });
         },

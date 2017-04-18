@@ -67,6 +67,11 @@ angular
         vm.updateSiteName = updateSiteName;
         vm.createDocumentFromTemplate = createDocumentFromTemplate;
 
+
+
+
+
+
         $scope.searchProjects = searchProjects;
 
 
@@ -403,9 +408,32 @@ angular
                 clickOutsideToClose: true
             });
         };
+
+        vm.uploadNewVersion = function (file, nodeRef) {
+                documentService.getDocument(nodeRef).then(function (response) {
+
+                    var cmisQuery = response.item.location.site + "/documentLibrary/" + response.item.location.path
+
+
+                    cmisService.getNode(cmisQuery).then(function (val) {
+
+                        var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+
+                        siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function (response) {
+                            vm.loadContents();
+                        });
+
+                        $mdDialog.cancel();
+                    });
+                });
+        };
     
     
-        vm.uploadNewVersionDialog = function (event) {
+        vm.uploadNewVersionDialog = function (event, nodeRef) {
+
+
+            $scope.nodeRef = nodeRef.replace("workspace://SpacesStore/","")
+
             $mdDialog.show({
                 templateUrl: 'app/src/sites/view/uploadNewVersion.tmpl.html',
                 parent: angular.element(document.body),
@@ -414,6 +442,12 @@ angular
                 preserveScope: true,  // do not forget this if use parent scope
                 clickOutsideToClose: true
             });
+        };
+
+        vm.selectFile = function (event) {
+            var file = event.target.value;
+            var fileName = file.replace(/^C:\\fakepath\\/, "");
+            document.getElementById("uploadFile").innerHTML = fileName;
         };
     
     
@@ -892,10 +926,8 @@ angular
 
                 var newName = result;
                 siteService.createDocumentFromTemplate(template_id, vm.currentFolderNodeRef,newName).then (function (response) {
-                    console.log('response');
-                    console.log(response.data[0]);
                     var ref = response.data[0].nodeRef.split("/")[3];
-                    createDocumentNotification(vm.project.title, ref, response.data.fileName);
+                    createDocumentNotification(vm.project.title, vm.project.shortName, ref, response.data[0].fileName);
                     loadSiteData();
                 });
             });
