@@ -929,7 +929,10 @@ angular
                     console.log('response');
                     console.log(response.data[0]);
                     var ref = response.data[0].nodeRef.split("/")[3];
-                    createDocumentNotification(vm.project.title, ref, response.data.fileName);
+                    alert(vm.project.title);
+                    alert(ref);
+                    alert(response.data[0].fileName);
+                    createDocumentNotification(vm.project.title, vm.project.shortName, ref, response.data[0].fileName);
                     loadSiteData();
                 });
             });
