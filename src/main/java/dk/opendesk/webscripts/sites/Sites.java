@@ -877,19 +877,21 @@ public class Sites extends AbstractWebScript {
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_n);
 
         int count = 0;
+        String name = fileName.split("\\.")[0];
+        String ext = fileName.split("\\.")[1];
+
         for (ChildAssociationRef child : childAssociationRefs) {
 
             String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
 
-            if (file.contains(fileName)) {
+            if (file.contains(name)) {
                 count++;
+                System.out.println("count" + count);
             }
         }
 
         if (count > 0) {
-
-            String name = fileName.split("\\.")[0];
-            String ext = fileName.split("\\.")[1];
+            System.out.println("what is count:" + count);
 
             fileName = name + "(" + count + ")." + ext;
         }

@@ -171,27 +171,40 @@ public class Template extends AbstractWebScript {
 
             try {
                 newFile = fileFolderService.copy(template_nodeRef, destination_nodeRef, fileName);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
 
-
-
-
-
-
-            try {
                 JSONObject json = new JSONObject();
                 json.put("status", "success");
                 json.put("nodeRef", newFile.getNodeRef());
                 json.put("fileName", fileName);
                 response.add(json);
                 response.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+
+            } catch (FileExistsException ex) {
+                 ex.printStackTrace();
+
+                // TODO apparently a file is still created with the name equal to the noderef instead of filename. Look into how this is deleted
+
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("status", "failure, file already exists");
+                    response.add(json);
+                    response.writeJSONString(webScriptResponse.getWriter());
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+
+
             }
+
+             catch (FileNotFoundException e) {
+                 e.printStackTrace();
+             }
+            catch (JSONException ej) {
+
+                ej.printStackTrace();
+            }
+
         }
     }
 }
