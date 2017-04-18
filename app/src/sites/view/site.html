@@ -178,6 +178,18 @@
                                                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
                                             </md-button>
                                         </md-menu-item>
+
+                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
+                                            <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef)">
+                                                <md-icon md-menu-align-target>playlist_add_check</md-icon>
+                                                {{'COMMON.NEWVERSION' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
+                                            </md-button>
+                                        </md-menu-item>
+
+
+
+
+
                                     </md-menu-content>
                                 </md-menu>
                             </td>
