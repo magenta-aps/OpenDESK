@@ -137,6 +137,11 @@
 		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="mutableAuthenticationService" ref="authenticationService"/>
+		<property name="actionService" ref="ActionService"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="messageService" ref="messageService"/>
+		<property name="properties"> <ref bean="global-properties"/> </property>
 	</bean>
 
 	<bean id="webscript.purge.get"
