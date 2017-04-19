@@ -104,18 +104,13 @@
                                ng-click="vm.newFolderDialog($event)">
                                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
                                <i class="material-icons">create_new_folder</i>
-                               <!-- Opret mappe -->
                     </md-button>
-
 
                     <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.isManager" class="md-icon-button md-primary z-index-0"
                                ng-click="vm.newLinkDialog($event)">
                                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
                                <i class="material-icons">link</i> 
-                               <!--Opret projektlink-->
                     </md-button>
-
-                    
 
                     <span flex></span>
 

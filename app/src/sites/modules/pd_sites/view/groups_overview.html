@@ -1,5 +1,5 @@
-
-<div ng-controller="PdSiteController as pd">
+<span ng-controller="PdSiteController as pd">
+<div>
 	<md-card>
 		<md-card-title class="detail-header-container" ng-click="pd.showProjDetails = !pd.showProjDetails" ng-class="pd.showProjDetails ? 'open' : 'closed'">
 			<div class="detail-header">
@@ -54,7 +54,7 @@
 </div>
 
 <md-card ng-controller="SiteController as sc">
-	<md-card-content ng-controller="PdSiteController as pd">
+	<md-card-content>
 		<h3 class="od-title-icon od-primary"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
 
 		<div ng-if="vm.project.type != 'PD-Project'">
@@ -205,3 +205,4 @@
 		</div>
 	</md-card-content>
 </md-card>
+</span>
