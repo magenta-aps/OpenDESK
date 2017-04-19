@@ -15,19 +15,11 @@
             <div layout='column'>
                 <md-input-container>
                     <label>{{'PROJECT.NAME' | translate}}</label>
-                    <input type="text" name="newSiteName" required ng-model="newSiteName">
-
-                    <!--<div ng-messages="createSiteForm.newSiteName.$error">
-                        <div ng-message="required">Dette felt skal udfyldes</div>
-                    </div>-->
+                    <input type="text" name="newSiteName" required ng-model="newSiteName" md-autofocus>
                 </md-input-container>
                 <md-input-container>
                     <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
                     <textarea required name="newSiteDesc" md-maxlength='250' maxlength="250" ng-model="newSiteDescription"></textarea>
-
-                    <!--<div ng-messages="createSiteForm.newSiteDesc.$error">
-                        <div ng-message="required">Dette felt skal udfyldes</div>
-                    </div>-->
                 </md-input-container>
 
                 <md-checkbox ng-model="newSiteIsPrivate" aria-label="Gør grupperummet privat">

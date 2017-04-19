@@ -26,7 +26,7 @@
         </md-menu-item>
 
         <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
-            <md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
+            <md-button ng-click="vm.renameDocumentDialog($event, content)">
                 <md-icon md-menu-align-target>create</md-icon>
                 {{'COMMON.RENAME' | translate }}
             </md-button>

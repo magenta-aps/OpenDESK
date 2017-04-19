@@ -53,6 +53,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.isMember = false;
     vm.isAdmin = sessionService.isAdmin();
     vm.newTemplateName = '';
+    vm.newFileName = '';
 
     vm.strings = {};
     vm.strings.templateProject = "Template-Project";
@@ -68,13 +69,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.updateSiteName = updateSiteName;
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
 
-
-
-
-
-
     $scope.searchProjects = searchProjects;
-
 
     siteService.getTemplateDocuments().then(function (response) {
         $scope.templateDocuments = response;
@@ -83,6 +78,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     })
 
     function loadSiteData() {
+        console.log('load site data');
         siteService.loadSiteData($stateParams.projekt).then(
             function (result) {
 
@@ -112,11 +108,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         );
     }
     loadSiteData();
-
-
-    //siteService.getAllUsers("a");
-    //siteService.addUser(vm.project, "abeecher", "PD_MONITORS");
-    //siteService.addMemberToSite("nytnyt","abeecher","SiteManager");
 
     function getUserManagedProjects() {
         return siteService.getSitesPerUser().then(function (response) {
@@ -257,15 +248,14 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             case 'cmis:link':
                 return 3;
         }
-        //return files;
-
-        //.contentType == 'cmis:folder'
     }
 
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
             $scope.contents = response;
             vm.addThumbnailUrl($scope.contents);
+            console.log('load contents');
+            console.log(response);
         });
 
     };
@@ -481,19 +471,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     };
 
     vm.deleteFileDialog = function (event, content) {
-        // console.log(nodeRef);
-        // var confirm = $mdDialog.confirm()
-        //     .title('Slette denne fil?')
-        //     .textContent('')
-        //     .ariaLabel('Slet dokument')
-        //     .targetEvent(event)
-        //     .ok('Slet')
-        //     .cancel('Nej, tak');
-
-        // $mdDialog.show(confirm).then(function () {
-        //     vm.deleteFile(nodeRef);
-        // });
-
         $mdDialog.show({
             controller: ['$scope', 'content', function ($scope, content) {
                 $scope.content = content;
@@ -516,30 +493,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
     vm.deleteFile = function (nodeRef) {
         siteService.deleteFile(nodeRef).then(function (val) {
-            vm.loadContents();
-        });
-
-        $mdDialog.hide();
-    };
-
-
-    vm.deleteFoldereDialog = function (event, nodeRef) {
-        var confirm = $mdDialog.confirm()
-            .title('Slette denne mappe?')
-            .textContent('Dette vil slette mappen med alt dens indhold')
-            .ariaLabel('Slet mappe')
-            .targetEvent(event)
-            .ok('Slet')
-            .cancel('Nej, tak');
-
-        $mdDialog.show(confirm).then(function () {
-            vm.deleteFolder(nodeRef);
-        });
-    };
-
-
-    vm.deleteFolder = function (nodeRef) {
-        siteService.deleteFolder(nodeRef).then(function (val) {
             vm.loadContents();
         });
 
@@ -594,7 +547,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     }
 
 
-    vm.createReviewNotification = function (documentNodeRef, userName, subject, message, project) {
+    vm.createReviewNotification = function (documentNodeRef, userName, message, project) {
         var creator = vm.currentUser.userName;
         var s = documentNodeRef.split("/");
         var ref = (s[3]);
@@ -608,7 +561,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     function loadMembers() {
         siteService.getSiteMembers(vm.project.shortName).then(function (val) {
             $scope.members = val;
-            //console.log("$scope.members: " + $scope.members);
         });
         siteService.getAllMembers(vm.project.shortName, vm.project.type).then(function (val) {
             $scope.allMembers = val;
@@ -837,17 +789,34 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     };
 
 
-    vm.renameDocumentDialog = function (event, docNodeRef) {
-        var confirm = $mdDialog.prompt()
-            .title('Hvordan vil du navngive dette?')
-            .placeholder('Navn')
-            .ariaLabel('Navn')
-            .targetEvent(event)
-            .ok('Omdøb')
-            .cancel('Annullér');
-        $mdDialog.show(confirm).then(function (result) {
-            var newName = result;
-            vm.renameDocument(docNodeRef, newName);
+    vm.renameDocumentDialog = function (event, content) {
+        // var confirm = $mdDialog.prompt()
+        //     .title('Hvordan vil du navngive dette?')
+        //     .placeholder('Navn')
+        //     .ariaLabel('Navn')
+        //     .targetEvent(event)
+        //     .ok('Omdøb')
+        //     .cancel('Annullér');
+        // $mdDialog.show(confirm).then(function (result) {
+        //     var newName = result;
+        //     vm.renameDocument(docNodeRef, newName);
+        // });
+
+        vm.newFileName = content.name;
+
+        $mdDialog.show({
+            controller: ['$scope', 'content', function ($scope, content) {
+                $scope.content = content;
+            }],
+            templateUrl: 'app/src/sites/view/renameFile.tmpl.html',
+            locals: {
+                content: content
+            },
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope, // use parent scope in template
+            preserveScope: true, // do not forget this if use parent scope
+            clickOutsideToClose: true
         });
     };
 

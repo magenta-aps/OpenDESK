@@ -117,7 +117,7 @@ angular
             
             
             function createPdSite() {
-                if ($scope.newSite.template == undefined) {
+                if ($scope.newSite.template == undefined  || $scope.newSite.template == "no-template") {
 
                     $scope.newSite.template = {"name" : ""};
 

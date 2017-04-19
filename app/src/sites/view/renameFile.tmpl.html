@@ -1,0 +1,35 @@
+<md-dialog>
+    <form name="renameFileForm"
+          ng-submit="vm.renameDocument(content.nodeRef, vm.newFileName);">
+        <div>
+            <md-toolbar>
+                <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+                    <h2>{{'COMMON.RENAME' | translate}} 
+                        <span ng-show="content.contentType == 'cmis:document'">{{'DOCUMENT.DOCUMENT' | translate | lowercase}}</span>
+                        <span ng-show="content.contentType == 'cmis:folder'">{{'COMMON.FOLDER' | translate | lowercase}}</span>
+                        <span ng-show="content.contentType == 'cmis:link'">{{'PROJECT.PROJECTLINK' | translate | lowercase}}</span>
+                    </h2>
+                    <md-button ng-click="vm.cancel()" class="md-icon-button">
+                        <i class="material-icons">close</i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-content class="md-padding">
+                <div layout-margin>
+                    <md-input-container>
+                        <label>{{'COMMON.NAME' | translate}}</label>
+                        <input type="text" name="newFileName" required ng-model="vm.newFileName" md-autofocus md-select-on-focus>
+                        <div ng-messages="renameFolderForm.newSiteName.$error">
+                            <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </md-content>
+
+            <md-dialog-actions>
+                <md-button type="submit" class="md-primary">{{'COMMON.RENAME' | translate}}</md-button>
+            </md-dialog-actions>
+        </div>
+    </form>
+</md-dialog>
