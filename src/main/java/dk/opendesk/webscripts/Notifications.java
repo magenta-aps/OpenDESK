@@ -219,7 +219,6 @@ public class Notifications extends AbstractWebScript {
             String project = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
 
             // project contains the shortName, we want the display name
-            System.out.println("project:  " + project);
             if (project != null) {
                 project = siteService.getSite(project).getTitle();
             }
