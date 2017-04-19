@@ -48,6 +48,12 @@ public class Notifications extends AbstractWebScript {
     private PersonService personService;
     private SiteService siteService;
 
+    public void setSiteService(SiteService siteService) {
+        this.siteService = siteService;
+    }
+
+
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -68,6 +74,7 @@ public class Notifications extends AbstractWebScript {
             JSONObject json = new JSONObject(c.getContent());
 
             String userName = Utils.getJSONObject(json, "PARAM_USERNAME");
+            String project = Utils.getJSONObject(json, "PARAM_PROJECT");
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
             String subject = Utils.getJSONObject(json, "PARAM_SUBJECT");
             String message = Utils.getJSONObject(json, "PARAM_MESSAGE");
@@ -86,7 +93,7 @@ public class Notifications extends AbstractWebScript {
                         break;
 
                     case "add":
-                        result = addNotification(userName, message, subject, link, type);
+                        result = addNotification(userName, message, subject, link, type, project);
                         break;
 
                     case "remove":
@@ -209,45 +216,48 @@ public class Notifications extends AbstractWebScript {
             Boolean seen = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
             String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
             String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
+            String project = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
+
+            // project contains the shortName, we want the display name
+            System.out.println("project:  " + project);
+            if (project != null) {
+                project = siteService.getSite(project).getTitle();
+            }
+
+
 
             String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATOR);
             NodeRef from = personService.getPerson(name);
 
             String from_name = (String)nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME)  + " " + (String)nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
-
-
             String fileName;
-            String siteName;
-            if (link.contains("dokument")) {
+
+            if (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST) || (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED))) {
                 NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
+                link = link + "&NID=" + child.getChildRef(); // add this to the link, makes it easy to lookup the notification from the ui
 
                 try {
                     fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-                    Path path = nodeService.getPath(document);
-                    siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
+
                 } catch (InvalidNodeRefException e) {
                     continue; // Skip this notification if the document is no longer available.
                 }
 
+
             }
             else {
                 fileName = "";
-                siteName = "";
             }
-
-
-            //String documentShortNodeRef = document.toString();
-            //documentShortNodeRef = documentShortNodeRef.split("/")[3];
 
             try {
                 json.put("nodeRef", child.getChildRef());
                 json.put("subject", subject);
                 json.put("message", message);
-                json.put("link", link + "&NID=" + child.getChildRef());
+                json.put("link", link);
                 json.put("read", read);
                 json.put("seen", seen);
                 json.put("filename", fileName);
-                json.put("project", siteName);
+                json.put("project", project);
                 json.put("from", from_name);
                 json.put("type", type);
 
@@ -265,7 +275,7 @@ public class Notifications extends AbstractWebScript {
         return result;
     }
 
-    private JSONArray addNotification(String userName, String message, String subject, String link, String type) {
+    private JSONArray addNotification(String userName, String message, String subject, String link, String type, String project) {
 
         AuthenticationUtil.pushAuthentication();
         try {
@@ -291,6 +301,7 @@ public class Notifications extends AbstractWebScript {
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_LINK, link);
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, type);
+                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_PROJECT, project);
 
                 nodeService.setProperties(childAssocRef.getChildRef(),contentProps);
 
@@ -333,16 +344,15 @@ public class Notifications extends AbstractWebScript {
     private JSONArray getInfo (NodeRef nodeRef) {
         String comment = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
         String link = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_LINK);
+        String project = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_PROJECT);
+
 
         NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
         String fileName = (String)nodeService.getProperty(document, ContentModel.PROP_NAME);
 
-        org.alfresco.service.cmr.repository.Path path = nodeService.getPath(document);
-        String siteName = path.get(3).getElementString().replace("{http://www.alfresco.org/model/content/1.0}", "");
-
         Map<String, Serializable> map = new HashMap<>();
         map.put("comment", comment);
-        map.put("project", siteName);
+        map.put("project", project);
         map.put("filename", fileName);
 
         return Utils.getJSONReturnArray(map);

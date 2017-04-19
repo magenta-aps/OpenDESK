@@ -20,13 +20,11 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.model.FileExistsException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -90,6 +88,7 @@ public class Template extends AbstractWebScript {
 
 
         String method = params.get("method");
+        String fileName = params.get("fileName");
 
         if (method.equals("getAllTemplateDocuments")) {
 
@@ -115,6 +114,9 @@ public class Template extends AbstractWebScript {
             for (ChildAssociationRef child : childAssociationRefs) {
                 json = new JSONObject();
 
+                ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
+                String originalMimeType = contentData.getMimetype();
+
                 Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
                 String name = (String) props.get(ContentModel.PROP_NAME);
 
@@ -122,6 +124,7 @@ public class Template extends AbstractWebScript {
             try {
                 json.put("nodeRef", child.getChildRef().getId());
                 json.put("name", name);
+                json.put("mimeType", originalMimeType);
 
                 children.add(json);
 
@@ -147,24 +150,61 @@ public class Template extends AbstractWebScript {
             NodeRef template_nodeRef = new NodeRef("workspace://SpacesStore/" + template_nodeid);
             NodeRef destination_nodeRef = new NodeRef(destination_nodeid);
 
-            String fileName = (String )nodeService.getProperty(template_nodeRef, ContentModel.PROP_NAME);
 
-            try {
-                fileFolderService.copy(template_nodeRef, destination_nodeRef, fileName);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_nodeRef);
+
+            int count = 0;
+            for (ChildAssociationRef child : childAssociationRefs) {
+
+                String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+
+                if (file.contains(fileName)) {
+                    count++;
+                }
             }
 
+            if (count > 0) {
+                fileName = fileName + "(" + count + ")";
+            }
+
+            FileInfo newFile = null;
+
             try {
+                newFile = fileFolderService.copy(template_nodeRef, destination_nodeRef, fileName);
+
                 JSONObject json = new JSONObject();
                 json.put("status", "success");
+                json.put("nodeRef", newFile.getNodeRef());
+                json.put("fileName", fileName);
                 response.add(json);
                 response.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+
+            } catch (FileExistsException ex) {
+                 ex.printStackTrace();
+
+                // TODO apparently a file is still created with the name equal to the noderef instead of filename. Look into how this is deleted
+
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("status", "failure, file already exists");
+                    response.add(json);
+                    response.writeJSONString(webScriptResponse.getWriter());
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+
+
             }
+
+             catch (FileNotFoundException e) {
+                 e.printStackTrace();
+             }
+            catch (JSONException ej) {
+
+                ej.printStackTrace();
+            }
+
         }
     }
 }
