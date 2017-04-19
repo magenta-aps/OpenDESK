@@ -2,28 +2,21 @@
 
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <h2>Overfør ny version</h2>
+            <h2>{{'COMMON.NEWVERSION' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+            </md-button>
         </div>
     </md-toolbar>
 
     <md-dialog-content class="md-padding" style="padding-top: 30px;">
-        <div class="fileUpload md-button md-raised md-primary">
-            <span style="float: right; width: 274px;">Hent opdateret dokument</span>
-            <input type="file" id="uploadBtn" class="upload" file-on-change="vm.selectFile" file-model="file"/>
-        </div>
+        <input id="uploadBtn" file-on-change="vm.selectFile" file-model="file" type="file">
     </md-dialog-content>
-    <md-dialog-content class="md-padding">
-        <div id="uploadFile" class="chosenFile"><i class="material-icons">error_outline</i>&nbsp;Der er ikke valgt noget
-            dokument
-        </div>
-    </md-dialog-content>
-    <md-dialog-content class="md-padding">
-        <!--div class="uploadBtn">
-            <input class="uploadLabel" id="upload" file-model="file" type="file">
-        </div-->
-        <md-button class="md-raised md-primary" ng-click="vm.uploadNewVersion(file, nodeRef)"><i class="material-icons">file_upload</i>&nbsp;overfør
-            dokument&nbsp;</md-button>
-        <md-button class="md-raised" ng-click="vm.cancel()">Annullér</md-button>
-    </md-dialog-content>
+
+    <md-dialog-actions>
+        <button class="md-button md-primary" ng-click="vm.uploadNewVersion(file, nodeRef)"><i class="material-icons">file_upload</i>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENT' | translate | lowercase}}
+        </button>
+    </md-dialog-actions>
     </form>
 </md-dialog>

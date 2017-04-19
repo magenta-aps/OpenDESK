@@ -92,7 +92,10 @@
     "FOLDER": "Folder",
     "CHOOSE": "Choose",
     "EMPTY_FOLDER": "This folder is empty",
-    "FILTER": "Filters"
+    "FILTER": "Filters",
+    "FROM": "From",
+    "COMPUTER": "PC",
+    "NEWVERSION": "Upload new version"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
