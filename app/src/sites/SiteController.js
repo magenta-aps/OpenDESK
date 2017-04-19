@@ -480,18 +480,33 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         });
     };
 
-    vm.deleteFileDialog = function (event, nodeRef) {
-        console.log(nodeRef);
-        var confirm = $mdDialog.confirm()
-            .title('Slette denne fil?')
-            .textContent('')
-            .ariaLabel('Slet dokument')
-            .targetEvent(event)
-            .ok('Slet')
-            .cancel('Nej, tak');
+    vm.deleteFileDialog = function (event, content) {
+        // console.log(nodeRef);
+        // var confirm = $mdDialog.confirm()
+        //     .title('Slette denne fil?')
+        //     .textContent('')
+        //     .ariaLabel('Slet dokument')
+        //     .targetEvent(event)
+        //     .ok('Slet')
+        //     .cancel('Nej, tak');
 
-        $mdDialog.show(confirm).then(function () {
-            vm.deleteFile(nodeRef);
+        // $mdDialog.show(confirm).then(function () {
+        //     vm.deleteFile(nodeRef);
+        // });
+
+        $mdDialog.show({
+            controller: ['$scope', 'content', function ($scope, content) {
+                $scope.content = content;
+            }],
+            templateUrl: 'app/src/sites/view/deleteFile.tmpl.html',
+            locals: {
+                content: content
+            },
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope, // use parent scope in template
+            preserveScope: true, // do not forget this if use parent scope
+            clickOutsideToClose: true
         });
     };
 

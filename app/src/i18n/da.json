@@ -13,6 +13,7 @@
     "DONE": "Færdig",
     "ACTIONS": "Handlinger",
     "REMOVE": "Fjern",
+    "SURETOREMOVE": "Vil du fjerne",
     "NEW": "Ny",
     "ADD_NEW": "Tilføj ny",
     "ADD": "Tilføj",
@@ -895,7 +896,7 @@
     "HISTORY": "Historik",
     "SURE_TO_DELETE": "Vil du slette dette projekt?",
     "SURE_TO_DELETE_MSG": "Projektet og alle dets filer vil blive slettet.",
-    "PROJECTLINK": "PROJEKTLINK",
+    "PROJECTLINK": "Projektlink",
     "NO_ACCESS_PROJECT": "Du har ikke adgang til dette projekt.",
     "NO_ACCESS_GROUPROOM": "Du har ikke adgang til dette grupperum.",
 

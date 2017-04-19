@@ -19,7 +19,7 @@
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
+            <md-button ng-click="vm.deleteFileDialog($event, content)">
                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                 {{'COMMON.REMOVE' | translate }}
             </md-button>
