@@ -38,144 +38,18 @@
                         </thead>
                         <tbody>
 
-                            <tr ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
-
-                            <td>
-                                <a class="od-filebrowser-link" ng-href="{{vm.getLink(content)}}">
-                                <i class="material-icons">
-                                    {{content.contentType == 'cmis:folder' ? 'folder' : ''}}
-                                    {{content.contentType == 'cmis:link' ? 'content_paste' : ''}}
-                                    <img class="md-avatar" 
-                                         ng-show="content.contentType === 'cmis:document'" 
-                                         ng-src="app/assets/images/filetypes/{{content.thumbNailURL}}"
-                                         onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
-                                    </i>
-                                {{content.name}}
-                                </a>
-                            </td>
-                            <td>
-                                <table>
-                                    <tr>
-                                        <td style="border: none; margin: 0; padding: 0">
-                                            <a class="od-filebrowser-link" ng-href="{{vm.getLink(content)}}">
-                                            {{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
-                                        </td>
-
-                                        <td ng-show="content.contentType === 'cmis:document' && content.hasHistory" style="border: none; margin: 0; padding: 0">
-                                            <md-menu md-position-mode="left bottom">
-                                                <md-button class="md-icon-button" aria-label="Se historik"
-                                                           ng-click="$mdMenu.open(); vm.loadHistory(content.shortRef)">
-                                                    <md-icon md-menu-origin
-                                                    " title="Se historik" style="font-size: 22px; position: relative;
-                                                    top: 5px">history</md-icon>
-                                                </md-button>
-                                                <md-menu-content>
-                                                    <md-menu-item class="menuListHead">
-                                                        Ændret
-                                                        <span style="width: 70px;"></span>
-                                                        Ændret af
-                                                    </md-menu-item>
-                                                    <md-menu-item ng-repeat="h in history" class="menuList">
-                                                        <a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
-                                                            {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{
-                                                            h.modifier }}</a>
-                                                        </md-button>
-                                                    </md-menu-item>
-                                                </md-menu-content>
-                                            </md-menu>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td>
-                                <md-checkbox name="to-esdh" ng-if="content.contentType == 'cmis:document'">
-                            </td>
-                            <td>
-                                </md-checkbox>
-                                <md-menu>
-                                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
-                                        <md-icon md-menu-origin>more_vert</md-icon>
-                                    </md-button>
-
-                                    <md-menu-content width="6">
-                                        <md-menu-item ng-if="content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
-                                                <md-icon md-menu-align-target>get_app</md-icon>
-                                                {{'COMMON.DOWNLOAD' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.previewDocument(content.nodeRef)">
-                                                <md-icon md-menu-align-target>search</md-icon>
-                                                {{'COMMON.PREVIEW' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="content.canMoveAndDelete">
-                                            <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
-                                                <md-icon md-menu-align-target>remove_circle_outline</md-icon>
-                                                {{'COMMON.REMOVE' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
-                                            <md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
-                                                <md-icon md-menu-align-target>create</md-icon>
-                                                {{'COMMON.RENAME' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
-                                                <md-icon md-menu-align-target>library_books</md-icon>
-                                                {{'COMMON.EDIT' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-										
-										<md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
-                                                <md-icon md-menu-align-target>unarchive</md-icon>
-                                                {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
-                                                <md-icon md-menu-align-target>content_copy</md-icon>
-                                                {{'COMMON.COPY' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="content.canMoveAndDelete && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
-                                                <md-icon md-menu-align-target>compare_arrows</md-icon>
-                                                {{'COMMON.MOVE' | translate }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
-                                                <md-icon md-menu-align-target>playlist_add_check</md-icon>
-                                                {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
-                                            </md-button>
-                                        </md-menu-item>
-
-                                        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-                                            <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef)">
-                                                <md-icon md-menu-align-target>playlist_add_check</md-icon>
-                                                {{'COMMON.NEWVERSION' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
-                                            </md-button>
-                                        </md-menu-item>
-
-
-
-
-
-                                    </md-menu-content>
-                                </md-menu>
-                            </td>
-                        </tr>
+                            <tr ng-show="content.contentType === 'cmis:document'"
+                                ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
+                                ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+                            </tr>
+                            <tr ng-show="content.contentType === 'cmis:folder'"
+                                ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
+                                ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+                            </tr>
+                            <tr ng-show="content.contentType === 'cmis:link'"
+                                ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
+                                ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+                            </tr>
 
                         </tbody>
                     </table>
@@ -205,6 +79,27 @@
                         </md-menu>
                     </div>
 
+                    <div layout="column">
+                        <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
+                            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Opret dokument">
+                                <i class="material-icons">note_add</i>
+                                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item ng-repeat="template in templateDocuments">
+                                <md-button ng-click="vm.newTemplateDialog($event,template)">
+                                    <i class="material-icons">
+                                        <img class="md-avatar" 
+                                         ng-src="app/assets/images/filetypes/{{template.thumbNailURL}}"
+                                         onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">    
+                                    </i> 
+                                    {{template.name}}
+                                </md-button>
+                            </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </div>
+
                     <md-button ng-if="vm.canEdit" class="md-icon-button md-primary z-index-0"
                                ng-click="vm.newFolderDialog($event)">
                                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
@@ -220,26 +115,7 @@
                                <!--Opret projektlink-->
                     </md-button>
 
-                    <div layout="column">
-                        <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
-                            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Opret dokument">
-                                <i class="material-icons">note_add</i>
-                                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
-                            </md-button>
-                            <md-menu-content>
-                                <md-menu-item ng-repeat="template in templateDocuments">
-                                <md-button ng-click="vm.createDocumentFromTemplate(template.nodeRef)">
-                                    <i class="material-icons">
-                                        <img class="md-avatar" 
-                                         ng-src="app/assets/images/filetypes/{{template.thumbNailURL}}"
-                                         onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">    
-                                    </i> 
-                                    {{template.name}}
-                                </md-button>
-                            </md-menu-item>
-                            </md-menu-content>
-                        </md-menu>
-                    </div>
+                    
 
                     <span flex></span>
 
@@ -249,23 +125,6 @@
                             {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
                         </span>
 					</md-button>
-
-					<!--<div layout="column">
-						<md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
-							<md-button ng-click="$mdMenu.open($event)" class="md-raised" aria-label="SBSYS">
-								<i class="material-icons">device_hub</i>
-								<span style="margin-left: 10px; margin-right: 20px;">Send til SBSYS</span>
-							</md-button>
-							<md-menu-content>
-								<md-menu-item>
-									<md-button ng-click="vm.uploadSbsysDialog($event)"><i class="material-icons">unarchive</i> Gem projekt</md-button>
-								</md-menu-item>
-								<md-menu-item>
-									<md-button ng-click="vm.loadSbsysDialog($event)"><i class="material-icons">archive</i> Hent dokumenter</md-button>
-								</md-menu-item>
-							</md-menu-content>
-						</md-menu>
-					</div>-->
                 </div>
             </md-card-content>
         </md-card>        
