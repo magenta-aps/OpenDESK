@@ -18,11 +18,16 @@ package dk.opendesk.webscripts.users;
 
 import dk.opendesk.repo.utils.Utils;
 import net.sf.acegisecurity.Authentication;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.template.TemplateNode;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
@@ -90,6 +95,11 @@ public class Users extends AbstractWebScript {
         this.properties = properties;
     }
 
+    private ServiceRegistry serviceRegistry;
+    public void setServiceRegistry (ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
+
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
@@ -152,10 +162,12 @@ public class Users extends AbstractWebScript {
 
             // Notify external user
             Map<String, Serializable> templateArgs = new HashMap<>();
-            templateArgs.put("inviterPersonRef", personService.getPerson(inviterUsername));
-            templateArgs.put("inviteePersonRef", inviteePersonRef);
+            NodeRef inviterPersonRef = personService.getPerson(inviterUsername);
+            templateArgs.put("inviterPerson", new TemplateNode(inviterPersonRef, serviceRegistry, null));
+            templateArgs.put("inviteePerson", new TemplateNode(inviteePersonRef, serviceRegistry, null));
             templateArgs.put("inviteePassword", password);
-            templateArgs.put("siteRef", siteService.getSite(siteShortName).getNodeRef());
+            NodeRef siteRef = siteService.getSite(siteShortName).getNodeRef();
+            templateArgs.put("site", new TemplateNode(siteRef, serviceRegistry, null));
             templateArgs.put("group", Utils.getPDGroupTranslation(groupName));
             String protocol = properties.getProperty("openDesk.protocol");
             String host = properties.getProperty("openDesk.host");

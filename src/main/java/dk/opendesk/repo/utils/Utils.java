@@ -406,7 +406,6 @@ public class Utils {
                                            SearchService searchService, Properties properties, String to,
                                            Map<String, Serializable> templateArgs){
 
-        messageService.registerResourceBundle("alfresco/extension/messages/opendesk-templates-messages");
         String subject = messageService.getMessage("opendesk.templates.invite_user_email.subject");
         String from = properties.getProperty("mail.from.default");
         String templatePath = "cm:OpenDesk/cm:user-invite-email.html.ftl";
