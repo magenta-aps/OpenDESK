@@ -269,7 +269,7 @@ public class Sites extends AbstractWebScript {
                 String role = Utils.getJSONObject(jsonObject, "role");
                 if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role)) {
                     JSONObject json = convertSiteInfoToJSON(siteInfo);
-                    if (CheckIfSiteIsTemplate(siteInfo))
+                    if (CheckIfSiteIsSpecial(siteInfo))
                         continue;
                     result.add(json);
                 }
@@ -288,7 +288,7 @@ public class Sites extends AbstractWebScript {
         List<SiteInfo> currentuser_standard_sites = siteService.listSites(authenticationService.getCurrentUserName());
 
         for (SiteInfo siteInfo : currentuser_standard_sites) {
-            if (CheckIfSiteIsTemplate(siteInfo))
+            if (CheckIfSiteIsSpecial(siteInfo))
                 continue;
             JSONObject json = convertSiteInfoToJSON(siteInfo);
             result.add(json);
@@ -297,9 +297,10 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
-    private boolean CheckIfSiteIsTemplate(SiteInfo siteInfo) {
+    private boolean CheckIfSiteIsSpecial(SiteInfo siteInfo) {
         NodeRef n = siteInfo.getNodeRef();
-        return nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES);
+        return nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES) ||
+        nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT);
     }
 
     public JSONArray removeTestSites() {
