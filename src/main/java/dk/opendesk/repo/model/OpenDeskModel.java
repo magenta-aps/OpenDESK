@@ -56,6 +56,7 @@ public interface OpenDeskModel {
     public static QName PROP_NOTIFICATION = QName.createQName(OD_URI, "notification");
     public static String PD_NOTIFICATION_REVIEW_REQUEST = "review-request";
     public static String PD_NOTIFICATION_REVIEW_APPROVED = "review-approved";
+    public static String PD_NOTIFICATION_NEWDOC = "new-doc";
 
 
 
