@@ -17,9 +17,21 @@ limitations under the License.
 package dk.opendesk.webscripts.users;
 
 import dk.opendesk.repo.utils.Utils;
+import net.sf.acegisecurity.Authentication;
+import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.template.TemplateNode;
+import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.action.ActionService;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.site.SiteInfo;
+import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +44,9 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class Users extends AbstractWebScript {
 
@@ -54,6 +68,36 @@ public class Users extends AbstractWebScript {
     private MutableAuthenticationService mutableAuthenticationService;
     public void setMutableAuthenticationService(MutableAuthenticationService mutableAuthenticationService) {
         this.mutableAuthenticationService = mutableAuthenticationService;
+    }
+
+    private ActionService actionService;
+    public void setActionService (ActionService actionService) {
+        this.actionService = actionService;
+    }
+
+    private SearchService searchService;
+    public void setSearchService (SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    private MessageService messageService;
+    public void setMessageService (MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    private SiteService siteService;
+    public void setSiteService(SiteService siteService) {
+        this.siteService = siteService;
+    }
+
+    private Properties properties;
+    public void setProperties (Properties properties) {
+        this.properties = properties;
+    }
+
+    private ServiceRegistry serviceRegistry;
+    public void setServiceRegistry (ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
     }
 
     @Override
@@ -100,6 +144,7 @@ public class Users extends AbstractWebScript {
         {
             userName = origUserName + "_" + i++;
         }
+        String inviterUsername = mutableAuthenticationService.getCurrentUserName();
 
         // ...code to be run as Admin...
         AuthenticationUtil.pushAuthentication();
@@ -107,16 +152,28 @@ public class Users extends AbstractWebScript {
             AuthenticationUtil.setRunAsUserSystem();
             // Create new external user and set password
             Map<QName, Serializable> props = Utils.createPersonProperties(userName, firstName, lastName, email);
-            personService.createPerson(props);
+            NodeRef inviteePersonRef = personService.createPerson(props);
             String password = Utils.generateNewPassword();
             mutableAuthenticationService.createAuthentication(userName, password.toCharArray());
-
-            // Notify new external user
-            personService.notifyPerson(userName, password);
 
             // Add external user to PDSite group
             String authority = Utils.getAuthorityName(siteShortName, groupName);
             authorityService.addAuthority(authority, userName);
+
+            // Notify external user
+            Map<String, Serializable> templateArgs = new HashMap<>();
+            NodeRef inviterPersonRef = personService.getPerson(inviterUsername);
+            templateArgs.put("inviterPerson", new TemplateNode(inviterPersonRef, serviceRegistry, null));
+            templateArgs.put("inviteePerson", new TemplateNode(inviteePersonRef, serviceRegistry, null));
+            templateArgs.put("inviteePassword", password);
+            NodeRef siteRef = siteService.getSite(siteShortName).getNodeRef();
+            templateArgs.put("site", new TemplateNode(siteRef, serviceRegistry, null));
+            templateArgs.put("group", Utils.getPDGroupTranslation(groupName));
+            String protocol = properties.getProperty("openDesk.protocol");
+            String host = properties.getProperty("openDesk.host");
+            templateArgs.put("loginURL", protocol + "://" + host + "/#!/login");
+
+            Utils.sendInviteUserEmail(messageService, actionService, searchService, properties, email, templateArgs);
 
         } finally {
             AuthenticationUtil.popAuthentication();

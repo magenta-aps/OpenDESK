@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.evaluator.HasTagEvaluator;
+import org.alfresco.repo.action.executer.MailActionExecuter;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.site.SiteServiceException;
+import org.alfresco.service.cmr.action.Action;
+import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.alfresco.service.cmr.repository.*;
@@ -52,6 +56,21 @@ import static org.alfresco.service.namespace.NamespaceService.CONTENT_MODEL_1_0_
 public class Utils {
 
     private static final String ROLE_NAME_MESSAGE_PREFIX = "role.";
+
+    private static Map<String, String> PD_GROUPS = new HashMap<>();
+
+    public static String getPDGroupTranslation(String group)
+    {
+        if(PD_GROUPS.isEmpty()) {
+            PD_GROUPS.put("PD_PROJECTOWNER", "Projektejere");
+            PD_GROUPS.put("PD_PROJECTMANAGER", "Projektledere");
+            PD_GROUPS.put("PD_PROJECTGROUP", "Projektgruppe");
+            PD_GROUPS.put("PD_WORKGROUP", "Arbejdsgruppe");
+            PD_GROUPS.put("PD_MONITORS", "Følgegruppe");
+            PD_GROUPS.put("PD_STEERING_GROUP", "Styregruppe");
+        }
+        return PD_GROUPS.get(group);
+    }
 
     /**
      * Alfresco's (or Java's) query string parsing doesn't handle UTF-8
@@ -351,5 +370,47 @@ public class Utils {
             return null;
         else
             return SiteVisibility.valueOf(visibilityStr);
+    }
+
+    public static void sendEmail(ActionService actionService, SearchService searchService, String templatePath,
+                                 String subject, String to, String from, Map<String, Serializable> templateArgs){
+        Action mailAction = actionService.createAction(MailActionExecuter.NAME);
+        mailAction.setParameterValue(MailActionExecuter.PARAM_SUBJECT, subject);
+        mailAction.setParameterValue(MailActionExecuter.PARAM_TO, to);
+        mailAction.setParameterValue(MailActionExecuter.PARAM_FROM, from);
+        mailAction.setParameterValue(MailActionExecuter.PARAM_TEXT, "Test body");
+
+        // Get Template
+        String templateRootPath = "/app:company_home/app:dictionary/app:email_templates/";
+        String templateQuery = "PATH:\"" + templateRootPath + templatePath + "\"";
+        ResultSet resultSet = searchService.query(new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore"),
+                SearchService.LANGUAGE_LUCENE, templateQuery);
+
+        if (resultSet.length()==0){
+            return;
+        }
+
+        NodeRef template = resultSet.getNodeRef(0);
+        mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE, template);
+
+        // Define parameters for the model (set fields in the ftl like : args.workflowTitle)
+        Map<String, Serializable> templateModel = new HashMap<String, Serializable>();
+        templateModel.put("args",(Serializable)templateArgs);
+
+        mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE_MODEL,(Serializable)templateModel);
+
+        actionService.executeAction(mailAction, null);
+    }
+
+    public static void sendInviteUserEmail(MessageService messageService, ActionService actionService,
+                                           SearchService searchService, Properties properties, String to,
+                                           Map<String, Serializable> templateArgs){
+
+        String subject = messageService.getMessage("opendesk.templates.invite_user_email.subject");
+        String from = properties.getProperty("mail.from.default");
+        String templatePath = "cm:OpenDesk/cm:user-invite-email.html.ftl";
+
+        sendEmail(actionService, searchService, templatePath, subject, to, from, templateArgs);
+
     }
 }

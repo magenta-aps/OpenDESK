@@ -17,12 +17,6 @@
 	limitations under the License.
 -->
 <beans>
-	<bean id="webscript.helloworld.get"
-		  class="openDESK.demoamp.HelloWorldWebScript"
-		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-	</bean>
-
 	<bean id="webscript.notifications.post"
 		  class="dk.opendesk.webscripts.Notifications"
 		  parent="webscript">
@@ -138,6 +132,12 @@
 		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="mutableAuthenticationService" ref="authenticationService"/>
+		<property name="actionService" ref="ActionService"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="messageService" ref="messageService"/>
+		<property name="properties"> <ref bean="global-properties"/> </property>
+		<property name="serviceRegistry"> <ref bean="ServiceRegistry"/> </property>
 	</bean>
 
 	<bean id="webscript.purge.get"
