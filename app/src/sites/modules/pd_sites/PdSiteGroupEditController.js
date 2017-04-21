@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteGroupEditController', PdSiteGroupEditController);
     
-    function PdSiteGroupEditController(sitedata, $scope, $mdDialog, siteService, $mdToast, pd_siteService) {
+    function PdSiteGroupEditController(sitedata, $scope, $mdDialog, siteService, $mdToast, pd_siteService, authService, notificationsService) {
         
         var pdg = this;
         
@@ -34,6 +34,9 @@ angular
         $scope.addMember = addMember;
         $scope.removeMember = removeMember;
         $scope.addExternalUserToGroup = addExternalUserToGroup;
+
+        var user = authService.getUserInfo().user;
+        var currentUser = user.userName;
 
         function addExternalUserToGroup (firstName, lastName, email, groupName) {
             pd_siteService.createExternalUser(pdg.site.shortName, firstName, lastName, email, groupName).then(
@@ -69,6 +72,8 @@ angular
         function addMember(member, group) {
             siteService.addUser( pdg.site.shortName, member.userName, group ).then(
                 function(response) {
+                    var link = "/#!/projekter/" + pdg.site.shortName;
+                    createSiteNotification(pdg.site.shortName, member.userName, link);
                     console.log('Added user ' + member.userName + ' to ' + group);
                 },
                 function(err) {
@@ -81,6 +86,7 @@ angular
         
         function removeMember(member, group) {
             siteService.removeUser( pdg.site.shortName, member.username, group ).then(
+
                 function(response) {
                     console.log('Removed user ' + u + ' from ' + group);
                 },
@@ -99,6 +105,16 @@ angular
                         .textContent('Grupper er opdateret')
                         .hideDelay(3000)
             );
+        }
+
+        function createSiteNotification (siteName, userName, link) {
+            if(userName !== currentUser) {
+                var subject = "Du er blevet tilføjet til " + siteName;
+                var message = "har tilføjet dig til projektet " + siteName + ".";
+                notificationsService.addNotice(userName, subject, message, link,'project', siteName).then(function (val) {
+                    $mdDialog.cancel();
+                });
+            }
         }
 
         

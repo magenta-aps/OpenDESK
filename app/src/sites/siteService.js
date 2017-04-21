@@ -210,7 +210,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 PARAM_FILENAME: file.name,
                 PARAM_DESTINATION: destination
             }).then(function(response) {
-                alert(response.data[0].fileName);
 
                 var formData = new FormData();
                 formData.append("filedata", file);
@@ -223,7 +222,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                     transformRequest: angular.identity,
                     headers: {'Content-Type': undefined}
                 }).then(function (response) {
-                    alert("done");
                     return response;
                 });
             });
