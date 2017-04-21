@@ -53,6 +53,13 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     };
 
     vm.goBack = function () {
+        console.log(vm.doc.location);
+
+        if(vm.wf) {
+            console.log('lets go back');
+            window.location.replace("/#!/projekter/" + vm.doc.location.site + vm.doc.location.path);
+            return;
+        }
         var nodeRef = vm.doc.nodeRef.split('/')[3];
         if ($stateParams.backToDocPreview) {
             //came from edit doc in documentpreviewer, before goBack in lool
@@ -174,6 +181,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
             notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then (function (val) {
                 $mdDialog.hide();
+                console.log('am i here');
+                vm.goBack();
             });
 
 
