@@ -37,18 +37,11 @@ function UserController($scope, $log, authService, userService, sessionService) 
     }
     vm.uploadAvatar = uploadAvatar;
 
-    function getPerson() {
-        userService.getPerson(vm.currentUser.userName).then(function(data) {
-            return data;
-        });
-    }
-    vm.getPerson = getPerson;
-
     function getAvatar() {
-        userService.getPerson(vm.currentUser.userName).then(function (data) {
-            var avatar = data.avatar.replace("/thumbnails/avatar", "");
-            vm.avatar = sessionService.makeURL("/alfresco/s/" + avatar + vm.currentUser.userName);
+        return userService.getAvatar(vm.currentUser.userName).then(function (data) {
+            vm.avatar = data;
         });
     }
+    vm.getAvatar = getAvatar;
 
 };

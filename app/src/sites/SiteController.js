@@ -218,19 +218,22 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     };
 
     vm.openMemberInfo = function (member, event) {
-        $mdDialog.show({
-            controller: ['$scope', 'member', function ($scope, member) {
-                $scope.member = member;
-            }],
-            templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
-            locals: {
-                member: member
-            },
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
+        userService.getAvatar(member.userName).then(function (data) {
+            $mdDialog.show({
+                controller: ['$scope', 'member', function ($scope, member) {
+                    $scope.member = member;
+                    $scope.avatar = data;
+                }],
+                templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
+                locals: {
+                    member: member
+                },
+                parent: angular.element(document.body),
+                targetEvent: event,
+                scope: $scope,
+                preserveScope: true,
+                clickOutsideToClose: true
+            });
         });
     }
 
