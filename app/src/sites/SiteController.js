@@ -30,6 +30,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     $scope.role_mapping_reverse["3"] = "SiteConsumer";
 
     $scope.contents = [];
+    $scope.object = [];
     $scope.history = [];
     $scope.members = [];
     $scope.allMembers = [];
@@ -68,6 +69,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.goToLOEditPage = goToLOEditPage;
     vm.updateSiteName = updateSiteName;
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
+    vm.deleteFile = deleteFile;
 
     $scope.searchProjects = searchProjects;
 
@@ -237,7 +239,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     }
 
     vm.fileComparator = function (files) {
-        console.log('hello');
         switch (files.contentType) {
             case 'cmis:document':
                 return 1;
@@ -253,9 +254,11 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
             $scope.contents = response;
+            $scope.object.contents = response;
             vm.addThumbnailUrl($scope.contents);
             console.log('load contents');
-            console.log(response);
+            console.log($scope.object.contents);
+            console.log($scope.$id);
         });
 
     };
@@ -282,22 +285,13 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         };
         siteService.createFolder("cm:folder", props).then(function (response) {
             vm.loadContents();
-        });
-        $mdDialog.hide();
-    };
-
-
-    vm.createLink = function (project) {
-        siteService.createLink(vm.project.shortName, project.shortName).then(function () {
-            vm.loadContents();
             $mdDialog.hide();
         });
     };
 
 
-    vm.deleteLink = function (source, destination) {
-
-        siteService.deleteLink(source, destination).then(function () {
+    vm.createLink = function (project) {
+        siteService.createLink(vm.project.shortName, project.shortName).then(function () {
             vm.loadContents();
             $mdDialog.hide();
         });
@@ -457,7 +451,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     vm.reviewDocumentsDialog = function (event, nodeRef) {
-
         $scope.nodeRef = nodeRef;
 
         $mdDialog.show({
@@ -491,13 +484,13 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
     };
 
-    vm.deleteFile = function (nodeRef) {
-        siteService.deleteFile(nodeRef).then(function (val) {
-            vm.loadContents();
-        });
 
-        $mdDialog.hide();
-    };
+    function deleteFile(nodeRef) {
+        siteService.deleteFile(nodeRef).then(function (response) {
+            loadSiteData();
+            $mdDialog.hide();
+        });
+    }
 
 
     function createNotification(userName, subject, message, link, wtype, project) {
@@ -567,6 +560,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         });
     }
 
+
     vm.newMember = function (event) {
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/newMember.tmpl.html',
@@ -578,8 +572,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         });
     };
 
-    vm.upload = function (files) {
 
+    vm.upload = function (files) {
         for (var i = 0; i < files.length; i++) {
             siteService.uploadFiles(files[i], vm.currentFolderNodeRef).then(function (response) {
                 vm.loadContents();
@@ -646,7 +640,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         // getTheValue
         var role_int_value = translation_to_value(role);
         var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
-
 
         siteService.addMemberToSite(siteName, userName, role_alfresco_value).then(function (val) {
             createSiteNotification(userName, siteName);
@@ -790,18 +783,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     vm.renameDocumentDialog = function (event, content) {
-        // var confirm = $mdDialog.prompt()
-        //     .title('Hvordan vil du navngive dette?')
-        //     .placeholder('Navn')
-        //     .ariaLabel('Navn')
-        //     .targetEvent(event)
-        //     .ok('Omdøb')
-        //     .cancel('Annullér');
-        // $mdDialog.show(confirm).then(function (result) {
-        //     var newName = result;
-        //     vm.renameDocument(docNodeRef, newName);
-        // });
-
         vm.newFileName = content.name;
 
         $mdDialog.show({
@@ -870,9 +851,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         documentService.getPath(ref.split("/")[3]).then(function (val) {
 
             $scope.selectedDocumentPath = val.container;
-            // var project = val.site;
-            // var container = val.container;
-            // var path = val.path;
 
             var path = ref.replace("workspace://SpacesStore/", "");
             $window.location.href = "/#!/dokument/" + path;

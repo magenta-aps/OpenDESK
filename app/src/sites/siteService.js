@@ -285,7 +285,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         },
         getContents: function (node) {
             return $http.get("/alfresco/service/contents?node=" + node).then(function(response) {
-
                 //console.log(response.data);
                 return response.data;
             });
