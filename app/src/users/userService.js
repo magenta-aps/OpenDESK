@@ -80,7 +80,12 @@ function userService($http, sessionService) {
     }
 
     function getAvatar(username) {
+        if(username == undefined)
+            return "http://placehold.it/128x128";
         return getPerson(username).then(function (data) {
+            if(data.avatar == undefined)
+                return "http://placehold.it/128x128";
+
             var avatar = data.avatar.replace("/thumbnails/avatar", "");
             return sessionService.makeURL("/alfresco/s/" + avatar);
         });

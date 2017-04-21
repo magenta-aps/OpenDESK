@@ -218,7 +218,13 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     };
 
     vm.openMemberInfo = function (member, event) {
-        userService.getAvatar(member.userName).then(function (data) {
+        var username;
+        if(member.userName != undefined)
+            username = member.userName;
+        if(member.authority.userName != undefined)
+            username = member.authority.userName;
+
+        userService.getAvatar(username).then(function (data) {
             $mdDialog.show({
                 controller: ['$scope', 'member', function ($scope, member) {
                     $scope.member = member;
