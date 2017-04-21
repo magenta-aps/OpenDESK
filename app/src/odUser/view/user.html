@@ -15,7 +15,10 @@
 
                 <div class="od-me">
                     <div layout="column" layout-align="center center">
-                        <img src="https://placehold.it/300x300" class="od-avatar" alt="{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}">
+                        <img src="{{ vm.avatar }}" class="od-avatar" alt="{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}">
+                        <input type="file" id="uploadBtn" class="upload" file-model="file"/>
+                        <md-button class="md-raised md-primary" ng-click="vm.uploadAvatar(file)"><i class="material-icons">file_upload</i>&nbsp;overfør
+                            avatar&nbsp;</md-button>
                         <h1>{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h1>
                     </div>
                     <md-subheader>{{'USER.USERINFO' | translate}}</md-subheader>

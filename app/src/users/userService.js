@@ -7,7 +7,8 @@ function userService($http) {
         getPerson: getPerson,
         getPeople: getPeople,
         getAuthorities: getAuthorities,
-        getPersons: getPersons
+        getPersons: getPersons,
+        uploadAvatar : uploadAvatar
     };
 
 
@@ -63,5 +64,18 @@ function userService($http) {
         );
     }
 
+    function uploadAvatar(file, username) {
+
+        var formData = new FormData();
+        formData.append("filedata", file);
+        formData.append("username", username);
+
+        return $http.post("/alfresco/service/slingshot/profile/uploadavatar", formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        }).then(function (response) {
+            return response;
+        });
+    }
 
 }
