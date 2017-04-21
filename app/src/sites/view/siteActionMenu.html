@@ -19,14 +19,14 @@
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="vm.deleteFileDialog($event, content.nodeRef)">
+            <md-button ng-click="vm.deleteFileDialog($event, content)">
                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                 {{'COMMON.REMOVE' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
-            <md-button ng-click="vm.renameDocumentDialog($event, content.nodeRef)">
+            <md-button ng-click="vm.renameDocumentDialog($event, content)">
                 <md-icon md-menu-align-target>create</md-icon>
                 {{'COMMON.RENAME' | translate }}
             </md-button>
@@ -42,7 +42,7 @@
         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                 <md-icon md-menu-align-target>unarchive</md-icon>
-                {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
+                {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
             </md-button>
         </md-menu-item>
 
@@ -69,8 +69,8 @@
 
         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
             <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef)">
-                <md-icon md-menu-align-target>playlist_add_check</md-icon>
-                {{'COMMON.NEWVERSION' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
+                <md-icon md-menu-align-target>file_upload</md-icon>
+                {{'COMMON.NEWVERSION' | translate }}
             </md-button>
         </md-menu-item>
     </md-menu-content>

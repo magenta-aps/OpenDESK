@@ -1,13 +1,12 @@
 
-<md-dialog aria-label="Slet fil" ng-cloak>
-    <form name="deleteFileForm" ng-submit="vm.deleteFile(content.nodeRef);">
+<md-dialog aria-label="Slet projekt" ng-cloak>
+    <form name="deleteProjectForm" ng-submit="vm.deleteSite(project.shortName);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>{{'COMMON.REMOVE' | translate}} 
-                    <span ng-show="content.contentType == 'cmis:document'">{{'DOCUMENT.DOCUMENT' | translate | lowercase}}</span>
-                    <span ng-show="content.contentType == 'cmis:folder'">{{'COMMON.FOLDER' | translate | lowercase}}</span>
-                    <span ng-show="content.contentType == 'cmis:link'">{{'PROJECT.PROJECTLINK' | translate | lowercase}}</span>
+                    <span ng-show="project.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate | lowercase}}</span>
+                    <span ng-show="project.type == 'Project'">{{'PROJECT.GROUPROOM' | translate | lowercase}}</span>
                 </h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.cancel()">
@@ -17,7 +16,7 @@
         </md-toolbar>
 
         <md-dialog-content class="md-padding">
-            <p>{{'COMMON.SURETOREMOVE' | translate}} <em>{{content.name}}</em>?</p>
+            <p>{{'COMMON.SURETOREMOVE' | translate}} <em>{{project.title}}</em>?</p>
         </md-dialog-content>
 
         <md-dialog-actions>

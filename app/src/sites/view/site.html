@@ -65,15 +65,15 @@
                     <div layout="column">
                         <md-menu>
                             <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Upload dokumenter">
-                                <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENTS' | translate | lowercase}}</md-tooltip>
+                                <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</md-tooltip>
                                 <i class="material-icons">file_upload</i>
                             </md-button>
                             <md-menu-content>
                                 <md-menu-item>
-                                    <md-button ng-click="vm.uploadDocumentsDialog($event)">Hent fra computer</md-button>
+                                    <md-button ng-click="vm.uploadDocumentsDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}}  {{'COMMON.COMPUTER' | translate}}</md-button>
                                 </md-menu-item>
                                 <md-menu-item ng-if="vm.project.type != vm.strings.templateProject">
-                                    <md-button ng-click="vm.loadSbsysDialog($event)">Hent fra SBSYS</md-button>
+                                    <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}}  {{'ESDH' | translate}} </md-button>
                                 </md-menu-item>
                             </md-menu-content>
                         </md-menu>
@@ -117,7 +117,7 @@
                     <md-button ng-if="vm.project.type != vm.strings.templateProject"  ng-click="vm.uploadSbsysDialog($event)" class="md-primary" aria-label="SBSYS">
 						<i class="material-icons">device_hub</i>
 						<span style="margin-left: 10px; margin-right: 20px;">
-                            {{'COMMON.SAVE' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
+                            {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
                         </span>
 					</md-button>
                 </div>

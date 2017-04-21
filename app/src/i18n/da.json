@@ -13,6 +13,7 @@
     "DONE": "Færdig",
     "ACTIONS": "Handlinger",
     "REMOVE": "Fjern",
+    "SURETOREMOVE": "Vil du fjerne",
     "NEW": "Ny",
     "ADD_NEW": "Tilføj ny",
     "ADD": "Tilføj",
@@ -54,7 +55,7 @@
     "DOWNLOAD": "Download",
     "ADDED": "Tilføjet",
     "ADDED_BY": "Tilføjet af",
-    "UPLOAD": "Upload",
+    "UPLOAD": "Overfør",
     "HOME": "Min side",
     "CLOSE": "Luk",
     "DUE_DATE": "Forfaldsdato",
@@ -92,7 +93,10 @@
     "EMPTY_FOLDER": "Denne mappe er tom",
     "FILTER": "Filtre",
     "LAST_MODIFIED": "Senest ændret",
-    "LAST_MODIFIED_BY": "Senest ændret af"
+    "LAST_MODIFIED_BY": "Senest ændret af",
+    "FROM": "Fra",
+    "COMPUTER": "PC",
+    "NEWVERSION": "Overfør ny version"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -892,7 +896,7 @@
     "HISTORY": "Historik",
     "SURE_TO_DELETE": "Vil du slette dette projekt?",
     "SURE_TO_DELETE_MSG": "Projektet og alle dets filer vil blive slettet.",
-    "PROJECTLINK": "PROJEKTLINK",
+    "PROJECTLINK": "Projektlink",
     "NO_ACCESS_PROJECT": "Du har ikke adgang til dette projekt.",
     "NO_ACCESS_GROUPROOM": "Du har ikke adgang til dette grupperum.",
 

@@ -106,20 +106,24 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		});
 	};
 
-	vm.deleteSiteDialog = function (siteName) {
-		var confirm = $mdDialog.confirm()
-			.title($translate.instant('PROJECT.SURE_TO_DELETE'))
-			.textContent($translate.instant('PROJECT.SURE_TO_DELETE_MSG'))
-			.ok($translate.instant('COMMON.YES'))
-			.cancel($translate.instant('COMMON.CANCEL'));
-		$mdDialog.show(confirm).then(
-			function () {
-				vm.deleteSite(siteName);
-			},
-			function () {
-				console.log('cancelled delete');
-			}
-		);
+	vm.deleteSiteDialog = function (project) {
+		console.log('deletesite dialog');
+		console.log(project);
+
+		$mdDialog.show({
+            controller: ['$scope', 'project', function ($scope, project) {
+                $scope.project = project;
+            }],
+            templateUrl: 'app/src/sites/view/deleteProject.tmpl.html',
+            locals: {
+                project: project
+            },
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true,
+        });
 	};
 
 	vm.deleteSite = function (siteName) {
@@ -135,6 +139,8 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 			getSitesPerUser().then(function (val) {
 				vm.sitesPerUser = val;
 			});
+			
+			//vm.reload();
 		});
 	};
 

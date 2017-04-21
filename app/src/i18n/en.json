@@ -13,6 +13,7 @@
     "DONE": "Done",
     "ACTIONS": "Actions",
     "REMOVE": "Remove",
+    "SURETOREMOVE": "Do you want to remove",
     "NEW": "New",
     "ADD_NEW": "Add new",
     "ADD": "Add",
@@ -92,7 +93,10 @@
     "FOLDER": "Folder",
     "CHOOSE": "Choose",
     "EMPTY_FOLDER": "This folder is empty",
-    "FILTER": "Filters"
+    "FILTER": "Filters",
+    "FROM": "From",
+    "COMPUTER": "PC",
+    "NEWVERSION": "Upload new version"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"

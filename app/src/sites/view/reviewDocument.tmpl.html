@@ -1,5 +1,5 @@
 <md-dialog aria-label="New member" ng-cloak>
-    <form name="addMemberForm" ng-submit="vm.createReviewNotification(nodeRef, newMemberName.userName, subject, comment, vm.project);">
+    <form name="addMemberForm" ng-submit="vm.createReviewNotification(nodeRef, newMemberName.userName, comment, vm.project);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -23,7 +23,7 @@
                     </div>
                 </md-autocomplete>
 
-                <md-dialog-content class="md-padding">
+                <!--<md-dialog-content class="md-padding">
                     <div>
                         <md-input-container>
                             <label>Emne</label>

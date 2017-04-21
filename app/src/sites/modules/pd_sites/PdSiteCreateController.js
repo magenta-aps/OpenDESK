@@ -117,7 +117,7 @@ angular
             
             
             function createPdSite() {
-                if ($scope.newSite.template == undefined) {
+                if ($scope.newSite.template == undefined  || $scope.newSite.template == "no-template") {
 
                     $scope.newSite.template = {"name" : ""};
 
@@ -142,12 +142,12 @@ angular
                     function(response) {
                         
                         if(response.data[0].status === 'success') {
-                            
+
                             var siteShortName = response.data[0].shortName;
                             var siteName = $scope.newSite.siteName;
                             var link = "/#!/projekter/" + siteShortName;
                             
-                            createSiteNotification(siteName, $scope.newSite.projectOwner.shortName, link);
+                            createSiteNotification(siteName, $scope.newSite.projectOwner.userName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);
 
                             addUserToGroup(siteShortName, $scope.projektGruppe, 'PD_PROJECTGROUP', link);
@@ -179,6 +179,7 @@ angular
                     var userName = user.userName;
                     promise = siteService.addUser(siteShortName, userName, groupName).then(
                         function (response) {
+
                             createSiteNotification(siteShortName, userName, link);
                             console.log('Added user ' + userName + ' to ' + groupName);
                         },
@@ -194,7 +195,7 @@ angular
                 if(userName !== currentUser) {
                     var subject = "Du er blevet tilføjet til " + siteName;
                     var message = "har tilføjet dig til projektet " + siteName + ".";
-                    notificationsService.addNotice(userName, subject, message, link,'project').then(function (val) {
+                    notificationsService.addNotice(userName, subject, message, link,'project', siteName).then(function (val) {
                         $mdDialog.cancel();
                     });
                 }
