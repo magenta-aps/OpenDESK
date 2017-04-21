@@ -3,7 +3,7 @@
         <md-icon md-menu-origin>more_vert</md-icon>
     </md-button>
 
-    <md-menu-content width="6">
+    <md-menu-content width="4">
         <md-menu-item ng-if="content.contentType == 'cmis:document'">
             <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
                 <md-icon md-menu-align-target>get_app</md-icon>
@@ -11,24 +11,10 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="content.contentType == 'cmis:document'">
+        <!--<md-menu-item ng-if="content.contentType == 'cmis:document'">
             <md-button ng-click="vm.previewDocument(content.nodeRef)">
                 <md-icon md-menu-align-target>search</md-icon>
                 {{'COMMON.PREVIEW' | translate }}
-            </md-button>
-        </md-menu-item>
-
-        <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="vm.deleteFileDialog($event, content)">
-                <md-icon md-menu-align-target>remove_circle_outline</md-icon>
-                {{'COMMON.REMOVE' | translate }}
-            </md-button>
-        </md-menu-item>
-
-        <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
-            <md-button ng-click="vm.renameDocumentDialog($event, content)">
-                <md-icon md-menu-align-target>create</md-icon>
-                {{'COMMON.RENAME' | translate }}
             </md-button>
         </md-menu-item>
 
@@ -37,26 +23,12 @@
                 <md-icon md-menu-align-target>library_books</md-icon>
                 {{'COMMON.EDIT' | translate }}
             </md-button>
-        </md-menu-item>
+        </md-menu-item>-->
 
         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
                 <md-icon md-menu-align-target>unarchive</md-icon>
                 {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
-            </md-button>
-        </md-menu-item>
-
-        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
-                <md-icon md-menu-align-target>content_copy</md-icon>
-                {{'COMMON.COPY' | translate }}
-            </md-button>
-        </md-menu-item>
-
-        <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
-                <md-icon md-menu-align-target>compare_arrows</md-icon>
-                {{'COMMON.MOVE' | translate }}
             </md-button>
         </md-menu-item>
 
@@ -71,6 +43,34 @@
             <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
+            <md-button ng-click="vm.renameDocumentDialog($event, content)">
+                <md-icon md-menu-align-target>create</md-icon>
+                {{'COMMON.RENAME' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="content.canMoveAndDelete">
+            <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
+                <md-icon md-menu-align-target>compare_arrows</md-icon>
+                {{'COMMON.MOVE' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
+                <md-icon md-menu-align-target>content_copy</md-icon>
+                {{'COMMON.COPY' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="content.canMoveAndDelete">
+            <md-button ng-click="vm.deleteFileDialog($event, content)">
+                <md-icon md-menu-align-target>remove_circle_outline</md-icon>
+                {{'COMMON.REMOVE' | translate }}
             </md-button>
         </md-menu-item>
     </md-menu-content>

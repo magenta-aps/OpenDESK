@@ -41,8 +41,7 @@
     </table>
 </td>
 <td>
-    <md-checkbox name="to-esdh " ng-if="content.contentType=='cmis:document' " aria-label="Vælg
-                            fil "></md-checkbox>
+    <input type="checkbox" name="to-esdh " ng-if="content.contentType!='cmis:link' " aria-label="Vælg">
 </td>
 <td>
     <div ng-include=" 'app/src/sites/view/siteActionMenu.html' "></div>
