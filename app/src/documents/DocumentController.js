@@ -282,7 +282,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         });
     }
 
-    function confirmLoolEditDocDialog() {
+    function confirmLoolEditDocDialog(event) {
         var confirm = $mdDialog.confirm()
             .title('Vil du redigere dette dokument?')
             .htmlContent('<i class="material-icons">info_outline</i><p>Du er nu i gang med at redigere et dokument fra historikken.</p><p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
