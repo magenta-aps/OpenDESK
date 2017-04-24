@@ -231,7 +231,7 @@ public class Notifications extends AbstractWebScript {
             String from_name = (String)nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME)  + " " + (String)nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
             String fileName;
 
-            if (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST) || (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED))) {
+            if (OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST.equals(type) || OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED.equals(type)) {
                 NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
                 link = link + "&NID=" + child.getChildRef(); // add this to the link, makes it easy to lookup the notification from the ui
 
