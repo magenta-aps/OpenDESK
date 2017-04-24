@@ -54,6 +54,8 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import java.util.regex.*;
+
 public class Sites extends AbstractWebScript {
 
 
@@ -871,30 +873,51 @@ public class Sites extends AbstractWebScript {
 
     private JSONArray returnFileName (String destination, String fileName) {
 
-
+        System.out.println("hey");
         NodeRef destination_n = new NodeRef(destination);
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_n);
 
-        int count = 0;
+        int currentHigest = 0;
         String name = fileName.split("\\.")[0];
-        name = name.split("()")[0];
         String ext = fileName.split("\\.")[1];
+        boolean match = false;
 
         for (ChildAssociationRef child : childAssociationRefs) {
 
             String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+            String file_name = "";
+            if (file.contains("(")) {
+                file_name = file.split("\\(")[0];
+            }
+            else {
+                file_name = file.split("\\.")[0];
+            }
 
-            if (file.contains(name)) {
-                count++;
-                System.out.println("count" + count);
+            if (file_name.trim().equals(name.trim())) {
+                match = true;
+                System.out.println("match");
+
+                int number = 0;
+                Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
+                while(m.find()) {
+                    number = Integer.valueOf(m.group(1));
+                    System.out.println(number);
+                }
+
+                if (number > currentHigest) {
+                    currentHigest = number;
+                }
+
             }
         }
 
-        if (count > 0) {
-            System.out.println("what is count:" + count);
 
-            fileName = name + "(" + count + ")." + ext;
+        System.out.println("what is count:" + currentHigest);
+
+        if (match) {
+            currentHigest++;
+            fileName = name + "(" + currentHigest + ")." + ext;
         }
 
         return Utils.getJSONReturnPair("fileName", fileName);

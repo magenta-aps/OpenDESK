@@ -226,7 +226,7 @@ public class Notifications extends AbstractWebScript {
                 project = siteService.getSite(project).getTitle();
             }
 
-            System.out.println("type: " + type);
+
 
             String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATOR);
             NodeRef from = personService.getPerson(name);

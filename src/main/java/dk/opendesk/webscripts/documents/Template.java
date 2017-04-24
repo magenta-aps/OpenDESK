@@ -45,6 +45,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Template extends AbstractWebScript {
@@ -153,19 +155,43 @@ public class Template extends AbstractWebScript {
 
             List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_nodeRef);
 
-            int count = 0;
+            int currentHigest = 0;
+            String name = fileName.split("\\.")[0];
+            String ext = fileName.split("\\.")[1];
+            boolean match = false;
+
             for (ChildAssociationRef child : childAssociationRefs) {
 
                 String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
 
-                if (file.contains(fileName)) {
-                    count++;
+                String file_name = file.split("\\(")[0];
+
+                if (file_name.trim().equals(name.trim())) {
+                    match = true;
+                    System.out.println("match");
+
+                    int number = 0;
+                    Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
+                    while(m.find()) {
+                        number = Integer.valueOf(m.group(1));
+                        System.out.println(number);
+                    }
+
+                    if (number > currentHigest) {
+                        currentHigest = number;
+                    }
+
                 }
             }
 
-            if (count > 0) {
-                fileName = fileName + "(" + count + ")";
+
+            System.out.println("what is count:" + currentHigest);
+
+            if (match) {
+                currentHigest++;
+                fileName = name + "(" + currentHigest + ")." + ext;
             }
+
 
             FileInfo newFile = null;
 
