@@ -222,7 +222,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         var username;
         if(member.userName != undefined)
             username = member.userName;
-        if(member.authority.userName != undefined)
+        else if(member.authority.userName != undefined)
             username = member.authority.userName;
 
         userService.getAvatar(username).then(function (data) {
