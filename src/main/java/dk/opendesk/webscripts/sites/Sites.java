@@ -601,8 +601,7 @@ public class Sites extends AbstractWebScript {
 
             ContentReader pptReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
             ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
-            ContentTransformer pptToPdfTransformer =
-                    contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
+            ContentTransformer pptToPdfTransformer = contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
 
 
             pptToPdfTransformer.transform(pptReader, pdfWriter);
@@ -878,6 +877,7 @@ public class Sites extends AbstractWebScript {
 
         int count = 0;
         String name = fileName.split("\\.")[0];
+        name = name.split("()")[0];
         String ext = fileName.split("\\.")[1];
 
         for (ChildAssociationRef child : childAssociationRefs) {

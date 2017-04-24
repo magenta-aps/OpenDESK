@@ -59,6 +59,8 @@ public interface OpenDeskModel {
     public static String PD_NOTIFICATION_REVIEW_REQUEST = "review-request";
     public static String PD_NOTIFICATION_REVIEW_APPROVED = "review-approved";
     public static String PD_NOTIFICATION_NEWDOC = "new-doc";
+    public static String PD_NOTIFICATION_PROJECT = "project";
+    public static String PD_NOTIFICATION_REJECTED = "review-rejected";
 
 
 

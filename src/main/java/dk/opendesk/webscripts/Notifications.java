@@ -203,9 +203,10 @@ public class Notifications extends AbstractWebScript {
 
         unseen.put("unseen", size);
         result.add(unseen);
+        int i = 0;
 
         for (ChildAssociationRef child : childAssociationRefs) {
-
+            i++;
 
             JSONObject json = new JSONObject();
 
@@ -220,25 +221,22 @@ public class Notifications extends AbstractWebScript {
             String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
             String project = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
 
-            System.out.println("***");
-            System.out.println("link: " + link);
-            System.out.println("type: " + type);
-            System.out.println("***");
-
             // project contains the shortName, we want the display name
             if (project != null) {
                 project = siteService.getSite(project).getTitle();
             }
 
-
+            System.out.println("type: " + type);
 
             String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATOR);
             NodeRef from = personService.getPerson(name);
 
             String from_name = (String)nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME)  + " " + (String)nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
-            String fileName;
+            String fileName = "";
 
-            if (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST) || (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED)) || type.contains(OpenDeskModel.PD_NOTIFICATION_NEWDOC)) {
+            if (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST) || (type.contains(OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED)) ||
+                    (type.contains(OpenDeskModel.PD_NOTIFICATION_REJECTED)) || type.contains(OpenDeskModel.PD_NOTIFICATION_NEWDOC)) {
+
                 NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
                 link = link + "&NID=" + child.getChildRef(); // add this to the link, makes it easy to lookup the notification from the ui
 
@@ -246,7 +244,10 @@ public class Notifications extends AbstractWebScript {
                     fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
 
                 } catch (InvalidNodeRefException e) {
-                    continue; // Skip this notification if the document is no longer available.
+
+                    if (!type.contains(OpenDeskModel.PD_NOTIFICATION_PROJECT)) {
+                        continue; // Skip this notification if the document is no longer available.
+                    }
                 }
 
 
@@ -254,7 +255,6 @@ public class Notifications extends AbstractWebScript {
             else {
                 fileName = "";
             }
-
             try {
                 json.put("nodeRef", child.getChildRef());
                 json.put("subject", subject);
@@ -276,6 +276,8 @@ public class Notifications extends AbstractWebScript {
                 e.printStackTrace();
             }
         }
+
+
         result.add(children);
 
         return result;
@@ -360,7 +362,6 @@ public class Notifications extends AbstractWebScript {
         map.put("comment", comment);
         map.put("project", project);
         map.put("filename", fileName);
-        System.out.println("fileName: " + fileName);
 
         return Utils.getJSONReturnArray(map);
     }
