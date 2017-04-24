@@ -1,8 +1,7 @@
-.od-user {
-}
+.od-user {}
 
 .od-avatar {
-  width:50%;
+  width: 50%;
   border-radius: 50%;
 }
 
@@ -10,10 +9,9 @@
   position: fixed;
   right: $u*3;
   top: 0;
-
   h2 {
     display: inline-block;
-    line-height:  $u*3;
+    line-height: $u*3;
     margin: 0;
     padding-right: $u;
     font-size: $u*1.5;
@@ -26,8 +24,7 @@
 }
 
 .od-user--toggle {
-  top: 0;
-  // right: $u*3;
+  top: 0; // right: $u*3;
   // position: fixed;
   float: right;
   z-index: 1;
@@ -46,54 +43,43 @@
 
 .od-me {
   padding: $u;
+  
+  input[type="file"] {
+    display: none;
+  }
+  .container {
+    position: relative; //width: 50%;
+  }
+  .middle {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    opacity: 0;
+    border-radius: 50%;
+    transition: .5s ease;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  .container:hover {
+    .middle {
+      opacity: 1;
+    }
+  }
+  .text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
 }
 
-.od-btn {
-
-}
+.od-btn {}
 
 #logout {
   position: absolute;
   bottom: 0;
-  left:0;
+  left: 0;
   width: 100%;
-}
-
-input[type="file"] {
-    display: none;
-}
-
-.container {
-    position: relative;
-    //width: 50%;
-}
-
-.middle {
-  position: absolute;
-  // top: 0;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
-  height: 100%;
-  width: 50%;
-  opacity: 0;
-  border-radius: 50%;
-  transition: .5s ease;
-  background-color: rgba(0,0,0,0.4);
-}
-
-.container:hover {
-  .middle {
-    opacity: 1;
-  }
-}
-
-.text {
-  color: white;
-  font-size: 20px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
 }
