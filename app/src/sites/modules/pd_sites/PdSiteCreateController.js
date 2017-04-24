@@ -150,10 +150,10 @@ angular
                             createSiteNotification(siteName, $scope.newSite.projectOwner.userName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);
 
-                            addUserToGroup(siteShortName, $scope.projektGruppe, 'PD_PROJECTGROUP', link);
-                            addUserToGroup(siteShortName, $scope.styreGruppe, 'PD_STEERING_GROUP', link);
-                            addUserToGroup(siteShortName, $scope.arbejdsGruppe, 'PD_WORKGROUP', link);
-                            addUserToGroup(siteShortName, $scope.folgeGruppe, 'PD_MONITORS', link);
+                            addUserToGroup(siteShortName, siteName, $scope.projektGruppe, 'PD_PROJECTGROUP', link);
+                            addUserToGroup(siteShortName, siteName, $scope.styreGruppe, 'PD_STEERING_GROUP', link);
+                            addUserToGroup(siteShortName, siteName, $scope.arbejdsGruppe, 'PD_WORKGROUP', link);
+                            addUserToGroup(siteShortName, siteName, $scope.folgeGruppe, 'PD_MONITORS', link);
 
                             $mdDialog.cancel();
                             window.location.href = link;
@@ -170,7 +170,7 @@ angular
                 );
             }
 
-            function addUserToGroup(siteShortName, group, groupName, link) {
+            function addUserToGroup(siteShortName, siteName, group, groupName, link) {
                 // Creating an empty initial promise that always resolves itself.
                 var promise = $q.all([]);
 
@@ -180,8 +180,8 @@ angular
                     promise = siteService.addUser(siteShortName, userName, groupName).then(
                         function (response) {
 
-                            createSiteNotification(siteShortName, userName, link);
-                            console.log('Added user ' + userName + ' to ' + groupName);
+                            createSiteNotification(siteName, userName, link);
+                            console.log('Added user ' + userName + ' to ' + groupName + ' in project ' + siteName);
                         },
                         function (err) {
                             console.log('ERROR: Problem creating user in project group ' + groupName);
