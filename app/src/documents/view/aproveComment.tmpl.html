@@ -4,6 +4,10 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Godkend dokument</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
             </div>
         </md-toolbar>
 
@@ -11,7 +15,7 @@
             <div style="margin-top: 20px;">
                 <md-input-container>
                     <label>Kommentar</label>
-                    <input type="text" name="comment" required ng-model="comment">
+                    <input type="text" name="comment" required ng-model="comment" md-autofocus>
 
                     <div ng-messages="createSiteForm.newSiteName.$error">
                         <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
@@ -21,7 +25,6 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button ng-click="vm.cancel()">Fortryd</md-button>
             <md-button type="submit" class="md-primary">Godkend</md-button>
         </md-dialog-actions>
 

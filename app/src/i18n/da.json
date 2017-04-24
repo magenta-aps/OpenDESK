@@ -96,7 +96,9 @@
     "LAST_MODIFIED_BY": "Senest ændret af",
     "FROM": "Fra",
     "COMPUTER": "PC",
-    "NEWVERSION": "Overfør ny version"
+    "NEWVERSION": "Overfør ny version",
+    "EDITINLIBRE": "Redigering i LibreOffice",
+    "CLOSEEDIT": "Luk redigering"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"

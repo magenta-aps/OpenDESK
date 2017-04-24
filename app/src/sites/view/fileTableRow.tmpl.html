@@ -25,10 +25,10 @@
                     </md-button>
                     <md-menu-content>
                         <md-menu-item class="menuListHead ">
-                            Ændret
-                            <span style="width: 70px; "></span> Ændret af
+                            {{'COMMON.MODIFIED' | translate}}
+                            <span style="width: 70px; "></span> {{'COMMON.MODIFIED_BY' | translate}}
                         </md-menu-item>
-                        <md-menu-item ng-repeat="h in history " class="menuList ">
+                        <md-menu-item ng-repeat="h in history" class="menuList">
                             <a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}} ">
                                                             {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{
                                                             h.modifier }}</a>
@@ -40,10 +40,9 @@
         </tr>
     </table>
 </td>
-<td>
-    <md-checkbox name="to-esdh " ng-if="content.contentType=='cmis:document' " aria-label="Vælg
-                            fil "></md-checkbox>
+<td style="width:32px">
+    <input type="checkbox" name="to-esdh" ng-model="vm.sendToEsdh" ng-if="content.contentType!='cmis:link' " aria-label="Vælg">
 </td>
-<td>
+<td style="width:32px">
     <div ng-include=" 'app/src/sites/view/siteActionMenu.html' "></div>
 </td>

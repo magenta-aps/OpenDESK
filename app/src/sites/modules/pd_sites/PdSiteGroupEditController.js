@@ -73,8 +73,9 @@ angular
             siteService.addUser( pdg.site.shortName, member.userName, group ).then(
                 function(response) {
                     var link = "/#!/projekter/" + pdg.site.shortName;
-                    createSiteNotification(pdg.site.shortName, member.userName, link);
-                    console.log('Added user ' + member.userName + ' to ' + group);
+                    createSiteNotification(pdg.site.title, member.userName, link);
+                    console.log('Added user ' + member.userName + ' to ' + group + ' in project ');
+                    console.log(pdg.site.title);
                 },
                 function(err) {
                     console.log('ERROR: Problem creating user ' + member.userName + ' in project group ' + group);

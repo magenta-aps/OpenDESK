@@ -29,13 +29,15 @@ function UserController($scope, $log, authService, userService, sessionService) 
     }
     vm.setNotificationPreferences = setNotificationPreferences;
 
-    function uploadAvatar(file) {
+    $scope.uploadAvatar = function(element) {
+        var file = element.files[0];
+        console.log('upload avatar');
+        console.log(file);
         userService.uploadAvatar(file, vm.currentUser.userName).then(function(data) {
             getAvatar();
             return data;
         });
     }
-    vm.uploadAvatar = uploadAvatar;
 
     function getAvatar() {
         return userService.getAvatar(vm.currentUser.userName).then(function (data) {
@@ -43,5 +45,4 @@ function UserController($scope, $log, authService, userService, sessionService) 
         });
     }
     vm.getAvatar = getAvatar;
-
 };

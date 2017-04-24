@@ -5,7 +5,7 @@ angular
     .controller('SiteController', SiteController);
 
 function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
-    alfrescoDownloadService, documentService, notificationsService, authService, $rootScope,
+    alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, $translate,
     searchService, $state, userService, groupService, preferenceService, sessionService, filterService, fileUtilsService) {
 
 
@@ -55,6 +55,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.isAdmin = sessionService.isAdmin();
     vm.newTemplateName = '';
     vm.newFileName = '';
+
+    vm.sendToEsdh = false;
 
     vm.strings = {};
     vm.strings.templateProject = "Template-Project";
@@ -173,10 +175,10 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     function buildBreadCrumbPath(project_title) {
         var title, link;
         if (vm.project.type == vm.strings.templateProject) {
-            title = 'Skabeloner';
+            title = $translate.instant('COMMON.TEMPLATES');
             link = '#!/indstillinger/systemopsætning/skabeloner';
         } else {
-            title = 'Projekter';
+            title = $translate.instant('PROJECT.PROJECTS');
             link = '#!/projekter';
         }
         var paths = [{
@@ -512,6 +514,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     function createSiteNotification(userName, site) {
+        console.log('create notification');
+        console.log(vm.project);
         var subject = "Du er blevet tilføjet til " + vm.project.title;
         var message = "har tilføjet dig til projektet " + vm.project.title + ".";
         var link = "/#!/projekter/" + site + "?type=Project";

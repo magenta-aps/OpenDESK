@@ -96,7 +96,9 @@
     "FILTER": "Filters",
     "FROM": "From",
     "COMPUTER": "PC",
-    "NEWVERSION": "Upload new version"
+    "NEWVERSION": "Upload new version",
+    "EDITINLIBRE": "Edit in LibreOffice",
+    "CLOSEEDIT": "Close editing"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"

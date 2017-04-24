@@ -32,7 +32,7 @@
                             <th class="od-secondary" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                             <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
                             <th colspan="2">
-                                <md-checkbox name="all-to-esdh" aria-label="Vælg alle"></md-checkbox>
+                                <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToEsdh">
                             </th>
                         </tr>
                         </thead>
@@ -114,10 +114,11 @@
 
                     <span flex></span>
 
-                    <md-button ng-if="vm.project.type != vm.strings.templateProject"  ng-click="vm.uploadSbsysDialog($event)" class="md-primary" aria-label="SBSYS">
+                    <md-button ng-show="vm.sendToEsdh" ng-if="vm.project.type != vm.strings.templateProject"  ng-click="vm.uploadSbsysDialog($event)" class="md-primary" aria-label="SBSYS">
+                        <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}</md-tooltip>
 						<i class="material-icons">device_hub</i>
 						<span style="margin-left: 10px; margin-right: 20px;">
-                            {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
+                            {{'ESDH' | translate }}
                         </span>
 					</md-button>
                 </div>
