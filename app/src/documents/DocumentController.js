@@ -53,22 +53,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     };
 
     vm.goBack = function () {
-        console.log(vm.doc.location);
-
-        if(vm.wf) {
-            console.log('lets go back');
-            window.location.replace("/#!/projekter/" + vm.doc.location.site + vm.doc.location.path);
-            return;
-        }
-        var nodeRef = vm.doc.nodeRef.split('/')[3];
-        if ($stateParams.backToDocPreview) {
-            //came from edit doc in documentpreviewer, before goBack in lool
-            window.location.replace("/#!/dokument/" + nodeRef + "?archived=" + $stateParams.showArchived);
-        } else {
-            //came from review doc or edit doc from the documentlist, before goBack in lool
-            $window.history.back();
-        }
-
+        $window.history.back();
     }
 
     vm.godkendDialog = function (event) {
@@ -297,7 +282,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         });
     }
 
-    function confirmLoolEditDocDialog(backToDocPreview) {
+    function confirmLoolEditDocDialog(event) {
         var confirm = $mdDialog.confirm()
             .title('Vil du redigere dette dokument?')
             .htmlContent('<i class="material-icons">info_outline</i><p>Du er nu i gang med at redigere et dokument fra historikken.</p><p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
@@ -308,29 +293,21 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         $mdDialog.show(confirm).then(function () {
             var selectedVersion = $location.search().version;
             documentService.revertToVersion(vm.doc.description, true, vm.doc.nodeRef, selectedVersion).then(function (response) {
-                $state.go('lool', {
-                    'nodeRef': vm.doc.nodeRef,
-                    'backToDocPreview': backToDocPreview,
-                    'showArchived': true
-                });
+                $state.go('lool', { 'nodeRef': vm.doc.nodeRef });
             });
         });
     }
 
 
     //Goes to the libreOffice online edit page
-    vm.goToLOEditPage = function (backToDocPreview) {
+    vm.goToLOEditPage = function () {
         var ref = $stateParams.doc;
         var isFirstInHistory = ref == firstDocumentNode;
         if (docHasParent && !isFirstInHistory) {
             //first promote doc to latest version
-            confirmLoolEditDocDialog(backToDocPreview);
+            confirmLoolEditDocDialog();
         } else {
-            $state.go('lool', {
-                'nodeRef': vm.doc.nodeRef,
-                'backToDocPreview': backToDocPreview,
-                'showArchived': false
-            });
+            $state.go('lool', { 'nodeRef': vm.doc.nodeRef });
         }
     };
 
