@@ -11,7 +11,7 @@
             </md-button>
         </md-menu-item>
 
-        <!--<md-menu-item ng-if="content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="content.contentType == 'cmis:document'">
             <md-button ng-click="vm.previewDocument(content.nodeRef)">
                 <md-icon md-menu-align-target>search</md-icon>
                 {{'COMMON.PREVIEW' | translate }}
@@ -23,7 +23,7 @@
                 <md-icon md-menu-align-target>library_books</md-icon>
                 {{'COMMON.EDIT' | translate }}
             </md-button>
-        </md-menu-item>-->
+        </md-menu-item>
 
         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
