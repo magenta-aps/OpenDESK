@@ -153,8 +153,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     
     vm.createWFNotification = function(comment, wtype) {
 
-        console.log($stateParams);
-
         var creator = authService.getUserInfo().user.userName;
         var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
@@ -166,7 +164,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
             notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then (function (val) {
                 $mdDialog.hide();
-                console.log('am i here');
+                vm.goBack();
                 vm.goBack();
             });
 
