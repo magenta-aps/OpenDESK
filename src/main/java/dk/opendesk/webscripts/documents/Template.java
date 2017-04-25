@@ -163,8 +163,13 @@ public class Template extends AbstractWebScript {
             for (ChildAssociationRef child : childAssociationRefs) {
 
                 String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-
-                String file_name = file.split("\\(")[0];
+                String file_name = "";
+                if (file.contains("(")) {
+                    file_name = file.split("\\(")[0];
+                }
+                else {
+                    file_name = file.split("\\.")[0];
+                }
 
                 if (file_name.trim().equals(name.trim())) {
                     match = true;

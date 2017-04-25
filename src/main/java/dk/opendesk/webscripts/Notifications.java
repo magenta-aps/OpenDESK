@@ -25,6 +25,7 @@ import org.alfresco.service.cmr.repository.Path;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -134,6 +135,8 @@ public class Notifications extends AbstractWebScript {
             }
         }
         catch (Exception e) {
+            System.out.println("hello from notification");
+            System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
         }
@@ -219,11 +222,20 @@ public class Notifications extends AbstractWebScript {
             Boolean seen = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
             String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
             String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
-            String project = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
+            String shortName = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
+            String projectName = "";
 
             // project contains the shortName, we want the display name
-            if (project != null) {
-                project = siteService.getSite(project).getTitle();
+            System.out.println("hvad er project: " + shortName);
+            if (shortName != null) {
+
+                SiteInfo site = siteService.getSite(shortName);
+
+                if (site != null ) {
+                    projectName = siteService.getSite(shortName).getTitle();
+                }
+
+
             }
 
 
@@ -238,18 +250,17 @@ public class Notifications extends AbstractWebScript {
                 OpenDeskModel.PD_NOTIFICATION_REJECTED.equals(type) || OpenDeskModel.PD_NOTIFICATION_NEWDOC.equals(type)) {
 
                 NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
-                link = link + "&NID=" + child.getChildRef(); // add this to the link, makes it easy to lookup the notification from the ui
+
+                String symbol = link.contains("?") ? "&" : "?";
+
+                link = link + symbol + "NID=" + child.getChildRef(); // add this to the link, makes it easy to lookup the notification from the ui
 
                 try {
                     fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
 
                 } catch (InvalidNodeRefException e) {
-
-                    if (!type.contains(OpenDeskModel.PD_NOTIFICATION_PROJECT)) {
                         continue; // Skip this notification if the document is no longer available.
-                    }
                 }
-
 
             }
             else {
@@ -263,7 +274,7 @@ public class Notifications extends AbstractWebScript {
                 json.put("read", read);
                 json.put("seen", seen);
                 json.put("filename", fileName);
-                json.put("project", project);
+                json.put("project", projectName);
                 json.put("from", from_name);
                 json.put("type", type);
 
