@@ -135,7 +135,6 @@ public class Notifications extends AbstractWebScript {
             }
         }
         catch (Exception e) {
-            System.out.println("hello from notification");
             System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
