@@ -226,7 +226,6 @@ public class Notifications extends AbstractWebScript {
             String projectName = "";
 
             // project contains the shortName, we want the display name
-            System.out.println("hvad er project: " + shortName);
             if (shortName != null) {
 
                 SiteInfo site = siteService.getSite(shortName);
