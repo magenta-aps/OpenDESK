@@ -708,6 +708,8 @@
     "CHANGE": "Skift",
     "ADD_MEMBERS": "Tilføj medlemmer",
     "ADD_MEMBER": "Tilføj medlem",
+    "ADD_EXTERNAL_MEMBERS": "Tilføj eksterne medlemmer",
+    "ADD_REMOVE_MEMBERS": "Tilføj og fjern medlemmer",
     "REMOVE_MEMBER": "Fjern medlem",
     "EDIT_MEMBER": "Redigér medlem",
     "CHOOSE_AUTHORITIES": "Vælg autoriteter",

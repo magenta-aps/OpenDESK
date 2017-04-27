@@ -34,6 +34,7 @@ angular
         $scope.addMember = addMember;
         $scope.removeMember = removeMember;
         $scope.addExternalUserToGroup = addExternalUserToGroup;
+        $scope.getFullName = getFullName;
 
         var user = authService.getUserInfo().user;
         var currentUser = user.userName;
@@ -51,7 +52,7 @@ angular
                 function (err) {
                     $mdToast.show(
                         $mdToast.simple()
-                            .textContent('Brugeren kunne oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
+                            .textContent('Brugeren kunne ikke oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
                             .hideDelay(3000)
                     );
                 });
@@ -97,6 +98,14 @@ angular
                 }
             );   
         }
+
+        function getFullName(user) {
+            console.log(user);
+		    try {
+			    return user.firstName + " " + user.lastName;
+		    }
+		    catch(err) {	}
+	    }
         
         
         function updatePDSiteGroups() { 

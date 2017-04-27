@@ -724,6 +724,8 @@
     "CHANGE": "Change",
     "ADD_MEMBERS": "Add members",
     "ADD_MEMBER": "Add member",
+    "ADD_EXTERNAL_MEMBERS": "Add external members",
+    "ADD_REMOVE_MEMBERS": "Add and remove members",
     "REMOVE_MEMBER": "Remove member",
     "EDIT_MEMBER": "Edit member",
     "CHOOSE_AUTHORITIES": "Choose authorities",
