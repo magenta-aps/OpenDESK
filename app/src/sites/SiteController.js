@@ -90,6 +90,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
                 vm.project = result;
                 vm.hasDescription = vm.project.description.trim() === "" ? false : true;
 
+                vm.project.visibility = vm.project.visibility == 'PUBLIC' ? false : true;
+
                 siteService.setType(vm.project.type);
 
                 getUserManagedProjects();
@@ -896,10 +898,14 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     function updateSiteName() {
-        siteService.updateSiteName(vm.project.shortName, vm.project.title, vm.project.description).then(
+        console.log('jeg er ' + vm.project.visibility);
+        siteService.updateSiteName(vm.project.shortName, vm.project.title, vm.project.description,vm.project.visibility).then(
             function (result) {
+                console.log('kig her');
+                console.log(result);
                 vm.project.title = result.title;
                 vm.project.description = result.description;
+                vm.project.visibility = result.visibility;
                 $mdDialog.hide();
                 loadSiteData();
             }

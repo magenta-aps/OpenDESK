@@ -12,22 +12,22 @@
             </md-toolbar>
 
             <md-content class="md-padding">
-                <div layout-margin>
-                    <md-input-container>
+                    <md-input-container class="md-block">
                         <label>{{'COMMON.NAME' | translate}}</label>
                         <input type="text" name="newSiteName" required ng-model="vm.project.title" md-autofocus>
                         <div ng-messages="renameFolderForm.newSiteName.$error">
                             <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                         </div>
                     </md-input-container>
-                </div>
 
-                <div layout-margin>
                     <md-input-container class="md-block">
                         <label>{{'COMMON.DESCRIPTION' | translate}}</label>
                         <textarea ng-model="vm.project.description" md-maxlength="250" maxlength="250"></textarea>
                     </md-input-container>
-                </div>
+
+                <md-checkbox ng-model="vm.project.visibility" aria-label="Gør grupperummet privat">
+                    {{'COMMON.PRIVATE' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
+                </md-checkbox>
             </md-content>
 
             <md-dialog-actions>

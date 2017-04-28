@@ -116,12 +116,13 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 }
             );
         },
-        updateSiteName: function (shortName, newName, description) {
+        updateSiteName: function (shortName, newName, description, visibility) {
             return $http.put('/api/sites/' + shortName, {
                 shortName: shortName,
                 sitePreset: "default",
                 title: newName,
-                description: (description && description !== '') ? description: ''
+                description: (description && description !== '') ? description: '',
+                visibility : (visibility ? 'PRIVATE' : 'PUBLIC')
             }).then(function (response) {
                 return response.data;
             });
