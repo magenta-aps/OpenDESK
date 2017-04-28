@@ -31,7 +31,7 @@
 			</h1>
 		</div>
 		<div ng-show="vm.canEdit" flex="45" style="position: relative; top: 10px;">
-			<md-button ng-click="vm.goToLOEditPage(true)" class="md-text-icon-button md-primary">
+			<md-button ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
 				<i class='material-icons'>edit</i>
 				<span>{{'DOCUMENT.EDIT_DOCUMENT' | translate}}</span>
 			</md-button>
@@ -125,7 +125,7 @@
 						</div>-->
 
 						Du kan
-						<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage">
+						<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage()">
 							Redigere
 						</md-button>
 						dokumentet, inden du godkender eller afviser.
