@@ -1,110 +1,89 @@
 <app-header></app-header>
 
-<md-content layout="column" ng-controller="SearchController as ctrl">
+<div class="od-projects" ng-controller="SearchController as ctrl">
 
-    <div class="sub-toolbar" layout-padding>
-        <h1 class="md-headline search__header">
-            <span class="muted">{{ 'SEARCH.SEARCHING_FOR' | translate }}:</span>
-            {{ ctrl.searchTerm }}
-        </h1>
-        <div flex class="opene-toggleview">
-            <md-button class="md-icon-button md-accent" ng-class="{active: layout == 'grid'}" ng-click="layout = 'grid'" title="{{ 'COMMON.GRID_VIEW' | translate }}"><i class="material-icons">view_stream</i></md-button>
-            <md-button class="md-icon-button md-accent" ng-class="{active: layout == 'list'}" ng-click="layout = 'list'" title="{{ 'COMMON.LIST_VIEW' | translate }}"><i class="material-icons">view_list</i></md-button>
-        </div>
+    <h1 class="od-title">{{'SEARCH.SEARCH' | translate}}</h1>
+
+    <div ng-include="'app/src/sites/view/search.tmpl.html'"></div>
+
+    <div layout='row'>
+        <md-card class="od-filter-sidebar transition" ng-class="showFilters ? 'flex-15' : ''" flex='0'>
+            <md-card-content>
+
+                <section class="facetgroup" data-ng-repeat="facet in facets" ng-if="(fullSearchResults.results | filter: search).length > 0">
+                    <md-autocomplete 
+					md-selected-item="selectedLead"
+					md-selected-item-change="search[facet.shortname] === param ? search[facet.shortname] = undefined : search[facet.shortname] = param" 
+					md-search-text="searchParam" 
+					md-items="param in facet.array"
+					md-item-text="param" 
+					md-floating-label="{{facet.title}}"
+					md-clear-button=true>
+					<span md-highlight-text="searchParam">{{ param }} ({{ (fullSearchResults.results | filter: search | filter:count(facet.shortname, param)).length }})</span>
+				</md-autocomplete>
+                </section>
+            </md-card-content>
+        </md-card>
+
+        <md-card flex>
+            <md-card-content>
+                <md-button aria-label="filter" class="md-icon-button" ng-click="toggleFilters()">
+                    <md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
+                    <md-icon>filter_list</md-icon>
+                </md-button>
+
+                <md-list class="">
+                    <table class="od-members od-members-row od-project-table">
+                        <col style="width:32px">
+                        <col style="width:50%">
+                        <col style="width:20%">
+                        <col style="width:25%">
+                        <thead fix-head>
+                            <tr>
+                                <th class="od-secondary" colspan="2" sort-table="title" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
+                                <th class="od-secondary" sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECT' | translate}} / {{'PROJECT.GROUPROOM' | translate | lowercase}}</th>
+                                <th class="od-secondary" colspan="2" sort-table="created" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in fullSearchResults.results | filter: search">
+                                <td class="icon">
+                                    <a class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                        <i class="material-icons">
+                                            <img class="md-avatar" 
+                                                ng-src="app/assets/images/filetypes/{{item.thumbNailURL}}"
+                                                onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
+                                        </i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <div ng-if="item.type == 'document'">
+                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link od-primary" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                            {{ item.displayName }}
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                    {{ item.site }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <div>
+                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                        {{ "COMMON.MODIFIED_BY" | translate }} {{ item.modifiedBy }} {{ item.modifiedOn | date}}
+                                        </a>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-list>
+                <md-divider></md-divider>
+            </md-card-content>
+        </md-card>
     </div>
-
-    <div layout="row">
-
-        <div flex="25" class="menu">
-            <aside class="searchfilters col-sm-3">
-                <div class="facets">
-
-                    <!-- Get all facets if any search results -->
-                    <section class="facetgroup" data-ng-repeat="facet in facets"
-                             ng-if="(fullSearchResults.results | filter: search).length > 0">
-
-                        <!-- Display facet title -->
-                        <h4>{{facet.title}}</h4>
-
-                        <!-- Get all parameters inside each facet -->
-                        <div data-ng-repeat="param in facet.array">
-
-                            <!-- If the facet is currently used for filtering then only display that parameter under this facet -->
-                            <label ng-if="(search[facet.title] === undefined || search[facet.title] === param) &&
-                            (fullSearchResults.results | filter: search | filter:count(facet.title, param)).length > 0">
-
-                                <!-- Clicking the facet will either enable or disable filtering with this facet parameter -->
-                                <input type="button" ng-click="search[facet.title] === param ? search[facet.title] = undefined : search[facet.title] = param" />
-
-                                <!-- Display the facet parameter name and the count of results with this set -->
-                                {{param}} <span>({{ (fullSearchResults.results | filter: search | filter:count(facet.title, param)).length }})</span> </label>
-                        </div>
-                    </section>
-                </div>
-            </aside>
-        </div>
-
-        <div flex="75" class="search__list">
-            <div ng-repeat="item in fullSearchResults.results | filter: search" ng-show="layout == 'grid'">
-
-                <div ng-if="item.type == 'document'" class="search__item-document">
-                    <div class="search__item__icon">
-                        <span class="material-icons">insert_drive_file</span>
-                    </div>
-                    <div class="search__item__info">
-                        <h2 ng-if="item.type == 'document'" class="search__item__title">
-                            <span class="search__item__bonusinfo muted">{{ "PROJECT.PROJECT" | translate }}: {{ item.site }}</span>
-                            <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}"
-                               class="search__item__link md-hue-1"
-                               ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
-                                {{ item.displayName }}</a>
-                        </h2>
-                        <p class="search__item__desc">{{ item.description }}</p>
-                        <div class="search__item__changed muted">{{ "COMMON.MODIFIED_BY" | translate }} {{ item.modifiedBy }} {{ item.modifiedOn | date }}</div>
-                    </div>
-                </div>
-
-            </div>
-
-            <table ng-show="layout == 'list'" class="list-search">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>{{ "COMMON.TITLE" | translate }}</th>
-                    <th>{{ "COMMON.DESCRIPTION" | translate }}</th>
-                    <th style="text-align: right; padding-right: 24px;">{{ "COMMON.MODIFIED_BY" | translate }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="item in fullSearchResults.results" >
-                    <td>
-                        <div ng-if="item.type == 'document'">
-                            <span class="material-icons">insert_drive_file</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div ng-if="item.type == 'document'">
-                            <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}"
-                               class="search__item__link md-hue-1"
-                               ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
-                                {{ item.displayName }}</a>
-                        </div>
-                    </td>
-                    <td>
-                        {{ item.description + item.projectType }}
-                    </td>
-                    <td style="text-align: right;">
-                        <div class="muted">{{ "COMMON.MODIFIED_BY" | translate }} {{ item.modifiedBy }} {{ item.modifiedOn | date }}</div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-
-    </div>
-
-
-</md-content>
+</div>
 
 <app-footer></app-footer>

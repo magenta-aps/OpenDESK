@@ -12,18 +12,30 @@ angular
  * @param $scope
  * @constructor
  */
-function SearchController($scope, $stateParams, searchService, fileUtilsService, siteService) {
+function SearchController($scope, $interval, $translate, $stateParams, searchService, fileUtilsService, siteService) {
     $scope.searchTerm = $stateParams.searchTerm;
     $scope.selectedFilters = {}; //Keep track of the selected filters
     $scope.filtersQueryString=""; // the selected filters as query string
     $scope.definedFacets = searchService.getConfiguredFacets();
     $scope.layout = 'grid';
+    $scope.showFilters = false;
+
+    function addThumbnailUrl(files) {
+        files.forEach(function (item) {
+            item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24);
+        });
+    };
 
     $scope.count = function (prop, value) {
         return function (el) {
             return el[prop] == value;
         };
     };
+
+    $scope.toggleFilters = function() {
+		$scope.showFilters = !$scope.showFilters;
+		$interval(function(){}, 1,1000);
+	}
 
     function initFacets(){
         searchService.getConfiguredFacets().then(function(data){
@@ -67,9 +79,9 @@ function SearchController($scope, $stateParams, searchService, fileUtilsService,
 
             $scope.facets = [];
 
-            var fileType = {array: [], title: 'fileType'};
-            var modifiedBy = {array: [], title: 'modifiedBy'};
-            var site = {array: [], title: 'site'};
+            var fileType = {array: [], shortname: "fileType", title: $translate.instant('COMMON.FILETYPE')};
+            var modifiedBy = {array: [], shortname: "modifiedBy", title: $translate.instant('COMMON.MODIFIED_BY')};
+            var site = {array: [], shortname: "site", title: $translate.instant('PROJECT.PROJECTNAME')};
 
             if (response.numberFound > 0) {
                 var displayedItems = [];
@@ -102,6 +114,8 @@ function SearchController($scope, $stateParams, searchService, fileUtilsService,
 
                     displayedItems.push(value);
                 }
+
+                addThumbnailUrl(displayedItems);
 
                 $scope.fullSearchResults = {
                     results: displayedItems

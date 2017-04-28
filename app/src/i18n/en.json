@@ -98,7 +98,8 @@
     "COMPUTER": "PC",
     "NEWVERSION": "Upload new version",
     "EDITINLIBRE": "Edit in LibreOffice",
-    "CLOSEEDIT": "Close editing"
+    "CLOSEEDIT": "Close editing",
+    "FILETYPE": "File type"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -800,7 +801,8 @@
     "THIS_TASK_IS_UNASSIGNED": "This task is unassigned",
     "TASK_CREATED_ON_BY": "Created on {{on}} by {{by}}",
     "SHOW_ALL_OPEN_TASKS": "Show all open tasks",
-    "ADHOC_TITLE": "Task allocated by {{initiator}}"
+    "ADHOC_TITLE": "Task allocated by {{initiator}}",
+    "SEND_TO_REVIEW": "Send to review"
   },
   "MENU": {
     "OPEN_MENU": "Open menu",
@@ -914,6 +916,7 @@
     "HEADER": "Projects/Group Rooms",
     "PROJECT": "Project",
     "PROJECTS": "Projects",
+    "PROJECTNAME": "Project name",
     "GROUPROOM": "Group Room",
     "NAME": "Name",
     "DESCRIPTION": "Description",

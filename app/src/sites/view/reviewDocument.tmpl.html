@@ -3,7 +3,7 @@
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Tilføj reviewer</h2>
+                <h2>{{'TASK.SEND_TO_REVIEW' | translate}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.cancel()">
                     <i class="material-icons" aria-label="Luk dialogboks">close</i>
@@ -14,7 +14,7 @@
         <md-dialog-content class="md-padding">
             <div>
                 <md-autocomplete required md-input-name="autocomplete" md-selected-item="newMemberName" md-search-text="searchTextUser" md-items="user in vm.getAllUsers(searchTextUser)"
-                    md-item-text="user.firstName + ' ' + user.lastName" md-floating-label="Hvem vil du tilføje?">
+                    md-item-text="user.firstName + ' ' + user.lastName" md-floating-label="{{'MEMBER.MEMBER' | translate}}">
                     <md-item-template>
                         <span md-highlight-text="searchTextUser">{{ user.firstName }} {{ user.lastName }}</span>
                     </md-item-template>
@@ -23,26 +23,10 @@
                     </div>
                 </md-autocomplete>
 
-                <!--<md-dialog-content class="md-padding">
-                    <div>
-                        <md-input-container>
-                            <label>Emne</label>
-                            <input type="text" name="subject" required ng-model="subject">
-
-                            <div ng-messages="createSiteForm.newSiteName.$error">
-                                <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                </md-dialog-content>
-
-                <!--<input type="hidden" name="subject" ng-model="subject" ng-value="test overskrift" />-->
-
                 <md-dialog-content class="md-padding">
                     <div>
                         <md-input-container class="md-block">
-                            <label>Kommentar</label>
-                            <!--<input type="text" name="comment" required ng-model="comment">-->
+                            <label>{{'COMMON.COMMENT' | translate}}</label>
 
                             <textarea name='comment' required ng-model="comment" md-maxlength="250" maxlength="250" rows="2" md-select-on-focus=""></textarea>
 
@@ -52,13 +36,10 @@
                         </md-input-container>
                     </div>
                 </md-dialog-content>
-
-
             </div>
         </md-dialog-content>
 
         <md-dialog-actions>
-            <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
             <md-button type="submit" class="md-primary">{{'COMMON.ADD' | translate}}</md-button>
         </md-dialog-actions>
 

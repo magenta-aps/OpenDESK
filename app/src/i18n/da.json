@@ -98,7 +98,8 @@
     "COMPUTER": "PC",
     "NEWVERSION": "Overfør ny version",
     "EDITINLIBRE": "Redigering i LibreOffice",
-    "CLOSEEDIT": "Luk redigering"
+    "CLOSEEDIT": "Luk redigering",
+    "FILETYPE": "Dokumenttype"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -779,7 +780,8 @@
     "ACTUAL_APPROVAL_PERCENTAGE": "Aktuel godkendelsesprocent",
     "TASK_CREATED_ON_BY": "Oprettet d. {{on}} af {{by}}",
     "SHOW_ALL_OPEN_TASKS": "Alle opgaver",
-    "ADHOC_TITLE": "Opgaven er tildelt af {{initiator}}"
+    "ADHOC_TITLE": "Opgaven er tildelt af {{initiator}}",
+    "SEND_TO_REVIEW": "Send til godkendelse"
   },
   "MENU": {
     "OPEN_MENU": "Åben menu",
@@ -888,6 +890,7 @@
     "HEADER": "Projekter/Grupperum",
     "PROJECT": "Projekt",
     "PROJECTS": "Projekter",
+    "PROJECTNAME": "Projektnavn",
     "GROUPROOM": "Grupperum",
     "NAME": "Navn",
     "DESCRIPTION": "Beskrivelse",

@@ -1,3 +1,7 @@
 .od-menu {
   z-index: 1;
+  position: absolute;
+  top: 0;
+  height: $u*3;
+  overflow: hidden;
 }

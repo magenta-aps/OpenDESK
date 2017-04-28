@@ -9,6 +9,7 @@
   position: fixed;
   right: $u*3;
   top: 0;
+  z-index: 1;
   h2 {
     display: inline-block;
     line-height: $u*3;
@@ -16,6 +17,7 @@
     padding-right: $u;
     font-size: $u*1.5;
     font-weight: 400;
+    color: white;
   }
 }
 

@@ -405,7 +405,11 @@ h2 {
   }
 
   md-card-content {
-    min-width: 200px;
+    min-width: 100px;
+  }
+
+  md-autocomplete {
+    min-width: 100px;
   }
 
   md-input-container {
