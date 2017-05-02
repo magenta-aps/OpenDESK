@@ -90,10 +90,10 @@ angular
             siteService.removeUser( pdg.site.shortName, member.username, group ).then(
 
                 function(response) {
-                    console.log('Removed user ' + u + ' from ' + group);
+                    console.log('Removed user ' + member.username + ' from ' + group);
                 },
                 function(err) {
-                    console.log('ERROR: Problem removing user ' + u + ' from project group ' + group);
+                    console.log('ERROR: Problem removing user ' + member.username + ' from project group ' + group);
                     console.log(err);
                 }
             );   
