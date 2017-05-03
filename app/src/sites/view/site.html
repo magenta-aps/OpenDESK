@@ -18,7 +18,7 @@
     </div>
 
     <div layout-gt-sm="row">
-        <md-card flex-gt-sm="vm.project.type == vm.strings.templateProject : 75 ? 100">
+        <md-card flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
             <md-card-content>
                 <h2 class="od-title-icon od-primary"><i class="material-icons">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}</h2>
 
