@@ -87,13 +87,13 @@ angular
         
         
         function removeMember(member, group) {
-            siteService.removeUser( pdg.site.shortName, member.username, group ).then(
+            siteService.removeUser( pdg.site.shortName, member.userName, group ).then(
 
                 function(response) {
-                    console.log('Removed user ' + u + ' from ' + group);
+                    console.log('Removed user ' + member.userName + ' from ' + group);
                 },
                 function(err) {
-                    console.log('ERROR: Problem removing user ' + u + ' from project group ' + group);
+                    console.log('ERROR: Problem removing user ' + member.userName + ' from project group ' + group);
                     console.log(err);
                 }
             );   
