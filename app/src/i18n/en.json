@@ -100,7 +100,8 @@
     "NEWVERSION": "Upload new version",
     "EDITINLIBRE": "Edit in LibreOffice",
     "CLOSEEDIT": "Close editing",
-    "FILETYPE": "File type"
+    "FILETYPE": "File type",
+    "LOCAL_DOCUMENT": "Local document"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"

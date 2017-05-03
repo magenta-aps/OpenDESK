@@ -100,7 +100,8 @@
     "NEWVERSION": "Overfør ny version",
     "EDITINLIBRE": "Redigering i LibreOffice",
     "CLOSEEDIT": "Luk redigering",
-    "FILETYPE": "Dokumenttype"
+    "FILETYPE": "Dokumenttype",
+    "LOCAL_DOCUMENT": "Lokalt dokument"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"

@@ -2,11 +2,10 @@
 
 	<h1 class="od-title">{{'PROJECT.HEADER' | translate}}</h1>
 
-	<div ng-include="'app/src/sites/view/search.tmpl.html'"></div>
-
 	<div layout='row'>
-		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0'>
+		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0' ng-show="vm.showFilters">
 			<md-card-content>
+				<h3 class="od-primary">{{'COMMON.FILTER' | translate}}</h3>
 				<md-input-container class="md-block show-all">
 					<md-checkbox name="show-all" ng-model="vm.showall">
 						{{'COMMON.SHOW' | translate}} {{'COMMON.ALL' | translate | lowercase}}
@@ -66,13 +65,13 @@
 		</md-card>
 
 		<md-card flex>
-			<md-card-content>
+			<md-card-content class="od-content-height">
 				<md-button aria-label="filter" class="md-icon-button" ng-click="vm.toggleFilters()">
 					<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
 					<md-icon>filter_list</md-icon>
 				</md-button>
 
-				<md-list class="">
+				<md-list class="od-list-height">
 				<table class="od-members od-members-row od-project-table">
 					<col style="width:32px">
 					<col style="width:40%">
@@ -83,11 +82,11 @@
 					<col style="width:32px">
 						<thead fix-head>
 							<tr>
-								<th class="od-secondary" colspan="2" sort-table="title" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
+								<th class="od-secondary" colspan="2" sort-table="title" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
 								<th class="od-secondary" sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
 								<th class="od-secondary" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
 								<th class="od-secondary" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
-								<th class="od-secondary" colspan="2" sort-table="created" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
+								<th class="od-secondary" colspan="2" sort-table="created" sort-default="reverse" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
 							</tr>
 						</thead>
 						<tbody>

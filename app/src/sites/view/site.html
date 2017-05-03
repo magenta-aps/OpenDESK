@@ -1,30 +1,20 @@
+<h1 class="od-title">
+    <span ng-if="vm.project.type == vm.strings.templateProject">{{'COMMON.TEMPLATEPROJECT' | translate}} :</span>
+    <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
+    <span ng-if="vm.project.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span>
+    {{ vm.project.title }}
+</h1>
+
 <div class="od-projects" ng-show="vm.isMember || vm.project.visibility == 'PUBLIC'">
-
-    <h1 class="od-title">
-        <span ng-if="vm.project.type == vm.strings.templateProject">{{'COMMON.TEMPLATEPROJECT' | translate}} :</span>
-        <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
-        <span ng-if="vm.project.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span>
-        {{ vm.project.title }}</h1>
-
-    <div layout="row" layout-align="space-between center">
-        <a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
-            {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }}
-            <span ng-if="vm.project.type == vm.strings.templateProject">{{'SYSTEM_SETTINGS.SYSTEM_SETTINGS' | translate | lowercase}}</span>
-            <span ng-if="vm.project.type != vm.strings.templateProject">{{'PROJECT.PROJECTS' | translate | lowercase}}</span>  
-            <!--{{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}-->
-        </a>
-
-        <div ng-include="'app/src/sites/view/search.tmpl.html'"></div>
-    </div>
 
     <div layout-gt-sm="row">
         <md-card flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
-            <md-card-content>
+            <md-card-content class="od-content-height">
                 <h2 class="od-title-icon od-primary"><i class="material-icons">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}</h2>
 
                 <breadcrumb paths="vm.paths"></breadcrumb>
 
-                <md-list class="sortHead">
+                <md-list class="sortHead od-list-height">
 
                     <table class="od-members od-members-row">
                         <thead fix-head>
@@ -32,6 +22,7 @@
                             <th class="od-secondary" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                             <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
                             <th colspan="2">
+                                <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
                                 <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToEsdh">
                             </th>
                         </tr>
@@ -70,7 +61,7 @@
                             </md-button>
                             <md-menu-content>
                                 <md-menu-item>
-                                    <md-button ng-click="vm.uploadDocumentsDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}}  {{'COMMON.COMPUTER' | translate}}</md-button>
+                                    <md-button ng-click="vm.uploadDocumentsDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
                                 </md-menu-item>
                                 <md-menu-item ng-if="vm.project.type != vm.strings.templateProject">
                                     <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}}  {{'ESDH' | translate}} </md-button>
@@ -116,9 +107,8 @@
 
                     <md-button ng-show="vm.sendToEsdh" ng-if="vm.project.type != vm.strings.templateProject"  ng-click="vm.uploadSbsysDialog($event)" class="md-primary" aria-label="SBSYS">
                         <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}</md-tooltip>
-						<i class="material-icons">device_hub</i>
 						<span style="margin-left: 10px; margin-right: 20px;">
-                            {{'ESDH' | translate }}
+                            {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
                         </span>
 					</md-button>
                 </div>
