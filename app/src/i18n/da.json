@@ -175,6 +175,7 @@
     "CASE_ADDED_TO_FAVORITE": "Sagen er føjet til dine favoritter og du bliver notificeret når der sker nye hændelser på sagen"
   },
   "DOCUMENT": {
+    "DOCUMENT_TEMPLATES": "Dokumentskabeloner",
     "STATUS_CHANGED_SUCCESS": "Status er ændret",
     "CATEGORY": {
       "annex": "Bilag",
@@ -891,6 +892,7 @@
     "PROJECT": "Projekt",
     "PROJECTS": "Projekter",
     "PROJECTNAME": "Projektnavn",
+    "PROJECT_TEMPLATES": "Projektskabeloner",
     "GROUPROOM": "Grupperum",
     "NAME": "Navn",
     "DESCRIPTION": "Beskrivelse",

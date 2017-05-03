@@ -177,7 +177,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     function buildBreadCrumbPath(project_title) {
         var title, link;
         if (vm.project.type == vm.strings.templateProject) {
-            title = $translate.instant('COMMON.TEMPLATES');
+            title = $translate.instant('SYSTEM_SETTINGS.SYSTEM_SETTINGS');
             link = '#!/indstillinger/systemopsætning/skabeloner';
         } else {
             title = $translate.instant('PROJECT.PROJECTS');

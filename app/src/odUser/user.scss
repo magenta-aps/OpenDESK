@@ -19,11 +19,16 @@
     font-weight: 400;
     color: white;
   }
+
+  .od-user-admin {
+    padding-right: $u*4;
+  }
 }
 
 .od-user-name {
   // position: fixed;
 }
+
 
 .od-user--toggle {
   top: 0; // right: $u*3;

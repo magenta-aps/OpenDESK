@@ -9,7 +9,7 @@
     <div layout="row" layout-align="space-between center">
         <a class="md-button" style="font-size: 14px" href="{{vm.project.type == vm.strings.templateProject ? '#!/indstillinger/systemopsætning/skabeloner' : '#!/projekter'}}"><i class="material-icons">arrow_back</i>
             {{'COMMON.BACK' | translate }} {{'COMMON.TO' | translate | lowercase }}
-            <span ng-if="vm.project.type == vm.strings.templateProject">{{'COMMON.TEMPLATES' | translate | lowercase}}</span>
+            <span ng-if="vm.project.type == vm.strings.templateProject">{{'SYSTEM_SETTINGS.SYSTEM_SETTINGS' | translate | lowercase}}</span>
             <span ng-if="vm.project.type != vm.strings.templateProject">{{'PROJECT.PROJECTS' | translate | lowercase}}</span>  
             <!--{{vm.project.type == vm.strings.templateProject ? "skabeloner" : "projekter"}}-->
         </a>
@@ -18,7 +18,7 @@
     </div>
 
     <div layout-gt-sm="row">
-        <md-card flex-gt-sm="75">
+        <md-card flex-gt-sm="vm.project.type == vm.strings.templateProject : 75 ? 100">
             <md-card-content>
                 <h2 class="od-title-icon od-primary"><i class="material-icons">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}</h2>
 
@@ -124,7 +124,7 @@
                 </div>
             </md-card-content>
         </md-card>        
-        <div flex-gt-sm="25">
+        <div flex-gt-sm="25" ng-if="vm.project.type != vm.strings.templateProject">
             <div ng-include="'app/src/sites/modules/pd_sites/view/groups_overview.html'"></div>
         </div>
     </div>

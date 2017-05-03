@@ -173,6 +173,7 @@
     "CASE_ADDED_TO_FAVORITE": "You have now added this case to your favorite cases and will be notified whenever the case is updated"
   },
   "DOCUMENT": {
+     "DOCUMENT_TEMPLATES": "Document templates",
     "STATUS_CHANGED_SUCCESS": "Status has been changed successfully",
     "CATEGORY": {
       "annex": "Annex",
@@ -917,6 +918,7 @@
     "PROJECT": "Project",
     "PROJECTS": "Projects",
     "PROJECTNAME": "Project name",
+    "PROJECT_TEMPLATES": "Project templates",
     "GROUPROOM": "Group Room",
     "NAME": "Name",
     "DESCRIPTION": "Description",
