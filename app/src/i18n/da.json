@@ -84,6 +84,7 @@
     "TEMPLATES": "Skabeloner",
     "NO_TEMPLATE": "Ingen skabelon",
     "PRIVATE": "Privat",
+    "CLOSED": "Lukket",
     "AND": "Og",
     "MANAGEMENT": "Styring",
     "WITH": "Med",
