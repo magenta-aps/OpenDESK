@@ -170,6 +170,7 @@ public class Contents extends AbstractWebScript {
 
                         json.put("nodeid", childNodeRef.getId());
                         json.put("destination_link", linkSiteShortName);
+                        json.put("nodeRef", childNodeRef);
 
                         if (linkNodeRef != null) {
                             json.put("destination_nodeid", linkNodeRef.getId());
