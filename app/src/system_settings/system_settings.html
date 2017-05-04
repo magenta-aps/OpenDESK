@@ -7,10 +7,6 @@
                     <md-icon class="md-default-theme" class="material-icons">{{sysSetPage.icon}}</md-icon>
                     <p>{{ sysSetPage.labelKey | translate}}</p>
                 </md-list-item>
-                <md-list-item ng-if="!sysSetPage.isAdminOnly || vm.isAdmin" href="#!/projekter/{{vm.shortName}}" ui-sref-active="active">
-                    <md-icon class="md-default-theme" class="material-icons">content_copy</md-icon>
-                    <p>Dokumentskabeloner</p>
-                </md-list-item>
             </md-list>
         </md-card-content>
     </md-card>

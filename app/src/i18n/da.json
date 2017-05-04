@@ -84,6 +84,7 @@
     "TEMPLATES": "Skabeloner",
     "NO_TEMPLATE": "Ingen skabelon",
     "PRIVATE": "Privat",
+    "CLOSED": "Lukket",
     "AND": "Og",
     "MANAGEMENT": "Styring",
     "WITH": "Med",
@@ -99,7 +100,8 @@
     "NEWVERSION": "Overfør ny version",
     "EDITINLIBRE": "Redigering i LibreOffice",
     "CLOSEEDIT": "Luk redigering",
-    "FILETYPE": "Dokumenttype"
+    "FILETYPE": "Dokumenttype",
+    "LOCAL_DOCUMENT": "Lokalt dokument"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"

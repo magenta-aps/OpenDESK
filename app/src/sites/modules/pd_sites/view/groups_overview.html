@@ -187,7 +187,7 @@
 			</div>
 		</div>
 
-		<div layout="row" layout-align="start center" class="btnAlign">
+		<md-card-actions layout="row" layout-align="start center" class="btnAlign">
 			<md-button ng-if="vm.project.type == 'PD-Project'" class="md-primary md-icon-button" ng-style="vm.isManager ? 'margin-left: 30px;' : ''"
 			    ng-click="pd.doPDF()" aria-label="Download PDF med grupper">
 				<md-tooltip md-direction="top">{{'MEMBER.DOWNLOAD_PDF' | translate}}</md-tooltip>
@@ -202,7 +202,7 @@
 				<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'MEMBER.ADD_MEMBER' | translate}}</md-tooltip>
 				<i class="material-icons">person_add</i>
 			</md-button>
-		</div>
+		</md-card-actions>
 	</md-card-content>
 </md-card>
 </span>

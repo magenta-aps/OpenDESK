@@ -1,6 +1,13 @@
 angular
     .module('openDeskApp')
     .controller('SearchController', SearchController)
+    .directive('odSearchbar', function () {
+        return {
+            restrict: 'E',
+            scope: {},
+            templateUrl: 'app/src/search/view/searchbar.html'
+        };
+    })
     .filter('count', function() {
         return function (collection, key) {
             return out;

@@ -86,6 +86,7 @@
     "NO_TEMPLATE": "No template",
     "TEMPLATEPROJECT": "Template project",
     "PRIVATE": "Private",
+    "CLOSED": "Closed",
     "AND": "And",
     "MANAGEMENT": "Management",
     "WITH": "With",
@@ -99,7 +100,8 @@
     "NEWVERSION": "Upload new version",
     "EDITINLIBRE": "Edit in LibreOffice",
     "CLOSEEDIT": "Close editing",
-    "FILETYPE": "File type"
+    "FILETYPE": "File type",
+    "LOCAL_DOCUMENT": "Local document"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
