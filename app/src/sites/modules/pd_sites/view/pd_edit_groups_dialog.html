@@ -20,15 +20,16 @@
 				<div>
 					<md-chips ng-model="groups['PD_PROJECTGROUP']" md-autocomplete-snap md-require-match="true" md-on-remove="removeMember($chip, 'PD_PROJECTGROUP')"
 					    md-on-add="addMember($chip, 'PD_PROJECTGROUP')">
-						<md-autocomplete 
-							md-selected-item="selectedProjGrpItem" 
-							md-search-text="srchprjgrptxt" 
+						<md-autocomplete
+							md-selected-item="selectedProjGrpItem"
+							md-search-text="srchprjgrptxt"
 							md-items="pgitem in searchPeople(srchprjgrptxt)"
-						    md-item-text="pgitem.firstName" 
+						    md-item-text="pgitem.firstName"
 							placeholder="{{'PROJECT.MEMBER' | translate}}">
 							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
 						</md-autocomplete>
 						<md-chip-template>
+                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
 							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span><br>
 						</md-chip-template>
 					</md-chips>
@@ -78,7 +79,7 @@
 						</md-autocomplete>
 						<md-chip-template>
 							<span>
-                                <!--<span ng-if="$chip.displayName">{{ $chip.displayName }}</span>-->
+                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
 							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
 							</span>
 						</md-chip-template>
@@ -128,7 +129,7 @@
 						</md-autocomplete>
 						<md-chip-template>
 							<span>
-                                <!--<span ng-if="$chip.displayName">{{ $chip.displayName }}</span>-->
+                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
 							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
 							</span>
 						</md-chip-template>
@@ -178,7 +179,7 @@
 						</md-autocomplete>
 						<md-chip-template>
 							<span>
-                                <!--<span ng-if="$chip.displayName">{{ $chip.displayName }}</span>-->
+                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
 							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
 							</span>
 						</md-chip-template>

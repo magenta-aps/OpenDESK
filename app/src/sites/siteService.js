@@ -15,50 +15,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         getType: function() {
             return _currentSiteType;
         },
-
-
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
             });
-        },
-        getAllMembers: function (siteShortName, siteType) {
-
-            //console.log("siteType :" + siteType);
-            var allMembers = [];
-
-            return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(
-                function (response) {
-                    var site_members = response.data;
-    
-                    for (var i in site_members) {
-                        allMembers.push(site_members[i].authority.userName);
-                    }
-    
-                    if (siteType === "PD-Project") {
-                        return $http.post("/alfresco/service/groups", {
-                            PARAM_METHOD : "getAllMembers",
-                            PARAM_SITE_SHORT_NAME: siteShortName
-                        }).then(function (response) {
-                            var pd_site_members = response.data[0];
-    
-                            for (var i in pd_site_members) {
-                                var username = pd_site_members[i].username;
-                                if(allMembers.indexOf(username) == -1)
-                                    allMembers.push(username);
-                            }
-                            return allMembers;
-                        })
-                    } else {
-                        return allMembers;
-                    }
-                },
-                function (err) {
-                    //console.log('Error retrieving site members');
-                    //console.log(err);
-                }
-                
-            );
         },
         getCurrentUserSiteRole: function (siteShortName) {
             //https:frank.opendesk.dk/alfresco/s/api/sites/Heinetestxx

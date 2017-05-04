@@ -33,14 +33,12 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     $scope.object = [];
     $scope.history = [];
     $scope.members = [];
-    $scope.allMembers = [];
     $scope.roles = [];
     $scope.roles_translated = [];
 
     var originatorEv;
     var vm = this;
 
-    vm.allMembers = [];
     vm.project = {};
     vm.userManagedProjects = [];
     vm.path = $stateParams.path;
@@ -222,18 +220,13 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         $mdOpenMenu(event);
     };
 
-    vm.openMemberInfo = function (member, event) {
-        var username;
-        if(member.userName != undefined)
-            username = member.userName;
-        else if(member.authority.userName != undefined)
-            username = member.authority.userName;
-
-        userService.getAvatar(username).then(function (data) {
+    vm.openMemberInfo = function (username, event) {
+        userService.getPerson(username).then(function (member) {
+            var avatar = userService.getAvatarFromUser(member);
             $mdDialog.show({
                 controller: ['$scope', 'member', function ($scope, member) {
                     $scope.member = member;
-                    $scope.avatar = data;
+                    $scope.avatar = avatar;
                 }],
                 templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
                 locals: {
@@ -516,11 +509,9 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     function createSiteNotification(userName, site) {
-        console.log('create notification');
-        console.log(vm.project);
         var subject = "Du er blevet tilføjet til " + vm.project.title;
         var message = "har tilføjet dig til projektet " + vm.project.title + ".";
-        var link = "/#!/projekter/" + site + "?type=Project";
+        var link = "/#!/projekter/" + site;
         createNotification(userName, subject, message, link, 'project', site);
     }
 
@@ -537,18 +528,18 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         var promise = $q.all([]);
 
         // Iterating list of items.
-        angular.forEach($scope.allMembers, function (userName) {
-            if (userName != vm.currentUser.userName) {
+        angular.forEach($scope.members, function (member) {
+            if (member.authority.userName != vm.currentUser.userName) {
                 var preferenceFilter = "dk.magenta.sites.receiveNotifications";
 
-                promise = preferenceService.getPreferences(userName, preferenceFilter).then(function (data) {
+                promise = preferenceService.getPreferences(member.authority.userName, preferenceFilter).then(function (data) {
                     var receiveNotifications = "true";
                     if (data[preferenceFilter] != null) {
                         receiveNotifications = data[preferenceFilter];
                     }
                     if (receiveNotifications != null && receiveNotifications == "true") {
-                        console.log("Sending notification to : " + userName);
-                        createNotification(userName, subject, message, link, 'new-doc', shortName);
+                        console.log("Sending notification to : " + member.authority.userName);
+                        createNotification(member.authority.userName, subject, message, link, 'new-doc', shortName);
                     }
                 });
             }
@@ -570,9 +561,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     function loadMembers() {
         siteService.getSiteMembers(vm.project.shortName).then(function (val) {
             $scope.members = val;
-        });
-        siteService.getAllMembers(vm.project.shortName, vm.project.type).then(function (val) {
-            $scope.allMembers = val;
         });
     }
 

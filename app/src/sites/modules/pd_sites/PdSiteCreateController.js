@@ -134,7 +134,7 @@ angular
                     $scope.newSite.desc,
                     $scope.newSite.sbsys,
                     $scope.newSite.center_id,
-                    $scope.newSite.projectOwner.userName,
+                    $scope.newSite.projectOwner.shortName,
                     $scope.newSite.manager.userName,
                     visibility,
                     $scope.newSite.template.name
@@ -147,7 +147,7 @@ angular
                             var siteName = $scope.newSite.siteName;
                             var link = "/#!/projekter/" + siteShortName;
                             
-                            createSiteNotification(siteName, $scope.newSite.projectOwner.userName, link);
+                            createSiteNotification(siteName, $scope.newSite.projectOwner.shortName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);
 
                             addUserToGroup(siteShortName, siteName, $scope.projektGruppe, 'PD_PROJECTGROUP', link);
