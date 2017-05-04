@@ -84,10 +84,10 @@ md-input-container.md-input-has-value label {
 }
 
 md-list {
-  //max-height: 350px;
-  height: -webkit-calc(100vh - 46px - #{$u*19}) !important;
-  height: -moz-calc(100vh - 46px - #{$u*19}) !important;
-  height: calc(100vh - 46px - #{$u*19}) !important;
+  max-height: 350px;
+  // height: -webkit-calc(100vh - 46px - #{$u*19}) !important;
+  // height: -moz-calc(100vh - 46px - #{$u*19}) !important;
+  // height: calc(100vh - 46px - #{$u*19}) !important;
   max-width: 2400px;
   overflow: auto;
 }

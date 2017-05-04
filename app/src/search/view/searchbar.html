@@ -9,7 +9,6 @@
 				md-items="result in vm.getAutoSuggestions(searchText)"
 			    md-item-text="result.name" 
 				md-floating-label="{{'SEARCH.DOCUMENTS' | translate }}"
-				md-dropdown-items="5"
 				md-menu-class="search-documents">
 				<md-item-template>
 					<div ng-click="vm.gotoPath(result.nodeRef)">

@@ -9,12 +9,12 @@
 
     <div layout-gt-sm="row">
         <md-card flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
-            <md-card-content class="od-content-height">
+            <md-card-content>
                 <h2 class="od-title-icon od-primary"><i class="material-icons">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}</h2>
 
                 <breadcrumb paths="vm.paths"></breadcrumb>
 
-                <md-list class="sortHead od-list-height">
+                <md-list class="sortHead">
 
                     <table class="od-members od-members-row">
                         <thead fix-head>
@@ -52,7 +52,7 @@
 
                 <md-divider></md-divider>
 
-                <div layout="row" layout-align="start center" class="btnAlign">
+                <md-card-actions layout="row" layout-align="start center" class="btnAlign">
                     <div layout="column">
                         <md-menu>
                             <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Upload dokumenter">
@@ -111,7 +111,7 @@
                             {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
                         </span>
 					</md-button>
-                </div>
+                </md-card-actions>
             </md-card-content>
         </md-card>        
         <div flex-gt-sm="25" ng-if="vm.project.type != vm.strings.templateProject">

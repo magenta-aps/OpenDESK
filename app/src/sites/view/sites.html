@@ -65,13 +65,13 @@
 		</md-card>
 
 		<md-card flex>
-			<md-card-content class="od-content-height">
+			<md-card-content class="">
 				<md-button aria-label="filter" class="md-icon-button" ng-click="vm.toggleFilters()">
 					<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
 					<md-icon>filter_list</md-icon>
 				</md-button>
 
-				<md-list class="od-list-height">
+				<md-list class="">
 				<table class="od-members od-members-row od-project-table">
 					<col style="width:32px">
 					<col style="width:40%">
@@ -159,7 +159,7 @@
 				</md-list>
 				<md-divider></md-divider>
 
-				<div layout="row" layout-align="start center" class="btnAlign">
+				<md-card-actions layout="row" layout-align="start center" class="btnAlign">
 					<md-button ng-click="vm.newSite($event)" class="md-primary" aria-label="Opret nyt grupperum">
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate}}</span>
@@ -170,7 +170,7 @@
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate}}</span>
 					</md-button>
-				</div>
+				</md-card-actions>
 			</md-card-content>
 		</md-card>
 	</div>

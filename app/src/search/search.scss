@@ -4,7 +4,11 @@
 
 od-searchbar {
   md-autocomplete {
-    height: 20px;
+    //height: 20px;
+  }
+
+  md-input-focused {
+    border: none !important;
   }
 
   .od-search {
@@ -17,7 +21,7 @@ od-searchbar {
     border-radius: 0.25em;
     margin-right: $u/2;
     margin-bottom: $u;
-    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+    //box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   }
   i {
     position: absolute;

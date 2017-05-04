@@ -3,8 +3,8 @@ angular
     .config(config);
 
 function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) {
-    systemSettingsPagesServiceProvider.addPage('Skabeloner', 'administration.systemsettings.templateList', true);
-    systemSettingsPagesServiceProvider.addPage('Notifikationer', 'administration.systemsettings.notifications', false);
+    systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'administration.systemsettings.templateList', true);
+    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'administration.systemsettings.document', true);
 
     $stateProvider.state('administration.systemsettings', {
         url: '/systemopsætning',
@@ -33,7 +33,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         }
     }).state('administration.systemsettings.document', {
         parent: 'site',
-        url: '/projekter/:projekt{path:.*}',
+        url: '/projekter/DokumentSkabeloner',
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/site.html',
