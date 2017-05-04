@@ -13,6 +13,10 @@ od-searchbar {
 
   .od-search {
   padding-top: 10px;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: calc(50vw - 175px);
   form {
     width: 350px;
     height: 30px;
