@@ -1,5 +1,52 @@
 var globalHeaderMenu = require('../common/globalHeader.po.js');
 
+<<<<<<< HEAD
+var AddMemberPage = function () {
+    
+    var public = {};
+
+
+    public.getMembers = function() {
+
+        var result =  element.all(by.repeater('member in members'));
+
+        return result
+    }
+
+
+    public.addMember = function (project_name, member_name, member_role) {
+
+        console.log("inside addMember");
+
+        var newMemberBtn = element(by.css('[ng-click="vm.newMember($event)"]'));
+
+        newMemberBtn.click();
+
+        browser.driver.sleep(500);
+
+        var addMemberName_element = element(by.css('md-autocomplete input#newMember'));
+        var addMemberRole_element = element(by.model('newMemberRole'));
+
+        addMemberName_element.sendKeys(member_name);
+
+        browser.sleep(1500);
+        browser.driver.actions().mouseMove(addMemberName_element);
+        addMemberName_element.sendKeys(protractor.Key.ARROW_DOWN);
+        addMemberName_element.sendKeys(protractor.Key.ENTER);
+
+        addMemberRole_element.sendKeys(member_role);
+
+
+        browser.driver.sleep(200);
+
+        var addMemberBtn = element(by.id('addMemberBtn'));
+
+        addMemberBtn.click();
+
+        browser.driver.sleep(1000);
+
+    }
+=======
 var LoginPage = function () {
     
     var public = {};
@@ -43,8 +90,13 @@ var LoginPage = function () {
         element(by.xpath('//button[@id="logout"]')).click();
         browser.driver.sleep(2000);
     };
+>>>>>>> develop
 
     return public;
 };
 
+<<<<<<< HEAD
+module.exports = AddMemberPage();
+=======
 module.exports = LoginPage();
+>>>>>>> develop
