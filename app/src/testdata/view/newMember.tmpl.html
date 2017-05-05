@@ -1,0 +1,48 @@
+<md-dialog aria-label="New member"  ng-cloak>
+	<form name="addMemberForm" ng-submit="vm.addMemberToSite(vm.project, newMemberName.userName, newMemberRole);">
+	
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Tilføj medlem til projekt</h2>
+			</div>
+		</md-toolbar>
+		
+		<md-dialog-content class="md-padding">
+			<div>
+
+				<md-autocomplete
+					required
+					md-input-name="autocomplete"
+					md-selected-item="newMemberName"
+					md-search-text="searchText"
+					md-items="user in vm.getAllUsers(searchText)"
+					md-item-text="user.firstName + ' ' + user.lastName"
+					md-floating-label="Hvem vil du tilføje?">
+					<md-item-template>
+						<span md-highlight-text="searchText">{{ user.firstName }} {{ user.lastName }}</span>
+					</md-item-template>
+					<div ng-messages="autocompleteForm.autocomplete.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				</md-autocomplete>
+
+				<md-input-container>
+					<label>Rolle</label>
+					<md-select required ng-model="newMemberRole">
+						<md-option ng-repeat="r in roles">{{ r }}</md-option>
+					</md-select>
+					<div ng-messages="vm.addMemberForm.newMemberRole.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				</md-input-container>
+				
+			</div>
+		</md-dialog-content>
+		
+		<md-dialog-actions>
+			<md-button ng-click="vm.cancel()">Annullér</md-button>
+			<md-button type="submit" class="md-primary">Tilføj</md-button>
+		</md-dialog-actions>
+		
+	</form>
+</md-dialog>

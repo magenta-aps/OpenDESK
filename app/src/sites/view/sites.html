@@ -86,7 +86,7 @@
 								<th class="od-secondary" sort-table="manager.fullName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
 								<th class="od-secondary" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
 								<th class="od-secondary" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
-								<th class="od-secondary" colspan="2" sort-table="created" sort-default="reverse" title="Sortér kolonne">{{'PROJECT.CREATED' | translate}}</th>
+								<th class="od-secondary" colspan="2" sort-table="modified" sort-default="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -106,7 +106,7 @@
 										
 										{{ project.description }}
 									</a>
-									
+
 								</td>
 								<td>
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
@@ -129,7 +129,7 @@
 								</td>
 								<td>
 									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}">
-										{{ project.created | date:'dd. MMMM yyyy' }}
+										{{ project.modified | date:'dd. MMMM yyyy' }}
 									</a>
 								</td>
 								<td>

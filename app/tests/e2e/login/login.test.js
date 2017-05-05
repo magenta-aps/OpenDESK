@@ -4,9 +4,12 @@ var loginPage = require('./loginPage.po.js');
 describe('openESDH login page', function() {
 
     it('should be able to access login page and login to user dashboard', function() {
+
+        console.log("trying to login")
         loginPage.loginAsAdmin();
+        
         //detect the userMenu button
         expect(globalHeader.getHeaderMenuItem().userMenuBtn);
-        //loginPage.logout();
+        loginPage.logout();
     });
 });

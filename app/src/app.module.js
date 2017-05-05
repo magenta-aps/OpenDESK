@@ -25,7 +25,11 @@ angular
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
+
+        'openDeskApp.testdata',
+
         //'openDeskApp.templates',
+
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
@@ -164,6 +168,19 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             'content@': {
                 templateUrl: 'app/src/sites/view/sites.html',
                 controller: 'SitesController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    }).state('testdata', {
+        parent: 'site',
+        url: '/testdata',
+        views: {
+            'content@': {
+                //templateUrl: 'app/src/sites/view/sites.html',
+                controller: 'TestController',
                 controllerAs: 'vm'
             }
         },
