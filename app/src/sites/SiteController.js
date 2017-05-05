@@ -506,6 +506,13 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         });
     }
 
+    vm.deleteLink = function (source, destination) {
+        siteService.deleteLink(source, destination).then(function () {
+            vm.loadContents();
+            $mdDialog.hide();
+        });
+    };
+
 
     function createNotification(userName, subject, message, link, wtype, project) {
         console.log('creating notification...');
