@@ -174,10 +174,6 @@ public class Sites extends AbstractWebScript {
                         result = this.createSite(siteDisplayName, description, site_visibility);
                         break;
 
-                    case "deleteTestSites":
-                        result = this.removeTestSites();
-                        break;
-
                     case "getSitesPerUser":
                         result = this.getAllSitesForCurrentUser();
                         break;
@@ -303,28 +299,6 @@ public class Sites extends AbstractWebScript {
         NodeRef n = siteInfo.getNodeRef();
         return nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES) ||
         nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT);
-    }
-
-    public JSONArray removeTestSites() {
-
-        ArrayList l = new ArrayList();
-        l.add(OpenDeskModel.testsite_1);
-        l.add(OpenDeskModel.testsite_2);
-        l.add(OpenDeskModel.testsite_rename);
-        l.add(OpenDeskModel.testsite_new_name);
-
-        Iterator i = l.iterator();
-
-        while (i.hasNext()) {
-            String siteName = (String) i.next();
-
-            SiteInfo site = siteService.getSite(siteName);
-
-            if (site != null) {
-                siteService.deleteSite(siteName);
-            }
-        }
-        return Utils.getJSONSuccess();
     }
 
     private JSONArray addUser(String siteShortName, String user, String group) {
