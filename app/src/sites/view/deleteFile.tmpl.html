@@ -1,6 +1,6 @@
 
 <md-dialog aria-label="Slet fil" ng-cloak>
-    <form name="deleteFileForm" ng-submit="vm.deleteFile(content.nodeRef);">
+    <form name="deleteFileForm" ng-submit="content.contentType != 'cmis:link' ? vm.deleteFile(content.nodeRef) : vm.deleteLink(content.nodeid, content.destination_nodeid)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
