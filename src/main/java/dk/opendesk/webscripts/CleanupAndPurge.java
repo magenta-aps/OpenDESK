@@ -5,8 +5,10 @@ package dk.opendesk.webscripts;
  */
 
 
+import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.archive.NodeArchiveService;
+import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.site.SiteInfo;
@@ -39,6 +41,12 @@ public class CleanupAndPurge extends DeclarativeWebScript {
     }
 
     private SiteService siteService;
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
+    ContentService contentService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -99,32 +107,9 @@ public class CleanupAndPurge extends DeclarativeWebScript {
 
     private void setupSites() {
 
-//        var testSite1_name = "Magenta_1";
-//        var testSite1_members = [{name : "abbecher", role : "siteConsumer"}];
-//
-//        var testSite2_name = "Magenta_2"
-//        var testSite3_rename = "Magenta_rename"
-
-        SiteInfo site = siteService.createSite("default", "Magenta_1", "Magenta_1", "no comments", SiteVisibility.PUBLIC);
-        this.addDocumentFolder(site);
-
-        site = siteService.createSite("default", "Magenta_2", "Magenta_2", "no comments", SiteVisibility.PUBLIC);
-        this.addDocumentFolder(site);
-
-        site = siteService.createSite("default", "Magenta_rename", "Magenta_rename", "no comments", SiteVisibility.PUBLIC);
-        this.addDocumentFolder(site);
-    }
-
-
-    private void addDocumentFolder(SiteInfo site) {
-        // Create documentLibary
-        String defaultFolder = "documentLibrary";
-        Map<QName, Serializable> documentLibaryProps = new HashMap<>();
-        documentLibaryProps.put(ContentModel.PROP_NAME, defaultFolder);
-
-        nodeService.createNode(site.getNodeRef(), ContentModel.ASSOC_CONTAINS,
-                QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "documentLibrary"),
-                ContentModel.TYPE_FOLDER, documentLibaryProps);
+        Utils.createSite(nodeService, contentService, siteService, "Magenta_1", "no comments", SiteVisibility.PUBLIC);
+        Utils.createSite(nodeService, contentService, siteService, "Magenta_2", "no comments", SiteVisibility.PUBLIC);
+        Utils.createSite(nodeService, contentService, siteService, "Magenta_rename", "no comments", SiteVisibility.PUBLIC);
     }
 
 }
