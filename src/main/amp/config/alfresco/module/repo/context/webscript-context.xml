@@ -137,6 +137,7 @@
 		<property name="siteService" ref="SiteService"/>
 		<property name="messageService" ref="messageService"/>
 		<property name="properties"> <ref bean="global-properties"/> </property>
+		<property name="transactionService" ref="TransactionService"/>
 		<property name="serviceRegistry"> <ref bean="ServiceRegistry"/> </property>
 	</bean>
 

@@ -6,12 +6,14 @@ package dk.opendesk.webscripts;
         import java.util.Map;
 
         import org.alfresco.model.ContentModel;
+        import org.alfresco.repo.model.Repository;
         import org.alfresco.repo.security.authentication.AuthenticationUtil;
         import org.alfresco.repo.web.scripts.BaseWebScriptTest;
         import org.alfresco.service.cmr.preference.PreferenceService;
         import org.alfresco.service.cmr.repository.NodeRef;
         import org.alfresco.service.cmr.security.MutableAuthenticationService;
         import org.alfresco.service.cmr.security.PersonService;
+        import org.alfresco.service.transaction.TransactionService;
         import org.alfresco.util.PropertyMap;
         import org.apache.log4j.Logger;
         import org.json.JSONArray;
@@ -20,18 +22,24 @@ package dk.opendesk.webscripts;
         import org.junit.Test;
         import org.springframework.extensions.webscripts.Status;
 
+        import javax.imageio.spi.ServiceRegistry;
+        import javax.transaction.UserTransaction;
+
 public class PreferencesTest extends BaseWebScriptTest {
 
     private static Logger log = Logger.getLogger(PreferencesTest.class);
 
-    private MutableAuthenticationService authenticationService;
-    private PersonService personService;
-    private PreferenceService preferenceService;
+    private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
+            "authenticationService");
+    private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("PersonService");
+    private PreferenceService preferenceService = (PreferenceService) getServer().getApplicationContext().getBean("preferenceService");
+    private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
 
-    private static final String USER_ONE = "RunAsOne";
     private static final String ADMIN_USER_NAME = "admin";
     private static final String WEBSCRIPT_URL = "/preferences";
     private static final String PREFERENCE = "dk.magenta.sites.receiveNotifications";
+
+    private static final String USER_ONE = "user_one";
 
     public PreferencesTest() {
         super();
@@ -40,11 +48,6 @@ public class PreferencesTest extends BaseWebScriptTest {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
-        this.authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
-                "authenticationService");
-        this.personService = (PersonService) getServer().getApplicationContext().getBean("PersonService");
-        this.preferenceService = (PreferenceService) getServer().getApplicationContext().getBean("preferenceService");
 
         AuthenticationUtil.setRunAsUserSystem();
 
@@ -56,17 +59,30 @@ public class PreferencesTest extends BaseWebScriptTest {
     }
 
     private void createUser(String userName) {
-        if (!this.authenticationService.authenticationExists(userName)) {
-            this.authenticationService.createAuthentication(userName, "PWD".toCharArray());
+        UserTransaction tx = null;
+        try {
+            tx = transactionService.getUserTransaction();
+            tx.begin();
+            if (!this.authenticationService.authenticationExists(userName)) {
+                this.authenticationService.createAuthentication(userName, "PWD".toCharArray());
 
-            PropertyMap ppOne = new PropertyMap(4);
-            ppOne.put(ContentModel.PROP_USERNAME, userName);
-            ppOne.put(ContentModel.PROP_FIRSTNAME, "firstName");
-            ppOne.put(ContentModel.PROP_LASTNAME, "lastName");
-            ppOne.put(ContentModel.PROP_EMAIL, "email@email.com");
-            ppOne.put(ContentModel.PROP_JOBTITLE, "jobTitle");
+                PropertyMap ppOne = new PropertyMap(4);
+                ppOne.put(ContentModel.PROP_USERNAME, userName);
+                ppOne.put(ContentModel.PROP_FIRSTNAME, "firstName");
+                ppOne.put(ContentModel.PROP_LASTNAME, "lastName");
+                ppOne.put(ContentModel.PROP_EMAIL, "email@email.com");
+                ppOne.put(ContentModel.PROP_JOBTITLE, "jobTitle");
 
-            this.personService.createPerson(ppOne);
+                this.personService.createPerson(ppOne);
+            }
+            tx.commit();
+        } catch (Throwable err) {
+            try {
+                if (tx != null) {
+                    tx.rollback();
+                }
+            } catch (Exception tex) {
+            }
         }
     }
 
@@ -95,5 +111,7 @@ public class PreferencesTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        personService.deletePerson(USER_ONE);
     }
 }
