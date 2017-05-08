@@ -49,18 +49,16 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.antlr:antlr-runtime:3.5.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.antlr:ST4:4.0.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-client-impl:0.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-client-api:0.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-commons-api:0.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-commons-impl:0.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-client-bindings:0.11.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jvnet.staxex:stax-ex:1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-server-bindings:0.11.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-commons-api:0.11.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-server-support:0.11.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.2.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.acegisecurity:acegi-security:0.8.2_patched" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-xmlfactory:1.0.3" level="project" />
@@ -84,8 +82,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.mp4parser:isoparser:1.0-RC-1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.drewnoakes:metadata-extractor:2.6.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: de.l3s.boilerpipe:boilerpipe:1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: rome:rome:0.9" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: jdom:jdom:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: rome:rome:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.gagravarr:vorbis-java-core:0.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.juniversalchardet:juniversalchardet:1.0.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.uwyn:jhighlight:1.0" level="project" />
@@ -100,7 +97,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-mbeans:5.1.e" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-context:3.2.14.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aop:3.2.14.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-expression:3.2.14.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-expression:3.2.10.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-text-gen:1.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco.services:alfresco-events:1.2.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.2" level="project" />
@@ -116,7 +113,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-net:commons-net:3.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-validator:commons-validator:1.4.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.httpcomponents:httpclient-cache:4.5.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.httpcomponents:httpcore:4.4.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jbpm:jbpm-jpdl:3.3.1-patched" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.ibm.icu:icu4j:3.6.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: oro:oro:2.0.8" level="project" />
@@ -188,7 +184,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-context-support:3.2.14.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.extensions.surf:spring-webscripts:5.8" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-webmvc:3.2.14.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-webmvc:3.2.10.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.extensions.surf:spring-webscripts-api:5.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.social:spring-social-core:1.0.3.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.social:spring-social-linkedin:1.0.0-20110711" level="project" />
@@ -227,7 +223,22 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-email:1.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.activiti:activiti-spring:5.19.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.alfresco:alfresco-repository:h2scripts:5.1.e" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.alfresco:alfresco-remote-api:tests:5.1.e" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.ws.security:wss4j:1.5.12" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.santuario:xmlsec:1.4.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-csv:20110211" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.portlet:portlet-api:2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco.cmis.client:alfresco-opencmis-extension:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.xml:jaxrpc-api:1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jdom:jdom:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-test-tck:0.11.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-client-api:0.11.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.chemistry.opencmis:chemistry-opencmis-client-bindings:0.11.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.alfresco:alfresco-repository:tests:5.1.e" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-remote-api:5.1.e" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-remote-api:config:5.1.e" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.springframework.extensions.surf:spring-webscripts:tests:5.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.httpcomponents:httpcore:4.4.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.alfresco.maven:alfresco-rad:2.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.tradeshift:junit-remote:3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-servlet:7.4.0.v20110414" level="project" />
