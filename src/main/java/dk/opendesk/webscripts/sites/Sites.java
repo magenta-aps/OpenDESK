@@ -898,13 +898,11 @@ public class Sites extends AbstractWebScript {
 
             if (file_name.trim().equals(name.trim())) {
                 match = true;
-                System.out.println("match");
 
                 int number = 0;
                 Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
                 while(m.find()) {
                     number = Integer.valueOf(m.group(1));
-                    System.out.println(number);
                 }
 
                 if (number > currentHigest) {
@@ -913,9 +911,6 @@ public class Sites extends AbstractWebScript {
 
             }
         }
-
-
-        System.out.println("what is count:" + currentHigest);
 
         if (match) {
             currentHigest++;
