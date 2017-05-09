@@ -99,7 +99,7 @@ public class Notifications extends AbstractWebScript {
 
                     case "remove":
                         if (nodeRef != null && !nodeService.exists(nodeRef)) {
-                            throw new AlfrescoRuntimeException("Sorry, " + nodeRef + " doesn't exist, sucker!");
+                            throw new AlfrescoRuntimeException("Sorry, nodeRef: " + nodeRef + " doesn't exist.");
                         } else {
 
                             this.removeNotification(nodeRef);

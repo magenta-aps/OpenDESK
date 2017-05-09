@@ -51,10 +51,10 @@ public class UsersTest extends BaseWebScriptTest {
             data.put("PARAM_EMAIL", TestUtils.USER_ONE_EMAIL);
             data.put("PARAM_GROUP_NAME", TestUtils.USER_ONE_GROUP);
 
-            JSONObject returnJSON = executeWebScript(data);
+            JSONArray returnJSON = executeWebScript(data);
 
-            assertTrue(returnJSON.has(USERNAME));
-            assertEquals(TestUtils.USER_ONE, returnJSON.getString(USERNAME));
+            assertTrue(returnJSON.getJSONObject(0).has(USERNAME));
+            assertEquals(TestUtils.USER_ONE, returnJSON.getJSONObject(0).getString(USERNAME));
 
             // Tear Down
             TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
@@ -66,10 +66,10 @@ public class UsersTest extends BaseWebScriptTest {
         }
     }
 
-    private JSONObject executeWebScript (JSONObject data) throws IOException, JSONException {
+    private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {
         TestWebScriptServer.Request request = new TestWebScriptServer.PostRequest("/users", data.toString(), "application/json");
         TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, TestUtils.ADMIN);
-        return new JSONArray(response.getContentAsString()).getJSONObject(0);
+        return new JSONArray(response.getContentAsString());
     }
 
     @Override
