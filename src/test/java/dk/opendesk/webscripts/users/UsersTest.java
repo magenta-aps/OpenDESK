@@ -39,31 +39,24 @@ public class UsersTest extends BaseWebScriptTest {
 
     // createExternalUser
     @Test
-    public void testCreateOneExternalUser() {
+    public void testCreateOneExternalUser() throws IOException, JSONException {
         log.debug("UsersTest.createsOneExternalUser");
 
-        try {
-            JSONObject data = new JSONObject();
-            data.put("PARAM_METHOD", "createExternalUser");
-            data.put("PARAM_SITE_SHORT_NAME", TestUtils.USER_ONE_SITE_FOUR);
-            data.put("PARAM_FIRSTNAME", TestUtils.USER_ONE_FIRSTNAME);
-            data.put("PARAM_LASTNAME", TestUtils.USER_ONE_LASTNAME);
-            data.put("PARAM_EMAIL", TestUtils.USER_ONE_EMAIL);
-            data.put("PARAM_GROUP_NAME", TestUtils.USER_ONE_GROUP);
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "createExternalUser");
+        data.put("PARAM_SITE_SHORT_NAME", TestUtils.USER_ONE_SITE_FOUR);
+        data.put("PARAM_FIRSTNAME", TestUtils.USER_ONE_FIRSTNAME);
+        data.put("PARAM_LASTNAME", TestUtils.USER_ONE_LASTNAME);
+        data.put("PARAM_EMAIL", TestUtils.USER_ONE_EMAIL);
+        data.put("PARAM_GROUP_NAME", TestUtils.USER_ONE_GROUP);
 
-            JSONArray returnJSON = executeWebScript(data);
+        JSONArray returnJSON = executeWebScript(data);
 
-            assertTrue(returnJSON.getJSONObject(0).has(USERNAME));
-            assertEquals(TestUtils.USER_ONE, returnJSON.getJSONObject(0).getString(USERNAME));
+        assertTrue(returnJSON.getJSONObject(0).has(USERNAME));
+        assertEquals(TestUtils.USER_ONE, returnJSON.getJSONObject(0).getString(USERNAME));
 
-            // Tear Down
-            TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
-
-        } catch (IOException ex) {
-            log.error("IOException", ex);
-        } catch (JSONException ex) {
-            log.error("JSONException", ex);
-        }
+        // Tear Down
+        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
     }
 
     private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {

@@ -28,6 +28,7 @@ public class NotificationsTest extends BaseWebScriptTest {
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
 
     private static final String UNSEEN = "unseen";
+    private static final String UNREAD = "unread";
     private static final String NODE_REF = "nodeRef";
 
     public NotificationsTest() {
@@ -41,90 +42,69 @@ public class NotificationsTest extends BaseWebScriptTest {
         AuthenticationUtil.setRunAsUserSystem();
 
         // Create users
+        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
         TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_ONE);
         TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_TWO);
         TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_THREE);
     }
 
-    @Test
-    public void testUserHasNoUnseenNotifications() {
+    public void testUserHasNoUnseenNotifications() throws IOException, JSONException {
         log.debug("NotificationsTest.testUserHasNoUnseenNotifications");
-        JSONArray returnJSON;
 
-        try {
-            //Gets all notifications for user one
-            returnJSON = executeWebScriptGetAll(TestUtils.USER_ONE);
-            assertTrue(returnJSON.getJSONObject(0).has(UNSEEN));
-            assertEquals("0", returnJSON.getJSONObject(0).getString(UNSEEN)); //unseen count should be zero
-
-        } catch (IOException ex) {
-            log.error("IOException", ex);
-        } catch (JSONException ex) {
-            log.error("JSONException", ex);
-        }
+        assertUnseen(TestUtils.USER_ONE, "0");
     }
 
-    @Test
-    public void testCreateThreeNotificationsForUserOne() {
+    public void testCreateThreeNotificationsForUserOne() throws IOException, JSONException {
         log.debug("NotificationsTest.testCreateThreeNotificationsForUserOne");
-        JSONArray returnJSON;
 
-        try {
-            //Adds three notifications
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        //Adds three notifications
+        assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+        assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_TWO);
+        assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_THREE);
 
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_TWO);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
-
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_THREE);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
-
-            //Gets all notifications for user one
-            returnJSON = executeWebScriptGetAll(TestUtils.USER_ONE);
-            assertTrue(returnJSON.getJSONObject(0).has(UNSEEN));
-            assertEquals("3", returnJSON.getJSONObject(0).getString(UNSEEN)); //unseen count should be three
-
-        } catch (IOException ex) {
-            log.error("IOException", ex);
-        } catch (JSONException ex) {
-            log.error("JSONException", ex);
-        }
+        assertGetAll(TestUtils.USER_ONE, 3);
     }
 
-    @Test
-    public void testRemoveNotification() {
+    public void testRemoveNotification() throws JSONException, IOException {
         log.debug("NotificationsTest.testRemoveNotification");
         JSONArray returnJSON;
 
-        try {
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        //Adds one notification
+        returnJSON = assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+        String nodeRef = getNodeRef(returnJSON);
 
-            //Gets all notifications for user one
-            returnJSON = executeWebScriptGetAll(TestUtils.USER_ONE);
-            assertTrue(returnJSON.getJSONObject(0).has(UNSEEN));
-            assertEquals("1", returnJSON.getJSONObject(0).getString(UNSEEN)); //unseen count should be zero
+        assertGetAll(TestUtils.USER_ONE, 1);
 
-            //Get the nodeRef of the notification
-            assertTrue(returnJSON.getJSONArray(1).getJSONObject(0).has(NODE_REF));
-            String nodeRef = returnJSON.getJSONArray(1).getJSONObject(0).getString(NODE_REF);
+        assertRemove(nodeRef);
 
-            //Remove same notification
-            returnJSON = executeWebScriptRemove(nodeRef);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        assertGetAll(TestUtils.USER_ONE, 0);
+    }
 
-            //Gets all notifications for user one
-            returnJSON = executeWebScriptGetAll(TestUtils.USER_ONE);
-            assertTrue(returnJSON.getJSONObject(0).has(UNSEEN));
-            assertEquals("0", returnJSON.getJSONObject(0).getString(UNSEEN)); //unseen count should be zero
+    public void testSetReadNotification() throws IOException, JSONException {
+        log.debug("NotificationsTest.testSetReadNotification");
+        JSONArray returnJSON;
 
-        } catch (IOException ex) {
-            log.error("IOException", ex);
-        } catch (JSONException ex) {
-            log.error("JSONException", ex);
-        }
+        //Adds one notification
+        returnJSON = assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+        String nodeRef = getNodeRef(returnJSON);
+        assertUnread(TestUtils.USER_ONE, "1");
+
+        assertSetRead(nodeRef);
+        assertUnread(TestUtils.USER_ONE, "0");
+    }
+
+    public void testSetSeenNotification() throws IOException, JSONException {
+        log.debug("NotificationsTest.testCreateThreeNotificationsForUserOne");
+        JSONArray returnJSON;
+
+        //Adds one notification
+        returnJSON = assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+        String nodeRef = getNodeRef(returnJSON);
+        assertUnseen(TestUtils.USER_ONE, "1");
+
+        assertSetSeen(nodeRef);
+        assertUnseen(TestUtils.USER_ONE, "0");
     }
 
     private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {
@@ -140,6 +120,26 @@ public class NotificationsTest extends BaseWebScriptTest {
         return executeWebScript(data);
     }
 
+    private JSONArray assertGetAll (String userName, int expectedCount) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptGetAll(userName);
+        assertEquals(expectedCount, returnJSON.getJSONArray(1).length());
+        return returnJSON;
+    }
+
+    private JSONArray assertUnseen (String userName, String expectedCount) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptGetAll(userName);
+        assertTrue(returnJSON.getJSONObject(0).has(UNSEEN));
+        assertEquals(expectedCount, returnJSON.getJSONObject(0).getString(UNSEEN));
+        return returnJSON;
+    }
+
+    private JSONArray assertUnread (String userName, String expectedCount) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptGetAll(userName);
+        assertTrue(returnJSON.getJSONObject(0).has(UNREAD));
+        assertEquals(expectedCount, returnJSON.getJSONObject(0).getString(UNREAD));
+        return returnJSON;
+    }
+
     private JSONArray executeWebScriptAdd (String userName, String siteShortName) throws IOException, JSONException {
         JSONObject data = new JSONObject();
         data.put("PARAM_METHOD", "add");
@@ -152,17 +152,46 @@ public class NotificationsTest extends BaseWebScriptTest {
         return executeWebScript(data);
     }
 
-    private JSONArray executeWebScriptRemove (String NodeRef) throws IOException, JSONException {
+    private JSONArray assertAdd (String userName, String SiteShortName) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptAdd(userName, SiteShortName);
+        assertTrue(returnJSON.getJSONObject(0).has(NODE_REF));
+        return returnJSON;
+    }
+
+    private JSONArray executeWebScriptWithNodeRef (String method, String NodeRef) throws IOException, JSONException {
         JSONObject data = new JSONObject();
-        data.put("PARAM_METHOD", "remove");
+        data.put("PARAM_METHOD", method);
         data.put("PARAM_NODE_REF", NodeRef);
         return executeWebScript(data);
+    }
+
+    private JSONArray assertRemove (String nodeRef) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptWithNodeRef("remove", nodeRef);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private JSONArray assertSetRead (String nodeRef) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptWithNodeRef("setRead", nodeRef);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private JSONArray assertSetSeen (String nodeRef) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptWithNodeRef("setSeen", nodeRef);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private String getNodeRef (JSONArray returnJSON) throws JSONException {
+        //Get the nodeRef of the notification
+        assertTrue(returnJSON.getJSONObject(0).has(NODE_REF));
+        return returnJSON.getJSONObject(0).getString(NODE_REF);
     }
 
     @Override
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
     }
 }

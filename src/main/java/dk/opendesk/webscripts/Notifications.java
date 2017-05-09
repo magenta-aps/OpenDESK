@@ -116,9 +116,9 @@ public class Notifications extends AbstractWebScript {
                             result = this.setNotificationSeen(nodeRef);
                         break;
 
-                    case "getInfo":
+                    case "getInfo": //TODO: Change name to GetDocumentInfo - remember frontend refactoring
                         if(nodeRef != null)
-                            result = this.getInfo(nodeRef);
+                            result = this.getDocumentInfo(nodeRef);
                         break;
 
                     case "setAllNotificationsSeen":
@@ -185,7 +185,8 @@ public class Notifications extends AbstractWebScript {
     // also returns read notifications
     private JSONArray getAllNotifications(String userName) throws JSONException {
 
-        int size = this.countUnSeenNotifications(userName);
+        int unSeenSize = countUnSeenNotifications(userName);
+        int unReadSize = countUnReadNotifications(userName);
 
         NodeRef user = personService.getPerson(userName);
 
@@ -195,10 +196,12 @@ public class Notifications extends AbstractWebScript {
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
         JSONArray result = new JSONArray();
         JSONArray children = new JSONArray();
-        JSONObject unseen = new JSONObject();
 
-        unseen.put("unseen", size);
-        result.add(unseen);
+        JSONObject stats = new JSONObject();
+        stats.put("unseen", unSeenSize);
+        stats.put("unread", unReadSize);
+        result.add(stats);
+
         int i = 0;
 
         for (ChildAssociationRef child : childAssociationRefs) {
@@ -282,6 +285,7 @@ public class Notifications extends AbstractWebScript {
 
     private JSONArray addNotification(String userName, String message, String subject, String link, String type, String project) {
 
+        ChildAssociationRef childAssocRef = null;
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
@@ -292,7 +296,7 @@ public class Notifications extends AbstractWebScript {
         NodeRef user = personService.getPerson(userName);
 
 
-        ChildAssociationRef childAssocRef = this.nodeService.createNode(
+        childAssocRef = this.nodeService.createNode(
                 user,
                 OpenDeskModel.PROP_NOTIFICATION_ASSOC,
                 QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(userName)),
@@ -315,7 +319,9 @@ public class Notifications extends AbstractWebScript {
         } finally {
             AuthenticationUtil.popAuthentication();
         }
-        return Utils.getJSONSuccess();
+        if(childAssocRef != null)
+            return Utils.getJSONReturnPair("nodeRef", childAssocRef.getChildRef().toString());
+        return Utils.getJSONError(new Exception("Failed to add notification"));
     }
 
     private JSONArray removeNotification(NodeRef nodeRef) {
@@ -335,22 +341,19 @@ public class Notifications extends AbstractWebScript {
 
     private JSONArray setAllNotificationsSeen (String userName) {
 
-
         NodeRef user = personService.getPerson(userName);
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocsByPropertyValue(user, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
 
         for (ChildAssociationRef child : childAssociationRefs) {
 
-
             NodeRef n = child.getChildRef();
-
             this.setNotificationSeen(n);
         }
         return Utils.getJSONSuccess();
     }
 
-    private JSONArray getInfo (NodeRef nodeRef) {
+    private JSONArray getDocumentInfo (NodeRef nodeRef) {
         String comment = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
         String link = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_LINK);
         String project = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_PROJECT);
@@ -366,18 +369,16 @@ public class Notifications extends AbstractWebScript {
         return Utils.getJSONReturnArray(map);
     }
 
-    private int countUnSeenNotifications(String userName) {
-
+    private int countPropertyValue(String userName, QName property, Serializable value) {
         NodeRef user = personService.getPerson(userName);
+        return nodeService.getChildAssocsByPropertyValue(user, property, value).size();
+    }
 
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocsByPropertyValue(user, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
-
-        int count = 0;
-        for (ChildAssociationRef child : childAssociationRefs) {
-            count++;
-        }
-
-        return count;
+    private int countUnSeenNotifications(String userName) {
+        return countPropertyValue(userName, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
+    }
+    private int countUnReadNotifications(String userName) {
+        return countPropertyValue(userName, OpenDeskModel.PROP_NOTIFICATION_READ, false);
     }
 }
 
