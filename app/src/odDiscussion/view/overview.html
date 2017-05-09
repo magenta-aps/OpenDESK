@@ -1,59 +1,59 @@
-
-        <md-list class="sortHead">
-
-            <table class="od-members od-members-row">
-                <thead fix-head>
-                    <tr>
-                        <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">Tråd</th>
-                        <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">Seneste svar</th>
-                        <th class="od-secondary" colspan="2">
-                            Svar
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]">
-                        <td class="icon">
-                            <i class="material-icons">chat_bubble_outline</i>
-                        </td>
-                        <td>
-                            <a class="od-filebrowser-link od-secondary overflow" ng-href="">
-                                <h3 class="od-primary">
-                                    Et spændende emne
-                                </h3>
-                                Kim Larsen
-                            </a>
-                        </td>
-                        <td>
-                            <a class="od-filebrowser-link od-secondary" ng-href="">
+<div ng-controller="DiscussionController as dc">
+<md-list class="sortHead">
+    <table class="od-members od-members-row">
+        <thead fix-head>
+            <tr>
+                <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">Tråd</th>
+                <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">Seneste svar</th>
+                <th class="od-secondary" colspan="2">
+                    Svar
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]">
+                <td class="icon">
+                    <i class="material-icons">chat_bubble_outline</i>
+                </td>
+                <td>
+                    <a class="od-filebrowser-link od-secondary overflow" ng-href="">
+                        <h3 class="od-primary">
+                            Et spændende emne
+                        </h3>
+                        Kim Larsen
+                    </a>
+                </td>
+                <td>
+                    <a class="od-filebrowser-link od-secondary" ng-href="">
                                 1 time siden af Johnny Madsen
                             </a>
-                        </td>
-                        <td>
-                            <a class="od-filebrowser-link od-secondary" ng-href="">
+                </td>
+                <td>
+                    <a class="od-filebrowser-link od-secondary" ng-href="">
                                 4
                             </a>
-                        </td>
-                        <td style="width:32px">
-                            <i class="material-icons od-secondary">notifications_none</i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </md-list>
+                </td>
+                <td style="width:32px">
+                    <i class="material-icons od-secondary">notifications_none</i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</md-list>
 
-        <p ng-show="contents.length === 0">
-            {{'COMMON.EMPTY_FOLDER' | translate}}
-        </p>
+<p ng-show="contents.length === 0">
+    {{'COMMON.EMPTY_FOLDER' | translate}}
+</p>
 
-        <md-divider></md-divider>
+<md-divider></md-divider>
 
-        <md-card-actions layout="row" layout-align="start center">
-            <span flex></span>
+<md-card-actions layout="row" layout-align="start center">
+    <span flex></span>
 
-            <md-button ng-click="vm.uploadSbsysDialog($event)" class="md-primary" aria-label="SBSYS">
-                <span>
+    <md-button ng-click="dc.newThreadDialog()" class="md-primary" aria-label="SBSYS">
+        <span>
                 Start ny samtale
             </span>
-            </md-button>
-        </md-card-actions>
+    </md-button>
+</md-card-actions>
+</div>
