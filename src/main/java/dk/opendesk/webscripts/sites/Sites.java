@@ -249,6 +249,7 @@ public class Sites extends AbstractWebScript {
             System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
         }
         Utils.writeJSONArray(webScriptWriter, result);
     }
