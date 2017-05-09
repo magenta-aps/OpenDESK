@@ -102,35 +102,28 @@ public class Notifications extends AbstractWebScript {
                             throw new AlfrescoRuntimeException("Sorry, nodeRef: " + nodeRef + " doesn't exist.");
                         } else {
 
-                            this.removeNotification(nodeRef);
+                            result = this.removeNotification(nodeRef);
                         }
                         break;
 
                     case "setRead":
                         if(nodeRef != null)
-                            this.setNotificationRead(nodeRef);
+                            result = this.setNotificationRead(nodeRef);
                         break;
-
 
                     case "setSeen":
                         if(nodeRef != null)
-                            this.setNotificationSeen(nodeRef);
+                            result = this.setNotificationSeen(nodeRef);
                         break;
-
 
                     case "getInfo":
                         if(nodeRef != null)
-                            result =  this.getInfo(nodeRef);
+                            result = this.getInfo(nodeRef);
                         break;
 
-
                     case "setAllNotificationsSeen":
-
-                           this.setAllNotificationsSeen(userName);
-
-
-
-
+                        result = this.setAllNotificationsSeen(userName);
+                        break;
                 }
             }
         }
@@ -213,7 +206,6 @@ public class Notifications extends AbstractWebScript {
 
             JSONObject json = new JSONObject();
 
-
             Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
 
             String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
@@ -233,11 +225,7 @@ public class Notifications extends AbstractWebScript {
                 if (site != null ) {
                     projectName = siteService.getSite(shortName).getTitle();
                 }
-
-
             }
-
-
 
             String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATOR);
             NodeRef from = personService.getPerson(name);
@@ -260,7 +248,6 @@ public class Notifications extends AbstractWebScript {
                 } catch (InvalidNodeRefException e) {
                         continue; // Skip this notification if the document is no longer available.
                 }
-
             }
             else {
                 fileName = "";
@@ -331,19 +318,22 @@ public class Notifications extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
-    private void removeNotification(NodeRef nodeRef) {
+    private JSONArray removeNotification(NodeRef nodeRef) {
         nodeService.deleteNode(nodeRef);
+        return Utils.getJSONSuccess();
     }
 
-    private void setNotificationRead (NodeRef nodeRef) {
+    private JSONArray setNotificationRead (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
+        return Utils.getJSONSuccess();
     }
 
-    private void setNotificationSeen (NodeRef nodeRef) {
+    private JSONArray setNotificationSeen (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
+        return Utils.getJSONSuccess();
     }
 
-    private void setAllNotificationsSeen (String userName) {
+    private JSONArray setAllNotificationsSeen (String userName) {
 
 
         NodeRef user = personService.getPerson(userName);
@@ -357,13 +347,13 @@ public class Notifications extends AbstractWebScript {
 
             this.setNotificationSeen(n);
         }
+        return Utils.getJSONSuccess();
     }
 
     private JSONArray getInfo (NodeRef nodeRef) {
         String comment = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
         String link = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_LINK);
         String project = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_PROJECT);
-
 
         NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
         String fileName = (String)nodeService.getProperty(document, ContentModel.PROP_NAME);
@@ -375,7 +365,6 @@ public class Notifications extends AbstractWebScript {
 
         return Utils.getJSONReturnArray(map);
     }
-
 
     private int countUnSeenNotifications(String userName) {
 
@@ -400,6 +389,3 @@ public class Notifications extends AbstractWebScript {
 //http://localhost:8080/alfresco/service/notifications?method=setRead&NODE_ID=76e15607-5519-4ad6-915c-1c07086535f2&STORE_TYPE=workspace&STORE_ID=SpacesStore
 
 //http://178.62.194.129:8080/alfresco/service/notifications?method=setRead&NODE_ID=/f1115ab8-bf2f-408c-b5ee-72acfb14be4c&STORE_TYPE=workspace&STORE_ID=SpacesStore
-
-
-
