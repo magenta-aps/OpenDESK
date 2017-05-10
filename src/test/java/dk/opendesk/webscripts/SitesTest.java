@@ -37,16 +37,15 @@ public class SitesTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        AuthenticationUtil.setRunAsUserSystem();
+        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
         // Create users
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_ONE);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_TWO);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_THREE);
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_THREE);
     }
 
-    @Test
     public void testUserHasNoUnseenNotifications() {
         log.debug("NotificationsTest.createsThreeNotificationForUserOne");
 
@@ -63,7 +62,6 @@ public class SitesTest extends BaseWebScriptTest {
         }
     }
 
-    @Test
     public void testCreateThreeNotificationsForUserOne() {
         log.debug("NotificationsTest.createsThreeNotificationForUserOne");
         JSONObject returnJSON;
@@ -72,13 +70,13 @@ public class SitesTest extends BaseWebScriptTest {
 */
         try {
             //Adds three notifications
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.SITE_ONE);
             assertEquals(TestUtils.SUCCESS, returnJSON.getString(TestUtils.STATUS));
 
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_TWO);
+            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.SITE_TWO);
             assertEquals(TestUtils.SUCCESS, returnJSON.getString(TestUtils.STATUS));
 
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_THREE);
+            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.SITE_THREE);
             assertEquals(TestUtils.SUCCESS, returnJSON.getString(TestUtils.STATUS));
 
             //Gets all notifications for user one

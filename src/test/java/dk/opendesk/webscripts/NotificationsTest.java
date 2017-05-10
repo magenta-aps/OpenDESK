@@ -1,9 +1,15 @@
 package dk.opendesk.webscripts;
 
+import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
@@ -15,6 +21,10 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NotificationsTest extends BaseWebScriptTest {
 
@@ -23,13 +33,21 @@ public class NotificationsTest extends BaseWebScriptTest {
     private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
             "authenticationService");
 
+    private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
     private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("personService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
+    private ContentService contentService = (ContentService) getServer().getApplicationContext().getBean("contentService");
+    private FileFolderService fileFolderService = (FileFolderService) getServer().getApplicationContext().getBean("fileFolderService");
 
     private static final String UNSEEN = "unseen";
     private static final String UNREAD = "unread";
     private static final String NODE_REF = "nodeRef";
+    private static final String PROJECT = "project";
+    private static final String COMMENT = "comment";
+    private static final String FILENAME = "filename";
+
+    private HashMap<String, SiteInfo> sites = new HashMap<>();
 
     public NotificationsTest() {
         super();
@@ -39,14 +57,16 @@ public class NotificationsTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        AuthenticationUtil.setRunAsUserSystem();
+        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
         // Create users
         TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_ONE);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_TWO);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_THREE);
+
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sites.put(TestUtils.SITE_ONE, TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE));
+        sites.put(TestUtils.SITE_TWO, TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO));
+        sites.put(TestUtils.SITE_THREE, TestUtils.createSite(transactionService, siteService, TestUtils.SITE_THREE));
     }
 
     public void testUserHasNoUnseenNotifications() throws IOException, JSONException {
@@ -55,15 +75,41 @@ public class NotificationsTest extends BaseWebScriptTest {
         assertUnseen(TestUtils.USER_ONE, "0");
     }
 
-    public void testCreateThreeNotificationsForUserOne() throws IOException, JSONException {
-        log.debug("NotificationsTest.testCreateThreeNotificationsForUserOne");
+    public void testUserHasNoUnreadNotifications() throws IOException, JSONException {
+        log.debug("NotificationsTest.testUserHasNoUnreadNotifications");
 
-        //Adds three notifications
-        assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
-        assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_TWO);
-        assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_THREE);
+        assertUnread(TestUtils.USER_ONE, "0");
+    }
+
+    public void testCreateThreeProjectNotificationsForUserOne() throws IOException, JSONException {
+        log.debug("NotificationsTest.testCreateThreeProjectNotificationsForUserOne");
+
+        assertAddProjectNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE);
+        assertAddProjectNotification(TestUtils.USER_ONE, TestUtils.SITE_TWO);
+        assertAddProjectNotification(TestUtils.USER_ONE, TestUtils.SITE_THREE);
 
         assertGetAll(TestUtils.USER_ONE, 3);
+    }
+
+    public void testCreateTwoDocumentNotificationsForUserOne() throws IOException, JSONException {
+        log.debug("NotificationsTest.testCreateTwoDocumentNotificationsForUserOne");
+
+        NodeRef ref1 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, sites.get(TestUtils.SITE_ONE).getNodeRef());
+        NodeRef ref2 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, sites.get(TestUtils.SITE_TWO).getNodeRef());
+        assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE, ref1);
+        assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_TWO, ref2);
+
+        assertGetAll(TestUtils.USER_ONE, 2);
+    }
+
+    public void testCreateOneDocumentNotificationAndGetInfo() throws IOException, JSONException {
+        log.debug("NotificationsTest.testCreateThreeDocumentNotificationsForUserOne");
+        JSONArray returnJSON;
+
+        NodeRef ref = TestUtils.uploadFile(transactionService, contentService, fileFolderService, sites.get(TestUtils.SITE_THREE).getNodeRef());
+        returnJSON = assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_THREE, ref);
+        String nodeRef = getNodeRef(returnJSON);
+        assertGetInfo(nodeRef, TestUtils.SITE_THREE);
     }
 
     public void testRemoveNotification() throws JSONException, IOException {
@@ -71,7 +117,7 @@ public class NotificationsTest extends BaseWebScriptTest {
         JSONArray returnJSON;
 
         //Adds one notification
-        returnJSON = assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+        returnJSON = assertAddProjectNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE);
         String nodeRef = getNodeRef(returnJSON);
 
         assertGetAll(TestUtils.USER_ONE, 1);
@@ -86,7 +132,7 @@ public class NotificationsTest extends BaseWebScriptTest {
         JSONArray returnJSON;
 
         //Adds one notification
-        returnJSON = assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+        returnJSON = assertAddProjectNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE);
         String nodeRef = getNodeRef(returnJSON);
         assertUnread(TestUtils.USER_ONE, "1");
 
@@ -95,11 +141,11 @@ public class NotificationsTest extends BaseWebScriptTest {
     }
 
     public void testSetSeenNotification() throws IOException, JSONException {
-        log.debug("NotificationsTest.testCreateThreeNotificationsForUserOne");
+        log.debug("NotificationsTest.testSetSeenNotification");
         JSONArray returnJSON;
 
         //Adds one notification
-        returnJSON = assertAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
+        returnJSON = assertAddProjectNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE);
         String nodeRef = getNodeRef(returnJSON);
         assertUnseen(TestUtils.USER_ONE, "1");
 
@@ -140,22 +186,35 @@ public class NotificationsTest extends BaseWebScriptTest {
         return returnJSON;
     }
 
-    private JSONArray executeWebScriptAdd (String userName, String siteShortName) throws IOException, JSONException {
+    private JSONArray executeWebScriptAdd (String userName, String siteShortName, String link, String type) throws IOException, JSONException {
         JSONObject data = new JSONObject();
         data.put("PARAM_METHOD", "add");
         data.put("PARAM_USERNAME", userName);
         data.put("PARAM_MESSAGE", "Test message");
         data.put("PARAM_SUBJECT", "Test subject");
-        data.put("PARAM_LINK", "/#!/projekter/" + siteShortName + "?type=Project");
-        data.put("PARAM_TYPE", "project");
+        data.put("PARAM_LINK", link);
+        data.put("PARAM_TYPE", type);
         data.put("PARAM_PROJECT", siteShortName);
         return executeWebScript(data);
     }
 
-    private JSONArray assertAdd (String userName, String SiteShortName) throws IOException, JSONException {
-        JSONArray returnJSON = executeWebScriptAdd(userName, SiteShortName);
+    private JSONArray assertAdd (String userName, String siteShortName, String link, String type) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptAdd(userName, siteShortName, link, type);
         assertTrue(returnJSON.getJSONObject(0).has(NODE_REF));
         return returnJSON;
+    }
+
+    private JSONArray assertAddProjectNotification (String userName, String siteShortName) throws IOException, JSONException {
+        String link = "/#!/projekter/" + siteShortName + "?type=Project";
+        String type = "project";
+        return assertAdd(userName, siteShortName, link, type);
+    }
+
+    private JSONArray assertAddNewDocumentNotification (String userName, String siteShortName, NodeRef n) throws IOException, JSONException {
+        String ref = n.toString().split("/")[3];
+        String link = "/#!/dokument/" + ref;
+        String type = "new-doc";
+        return assertAdd(userName, siteShortName, link, type);
     }
 
     private JSONArray executeWebScriptWithNodeRef (String method, String NodeRef) throws IOException, JSONException {
@@ -183,6 +242,16 @@ public class NotificationsTest extends BaseWebScriptTest {
         return returnJSON;
     }
 
+    //TODO: Change name to GetDocumentInfo - remember frontend refactoring
+    private JSONArray assertGetInfo (String nodeRef, String project) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptWithNodeRef("getInfo", nodeRef);
+        assertTrue(returnJSON.getJSONObject(0).has(COMMENT));
+        assertTrue(returnJSON.getJSONObject(0).has(FILENAME));
+        assertTrue(returnJSON.getJSONObject(0).has(PROJECT));
+        assertEquals(project, returnJSON.getJSONObject(0).getString(PROJECT));
+        return returnJSON;
+    }
+
     private String getNodeRef (JSONArray returnJSON) throws JSONException {
         //Get the nodeRef of the notification
         assertTrue(returnJSON.getJSONObject(0).has(NODE_REF));
@@ -193,5 +262,9 @@ public class NotificationsTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        for (Map.Entry<String, SiteInfo> s : sites.entrySet()) {
+            TestUtils.deleteSite(transactionService, siteService, s.getKey());
+        }
     }
 }

@@ -40,7 +40,7 @@ public class PreferencesTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        AuthenticationUtil.setRunAsUserSystem();
+        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
         TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
@@ -49,7 +49,6 @@ public class PreferencesTest extends BaseWebScriptTest {
         preferenceService.setPreferences(TestUtils.USER_ONE, preferences);
     }
 
-    @Test
     public void testGetPreferenceForReceivingNotificationsForUserOne() throws JSONException, IOException {
         log.debug("PreferencesTest.testPreferencesWebscript");
         Map<String, String> args = new HashMap<String, String>() {
