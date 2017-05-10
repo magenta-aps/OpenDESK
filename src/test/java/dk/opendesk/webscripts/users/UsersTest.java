@@ -39,6 +39,8 @@ public class UsersTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
+        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
         nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         site_one = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
     }
@@ -72,7 +74,5 @@ public class UsersTest extends BaseWebScriptTest {
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-
-        TestUtils.deleteSite(transactionService, siteService, site_one.getShortName());
     }
 }

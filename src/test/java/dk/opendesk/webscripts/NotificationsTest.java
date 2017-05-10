@@ -47,7 +47,7 @@ public class NotificationsTest extends BaseWebScriptTest {
     private static final String COMMENT = "comment";
     private static final String FILENAME = "filename";
 
-    private HashMap<String, SiteInfo> sites = new HashMap<>();
+    private SiteInfo siteOne, siteTwo, siteThree;
 
     public NotificationsTest() {
         super();
@@ -63,10 +63,15 @@ public class NotificationsTest extends BaseWebScriptTest {
         TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
 
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_TWO);
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_THREE);
+
         nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        sites.put(TestUtils.SITE_ONE, TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE));
-        sites.put(TestUtils.SITE_TWO, TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO));
-        sites.put(TestUtils.SITE_THREE, TestUtils.createSite(transactionService, siteService, TestUtils.SITE_THREE));
+
+        siteOne = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
+        siteTwo = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
+        siteThree = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_THREE);
     }
 
     public void testUserHasNoUnseenNotifications() throws IOException, JSONException {
@@ -94,8 +99,8 @@ public class NotificationsTest extends BaseWebScriptTest {
     public void testCreateTwoDocumentNotificationsForUserOne() throws IOException, JSONException {
         log.debug("NotificationsTest.testCreateTwoDocumentNotificationsForUserOne");
 
-        NodeRef ref1 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, sites.get(TestUtils.SITE_ONE).getNodeRef());
-        NodeRef ref2 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, sites.get(TestUtils.SITE_TWO).getNodeRef());
+        NodeRef ref1 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, siteOne.getNodeRef());
+        NodeRef ref2 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, siteTwo.getNodeRef());
         assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE, ref1);
         assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_TWO, ref2);
 
@@ -106,7 +111,7 @@ public class NotificationsTest extends BaseWebScriptTest {
         log.debug("NotificationsTest.testCreateThreeDocumentNotificationsForUserOne");
         JSONArray returnJSON;
 
-        NodeRef ref = TestUtils.uploadFile(transactionService, contentService, fileFolderService, sites.get(TestUtils.SITE_THREE).getNodeRef());
+        NodeRef ref = TestUtils.uploadFile(transactionService, contentService, fileFolderService, siteThree.getNodeRef());
         returnJSON = assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_THREE, ref);
         String nodeRef = getNodeRef(returnJSON);
         assertGetInfo(nodeRef, TestUtils.SITE_THREE);
@@ -262,9 +267,5 @@ public class NotificationsTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
-
-        for (Map.Entry<String, SiteInfo> s : sites.entrySet()) {
-            TestUtils.deleteSite(transactionService, siteService, s.getKey());
-        }
     }
 }

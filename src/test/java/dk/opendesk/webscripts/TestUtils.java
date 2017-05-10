@@ -77,6 +77,7 @@ public class TestUtils {
 
     public static Boolean deleteSite(TransactionService transactionService, SiteService siteService, String siteShortName) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+            if(siteService.hasSite(siteShortName))
             siteService.deleteSite(siteShortName);
             return true;
         });

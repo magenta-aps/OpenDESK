@@ -1,7 +1,9 @@
 package dk.opendesk.webscripts;
 
+import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteService;
@@ -23,6 +25,7 @@ public class SitesTest extends BaseWebScriptTest {
     private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
             "authenticationService");
 
+    private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
     private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("personService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
@@ -40,6 +43,12 @@ public class SitesTest extends BaseWebScriptTest {
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
         // Create users
+        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_TWO);
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_THREE);
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
         TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
         TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
@@ -120,6 +129,5 @@ public class SitesTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
     }
 }
