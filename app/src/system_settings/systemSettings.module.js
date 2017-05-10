@@ -4,7 +4,7 @@ angular
 
 function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) {
     systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'administration.systemsettings.templateList', true);
-    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'administration.systemsettings.document', true);
+    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'document_templates', true);
 
     $stateProvider.state('administration.systemsettings', {
         url: '/systemopsætning',
@@ -31,9 +31,9 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 controllerAs: 'vm'
             }
         }
-    }).state('administration.systemsettings.document', {
+    }).state('document_templates', {
         parent: 'site',
-        url: '/projekter/DokumentSkabeloner',
+        url: 'projekter/DokumentSkabeloner',
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/site.html',
