@@ -158,6 +158,14 @@ public class NotificationsTest extends BaseWebScriptTest {
         assertUnseen(TestUtils.USER_ONE, "0");
     }
 
+    public void testSetAllNotificationsSeen() throws IOException, JSONException {
+        log.debug("NotificationsTest.testSetSeenNotification");
+        JSONArray returnJSON;
+
+        assertSetAllNotificationsSeen(TestUtils.USER_ONE);
+        assertUnseen(TestUtils.USER_ONE, "0");
+    }
+
     private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {
         TestWebScriptServer.Request request = new TestWebScriptServer.PostRequest("/notifications", data.toString(), "application/json");
         TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, TestUtils.ADMIN);
@@ -254,6 +262,19 @@ public class NotificationsTest extends BaseWebScriptTest {
         assertTrue(returnJSON.getJSONObject(0).has(FILENAME));
         assertTrue(returnJSON.getJSONObject(0).has(PROJECT));
         assertEquals(project, returnJSON.getJSONObject(0).getString(PROJECT));
+        return returnJSON;
+    }
+
+    private JSONArray executeWebScriptSetAllNotificationsSeen (String userName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "setAllNotificationsSeen");
+        data.put("PARAM_USERNAME", userName);
+        return executeWebScript(data);
+    }
+
+    private JSONArray assertSetAllNotificationsSeen (String userName) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptSetAllNotificationsSeen(userName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
         return returnJSON;
     }
 
