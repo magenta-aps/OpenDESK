@@ -1,7 +1,9 @@
 package dk.opendesk.webscripts.users;
 
 import dk.opendesk.webscripts.TestUtils;
+import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
@@ -20,11 +22,14 @@ public class UsersTest extends BaseWebScriptTest {
 
     private static Logger log = Logger.getLogger(UsersTest.class);
 
+    private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
     private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("personService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
 
     private static final String USERNAME = "userName";
+
+    SiteInfo site_one;
 
     public UsersTest() {
         super();
@@ -34,36 +39,30 @@ public class UsersTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_FOUR);
+        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        site_one = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
     }
 
-    // createExternalUser
-    @Test
-    public void testCreateOneExternalUser() {
+    public void testCreateOneExternalUser() throws IOException, JSONException {
         log.debug("UsersTest.createsOneExternalUser");
 
-        try {
-            JSONObject data = new JSONObject();
-            data.put("PARAM_METHOD", "createExternalUser");
-            data.put("PARAM_SITE_SHORT_NAME", TestUtils.USER_ONE_SITE_FOUR);
-            data.put("PARAM_FIRSTNAME", TestUtils.USER_ONE_FIRSTNAME);
-            data.put("PARAM_LASTNAME", TestUtils.USER_ONE_LASTNAME);
-            data.put("PARAM_EMAIL", TestUtils.USER_ONE_EMAIL);
-            data.put("PARAM_GROUP_NAME", TestUtils.USER_ONE_GROUP);
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "createExternalUser");
+        data.put("PARAM_SITE_SHORT_NAME", TestUtils.SITE_ONE);
+        data.put("PARAM_FIRSTNAME", TestUtils.USER_ONE_FIRSTNAME);
+        data.put("PARAM_LASTNAME", TestUtils.USER_ONE_LASTNAME);
+        data.put("PARAM_EMAIL", TestUtils.USER_ONE_EMAIL);
+        data.put("PARAM_GROUP_NAME", TestUtils.USER_ONE_GROUP);
 
-            JSONArray returnJSON = executeWebScript(data);
+        JSONArray returnJSON = executeWebScript(data);
 
-            assertTrue(returnJSON.getJSONObject(0).has(USERNAME));
-            assertEquals(TestUtils.USER_ONE, returnJSON.getJSONObject(0).getString(USERNAME));
+        assertTrue(returnJSON.getJSONObject(0).has(USERNAME));
+        assertEquals(TestUtils.USER_ONE, returnJSON.getJSONObject(0).getString(USERNAME));
 
-            // Tear Down
-            TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
-
-        } catch (IOException ex) {
-            log.error("IOException", ex);
-        } catch (JSONException ex) {
-            log.error("JSONException", ex);
-        }
+        // Tear Down
+        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
     }
 
     private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {
@@ -73,8 +72,7 @@ public class UsersTest extends BaseWebScriptTest {
     }
 
     @Override
-    protected void tearDown() throws Exception
-    {
+    protected void tearDown() throws Exception {
         super.tearDown();
     }
 }

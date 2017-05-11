@@ -40,17 +40,16 @@ public class PreferencesTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        AuthenticationUtil.setRunAsUserSystem();
+        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
-        // Create users
+        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
         HashMap<String, Serializable> preferences = new HashMap<>();
         preferences.put(PREFERENCE, PREFERENCE_VALUE);
         preferenceService.setPreferences(TestUtils.USER_ONE, preferences);
     }
 
-    @Test
-    public void testGetPreferenceForReceivingNotificationsForUserOne() {
+    public void testGetPreferenceForReceivingNotificationsForUserOne() throws JSONException, IOException {
         log.debug("PreferencesTest.testPreferencesWebscript");
         Map<String, String> args = new HashMap<String, String>() {
             {
@@ -58,14 +57,8 @@ public class PreferencesTest extends BaseWebScriptTest {
                 put("pf", PREFERENCE);
             }
         };
-        try {
-            JSONObject returnJSON = executeWebScript(args);
-            assertEquals(PREFERENCE_VALUE, returnJSON.getString(PREFERENCE));
-        } catch (IOException ex) {
-            log.warn("IOException", ex);
-        } catch (JSONException ex) {
-            log.warn("JSONException", ex);
-        }
+        JSONObject returnJSON = executeWebScript(args);
+        assertEquals(PREFERENCE_VALUE, returnJSON.getString(PREFERENCE));
     }
 
     private JSONObject executeWebScript (Map<String, String> args) throws IOException, JSONException {
@@ -78,6 +71,5 @@ public class PreferencesTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
     }
 }

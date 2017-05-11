@@ -1,7 +1,9 @@
 package dk.opendesk.webscripts;
 
+import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteService;
@@ -23,6 +25,7 @@ public class SitesTest extends BaseWebScriptTest {
     private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
             "authenticationService");
 
+    private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
     private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("personService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
@@ -44,29 +47,29 @@ public class SitesTest extends BaseWebScriptTest {
 
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
+
         TestUtils.createSite(transactionService, siteService, newTestSite);
         TestUtils.createSite(transactionService, siteService, newTestSite2);
         TestUtils.createSite(transactionService, siteService, newTestSite3);
         TestUtils.createSite(transactionService, siteService, newTestSite4);
     }
 
-//    @Test
-//    public void testGetSite()  throws IOException, JSONException{
-//        log.debug("NotificationsTest.testGetSite");
-//        JSONArray returnJSON;
-//
-//            returnJSON = executeWebScriptGetSite(newTestSite);
-//
-//            assertEquals(newTestSite, returnJSON.getJSONObject(0).get("shortName"));
-//
-//
-//    }
+    @Test
+    public void testGetSite()  throws IOException, JSONException{
+        log.debug("NotificationsTest.testGetSite");
+        JSONArray returnJSON;
+
+            returnJSON = executeWebScriptGetSite(newTestSite);
+
+            assertEquals(newTestSite, returnJSON.getJSONObject(0).get("shortName"));
+
+
+    }
 
     @Test
     public void testGetAll() throws IOException, JSONException {
         log.debug("NotificationsTest.testGetAll");
         JSONArray returnJSON;
-
 
             returnJSON = executeWebScriptGetAll("");
         System.out.println(returnJSON);
@@ -75,9 +78,6 @@ public class SitesTest extends BaseWebScriptTest {
 
 
     }
-
-
-
 
 
 
@@ -113,7 +113,9 @@ public class SitesTest extends BaseWebScriptTest {
     {
         super.tearDown();
 
+
 //        TestUtils.deleteSite(transactionService, siteService, newTestSite);
-        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
+//        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
+
     }
 }
