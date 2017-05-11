@@ -38,7 +38,7 @@ public class NotificationsTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        AuthenticationUtil.setRunAsUserSystem();
+        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
         // Create users
         TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);

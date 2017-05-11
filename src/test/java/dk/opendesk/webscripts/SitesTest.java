@@ -27,7 +27,12 @@ public class SitesTest extends BaseWebScriptTest {
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
 
-    private static final String UNSEEN = "unseen";
+
+
+    private static final String newTestSite = "newTestSite";
+    private static final String newTestSite2 = "newTestSite2";
+    private static final String newTestSite3 = "newTestSite3";
+    private static final String newTestSite4 = "newTestSite4";
 
     public SitesTest() {
         super();
@@ -37,91 +42,78 @@ public class SitesTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        AuthenticationUtil.setRunAsUserSystem();
+        AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
-        // Create users
-        TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_ONE);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_TWO);
-        TestUtils.createSite(transactionService, siteService, TestUtils.USER_ONE_SITE_THREE);
+        TestUtils.createSite(transactionService, siteService, newTestSite);
+        TestUtils.createSite(transactionService, siteService, newTestSite2);
+        TestUtils.createSite(transactionService, siteService, newTestSite3);
+        TestUtils.createSite(transactionService, siteService, newTestSite4);
     }
+
+//    @Test
+//    public void testGetSite()  throws IOException, JSONException{
+//        log.debug("NotificationsTest.testGetSite");
+//        JSONArray returnJSON;
+//
+//            returnJSON = executeWebScriptGetSite(newTestSite);
+//
+//            assertEquals(newTestSite, returnJSON.getJSONObject(0).get("shortName"));
+//
+//
+//    }
 
     @Test
-    public void testUserHasNoUnseenNotifications() {
-        log.debug("NotificationsTest.createsThreeNotificationForUserOne");
+    public void testGetAll() throws IOException, JSONException {
+        log.debug("NotificationsTest.testGetAll");
+        JSONArray returnJSON;
 
-        try {
-            //Gets all notifications for user one
-            JSONObject returnJSON = executeWebScriptGetAll(TestUtils.USER_ONE);
-            assertTrue(returnJSON.has(UNSEEN));
-            assertEquals("0", returnJSON.getString(UNSEEN)); //unseen count should be zero
 
-        } catch (IOException ex) {
-            log.error("IOException", ex);
-        } catch (JSONException ex) {
-            log.error("JSONException", ex);
-        }
+            returnJSON = executeWebScriptGetAll("");
+        System.out.println(returnJSON);
+
+            //assertEquals(newTestSite, returnJSON.getJSONObject(0).get("shortName"));
+
+
     }
 
-    @Test
-    public void testCreateThreeNotificationsForUserOne() {
-        log.debug("NotificationsTest.createsThreeNotificationForUserOne");
-        JSONObject returnJSON;
-/*
-        data.put("PARAM_NODE_REF", USER_ONE);
-*/
-        try {
-            //Adds three notifications
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_ONE);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getString(TestUtils.STATUS));
 
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_TWO);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getString(TestUtils.STATUS));
 
-            returnJSON = executeWebScriptAdd(TestUtils.USER_ONE, TestUtils.USER_ONE_SITE_THREE);
-            assertEquals(TestUtils.SUCCESS, returnJSON.getString(TestUtils.STATUS));
 
-            //Gets all notifications for user one
-            returnJSON = executeWebScriptGetAll(TestUtils.USER_ONE);
-            assertTrue(returnJSON.has(UNSEEN));
-            assertEquals("3", returnJSON.getString(UNSEEN)); //unseen count should be three
 
-        } catch (IOException ex) {
-            log.error("IOException", ex);
-        } catch (JSONException ex) {
-            log.error("JSONException", ex);
-        }
-    }
 
-    private JSONObject executeWebScript (JSONObject data) throws IOException, JSONException {
-        TestWebScriptServer.Request request = new TestWebScriptServer.PostRequest("/notifications", data.toString(), "application/json");
+
+   /** webscripts **/
+
+    private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {
+        TestWebScriptServer.Request request = new TestWebScriptServer.PostRequest("/sites", data.toString(), "application/json");
         TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, TestUtils.ADMIN);
-        return new JSONArray(response.getContentAsString()).getJSONObject(0);
+        return new JSONArray(response.getContentAsString());
     }
 
-    private JSONObject executeWebScriptGetAll (String userName) throws IOException, JSONException {
+    private JSONArray executeWebScriptGetSite (String siteName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getSite");
+        data.put("PARAM_SITE_SHORT_NAME", siteName);
+        return executeWebScript(data);
+    }
+
+    private JSONArray executeWebScriptGetAll (String query) throws IOException, JSONException {
         JSONObject data = new JSONObject();
         data.put("PARAM_METHOD", "getAll");
-        data.put("PARAM_USERNAME", userName);
+        data.put("PARAM_QUERY", query);
         return executeWebScript(data);
     }
 
-    private JSONObject executeWebScriptAdd (String userName, String siteShortName) throws IOException, JSONException {
-        JSONObject data = new JSONObject();
-        data.put("PARAM_METHOD", "add");
-        data.put("PARAM_USERNAME", userName);
-        data.put("PARAM_MESSAGE", "Test message");
-        data.put("PARAM_SUBJECT", "Test subject");
-        data.put("PARAM_LINK", "/#!/projekter/" + siteShortName + "?type=Project");
-        data.put("PARAM_TYPE", "project");
-        data.put("PARAM_PROJECT", siteShortName);
-        return executeWebScript(data);
-    }
+
+
+
 
     @Override
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+//        TestUtils.deleteSite(transactionService, siteService, newTestSite);
         TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
     }
 }

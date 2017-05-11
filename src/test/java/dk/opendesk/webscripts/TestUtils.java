@@ -66,17 +66,20 @@ public class TestUtils {
     public static SiteInfo createSite(TransactionService transactionService, SiteService siteService, String siteShortName){
         UserTransaction tx = null;
         SiteInfo s = null;
+        System.out.println("heyyyyy *********************");
         try {
             tx = transactionService.getUserTransaction();
             tx.begin();
             s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
             tx.commit();
         } catch (Throwable err) {
+            System.out.println();
             try {
                 if (tx != null) {
                     tx.rollback();
                 }
             } catch (Exception tex) {
+                System.out.println("really bad bad");
             }
         }
         return s;
@@ -95,4 +98,14 @@ public class TestUtils {
             return true;
         });
     }
+
+//    public static SiteInfo createSite(TransactionService transactionService, SiteService siteService, String siteShortName) {
+//        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+//            SiteInfo s = null;
+//            s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
+//            return s;
+//        });
+//    }
+
+
 }
