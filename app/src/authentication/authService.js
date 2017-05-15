@@ -89,21 +89,7 @@ function authService($http, $window, $state, sessionService, userService, APP_CO
     return service;
 
     function getUserInfo() {
-        var userInfo = sessionService.getUserInfo();
-        if (userInfo == undefined) {
-            if (APP_CONFIG.ssoLoginEnabled == "true") {
-                ssoLogin().then(function (response) {
-                    if (!isAuthenticated()) {
-                        goToLogin();
-                    }
-                });
-            }
-            else if (!isAuthenticated()) {
-                goToLogin();
-            }
-        }
-
-        return userInfo;
+        return sessionService.getUserInfo();
     }
 
     function goToLogin() {

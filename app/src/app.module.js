@@ -54,27 +54,25 @@ angular
             if (next.data.authorizedRoles.length === 0) {
                 return;
             }
-
-            if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                if(ssoLoginEnabled) {
-                    authService.ssoLogin().then(function (response) {
-                        if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                            event.preventDefault();
-                            sessionService.retainCurrentLocation();
-                            $state.go('login');
-                        }
-                    });
-                }
-                else if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                    event.preventDefault();
-                    sessionService.retainCurrentLocation();
-                    $state.go('login');
-                }
-            }
-
             // If we got any open dialogs, close them before route change
             $mdDialog.cancel();
         });
+        if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
+            if(ssoLoginEnabled) {
+                authService.ssoLogin().then(function (response) {
+                    if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
+                        event.preventDefault();
+                        sessionService.retainCurrentLocation();
+                        $state.go('login');
+                    }
+                });
+            }
+            else if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
+                event.preventDefault();
+                sessionService.retainCurrentLocation();
+                $state.go('login');
+            }
+        }
     });
 
 function config($stateProvider, $urlRouterProvider, USER_ROLES) {
