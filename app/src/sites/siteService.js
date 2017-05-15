@@ -77,9 +77,14 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             ) 
         },
         getSites: function () {
-            return $http.post("/alfresco/service/sites", { PARAM_METHOD : "getAll" }).then(function(response) {
-                return response.data;
-            })
+            return $http.post("/alfresco/service/sites", {PARAM_METHOD: "getAll"}).then(
+                function (response) {
+                    return response.data;
+                }, function (error) {
+                    console.log("Error retrieving list of all sites.");
+                    console.log(error);
+                }
+            )
         },
         getSitesPerUser: function () {
             return $http.post("/alfresco/service/sites", { PARAM_METHOD : "getSitesPerUser" }).then(
