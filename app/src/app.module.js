@@ -57,17 +57,17 @@ angular
             // If we got any open dialogs, close them before route change
             $mdDialog.cancel();
         });
-        if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
+        if (!authService.isAuthenticated()) {
             if(ssoLoginEnabled) {
                 authService.ssoLogin().then(function (response) {
-                    if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
+                    if (!authService.isAuthenticated()) {
                         event.preventDefault();
                         sessionService.retainCurrentLocation();
                         $state.go('login');
                     }
                 });
             }
-            else if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
+            else if (!authService.isAuthenticated()) {
                 event.preventDefault();
                 sessionService.retainCurrentLocation();
                 $state.go('login');
