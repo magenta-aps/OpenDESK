@@ -85,6 +85,8 @@ angular
             return groupService.getSubGroups("OrganizationalCenters").then(function (response) {
                 //console.log(response);
                 return response;
+            }, function (error) {
+                console.log(error);
             });
         }
 
