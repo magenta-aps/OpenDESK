@@ -65,6 +65,8 @@ angular
                         sessionService.retainCurrentLocation();
                         $state.go('login');
                     }
+                    else
+                        $state.reload();
                 });
             }
             else if (!authService.isAuthenticated()) {
