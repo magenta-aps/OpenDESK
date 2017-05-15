@@ -73,7 +73,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
 }
 
-function authService($http, $window, $state, sessionService, userService) {
+function authService($http, $window, $state, sessionService, userService, APP_CONFIG) {
     var service = {
         login: login,
         logout: logout,
@@ -89,12 +89,32 @@ function authService($http, $window, $state, sessionService, userService) {
     return service;
 
     function getUserInfo() {
-        return sessionService.getUserInfo();
+        var userInfo = sessionService.getUserInfo();
+        if (userInfo == undefined) {
+            if (APP_CONFIG.ssoLoginEnabled == "true") {
+                ssoLogin().then(function (response) {
+                    if (!isAuthenticated()) {
+                        goToLogin();
+                    }
+                });
+            }
+            else if (!isAuthenticated()) {
+                goToLogin();
+            }
+        }
+
+        return userInfo;
+    }
+
+    function goToLogin() {
+        event.preventDefault();
+        sessionService.retainCurrentLocation();
+        $state.go('login');
     }
 
     function ssoLogin() {
         var userInfo = {};
-        return $http.get("alfresco/s/ssologin").then(function (response) {
+        return $http.get("/alfresco/s/ssologin").then(function (response) {
             var username = response.data;
             return $http.get("/api/people/" + username).then(function (response) {
                 userInfo.user = response.data;
