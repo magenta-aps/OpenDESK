@@ -92,12 +92,6 @@ function authService($http, $window, $state, sessionService, userService, APP_CO
         return sessionService.getUserInfo();
     }
 
-    function goToLogin() {
-        event.preventDefault();
-        sessionService.retainCurrentLocation();
-        $state.go('login');
-    }
-
     function ssoLogin() {
         var userInfo = {};
         return $http.get("/alfresco/s/ssologin").then(function (response) {
