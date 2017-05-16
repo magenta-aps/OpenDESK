@@ -43,7 +43,7 @@ angular
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
-        var ssoLoginEnabled = false;
+        var ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
         angular.element(window.document)[0].title = APP_CONFIG.appName;
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
@@ -54,27 +54,27 @@ angular
             if (next.data.authorizedRoles.length === 0) {
                 return;
             }
-
-            if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                if(ssoLoginEnabled) {
-                    authService.ssoLogin().then(function (response) {
-                        if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                            event.preventDefault();
-                            sessionService.retainCurrentLocation();
-                            $state.go('login');
-                        }
-                    });
-                }
-                else if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                    event.preventDefault();
-                    sessionService.retainCurrentLocation();
-                    $state.go('login');
-                }
-            }
-
             // If we got any open dialogs, close them before route change
             $mdDialog.cancel();
         });
+        if (!authService.isAuthenticated()) {
+            if(ssoLoginEnabled) {
+                authService.ssoLogin().then(function (response) {
+                    if (!authService.isAuthenticated()) {
+                        event.preventDefault();
+                        sessionService.retainCurrentLocation();
+                        $state.go('login');
+                    }
+                    else
+                        $state.reload();
+                });
+            }
+            else if (!authService.isAuthenticated()) {
+                event.preventDefault();
+                sessionService.retainCurrentLocation();
+                $state.go('login');
+            }
+        }
     });
 
 function config($stateProvider, $urlRouterProvider, USER_ROLES) {

@@ -13,8 +13,8 @@ angular.module('openDeskApp.testdata').factory('testService', function ($http, $
     var testSite1_name = "Magenta_1";
     var testSite1_members = [{name : "abbecher", role : "siteConsumer"}];
 
-    var testSite2_name = "Magenta_2"
-    var testSite3_rename = "Magenta_rename"
+    var testSite2_name = "Magenta_2";
+    var testSite3_rename = "Magenta_rename";
 
 
     var sites = new Array();
@@ -29,34 +29,6 @@ angular.module('openDeskApp.testdata').factory('testService', function ($http, $
 
 
     return {
-
-        loadSites: function () {
-
-
-            var defer = $q.defer();
-            var promises = [];
-
-            function lastTask(){
-
-               console.log("last task")
-                    defer.resolve();
-
-            }
-
-
-             for (var i in sites) {
-
-               let s = sites[i];
-
-                 console.log("creating site" + s);
-
-                 promises.push(siteService.createSite(s, s, "PUBLIC"));
-
-             }
-
-            $q.all(promises).then(lastTask);
-            return defer.promise;
-        },
 
         addDocumentsToSites: function () {
 
@@ -87,7 +59,7 @@ angular.module('openDeskApp.testdata').factory('testService', function ($http, $
 
                             // todo dynamize the mimetype
                             var file = new Blob([response.data], {type: 'application/pdf'});
-                            file.name = f.name
+                            file.name = f.name;
 
                             siteService.uploadFiles(file, currentFolderNodeRef);
                         })

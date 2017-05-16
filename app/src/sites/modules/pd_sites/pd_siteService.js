@@ -73,9 +73,9 @@ angular
                     //console.log(response.data);
                     return response;
                 },
-                function (err) {
-                    //console.log(err);
-                    return err;
+                function (error) {
+                    console.log("Error retrieving list of all managers.");
+                    console.log(error);
                 }
             );
         }
@@ -85,13 +85,9 @@ angular
             return groupService.getSubGroups("OrganizationalCenters").then(function (response) {
                 //console.log(response);
                 return response;
-            });
-        }
-
-        function getAllTemplates() {
-            return groupService.getGroupMembers("OrganizationalCenters").then(function (response) {
-                //console.log(response);
-                return response;
+            }, function (error) {
+                console.log("Error retrieving list of all organizational centers.");
+                console.log(error);
             });
         }
 

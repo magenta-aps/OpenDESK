@@ -73,7 +73,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
 }
 
-function authService($http, $window, $state, sessionService, userService) {
+function authService($http, $window, $state, sessionService, userService, APP_CONFIG) {
     var service = {
         login: login,
         logout: logout,
@@ -94,7 +94,7 @@ function authService($http, $window, $state, sessionService, userService) {
 
     function ssoLogin() {
         var userInfo = {};
-        return $http.get("alfresco/s/ssologin").then(function (response) {
+        return $http.get("/alfresco/s/ssologin").then(function (response) {
             var username = response.data;
             return $http.get("/api/people/" + username).then(function (response) {
                 userInfo.user = response.data;

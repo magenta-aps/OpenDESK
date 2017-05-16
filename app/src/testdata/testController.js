@@ -8,21 +8,13 @@ function TestController($scope, $mdDialog, $window, testService, siteService, $s
 
     var vm = this;
 
-
-
-            // the fix was that i forgot to return this line in createSite:
-            // return $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
-            testService.loadSites();
+            //Først skal clean up and purge webscriptet kaldes : http://0.0.0.0:8080/alfresco/s/cleanupandpurge
 
             var sites = siteService.getSites().then (function (result) {
                 testService.addDocumentsToSites().then(function (result) {
                     testService.addMembersToSite();
                 });
             });
-
-
-
-
 
     // TODO setup wait for the loadSites to be finished before the documents are added
 
