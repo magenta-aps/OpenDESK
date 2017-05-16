@@ -12,7 +12,9 @@ angular
         'swfobject',
         'isteven-multi-select',
         'openDeskApp.init',
+        'openDeskApp.auth',
         'openDeskApp.sites',
+        'openDeskApp.site',
         'openDeskApp.pd_sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
@@ -22,13 +24,10 @@ angular
         'openDeskApp.administration',
         'openDeskApp.groups',
         'openDeskApp.users',
-        //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
-
-        'openDeskApp.testdata',
-
-        //'openDeskApp.templates',
+        'openDeskApp.calendar',
+        'openDeskApp.nogletal',
 
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
@@ -98,130 +97,6 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             'header@': {
                 templateUrl: 'app/src/header/view/header.html'
             }
-        }
-    }).state('dashboard', {
-        parent: 'site',
-        url: '/',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/dashboard/view/dashboard.html',
-                controller: 'DashboardController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('administration', {
-        parent: 'site',
-        url: '/indstillinger',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/admin/view/admin.html',
-                controller: 'AdminController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('kalendar', {
-        parent: 'site',
-        url: '/kalendar',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/kalendar/view/kalendar.html'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('nogletal', {
-        parent: 'site',
-        url: '/nogletal',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/nogletal/view/nogletal.html'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('login', {
-        parent: 'site',
-        url: '/login?error&nosso',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/authentication/view/login.html',
-                controller: 'AuthController',
-                controllerAs: 'vm'
-            },
-            'header@': {},
-            'footer@': {}
-        },
-        data: {
-            authorizedRoles: []
-        }
-    }).state('projects', {
-        parent: 'site',
-        url: '/projekter',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/sites/view/sites.html',
-                controller: 'SitesController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('testdata', {
-        parent: 'site',
-        url: '/testdata',
-        views: {
-            'content@': {
-                //templateUrl: 'app/src/sites/view/sites.html',
-                controller: 'TestController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    }).state('project', {
-        parent: 'site',
-        url: '/projekter/:projekt{path:.*}',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/sites/view/site.html',
-                controller: 'SiteController',
-                controllerAs: 'vm'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 0
-        }
-
-    }).state('testuser', {
-        parent: 'site',
-        url: '/testuser',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/users/view/test.html',
-                controller: 'UsersController'
-            }
-        }
-
-    }).state('search', {
-        url: '/search/:searchTerm',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/search/view/search.html'
-            }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
         }
     });
 }

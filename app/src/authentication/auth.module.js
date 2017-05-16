@@ -1,0 +1,26 @@
+'use strict';
+
+angular.module('openDeskApp.auth', ['ngMaterial'])
+        .config(config);
+
+
+function config($stateProvider, USER_ROLES) {
+
+    $stateProvider.state('login', {
+        parent: 'site',
+        url: '/login?error&nosso',
+        views: {
+            'content@': {
+                templateUrl: 'app/src/authentication/view/login.html',
+                controller: 'AuthController',
+                controllerAs: 'vm'
+            },
+            'header@': {},
+            'footer@': {}
+        },
+        data: {
+            authorizedRoles: []
+        }
+    });
+
+};

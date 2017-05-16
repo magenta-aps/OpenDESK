@@ -43,7 +43,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.allMembers = [];
     vm.project = {};
     vm.userManagedProjects = [];
-    vm.path = $stateParams.path;
+    vm.path = $stateParams.path == undefined ? '' : $stateParams.path;
     vm.userRole = 'Consumer';
     vm.editRole = 'Collaborator';
     vm.managerRole = 'Manager';
@@ -73,6 +73,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
     vm.deleteFile = deleteFile;
 
+    vm.documentTab = '/dokumenter';
+
     $scope.searchProjects = searchProjects;
 
     siteService.getTemplateDocuments().then(function (response) {
@@ -82,8 +84,12 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             vm.addThumbnailUrl($scope.templateDocuments);
     })
 
+    $scope.selectedTab = 1;
+  
     function loadSiteData() {
         console.log('load site data');
+        console.log('path ' + $stateParams.path);
+        console.log('projekt ' + $stateParams.projekt);
         siteService.loadSiteData($stateParams.projekt).then(
             function (result) {
 
@@ -174,6 +180,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     }
 
 
+
     function buildBreadCrumbPath(project_title) {
         var title, link;
         if (vm.project.type == vm.strings.templateProject) {
@@ -189,18 +196,20 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             },
             {
                 title: project_title,
-                link: '#!/projekter/' + vm.project.shortName
+                link: '#!/projekter/' + vm.project.shortName + vm.documentTab
             }
         ];
-        var pathArr = $stateParams.path.split('/');
-        var pathLink = '/';
-        for (var a in pathArr) {
-            if (pathArr[a] !== '') {
-                paths.push({
-                    title: pathArr[a],
-                    link: '#!/projekter/' + vm.project.shortName + pathLink + pathArr[a]
-                });
-                pathLink = pathLink + pathArr[a] + '/';
+        if ($stateParams.path != undefined) {
+            var pathArr = $stateParams.path.split('/');
+            var pathLink = '/';
+            for (var a in pathArr) {
+                if (pathArr[a] !== '') {
+                    paths.push({
+                        title: pathArr[a],
+                        link: '#!/projekter/' + vm.project.shortName + vm.documentTab + pathLink + pathArr[a]
+                    });
+                    pathLink = pathLink + pathArr[a] + '/';
+                }
             }
         }
         return paths;
@@ -316,7 +325,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             return '#!/dokument/' + content.shortRef;
         }
         if (content.contentType === 'cmis:folder') {
-            return '#!/projekter/' + vm.project.shortName + vm.path + '/' + content.name;
+            return '#!/projekter/' + vm.project.shortName + vm.documentTab + vm.path + '/' + content.name;
         }
         if (content.contentType === 'cmis:link') {
             return '#!/projekter/' + content.destination_link;
@@ -890,7 +899,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             'fileName': fileName
         });
     };
-
 
     function editSiteDialog(ev) {
         $mdDialog.show({

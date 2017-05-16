@@ -1,0 +1,100 @@
+<!--<h2 class="od-title-icon od-primary"><i class="material-icons">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}</h2>-->
+
+                            <breadcrumb paths="vm.paths"></breadcrumb>
+
+                            <md-list class="sortHead">
+
+                                <table class="od-members od-members-row">
+                                    <thead fix-head>
+                                        <tr>
+                                            <th class="od-secondary" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
+                                            <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
+                                            <th colspan="2">
+                                                <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
+                                                <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToEsdh">
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr ng-show="content.contentType === 'cmis:document'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
+                                            ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+                                        </tr>
+                                        <tr ng-show="content.contentType === 'cmis:folder'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
+                                            ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+                                        </tr>
+                                        <tr ng-show="content.contentType === 'cmis:link'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
+                                            ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </md-list>
+
+                            <p ng-show="contents.length === 0">
+                                {{'COMMON.EMPTY_FOLDER' | translate}}
+                            </p>
+
+                            <md-divider></md-divider>
+
+                            <md-card-actions layout="row" layout-align="start center" class="btnAlign">
+                                <div layout="column">
+                                    <md-menu>
+                                        <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Upload dokumenter">
+                                            <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</md-tooltip>
+                                            <i class="material-icons">file_upload</i>
+                                        </md-button>
+                                        <md-menu-content>
+                                            <md-menu-item>
+                                                <md-button ng-click="vm.uploadDocumentsDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
+                                            </md-menu-item>
+                                            <md-menu-item ng-if="vm.project.type != vm.strings.templateProject">
+                                                <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}}
+                                                    {{'ESDH' | translate}} </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </div>
+
+                                <div layout="column">
+                                    <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
+                                        <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Opret dokument">
+                                            <i class="material-icons">note_add</i>
+                                            <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
+                                        </md-button>
+                                        <md-menu-content>
+                                            <md-menu-item ng-repeat="template in templateDocuments">
+                                                <md-button ng-click="vm.newTemplateDialog($event,template)">
+                                                    <i class="material-icons">
+                                        <img class="md-avatar" 
+                                         ng-src="app/assets/images/filetypes/{{template.thumbNailURL}}"
+                                         onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">    
+                                    </i> {{template.name}}
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </div>
+
+                                <md-button ng-if="vm.canEdit" class="md-icon-button md-primary z-index-0" ng-click="vm.newFolderDialog($event)">
+                                    <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
+                                    <i class="material-icons">create_new_folder</i>
+                                </md-button>
+
+                                <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.isManager" class="md-icon-button md-primary z-index-0"
+                                    ng-click="vm.newLinkDialog($event)">
+                                    <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
+                                    <i class="material-icons">link</i>
+                                </md-button>
+
+                                <span flex></span>
+
+                                <md-button ng-show="vm.sendToEsdh" ng-if="vm.project.type != vm.strings.templateProject" ng-click="vm.uploadSbsysDialog($event)" class="md-primary" aria-label="SBSYS">
+                                    <md-tooltip md-direction="top">
+                                        {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
+                                    </md-tooltip>
+                                    <span style="margin-left: 10px; margin-right: 20px;">
+                                        {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
+                                    </span>
+                                </md-button>
+                            </md-card-actions>
