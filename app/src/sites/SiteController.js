@@ -229,21 +229,24 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         else if(member.authority.userName != undefined)
             username = member.authority.userName;
 
-        userService.getAvatar(username).then(function (data) {
-            $mdDialog.show({
-                controller: ['$scope', 'member', function ($scope, member) {
-                    $scope.member = member;
-                    $scope.avatar = data;
-                }],
-                templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
-                locals: {
-                    member: member
-                },
-                parent: angular.element(document.body),
-                targetEvent: event,
-                scope: $scope,
-                preserveScope: true,
-                clickOutsideToClose: true
+        userService.getPerson(username).then(function (data) {
+            member = data;
+            userService.getAvatar(username).then(function (data) {
+                $mdDialog.show({
+                    controller: ['$scope', 'member', function ($scope, member) {
+                        $scope.member = member;
+                        $scope.avatar = data;
+                    }],
+                    templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
+                    locals: {
+                        member: member
+                    },
+                    parent: angular.element(document.body),
+                    targetEvent: event,
+                    scope: $scope,
+                    preserveScope: true,
+                    clickOutsideToClose: true
+                });
             });
         });
     }
