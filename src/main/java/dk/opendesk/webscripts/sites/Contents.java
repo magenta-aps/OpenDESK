@@ -156,14 +156,13 @@ public class Contents extends AbstractWebScript {
                         Date d = (Date) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIED);
                         json.put("lastChanged", d.getTime());
 
-                        String label = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_VERSION_LABEL);
-
-
-                        if (label != null && label.equals("1.0")) {
-                            json.put("hasHistory", false);
-                        } else {
-                            json.put("hasHistory", true);
+                        boolean hasHistory = false;
+                        if(nodeService.hasAspect(childNodeRef, ContentModel.ASPECT_VERSIONABLE)) {
+                            String versionLabel = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_VERSION_LABEL);
+                            if (versionLabel != null && !versionLabel.equals("1.0"))
+                                hasHistory = true;
                         }
+                        json.put("hasHistory", hasHistory);
                     } else {
                         String linkSiteShortName = (String) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET);
                         NodeRef linkNodeRef = (NodeRef) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
