@@ -145,7 +145,7 @@ angular
 
                             var siteShortName = response.data[0].shortName;
                             var siteName = $scope.newSite.siteName;
-                            var link = "/#!/projekter/" + siteShortName;
+                            var link = "#!/projekter/" + siteShortName;
                             
                             createSiteNotification(siteName, $scope.newSite.projectOwner.userName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);
@@ -156,7 +156,7 @@ angular
                             addUserToGroup(siteShortName, siteName, $scope.folgeGruppe, 'PD_MONITORS', link);
 
                             $mdDialog.cancel();
-                            $state.go('project', {projekt: siteShortName});
+                            $state.go( 'project', { projekt: siteShortName , path: ""}  );
                             $mdToast.show(
                                 $mdToast.simple()
                                         .textContent('Du har oprettet projekt: ' + $scope.newSite.siteName)
