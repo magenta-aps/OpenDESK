@@ -68,7 +68,7 @@ angular
 
 
         function getAllManagers() {
-            return groupService.getGroupMembers("GLOBAL_Projectmanagers").then(
+            return groupService.getGroupMembers("OPENDESK_ProjectOwners").then(
                 function (response) {
                     //console.log(response.data);
                     return response;
@@ -82,7 +82,7 @@ angular
 
 
         function getAllOrganizationalCenters() {
-            return groupService.getSubGroups("OrganizationalCenters").then(function (response) {
+            return groupService.getSubGroups("OPENDESK_OrganizationalCenters").then(function (response) {
                 //console.log(response);
                 return response;
             }, function (error) {
