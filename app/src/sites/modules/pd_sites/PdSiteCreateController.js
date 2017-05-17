@@ -156,7 +156,7 @@ angular
                             addUserToGroup(siteShortName, siteName, $scope.folgeGruppe, 'PD_MONITORS', link);
 
                             $mdDialog.cancel();
-                            window.location.href = link;
+                            $state.go('project', {projekt: siteShortName});
                             $mdToast.show(
                                 $mdToast.simple()
                                         .textContent('Du har oprettet projekt: ' + $scope.newSite.siteName)
