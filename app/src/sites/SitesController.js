@@ -106,7 +106,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		});
 	};
 
-	vm.deleteSiteDialog = function (project) {
+	vm.deleteSiteDialog = function (project, event) {
 		console.log('deletesite dialog');
 		console.log(project);
 
