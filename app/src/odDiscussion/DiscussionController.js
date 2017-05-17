@@ -9,10 +9,10 @@ angular
         };
     });
 
-function DiscussionController($scope, $log, $mdDialog) {
+function DiscussionController($scope, $log, $mdDialog, $state) {
     var dc = this;
 
-    dc.replyDialog = function($scope) {
+    dc.replyDialog = function() {
         $mdDialog.show({
             templateUrl: 'app/src/odDiscussion/view/reply.tmpl.html',
             parent: angular.element(document.body),
@@ -35,15 +35,12 @@ function DiscussionController($scope, $log, $mdDialog) {
         });
     }
 
-    dc.viewThread = function($scope) {
-        $mdDialog.show({
-            templateUrl: 'app/src/odDiscussion/view/conversation.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
+    dc.viewThread = function() {
+        $state.go('project.viewthread');
+    }
+
+    dc.viewDiscussions = function() {
+        $state.go('project.discussions');
     }
 
     dc.cancel = function() {

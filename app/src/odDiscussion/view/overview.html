@@ -5,7 +5,7 @@
             <tr>
                 <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">Tråd</th>
                 <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">Seneste svar</th>
-                <th class="od-secondary" colspan="2">
+                <th class="od-secondary" colspan="3">
                     Svar
                 </th>
             </tr>
@@ -16,7 +16,7 @@
                     <i class="material-icons">chat_bubble_outline</i>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary overflow" ng-href="https://google.com">
+                    <a class="od-filebrowser-link od-secondary overflow" ng-href="" ng-click='dc.viewThread()'>
                         <h3 class="od-primary">
                             Et spændende emne
                         </h3>
@@ -36,6 +36,22 @@
                 <td style="width:32px">
                     <i class="material-icons od-secondary">notifications_none</i>
                 </td>
+                <td style="width:32px">
+                    <md-menu>
+                    <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+                        <md-icon md-menu-origin>more_vert</md-icon>
+                    </md-button>
+
+                    <md-menu-content width="3">
+                        <md-menu-item>
+                            <md-button ng-click="vm.previewDocument(content.nodeRef)">
+                                <md-icon md-menu-align-target>delete</md-icon>
+                                {{'COMMON.DELETE' | translate }}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -48,6 +64,16 @@
 <md-divider></md-divider>
 
 <md-card-actions layout="row" layout-align="start center">
+
+    <md-input-container>
+          <label>Sorter efter</label>
+          <md-select name="type" ng-model="project.type">
+            <md-option value="all">Alle</md-option>
+            <md-option value="mine">Oprettet af mig</md-option>
+            <md-option value="follow">Jeg følger</md-option>
+          </md-select>
+        </md-input-container>
+
     <span flex></span>
 
     <md-button ng-click="dc.newThreadDialog()" class="md-primary" aria-label="SBSYS">

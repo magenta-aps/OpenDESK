@@ -34,13 +34,26 @@ function config($stateProvider, USER_ROLES) {
             selectedTab: 1
         }
     }).state('project.discussions', {
-        url: '/diskussioner{path:.*}',
+        url: '/diskussioner',
         data: {
             selectedTab: 2
         },
         views: {
             'discussions': {
                 templateUrl: 'app/src/odDiscussion/view/overview.html',
+                controller: 'DiscussionController',
+                controllerAs: 'dc'
+            }
+        }
+    })
+    .state('project.viewthread', {
+        url: '/diskussioner{path:.*}',
+        data: {
+            selectedTab: 2
+        },
+        views: {
+            'discussions': {
+                templateUrl: 'app/src/odDiscussion/view/conversation.html',
                 controller: 'DiscussionController',
                 controllerAs: 'dc'
             }
