@@ -15,6 +15,13 @@ import java.util.Map;
 public interface OpenDeskModel {
 
 
+    // Containers
+    public static String DISCUSSIONS = "discussions";
+    public static String DOCUMENT_LIBRARY = "documentLibrary";
+    public static String WIKI = "wiki"; // Not implemented yet
+    public static String DATA_LISTS = "dataLists"; // Not implemented yet
+    public static String LINKS = "links"; // Not implemented yet
+
     public static String OD_URI = "http://www.magenta-aps.dk/model/content/1.0";
     public static String OD_PREFIX = "od";
 

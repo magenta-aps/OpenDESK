@@ -200,8 +200,9 @@ public class Utils {
                         siteVisibility);
                 NodeRef n = site.getNodeRef();
 
-                // Create documentLibary
-                createChildNode(nodeService, n, "documentLibrary", ContentModel.TYPE_FOLDER);
+                // Create containers like document library and discussions
+                createContainer(siteService, shortNameWithVersion, OpenDeskModel.DOCUMENT_LIBRARY);
+                createContainer(siteService, shortNameWithVersion, OpenDeskModel.DISCUSSIONS);
 
                 // Create site dashboard
                 createSiteDashboard(nodeService, contentService, n, shortNameWithVersion);
@@ -216,13 +217,17 @@ public class Utils {
         return site.getNodeRef();
     }
 
+    private static NodeRef createContainer(SiteService siteService, String shortName, String componentId) {
+        return siteService.createContainer(shortName, componentId, ContentModel.TYPE_FOLDER, null);
+    }
+
     private static NodeRef createChildNode(NodeService nodeService, NodeRef n, String name, QName type) {
         Map<QName, Serializable> props = new HashMap<>();
         props.put(ContentModel.PROP_NAME, name);
 
         return nodeService.createNode(n, ContentModel.ASSOC_CONTAINS,
                 QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
-                ContentModel.TYPE_FOLDER, props).getChildRef();
+                type, props).getChildRef();
     }
 
     private static void createSiteDashboard(NodeService nodeService, ContentService contentService,
@@ -248,9 +253,10 @@ public class Utils {
         Map<String, String> components = new HashMap<>();
         components.put("title", "title/collaboration-title");
         components.put("navigation", "navigation/collaboration-navigation");
-        components.put("component-1-1", "dashlets/colleagues");
-        components.put("component-2-1", "dashlets/activityfeed");
-        components.put("component-3-1", "dashlets/docsummary");
+        components.put("component-1-1", "dashlets/docsummary");
+        components.put("component-1-2", "dashlets/forum-summary");
+        components.put("component-2-1", "dashlets/colleagues");
+        components.put("component-2-2", "dashlets/activityfeed");
 
         for (Map.Entry<String, String> component : components.entrySet()) {
             Document doc = createComponentXML(docBuilder, siteShortName, component.getKey(), component.getValue(), "");
@@ -304,7 +310,9 @@ public class Utils {
         Element propertiesElement = doc.createElement("properties");
         rootElement.appendChild(propertiesElement);
 
-        addXMLChild(doc, propertiesElement, "sitePages", "[{\"pageId\":\"documentlibrary\"}]");
+        String pageDocLib = "{\"pageId\":\"documentlibrary\"}";
+        String pageDiscussions = "{\"pageId\":\"discussions-topiclist\"}";
+        addXMLChild(doc, propertiesElement, "sitePages", "[" + pageDocLib + "," + pageDiscussions + "]");
 
         return doc;
     }

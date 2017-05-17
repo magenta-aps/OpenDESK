@@ -18,35 +18,34 @@ package dk.opendesk.webscripts.sites;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
-import org.alfresco.model.ContentModel;
-import org.alfresco.repo.domain.permissions.Authority;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
-import org.alfresco.repo.site.SiteServiceException;
-import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.AuthorityType;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
-
 import org.alfresco.service.cmr.site.SiteVisibility;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.*;
-
-import org.json.JSONObject;
+import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-
 import java.io.Writer;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class ProjectDepartment extends AbstractWebScript {
 
@@ -61,13 +60,6 @@ public class ProjectDepartment extends AbstractWebScript {
     public void setCopyService(CopyService copyService) {
         this.copyService = copyService;
     }
-
-
-    public void setFileFolderService(FileFolderService fileFolderService) {
-        this.fileFolderService = fileFolderService;
-    }
-
-    FileFolderService fileFolderService;
 
     private CopyService copyService;
 
@@ -92,7 +84,6 @@ public class ProjectDepartment extends AbstractWebScript {
 
     private SiteService siteService;
     private NodeService nodeService;
-    private PersonService personService;
     private AuthorityService authorityService;
 
     public void setSiteService(SiteService siteService) {
@@ -104,10 +95,8 @@ public class ProjectDepartment extends AbstractWebScript {
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
 
-    } public void setPermissionService(PermissionService permissionService) {
+    public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
 
@@ -171,18 +160,12 @@ public class ProjectDepartment extends AbstractWebScript {
             SiteInfo newSiteInfo = siteService.getSite(newSiteRef);
 
             // Get the documentLibrary of the template site.
-            NodeRef template_documentlibrary = siteService.getContainer(templateSite.getShortName(), "documentlibrary");
+            NodeRef template_documentlibrary = siteService.getContainer(templateSite.getShortName(), OpenDeskModel.DOCUMENT_LIBRARY);
 
             // Get the documentLibrary of the new site.
-            NodeRef newSite_documentlibrary = siteService.getContainer(newSiteInfo.getShortName(), "documentlibrary");
+            NodeRef newSite_documentlibrary = siteService.getContainer(newSiteInfo.getShortName(), OpenDeskModel.DOCUMENT_LIBRARY);
 
-             nodeService.deleteNode(newSite_documentlibrary);
-
-            try {
-                fileFolderService.copy(template_documentlibrary, newSiteRef, "documentLibrary");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            copyService.copy(template_documentlibrary, newSite_documentlibrary);
         }
 
     }
