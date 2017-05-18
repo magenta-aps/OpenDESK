@@ -53,8 +53,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     };
 
     vm.goBack = function () {
-        $window.history.back();
-        $window.history.back();
+        window.history.go(-2);
     }
 
     vm.godkendDialog = function (event) {
