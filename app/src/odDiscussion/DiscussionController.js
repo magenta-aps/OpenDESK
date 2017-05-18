@@ -9,7 +9,7 @@ angular
         };
     });
 
-function DiscussionController($scope, $log, $mdDialog, $state) {
+function DiscussionController($scope, $log, $mdDialog, $state, discussionService) {
     var dc = this;
 
     dc.replyDialog = function() {
