@@ -402,12 +402,23 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         loadFromSbsys : function() {
-        	return $http.post("/alfresco/service/sbsys/fakedownload", {
-        		destinationNodeRef : "workspace://SpacesStore/22d590d5-99a1-4704-9b70-5f6b1f5e16f7",
-        		nodeRefs : ["workspace://SpacesStore/13ea501d-4dd7-4389-8764-4b3850de487c", "workspace://SpacesStore/7acc29d6-265e-4b34-b2ef-88235dfdbcfb"]
-        	}).then(function(response) {
-        		return response.data;
-        	});
+
+            return $http.get("/alfresco/s/slingshot/doclib2/doclist/type/site/sbsysfakedata/documentLibrary", {}).then(function (sbsysfakedataResponse) {
+                var nodeRefs = [];
+                for (var i in sbsysfakedataResponse.data.items)
+                    nodeRefs.push(sbsysfakedataResponse.data.items[i].node.nodeRef);
+
+                return $http.get("/alfresco/s/slingshot/doclib/container/SBSYS-funktionalitet/documentLibrary", {}).then(function (SbsysfunktionalitetResponse) {
+
+                    var destinationNodeRef = SbsysfunktionalitetResponse.data.container.nodeRef;
+                    return $http.post("/alfresco/service/sbsys/fakedownload", {
+                        destinationNodeRef: destinationNodeRef,
+                        nodeRefs: nodeRefs
+                    }).then(function (response) {
+                        return response.data;
+                    });
+                });
+            });
         },
         getTemplateDocuments : function() {
             return $http.get("/alfresco/service/template?method=getAllTemplateDocuments", {
