@@ -54,6 +54,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     vm.goBack = function () {
         $window.history.back();
+        $window.history.back();
     }
 
     vm.godkendDialog = function (event) {
@@ -164,7 +165,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
             notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then (function (val) {
                 $mdDialog.hide();
-                vm.goBack();
                 vm.goBack();
             });
 
