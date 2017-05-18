@@ -154,7 +154,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.createWFNotification = function(comment, wtype) {
 
         var creator = authService.getUserInfo().user.userName;
-        var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
+        var link = "#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
         var status = wtype == 'review-approved' ? 'godkendt' : 'afvist';
 
