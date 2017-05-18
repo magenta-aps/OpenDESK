@@ -358,7 +358,7 @@ public class Notifications extends AbstractWebScript {
         String link = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_LINK);
         String project = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_PROJECT);
 
-        NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("/#!/dokument/", "").split("\\?")[0]);
+        NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("#!/dokument/", "").split("\\?")[0]);
         String fileName = (String)nodeService.getProperty(document, ContentModel.PROP_NAME);
 
         Map<String, Serializable> map = new HashMap<>();
