@@ -61,7 +61,6 @@ angular
             if(ssoLoginEnabled) {
                 authService.ssoLogin().then(function (response) {
                     if (!authService.isAuthenticated()) {
-                        event.preventDefault();
                         sessionService.retainCurrentLocation();
                         $state.go('login');
                     }
@@ -70,7 +69,6 @@ angular
                 });
             }
             else if (!authService.isAuthenticated()) {
-                event.preventDefault();
                 sessionService.retainCurrentLocation();
                 $state.go('login');
             }
