@@ -122,7 +122,6 @@ angular
                 var subject = "Du er blevet tilføjet til " + siteName;
                 var message = "har tilføjet dig til projektet " + siteName + ".";
                 notificationsService.addNotice(userName, subject, message, link,'project', siteName).then(function (val) {
-                    $mdDialog.cancel();
                 });
             }
         }
