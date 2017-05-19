@@ -55,12 +55,6 @@ angular
                 return;
             }
 
-            if (!authService.isAuthenticated()) {
-                event.preventDefault();
-                sessionService.retainCurrentLocation();
-                $state.go('login');
-            }
-
             // If we got any open dialogs, close them before route change
             $mdDialog.cancel();
         });
@@ -74,6 +68,10 @@ angular
                     else
                         $state.reload();
                 });
+            }
+            else {
+                sessionService.retainCurrentLocation();
+                $state.go('login');
             }
         }
     });
