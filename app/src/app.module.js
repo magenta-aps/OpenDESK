@@ -76,7 +76,6 @@ angular
                 });
             }
             else {
-                event.preventDefault();
                 sessionService.retainCurrentLocation();
                 $state.go('login');
             }
