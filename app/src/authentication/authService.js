@@ -185,8 +185,8 @@ function authService($http, $window, $state, sessionService, userService, APP_CO
     }
 
     function revalidateUser() {
-        return $http.get('/api/opendesk/currentUser').then(function (response) {
-            return addUserToSession(response.data.userName);
+        return $http.get('/alfresco/s/ssologin').then(function (response) {
+            return addUserToSession(response.data);
         });
     }
 
