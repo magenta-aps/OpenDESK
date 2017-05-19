@@ -77,6 +77,7 @@ angular
             }
             else {
                 authService.revalidateUser();
+                $state.reload();
                 if (!authService.isAuthenticated()) {
                     sessionService.retainCurrentLocation();
                     $state.go('login');
