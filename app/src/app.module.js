@@ -75,10 +75,6 @@ angular
                         $state.reload();
                 });
             }
-            else {
-                sessionService.retainCurrentLocation();
-                $state.go('login');
-            }
         }
     });
 
