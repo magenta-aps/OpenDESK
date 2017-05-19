@@ -75,6 +75,11 @@ angular
                         $state.reload();
                 });
             }
+            else {
+                event.preventDefault();
+                sessionService.retainCurrentLocation();
+                $state.go('login');
+            }
         }
     });
 
