@@ -42,13 +42,13 @@ angular
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
-    .run(function ($rootScope, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
+    .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
         var ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
         angular.element(window.document)[0].title = APP_CONFIG.appName;
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
 
-        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+        $transitions.onError({}, function (transition) {
             $state.go('login');
         });
 
