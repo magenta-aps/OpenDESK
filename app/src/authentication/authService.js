@@ -131,9 +131,10 @@ function authService($http, $window, $state, sessionService, userService, APP_CO
 
 
         if (userInfo) {
-            return $http.delete('/api/login/ticket/' + userInfo.ticket, {alf_ticket: userInfo.ticket}).then(function (response) {
-                sessionService.setUserInfo(null);
-                sessionService.clearRetainedLocation();
+            var ticket =  userInfo.ticket;
+            sessionService.setUserInfo(null);
+            sessionService.clearRetainedLocation();
+            return $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function (response) {
                 return response;
             });
         }

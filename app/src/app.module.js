@@ -65,14 +65,16 @@ angular
             $mdDialog.cancel();
         });
         if (!authService.isAuthenticated()) {
-            authService.ssoLogin().then(function (response) {
-                if (!authService.isAuthenticated()) {
-                    sessionService.retainCurrentLocation();
-                    $state.go('login');
-                }
-                else
-                    $state.reload();
-            });
+            if (ssoLoginEnabled) {
+                authService.ssoLogin().then(function (response) {
+                    if (!authService.isAuthenticated()) {
+                        sessionService.retainCurrentLocation();
+                        $state.go('login');
+                    }
+                    else
+                        $state.reload();
+                });
+            }
         }
     });
 
