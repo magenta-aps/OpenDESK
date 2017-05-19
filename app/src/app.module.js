@@ -54,11 +54,18 @@ angular
             if (next.data.authorizedRoles.length === 0) {
                 return;
             }
+
+            if (!authService.isAuthenticated()) {
+                event.preventDefault();
+                sessionService.retainCurrentLocation();
+                $state.go('login');
+            }
+
             // If we got any open dialogs, close them before route change
             $mdDialog.cancel();
         });
         if (!authService.isAuthenticated()) {
-            if(ssoLoginEnabled) {
+            if (ssoLoginEnabled) {
                 authService.ssoLogin().then(function (response) {
                     if (!authService.isAuthenticated()) {
                         sessionService.retainCurrentLocation();
@@ -67,10 +74,6 @@ angular
                     else
                         $state.reload();
                 });
-            }
-            else if (!authService.isAuthenticated()) {
-                sessionService.retainCurrentLocation();
-                $state.go('login');
             }
         }
     });
