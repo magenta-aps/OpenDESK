@@ -48,22 +48,10 @@ angular
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
 
-        $rootScope.$on('$stateChangeStart', function (event, next, params) {
-            $rootScope.toState = next;
-            $rootScope.toStateParams = params;
-            if (next.data.authorizedRoles.length === 0) {
-                return;
-            }
-
-            if (!authService.isAuthenticated()) {
-                event.preventDefault();
-                sessionService.retainCurrentLocation();
-                $state.go('login');
-            }
-
-            // If we got any open dialogs, close them before route change
-            $mdDialog.cancel();
+        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+            $state.go('login');
         });
+
         if (!authService.isAuthenticated()) {
             if (ssoLoginEnabled) {
                 authService.ssoLogin().then(function (response) {
@@ -87,7 +75,17 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
     $stateProvider.state('site', {
         abstract: true,
         resolve: {
-            authorize: ['authService', function (authService) {
+            authorize:
+                ['authService', '$q', function (authService, $q) {
+                var d = $q.defer();
+                if (authService.isAuthenticated()) {
+                    // I also provide the user for child controllers
+                    d.resolve(authService.user);
+                } else {
+                    // here the rejection
+                    d.reject('not logged');
+                }
+                return d.promise;
             }]
         },
         views: {
@@ -148,8 +146,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: [USER_ROLES.user]
         }
     }).state('login', {
-        parent: 'site',
-        url: '/login?error&nosso',
+        url: '/login',
         views: {
             'content@': {
                 templateUrl: 'app/src/authentication/view/login.html',
