@@ -55,6 +55,12 @@ angular
                 return;
             }
 
+            if (!authService.isAuthenticated()) {
+                event.preventDefault();
+                sessionService.retainCurrentLocation();
+                $state.go('login');
+            }
+
             // If we got any open dialogs, close them before route change
             $mdDialog.cancel();
         });
@@ -70,8 +76,11 @@ angular
                 });
             }
             else {
-                sessionService.retainCurrentLocation();
-                $state.go('login');
+                authService.revalidateUser();
+                if (!authService.isAuthenticated()) {
+                    sessionService.retainCurrentLocation();
+                    $state.go('login');
+                }
             }
         }
     });
