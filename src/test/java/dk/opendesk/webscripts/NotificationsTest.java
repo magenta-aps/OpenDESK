@@ -218,14 +218,14 @@ public class NotificationsTest extends BaseWebScriptTest {
     }
 
     private JSONArray assertAddProjectNotification (String userName, String siteShortName) throws IOException, JSONException {
-        String link = "/#!/projekter/" + siteShortName + "?type=Project";
+        String link = "#!/projekter/" + siteShortName;
         String type = "project";
         return assertAdd(userName, siteShortName, link, type);
     }
 
     private JSONArray assertAddNewDocumentNotification (String userName, String siteShortName, NodeRef n) throws IOException, JSONException {
         String ref = n.toString().split("/")[3];
-        String link = "/#!/dokument/" + ref;
+        String link = "#!/dokument/" + ref;
         String type = "new-doc";
         return assertAdd(userName, siteShortName, link, type);
     }
