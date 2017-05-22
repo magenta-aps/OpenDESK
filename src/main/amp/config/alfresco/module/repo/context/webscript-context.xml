@@ -140,11 +140,6 @@
 		<property name="serviceRegistry"> <ref bean="ServiceRegistry"/> </property>
 	</bean>
 
-	<bean id="webscript.purge.get"
-		  class="dk.opendesk.webscripts.Purge" parent="webscript">
-		<property name="nodeArchiveService" ref="nodeArchiveService"/>
-	</bean>
-
 	<bean id="webscript.cleanupandpurge.get"
 		  class="dk.opendesk.webscripts.CleanupAndPurge" parent="webscript">
 		<property name="nodeArchiveService" ref="nodeArchiveService"/>
