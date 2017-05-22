@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
@@ -29,6 +30,10 @@ public class TestUtils {
     public static final String USER_ONE_LASTNAME = "one";
     public static final String USER_ONE_EMAIL = "user_one@testtest.dk";
     public static final String USER_ONE_GROUP = "Collaborator";
+    public static final String USER_TWO = "user_two";
+    public static final String USER_THREE = "user_three";
+    public static final String USER_FOUR = "user_four";
+    public static final String USER_FIVE = "user_five";
     public static final String SITE_ONE = "user_one_site_one";
     public static final String SITE_TWO = "user_one_site_two";
     public static final String SITE_THREE = "user_one_site_three";
@@ -54,20 +59,17 @@ public class TestUtils {
 
         UserTransaction tx = null;
         SiteInfo s = null;
-        System.out.println("heyyyyy *********************");
         try {
             tx = transactionService.getUserTransaction();
             tx.begin();
             s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
             tx.commit();
         } catch (Throwable err) {
-            System.out.println();
             try {
                 if (tx != null) {
                     tx.rollback();
                 }
             } catch (Exception tex) {
-                System.out.println("really bad bad");
             }
         }
         return s;
@@ -92,7 +94,8 @@ public class TestUtils {
         });
     }
 
-    public static Boolean deleteSite(TransactionService transactionService, SiteService siteService, String siteShortName) {
+    public static Boolean deleteSite(TransactionService transactionService, SiteService siteService,
+                                     String siteShortName) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
             if(siteService.hasSite(siteShortName))
             siteService.deleteSite(siteShortName);
@@ -100,14 +103,23 @@ public class TestUtils {
         });
     }
 
-    public static Boolean deletePerson(TransactionService transactionService, PersonService personService, String userName) {
+    public static Boolean deletePerson(TransactionService transactionService, PersonService personService,
+                                       String userName) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
             personService.deletePerson(userName);
             return true;
         });
     }
+    public static Boolean addToAuthority(TransactionService transactionService, AuthorityService authorityService,
+                                         String group, String userName) {
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+            authorityService.addAuthority(group, userName);
+            return true;
+        });
+    }
 
-//    public static SiteInfo createSite(TransactionService transactionService, SiteService siteService, String siteShortName) {
+//    public static SiteInfo createSite(TransactionService transactionService, SiteService siteService,
+//                                         String siteShortName) {
 //        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
 //            SiteInfo s = null;
 //            s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
