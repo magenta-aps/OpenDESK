@@ -90,7 +90,7 @@ public class History extends AbstractWebScript {
             if (method != null) {
                 switch (method) {
                     case "getAll":
-                        result = this.getVersion(nodeRef);
+                        result = getVersion(nodeRef);
                         break;
                 }
             }
