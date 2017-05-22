@@ -5,9 +5,6 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
-import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
@@ -41,7 +38,6 @@ public class GroupsTest extends BaseWebScriptTest {
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
     private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
 
-    private static final String NODE_REF = "nodeRef";
     private List<String> users = new ArrayList<>();
     private Map<String, SiteInfo> sites = new HashMap<>();
 
