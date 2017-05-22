@@ -4,6 +4,9 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
 
     var restBaseUrl = '/alfresco/s/api';
 
+    var selectedDiscussion = [];
+    var replies = [];
+
     return {
         getDiscussions : function(siteShortName) {
             return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {}).then(function (response) {
@@ -22,9 +25,16 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
         },
 
         getReplies : function(postItem) {
+            selectedDiscussion = postItem;
+            console.log('discussion service set selected discussion');
+            console.log(selectedDiscussion);
             return $http.get(restBaseUrl + postItem.repliesUrl, {}).then(function (response) {
                 return response.data.items;
             });
+        },
+
+        getSelectedDiscussion : function() {
+            return selectedDiscussion;
         },
 
         addDiscussion : function(siteShortName, title, content) {
@@ -36,7 +46,7 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
             });
         },
 
-        addPost : function(postItem, content) {
+        addReply : function(postItem, content) {
             var id = nodeRefUtilsService.getId(postItem.nodeRef);
             return $http.post(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id + "/replies", {
                 content: content

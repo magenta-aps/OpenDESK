@@ -9,8 +9,35 @@ angular
         };
     });
 
-function DiscussionController($scope, $log, $mdDialog, $state) {
+function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, discussionService,nodeRefUtilsService) {
     var dc = this;
+
+    dc.discussions = [];
+    dc.selectedDiscussion = discussionService.getSelectedDiscussion();
+    dc.replies = [];
+
+    dc.getDiscussions = function(siteShortName) {
+        discussionService.getDiscussions(siteShortName).then(function(response) {
+            dc.discussions = response.items;
+            console.log('get discussions');
+            console.log(dc.discussions);
+        });
+    }
+
+    dc.getReplies = function(postItem) {
+        console.log('get replies');
+        discussionService.getReplies(postItem).then(function(response) {
+            console.log(response);
+            dc.replies = response;
+        })
+    }
+
+    function init() {
+        console.log('discussion controller init');
+        dc.getDiscussions($stateParams.projekt);
+        dc.getReplies(dc.selectedDiscussion);
+    }
+    init();
 
     dc.replyDialog = function() {
         $mdDialog.show({
@@ -23,7 +50,14 @@ function DiscussionController($scope, $log, $mdDialog, $state) {
         });
     }
 
-    dc.newThreadDialog = function() {
+    dc.reply = function(content) {
+        discussionService.addReply(dc.selectedDiscussion,content).then(function(response) {
+            console.log(response);
+            $mdDialog.cancel();
+        })
+    },
+
+    dc.newDiscussionDialog = function() {
         console.log('ny thread');
         $mdDialog.show({
             templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
@@ -35,8 +69,24 @@ function DiscussionController($scope, $log, $mdDialog, $state) {
         });
     }
 
-    dc.viewThread = function() {
-        $state.go('project.viewthread');
+    dc.newDiscussion = function(title, content) {
+        discussionService.addDiscussion($stateParams.projekt, title, content).then(function(response) {
+            console.log(response);
+            $mdDialog.cancel();
+        });
+    },
+
+    dc.viewThread = function(postItem) {
+        console.log('view thread');
+        //dc.getReplies(postItem);
+        //$state.go('project.viewthread');
+        return '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
+    }
+
+    dc.deleteDiscussion = function(postItem) {
+        discussionService.deletePost(postItem).then(function(response) {
+            console.log(response);
+        });
     }
 
     dc.viewDiscussions = function() {

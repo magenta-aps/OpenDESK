@@ -1,4 +1,4 @@
-<div ng-controller="DiscussionController as dc">
+<!--<div ng-controller="DiscussionController as dc">-->
 <md-list class="sortHead">
     <table class="od-members od-members-row">
         <thead fix-head>
@@ -11,40 +11,40 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]">
+            <tr ng-repeat="discussion in dc.discussions">
                 <td class="icon">
                     <i class="material-icons">chat_bubble_outline</i>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary overflow" ng-href="" ng-click='dc.viewThread()'>
+                    <a class="od-filebrowser-link od-secondary overflow" ng-href="{{dc.viewThread(discussion)}}" ng-click="dc.getReplies(discussion)">
                         <h3 class="od-primary">
-                            Et spændende emne
+                            {{discussion.title}}
                         </h3>
-                        Kim Larsen
+                        {{discussion.author.firstName}} {{discussion.author.lastName}}
                     </a>
                 </td>
                 <td>
                     <a class="od-filebrowser-link od-secondary" ng-href="">
-                                1 time siden af Johnny Madsen
+                                {{discussion.modifiedOn | customDate}} af Johnny Madsen
                             </a>
                 </td>
                 <td>
                     <a class="od-filebrowser-link od-secondary" ng-href="">
-                                4
+                                {{discussion.totalReplyCount}}
                             </a>
                 </td>
                 <td style="width:32px">
                     <i class="material-icons od-secondary">notifications_none</i>
                 </td>
                 <td style="width:32px">
-                    <md-menu>
+                    <md-menu ng-if="discussion.permissions.delete">
                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                         <md-icon md-menu-origin>more_vert</md-icon>
                     </md-button>
 
                     <md-menu-content width="3">
                         <md-menu-item>
-                            <md-button ng-click="vm.previewDocument(content.nodeRef)">
+                            <md-button ng-click="dc.deleteDiscussion(discussion)">
                                 <md-icon md-menu-align-target>delete</md-icon>
                                 {{'COMMON.DELETE' | translate }}
                             </md-button>
@@ -76,10 +76,10 @@
 
     <span flex></span>
 
-    <md-button ng-click="dc.newThreadDialog()" class="md-primary" aria-label="SBSYS">
+    <md-button ng-click="dc.newDiscussionDialog()" class="md-primary" aria-label="ny-diskussion">
         <span>
                 Start ny samtale
             </span>
     </md-button>
 </md-card-actions>
-</div>
+<!--</div>-->

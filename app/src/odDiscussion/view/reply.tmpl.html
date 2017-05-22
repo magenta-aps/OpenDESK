@@ -1,6 +1,6 @@
 
-<md-dialog aria-label="Slet projekt" ng-cloak>
-    <form name="deleteProjectForm" ng-submit="dc.newThread()">
+<md-dialog aria-label="Besvar" ng-cloak>
+    <form name="newReplyForm" ng-submit="dc.reply(replyContent)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -16,12 +16,12 @@
         <md-dialog-content class="md-padding" layout='column'>
                 <md-input-container>
                     <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
-                    <textarea required name="newSiteDesc" ng-model="newSiteDescription"></textarea>
+                    <textarea required name="replyContent" ng-model="replyContent"></textarea>
                 </md-input-container>
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button type="submit" class="md-primary">{{'COMMON.REMOVE' | translate}}</md-button>
+            <md-button type="submit" class="md-primary">{{'COMMON.REPLY' | translate}}</md-button>
         </md-dialog-actions>
 
         
