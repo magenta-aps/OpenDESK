@@ -128,58 +128,11 @@ public class Notifications extends AbstractWebScript {
             }
         }
         catch (Exception e) {
-            System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
             webScriptResponse.setStatus(400);
         }
         Utils.writeJSONArray(webScriptWriter, result);
-    }
-
-    private JSONArray getNotifications(String userName) {
-
-        NodeRef user = personService.getPerson(userName);
-
-        Set<QName> types = new HashSet<>();
-        types.add(OpenDeskModel.PROP_NOTIFICATION);
-
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
-        JSONArray result = new JSONArray();
-
-        for (ChildAssociationRef child : childAssociationRefs) {
-            JSONObject json = new JSONObject();
-
-
-            Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
-
-
-            Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
-
-            if (!read) {
-                String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
-                String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
-                String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
-
-                try {
-                    json.put("nodeRef", child.getChildRef());
-                    json.put("subject", subject);
-                    json.put("message", message);
-                    json.put("read", read);
-
-                    Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
-                    json.put("created", d.getTime());
-
-                    if(link != null)
-                        json.put("link", link);
-
-                    result.add(json);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return result;
     }
 
     // also returns read notifications
@@ -213,8 +166,8 @@ public class Notifications extends AbstractWebScript {
 
             String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
             String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
-            Boolean read = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
-            Boolean seen = (Boolean)props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
+            Boolean read = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
+            Boolean seen = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
             String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
             String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
             String shortName = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
@@ -225,7 +178,7 @@ public class Notifications extends AbstractWebScript {
 
                 SiteInfo site = siteService.getSite(shortName);
 
-                if (site != null ) {
+                if (site != null) {
                     projectName = siteService.getSite(shortName).getTitle();
                 }
             }
@@ -233,11 +186,11 @@ public class Notifications extends AbstractWebScript {
             String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATOR);
             NodeRef from = personService.getPerson(name);
 
-            String from_name = (String)nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME)  + " " + (String)nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
+            String from_name = (String) nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
             String fileName = "";
 
             if (OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST.equals(type) || OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED.equals(type) ||
-                OpenDeskModel.PD_NOTIFICATION_REJECTED.equals(type) || OpenDeskModel.PD_NOTIFICATION_NEWDOC.equals(type)) {
+                    OpenDeskModel.PD_NOTIFICATION_REJECTED.equals(type) || OpenDeskModel.PD_NOTIFICATION_NEWDOC.equals(type)) {
 
                 NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("#!/dokument/", "").split("\\?")[0]);
 
@@ -249,32 +202,26 @@ public class Notifications extends AbstractWebScript {
                     fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
 
                 } catch (InvalidNodeRefException e) {
-                        continue; // Skip this notification if the document is no longer available.
+                    continue; // Skip this notification if the document is no longer available.
                 }
-            }
-            else {
+            } else {
                 fileName = "";
             }
-            try {
-                json.put("nodeRef", child.getChildRef());
-                json.put("subject", subject);
-                json.put("message", message);
-                json.put("link", link);
-                json.put("read", read);
-                json.put("seen", seen);
-                json.put("filename", fileName);
-                json.put("project", projectName);
-                json.put("from", from_name);
-                json.put("type", type);
+            json.put("nodeRef", child.getChildRef());
+            json.put("subject", subject);
+            json.put("message", message);
+            json.put("link", link);
+            json.put("read", read);
+            json.put("seen", seen);
+            json.put("filename", fileName);
+            json.put("project", projectName);
+            json.put("from", from_name);
+            json.put("type", type);
 
 
-                Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
-                json.put("created", d.getTime());
-                children.add(json);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
+            json.put("created", d.getTime());
+            children.add(json);
         }
 
 
@@ -381,12 +328,3 @@ public class Notifications extends AbstractWebScript {
         return countPropertyValue(userName, OpenDeskModel.PROP_NOTIFICATION_READ, false);
     }
 }
-
-// create
-//http://localhost:8080/alfresco/service/notifications?userName=fhp&message=duerdum&subject=hilsen&method=add&NODE_ID=3570b61b-a861-4a75-8a27-7b16393027cd&STORE_TYPE=workspace&STORE_ID=SpacesStore
-
-
-// setRead
-//http://localhost:8080/alfresco/service/notifications?method=setRead&NODE_ID=76e15607-5519-4ad6-915c-1c07086535f2&STORE_TYPE=workspace&STORE_ID=SpacesStore
-
-//http://178.62.194.129:8080/alfresco/service/notifications?method=setRead&NODE_ID=/f1115ab8-bf2f-408c-b5ee-72acfb14be4c&STORE_TYPE=workspace&STORE_ID=SpacesStore

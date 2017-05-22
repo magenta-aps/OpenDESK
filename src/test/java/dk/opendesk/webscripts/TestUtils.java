@@ -1,5 +1,6 @@
 package dk.opendesk.webscripts;
 
+import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.cmr.model.FileFolderService;
@@ -32,7 +33,7 @@ public class TestUtils {
     public static final String USER_ONE_FIRSTNAME = "user";
     public static final String USER_ONE_LASTNAME = "one";
     public static final String USER_ONE_EMAIL = "user_one@testtest.dk";
-    public static final String USER_ONE_GROUP = "Collaborator";
+    public static final String USER_ONE_GROUP = "Site" + OpenDeskModel.COLLABORATOR;
     public static final String USER_TWO = "user_two";
     public static final String USER_THREE = "user_three";
     public static final String USER_FOUR = "user_four";

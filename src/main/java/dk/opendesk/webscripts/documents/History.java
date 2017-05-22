@@ -95,7 +95,6 @@ public class History extends AbstractWebScript {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
             webScriptResponse.setStatus(400);
@@ -103,7 +102,7 @@ public class History extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private JSONArray getVersion(NodeRef nodeRef) {
+    private JSONArray getVersion(NodeRef nodeRef) throws JSONException {
 
         System.out.println("nodeRef" + nodeRef);
 
@@ -116,25 +115,20 @@ public class History extends AbstractWebScript {
             for (Version v : versions) {
 
                 JSONObject json = new JSONObject();
-                try {
 
-                    json.put("parent_nodeRef", nodeRef.getId());
-                    json.put("nodeRef", v.getFrozenStateNodeRef().getId());
+                json.put("parent_nodeRef", nodeRef.getId());
+                json.put("nodeRef", v.getFrozenStateNodeRef().getId());
 
-                    NodeRef modifier = this.personService.getPerson(v.getFrozenModifier());
+                NodeRef modifier = this.personService.getPerson(v.getFrozenModifier());
 
-                    json.put("modifier", nodeService.getProperty(modifier, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(modifier, ContentModel.PROP_LASTNAME));
+                json.put("modifier", nodeService.getProperty(modifier, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(modifier, ContentModel.PROP_LASTNAME));
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                    json.put("created", sdf.format(v.getFrozenModifiedDate()));
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                json.put("created", sdf.format(v.getFrozenModifiedDate()));
 
-                    json.put("version", v.getVersionLabel());
+                json.put("version", v.getVersionLabel());
 
-                    result.add(json);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                result.add(json);
             }
         }
 

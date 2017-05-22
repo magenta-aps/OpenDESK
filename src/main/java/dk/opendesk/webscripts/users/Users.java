@@ -17,25 +17,16 @@ limitations under the License.
 package dk.opendesk.webscripts.users;
 
 import dk.opendesk.repo.utils.Utils;
-import net.sf.acegisecurity.Authentication;
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.security.authority.UnknownAuthorityException;
 import org.alfresco.repo.template.TemplateNode;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
-import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
@@ -43,7 +34,6 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import javax.transaction.UserTransaction;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -56,11 +46,6 @@ public class Users extends AbstractWebScript {
     private PersonService personService;
     public void setPersonService(PersonService personService) {
         this.personService = personService;
-    }
-
-    private NodeService nodeService;
-    public void setNodeService (NodeService nodeService) {
-        this.nodeService = nodeService;
     }
 
     private AuthorityService authorityService;
@@ -103,11 +88,6 @@ public class Users extends AbstractWebScript {
         this.serviceRegistry = serviceRegistry;
     }
 
-    private TransactionService transactionService;
-    public void setTransactionService (TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
-
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
@@ -133,8 +113,7 @@ public class Users extends AbstractWebScript {
                         break;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);
             webScriptResponse.setStatus(400);
@@ -142,65 +121,50 @@ public class Users extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    // also returns read notifications
     private JSONArray createExternalUser(String firstName, String lastName, String email, String siteShortName,
                                          String groupName) throws Exception {
 
         String origUserName = (firstName + "_" + lastName).replace(" ", "_");
         String userName = origUserName;
 
-        UserTransaction tx = null;
+        int i = 2;
+        while (personService.personExists(userName)) {
+            userName = origUserName + "_" + i++;
+        }
+        String inviterUsername = mutableAuthenticationService.getCurrentUserName();
+
+        // ...code to be run as Admin...
+        AuthenticationUtil.pushAuthentication();
         try {
-            tx = transactionService.getUserTransaction();
-            tx.begin();
+            AuthenticationUtil.setRunAsUserSystem();
+            // Create new external user and set password
+            Map<QName, Serializable> props = Utils.createPersonProperties(userName, firstName, lastName, email);
+            NodeRef inviteePersonRef = personService.createPerson(props);
+            String password = Utils.generateNewPassword();
 
-            int i = 2;
-            while (personService.personExists(userName)) {
-                userName = origUserName + "_" + i++;
-            }
-            String inviterUsername = mutableAuthenticationService.getCurrentUserName();
+            mutableAuthenticationService.createAuthentication(userName, password.toCharArray());
 
-            // ...code to be run as Admin...
-            AuthenticationUtil.pushAuthentication();
-            try {
-                AuthenticationUtil.setRunAsUserSystem();
-                // Create new external user and set password
-                Map<QName, Serializable> props = Utils.createPersonProperties(userName, firstName, lastName, email);
-                NodeRef inviteePersonRef = personService.createPerson(props);
-                String password = Utils.generateNewPassword();
+            // Add external user to PDSite group
+            String authority = Utils.getAuthorityName(siteShortName, groupName);
+            authorityService.addAuthority(authority, userName);
 
-                mutableAuthenticationService.createAuthentication(userName, password.toCharArray());
+            // Notify external user
+            Map<String, Serializable> templateArgs = new HashMap<>();
+            NodeRef inviterPersonRef = personService.getPerson(inviterUsername);
+            templateArgs.put("inviterPerson", new TemplateNode(inviterPersonRef, serviceRegistry, null));
+            templateArgs.put("inviteePerson", new TemplateNode(inviteePersonRef, serviceRegistry, null));
+            templateArgs.put("inviteePassword", password);
+            NodeRef siteRef = siteService.getSite(siteShortName).getNodeRef();
+            templateArgs.put("site", new TemplateNode(siteRef, serviceRegistry, null));
+            templateArgs.put("group", Utils.getPDGroupTranslation(groupName));
+            String protocol = properties.getProperty("openDesk.protocol");
+            String host = properties.getProperty("openDesk.host");
+            templateArgs.put("loginURL", protocol + "://" + host + "/#!/login");
 
-                // Add external user to PDSite group
-                String authority = Utils.getAuthorityName(siteShortName, groupName);
-                authorityService.addAuthority(authority, userName);
+            Utils.sendInviteUserEmail(messageService, actionService, searchService, properties, email, templateArgs);
 
-                // Notify external user
-                Map<String, Serializable> templateArgs = new HashMap<>();
-                NodeRef inviterPersonRef = personService.getPerson(inviterUsername);
-                templateArgs.put("inviterPerson", new TemplateNode(inviterPersonRef, serviceRegistry, null));
-                templateArgs.put("inviteePerson", new TemplateNode(inviteePersonRef, serviceRegistry, null));
-                templateArgs.put("inviteePassword", password);
-                NodeRef siteRef = siteService.getSite(siteShortName).getNodeRef();
-                templateArgs.put("site", new TemplateNode(siteRef, serviceRegistry, null));
-                templateArgs.put("group", Utils.getPDGroupTranslation(groupName));
-                String protocol = properties.getProperty("openDesk.protocol");
-                String host = properties.getProperty("openDesk.host");
-                templateArgs.put("loginURL", protocol + "://" + host + "/#!/login");
-
-                Utils.sendInviteUserEmail(messageService, actionService, searchService, properties, email, templateArgs);
-
-            } finally {
-                AuthenticationUtil.popAuthentication();
-            }
-            tx.commit();
-        } catch (Throwable err) {
-            try {
-                if (tx != null) {
-                    tx.rollback();
-                }
-            } catch (Exception tex) {
-            }
+        } finally {
+            AuthenticationUtil.popAuthentication();
         }
         return Utils.getJSONReturnPair("userName", userName);
     }

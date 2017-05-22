@@ -1,16 +1,10 @@
 package dk.opendesk.webscripts;
 
-/**
- * Created by flemmingheidepedersen on 10/10/2016.
- */
-
-
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteService;
 import org.json.JSONException;
@@ -25,26 +19,15 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 
-/**
- *
- * @author flemming
- */
 public class Groups extends AbstractWebScript {
 
     final Logger logger = LoggerFactory.getLogger(Groups.class);
-
-    public void setSearchService(SearchService searchService) {
-        this.searchService = searchService;
-    }
-
-    private SearchService searchService;
 
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
 
     private SiteService siteService;
-
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -109,22 +92,15 @@ public class Groups extends AbstractWebScript {
                         break;
                 }
             }
-        }
-        catch (Exception e) {
-            System.out.println(e);
+        } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
         }
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private void errorMessage(Status status, int code, final String message) {
-        status.setCode(code);
-        status.setMessage(message);
-        status.setRedirect(true);
-    }
-
-    private JSONArray getAllMembers(String shortName, String groupName) {
+    private JSONArray getAllMembers(String shortName, String groupName) throws JSONException {
 
         NodeRef siteNodeRef = siteService.getSite(shortName).getNodeRef();
 
@@ -134,7 +110,7 @@ public class Groups extends AbstractWebScript {
 
         String group = Utils.getAuthorityName(shortName, groupName);
         Boolean onlyDirectMembers = true;
-        if(groupName.isEmpty())
+        if (groupName.isEmpty())
             onlyDirectMembers = false;
 
         Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, onlyDirectMembers);
@@ -142,31 +118,22 @@ public class Groups extends AbstractWebScript {
         Set<AccessPermission> permissions = permissionService.getAllSetPermissions(siteNodeRef);
 
         String permission = Utils.getGroupUserRole(authorityService, permissions, group);
-        if(permission != null)
-        {
-            try {
-                json.put("permission",this.translatePermission(permission));
-                result.add(json);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if (permission != null) {
+            json.put("permission", this.translatePermission(permission));
+            result.add(json);
         }
 
         for (String authority : authorities) {
             NodeRef person = personService.getPerson(authority);
-            String username  = (String)nodeService.getProperty(person, ContentModel.PROP_USERNAME);
-            String displayName  = (String)nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String)nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
-            String email  = (String)nodeService.getProperty(person, ContentModel.PROP_EMAIL);
+            String username = (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
+            String displayName = nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
+            String email = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
 
             json = new JSONObject();
 
-            try {
-                json.put("username", username);
-                json.put("displayName", displayName);
-                json.put("email", email);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            json.put("username", username);
+            json.put("displayName", displayName);
+            json.put("email", email);
 
             members.add(json);
         }

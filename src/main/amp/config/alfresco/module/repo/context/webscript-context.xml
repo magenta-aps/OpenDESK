@@ -39,7 +39,6 @@
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="permissionService" ref="PermissionService"/>
 		<property name="personService" ref="PersonService"/>
-		<property name="searchService" ref="SearchService"/>
 		<property name="siteService" ref="SiteService"/>
 	</bean>
 
@@ -60,7 +59,6 @@
 	<bean id="webscript.documents.permissions.get"
 		  class="dk.opendesk.webscripts.documents.Permissions"
 		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
 		<property name="permissionService" ref="PermissionService"/>
 	</bean>
 
@@ -128,7 +126,6 @@
 		  class="dk.opendesk.webscripts.users.Users"
 		  parent="webscript">
 		<property name="personService" ref="PersonService"/>
-		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="mutableAuthenticationService" ref="authenticationService"/>
 		<property name="actionService" ref="ActionService"/>
@@ -136,7 +133,6 @@
 		<property name="siteService" ref="SiteService"/>
 		<property name="messageService" ref="messageService"/>
 		<property name="properties"> <ref bean="global-properties"/> </property>
-		<property name="transactionService" ref="TransactionService"/>
 		<property name="serviceRegistry"> <ref bean="ServiceRegistry"/> </property>
 	</bean>
 

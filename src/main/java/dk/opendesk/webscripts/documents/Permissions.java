@@ -29,15 +29,10 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 
 public class Permissions extends AbstractWebScript {
-
-
-    private NodeService nodeService;
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
 
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
@@ -47,44 +42,46 @@ public class Permissions extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-        webScriptResponse.setContentEncoding("UTF-8");
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-        NodeRef nodeRef = null;
-        String storeType = params.get("STORE_TYPE");
-        String storeId = params.get("STORE_ID");
-        String nodeId = params.get("NODE_ID");
+        webScriptResponse.setContentEncoding("UTF-8");
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
-        if (storeType != null && storeId != null && nodeId != null) {
-            nodeRef = new NodeRef(storeType, storeId, nodeId);
-        }
+        try {
+            NodeRef nodeRef = null;
+            String storeType = params.get("STORE_TYPE");
+            String storeId = params.get("STORE_ID");
+            String nodeId = params.get("NODE_ID");
 
-        String method = params.get("method");
-
-        if (method != null && method.equals("getEditPermission")) {
-
-            JSONArray result = getEditPermission(nodeRef);
-            try {
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (storeType != null && storeId != null && nodeId != null) {
+                nodeRef = new NodeRef(storeType, storeId, nodeId);
             }
 
+            String method = params.get("method");
+            if (method != null) {
+                switch (method) {
+                    case "getEditPermission":
+                        result = getEditPermission(nodeRef);
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
         }
+        Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private JSONArray getEditPermission(NodeRef nodeRef) {
+    private JSONArray getEditPermission(NodeRef nodeRef) throws JSONException {
 
         JSONArray result = new JSONArray();
         AccessStatus accessStatus = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
 
-        try {
-            JSONObject json = new JSONObject();
-            json.put("edit_permission", accessStatus);
-            result.add(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject json = new JSONObject();
+        json.put("edit_permission", accessStatus);
+        result.add(json);
 
         return result;
     }
