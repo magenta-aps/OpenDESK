@@ -33,6 +33,7 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 
@@ -40,6 +41,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Iterator;
@@ -70,29 +72,35 @@ public class History extends AbstractWebScript {
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-        System.out.println("hej");
+        webScriptResponse.setContentEncoding("UTF-8");
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
-        NodeRef nodeRef = null;
-        String storeType = params.get("STORE_TYPE");
-        String storeId = params.get("STORE_ID");
-        String nodeId = params.get("NODE_ID");
+        try {
+            NodeRef nodeRef = null;
+            String storeType = params.get("STORE_TYPE");
+            String storeId = params.get("STORE_ID");
+            String nodeId = params.get("NODE_ID");
 
-        if (storeType != null && storeId != null && nodeId != null) {
-            nodeRef = new NodeRef(storeType, storeId, nodeId);
-        }
-
-        String method = params.get("method");
-
-        if (method != null && method.equals("getAll")) {
-
-            JSONArray result = this.getVersion(nodeRef);
-            try {
-                result.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (storeType != null && storeId != null && nodeId != null) {
+                nodeRef = new NodeRef(storeType, storeId, nodeId);
             }
 
+            String method = params.get("method");
+            if (method != null) {
+                switch (method) {
+                    case "getAll":
+                        result = this.getVersion(nodeRef);
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+            result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
         }
+        Utils.writeJSONArray(webScriptWriter, result);
     }
 
     private JSONArray getVersion(NodeRef nodeRef) {
@@ -103,18 +111,11 @@ public class History extends AbstractWebScript {
         VersionHistory h = versionService.getVersionHistory(nodeRef);
 
         if (h != null) {
-            Collection c = h.getAllVersions();
+            Collection<Version> versions = h.getAllVersions();
 
-            Iterator i = c.iterator();
-
-            while (i.hasNext()) {
-
-                System.out.println("1'2");
+            for (Version v : versions) {
 
                 JSONObject json = new JSONObject();
-                System.out.println("start:");
-                Version v = (Version)i.next();
-
                 try {
 
                     json.put("parent_nodeRef", nodeRef.getId());
@@ -122,7 +123,7 @@ public class History extends AbstractWebScript {
 
                     NodeRef modifier = this.personService.getPerson(v.getFrozenModifier());
 
-                    json.put("modifier", ((String)nodeService.getProperty(modifier, ContentModel.PROP_FIRSTNAME)) + " " + (String)nodeService.getProperty(modifier, ContentModel.PROP_LASTNAME));
+                    json.put("modifier", nodeService.getProperty(modifier, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(modifier, ContentModel.PROP_LASTNAME));
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                     json.put("created", sdf.format(v.getFrozenModifiedDate()));
@@ -140,5 +141,3 @@ public class History extends AbstractWebScript {
         return result;
     }
 }
-
-//http://localhost:8080/alfresco/s/filebrowser?&method=getAll&NODE_ID=bbf34889-6eed-4027-9e9d-aa6fb82ef922&STORE_TYPE=workspace&STORE_ID=SpacesStore

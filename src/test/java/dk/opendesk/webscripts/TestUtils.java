@@ -13,11 +13,14 @@ import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
+import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyMap;
 
 import javax.transaction.UserTransaction;
 import java.io.File;
+import java.io.Serializable;
+import java.util.Map;
 
 public class TestUtils {
 
@@ -110,10 +113,19 @@ public class TestUtils {
             return true;
         });
     }
+
     public static Boolean addToAuthority(TransactionService transactionService, AuthorityService authorityService,
                                          String group, String userName) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
             authorityService.addAuthority(group, userName);
+            return true;
+        });
+    }
+
+    public static Boolean createVersion(TransactionService transactionService, VersionService versionService,
+                                         NodeRef docRef, Map<String, Serializable> versionProperties) {
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+            versionService.createVersion(docRef, versionProperties);
             return true;
         });
     }
