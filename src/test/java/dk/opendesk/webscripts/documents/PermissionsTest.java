@@ -40,7 +40,7 @@ public class PermissionsTest extends BaseWebScriptTest {
 
     private List<String> users = new ArrayList<>();
     private Map<String, SiteInfo> sites = new HashMap<>();
-    NodeRef docRef;
+    private NodeRef docRef;
 
     public PermissionsTest() {
         super();
