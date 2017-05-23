@@ -43,13 +43,13 @@ public class PreviewHelper extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
         webScriptResponse.setContentEncoding("UTF-8");
         Writer webScriptWriter = webScriptResponse.getWriter();
         JSONArray result = new JSONArray();
 
         try {
+            Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
             String parentNode = params.get("parent_node");
             String versionNode = params.get("version_node");
             String method = params.get("method");
