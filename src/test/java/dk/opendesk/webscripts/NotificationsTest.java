@@ -98,8 +98,10 @@ public class NotificationsTest extends BaseWebScriptTest {
     public void testCreateTwoDocumentNotificationsForUserOne() throws IOException, JSONException {
         log.debug("NotificationsTest.testCreateTwoDocumentNotificationsForUserOne");
 
-        NodeRef ref1 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, siteOne.getNodeRef());
-        NodeRef ref2 = TestUtils.uploadFile(transactionService, contentService, fileFolderService, siteTwo.getNodeRef());
+        NodeRef ref1 = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                siteOne.getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
+        NodeRef ref2 = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                siteTwo.getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
         assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE, ref1);
         assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_TWO, ref2);
 
@@ -110,7 +112,8 @@ public class NotificationsTest extends BaseWebScriptTest {
         log.debug("NotificationsTest.testCreateThreeDocumentNotificationsForUserOne");
         JSONArray returnJSON;
 
-        NodeRef ref = TestUtils.uploadFile(transactionService, contentService, fileFolderService, siteThree.getNodeRef());
+        NodeRef ref = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                siteThree.getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
         returnJSON = assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_THREE, ref);
         String nodeRef = getNodeRef(returnJSON);
         assertGetInfo(nodeRef, TestUtils.SITE_THREE);
