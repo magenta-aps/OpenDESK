@@ -424,46 +424,43 @@ public class Utils {
         sendEmail(actionService, searchService, templatePath, subject, to, from, templateArgs);
     }
 
-    public static String getFileName (NodeService nodeService, NodeRef nodeRef, String fileName) {
+    public static String getFileName (NodeService nodeService, NodeRef nodeRef, String nodeName) {
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
 
+        String dotSplit = "\\.";
+        String bracketSplit = "\\(";
+
         int currentHighest = 0;
-        String name = fileName.split("\\.")[0];
-        String ext = fileName.split("\\.")[1];
+        String[] nodeNameParts = nodeName.split(dotSplit);
+        String name = nodeNameParts[0];
+        String ext = nodeNameParts[1];
         boolean match = false;
 
         for (ChildAssociationRef child : childAssociationRefs) {
 
             String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-            String file_name = "";
-            if (file.contains("(")) {
-                file_name = file.split("\\(")[0];
-            } else {
-                file_name = file.split("\\.")[0];
-            }
+            String splitter = file.contains("(") ? bracketSplit : dotSplit;
+            String file_name = file.split(splitter)[0];
 
             if (file_name.trim().equals(name.trim())) {
                 match = true;
+                Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
 
                 int number = 0;
-                Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
-                while (m.find()) {
+                while (m.find())
                     number = Integer.valueOf(m.group(1));
-                }
 
-                if (number > currentHighest) {
+                if (number > currentHighest)
                     currentHighest = number;
-                }
-
             }
         }
 
         if (match) {
             currentHighest++;
-            fileName = name + "(" + currentHighest + ")." + ext;
+            return name + "(" + currentHighest + ")." + ext;
         }
-        return fileName;
+        return nodeName;
     }
 
     public static String getDocumentTemplate(SearchService searchService, SiteService siteService)
