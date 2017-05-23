@@ -42,7 +42,6 @@ public class NotificationsTest extends BaseWebScriptTest {
 
     private static final String UNSEEN = "unseen";
     private static final String UNREAD = "unread";
-    private static final String NODE_REF = "nodeRef";
     private static final String PROJECT = "project";
     private static final String COMMENT = "comment";
     private static final String FILENAME = "filename";
@@ -213,7 +212,7 @@ public class NotificationsTest extends BaseWebScriptTest {
 
     private JSONArray assertAdd (String userName, String siteShortName, String link, String type) throws IOException, JSONException {
         JSONArray returnJSON = executeWebScriptAdd(userName, siteShortName, link, type);
-        assertTrue(returnJSON.getJSONObject(0).has(NODE_REF));
+        assertTrue(returnJSON.getJSONObject(0).has(TestUtils.NODE_REF));
         return returnJSON;
     }
 
@@ -280,8 +279,8 @@ public class NotificationsTest extends BaseWebScriptTest {
 
     private String getNodeRef (JSONArray returnJSON) throws JSONException {
         //Get the nodeRef of the notification
-        assertTrue(returnJSON.getJSONObject(0).has(NODE_REF));
-        return returnJSON.getJSONObject(0).getString(NODE_REF);
+        assertTrue(returnJSON.getJSONObject(0).has(TestUtils.NODE_REF));
+        return returnJSON.getJSONObject(0).getString(TestUtils.NODE_REF);
     }
 
     @Override
