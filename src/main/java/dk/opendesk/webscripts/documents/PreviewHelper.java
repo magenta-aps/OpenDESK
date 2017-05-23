@@ -16,181 +16,109 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.documents;
 
-import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.cmr.version.Version;
-import org.alfresco.service.cmr.version.VersionHistory;
-import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.james.mime4j.dom.datetime.DateTime;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.io.Writer;
 import java.util.*;
-
 
 public class PreviewHelper extends AbstractWebScript {
 
-
     private NodeService nodeService;
-    private PersonService personService;
-    private VersionService versionService;
-
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
-    }
-
-    public void setVersionService(VersionService versionService) {
-        this.versionService = versionService;
-    }
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
     }
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-        System.out.println("preview helper");
+        webScriptResponse.setContentEncoding("UTF-8");
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
+        try {
+            String parentNode = params.get("parent_node");
+            String versionNode = params.get("version_node");
+            String method = params.get("method");
 
-        String method = params.get("method");
+            if (method == null)
+                method = "createThumbnail";  //TODO: Add method name "createThumbnail".
 
-        if (method.equals("cleanup")) {
-
-            System.out.println("cleaning:");
-
-            String temp_node = params.get("version_node");
-            NodeRef node = new NodeRef("workspace", "SpacesStore", temp_node);
-
-
-
-            AuthenticationUtil.pushAuthentication();
-            try {
-                AuthenticationUtil.setRunAsUserSystem();
-                // ...code to be run as Admin...
-
-                System.out.println("start cleaning" + new Date());
-                System.out.println(node);
-
-                try {
-                    // sleep a while until the preview has been loaded in the frontend
-                    Thread.sleep(10000);
-                    nodeService.deleteNode(node);
-                    System.out.println("done cleaning" + new Date());
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
-            } finally {
-                AuthenticationUtil.popAuthentication();
+            switch (method) {
+                case "cleanUp":
+                    result = cleanUp(versionNode); // TODO Use another variable than versionNode as versionNode in this case is a normal root content NodeRef
+                    break;
+                case "createThumbnail":
+                    result = createThumbnail(parentNode, versionNode);
+                    break;
             }
-
-
-
-
-
-            JSONArray response = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("result","success");
-                response.add(json);
-                response.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
         }
-        else {
-            String parent_node = params.get("parent_node");
-            String version_node = params.get("version_node");
-
-
-            NodeRef parentRef = null;
-            NodeRef versionRef = null;
-
-
-            parentRef = new NodeRef("workspace", "SpacesStore", parent_node);
-
-            ChildAssociationRef childAssociationRef = nodeService.getPrimaryParent(parentRef);
-            NodeRef folder = childAssociationRef.getParentRef();
-
-            versionRef = new NodeRef("versionStore", "version2Store", version_node);
-
-
-            NodeRef result = this.createThumbnail(folder, versionRef);
-
-            JSONArray response = new JSONArray();
-            JSONObject json = new JSONObject();
-
-
-            try {
-                json.put("nodeRef",result);
-                response.add(json);
-                response.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-
-
-
+        Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private NodeRef createThumbnail(NodeRef parentRef, NodeRef versionRef) {
+    private JSONArray cleanUp(String nodeId) throws InterruptedException {
+        NodeRef n = new NodeRef("workspace", "SpacesStore", nodeId);
 
-        ChildAssociationRef childAssocRef;
+        System.out.println("Deleting nodeRef: " + n + " [" + new Date() + "]");
+        // sleep a while until the preview has been loaded in the frontend
+        Thread.sleep(10000);
+
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
+            nodeService.deleteNode(n);
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
+        return Utils.getJSONSuccess();
+    }
+
+    private JSONArray createThumbnail(String parentNode, String versionNode) {
+
+        NodeRef parentRef = new NodeRef("workspace", "SpacesStore", parentNode);
+        NodeRef versionRef = new NodeRef("versionStore", "version2Store", versionNode);
+        NodeRef thumbnailNodeRef;
 
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-            childAssocRef= nodeService.createNode(
+            ChildAssociationRef childAssocRef = nodeService.createNode(
                     parentRef,
                     ContentModel.ASSOC_CONTAINS,
-                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName("copyofthefly_of " + versionRef.toString())),
+                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
+                            QName.createValidLocalName("copyofthefly_of " + versionRef.toString())),
                     ContentModel.TYPE_CONTENT,
                     null);
 
-            nodeService.setProperty(childAssocRef.getChildRef(), ContentModel.PROP_CONTENT, nodeService.getProperty(versionRef, ContentModel.PROP_CONTENT));
+            nodeService.setProperty(childAssocRef.getChildRef(), ContentModel.PROP_CONTENT,
+                    nodeService.getProperty(versionRef, ContentModel.PROP_CONTENT));
+
             nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
 
-
-
+            thumbnailNodeRef = childAssocRef.getChildRef();
         } finally {
             AuthenticationUtil.popAuthentication();
         }
-
-        return childAssocRef.getChildRef();
-
-
-
+        return Utils.getJSONReturnPair("nodeRef", thumbnailNodeRef.toString());
     }
 }
-
-//http://localhost:8080/alfresco/s/previewhelper?parent_node=&version_node=

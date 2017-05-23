@@ -66,8 +66,6 @@
 		  class="dk.opendesk.webscripts.documents.PreviewHelper"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
-		<property name="versionService" ref="VersionService"/>
-		<property name="personService" ref="PersonService"/>
 	</bean>
 
 	<bean id="webscript.documents.template.get"
