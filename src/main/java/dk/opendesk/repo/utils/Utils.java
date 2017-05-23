@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import dk.opendesk.repo.model.OpenDeskModel;
@@ -14,6 +16,7 @@ import org.alfresco.repo.action.evaluator.HasTagEvaluator;
 import org.alfresco.repo.action.executer.MailActionExecuter;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.i18n.MessageService;
+import org.alfresco.repo.search.SearcherException;
 import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionService;
@@ -419,6 +422,65 @@ public class Utils {
         String templatePath = "cm:OpenDesk/cm:user-invite-email.html.ftl";
 
         sendEmail(actionService, searchService, templatePath, subject, to, from, templateArgs);
+    }
 
+    public static String getFileName (NodeService nodeService, NodeRef nodeRef, String fileName) {
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
+
+        int currentHighest = 0;
+        String name = fileName.split("\\.")[0];
+        String ext = fileName.split("\\.")[1];
+        boolean match = false;
+
+        for (ChildAssociationRef child : childAssociationRefs) {
+
+            String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+            String file_name = "";
+            if (file.contains("(")) {
+                file_name = file.split("\\(")[0];
+            } else {
+                file_name = file.split("\\.")[0];
+            }
+
+            if (file_name.trim().equals(name.trim())) {
+                match = true;
+
+                int number = 0;
+                Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
+                while (m.find()) {
+                    number = Integer.valueOf(m.group(1));
+                }
+
+                if (number > currentHighest) {
+                    currentHighest = number;
+                }
+
+            }
+        }
+
+        if (match) {
+            currentHighest++;
+            fileName = name + "(" + currentHighest + ")." + ext;
+        }
+        return fileName;
+    }
+
+    public static String getDocumentTemplate(SearchService searchService, SiteService siteService)
+            throws SearcherException {
+        String query = "ASPECT:\"" + OpenDeskModel.ASPECT_PD_DOCUMENT + "\" ";
+
+        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+
+        if (siteSearchResult.length() == 0) {
+            String error = "A site with the document_template aspect was not found.";
+            error += " Please add a Document Template folder";
+            throw new SearcherException(error);
+        }
+
+        NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
+        SiteInfo siteInfo = siteService.getSite(siteNodeRef);
+        return siteInfo.getShortName();
     }
 }

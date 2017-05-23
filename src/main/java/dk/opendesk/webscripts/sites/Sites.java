@@ -837,61 +837,14 @@ public class Sites extends AbstractWebScript {
 
     public JSONArray getDocumentTemplateSite() {
 
-        String query = "ASPECT:\"" + OpenDeskModel.ASPECT_PD_DOCUMENT + "\" ";
-
-        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
-
-        NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
-        SiteInfo siteInfo = siteService.getSite(siteNodeRef);
-
-        return Utils.getJSONReturnPair("shortName", siteInfo.getShortName());
+        String documentTemplate = Utils.getDocumentTemplate(searchService, siteService);
+        return Utils.getJSONReturnPair("shortName", documentTemplate);
     }
 
-    private JSONArray returnFileName (String destination, String fileName) {
+    private JSONArray returnFileName (String destination, String nodeName) {
 
-        System.out.println("hey");
-        NodeRef destination_n = new NodeRef(destination);
-
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_n);
-
-        int currentHigest = 0;
-        String name = fileName.split("\\.")[0];
-        String ext = fileName.split("\\.")[1];
-        boolean match = false;
-
-        for (ChildAssociationRef child : childAssociationRefs) {
-
-            String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-            String file_name = "";
-            if (file.contains("(")) {
-                file_name = file.split("\\(")[0];
-            }
-            else {
-                file_name = file.split("\\.")[0];
-            }
-
-            if (file_name.trim().equals(name.trim())) {
-                match = true;
-
-                int number = 0;
-                Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
-                while(m.find()) {
-                    number = Integer.valueOf(m.group(1));
-                }
-
-                if (number > currentHigest) {
-                    currentHigest = number;
-                }
-
-            }
-        }
-
-        if (match) {
-            currentHigest++;
-            fileName = name + "(" + currentHigest + ")." + ext;
-        }
-
+        NodeRef destinationNodeRef = new NodeRef(destination);
+        String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
         return Utils.getJSONReturnPair("fileName", fileName);
     }
 
