@@ -223,7 +223,7 @@ public class NotificationsTest extends BaseWebScriptTest {
     }
 
     private JSONArray assertAddNewDocumentNotification (String userName, String siteShortName, NodeRef n) throws IOException, JSONException {
-        String ref = TestUtils.getIdFromRef(n);
+        String ref = n.getId();
         String link = "#!/dokument/" + ref;
         String type = "new-doc";
         return assertAdd(userName, siteShortName, link, type);

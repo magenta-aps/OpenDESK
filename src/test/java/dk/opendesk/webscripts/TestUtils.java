@@ -132,12 +132,6 @@ public class TestUtils {
         });
     }
 
-    public static String getIdFromRef(NodeRef n) {
-        return n.toString().split("/")[3];
-    }
-
-
-
 //    public static SiteInfo createSite(TransactionService transactionService, SiteService siteService,
 //                                         String siteShortName) {
 //        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
