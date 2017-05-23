@@ -14,6 +14,7 @@ import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
+import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyMap;
@@ -124,13 +125,18 @@ public class TestUtils {
         });
     }
 
-    public static Boolean createVersion(TransactionService transactionService, VersionService versionService,
-                                         NodeRef docRef, Map<String, Serializable> versionProperties) {
+    public static Version createVersion(TransactionService transactionService, VersionService versionService,
+                                        NodeRef docRef, Map<String, Serializable> versionProperties) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
-            versionService.createVersion(docRef, versionProperties);
-            return true;
+            return versionService.createVersion(docRef, versionProperties);
         });
     }
+
+    public static String getIdFromRef(NodeRef n) {
+        return n.toString().split("/")[3];
+    }
+
+
 
 //    public static SiteInfo createSite(TransactionService transactionService, SiteService siteService,
 //                                         String siteShortName) {
