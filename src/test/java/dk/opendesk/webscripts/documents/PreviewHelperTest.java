@@ -66,7 +66,7 @@ public class PreviewHelperTest extends BaseWebScriptTest {
             site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
         }
         NodeRef docRef = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                sites.get(TestUtils.SITE_ONE).getNodeRef());
+                sites.get(TestUtils.SITE_ONE).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
 
         NodeRef parentFolderRef = nodeService.getParentAssocs(docRef).get(0).getParentRef();
         parentFolderId = parentFolderRef.getId();

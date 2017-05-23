@@ -40,9 +40,18 @@ public class TestUtils {
     public static final String USER_THREE = "user_three";
     public static final String USER_FOUR = "user_four";
     public static final String USER_FIVE = "user_five";
+
     public static final String SITE_ONE = "user_one_site_one";
     public static final String SITE_TWO = "user_one_site_two";
     public static final String SITE_THREE = "user_one_site_three";
+    public static final String SITE_DOCUMENT_TEMPLATE = "document_template";
+
+    public static final String FILE_TEST_UPLOAD = "Test_Upload";
+    public static final String FILE_TEST_TEMPLATE1 = "Test_Template1";
+    public static final String FILE_TEST_TEMPLATE2 = "Test_Template2";
+    public static final String FILE_TEST_TEMPLATE3 = "Test_Template3";
+    public static final String FILE_TEST_TEMPLATE4 = "Test_Template4";
+    public static final String FILE_TEST_FROM_TEMPLATE1 = "Test_From_Template1";
 
     public static NodeRef createUser(TransactionService transactionService, PersonService personService,
                                   MutableAuthenticationService authenticationService, String userName) {
@@ -83,10 +92,9 @@ public class TestUtils {
     }
 
     public static NodeRef uploadFile(TransactionService transactionService, ContentService contentService,
-                                     FileFolderService fileFolderService, NodeRef parent) {
+                                     FileFolderService fileFolderService, NodeRef parent, String filename) {
 
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
-            final String filename = "Test_Upload";
             File file = new File("src/test/resources/Test_Upload.pdf");
 
             FileInfo fileInfo = fileFolderService.create(parent, filename, ContentModel.PROP_CONTENT);

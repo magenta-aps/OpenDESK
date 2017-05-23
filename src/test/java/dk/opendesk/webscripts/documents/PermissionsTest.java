@@ -73,7 +73,7 @@ public class PermissionsTest extends BaseWebScriptTest {
             site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
         }
         docRef = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                sites.get(TestUtils.SITE_ONE).getNodeRef());
+                sites.get(TestUtils.SITE_ONE).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
     }
 
     public void testGetAllowedEditPermissionAsAdmin() throws IOException, JSONException {

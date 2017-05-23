@@ -36,8 +36,8 @@ public class HistoryTest extends BaseWebScriptTest {
     private FileFolderService fileFolderService = (FileFolderService) getServer().getApplicationContext().getBean("fileFolderService");
     private VersionService versionService = (VersionService) getServer().getApplicationContext().getBean("versionService");
 
-    private List<String> users = new ArrayList<>();
     private Map<String, SiteInfo> sites = new HashMap<>();
+    private NodeRef docRef;
 
     public HistoryTest() {
         super();
@@ -60,13 +60,13 @@ public class HistoryTest extends BaseWebScriptTest {
         for (Map.Entry<String, SiteInfo> site : sites.entrySet()) {
             site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
         }
+
+        docRef = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                sites.get(TestUtils.SITE_ONE).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
     }
 
     public void testCreate4VersionsAndGetAllVersions() throws IOException, JSONException {
         log.debug("HistoryTest.testCreate4VersionsAndGetAllVersions");
-
-        NodeRef docRef = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                sites.get(TestUtils.SITE_ONE).getNodeRef());
 
         Map<String, Serializable> versionProperties = new HashMap<>();
 
@@ -81,9 +81,6 @@ public class HistoryTest extends BaseWebScriptTest {
 
     public void testCreate10VersionsAndGetAllVersions() throws IOException, JSONException {
         log.debug("HistoryTest.testCreate10VersionsAndGetAllVersions");
-
-        NodeRef docRef = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                sites.get(TestUtils.SITE_ONE).getNodeRef());
 
         Map<String, Serializable> versionProperties = new HashMap<>();
 
