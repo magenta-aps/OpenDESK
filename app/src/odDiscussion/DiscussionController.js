@@ -57,6 +57,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
     dc.reply = function(content) {
         discussionService.addReply(dc.selectedDiscussion,content).then(function(response) {
             console.log(response);
+            discussionService.subscribeToDiscussion($stateParams.projekt,dc.selectedDiscussion);
             $mdDialog.cancel();
         })
     },
@@ -76,6 +77,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
     dc.newDiscussion = function(title, content) {
         discussionService.addDiscussion($stateParams.projekt, title, content).then(function(response) {
             console.log(response);
+            discussionService.subscribeToDiscussion($stateParams.projekt,response.item);
             $mdDialog.cancel();
         });
     },
@@ -147,8 +149,22 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
         $mdDialog.cancel();
     }
 
-    dc.subscribe = function(siteShortName,postItem) {
-        
+    dc.changeSubscription = function(postItem) {
+        postItem.isSubscribed = !postItem.isSubscribed;
+
+        if(postItem.isSubscribed) {
+            discussionService.subscribeToDiscussion($stateParams.projekt,postItem);
+        } else {
+            discussionService.unSubscribeToDiscussion($stateParams.projekt,postItem);
+        }
+    }
+
+    dc.subscriptionIcon = function(value) {
+        if(value) {
+            return 'notifications_active';
+        } else {
+            return 'notifications_none';
+        }
     }
 
     dc.getAvatarUrl = function(avatarRef) {

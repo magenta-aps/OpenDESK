@@ -34,7 +34,7 @@
                             </a>
                 </td>
                 <td style="width:32px">
-                    <i class="material-icons od-secondary">notifications_none</i>
+                    <i ng-click='dc.changeSubscription(discussion)' class="material-icons od-secondary">{{dc.subscriptionIcon(discussion.isSubscribed)}}</i>
                 </td>
                 <td style="width:32px">
                     <md-menu ng-if="discussion.permissions.delete">
