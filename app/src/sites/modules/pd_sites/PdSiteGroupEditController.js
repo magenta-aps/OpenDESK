@@ -73,7 +73,7 @@ angular
         function addMember(member, group) {
             siteService.addUser( pdg.site.shortName, member.userName, group ).then(
                 function(response) {
-                    var link = "/#!/projekter/" + pdg.site.shortName;
+                    var link = "#!/projekter/" + pdg.site.shortName;
                     createSiteNotification(pdg.site.title, member.userName, link);
                     console.log('Added user ' + member.userName + ' to ' + group + ' in project ');
                     console.log(pdg.site.title);
@@ -122,7 +122,6 @@ angular
                 var subject = "Du er blevet tilføjet til " + siteName;
                 var message = "har tilføjet dig til projektet " + siteName + ".";
                 notificationsService.addNotice(userName, subject, message, link,'project', siteName).then(function (val) {
-                    $mdDialog.cancel();
                 });
             }
         }

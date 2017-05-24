@@ -42,37 +42,26 @@ angular
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
-    .run(function ($rootScope, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
+    .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
         var ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
         angular.element(window.document)[0].title = APP_CONFIG.appName;
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
 
-        $rootScope.$on('$stateChangeStart', function (event, next, params) {
-            $rootScope.toState = next;
-            $rootScope.toStateParams = params;
-            if (next.data.authorizedRoles.length === 0) {
-                return;
-            }
-            // If we got any open dialogs, close them before route change
-            $mdDialog.cancel();
+        $transitions.onError({}, function (transition) {
+            $state.go('login');
         });
+
         if (!authService.isAuthenticated()) {
-            if(ssoLoginEnabled) {
+            if (ssoLoginEnabled) {
                 authService.ssoLogin().then(function (response) {
                     if (!authService.isAuthenticated()) {
-                        event.preventDefault();
                         sessionService.retainCurrentLocation();
                         $state.go('login');
                     }
                     else
                         $state.reload();
                 });
-            }
-            else if (!authService.isAuthenticated()) {
-                event.preventDefault();
-                sessionService.retainCurrentLocation();
-                $state.go('login');
             }
         }
     });
@@ -86,7 +75,17 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
     $stateProvider.state('site', {
         abstract: true,
         resolve: {
-            authorize: ['authService', function (authService) {
+            authorize:
+                ['authService', '$q', function (authService, $q) {
+                var d = $q.defer();
+                if (authService.isAuthenticated()) {
+                    // I also provide the user for child controllers
+                    d.resolve(authService.user);
+                } else {
+                    // here the rejection
+                    d.reject('not logged');
+                }
+                return d.promise;
             }]
         },
         views: {

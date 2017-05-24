@@ -55,7 +55,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     };
 
     vm.goBack = function () {
-        $window.history.back();
+        window.history.go(-2);
     }
 
     vm.godkendDialog = function (event) {
@@ -156,7 +156,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.createWFNotification = function(comment, wtype) {
 
         var creator = authService.getUserInfo().user.userName;
-        var link = "/#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
+        var link = "#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
         var status = wtype == 'review-approved' ? 'godkendt' : 'afvist';
 
@@ -166,7 +166,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
             notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then (function (val) {
                 $mdDialog.hide();
-                vm.goBack();
                 vm.goBack();
             });
 

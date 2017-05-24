@@ -145,7 +145,7 @@
 												</md-button>
 											</md-menu-item>
 											<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
-												<md-button ng-click="vm.deleteSiteDialog(project)"> <!--shortname-->
+												<md-button ng-click="vm.deleteSiteDialog(project, $event)"> <!--shortname-->
 													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 													{{'COMMON.REMOVE' | translate}}
 												</md-button>

@@ -535,7 +535,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         console.log(vm.project);
         var subject = "Du er blevet tilføjet til " + vm.project.title;
         var message = "har tilføjet dig til projektet " + vm.project.title + ".";
-        var link = "/#!/projekter/" + site + "?type=Project";
+        var link = "#!/projekter/" + site + "?type=Project";
         createNotification(userName, subject, message, link, 'project', site);
     }
 
@@ -544,7 +544,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         var creatorFullName = vm.currentUser.firstName + " " + vm.currentUser.lastName;;
         var subject = "Nyt dokument i " + projekt;
         var message = "Et nyt dokument \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
-        var link = "/#!/dokument/" + ref;
+        var link = "#!/dokument/" + ref;
 
         // Creating an empty initial promise that always resolves itself.
         var promise = $q.all([]);
@@ -573,7 +573,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
         var creator = vm.currentUser.userName;
         var s = documentNodeRef.split("/");
         var ref = (s[3]);
-        var link = "/#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator;
+        var link = "#!/dokument/" + ref + "?dtype=wf" + "&from=" + creator;
 
         var sub = "Review forespørgsel";
         createNotification(userName, sub, message, link, 'review-request', project.shortName);

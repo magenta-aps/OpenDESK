@@ -100,12 +100,12 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 				vm.sitesPerUser = val;
 			});
 
-			window.location.href = "/#!/projekter/" + val[0].shortName + "?type=Project";
+			$state.go( 'project', { projekt: val[0].shortName , path: ""}  );
 
 		});
 	};
 
-	vm.deleteSiteDialog = function (project) {
+	vm.deleteSiteDialog = function (project, event) {
 		console.log('deletesite dialog');
 		console.log(project);
 
