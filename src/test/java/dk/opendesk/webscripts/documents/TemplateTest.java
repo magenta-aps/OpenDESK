@@ -17,6 +17,7 @@ import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.junit.Test;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
@@ -121,6 +122,7 @@ public class TemplateTest extends BaseWebScriptTest {
             throws IOException, JSONException {
         JSONArray returnJSON = executeWebScriptMakeNewDocumentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
         assertTrue(returnJSON.getJSONObject(0).has(TestUtils.NODE_REF));
+        assertTrue(returnJSON.getJSONObject(0).has(TestUtils.FILENAME));
         return returnJSON;
     }
 

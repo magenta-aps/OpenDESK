@@ -619,39 +619,32 @@ public class Sites extends AbstractWebScript {
 
     public JSONArray deleteSite(String siteShortName) {
 
-        SiteInfo site = siteService.getSite(siteShortName);
+        // Find all links pointing from this site
+        NodeRef documentLibrary = siteService.getContainer(siteShortName, SiteService.DOCUMENT_LIBRARY);
 
-        if (site != null) {
-            // Find all links pointing from this site
-            NodeRef documentLibrary = siteService.getContainer(siteShortName, SiteService.DOCUMENT_LIBRARY);
+        Set<QName> childNodeTypeQNames = new HashSet<>(Collections.singletonList(OpenDeskModel.PROP_LINK));
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(documentLibrary, childNodeTypeQNames);
 
-            Set<QName> childNodeTypeQNames = new HashSet<>(Collections.singletonList(OpenDeskModel.PROP_LINK));
-            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(documentLibrary, childNodeTypeQNames);
-
-            // Delete the counterpart links linking to this site
-            for (ChildAssociationRef assoc : childAssocs)
-            {
-                NodeRef n = assoc.getChildRef();
-                if (n != null)
-                {
-                    String query = "TYPE:\"od:link\" AND @od\\:targetproject_noderef:\"" + n + "\"";
-                    StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-                    ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
-                    NodeRef ln = siteSearchResult.getNodeRef(0);
-                    nodeService.deleteNode(ln);
-                }
+        // Delete the counterpart links linking to this site
+        for (ChildAssociationRef assoc : childAssocs) {
+            NodeRef n = assoc.getChildRef();
+            if (n != null) {
+                String query = "TYPE:\"od:link\" AND @od\\:targetproject_noderef:\"" + n + "\"";
+                StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+                ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+                NodeRef ln = siteSearchResult.getNodeRef(0);
+                nodeService.deleteNode(ln);
             }
-
-            // Delete the site n
-            siteService.deleteSite(siteShortName);
-
-            // Delete all groups/authorities of the site
-            String authority = Utils.getAuthorityName(siteShortName, "");
-            authorityService.deleteAuthority(authority, true);
-
-            return Utils.getJSONSuccess();
         }
-        return Utils.getJSONError(new Exception());
+
+        // Delete the site n
+        siteService.deleteSite(siteShortName);
+
+        // Delete all groups/authorities of the site
+        String authority = Utils.getAuthorityName(siteShortName, "");
+        authorityService.deleteAuthority(authority, true);
+
+        return Utils.getJSONSuccess();
     }
 
     private JSONArray getDocumentTemplateSite() {

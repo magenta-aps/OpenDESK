@@ -3,10 +3,11 @@ package dk.opendesk.webscripts.sites;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.TestUtils;
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -15,10 +16,8 @@ import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
-import org.bouncycastle.jce.provider.JCEBlockCipher;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +26,6 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +44,8 @@ public class SitesTest extends BaseWebScriptTest {
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
     private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
+    private ContentService contentService = (ContentService) getServer().getApplicationContext().getBean("contentService");
+    private FileFolderService fileFolderService = (FileFolderService) getServer().getApplicationContext().getBean("fileFolderService");
 
     private List<String> users = new ArrayList<>();
     private Map<String, SiteInfo> sites = new HashMap<>();
@@ -56,6 +56,7 @@ public class SitesTest extends BaseWebScriptTest {
     private String TITLE = "title";
     private String DESCRIPTION = "description";
     private String VISIBILITY = "visibility";
+    private String PDF_NODEREF = "Noderef";
 
     public SitesTest() {
         super();
@@ -257,6 +258,36 @@ public class SitesTest extends BaseWebScriptTest {
         assertGetTemplates(initialCount + 1);
     }
 
+    // CreateMembersPDF cannot be tested as transformers are not loaded in tests.
+    // pptToPdfTransformer.transform(pptReader, pdfWriter); will result in a NullPointerException
+
+    public void testDeleteSite()  throws IOException, JSONException {
+        log.debug("SitesTest.testDeleteSite");
+
+        JSONArray returnJSON = executeGetAll("");
+        int initialCount = returnJSON.length();
+
+        assertDeleteSite(TestUtils.SITE_ONE);
+        assertGetAll("", initialCount - 1);
+    }
+
+    public void testGetDocumentTemplateSite()  throws IOException, JSONException {
+        log.debug("SitesTest.GetDocumentTemplateSite");
+
+        assertGetDocumentTemplateSite();
+    }
+
+    public void testReturnFileName()  throws IOException, JSONException {
+        log.debug("SitesTest.testReturnFileName");
+
+        NodeRef docLib = siteService.getContainer(TestUtils.SITE_ONE, OpenDeskModel.DOC_LIBRARY);
+
+        TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                docLib, TestUtils.FILE_TEST_TEMPLATE1);
+
+        assertReturnFileName(docLib.toString(), TestUtils.FILE_TEST_TEMPLATE1);
+    }
+
 
     /** Assertions **/
 
@@ -355,7 +386,23 @@ public class SitesTest extends BaseWebScriptTest {
         return returnJSON;
     }
 
+    private JSONArray assertDeleteSite (String siteShortName) throws IOException, JSONException {
+        JSONArray returnJSON = executeDeleteSite(siteShortName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
 
+    private JSONArray assertGetDocumentTemplateSite () throws IOException, JSONException {
+        JSONArray returnJSON = executeGetDocumentTemplateSite();
+        assertEquals(OpenDeskModel.DOC_TEMPLATE, returnJSON.getJSONObject(0).getString(SHORTNAME));
+        return returnJSON;
+    }
+
+    private JSONArray assertReturnFileName (String destinationRef, String nodeName) throws IOException, JSONException {
+        JSONArray returnJSON = executeReturnFileName(destinationRef, nodeName);
+        assertTrue(returnJSON.getJSONObject(0).has(TestUtils.FILENAME));
+        return returnJSON;
+    }
 
     /** Webscripts **/
 
@@ -457,6 +504,27 @@ public class SitesTest extends BaseWebScriptTest {
         JSONObject data = new JSONObject();
         data.put("PARAM_METHOD", "makeSiteATemplate");
         data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeGetDocumentTemplateSite () throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getDocumentTemplateSite");
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeDeleteSite (String siteShortName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "deleteSite");
+        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeReturnFileName (String destinationRef, String nodeName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "returnFileName");
+        data.put("PARAM_DESTINATION", destinationRef);
+        data.put("PARAM_FILENAME", nodeName);
         return executeWebScript(data, TestUtils.ADMIN);
     }
 
