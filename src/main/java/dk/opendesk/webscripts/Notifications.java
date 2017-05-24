@@ -40,7 +40,6 @@ import dk.opendesk.repo.utils.Utils;
 
 public class Notifications extends AbstractWebScript {
 
-
     private NodeService nodeService;
     private PersonService personService;
     private SiteService siteService;
@@ -48,13 +47,9 @@ public class Notifications extends AbstractWebScript {
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
-
-
-
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
@@ -103,17 +98,17 @@ public class Notifications extends AbstractWebScript {
                         break;
 
                     case "setRead":
-                        if(nodeRef != null)
+                        if (nodeRef != null)
                             result = this.setNotificationRead(nodeRef);
                         break;
 
                     case "setSeen":
-                        if(nodeRef != null)
+                        if (nodeRef != null)
                             result = this.setNotificationSeen(nodeRef);
                         break;
 
                     case "getInfo": //TODO: Change name to GetDocumentInfo - remember frontend refactoring
-                        if(nodeRef != null)
+                        if (nodeRef != null)
                             result = this.getDocumentInfo(nodeRef);
                         break;
 

@@ -92,8 +92,6 @@ public class Sites extends AbstractWebScript {
         try {
             JSONObject json = new JSONObject(c.getContent());
 
-            // Read all used parameters no matter what method is used.
-            // Those parameters that are not sent are set to an empty string
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
             String query = Utils.getJSONObject(json, "PARAM_QUERY");
             String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
