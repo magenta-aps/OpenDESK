@@ -462,22 +462,4 @@ public class Utils {
         }
         return nodeName;
     }
-
-    public static String getDocumentTemplate(SearchService searchService, SiteService siteService)
-            throws SearcherException {
-        String query = "ASPECT:\"" + OpenDeskModel.ASPECT_PD_DOCUMENT + "\" ";
-
-        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
-
-        if (siteSearchResult.length() == 0) {
-            String error = "A site with the document_template aspect was not found.";
-            error += " Please add a Document Template folder";
-            throw new SearcherException(error);
-        }
-
-        NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
-        SiteInfo siteInfo = siteService.getSite(siteNodeRef);
-        return siteInfo.getShortName();
-    }
 }

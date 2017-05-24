@@ -14,6 +14,9 @@ import java.util.Map;
 
 public interface OpenDeskModel {
 
+    //SPECIAL SITES
+
+    public static String SITE_DOCUMENT_TEMPLATE = "Dokumentskabeloner";
 
     // Containers
     public static String DISCUSSIONS = "discussions";

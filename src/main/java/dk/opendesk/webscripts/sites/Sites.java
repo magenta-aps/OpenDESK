@@ -836,9 +836,7 @@ public class Sites extends AbstractWebScript {
     }
 
     public JSONArray getDocumentTemplateSite() {
-
-        String documentTemplate = Utils.getDocumentTemplate(searchService, siteService);
-        return Utils.getJSONReturnPair("shortName", documentTemplate);
+        return Utils.getJSONReturnPair("shortName", OpenDeskModel.SITE_DOCUMENT_TEMPLATE);
     }
 
     private JSONArray returnFileName (String destination, String nodeName) {
