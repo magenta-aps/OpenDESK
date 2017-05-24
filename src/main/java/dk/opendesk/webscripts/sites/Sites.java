@@ -24,8 +24,6 @@ import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
-import org.alfresco.service.cmr.invitation.Invitation;
-import org.alfresco.service.cmr.invitation.InvitationService;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.rendition.RenditionService;
 import org.alfresco.service.cmr.repository.*;
@@ -84,12 +82,6 @@ public class Sites extends AbstractWebScript {
     }
 
     SearchService searchService;
-
-    public void setInvitationService(InvitationService invitationService) {
-        this.invitationService = invitationService;
-    }
-
-    InvitationService invitationService;
 
     private NodeArchiveService nodeArchiveService;
     private SiteService siteService;
@@ -154,9 +146,6 @@ public class Sites extends AbstractWebScript {
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
             String description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
             String fileName = Utils.getJSONObject(json, "PARAM_FILENAME");
-            String firstName = Utils.getJSONObject(json, "PARAM_FIRSTNAME");
-            String lastName = Utils.getJSONObject(json, "PARAM_LASTNAME");
-            String email = Utils.getJSONObject(json, "PARAM_EMAIL");
             String site_visibility_str = Utils.getJSONObject(json, "PARAM_VISIBILITY");
             SiteVisibility site_visibility = Utils.getVisibility(site_visibility_str);
 
@@ -231,9 +220,6 @@ public class Sites extends AbstractWebScript {
 
                     case "deleteSite":
                         result = this.deleteSite(siteShortName);
-                        break;
-                    case "inviteExternalUser":
-                        result = this.inviteExternalUser(firstName, lastName, siteShortName, email);
                         break;
 
                     case "getDocumentTemplateSite":
@@ -823,16 +809,6 @@ public class Sites extends AbstractWebScript {
             return Utils.getJSONSuccess();
         }
         return Utils.getJSONError(new Exception());
-    }
-
-
-    public JSONArray inviteExternalUser(String firstName, String lastName, String shortName, String email) {
-
-        Invitation.ResourceType resourceType = Invitation.ResourceType.WEB_SITE;
-
-        invitationService.inviteNominated(firstName,lastName,email,resourceType,"test", SiteModel.SITE_COLLABORATOR,"acceptUrl", "rejectUrl");
-
-        return Utils.getJSONSuccess();
     }
 
     public JSONArray getDocumentTemplateSite() {
