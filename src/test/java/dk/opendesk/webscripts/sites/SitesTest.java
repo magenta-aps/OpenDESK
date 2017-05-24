@@ -247,6 +247,16 @@ public class SitesTest extends BaseWebScriptTest {
         assertCreateTemplate(TestUtils.SITE_TWO, "This is a small description");
     }
 
+    public void testMakeSiteATemplate()  throws IOException, JSONException {
+        log.debug("SitesTest.testMakeSiteATemplate");
+
+        JSONArray returnJSON = executeGetTemplates();
+        int initialCount = returnJSON.length();
+
+        assertMakeSiteATemplate(TestUtils.SITE_ONE);
+        assertGetTemplates(initialCount + 1);
+    }
+
 
     /** Assertions **/
 
@@ -336,6 +346,12 @@ public class SitesTest extends BaseWebScriptTest {
         JSONArray returnJSON = executeCreateTemplate(siteShortName, description);
         assertEquals(siteShortName, returnJSON.getJSONObject(0).get(TITLE));
         assertEquals(description, returnJSON.getJSONObject(0).get(DESCRIPTION));
+        return returnJSON;
+    }
+
+    private JSONArray assertMakeSiteATemplate (String siteShortName) throws IOException, JSONException {
+        JSONArray returnJSON = executeMakeSiteATemplate(siteShortName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
         return returnJSON;
     }
 
@@ -434,6 +450,13 @@ public class SitesTest extends BaseWebScriptTest {
         data.put("PARAM_METHOD", "createTemplate");
         data.put("PARAM_SITE_SHORT_NAME", siteShortName);
         data.put("PARAM_DESCRIPTION", description);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeMakeSiteATemplate (String siteShortName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "makeSiteATemplate");
+        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
         return executeWebScript(data, TestUtils.ADMIN);
     }
 
