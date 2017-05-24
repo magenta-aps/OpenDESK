@@ -47,7 +47,7 @@ function config($stateProvider, USER_ROLES) {
         }
     })
     .state('project.viewthread', {
-        url: '/diskussioner{path:.*}',
+        url: '/diskussioner/{path:.*}',
         data: {
             selectedTab: 2
         },
@@ -58,6 +58,7 @@ function config($stateProvider, USER_ROLES) {
                 controllerAs: 'dc'
             }
         }
-    });
+    })
+    ;
 
 };

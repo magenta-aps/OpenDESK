@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.discussion').factory('discussionService', function ($http, nodeRefUtilsService, authService) {
+angular.module('openDeskApp.discussion').factory('discussionService', function ($http, $q, nodeRefUtilsService, authService, sessionService, preferenceService) {
 
     var restBaseUrl = '/alfresco/s/api';
     var currentUser = authService.getUserInfo().user.userName;
@@ -9,17 +9,18 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     var replies = [];
 
     return {
-        getSelectedDiscussion : getSelectedDiscussion,
-        getDiscussions : getDiscussions,
-        getMyDiscussions : getMyDiscussions,
-        getSubscribedDiscussions : getSubscribedDiscussions,
-        getReplies : getReplies,
-        addDiscussion : addDiscussion,
-        addPost : addPost,
-        updatePost : updatePost,
-        deletePost : deletePost,
-        subscribeToDiscussion : subscribeToDiscussion,
-        unSubscribeToDiscussion : unSubscribeToDiscussion
+        getSelectedDiscussion: getSelectedDiscussion,
+        getDiscussions: getDiscussions,
+        getMyDiscussions: getMyDiscussions,
+        getSubscribedDiscussions: getSubscribedDiscussions,
+        getReplies: getReplies,
+        addDiscussion: addDiscussion,
+        addReply: addReply,
+        updatePost: updatePost,
+        deletePost: deletePost,
+        subscribeToDiscussion: subscribeToDiscussion,
+        unSubscribeToDiscussion: unSubscribeToDiscussion,
+        isSubscribedToDiscussion: isSubscribedToDiscussion
     };
 
     function getSelectedDiscussion() {
@@ -28,26 +29,29 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
 
     function getDiscussions(siteShortName) {
         return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {}).then(function (response) {
+            addSubscriptionFlag(siteShortName,response.data.items);
+            console.log('get discussions data');
+            console.log(response.data);
             return response.data;
         });
     }
 
-    function getMyDiscussions (siteShortName) {
+    function getMyDiscussions(siteShortName) {
         return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts/myposts', {}).then(function (response) {
             return response.data;
         });
     }
 
-    function getSubscribedDiscussions (siteShortName) {
+    function getSubscribedDiscussions(siteShortName) {
         return getDiscussions(siteShortName).then(function (discussionResponse) {
 
             var discussions = discussionResponse.data.items;
             var subscriptionsPreferenceFilter = getSiteSubscriptionsPreferenceFilter(siteShortName);
 
-            return preferenceService.getPreferences(vm.currentUser, subscriptionsPreferenceFilter).then(function (preferenceResponse) {
+            return preferenceService.getPreferences(currentUser, subscriptionsPreferenceFilter).then(function (preferenceResponse) {
 
                 var subscribedDiscussions = [];
-                for(var i = 0; i < discussions.length; i++) {
+                for (var i = 0; i < discussions.length; i++) {
                     var postItem = discussions[i];
                     var id = nodeRefUtilsService.getId(postItem.nodeRef);
                     var postPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id);
@@ -59,23 +63,26 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
         });
     }
 
-    function getReplies (postItem) {
+    function getReplies(postItem) {
         selectedDiscussion = postItem;
+        selectedDiscussion.author.avatarUrl = '';
+        var avatarId = postItem.author.avatarRef.split('/')[3];
+        selectedDiscussion.author.avatarUrl = sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
         return $http.get(restBaseUrl + postItem.repliesUrl, {}).then(function (response) {
             return response.data.items;
         });
     }
 
-    function addDiscussion (siteShortName, title, content) {
+    function addDiscussion(siteShortName, title, content) {
         return $http.post(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {
-            title : title,
+            title: title,
             content: content
         }).then(function (response) {
             return response.data;
         });
     }
 
-    function addPost (postItem, content) {
+    function addReply(postItem, content) {
         var id = nodeRefUtilsService.getId(postItem.nodeRef);
         return $http.post(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id + "/replies", {
             content: content
@@ -84,29 +91,41 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
         });
     }
 
-    function updatePost (postItem, title, content) {
+    function updatePost(postItem, title, content) {
         var id = nodeRefUtilsService.getId(postItem.nodeRef);
         return $http.put(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {
-            title : title,
+            title: title,
             content: content
         }).then(function (response) {
             return response.data;
         });
     }
 
-    function deletePost (postItem) {
+    function deletePost(postItem) {
         var id = nodeRefUtilsService.getId(postItem.nodeRef);
         return $http.delete(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {}).then(function (response) {
             return response.data;
         });
     }
 
-    function subscribeToDiscussion (siteShortName, postItem) {
+    function subscribeToDiscussion(siteShortName, postItem) {
         setSubscribe(siteShortName, postItem, true);
     }
 
-    function unSubscribeToDiscussion (siteShortName, postItem) {
+    function unSubscribeToDiscussion(siteShortName, postItem) {
         setSubscribe(siteShortName, postItem, false);
+    }
+
+    function isSubscribedToDiscussion(siteShortName, postItem) {
+
+        var id = nodeRefUtilsService.getId(postItem.nodeRef);
+        var subscriptionsPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id);
+
+        return preferenceService.getPreferences(currentUser, subscriptionsPreferenceFilter).then(function (preferenceResponse) {
+            if(preferenceResponse[subscriptionsPreferenceFilter] == undefined)
+                return false;
+            return preferenceResponse[subscriptionsPreferenceFilter];
+        });
     }
 
     // Private methods
@@ -114,10 +133,10 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     function setSubscribe(siteShortName, postItem, value) {
         var id = nodeRefUtilsService.getId(postItem.nodeRef);
         var preferenceFilter = getSubscribePreferenceFilter(siteShortName, id);
-        var preferences = { };
+        var preferences = {};
         preferences[preferenceFilter] = value;
 
-        preferenceService.setPreferences(currentUser, preferences).then(function(data) {
+        preferenceService.setPreferences(currentUser, preferences).then(function (data) {
             return data;
         });
     }
@@ -128,6 +147,14 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
 
     function getSiteSubscriptionsPreferenceFilter(siteShortName) {
         return "dk.magenta.sites." + siteShortName + ".discussions";
+    }
+
+    function addSubscriptionFlag(siteShortName, postItems) {
+        postItems.forEach(function (postItem) {
+            isSubscribedToDiscussion(siteShortName,postItem).then(function (response) {
+                postItem.isSubscribed = response;
+            });
+        });
     }
 
 });

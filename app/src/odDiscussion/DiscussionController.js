@@ -9,7 +9,7 @@ angular
         };
     });
 
-function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, discussionService,nodeRefUtilsService) {
+function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, discussionService, nodeRefUtilsService, userService, sessionService) {
     var dc = this;
 
     dc.discussions = [];
@@ -18,24 +18,28 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
 
     dc.getDiscussions = function(siteShortName) {
         discussionService.getDiscussions(siteShortName).then(function(response) {
+            response.items.forEach(function (item) {
+                if(item.lastReplyOn == undefined) {
+                    item.lastReplyOn = item.modifiedOn;
+                }
+            });
             dc.discussions = response.items;
-            console.log('get discussions');
-            console.log(dc.discussions);
         });
     }
 
     dc.getReplies = function(postItem) {
         console.log('get replies');
         discussionService.getReplies(postItem).then(function(response) {
-            console.log(response);
             dc.replies = response;
-        })
+
+            for(var i=0;i<dc.replies.length;i++) {
+                dc.replies[i].author.avatarUrl = dc.getAvatarUrl(dc.replies[i].author.avatarRef);
+            }
+        });
     }
 
     function init() {
-        console.log('discussion controller init');
         dc.getDiscussions($stateParams.projekt);
-        dc.getReplies(dc.selectedDiscussion);
     }
     init();
 
@@ -78,8 +82,6 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
 
     dc.viewThread = function(postItem) {
         console.log('view thread');
-        //dc.getReplies(postItem);
-        //$state.go('project.viewthread');
         return '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
     }
 
@@ -89,11 +91,68 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
         });
     }
 
+    dc.editReply = function(postItem,content) {
+        discussionService.updatePost(postItem,'',content).then(function(response) {
+            console.log(response);
+            $mdDialog.cancel();
+        });
+    }
+
+    dc.editReplyDialog = function(postItem) {
+        $mdDialog.show({
+            controller: ['$scope', 'postItem', function ($scope, postItem) {
+                $scope.postItem = postItem;
+            }],
+            locals: {
+                postItem: postItem
+            },
+            templateUrl: 'app/src/odDiscussion/view/edit.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    }
+
+    dc.editFirstPost = function(postItem,title,content) {
+        discussionService.updatePost(postItem,title,content).then(function(response) {
+            console.log(response);
+            $mdDialog.cancel();
+        });
+    }
+
+    dc.editFirstPostDialog = function(postItem) {
+        $mdDialog.show({
+            controller: ['$scope', 'postItem', function ($scope, postItem) {
+                $scope.postItem = postItem;
+            }],
+            locals: {
+                postItem: postItem
+            },
+            templateUrl: 'app/src/odDiscussion/view/editFirstPost.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    }
+
     dc.viewDiscussions = function() {
         $state.go('project.discussions');
     }
 
     dc.cancel = function() {
         $mdDialog.cancel();
+    }
+
+    dc.subscribe = function(siteShortName,postItem) {
+        
+    }
+
+    dc.getAvatarUrl = function(avatarRef) {
+        var avatarId = avatarRef.split('/')[3];
+        return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
     }
 };

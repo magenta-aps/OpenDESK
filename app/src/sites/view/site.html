@@ -15,7 +15,7 @@
                     <i class="material-icons">arrow_back</i> Projekter
                 </md-tab-label>
             </md-tab>
-            <md-tab ui-sref="project.filebrowser">
+            <md-tab ui-sref="project.filebrowser({path:''})">
                 <md-tab-label>
                     <i class="material-icons">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}
                 </md-tab-label>
@@ -23,7 +23,7 @@
                     <div ui-view='filebrowser'></div>
                 </md-tab-body>
             </md-tab>
-            <md-tab ui-sref="project.discussions"> <!-- ui-sref="project.discussions" -->
+            <md-tab ui-sref="project.discussions">
                 <md-tab-label>
                     <i class="material-icons">chat_bubble_outline</i>Samtaler
                 </md-tab-label>

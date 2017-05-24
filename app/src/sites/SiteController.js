@@ -84,7 +84,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             vm.addThumbnailUrl($scope.templateDocuments);
     })
 
-    $scope.selectedTab = 1;
+    $scope.selectedTab = $state.current.data.selectedTab;
   
     function loadSiteData() {
         console.log('load site data');

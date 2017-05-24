@@ -1,10 +1,10 @@
 
-<md-dialog aria-label="Besvar" ng-cloak>
-    <form name="newReplyForm" ng-submit="dc.reply(replyContent)">
+<md-dialog aria-label="Rediger" ng-cloak>
+    <form name="newReplyForm" ng-submit="dc.editFirstPost(postItem,postItem.title,postItem.content)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Besvar 
+                <h2>Rediger 
                 </h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="dc.cancel()">
@@ -14,9 +14,13 @@
         </md-toolbar>
 
         <md-dialog-content class="md-padding" layout='column'>
+            <md-input-container>
+                    <label>{{'PROJECT.NAME' | translate}}</label>
+                    <input type="text" name="postTitle" required ng-model="postItem.title" md-autofocus>
+                </md-input-container>
                 <md-input-container>
                     <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
-                    <textarea required name="replyContent" ng-model="replyContent">
+                    <textarea required name="postContent" ng-model="postItem.content">
                     </textarea>
                 </md-input-container>
         </md-dialog-content>

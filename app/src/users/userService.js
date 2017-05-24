@@ -87,6 +87,8 @@ function userService($http, sessionService) {
                 return "http://placehold.it/128x128";
 
             var avatar = data.avatar.replace("/thumbnails/avatar", "");
+            console.log('get avatar sidebar');
+            console.log(avatar);
             return sessionService.makeURL("/alfresco/s/" + avatar);
         });
     }

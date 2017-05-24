@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="discussion in dc.discussions">
+            <tr ng-repeat="discussion in dc.discussions | orderBy: '-lastReplyOn'">
                 <td class="icon">
                     <i class="material-icons">chat_bubble_outline</i>
                 </td>
@@ -24,8 +24,8 @@
                     </a>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary" ng-href="">
-                                {{discussion.modifiedOn | customDate}} af Johnny Madsen
+                    <a ng-if="discussion.lastReplyBy" class="od-filebrowser-link od-secondary" ng-href="">
+                                {{discussion.lastReplyOn | customDate}} af {{discussion.lastReplyBy.firstName}} {{discussion.lastReplyBy.lastName}}
                             </a>
                 </td>
                 <td>
