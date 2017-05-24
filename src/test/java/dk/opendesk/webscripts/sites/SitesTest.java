@@ -221,14 +221,21 @@ public class SitesTest extends BaseWebScriptTest {
     public void testGetSiteTypeOfSiteOneIsPDProject()  throws IOException, JSONException {
         log.debug("SitesTest.testGetSiteTypeOfSiteOneIsPDProject");
 
-        SiteInfo s = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
-        Map<QName, Serializable> aspectProps = new HashMap<>();
-        TestUtils.addAspect(transactionService, nodeService, s.getNodeRef(), OpenDeskModel.ASPECT_PD,
-                aspectProps);
-
+        TestUtils.createPDSite(transactionService, siteService, nodeService, TestUtils.SITE_TWO);
         assertGetSiteType(TestUtils.SITE_TWO, OpenDeskModel.pd_project);
     }
 
+    public void testGet3Templates()  throws IOException, JSONException {
+        log.debug("SitesTest.testGet3Templates");
+
+        JSONArray returnJSON = executeGetTemplates();
+        int initialCount = returnJSON.length();
+
+        TestUtils.createSiteTemplate(transactionService, siteService, nodeService, TestUtils.SITE_TWO);
+        TestUtils.createSiteTemplate(transactionService, siteService, nodeService, TestUtils.SITE_THREE);
+        TestUtils.createSiteTemplate(transactionService, siteService, nodeService, TestUtils.SITE_FOUR);
+        assertGetTemplates(initialCount + 3);
+    }
 
 
     /** Assertions **/
@@ -309,6 +316,14 @@ public class SitesTest extends BaseWebScriptTest {
         return returnJSON;
     }
 
+    private JSONArray assertGetTemplates (int templateCount) throws IOException, JSONException {
+        JSONArray returnJSON = executeGetTemplates();
+        assertEquals(templateCount, returnJSON.length());
+        return returnJSON;
+    }
+
+
+
     /** Webscripts **/
 
     private JSONArray executeGetSite (String siteName) throws IOException, JSONException {
@@ -388,6 +403,12 @@ public class SitesTest extends BaseWebScriptTest {
         JSONObject data = new JSONObject();
         data.put("PARAM_METHOD", "getSiteType");
         data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeGetTemplates () throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getTemplates");
         return executeWebScript(data, TestUtils.ADMIN);
     }
 

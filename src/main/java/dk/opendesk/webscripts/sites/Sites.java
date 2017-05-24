@@ -488,21 +488,26 @@ public class Sites extends AbstractWebScript {
         return json;
     }
 
-    private JSONArray getTemplates() throws JSONException {
+    private JSONArray getSitesWithAspect(QName aspect) throws JSONException {
 
-        String query = "ASPECT:\"od:projecttype_templates\" ";
-        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+        NodeRef sitesNodeRef = siteService.getSiteRoot();
 
         JSONArray result = new JSONArray();
-        for (int i = 0; i <= siteSearchResult.length() - 1; i++) {
-            NodeRef siteNodeRef = siteSearchResult.getNodeRef(i);
-            SiteInfo siteInfo = siteService.getSite(siteNodeRef);
-            JSONObject json = convertSiteInfoToJSON(siteInfo);
-            result.add(json);
+        List<ChildAssociationRef> children = nodeService.getChildAssocs(sitesNodeRef);
+        for (ChildAssociationRef child : children) {
+            NodeRef childRef = child.getChildRef();
+            if (nodeService.hasAspect(childRef, aspect))
+            {
+                SiteInfo s = siteService.getSite(childRef);
+                JSONObject json = convertSiteInfoToJSON(s);
+                result.add(json);
+            }
         }
-
         return result;
+    }
+
+    private JSONArray getTemplates() throws JSONException {
+        return getSitesWithAspect(OpenDeskModel.ASPECT_PD_TEMPLATE_SITES);
     }
 
     private JSONArray createSite(String displayName, String description, SiteVisibility site_visibility)

@@ -24,6 +24,7 @@ import org.alfresco.util.PropertyMap;
 import javax.transaction.UserTransaction;
 import java.io.File;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TestUtils {
@@ -71,6 +72,29 @@ public class TestUtils {
 
             return personService.createPerson(ppOne);
         });
+    }
+
+    public static SiteInfo createSiteTemplate(TransactionService transactionService, SiteService siteService,
+                                         NodeService nodeService, String siteShortName){
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() ->
+                createSiteWithAspect(transactionService, siteService, nodeService, siteShortName,
+                        OpenDeskModel.ASPECT_PD_TEMPLATE_SITES));
+    }
+
+    public static SiteInfo createPDSite(TransactionService transactionService, SiteService siteService,
+                                                 NodeService nodeService, String siteShortName){
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() ->
+                createSiteWithAspect(transactionService, siteService, nodeService, siteShortName,
+                        OpenDeskModel.ASPECT_PD));
+    }
+
+    private static SiteInfo createSiteWithAspect(TransactionService transactionService, SiteService siteService,
+                                        NodeService nodeService, String siteShortName, QName aspect) {
+        SiteInfo s = createSite(siteService, siteShortName, SiteVisibility.PUBLIC);
+        Map<QName, Serializable> aspectProps = new HashMap<>();
+        TestUtils.addAspect(transactionService, nodeService, s.getNodeRef(), aspect,
+                aspectProps);
+        return s;
     }
 
     public static SiteInfo createSite(TransactionService transactionService, SiteService siteService, String siteShortName){
