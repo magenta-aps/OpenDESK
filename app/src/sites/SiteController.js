@@ -545,9 +545,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     function createDocumentNotification(projekt, shortName, ref, fileName) {
-        var creatorFirstName = vm.currentUser.firstName;
-        var creatorLastName = vm.currentUser.lastName;
-        var creatorFullName = creatorFirstName + " " + creatorLastName;
+        var creatorFullName = vm.currentUser.firstName + " " + vm.currentUser.lastName;;
         var subject = "Nyt dokument i " + projekt;
         var message = "Et nyt dokument \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
         var link = "/#!/dokument/" + ref;

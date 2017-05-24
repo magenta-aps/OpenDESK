@@ -20,10 +20,12 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
         deletePost: deletePost,
         subscribeToDiscussion: subscribeToDiscussion,
         unSubscribeToDiscussion: unSubscribeToDiscussion,
-        isSubscribedToDiscussion: isSubscribedToDiscussion
+        isSubscribedToDiscussion: isSubscribedToDiscussion,
+        getSubscribePreferenceFilter: getSubscribePreferenceFilter
     };
 
     function getSelectedDiscussion() {
+        console.log(selectedDiscussion);
         return selectedDiscussion;
     }
 

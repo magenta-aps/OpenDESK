@@ -9,12 +9,14 @@ angular
         };
     });
 
-function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, discussionService, nodeRefUtilsService, userService, sessionService) {
+function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, discussionService, nodeRefUtilsService, 
+                            userService, sessionService, notificationsService, siteService, preferenceService) {
     var dc = this;
 
     dc.discussions = [];
     dc.selectedDiscussion = discussionService.getSelectedDiscussion();
     dc.replies = [];
+    dc.allMembers = [];
 
     dc.getDiscussions = function(siteShortName) {
         discussionService.getDiscussions(siteShortName).then(function(response) {
@@ -32,14 +34,16 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
         discussionService.getReplies(postItem).then(function(response) {
             dc.replies = response;
 
-            for(var i=0;i<dc.replies.length;i++) {
-                dc.replies[i].author.avatarUrl = dc.getAvatarUrl(dc.replies[i].author.avatarRef);
-            }
+            dc.replies.forEach(function (reply) {
+                reply.author.avatarUrl = dc.getAvatarUrl(reply.author.avatarRef);
+            });
+            
         });
     }
 
     function init() {
         dc.getDiscussions($stateParams.projekt);
+        getAllMembers($stateParams.projekt,'PD-Project');
     }
     init();
 
@@ -58,12 +62,12 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
         discussionService.addReply(dc.selectedDiscussion,content).then(function(response) {
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,dc.selectedDiscussion);
+            dc.createNotification(response.item);
             $mdDialog.cancel();
         })
     },
 
     dc.newDiscussionDialog = function() {
-        console.log('ny thread');
         $mdDialog.show({
             templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
             parent: angular.element(document.body),
@@ -83,7 +87,6 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
     },
 
     dc.viewThread = function(postItem) {
-        console.log('view thread');
         return '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
     }
 
@@ -171,4 +174,38 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
         var avatarId = avatarRef.split('/')[3];
         return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
     }
+
+    function getAllMembers(siteShortName,siteType) {
+        siteService.getAllMembers(siteShortName,siteType).then(function(response) {
+            dc.allMembers = response;
+        });
+    }
+
+    dc.createNotification = function(postItem) {
+        console.log('creating notification...');
+
+        dc.allMembers.forEach(function (username) {
+            if (username != postItem.author.username) {
+                var nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
+                var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt,nodeRef);
+
+                preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
+
+                    var receiveNotifications = "false";
+                    if (data[preferenceFilter] != null) {
+                        receiveNotifications = data[preferenceFilter];
+                    }
+                    if (receiveNotifications != null && receiveNotifications == "true") {
+                        console.log("Sending notification to : " + username);
+                        var subject = 'Ny kommentar på en samtale du følger';
+                        var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
+                        var link = '';
+                        
+                        notificationsService.addNotice(username, subject, message, link, 'new-reply', $stateParams.projekt);
+                    }
+                });
+            }
+        });
+    }
+
 };
