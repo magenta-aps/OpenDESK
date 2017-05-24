@@ -72,25 +72,11 @@ public class TestUtils {
     }
 
     public static SiteInfo createSite(TransactionService transactionService, SiteService siteService, String siteShortName){
-
-        UserTransaction tx = null;
-        SiteInfo s = null;
-        try {
-            tx = transactionService.getUserTransaction();
-            tx.begin();
-            s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+            SiteInfo s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
             siteService.createContainer(siteShortName, OpenDeskModel.DOC_LIBRARY, ContentModel.TYPE_FOLDER, null);
-            tx.commit();
-        } catch (Throwable err) {
-            try {
-                if (tx != null) {
-                    tx.rollback();
-                }
-            } catch (Exception tex) {
-            }
-        }
-        return s;
-
+            return s;
+        });
     }
 
     public static NodeRef uploadFile(TransactionService transactionService, ContentService contentService,
