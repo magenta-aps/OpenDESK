@@ -204,7 +204,7 @@ public class Utils {
                 NodeRef n = site.getNodeRef();
 
                 // Create containers like document library and discussions
-                createContainer(siteService, shortNameWithVersion, OpenDeskModel.DOCUMENT_LIBRARY);
+                createContainer(siteService, shortNameWithVersion, OpenDeskModel.DOC_LIBRARY);
                 createContainer(siteService, shortNameWithVersion, OpenDeskModel.DISCUSSIONS);
 
                 // Create site dashboard

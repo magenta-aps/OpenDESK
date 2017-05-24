@@ -16,11 +16,11 @@ public interface OpenDeskModel {
 
     //SPECIAL SITES
 
-    public static String SITE_DOCUMENT_TEMPLATE = "Dokumentskabeloner";
+    public static String DOC_TEMPLATE = "Dokumentskabeloner";
 
     // Containers
     public static String DISCUSSIONS = "discussions";
-    public static String DOCUMENT_LIBRARY = "documentLibrary";
+    public static String DOC_LIBRARY = "documentLibrary";
     public static String WIKI = "wiki"; // Not implemented yet
     public static String DATA_LISTS = "dataLists"; // Not implemented yet
     public static String LINKS = "links"; // Not implemented yet

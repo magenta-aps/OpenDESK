@@ -160,10 +160,10 @@ public class ProjectDepartment extends AbstractWebScript {
             SiteInfo newSiteInfo = siteService.getSite(newSiteRef);
 
             // Get the documentLibrary of the template site.
-            NodeRef template_documentlibrary = siteService.getContainer(templateSite.getShortName(), OpenDeskModel.DOCUMENT_LIBRARY);
+            NodeRef template_documentlibrary = siteService.getContainer(templateSite.getShortName(), OpenDeskModel.DOC_LIBRARY);
 
             // Get the documentLibrary of the new site.
-            NodeRef newSite_documentlibrary = siteService.getContainer(newSiteInfo.getShortName(), OpenDeskModel.DOCUMENT_LIBRARY);
+            NodeRef newSite_documentlibrary = siteService.getContainer(newSiteInfo.getShortName(), OpenDeskModel.DOC_LIBRARY);
 
             copyService.copy(template_documentlibrary, newSite_documentlibrary);
         }

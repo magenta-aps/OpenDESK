@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -16,6 +17,7 @@ import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.cmr.version.VersionService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyMap;
 
@@ -44,14 +46,13 @@ public class TestUtils {
     public static final String SITE_ONE = "user_one_site_one";
     public static final String SITE_TWO = "user_one_site_two";
     public static final String SITE_THREE = "user_one_site_three";
-    public static final String SITE_DOCUMENT_TEMPLATE = "document_template";
 
-    public static final String FILE_TEST_UPLOAD = "Test_Upload";
-    public static final String FILE_TEST_TEMPLATE1 = "Test_Template1";
-    public static final String FILE_TEST_TEMPLATE2 = "Test_Template2";
-    public static final String FILE_TEST_TEMPLATE3 = "Test_Template3";
-    public static final String FILE_TEST_TEMPLATE4 = "Test_Template4";
-    public static final String FILE_TEST_FROM_TEMPLATE1 = "Test_From_Template1";
+    public static final String FILE_TEST_UPLOAD = "Test_Upload.pdf";
+    public static final String FILE_TEST_TEMPLATE1 = "Test_Template1.pdf";
+    public static final String FILE_TEST_TEMPLATE2 = "Test_Template2.pdf";
+    public static final String FILE_TEST_TEMPLATE3 = "Test_Template3.pdf";
+    public static final String FILE_TEST_TEMPLATE4 = "Test_Template4.pdf";
+    public static final String FILE_TEST_FROM_TEMPLATE1 = "Test_From_Template1.pdf";
 
     public static NodeRef createUser(TransactionService transactionService, PersonService personService,
                                   MutableAuthenticationService authenticationService, String userName) {
@@ -78,6 +79,7 @@ public class TestUtils {
             tx = transactionService.getUserTransaction();
             tx.begin();
             s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
+            siteService.createContainer(siteShortName, OpenDeskModel.DOC_LIBRARY, ContentModel.TYPE_FOLDER, null);
             tx.commit();
         } catch (Throwable err) {
             try {
@@ -137,6 +139,14 @@ public class TestUtils {
                                         NodeRef docRef, Map<String, Serializable> versionProperties) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
             return versionService.createVersion(docRef, versionProperties);
+        });
+    }
+
+    public static Boolean addAspect(TransactionService transactionService, NodeService nodeService,
+                                        NodeRef nodeRef, QName aspect, Map<QName, Serializable> aspectProperties) {
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+            nodeService.addAspect(nodeRef, aspect, aspectProperties);
+            return true;
         });
     }
 
