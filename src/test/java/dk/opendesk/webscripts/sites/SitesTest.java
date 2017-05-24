@@ -52,6 +52,10 @@ public class SitesTest extends BaseWebScriptTest {
     private String SOURCE_LINK_REF = "sourceLinkRef";
     private String DESTINATION_LINK_REF = "destinationLinkRef";
     private String TYPE = "type";
+    private String SHORTNAME = "shortName";
+    private String TITLE = "title";
+    private String DESCRIPTION = "description";
+    private String VISIBILITY = "visibility";
 
     public SitesTest() {
         super();
@@ -237,12 +241,18 @@ public class SitesTest extends BaseWebScriptTest {
         assertGetTemplates(initialCount + 3);
     }
 
+    public void testCreateTemplate()  throws IOException, JSONException {
+        log.debug("SitesTest.testCreateTemplate");
+
+        assertCreateTemplate(TestUtils.SITE_TWO, "This is a small description");
+    }
+
 
     /** Assertions **/
 
     private JSONArray assertGetSite (String siteShortName) throws IOException, JSONException {
         JSONArray returnJSON = executeGetSite(siteShortName);
-        assertEquals(siteShortName, returnJSON.getJSONObject(0).get("shortName"));
+        assertEquals(siteShortName, returnJSON.getJSONObject(0).get(SHORTNAME));
         return returnJSON;
     }
 
@@ -255,9 +265,9 @@ public class SitesTest extends BaseWebScriptTest {
     private JSONArray assertCreateSite (String siteDisplayName, String description, String siteVisibility)
             throws IOException, JSONException {
         JSONArray returnJSON = executeCreateSite(siteDisplayName, description, siteVisibility);
-        assertEquals(siteDisplayName, returnJSON.getJSONObject(0).get("title"));
-        assertEquals(description, returnJSON.getJSONObject(0).get("description"));
-        assertEquals(siteVisibility, returnJSON.getJSONObject(0).get("visibility"));
+        assertEquals(siteDisplayName, returnJSON.getJSONObject(0).get(TITLE));
+        assertEquals(description, returnJSON.getJSONObject(0).get(DESCRIPTION));
+        assertEquals(siteVisibility, returnJSON.getJSONObject(0).get(VISIBILITY));
         return returnJSON;
     }
 
@@ -319,6 +329,13 @@ public class SitesTest extends BaseWebScriptTest {
     private JSONArray assertGetTemplates (int templateCount) throws IOException, JSONException {
         JSONArray returnJSON = executeGetTemplates();
         assertEquals(templateCount, returnJSON.length());
+        return returnJSON;
+    }
+
+    private JSONArray assertCreateTemplate (String siteShortName, String description) throws IOException, JSONException {
+        JSONArray returnJSON = executeCreateTemplate(siteShortName, description);
+        assertEquals(siteShortName, returnJSON.getJSONObject(0).get(TITLE));
+        assertEquals(description, returnJSON.getJSONObject(0).get(DESCRIPTION));
         return returnJSON;
     }
 
@@ -409,6 +426,14 @@ public class SitesTest extends BaseWebScriptTest {
     private JSONArray executeGetTemplates () throws IOException, JSONException {
         JSONObject data = new JSONObject();
         data.put("PARAM_METHOD", "getTemplates");
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeCreateTemplate (String siteShortName, String description) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "createTemplate");
+        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        data.put("PARAM_DESCRIPTION", description);
         return executeWebScript(data, TestUtils.ADMIN);
     }
 
