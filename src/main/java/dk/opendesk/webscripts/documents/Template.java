@@ -19,19 +19,13 @@ package dk.opendesk.webscripts.documents;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.model.FileExistsException;
+import org.alfresco.repo.search.SearcherException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.cmr.version.VersionService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,200 +36,101 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
+import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Template extends AbstractWebScript {
 
+    private FileFolderService fileFolderService;
+    private NodeService nodeService;
+    private SiteService siteService;
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
     }
-
-    FileFolderService fileFolderService;
-
-    private NodeService nodeService;
-    private PersonService personService;
-    private VersionService versionService;
-
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
 
-    public void setSearchService(SearchService searchService) {
-        this.searchService = searchService;
-    }
-
-    private SiteService siteService;
-    private SearchService searchService;
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
-    public void setVersionService(VersionService versionService) {
-        this.versionService = versionService;
-    }
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
-    }
-
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
+        webScriptResponse.setContentEncoding("UTF-8");
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result = new JSONArray();
 
-        String method = params.get("method");
-        String fileName = params.get("fileName");
+        try {
+            Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-        if (method.equals("getAllTemplateDocuments")) {
+            String method = params.get("method");
+            String nodeName = params.get("fileName"); //TODO: Change param name
+            String templateNodeId = params.get("template_nodeid");
+            String destinationNodeRefStr = params.get("destination_nodeRefid"); //TODO: Change param name
 
-            JSONArray response = new JSONArray();
-            JSONArray children = new JSONArray();
+            switch (method) {
+                case "getAllTemplateDocuments":
+                    result = getAllTemplateDocuments();
+                    break;
+                case "makeNewDocumentFromTemplate":
+                    result = makeNewDocumentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
+                    break;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
+        }
+        Utils.writeJSONArray(webScriptWriter, result);
+    }
+
+    private JSONArray getAllTemplateDocuments() throws SearcherException, JSONException {
+
+        NodeRef documentLibrary = siteService.getContainer(OpenDeskModel.DOC_TEMPLATE, OpenDeskModel.DOC_LIBRARY);
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(documentLibrary);
+
+        JSONArray children = new JSONArray();
+        for (ChildAssociationRef child : childAssociationRefs) {
             JSONObject json = new JSONObject();
 
-            String query = "ASPECT:\"" + OpenDeskModel.ASPECT_PD_DOCUMENT + "\" ";
+            ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
+            String originalMimeType = contentData.getMimetype();
 
-            StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-            ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+            Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
+            String name = (String) props.get(ContentModel.PROP_NAME);
 
-            if(siteSearchResult.length() == 0)
-                return;
+            json.put("nodeRef", child.getChildRef().getId());
+            json.put("name", name);
+            json.put("mimeType", originalMimeType);
 
-            NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
-            SiteInfo siteInfo = siteService.getSite(siteNodeRef);
-
-            NodeRef documentLibrary = siteService.getContainer(siteInfo.getShortName(), "documentlibrary");
-
-            List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(documentLibrary);
-
-            for (ChildAssociationRef child : childAssociationRefs) {
-                json = new JSONObject();
-
-                ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
-                String originalMimeType = contentData.getMimetype();
-
-                Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
-                String name = (String) props.get(ContentModel.PROP_NAME);
-
-
-            try {
-                json.put("nodeRef", child.getChildRef().getId());
-                json.put("name", name);
-                json.put("mimeType", originalMimeType);
-
-                children.add(json);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            try {
-                response.add(children);
-                response.writeJSONString(webScriptResponse.getWriter());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            children.add(json);
         }
-        else if (method.equals("makeNewDocumentFromTemplate")) {
 
-            JSONArray response = new JSONArray();
+        JSONArray response = new JSONArray();
+        response.add(children);
+        return response;
+    }
 
-            String template_nodeid = params.get("template_nodeid");
-            String destination_nodeid = params.get("destination_nodeRefid");
+    private JSONArray makeNewDocumentFromTemplate(String nodeName, String templateNodeId, String destinationNodeRefStr)
+            throws JSONException, FileNotFoundException {
 
-            NodeRef template_nodeRef = new NodeRef("workspace://SpacesStore/" + template_nodeid);
-            NodeRef destination_nodeRef = new NodeRef(destination_nodeid);
+        NodeRef templateNodeRef = new NodeRef("workspace://SpacesStore/" + templateNodeId);
+        NodeRef destinationNodeRef = new NodeRef(destinationNodeRefStr);
+        String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
 
+        FileInfo newFile = fileFolderService.copy(templateNodeRef, destinationNodeRef, fileName);
+        // TODO apparently a file is still created on FileExistsException with noderef as name. Should be deleted.
 
-            List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(destination_nodeRef);
-
-            int currentHigest = 0;
-            String name = fileName.split("\\.")[0];
-            String ext = fileName.split("\\.")[1];
-            boolean match = false;
-
-            for (ChildAssociationRef child : childAssociationRefs) {
-
-                String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-                String file_name = "";
-                if (file.contains("(")) {
-                    file_name = file.split("\\(")[0];
-                }
-                else {
-                    file_name = file.split("\\.")[0];
-                }
-
-                if (file_name.trim().equals(name.trim())) {
-                    match = true;
-                    System.out.println("match");
-
-                    int number = 0;
-                    Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
-                    while(m.find()) {
-                        number = Integer.valueOf(m.group(1));
-                        System.out.println(number);
-                    }
-
-                    if (number > currentHigest) {
-                        currentHigest = number;
-                    }
-
-                }
-            }
-
-
-            System.out.println("what is count:" + currentHigest);
-
-            if (match) {
-                currentHigest++;
-                fileName = name + "(" + currentHigest + ")." + ext;
-            }
-
-
-            FileInfo newFile = null;
-
-            try {
-                newFile = fileFolderService.copy(template_nodeRef, destination_nodeRef, fileName);
-
-                JSONObject json = new JSONObject();
-                json.put("status", "success");
-                json.put("nodeRef", newFile.getNodeRef());
-                json.put("fileName", fileName);
-                response.add(json);
-                response.writeJSONString(webScriptResponse.getWriter());
-
-
-            } catch (FileExistsException ex) {
-                 ex.printStackTrace();
-
-                // TODO apparently a file is still created with the name equal to the noderef instead of filename. Look into how this is deleted
-
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("status", "failure, file already exists");
-                    response.add(json);
-                    response.writeJSONString(webScriptResponse.getWriter());
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-
-
-            }
-
-             catch (FileNotFoundException e) {
-                 e.printStackTrace();
-             }
-            catch (JSONException ej) {
-
-                ej.printStackTrace();
-            }
-
-        }
+        Map<String, Serializable> response = new HashMap<>();
+        response.put("nodeRef", newFile.getNodeRef());
+        response.put("fileName", fileName);
+        return Utils.getJSONReturnArray(response);
     }
 }

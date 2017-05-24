@@ -72,9 +72,6 @@
 		  class="dk.opendesk.webscripts.documents.Template"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
-		<property name="versionService" ref="VersionService"/>
-		<property name="personService" ref="PersonService"/>
-		<property name="searchService" ref="SearchService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="fileFolderService" ref="fileFolderService"/>
 	</bean>
@@ -143,7 +140,7 @@
 	</bean>
 
 	<bean id="webscript.sbsys.fakesbsys.post" class="dk.opendesk.webscripts.sbsys.FakeSbsysDownload" parent="webscript">
-		<property name="fileFolderService" ref="FileFolderService"></property>
+		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
 </beans>
