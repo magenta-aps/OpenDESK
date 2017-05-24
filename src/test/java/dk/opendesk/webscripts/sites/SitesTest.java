@@ -6,6 +6,7 @@ import dk.opendesk.webscripts.TestUtils;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.site.SiteInfo;
@@ -45,16 +46,18 @@ public class SitesTest extends BaseWebScriptTest {
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
         // SITES
-        sites.put(TestUtils.SITE_ONE, null);
         sites.put(TestUtils.SITE_TWO, null);
         sites.put(TestUtils.SITE_THREE, null);
         sites.put(TestUtils.SITE_FOUR, null);
 
         // Delete and purge and then create sites
+        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
         for (String siteShortName : sites.keySet()) {
             TestUtils.deleteSite(transactionService, siteService, siteShortName);
         }
         nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
     }
 
     /** Tests **/
@@ -62,7 +65,6 @@ public class SitesTest extends BaseWebScriptTest {
     public void testGetSite()  throws IOException, JSONException {
         log.debug("SitesTest.testGetSite");
 
-        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
         assertGetSite(TestUtils.SITE_ONE);
     }
 
@@ -101,13 +103,43 @@ public class SitesTest extends BaseWebScriptTest {
 
         String group = "Site" + OpenDeskModel.CONSUMER;
 
-        String siteOneConsumerGroup = Utils.getAuthorityName(TestUtils.SITE_ONE, group);
-        TestUtils.addToAuthority(transactionService, authorityService, siteOneConsumerGroup, userName);
+        String siteThreeConsumerGroup = Utils.getAuthorityName(TestUtils.SITE_THREE, group);
+        TestUtils.addToAuthority(transactionService, authorityService, siteThreeConsumerGroup, userName);
 
         String siteTwoConsumerGroup = Utils.getAuthorityName(TestUtils.SITE_TWO, group);
         TestUtils.addToAuthority(transactionService, authorityService, siteTwoConsumerGroup, userName);
 
         assertGetAllSitesForCurrentUser(userName, initialCount + 2);
+    }
+
+    public void testAddUser()  throws IOException, JSONException {
+        log.debug("SitesTest.testAddUser");
+
+        String group = "Site" + OpenDeskModel.CONSUMER;
+        assertAddUser(TestUtils.SITE_ONE, TestUtils.USER_ONE, group);
+    }
+
+    public void testRemoveUser()  throws IOException, JSONException {
+        log.debug("SitesTest.testRemoveUser");
+
+        String userName = TestUtils.USER_ONE;
+        String group = "Site" + OpenDeskModel.CONSUMER;
+        String groupName = Utils.getAuthorityName(TestUtils.SITE_ONE, group);
+        TestUtils.addToAuthority(transactionService, authorityService, groupName, userName);
+        assertRemoveUser(TestUtils.SITE_ONE, userName, group);
+    }
+
+    public void testAddPermission()  throws IOException, JSONException {
+        log.debug("SitesTest.testAddPermission");
+
+        assertAddPermission(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.CONTRIBUTOR);
+    }
+
+    public void testRemovePermission()  throws IOException, JSONException {
+        log.debug("SitesTest.testAddPermission");
+
+        assertAddPermission(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.CONTRIBUTOR);
+        assertRemovePermission(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.CONTRIBUTOR);
     }
 
     /** Assertions **/
@@ -136,6 +168,30 @@ public class SitesTest extends BaseWebScriptTest {
     private JSONArray assertGetAllSitesForCurrentUser (String userName, int siteCount) throws IOException, JSONException {
         JSONArray returnJSON = executeGetAllSitesForCurrentUser(userName);
         assertEquals(siteCount, returnJSON.length());
+        return returnJSON;
+    }
+
+    private JSONArray assertAddUser (String siteShortName, String userName, String groupName) throws IOException, JSONException {
+        JSONArray returnJSON = executeAddUser(siteShortName, userName, groupName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private JSONArray assertRemoveUser (String siteShortName, String userName, String groupName) throws IOException, JSONException {
+        JSONArray returnJSON = executeRemoveUser(siteShortName, userName, groupName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private JSONArray assertAddPermission (String siteShortName, String userName, String roleName) throws IOException, JSONException {
+        JSONArray returnJSON = executeAddPermission(siteShortName, userName, roleName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private JSONArray assertRemovePermission (String siteShortName, String userName, String roleName) throws IOException, JSONException {
+        JSONArray returnJSON = executeRemovePermission(siteShortName, userName, roleName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
         return returnJSON;
     }
 
@@ -169,6 +225,48 @@ public class SitesTest extends BaseWebScriptTest {
         JSONObject data = new JSONObject();
         data.put("PARAM_METHOD", "getAll");
         return executeWebScript(data, userName);
+    }
+
+    private JSONArray executeAddUser (String siteShortName, String userName, String groupName)
+            throws IOException, JSONException {
+        return executeUserWebScripts("addUser", siteShortName, userName, groupName);
+    }
+
+    private JSONArray executeRemoveUser (String siteShortName, String userName, String groupName)
+            throws IOException, JSONException {
+        return executeUserWebScripts("removeUser", siteShortName, userName, groupName);
+    }
+
+    private JSONArray executeAddPermission (String siteShortName, String userName, String roleName)
+            throws IOException, JSONException {
+        return executePermissionWebScripts("addPermission", siteShortName, userName, roleName);
+    }
+
+    private JSONArray executeRemovePermission (String siteShortName, String userName, String roleName)
+            throws IOException, JSONException {
+        return executePermissionWebScripts("removePermission", siteShortName, userName, roleName);
+    }
+
+    /** Help Webscripts **/
+
+    private JSONArray executeUserWebScripts (String method, String siteShortName, String userName, String groupName)
+            throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", method);
+        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        data.put("PARAM_USER", userName);
+        data.put("PARAM_GROUP", groupName);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executePermissionWebScripts (String method, String siteShortName, String userName, String roleName)
+            throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", method);
+        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        data.put("PARAM_USER", userName);
+        data.put("PARAM_ROLE", roleName);
+        return executeWebScript(data, TestUtils.ADMIN);
     }
 
     /** Root Webscript **/

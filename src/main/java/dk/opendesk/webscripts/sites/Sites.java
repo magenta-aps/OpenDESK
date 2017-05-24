@@ -132,12 +132,13 @@ public class Sites extends AbstractWebScript {
                         result = removeUser(siteShortName, user, group);
                         break;
 
+                    // TODO: Change name to addRole and removeRole
                     case "addPermission":
-                        result = addPermission(siteShortName, user, role);
+                        result = addRole(siteShortName, user, role);
                         break;
 
                     case "removePermission":
-                        result = removePermission(siteShortName, user, role);
+                        result = removeRole(siteShortName, user, role);
                         break;
 
                     case "getCurrentUserSiteRole":
@@ -253,14 +254,14 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
-    private JSONArray addPermission(String siteShortName, String user, String role) {
+    private JSONArray addRole(String siteShortName, String user, String role) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
         permissionService.setPermission(ref, user, role, true);
         return Utils.getJSONSuccess();
     }
 
-    private JSONArray removePermission(String siteShortName, String user, String role) {
+    private JSONArray removeRole(String siteShortName, String user, String role) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
         permissionService.deletePermission(ref, user, role);
