@@ -103,8 +103,8 @@ public class Sites extends AbstractWebScript {
             String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
             String description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
             String fileName = Utils.getJSONObject(json, "PARAM_FILENAME");
-            String site_visibility_str = Utils.getJSONObject(json, "PARAM_VISIBILITY");
-            SiteVisibility site_visibility = Utils.getVisibility(site_visibility_str);
+            String siteVisibilityStr = Utils.getJSONObject(json, "PARAM_VISIBILITY");
+            SiteVisibility siteVisibility = Utils.getVisibility(siteVisibilityStr);
 
             if (method != null) {
                 switch (method) {
@@ -117,7 +117,7 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "createSite":
-                        result = createSite(siteDisplayName, description, site_visibility);
+                        result = createSite(siteDisplayName, description, siteVisibility);
                         break;
 
                     case "getSitesPerUser":

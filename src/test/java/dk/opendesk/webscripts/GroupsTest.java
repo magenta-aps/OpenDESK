@@ -82,7 +82,6 @@ public class GroupsTest extends BaseWebScriptTest {
 
         String group = "Site" + OpenDeskModel.CONSUMER;
 
-
         String consumerGroup = Utils.getAuthorityName(TestUtils.SITE_ONE, group);
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_ONE);
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_THREE);

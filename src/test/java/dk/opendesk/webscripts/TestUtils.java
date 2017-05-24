@@ -44,6 +44,7 @@ public class TestUtils {
     public static final String USER_FIVE = "user_five";
 
     public static final String SITE_ONE = "reserved_for_test_site_one";
+    public static final String SITE_ONE_DESC = "This is a fine desc";
     public static final String SITE_TWO = "reserved_for_test_site_two";
     public static final String SITE_THREE = "reserved_for_test_site_three";
     public static final String SITE_FOUR = "reserved_for_test_site_four";
@@ -73,11 +74,19 @@ public class TestUtils {
     }
 
     public static SiteInfo createSite(TransactionService transactionService, SiteService siteService, String siteShortName){
-        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
-            SiteInfo s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
-            siteService.createContainer(siteShortName, OpenDeskModel.DOC_LIBRARY, ContentModel.TYPE_FOLDER, null);
-            return s;
-        });
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() ->
+                createSite(siteService, siteShortName, SiteVisibility.PUBLIC));
+    }
+
+    public static SiteInfo createPrivateSite(TransactionService transactionService, SiteService siteService, String siteShortName){
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() ->
+                createSite(siteService, siteShortName, SiteVisibility.PRIVATE));
+    }
+
+    private static SiteInfo createSite(SiteService siteService, String siteShortName, SiteVisibility siteVisibility) {
+        SiteInfo s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", siteVisibility);
+        siteService.createContainer(siteShortName, OpenDeskModel.DOC_LIBRARY, ContentModel.TYPE_FOLDER, null);
+        return s;
     }
 
     public static NodeRef uploadFile(TransactionService transactionService, ContentService contentService,
@@ -124,9 +133,8 @@ public class TestUtils {
 
     public static Version createVersion(TransactionService transactionService, VersionService versionService,
                                         NodeRef docRef, Map<String, Serializable> versionProperties) {
-        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
-            return versionService.createVersion(docRef, versionProperties);
-        });
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() ->
+                versionService.createVersion(docRef, versionProperties));
     }
 
     public static Boolean addAspect(TransactionService transactionService, NodeService nodeService,
@@ -136,15 +144,4 @@ public class TestUtils {
             return true;
         });
     }
-
-//    public static SiteInfo createSite(TransactionService transactionService, SiteService siteService,
-//                                         String siteShortName) {
-//        return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
-//            SiteInfo s = null;
-//            s = siteService.createSite("site-dashboard", siteShortName, siteShortName, "desc", SiteVisibility.PUBLIC);
-//            return s;
-//        });
-//    }
-
-
 }
