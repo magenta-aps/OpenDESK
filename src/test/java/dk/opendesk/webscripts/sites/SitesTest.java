@@ -15,6 +15,7 @@ import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.JCEBlockCipher;
@@ -26,6 +27,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +51,7 @@ public class SitesTest extends BaseWebScriptTest {
     private Map<String, SiteInfo> sites = new HashMap<>();
     private String SOURCE_LINK_REF = "sourceLinkRef";
     private String DESTINATION_LINK_REF = "destinationLinkRef";
+    private String TYPE = "type";
 
     public SitesTest() {
         super();
@@ -209,6 +212,24 @@ public class SitesTest extends BaseWebScriptTest {
         assertDeleteLink(sourceId, destinationId);
     }
 
+    public void testGetSiteTypeOfSiteOneIsProject()  throws IOException, JSONException {
+        log.debug("SitesTest.testGetSiteTypeOfSiteOneIsProject");
+
+        assertGetSiteType(TestUtils.SITE_ONE, OpenDeskModel.project);
+    }
+
+    public void testGetSiteTypeOfSiteOneIsPDProject()  throws IOException, JSONException {
+        log.debug("SitesTest.testGetSiteTypeOfSiteOneIsPDProject");
+
+        SiteInfo s = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
+        Map<QName, Serializable> aspectProps = new HashMap<>();
+        TestUtils.addAspect(transactionService, nodeService, s.getNodeRef(), OpenDeskModel.ASPECT_PD,
+                aspectProps);
+
+        assertGetSiteType(TestUtils.SITE_TWO, OpenDeskModel.pd_project);
+    }
+
+
 
     /** Assertions **/
 
@@ -279,6 +300,12 @@ public class SitesTest extends BaseWebScriptTest {
     private JSONArray assertDeleteLink (String sourceId, String destinationId) throws IOException, JSONException {
         JSONArray returnJSON = executeDeleteLink(sourceId, destinationId);
         assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private JSONArray assertGetSiteType (String siteShortName, String type) throws IOException, JSONException {
+        JSONArray returnJSON = executeGetSiteType(siteShortName);
+        assertEquals(type, returnJSON.getJSONObject(0).getString(TYPE));
         return returnJSON;
     }
 
@@ -354,6 +381,13 @@ public class SitesTest extends BaseWebScriptTest {
         data.put("PARAM_METHOD", "deleteLink");
         data.put("PARAM_SOURCE", sourceId);
         data.put("PARAM_DESTINATION", destinationId);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeGetSiteType (String siteShortName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getSiteType");
+        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
         return executeWebScript(data, TestUtils.ADMIN);
     }
 
