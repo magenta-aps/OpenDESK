@@ -106,15 +106,11 @@
 		<property name="nodeService" ref="NodeService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="personService" ref="PersonService"/>
-		<property name="nodeArchiveService" ref="nodeArchiveService"/>
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="AuthorityService" ref="authorityService"/>
 		<property name="permissionService" ref="PermissionService"/>
-		<property name="renditionService" ref="RenditionService"/>
-		<property name="fileFolderService" ref="FileFolderService"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="searchService" ref="SearchService"/>
-		<property name="invitationService" ref="InvitationService"/>
 	</bean>
 
 	<bean id="webscript.users.post"

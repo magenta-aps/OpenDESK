@@ -21,11 +21,7 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
-import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.site.SiteModel;
-import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.rendition.RenditionService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
@@ -34,13 +30,10 @@ import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.util.ISO9075;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -52,74 +45,40 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import java.util.regex.*;
-
 public class Sites extends AbstractWebScript {
 
-
-    final Logger logger = LoggerFactory.getLogger(Sites.class);
+    private AuthenticationService authenticationService;
+    private ContentService contentService;
+    private SearchService searchService;
+    private SiteService siteService;
+    private NodeService nodeService;
+    private PersonService personService;
+    private PermissionService permissionService;
+    private AuthorityService authorityService;
 
     public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
-
-    AuthenticationService authenticationService;
-
-    public void setFileFolderService(FileFolderService fileFolderService) {
-        this.fileFolderService = fileFolderService;
-    }
-
-    FileFolderService fileFolderService;
-
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
     }
-
-    ContentService contentService;
-
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
     }
-
-    SearchService searchService;
-
-    private NodeArchiveService nodeArchiveService;
-    private SiteService siteService;
-    private NodeService nodeService;
-    private PersonService personService;
-
-    public void setRenditionService(RenditionService renditionService) {
-        this.renditionService = renditionService;
-    }
-
-    private RenditionService renditionService;
-
-    public void setPermissionService(PermissionService permissionService) {
-        this.permissionService = permissionService;
-    }
-
-    private PermissionService permissionService;
-
-    public void setAuthorityService(AuthorityService authorityService) {
-        this.authorityService = authorityService;
-    }
-
-    private AuthorityService authorityService;
-
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
-
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
-
-    public void setNodeArchiveService(NodeArchiveService nodeArchiveService) {
-        this.nodeArchiveService = nodeArchiveService;
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
     }
 
     @Override
