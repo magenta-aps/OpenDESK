@@ -43,9 +43,10 @@ public class TestUtils {
     public static final String USER_FOUR = "user_four";
     public static final String USER_FIVE = "user_five";
 
-    public static final String SITE_ONE = "user_one_site_one";
-    public static final String SITE_TWO = "user_one_site_two";
-    public static final String SITE_THREE = "user_one_site_three";
+    public static final String SITE_ONE = "reserved_for_test_site_one";
+    public static final String SITE_TWO = "reserved_for_test_site_two";
+    public static final String SITE_THREE = "reserved_for_test_site_three";
+    public static final String SITE_FOUR = "reserved_for_test_site_four";
 
     public static final String FILE_TEST_UPLOAD = "Test_Upload.pdf";
     public static final String FILE_TEST_TEMPLATE1 = "Test_Template1.pdf";

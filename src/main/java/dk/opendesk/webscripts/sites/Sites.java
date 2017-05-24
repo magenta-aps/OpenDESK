@@ -109,70 +109,70 @@ public class Sites extends AbstractWebScript {
             if (method != null) {
                 switch (method) {
                     case "getSite":
-                        result = this.getSiteInfo(siteShortName);
+                        result = getSiteInfo(siteShortName);
                         break;
 
                     case "getAll":
-                        result = this.getAllSites(query);
+                        result = getAllSites(query);
                         break;
 
                     case "createSite":
-                        result = this.createSite(siteDisplayName, description, site_visibility);
+                        result = createSite(siteDisplayName, description, site_visibility);
                         break;
 
                     case "getSitesPerUser":
-                        result = this.getAllSitesForCurrentUser();
+                        result = getAllSitesForCurrentUser();
                         break;
 
                     case "addUser":
-                        result = this.addUser(siteShortName, user, group);
+                        result = addUser(siteShortName, user, group);
                         break;
 
                     case "removeUser":
-                        result = this.removeUser(siteShortName, user, group);
+                        result = removeUser(siteShortName, user, group);
                         break;
 
                     case "addPermission":
-                        result = this.addPermission(siteShortName, user, role);
+                        result = addPermission(siteShortName, user, role);
                         break;
 
                     case "removePermission":
-                        result = this.removePermission(siteShortName, user, role);
+                        result = removePermission(siteShortName, user, role);
                         break;
 
                     case "getCurrentUserSiteRole":
-                        result = this.getCurrentUserSiteRole(siteShortName);
+                        result = getCurrentUserSiteRole(siteShortName);
                         break;
 
                     case "addLink":
-                        result = this.addLink(source, destination);
+                        result = addLink(source, destination);
                         break;
 
                     case "deleteLink":
                         NodeRef source_n = new NodeRef("workspace://SpacesStore/" + source);
                         NodeRef destination_n = new NodeRef("workspace://SpacesStore/" + destination);
 
-                        result = this.deleteLink(source_n, destination_n);
+                        result = deleteLink(source_n, destination_n);
                         break;
 
                     case "getSiteType":
-                        result = this.getSiteType(siteShortName);
+                        result = getSiteType(siteShortName);
                         break;
 
                     case "getTemplates":
-                        result = this.getTemplates();
+                        result = getTemplates();
                         break;
 
                     case "createTemplate":
-                        result = this.createTemplate(siteShortName, description);
+                        result = createTemplate(siteShortName, description);
                         break;
 
                     case "makeSiteATemplate":
-                        result = this.makeSiteATemplate(siteShortName);
+                        result = makeSiteATemplate(siteShortName);
                         break;
 
                     case "createMembersPDF":
-                        result = this.createMembersPDF(siteShortName);
+                        result = createMembersPDF(siteShortName);
                         break;
 
                     case "deleteSite":
@@ -180,16 +180,15 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "getDocumentTemplateSite":
-                        result = this.getDocumentTemplateSite();
+                        result = getDocumentTemplateSite();
                         break;
 
                     case "returnFileName":
-                        result = this.returnFileName(destination, fileName);
+                        result = returnFileName(destination, fileName);
                         break;
                 }
             }
         } catch (Exception e) {
-            System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
             webScriptResponse.setStatus(400);
@@ -197,39 +196,34 @@ public class Sites extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private JSONArray getAllSites(String q) {
+    private JSONArray getAllSites(String q) throws JSONException {
         JSONArray result = new JSONArray();
 
-        //TODO : carefully choose the number of sites to return
         List<SiteInfo> allSites = siteService.listSites(q, q);
 
         for (SiteInfo siteInfo : allSites) {
             String siteShortName = siteInfo.getShortName();
             JSONArray JSONresult = getCurrentUserSiteRole(siteShortName);
             JSONObject jsonObject = (JSONObject) JSONresult.get(0);
-            try {
-                String role = Utils.getJSONObject(jsonObject, "role");
-                if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role)) {
-                    JSONObject json = convertSiteInfoToJSON(siteInfo);
-                    if (CheckIfSiteIsSpecial(siteInfo))
-                        continue;
-                    result.add(json);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            String role = Utils.getJSONObject(jsonObject, "role");
+            if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role)) {
+                JSONObject json = convertSiteInfoToJSON(siteInfo);
+                if (CheckIfSiteIsSpecial(siteInfo))
+                    continue;
+                result.add(json);
             }
         }
 
         return result;
     }
 
-    private JSONArray getAllSitesForCurrentUser() {
+    private JSONArray getAllSitesForCurrentUser() throws JSONException {
 
         JSONArray result = new JSONArray();
 
-        List<SiteInfo> currentuser_standard_sites = siteService.listSites(authenticationService.getCurrentUserName());
+        List<SiteInfo> currentUserSites = siteService.listSites(authenticationService.getCurrentUserName());
 
-        for (SiteInfo siteInfo : currentuser_standard_sites) {
+        for (SiteInfo siteInfo : currentUserSites) {
             if (CheckIfSiteIsSpecial(siteInfo))
                 continue;
             JSONObject json = convertSiteInfoToJSON(siteInfo);
@@ -248,36 +242,28 @@ public class Sites extends AbstractWebScript {
     private JSONArray addUser(String siteShortName, String user, String group) {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
-
         authorityService.addAuthority(groupName, user);
-
         return Utils.getJSONSuccess();
     }
 
     private JSONArray removeUser(String siteShortName, String user, String group) {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
-
         authorityService.removeAuthority(groupName, user);
-
         return Utils.getJSONSuccess();
     }
 
     private JSONArray addPermission(String siteShortName, String user, String role) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
-
         permissionService.setPermission(ref, user, role, true);
-
         return Utils.getJSONSuccess();
     }
 
     private JSONArray removePermission(String siteShortName, String user, String role) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
-
         permissionService.deletePermission(ref, user, role);
-
         return Utils.getJSONSuccess();
     }
 
@@ -322,184 +308,73 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONReturnPair("role", role);
     }
 
-    private JSONArray addLink(String source_project, String destinaion_project) {
+    private JSONArray addLink(String sourceProject, String destinationProject) {
 
-        SiteInfo source = siteService.getSite(source_project);
-        SiteInfo destination = siteService.getSite(destinaion_project);
+        SiteInfo source = siteService.getSite(sourceProject);
+        SiteInfo destination = siteService.getSite(destinationProject);
 
-        // Get the documentLibrary of the site.
-        NodeRef source_documentLib = siteService.getContainer(source.getShortName(), "documentlibrary");
-
-        NodeRef dest_documentLib = siteService.getContainer(destination.getShortName(), "documentlibrary");
+        // Get the documentLibrary of the sites.
+        NodeRef sourceDocumentLib = siteService.getContainer(source.getShortName(), OpenDeskModel.DOC_LIBRARY);
+        NodeRef destDocumentLib = siteService.getContainer(destination.getShortName(), OpenDeskModel.DOC_LIBRARY);
 
         // create link for source
         Map<QName, Serializable> linkProperties = new HashMap<QName, Serializable>();
         linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(destination.getNodeRef(), ContentModel.PROP_NAME));
         linkProperties.put(OpenDeskModel.PROP_LINK_TARGET, destination.getShortName());
-
-
-        ChildAssociationRef source_nodeRef = nodeService.createNode(source_documentLib, ContentModel.ASSOC_CONTAINS,
+        ChildAssociationRef source_nodeRef = nodeService.createNode(sourceDocumentLib, ContentModel.ASSOC_CONTAINS,
                 OpenDeskModel.PROP_LINK, OpenDeskModel.PROP_LINK, linkProperties);
 
         // create link for destination
         linkProperties = new HashMap<QName, Serializable>();
         linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(source.getNodeRef(), ContentModel.PROP_NAME));
         linkProperties.put(OpenDeskModel.PROP_LINK_TARGET, source.getShortName());
-
-
-        ChildAssociationRef destination_nodeRef = nodeService.createNode(dest_documentLib, ContentModel.ASSOC_CONTAINS,
+        ChildAssociationRef destination_nodeRef = nodeService.createNode(destDocumentLib, ContentModel.ASSOC_CONTAINS,
                 OpenDeskModel.PROP_LINK, OpenDeskModel.PROP_LINK, linkProperties);
 
         // for easy deletion of the links, we do a save of the nodeRefs on each side
         nodeService.setProperty(source_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF, destination_nodeRef.getChildRef());
         nodeService.setProperty(destination_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF, source_nodeRef.getChildRef());
-
         return Utils.getJSONSuccess();
     }
 
     private JSONArray deleteLink(NodeRef source, NodeRef destination) {
+
         nodeService.deleteNode(source);
         nodeService.deleteNode(destination);
-
         return Utils.getJSONSuccess();
     }
 
-
-    private JSONArray createMembersPDF(String shortName) {
-
+//TODO: Move this to ProjectDepartment or add functionality for normal sites.
+    private JSONArray createMembersPDF(String siteShortName) {
 
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-
-            SiteInfo site = siteService.getSite(shortName);
+            SiteInfo site = siteService.getSite(siteShortName);
             String output = "Medlemsliste for projektet: " + site.getTitle() + "\n\n\n\n\n";
 
-
-            // until further noctice, we dont want to make pds for normal projects
-
-//            String siteManagerGroup = "GROUP_site_" + shortName + "_SiteManager";
-//            String siteManagerMembers = "SITEManager: \n\n";
-//            Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, siteManagerGroup, true);
-//
-//            System.out.println(authorities);
-//            for (String authority : authorities) {
-//                NodeRef person = personService.getPerson(authority);
-//                siteManagerMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-//            }
-//
-//            String SiteCollaboratorGroup = "GROUP_site_" + shortName + "_SiteCollaborator";
-//            String SiteCollaboratorMembers = "SITECollaborator: \n\n";
-//            authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteCollaboratorGroup, true);
-//            for (String authority : authorities) {
-//                NodeRef person = personService.getPerson(authority);
-//                SiteCollaboratorMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-//            }
-//
-//            String SiteContributorGroup = "GROUP_site_" + shortName + "_SiteContributor";
-//            String SiteContributorMembers = "SITEContributor: \n\n";
-//            authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteContributorGroup, true);
-//            for (String authority : authorities) {
-//                NodeRef person = personService.getPerson(authority);
-//                SiteContributorMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-//            }
-//
-//            String SiteConsumerGroup = "GROUP_site_" + shortName + "_SiteConsumer";
-//            String SiteConsumerMembers = "SITEConsumer: \n\n";
-//            authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteConsumerGroup, true);
-//            for (String authority : authorities) {
-//                NodeRef person = personService.getPerson(authority);
-//                SiteConsumerMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-//            }
-//
-//
-//
-//
-//            output += siteManagerMembers + "\n\n";
-//
-//            output += SiteCollaboratorMembers + "\n\n";
-//
-//            output += SiteContributorMembers + "\n\n";
-//
-//            output += SiteConsumerMembers + "\n\n";
-
-
-            // extra groups for the new projecttype
-
-            NodeRef n = siteService.getSite(shortName).getNodeRef();
+            // extra groups for the PD_sites
+            NodeRef n = siteService.getSite(siteShortName).getNodeRef();
             if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-
-                String projectManagerGroup = Utils.getAuthorityName(shortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
-                String projectManagerGroupMembers = "PROJEKTLEDER: \n\n";
-                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
-                for (String authority : authorities) {
-                    NodeRef person = personService.getPerson(authority);
-                    projectManagerGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-                }
-
-                String projectOwnerGroup = Utils.getAuthorityName(shortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
-                String projectOwnerMembers = "PROJEKTEJER: \n\n";
-                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
-                for (String authority : authorities) {
-                    NodeRef person = personService.getPerson(authority);
-                    projectOwnerMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-                }
-
-                String projectGroup = Utils.getAuthorityName(shortName, OpenDeskModel.PD_GROUP_PROJECTGROUP);
-                String projectGroupMembers = "PROJEKTGRUPPE: \n\n";
-                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectGroup, true);
-                for (String authority : authorities) {
-                    NodeRef person = personService.getPerson(authority);
-                    projectGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-                }
-
-                String workGroup = Utils.getAuthorityName(shortName, OpenDeskModel.PD_GROUP_WORKGROUP);
-                String workGroupMembers = "ARBEJDSGRUPPE: \n\n";
-                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, workGroup, true);
-                for (String authority : authorities) {
-                    NodeRef person = personService.getPerson(authority);
-                    workGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-                }
-
-
-                String projectMonitors = Utils.getAuthorityName(shortName, OpenDeskModel.PD_GROUP_MONITORS);
-                String projectMonitorsMembers = "FØLGEGRUPPE: \n\n";
-                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectMonitors, true);
-                for (String authority : authorities) {
-                    NodeRef person = personService.getPerson(authority);
-                    projectMonitorsMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-                }
-
-                String steeringGroup = Utils.getAuthorityName(shortName, OpenDeskModel.PD_GROUP_STEERING_GROUP);
-                String steeringGroupMembers = "STYREGRUPPE: \n\n";
-                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, steeringGroup, true);
-                for (String authority : authorities) {
-                    NodeRef person = personService.getPerson(authority);
-                    steeringGroupMembers += (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-                }
-
-                output += projectOwnerMembers + "\n\n";
-                output += projectManagerGroupMembers + "\n\n";
-                output += projectGroupMembers + "\n\n";
-                output += workGroupMembers + "\n\n";
-                output += projectMonitorsMembers + "\n\n";
-                output += steeringGroupMembers + "\n\n";
-
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTGROUP) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_WORKGROUP) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_MONITORS) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_STEERING_GROUP) + "\n\n";
             }
-
-
 
             // delete the pdf if it is already present
-            NodeRef documentLib = siteService.getContainer(site.getShortName(), "documentlibrary");
-            NodeRef pdfnode = nodeService.getChildByName(documentLib, ContentModel.ASSOC_CONTAINS, ISO9075.encode("Medlemsoversigt.pdf"));
+            NodeRef documentLib = siteService.getContainer(site.getShortName(), OpenDeskModel.DOC_LIBRARY);
+            NodeRef pdfNode = nodeService.getChildByName(documentLib, ContentModel.ASSOC_CONTAINS, ISO9075.encode("Medlemsoversigt.pdf"));
 
-            if (pdfnode != null) {
-                nodeService.deleteNode(pdfnode);
+            if (pdfNode != null) {
+                nodeService.deleteNode(pdfNode);
             }
 
-
+            // Create new PDF
             Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
             documentLibaryProps.put(ContentModel.PROP_NAME, "Medlemsoversigt.pdf");
 
@@ -510,7 +385,7 @@ public class Sites extends AbstractWebScript {
             Map<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
             nodeService.addAspect(pdf.getChildRef(), ContentModel.ASPECT_HIDDEN, aspectProps);
 
-
+            // Write to the new PDF
             ContentWriter writer = this.contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
             writer.setMimetype(MimetypeMap.MIMETYPE_TEXT_PLAIN);
             writer.setEncoding("UTF-8");
@@ -524,7 +399,6 @@ public class Sites extends AbstractWebScript {
             ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
             ContentTransformer pptToPdfTransformer = contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
 
-
             pptToPdfTransformer.transform(pptReader, pdfWriter);
 
             nodeService.deleteNode(child.getChildRef());
@@ -535,128 +409,132 @@ public class Sites extends AbstractWebScript {
         }
     }
 
+    // Used by createMembersPDF
+    private String getAuthorityMembersToString(String siteShortName, String groupName) {
+        String group = Utils.getAuthorityName(siteShortName, groupName);
+        String groupMembers = groupName + ": \n\n";
+        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            groupMembers += nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        }
+        return groupMembers;
+    }
+
     private JSONArray getSiteType(String shortName) {
 
         NodeRef n = siteService.getSite(shortName).getNodeRef();
 
-            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-            return Utils.getJSONReturnPair("type", OpenDeskModel.pd_project);
-        } else {
-            return Utils.getJSONReturnPair("type", OpenDeskModel.project);
+        String type = OpenDeskModel.project;
+        if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+            type = OpenDeskModel.pd_project;
         }
+        return Utils.getJSONReturnPair("type", type);
     }
 
 
-    private JSONObject convertSiteInfoToJSON(SiteInfo s) {
+    private JSONObject convertSiteInfoToJSON(SiteInfo s) throws JSONException {
+        JSONObject json = new JSONObject();
+        String siteShortName = s.getShortName();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        json.put("created", sdf.format(s.getCreatedDate()));
+        json.put("modified", sdf.format(s.getLastModifiedDate()));
+
+        json.put("shortName", siteShortName);
+        json.put("visibility", s.getVisibility());
+
+        JSONArray JSONresult = getCurrentUserSiteRole(siteShortName);
+        JSONObject jsonObject = (JSONObject) JSONresult.get(0);
         try {
-            JSONObject json = new JSONObject();
-            String siteShortName = s.getShortName();
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            json.put("created", sdf.format(s.getCreatedDate()));
-            json.put("modified", sdf.format(s.getLastModifiedDate()));
-
-            json.put("shortName", siteShortName);
-            json.put("visibility", s.getVisibility());
-
-            JSONArray JSONresult = getCurrentUserSiteRole(siteShortName);
-            JSONObject jsonObject = (JSONObject) JSONresult.get(0);
-            try {
-                String role = Utils.getJSONObject(jsonObject, "role");
-                json.put("current_user_role", role);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            NodeRef n = s.getNodeRef();
-            json.put("nodeRef", n.toString());
-
-            String manager = "";
-            String owner = "";
-
-            boolean notTemplateSite = true;
-
-            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES) || nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT)) {
-                notTemplateSite = false;
-            }
-
-
-
-            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-                json.put("title", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_NAME));
-                json.put("description", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_DESCRIPTION));
-                json.put("type", OpenDeskModel.pd_project);
-                json.put("state", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_STATE));
-                String centerID = (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_CENTERID);
-                json.put("center_id", centerID);
-                String centerName = authorityService.getAuthorityDisplayName("GROUP_" + centerID);
-                json.put("center_name", centerName);
-                json.put("sbsys", (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_SBSYS));
-                json.put("notTemplateSite", true); // only grupperum can be used as templateSites
-
-                String projectManagerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
-                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
-                manager = authorities.iterator().next();
-
-                String projectOwnerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
-                authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
-                owner = authorities.iterator().next();
-            } else {
-                json.put("title", s.getTitle());
-                json.put("description", s.getDescription());
-                if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES))
-                    json.put("type", OpenDeskModel.template_project);
-
-                else if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT))
-                    json.put("type", OpenDeskModel.template_project);
-                else
-                    json.put("type", OpenDeskModel.project);
-
-
-                json.put("state", "");
-                json.put("center_id", "");
-                json.put("center_name", "");
-                json.put("sbsys", "");
-                json.put("notTemplateSite", notTemplateSite);
-
-                String SiteManager = Utils.getAuthorityName(siteShortName, "SiteManager");
-                Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
-                manager = authorities.iterator().next();
-            }
-
-            //Get Manager
-            if (!manager.isEmpty()) {
-                JSONObject managerObj = getUserInfo(manager);
-                json.put("manager", managerObj);
-            }
-
-            //Get Owner
-            if (!owner.isEmpty()) {
-                JSONObject ownerObj = getUserInfo(owner);
-                json.put("owner", ownerObj);
-            }
-
-            //Get Creator
-            String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
-            JSONObject creatorObj = getUserInfo(creator);
-            json.put("creator", creatorObj);
-
-            //Get Member list
-            JSONArray membersArray = new JSONArray();
-            String group = Utils.getAuthorityName(siteShortName, "");
-            Set<String> members = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
-
-            for (String username : members) {
-                membersArray.add(username);
-            }
-            json.put("members", membersArray);
-
-            return json;
-
+            String role = Utils.getJSONObject(jsonObject, "role");
+            json.put("current_user_role", role);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return null;
+
+        NodeRef n = s.getNodeRef();
+        json.put("nodeRef", n.toString());
+
+        String manager = "";
+        String owner = "";
+
+        boolean notTemplateSite = true;
+
+        if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES) || nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT)) {
+            notTemplateSite = false;
+        }
+
+        if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+            json.put("title", nodeService.getProperty(n, OpenDeskModel.PROP_PD_NAME));
+            json.put("description", nodeService.getProperty(n, OpenDeskModel.PROP_PD_DESCRIPTION));
+            json.put("type", OpenDeskModel.pd_project);
+            json.put("state", nodeService.getProperty(n, OpenDeskModel.PROP_PD_STATE));
+            String centerID = (String) nodeService.getProperty(n, OpenDeskModel.PROP_PD_CENTERID);
+            json.put("center_id", centerID);
+            String centerName = authorityService.getAuthorityDisplayName("GROUP_" + centerID);
+            json.put("center_name", centerName);
+            json.put("sbsys", nodeService.getProperty(n, OpenDeskModel.PROP_PD_SBSYS));
+            json.put("notTemplateSite", true); // only pd_sites can be used as templateSites
+
+            String projectManagerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
+            Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
+            manager = authorities.iterator().next();
+
+            String projectOwnerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
+            authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
+            owner = authorities.iterator().next();
+        } else {
+            json.put("title", s.getTitle());
+            json.put("description", s.getDescription());
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES))
+                json.put("type", OpenDeskModel.template_project);
+
+            else if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT))
+                json.put("type", OpenDeskModel.template_project);
+            else
+                json.put("type", OpenDeskModel.project);
+
+
+            json.put("state", "");
+            json.put("center_id", "");
+            json.put("center_name", "");
+            json.put("sbsys", "");
+            json.put("notTemplateSite", notTemplateSite);
+
+            String SiteManager = Utils.getAuthorityName(siteShortName, "SiteManager");
+            Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
+            manager = authorities.iterator().next();
+        }
+
+        //Get Manager
+        if (!manager.isEmpty()) {
+            JSONObject managerObj = getUserInfo(manager);
+            json.put("manager", managerObj);
+        }
+
+        //Get Owner
+        if (!owner.isEmpty()) {
+            JSONObject ownerObj = getUserInfo(owner);
+            json.put("owner", ownerObj);
+        }
+
+        //Get Creator
+        String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
+        JSONObject creatorObj = getUserInfo(creator);
+        json.put("creator", creatorObj);
+
+        //Get Member list
+        JSONArray membersArray = new JSONArray();
+        String group = Utils.getAuthorityName(siteShortName, "");
+        Set<String> members = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
+
+        for (String username : members) {
+            membersArray.add(username);
+        }
+        json.put("members", membersArray);
+
+        return json;
     }
 
     private JSONObject getUserInfo(String userName) throws JSONException {
@@ -664,15 +542,15 @@ public class Sites extends AbstractWebScript {
         NodeRef cn = this.personService.getPerson(userName);
 
         JSONObject user = new JSONObject();
-        user.put("userName", (String) nodeService.getProperty(cn, ContentModel.PROP_USERNAME));
-        user.put("firstName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
-        user.put("lastName", (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-        user.put("fullName", (String) nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+        user.put("userName", nodeService.getProperty(cn, ContentModel.PROP_USERNAME));
+        user.put("firstName", nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
+        user.put("lastName", nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
+        user.put("fullName", nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
 
         return user;
     }
 
-    private JSONArray getSiteInfo(String shortName) {
+    private JSONArray getSiteInfo(String shortName) throws JSONException {
 
         SiteInfo siteInfo = siteService.getSite(shortName);
         JSONArray json = new JSONArray();
@@ -680,20 +558,16 @@ public class Sites extends AbstractWebScript {
         return json;
     }
 
-    private JSONArray getTemplates() {
-
-        JSONArray result = new JSONArray();
+    private JSONArray getTemplates() throws JSONException {
 
         String query = "ASPECT:\"od:projecttype_templates\" ";
-
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
         ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
 
-
+        JSONArray result = new JSONArray();
         for (int i = 0; i <= siteSearchResult.length() - 1; i++) {
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(i);
             SiteInfo siteInfo = siteService.getSite(siteNodeRef);
-
             JSONObject json = convertSiteInfoToJSON(siteInfo);
             result.add(json);
         }
@@ -701,7 +575,8 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
-    private JSONArray createSite(String displayName, String description, SiteVisibility site_visibility) {
+    private JSONArray createSite(String displayName, String description, SiteVisibility site_visibility)
+            throws JSONException {
 
         NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
                 description, site_visibility);
@@ -709,7 +584,7 @@ public class Sites extends AbstractWebScript {
         return getSiteInfo(siteService.getSiteShortName(nodeRef));
     }
 
-    private JSONArray createTemplate(String displayName, String description) {
+    private JSONArray createTemplate(String displayName, String description) throws JSONException {
 
         NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
                 description, SiteVisibility.PUBLIC);
@@ -727,7 +602,6 @@ public class Sites extends AbstractWebScript {
 
         Map<QName, Serializable> aspectProps = new HashMap<>();
         nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES, aspectProps);
-
         return Utils.getJSONSuccess();
     }
 
@@ -756,7 +630,7 @@ public class Sites extends AbstractWebScript {
                 }
             }
 
-            // Delete the site ñ
+            // Delete the site n
             siteService.deleteSite(siteShortName);
 
             // Delete all groups/authorities of the site
@@ -778,7 +652,4 @@ public class Sites extends AbstractWebScript {
         String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
         return Utils.getJSONReturnPair("fileName", fileName);
     }
-
-
-
 }

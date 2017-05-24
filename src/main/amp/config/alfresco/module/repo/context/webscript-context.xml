@@ -107,7 +107,7 @@
 		<property name="siteService" ref="SiteService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="authenticationService" ref="authenticationService"/>
-		<property name="AuthorityService" ref="authorityService"/>
+		<property name="authorityService" ref="authorityService"/>
 		<property name="permissionService" ref="PermissionService"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="searchService" ref="SearchService"/>
