@@ -38,12 +38,14 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
         });
     }
 
+    //slet denne
     function getMyDiscussions(siteShortName) {
         return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts/myposts', {}).then(function (response) {
             return response.data;
         });
     }
 
+    //slet denne
     function getSubscribedDiscussions(siteShortName) {
         return getDiscussions(siteShortName).then(function (discussionResponse) {
 

@@ -88,8 +88,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
   
     function loadSiteData() {
         console.log('load site data');
-        console.log('path ' + $stateParams.path);
-        console.log('projekt ' + $stateParams.projekt);
         siteService.loadSiteData($stateParams.projekt).then(
             function (result) {
 
@@ -283,8 +281,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             $scope.object.contents = response;
             vm.addThumbnailUrl($scope.contents);
             console.log('load contents');
-            console.log($scope.object.contents);
-            console.log($scope.$id);
         });
 
     };

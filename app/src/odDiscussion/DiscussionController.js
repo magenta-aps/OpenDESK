@@ -17,6 +17,8 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
     dc.selectedDiscussion = discussionService.getSelectedDiscussion();
     dc.replies = [];
     dc.allMembers = [];
+    dc.search = '';
+    dc.user = '';
 
     dc.getDiscussions = function(siteShortName) {
         discussionService.getDiscussions(siteShortName).then(function(response) {
@@ -42,6 +44,8 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
     }
 
     function init() {
+        console.log('return user info');
+        dc.user = sessionService.getUserInfo().user;
         dc.getDiscussions($stateParams.projekt);
         getAllMembers($stateParams.projekt,'PD-Project');
     }
@@ -150,6 +154,23 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
 
     dc.cancel = function() {
         $mdDialog.cancel();
+    }
+
+    dc.evaluateFilter = function() {
+        if(dc.search == 'all') {
+            dc.searchSubscribed = undefined;
+            dc.searchUser = undefined;
+            console.log('clear search');
+        }
+        if(dc.search == 'follow') {
+            dc.searchUser = undefined;
+            dc.searchSubscribed = "true";
+        }
+
+        if(dc.search == 'mine') {
+            dc.searchSubscribed = undefined;
+            dc.searchUser = dc.user.userName;
+        }
     }
 
     dc.changeSubscription = function(postItem) {
