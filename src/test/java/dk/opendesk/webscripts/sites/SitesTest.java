@@ -3,16 +3,21 @@ package dk.opendesk.webscripts.sites;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.TestUtils;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.MutableAuthenticationService;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
+import org.bouncycastle.jce.provider.JCEBlockCipher;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,19 +26,29 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SitesTest extends BaseWebScriptTest {
 
     private static Logger log = Logger.getLogger(SitesTest.class);
 
+    private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
+            "authenticationService");
+
+    private NodeService nodeService = (NodeService) getServer().getApplicationContext().getBean("nodeService");
     private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
+    private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("personService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
     private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
 
+    private List<String> users = new ArrayList<>();
     private Map<String, SiteInfo> sites = new HashMap<>();
+    private String SOURCE_LINK_REF = "sourceLinkRef";
+    private String DESTINATION_LINK_REF = "destinationLinkRef";
 
     public SitesTest() {
         super();
@@ -44,6 +59,15 @@ public class SitesTest extends BaseWebScriptTest {
         super.setUp();
 
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
+
+        // USERS
+        users.add(TestUtils.USER_ONE);
+
+        // Delete and then create users
+        for (String userName : users) {
+            TestUtils.deletePerson(transactionService, personService, userName);
+            TestUtils.createUser(transactionService, personService, authenticationService, userName);
+        }
 
         // SITES
         sites.put(TestUtils.SITE_TWO, null);
@@ -112,14 +136,14 @@ public class SitesTest extends BaseWebScriptTest {
         assertGetAllSitesForCurrentUser(userName, initialCount + 2);
     }
 
-    public void testAddUser()  throws IOException, JSONException {
+    public void testAddUser() throws IOException, JSONException {
         log.debug("SitesTest.testAddUser");
 
         String group = "Site" + OpenDeskModel.CONSUMER;
         assertAddUser(TestUtils.SITE_ONE, TestUtils.USER_ONE, group);
     }
 
-    public void testRemoveUser()  throws IOException, JSONException {
+    public void testRemoveUser() throws IOException, JSONException {
         log.debug("SitesTest.testRemoveUser");
 
         String userName = TestUtils.USER_ONE;
@@ -129,18 +153,62 @@ public class SitesTest extends BaseWebScriptTest {
         assertRemoveUser(TestUtils.SITE_ONE, userName, group);
     }
 
-    public void testAddPermission()  throws IOException, JSONException {
+    public void testAddPermission() throws IOException, JSONException {
         log.debug("SitesTest.testAddPermission");
 
         assertAddPermission(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.CONTRIBUTOR);
     }
 
-    public void testRemovePermission()  throws IOException, JSONException {
+    public void testRemovePermission() throws IOException, JSONException {
         log.debug("SitesTest.testAddPermission");
 
         assertAddPermission(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.CONTRIBUTOR);
         assertRemovePermission(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.CONTRIBUTOR);
     }
+
+    public void testGetCurrentUserSiteRoleAsCollaborator() throws IOException, JSONException {
+        log.debug("SitesTest.testGetCurrentUserSiteRoleAsCollaborator");
+
+        String collaboratorGroup = "Site" + OpenDeskModel.COLLABORATOR;
+        String collaboratorGroupName = Utils.getAuthorityName(TestUtils.SITE_ONE, collaboratorGroup);
+        TestUtils.addToAuthority(transactionService, authorityService, collaboratorGroupName, TestUtils.USER_ONE);
+        assertGetCurrentUserSiteRole(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.COLLABORATOR);
+    }
+
+    public void testGetCurrentUserSiteRoleAsOutsider() throws IOException, JSONException {
+        log.debug("SitesTest.testGetCurrentUserSiteRoleAsOutsider");
+
+        assertGetCurrentUserSiteRole(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.OUTSIDER);
+    }
+
+    public void testGetAdminSiteRoleAsManager() throws IOException, JSONException {
+        log.debug("SitesTest.testGetAdminSiteRoleAsManager");
+
+        assertGetCurrentUserSiteRole(TestUtils.SITE_ONE, TestUtils.ADMIN, OpenDeskModel.MANAGER);
+    }
+
+    public void testAddLink() throws IOException, JSONException {
+        log.debug("SitesTest.testAddLink");
+
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
+        assertAddLink(TestUtils.SITE_ONE, TestUtils.SITE_TWO);
+    }
+
+    public void testDeleteLink()  throws IOException, JSONException {
+        log.debug("SitesTest.testDeleteLink");
+
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_THREE);
+        JSONArray returnJSON = assertAddLink(TestUtils.SITE_TWO, TestUtils.SITE_THREE);
+
+        String sourceRef = returnJSON.getJSONObject(0).getString(SOURCE_LINK_REF);
+        String destinationRef = returnJSON.getJSONObject(0).getString(DESTINATION_LINK_REF);
+
+        String sourceId = TestUtils.getIdFromNodeRefStr(sourceRef);
+        String destinationId = TestUtils.getIdFromNodeRefStr(destinationRef);
+        assertDeleteLink(sourceId, destinationId);
+    }
+
 
     /** Assertions **/
 
@@ -191,6 +259,25 @@ public class SitesTest extends BaseWebScriptTest {
 
     private JSONArray assertRemovePermission (String siteShortName, String userName, String roleName) throws IOException, JSONException {
         JSONArray returnJSON = executeRemovePermission(siteShortName, userName, roleName);
+        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
+        return returnJSON;
+    }
+
+    private JSONArray assertGetCurrentUserSiteRole (String siteShortName, String userName, String roleName) throws IOException, JSONException {
+        JSONArray returnJSON = executeGetCurrentUserSiteRole(siteShortName, userName);
+        assertEquals(roleName,  returnJSON.getJSONObject(0).getString("role"));
+        return returnJSON;
+    }
+
+    private JSONArray assertAddLink (String sourceShortName, String destinationShortName) throws IOException, JSONException {
+        JSONArray returnJSON = executeAddLink(sourceShortName, destinationShortName);
+        assertTrue(returnJSON.getJSONObject(0).has(SOURCE_LINK_REF));
+        assertTrue(returnJSON.getJSONObject(0).has(DESTINATION_LINK_REF));
+        return returnJSON;
+    }
+
+    private JSONArray assertDeleteLink (String sourceId, String destinationId) throws IOException, JSONException {
+        JSONArray returnJSON = executeDeleteLink(sourceId, destinationId);
         assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
         return returnJSON;
     }
@@ -247,6 +334,29 @@ public class SitesTest extends BaseWebScriptTest {
         return executePermissionWebScripts("removePermission", siteShortName, userName, roleName);
     }
 
+    private JSONArray executeGetCurrentUserSiteRole (String siteShortName, String userName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getCurrentUserSiteRole");
+        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        return executeWebScript(data, userName);
+    }
+
+    private JSONArray executeAddLink (String sourceShortName, String destinationShortName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "addLink");
+        data.put("PARAM_SOURCE", sourceShortName);
+        data.put("PARAM_DESTINATION", destinationShortName);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
+    private JSONArray executeDeleteLink (String sourceId, String destinationId) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "deleteLink");
+        data.put("PARAM_SOURCE", sourceId);
+        data.put("PARAM_DESTINATION", destinationId);
+        return executeWebScript(data, TestUtils.ADMIN);
+    }
+
     /** Help Webscripts **/
 
     private JSONArray executeUserWebScripts (String method, String siteShortName, String userName, String groupName)
@@ -273,7 +383,11 @@ public class SitesTest extends BaseWebScriptTest {
 
     private JSONArray executeWebScript (JSONObject data, String userName) throws IOException, JSONException {
         TestWebScriptServer.Request request = new TestWebScriptServer.PostRequest("/sites", data.toString(), "application/json");
+        if(!TestUtils.ADMIN.equals(userName))
+            AuthenticationUtil.setFullyAuthenticatedUser(userName);
         TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, userName);
+        if(!TestUtils.ADMIN.equals(userName))
+            AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
         return new JSONArray(response.getContentAsString());
     }
 

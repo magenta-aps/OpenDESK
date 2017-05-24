@@ -144,4 +144,8 @@ public class TestUtils {
             return true;
         });
     }
+
+    public static String getIdFromNodeRefStr(String nodeRefStr) {
+        return nodeRefStr.split("/")[3];
+    }
 }

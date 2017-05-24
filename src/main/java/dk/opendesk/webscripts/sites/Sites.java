@@ -132,13 +132,12 @@ public class Sites extends AbstractWebScript {
                         result = removeUser(siteShortName, user, group);
                         break;
 
-                    // TODO: Change name to addRole and removeRole
                     case "addPermission":
-                        result = addRole(siteShortName, user, role);
+                        result = addPermission(siteShortName, user, role);
                         break;
 
                     case "removePermission":
-                        result = removeRole(siteShortName, user, role);
+                        result = removePermission(siteShortName, user, role);
                         break;
 
                     case "getCurrentUserSiteRole":
@@ -254,17 +253,17 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
-    private JSONArray addRole(String siteShortName, String user, String role) {
+    private JSONArray addPermission(String siteShortName, String user, String permission) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
-        permissionService.setPermission(ref, user, role, true);
+        permissionService.setPermission(ref, user, permission, true);
         return Utils.getJSONSuccess();
     }
 
-    private JSONArray removeRole(String siteShortName, String user, String role) {
+    private JSONArray removePermission(String siteShortName, String user, String permission) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
-        permissionService.deletePermission(ref, user, role);
+        permissionService.deletePermission(ref, user, permission);
         return Utils.getJSONSuccess();
     }
 
@@ -322,20 +321,28 @@ public class Sites extends AbstractWebScript {
         Map<QName, Serializable> linkProperties = new HashMap<QName, Serializable>();
         linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(destination.getNodeRef(), ContentModel.PROP_NAME));
         linkProperties.put(OpenDeskModel.PROP_LINK_TARGET, destination.getShortName());
-        ChildAssociationRef source_nodeRef = nodeService.createNode(sourceDocumentLib, ContentModel.ASSOC_CONTAINS,
+        ChildAssociationRef sourceChildRef = nodeService.createNode(sourceDocumentLib, ContentModel.ASSOC_CONTAINS,
                 OpenDeskModel.PROP_LINK, OpenDeskModel.PROP_LINK, linkProperties);
+        NodeRef sourceRef = sourceChildRef.getChildRef();
 
         // create link for destination
         linkProperties = new HashMap<QName, Serializable>();
         linkProperties.put(ContentModel.PROP_NAME, nodeService.getProperty(source.getNodeRef(), ContentModel.PROP_NAME));
         linkProperties.put(OpenDeskModel.PROP_LINK_TARGET, source.getShortName());
-        ChildAssociationRef destination_nodeRef = nodeService.createNode(destDocumentLib, ContentModel.ASSOC_CONTAINS,
+        ChildAssociationRef destinationChildRef = nodeService.createNode(destDocumentLib, ContentModel.ASSOC_CONTAINS,
                 OpenDeskModel.PROP_LINK, OpenDeskModel.PROP_LINK, linkProperties);
+        NodeRef destinationRef = destinationChildRef.getChildRef();
+
 
         // for easy deletion of the links, we do a save of the nodeRefs on each side
-        nodeService.setProperty(source_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF, destination_nodeRef.getChildRef());
-        nodeService.setProperty(destination_nodeRef.getChildRef(), OpenDeskModel.PROP_LINK_TARGET_NODEREF, source_nodeRef.getChildRef());
-        return Utils.getJSONSuccess();
+        nodeService.setProperty(sourceRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF, destinationRef);
+        nodeService.setProperty(destinationRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF, sourceRef);
+
+        Map<String, Serializable> map = new HashMap<>();
+        map.put("sourceLinkRef", sourceRef);
+        map.put("destinationLinkRef", destinationRef);
+
+        return Utils.getJSONReturnArray(map);
     }
 
     private JSONArray deleteLink(NodeRef source, NodeRef destination) {
@@ -343,83 +350,6 @@ public class Sites extends AbstractWebScript {
         nodeService.deleteNode(source);
         nodeService.deleteNode(destination);
         return Utils.getJSONSuccess();
-    }
-
-//TODO: Move this to ProjectDepartment or add functionality for normal sites.
-    private JSONArray createMembersPDF(String siteShortName) {
-
-        AuthenticationUtil.pushAuthentication();
-        try {
-            AuthenticationUtil.setRunAsUserSystem();
-            // ...code to be run as Admin...
-
-            SiteInfo site = siteService.getSite(siteShortName);
-            String output = "Medlemsliste for projektet: " + site.getTitle() + "\n\n\n\n\n";
-
-            // extra groups for the PD_sites
-            NodeRef n = siteService.getSite(siteShortName).getNodeRef();
-            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTGROUP) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_WORKGROUP) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_MONITORS) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_STEERING_GROUP) + "\n\n";
-            }
-
-            // delete the pdf if it is already present
-            NodeRef documentLib = siteService.getContainer(site.getShortName(), OpenDeskModel.DOC_LIBRARY);
-            NodeRef pdfNode = nodeService.getChildByName(documentLib, ContentModel.ASSOC_CONTAINS, ISO9075.encode("Medlemsoversigt.pdf"));
-
-            if (pdfNode != null) {
-                nodeService.deleteNode(pdfNode);
-            }
-
-            // Create new PDF
-            Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
-            documentLibaryProps.put(ContentModel.PROP_NAME, "Medlemsoversigt.pdf");
-
-            ChildAssociationRef child = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "tempfile1"), ContentModel.TYPE_CONTENT);
-            ChildAssociationRef pdf = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "thePDF"), ContentModel.TYPE_CONTENT, documentLibaryProps);
-
-            // hide the pdf from the users
-            Map<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-            nodeService.addAspect(pdf.getChildRef(), ContentModel.ASPECT_HIDDEN, aspectProps);
-
-            // Write to the new PDF
-            ContentWriter writer = this.contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
-            writer.setMimetype(MimetypeMap.MIMETYPE_TEXT_PLAIN);
-            writer.setEncoding("UTF-8");
-            writer.putContent(output);
-
-            writer = this.contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
-            writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
-            writer.putContent(output);
-
-            ContentReader pptReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
-            ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
-            ContentTransformer pptToPdfTransformer = contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
-
-            pptToPdfTransformer.transform(pptReader, pdfWriter);
-
-            nodeService.deleteNode(child.getChildRef());
-
-            return Utils.getJSONReturnPair("Noderef", pdf.getChildRef().getId());
-        } finally {
-            AuthenticationUtil.popAuthentication();
-        }
-    }
-
-    // Used by createMembersPDF
-    private String getAuthorityMembersToString(String siteShortName, String groupName) {
-        String group = Utils.getAuthorityName(siteShortName, groupName);
-        String groupMembers = groupName + ": \n\n";
-        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            groupMembers += nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
-        }
-        return groupMembers;
     }
 
     private JSONArray getSiteType(String shortName) {
@@ -432,7 +362,6 @@ public class Sites extends AbstractWebScript {
         }
         return Utils.getJSONReturnPair("type", type);
     }
-
 
     private JSONObject convertSiteInfoToJSON(SiteInfo s) throws JSONException {
         JSONObject json = new JSONObject();
@@ -606,6 +535,83 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    //TODO: Move this to ProjectDepartment or add functionality for normal sites.
+    private JSONArray createMembersPDF(String siteShortName) {
+
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
+
+            SiteInfo site = siteService.getSite(siteShortName);
+            String output = "Medlemsliste for projektet: " + site.getTitle() + "\n\n\n\n\n";
+
+            // extra groups for the PD_sites
+            NodeRef n = siteService.getSite(siteShortName).getNodeRef();
+            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTGROUP) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_WORKGROUP) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_MONITORS) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_STEERING_GROUP) + "\n\n";
+            }
+
+            // delete the pdf if it is already present
+            NodeRef documentLib = siteService.getContainer(site.getShortName(), OpenDeskModel.DOC_LIBRARY);
+            NodeRef pdfNode = nodeService.getChildByName(documentLib, ContentModel.ASSOC_CONTAINS, ISO9075.encode("Medlemsoversigt.pdf"));
+
+            if (pdfNode != null) {
+                nodeService.deleteNode(pdfNode);
+            }
+
+            // Create new PDF
+            Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
+            documentLibaryProps.put(ContentModel.PROP_NAME, "Medlemsoversigt.pdf");
+
+            ChildAssociationRef child = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "tempfile1"), ContentModel.TYPE_CONTENT);
+            ChildAssociationRef pdf = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "thePDF"), ContentModel.TYPE_CONTENT, documentLibaryProps);
+
+            // hide the pdf from the users
+            Map<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+            nodeService.addAspect(pdf.getChildRef(), ContentModel.ASPECT_HIDDEN, aspectProps);
+
+            // Write to the new PDF
+            ContentWriter writer = this.contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
+            writer.setMimetype(MimetypeMap.MIMETYPE_TEXT_PLAIN);
+            writer.setEncoding("UTF-8");
+            writer.putContent(output);
+
+            writer = this.contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
+            writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
+            writer.putContent(output);
+
+            ContentReader pptReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
+            ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
+            ContentTransformer pptToPdfTransformer = contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
+
+            pptToPdfTransformer.transform(pptReader, pdfWriter);
+
+            nodeService.deleteNode(child.getChildRef());
+
+            return Utils.getJSONReturnPair("Noderef", pdf.getChildRef().getId());
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
+    }
+
+    // Used by createMembersPDF
+    private String getAuthorityMembersToString(String siteShortName, String groupName) {
+        String group = Utils.getAuthorityName(siteShortName, groupName);
+        String groupMembers = groupName + ": \n\n";
+        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
+        for (String authority : authorities) {
+            NodeRef person = personService.getPerson(authority);
+            groupMembers += nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+        }
+        return groupMembers;
+    }
+
     public JSONArray deleteSite(String siteShortName) {
 
         SiteInfo site = siteService.getSite(siteShortName);
@@ -643,7 +649,7 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONError(new Exception());
     }
 
-    public JSONArray getDocumentTemplateSite() {
+    private JSONArray getDocumentTemplateSite() {
         return Utils.getJSONReturnPair("shortName", OpenDeskModel.DOC_TEMPLATE);
     }
 
