@@ -29,7 +29,6 @@
 		  class="dk.opendesk.webscripts.FileBrowser"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
-		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
 	<bean id="webscript.groups.post"
@@ -94,7 +93,6 @@
 		  class="dk.opendesk.webscripts.sites.Contents"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
-		<property name="fileFolderService" ref="FileFolderService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="permissionService" ref="PermissionService"/>
 		<property name="siteService" ref="SiteService"/>

@@ -4,12 +4,10 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.search.impl.querymodel.impl.functions.Child;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -180,5 +178,12 @@ public class TestUtils {
 
     public static String getIdFromNodeRefStr(String nodeRefStr) {
         return nodeRefStr.split("/")[3];
+    }
+
+    public static ChildAssociationRef createFolder(TransactionService transactionService, NodeService nodeService,
+                                                    NodeRef parent, String folderName) {
+        return transactionService.getRetryingTransactionHelper().doInTransaction(() ->
+                nodeService.createNode(parent, ContentModel.ASSOC_CONTAINS, QName.createQName(folderName),
+                        ContentModel.TYPE_FOLDER));
     }
 }

@@ -19,8 +19,6 @@ package dk.opendesk.webscripts.sites;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentData;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -31,164 +29,141 @@ import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.namespace.QNamePattern;
-import org.alfresco.service.namespace.RegexQNamePattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import org.w3c.dom.Node;
 
 import java.io.IOException;
-import java.io.Serializable;
+import java.io.Writer;
 import java.util.*;
 
 
 public class Contents extends AbstractWebScript {
 
-
+    private PersonService personService;
     private NodeService nodeService;
+    private PermissionService permissionService;
+    private SiteService siteService;
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
-
-    private PersonService personService;
-    private FileFolderService fileFolderService;
-
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
-    public void setFileFolderService(FileFolderService fileFolderService) {
-        this.fileFolderService = fileFolderService;
-    }
-
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
-
-    private PermissionService permissionService;
-
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
 
-    private SiteService siteService;
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
         Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-        String nodeId = params.get("node");
+        webScriptResponse.setContentEncoding("UTF-8");
+        Writer webScriptWriter = webScriptResponse.getWriter();
+        JSONArray result;
 
-        NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-
-        JSONArray result = this.getChildNodes(nodeRef);
         try {
+            String nodeId = params.get("node");
+            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
+            result = this.getChildNodes(nodeRef);
 
-            webScriptResponse.setContentEncoding("UTF-8");
-            result.writeJSONString(webScriptResponse.getWriter());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
         }
+        Utils.writeJSONArray(webScriptWriter, result);
     }
 
-
-    private JSONArray getChildNodes(NodeRef parentNodeRef) {
-
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(parentNodeRef);
+    private JSONArray getChildNodes(NodeRef parentNodeRef) throws JSONException {
 
         JSONArray result = new JSONArray();
 
-        Iterator i = childAssociationRefs.iterator();
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(parentNodeRef);
 
-        while (i.hasNext()) {
+        for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
             JSONObject json = new JSONObject();
 
-            ChildAssociationRef childAssociationRef = (ChildAssociationRef) i.next();
             NodeRef childNodeRef = childAssociationRef.getChildRef();
 
             if (!nodeService.hasAspect(childNodeRef, ContentModel.ASPECT_HIDDEN)) {
 
-                try {
-                    String name = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_NAME);
-                    json.put("name", name);
+                String name = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_NAME);
+                json.put("name", name);
 
-                    QName qname = nodeService.getType(childNodeRef);
+                QName qname = nodeService.getType(childNodeRef);
 
-                    String type;
-                    if (qname.equals(ContentModel.TYPE_FOLDER)) {
-                        type = "cmis:folder";
-                    } else if (qname.equals(OpenDeskModel.PROP_LINK)) {
-                        type = "cmis:link";
-                    } else {
-                        type = "cmis:document";
-                        ContentData contentData = (ContentData) nodeService.getProperty(childNodeRef, ContentModel.PROP_CONTENT);
-                        String mimeType = contentData.getMimetype();
-                        json.put("mimeType", mimeType);
-                    }
-
-                    AccessStatus accessStatus = permissionService.hasPermission(childNodeRef, PermissionService.DELETE);
-                    json.put("canMoveAndDelete", accessStatus == AccessStatus.ALLOWED);
-
-                    json.put("contentType", type);
-
-                    if (!"cmis:link".equals(type)) {
-                        json.put("nodeRef", childNodeRef);
-
-                        ChildAssociationRef parent = nodeService.getPrimaryParent(childNodeRef);
-
-                        json.put("parentNodeRef", parent.getParentRef());
-                        json.put("shortRef", childNodeRef.getId());
-
-
-                        String modifier = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIER);
-                        NodeRef person = personService.getPerson(modifier);
-
-
-                        json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
-
-
-                        Date d = (Date) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIED);
-                        json.put("lastChanged", d.getTime());
-
-                        boolean hasHistory = false;
-                        if(nodeService.hasAspect(childNodeRef, ContentModel.ASPECT_VERSIONABLE)) {
-                            String versionLabel = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_VERSION_LABEL);
-                            if (versionLabel != null && !versionLabel.equals("1.0"))
-                                hasHistory = true;
-                        }
-                        json.put("hasHistory", hasHistory);
-                    } else {
-                        String linkSiteShortName = (String) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET);
-                        NodeRef linkNodeRef = (NodeRef) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
-
-                        json.put("nodeid", childNodeRef.getId());
-                        json.put("destination_link", linkSiteShortName);
-                        json.put("nodeRef", childNodeRef);
-
-                        if (linkNodeRef != null) {
-                            json.put("destination_nodeid", linkNodeRef.getId());
-
-                            SiteInfo linkSiteInfo = siteService.getSite(linkSiteShortName);
-                            String linkSiteDisplayName = linkSiteInfo.getTitle();
-                            json.put("name", linkSiteDisplayName);
-                        }
-                    }
-
-                    result.add(json);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                String type;
+                if (qname.equals(ContentModel.TYPE_FOLDER)) {
+                    type = "cmis:folder";
+                } else if (qname.equals(OpenDeskModel.PROP_LINK)) {
+                    type = "cmis:link";
+                } else {
+                    type = "cmis:document";
+                    ContentData contentData = (ContentData) nodeService.getProperty(childNodeRef, ContentModel.PROP_CONTENT);
+                    String mimeType = contentData.getMimetype();
+                    json.put("mimeType", mimeType);
                 }
+
+                AccessStatus accessStatus = permissionService.hasPermission(childNodeRef, PermissionService.DELETE);
+                json.put("canMoveAndDelete", accessStatus == AccessStatus.ALLOWED);
+
+                json.put("contentType", type);
+
+                if (!"cmis:link".equals(type)) {
+                    json.put("nodeRef", childNodeRef);
+
+                    ChildAssociationRef parent = nodeService.getPrimaryParent(childNodeRef);
+
+                    json.put("parentNodeRef", parent.getParentRef());
+                    json.put("shortRef", childNodeRef.getId());
+
+
+                    String modifier = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIER);
+                    NodeRef person = personService.getPerson(modifier);
+
+
+                    json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
+
+
+                    Date d = (Date) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIED);
+                    json.put("lastChanged", d.getTime());
+
+                    boolean hasHistory = false;
+                    if (nodeService.hasAspect(childNodeRef, ContentModel.ASPECT_VERSIONABLE)) {
+                        String versionLabel = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_VERSION_LABEL);
+                        if (versionLabel != null && !versionLabel.equals("1.0"))
+                            hasHistory = true;
+                    }
+                    json.put("hasHistory", hasHistory);
+                } else {
+                    String linkSiteShortName = (String) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET);
+                    NodeRef linkNodeRef = (NodeRef) nodeService.getProperty(childNodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
+
+                    json.put("nodeid", childNodeRef.getId());
+                    json.put("destination_link", linkSiteShortName);
+                    json.put("nodeRef", childNodeRef);
+
+                    if (linkNodeRef != null) {
+                        json.put("destination_nodeid", linkNodeRef.getId());
+
+                        SiteInfo linkSiteInfo = siteService.getSite(linkSiteShortName);
+                        String linkSiteDisplayName = linkSiteInfo.getTitle();
+                        json.put("name", linkSiteDisplayName);
+                    }
+                }
+                result.add(json);
             }
-
         }
-
         return result;
     }
 }
