@@ -50,42 +50,26 @@ import java.util.Set;
 public class ProjectDepartment extends AbstractWebScript {
 
     private PermissionService permissionService;
-
-    public void setSearchService(SearchService searchService) {
-        this.searchService = searchService;
-    }
-
     private SearchService searchService;
-
-    public void setCopyService(CopyService copyService) {
-        this.copyService = copyService;
-    }
-
     private CopyService copyService;
-
-    public void setAuthenticationService(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
-
-    AuthenticationService authenticationService;
-
-    public void setContentService(ContentService contentService) {
-        this.contentService = contentService;
-    }
-
-    ContentService contentService;
-
-    public class CustomComparator implements Comparator<SiteInfo> {
-        @Override
-        public int compare(SiteInfo o1, SiteInfo o2) {
-            return o1.getTitle().compareTo(o2.getTitle());
-        }
-    }
-
+    private AuthenticationService authenticationService;
+    private ContentService contentService;
     private SiteService siteService;
     private NodeService nodeService;
     private AuthorityService authorityService;
 
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+    public void setCopyService(CopyService copyService) {
+        this.copyService = copyService;
+    }
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
@@ -95,7 +79,6 @@ public class ProjectDepartment extends AbstractWebScript {
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
-
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
@@ -133,14 +116,12 @@ public class ProjectDepartment extends AbstractWebScript {
                     result = updatePDSite(site_short_name, site_name, site_description,
                             site_sbsys, site_center_id, site_owner, site_manager, site_state, site_visibility);
                     break;
-                case "addTemplate":
-                    break;
             }
         }
         catch (Exception e) {
-            System.out.println(e);
             e.printStackTrace();
             result = Utils.getJSONError(e);
+            webScriptResponse.setStatus(400);
         }
         Utils.writeJSONArray(webScriptWriter, result);
     }
@@ -157,15 +138,15 @@ public class ProjectDepartment extends AbstractWebScript {
 
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
             SiteInfo templateSite = siteService.getSite(siteNodeRef);
-            SiteInfo newSiteInfo = siteService.getSite(newSiteRef);
+            SiteInfo newSite = siteService.getSite(newSiteRef);
 
             // Get the documentLibrary of the template site.
-            NodeRef template_documentlibrary = siteService.getContainer(templateSite.getShortName(), OpenDeskModel.DOC_LIBRARY);
+            NodeRef templateDocLib = siteService.getContainer(templateSite.getShortName(), OpenDeskModel.DOC_LIBRARY);
 
             // Get the documentLibrary of the new site.
-            NodeRef newSite_documentlibrary = siteService.getContainer(newSiteInfo.getShortName(), OpenDeskModel.DOC_LIBRARY);
+            NodeRef newSiteDocLib = siteService.getContainer(newSite.getShortName(), OpenDeskModel.DOC_LIBRARY);
 
-            copyService.copy(template_documentlibrary, newSite_documentlibrary);
+            copyService.copy(templateDocLib, newSiteDocLib);
         }
 
     }
@@ -194,8 +175,6 @@ public class ProjectDepartment extends AbstractWebScript {
             }
 
             JSONObject return_json = new JSONObject();
-
-            return_json.put("status", "success");
             return_json.put("nodeRef", newSiteRef);
             return_json.put("shortName", siteService.getSiteShortName(newSiteRef));
 
