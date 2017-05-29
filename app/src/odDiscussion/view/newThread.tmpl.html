@@ -18,10 +18,8 @@
                     <label>{{'PROJECT.NAME' | translate}}</label>
                     <input type="text" name="newDiscussionTitle" required ng-model="newDiscussionTitle" md-autofocus>
                 </md-input-container>
-                <md-input-container>
-                    <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
-                    <textarea required name="newDiscussionContent" ng-model="newDiscussionContent"></textarea>
-                </md-input-container>
+
+                <ng-ckeditor ng-model="newDiscussionContent" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
         </md-dialog-content>
 
         <md-dialog-actions>

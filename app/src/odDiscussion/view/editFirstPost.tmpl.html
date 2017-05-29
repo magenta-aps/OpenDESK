@@ -20,8 +20,7 @@
                 </md-input-container>
                 <md-input-container>
                     <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
-                    <textarea required name="postContent" ng-model="postItem.content">
-                    </textarea>
+                    <ng-ckeditor ng-model="postItem.content" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
                 </md-input-container>
         </md-dialog-content>
 

@@ -1,13 +1,6 @@
 angular
-    .module('openDeskApp.discussion')
-    .controller('DiscussionController', DiscussionController)
-    .directive('odDiscussion', function () {
-        return {
-            restrict: 'E',
-            scope: {},
-            templateUrl: 'app/src/odDiscussion/view/overview.html'
-        };
-    });
+    .module('openDeskApp.discussion', ['ng.ckeditor'])
+    .controller('DiscussionController', DiscussionController);
 
 function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $interval, discussionService, nodeRefUtilsService, 
                             userService, sessionService, notificationsService, siteService, preferenceService) {

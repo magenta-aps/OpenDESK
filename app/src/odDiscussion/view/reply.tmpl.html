@@ -16,8 +16,7 @@
         <md-dialog-content class="md-padding" layout='column'>
                 <md-input-container>
                     <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
-                    <textarea required name="replyContent" ng-model="replyContent">
-                    </textarea>
+                    <ng-ckeditor ng-model="replyContent" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
                 </md-input-container>
         </md-dialog-content>
 
