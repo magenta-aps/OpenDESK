@@ -2,7 +2,9 @@ package dk.opendesk.webscripts;
 
         import java.io.IOException;
         import java.io.Serializable;
+        import java.util.ArrayList;
         import java.util.HashMap;
+        import java.util.List;
         import java.util.Map;
 
         import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -29,6 +31,8 @@ public class PreferencesTest extends BaseWebScriptTest {
     private PreferenceService preferenceService = (PreferenceService) getServer().getApplicationContext().getBean("preferenceService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
 
+    private List<String> users = new ArrayList<>();
+
     private static final String PREFERENCE = "dk.magenta.sites.receiveNotifications";
     private static final String PREFERENCE_VALUE = "true";
 
@@ -42,8 +46,13 @@ public class PreferencesTest extends BaseWebScriptTest {
 
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
-        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
-        TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
+        // USERS
+        users.add(TestUtils.USER_ONE);
+
+        for (String userName : users) {
+            TestUtils.createUser(transactionService, personService, authenticationService, userName);
+        }
+
         HashMap<String, Serializable> preferences = new HashMap<>();
         preferences.put(PREFERENCE, PREFERENCE_VALUE);
         preferenceService.setPreferences(TestUtils.USER_ONE, preferences);
@@ -71,5 +80,10 @@ public class PreferencesTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        // Delete users
+        for (String userName : users) {
+            TestUtils.deletePerson(transactionService, personService, userName);
+        }
     }
 }

@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
@@ -21,6 +22,10 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NotificationsTest extends BaseWebScriptTest {
 
@@ -35,6 +40,7 @@ public class NotificationsTest extends BaseWebScriptTest {
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
     private ContentService contentService = (ContentService) getServer().getApplicationContext().getBean("contentService");
     private FileFolderService fileFolderService = (FileFolderService) getServer().getApplicationContext().getBean("fileFolderService");
+    private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
 
     private static final String UNSEEN = "unseen";
     private static final String UNREAD = "unread";
@@ -42,7 +48,8 @@ public class NotificationsTest extends BaseWebScriptTest {
     private static final String COMMENT = "comment";
     private static final String FILENAME = "filename";
 
-    private SiteInfo siteOne, siteTwo, siteThree;
+    private List<String> users = new ArrayList<>();
+    private Map<String, SiteInfo> sites = new HashMap<>();
 
     public NotificationsTest() {
         super();
@@ -54,19 +61,21 @@ public class NotificationsTest extends BaseWebScriptTest {
 
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
-        // Create users
-        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
-        TestUtils.createUser(transactionService, personService, authenticationService, TestUtils.USER_ONE);
+        // USERS
+        users.add(TestUtils.USER_ONE);
 
-        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
-        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_TWO);
-        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_THREE);
+        for (String userName : users) {
+            TestUtils.createUser(transactionService, personService, authenticationService, userName);
+        }
 
-        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        // SITES
+        sites.put(TestUtils.SITE_ONE, null);
+        sites.put(TestUtils.SITE_TWO, null);
+        sites.put(TestUtils.SITE_THREE, null);
 
-        siteOne = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
-        siteTwo = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_TWO);
-        siteThree = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_THREE);
+        for (Map.Entry<String, SiteInfo> site : sites.entrySet()) {
+            site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
+        }
     }
 
     public void testUserHasNoUnseenNotifications() throws IOException, JSONException {
@@ -95,9 +104,9 @@ public class NotificationsTest extends BaseWebScriptTest {
         log.debug("NotificationsTest.testCreateTwoDocumentNotificationsForUserOne");
 
         NodeRef ref1 = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                siteOne.getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
+                sites.get(TestUtils.SITE_ONE).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
         NodeRef ref2 = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                siteTwo.getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
+                sites.get(TestUtils.SITE_TWO).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
         assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_ONE, ref1);
         assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_TWO, ref2);
 
@@ -109,7 +118,7 @@ public class NotificationsTest extends BaseWebScriptTest {
         JSONArray returnJSON;
 
         NodeRef ref = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                siteThree.getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
+                sites.get(TestUtils.SITE_THREE).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
         returnJSON = assertAddNewDocumentNotification(TestUtils.USER_ONE, TestUtils.SITE_THREE, ref);
         String nodeRef = getNodeRef(returnJSON);
         assertGetInfo(nodeRef, TestUtils.SITE_THREE);
@@ -286,5 +295,16 @@ public class NotificationsTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        // Delete users
+        for (String userName : users) {
+            TestUtils.deletePerson(transactionService, personService, userName);
+        }
+
+        // Delete sites
+        for (String siteShortName : sites.keySet()) {
+            TestUtils.deleteSite(transactionService, siteService, authorityService, siteShortName);
+        }
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
     }
 }

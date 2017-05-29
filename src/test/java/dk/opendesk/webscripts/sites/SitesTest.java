@@ -56,7 +56,6 @@ public class SitesTest extends BaseWebScriptTest {
     private String TITLE = "title";
     private String DESCRIPTION = "description";
     private String VISIBILITY = "visibility";
-    private String PDF_NODEREF = "Noderef";
 
     public SitesTest() {
         super();
@@ -71,9 +70,7 @@ public class SitesTest extends BaseWebScriptTest {
         // USERS
         users.add(TestUtils.USER_ONE);
 
-        // Delete and then create users
         for (String userName : users) {
-            TestUtils.deletePerson(transactionService, personService, userName);
             TestUtils.createUser(transactionService, personService, authenticationService, userName);
         }
 
@@ -81,13 +78,6 @@ public class SitesTest extends BaseWebScriptTest {
         sites.put(TestUtils.SITE_TWO, null);
         sites.put(TestUtils.SITE_THREE, null);
         sites.put(TestUtils.SITE_FOUR, null);
-
-        // Delete and purge and then create sites
-        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
-        for (String siteShortName : sites.keySet()) {
-            TestUtils.deleteSite(transactionService, siteService, siteShortName);
-        }
-        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 
         TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
     }
@@ -566,5 +556,19 @@ public class SitesTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        // Delete users
+        for (String userName : users) {
+            TestUtils.deletePerson(transactionService, personService, userName);
+        }
+
+        // Delete sites
+
+        TestUtils.deleteSite(transactionService, siteService, authorityService, TestUtils.SITE_ONE);
+
+        for (String siteShortName : sites.keySet()) {
+            TestUtils.deleteSite(transactionService, siteService, authorityService, siteShortName);
+        }
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
     }
 }

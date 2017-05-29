@@ -4,6 +4,7 @@ import dk.opendesk.webscripts.TestUtils;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
 import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
@@ -17,6 +18,10 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UsersTest extends BaseWebScriptTest {
 
@@ -26,6 +31,10 @@ public class UsersTest extends BaseWebScriptTest {
     private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("personService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
+    private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
+
+    private List<String> users = new ArrayList<>();
+    private Map<String, SiteInfo> sites = new HashMap<>();
 
     private static final String USERNAME = "userName";
 
@@ -39,10 +48,15 @@ public class UsersTest extends BaseWebScriptTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        TestUtils.deletePerson(transactionService, personService, TestUtils.USER_ONE);
-        TestUtils.deleteSite(transactionService, siteService, TestUtils.SITE_ONE);
-        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        site_one = TestUtils.createSite(transactionService, siteService, TestUtils.SITE_ONE);
+        // USERS
+        users.add(TestUtils.USER_ONE);
+
+        // SITES
+        sites.put(TestUtils.SITE_ONE, null);
+
+        for (Map.Entry<String, SiteInfo> site : sites.entrySet()) {
+            site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
+        }
     }
 
     public void testCreateOneExternalUser() throws IOException, JSONException {
@@ -74,5 +88,16 @@ public class UsersTest extends BaseWebScriptTest {
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+
+        // Delete users
+        for (String userName : users) {
+            TestUtils.deletePerson(transactionService, personService, userName);
+        }
+
+        // Delete sites
+        for (String siteShortName : sites.keySet()) {
+            TestUtils.deleteSite(transactionService, siteService, authorityService, siteShortName);
+        }
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
     }
 }

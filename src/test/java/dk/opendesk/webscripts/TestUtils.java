@@ -1,6 +1,7 @@
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
+import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.cmr.model.FileFolderService;
@@ -33,6 +34,7 @@ public class TestUtils {
     public static final String SUCCESS = "success";
     public static final String NODE_REF = "nodeRef";
     public static final String FILENAME = "fileName";
+    public static final String SHORTNAME = "shortName";
     public static final String ADMIN = "admin";
 
     public static final String USER_ONE = "user_one";
@@ -50,6 +52,8 @@ public class TestUtils {
     public static final String SITE_TWO = "reserved_for_test_site_two";
     public static final String SITE_THREE = "reserved_for_test_site_three";
     public static final String SITE_FOUR = "reserved_for_test_site_four";
+
+    public static final String SITE_NAME = "Reserved for test site";
 
     public static final String FILE_TEST_UPLOAD = "Test_Upload.pdf";
     public static final String FILE_TEST_TEMPLATE1 = "Test_Template1.pdf";
@@ -132,10 +136,14 @@ public class TestUtils {
     }
 
     public static Boolean deleteSite(TransactionService transactionService, SiteService siteService,
-                                     String siteShortName) {
+                                     AuthorityService authorityService, String siteShortName) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
             if(siteService.hasSite(siteShortName))
             siteService.deleteSite(siteShortName);
+
+            String authority = Utils.getAuthorityName(siteShortName, "");
+            if (authorityService.authorityExists(authority))
+                authorityService.deleteAuthority(authority, true);
             return true;
         });
     }

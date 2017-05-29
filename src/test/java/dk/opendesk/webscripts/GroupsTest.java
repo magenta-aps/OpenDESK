@@ -58,20 +58,13 @@ public class GroupsTest extends BaseWebScriptTest {
         users.add(TestUtils.USER_FOUR);
         users.add(TestUtils.USER_FIVE);
 
-        // Delete and then create users
         for (String userName : users) {
-            TestUtils.deletePerson(transactionService, personService, userName);
             TestUtils.createUser(transactionService, personService, authenticationService, userName);
         }
 
         // SITES
         sites.put(TestUtils.SITE_ONE, null);
 
-        // Delete and purge and then create sites
-        for (String siteShortName : sites.keySet()) {
-            TestUtils.deleteSite(transactionService, siteService, siteShortName);
-        }
-        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         for (Map.Entry<String, SiteInfo> site : sites.entrySet()) {
             site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
         }
@@ -114,5 +107,16 @@ public class GroupsTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        // Delete users
+        for (String userName : users) {
+            TestUtils.deletePerson(transactionService, personService, userName);
+        }
+
+        // Delete sites
+        for (String siteShortName : sites.keySet()) {
+            TestUtils.deleteSite(transactionService, siteService, authorityService, siteShortName);
+        }
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
     }
 }

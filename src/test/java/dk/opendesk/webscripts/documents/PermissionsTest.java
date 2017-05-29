@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
@@ -37,6 +38,7 @@ public class PermissionsTest extends BaseWebScriptTest {
     private PersonService personService = (PersonService) getServer().getApplicationContext().getBean("personService");
     private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
             "authenticationService");
+    private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
 
     private List<String> users = new ArrayList<>();
     private Map<String, SiteInfo> sites = new HashMap<>();
@@ -55,23 +57,17 @@ public class PermissionsTest extends BaseWebScriptTest {
         // USERS
         users.add(TestUtils.USER_ONE);
 
-        // Delete and then create users
         for (String userName : users) {
-            TestUtils.deletePerson(transactionService, personService, userName);
             TestUtils.createUser(transactionService, personService, authenticationService, userName);
         }
 
         // SITES
         sites.put(TestUtils.SITE_ONE, null);
 
-        // Delete and purge and then create sites
-        for (String siteShortName : sites.keySet()) {
-            TestUtils.deleteSite(transactionService, siteService, siteShortName);
-        }
-        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         for (Map.Entry<String, SiteInfo> site : sites.entrySet()) {
             site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
         }
+
         docRef = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
                 sites.get(TestUtils.SITE_ONE).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
     }
@@ -117,5 +113,16 @@ public class PermissionsTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        // Delete users
+        for (String userName : users) {
+            TestUtils.deletePerson(transactionService, personService, userName);
+        }
+
+        // Delete sites
+        for (String siteShortName : sites.keySet()) {
+            TestUtils.deleteSite(transactionService, siteService, authorityService, siteShortName);
+        }
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
     }
 }

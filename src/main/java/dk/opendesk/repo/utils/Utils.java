@@ -186,7 +186,6 @@ public class Utils {
             return siteGroup + "_" + groupName;
     }
 
-    // NOTICE: Sites created this way does not work in Share as they lack dashboards.
     public static NodeRef createSite(NodeService nodeService, ContentService contentService,  SiteService siteService,
                                      String displayName, String description, SiteVisibility siteVisibility) {
 

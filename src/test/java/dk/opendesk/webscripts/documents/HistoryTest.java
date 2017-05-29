@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.version.VersionService;
@@ -35,6 +36,7 @@ public class HistoryTest extends BaseWebScriptTest {
     private ContentService contentService = (ContentService) getServer().getApplicationContext().getBean("contentService");
     private FileFolderService fileFolderService = (FileFolderService) getServer().getApplicationContext().getBean("fileFolderService");
     private VersionService versionService = (VersionService) getServer().getApplicationContext().getBean("versionService");
+    private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
 
     private Map<String, SiteInfo> sites = new HashMap<>();
     private NodeRef docRef;
@@ -52,11 +54,6 @@ public class HistoryTest extends BaseWebScriptTest {
         // SITES
         sites.put(TestUtils.SITE_ONE, null);
 
-        // Delete and purge and then create sites
-        for (String siteShortName : sites.keySet()) {
-            TestUtils.deleteSite(transactionService, siteService, siteShortName);
-        }
-        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         for (Map.Entry<String, SiteInfo> site : sites.entrySet()) {
             site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
         }
@@ -127,5 +124,11 @@ public class HistoryTest extends BaseWebScriptTest {
     protected void tearDown() throws Exception
     {
         super.tearDown();
+
+        // Delete and purge and then create sites
+        for (String siteShortName : sites.keySet()) {
+            TestUtils.deleteSite(transactionService, siteService, authorityService, siteShortName);
+        }
+        nodeArchiveService.purgeAllArchivedNodes(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
     }
 }
