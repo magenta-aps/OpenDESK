@@ -28,6 +28,7 @@
     "angular-i18n": "",
     "angular-utf8-base64": "^0.0.5",
     "angular-auto-height": "https://github.com/m43nu/angular-auto-height.git",
+    "angular-ckeditor": "",
     "checklist-model": "~0.9.0",
     "isteven-angular-multiselect": "3.0.0",
     "material-wizard": "",

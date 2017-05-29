@@ -30,7 +30,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     $scope.role_mapping_reverse["3"] = "SiteConsumer";
 
     $scope.contents = [];
-    $scope.object = [];
+    //$scope.object = [];
     $scope.history = [];
     $scope.members = [];
     $scope.allMembers = [];
@@ -278,7 +278,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
             $scope.contents = response;
-            $scope.object.contents = response;
+            //$scope.object.contents = response;
             vm.addThumbnailUrl($scope.contents);
             console.log('load contents');
         });

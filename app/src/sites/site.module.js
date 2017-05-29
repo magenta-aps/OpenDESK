@@ -12,7 +12,8 @@ function config($stateProvider, USER_ROLES) {
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/site.html',
-                controller: 'SiteController as vm',
+                controller: 'SiteController',
+                controllerAs: 'vm'
             },
         },
         data: {

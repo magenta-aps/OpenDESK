@@ -11,8 +11,6 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     return {
         getSelectedDiscussion: getSelectedDiscussion,
         getDiscussions: getDiscussions,
-        getMyDiscussions: getMyDiscussions,
-        getSubscribedDiscussions: getSubscribedDiscussions,
         getReplies: getReplies,
         addDiscussion: addDiscussion,
         addReply: addReply,
@@ -21,12 +19,28 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
         subscribeToDiscussion: subscribeToDiscussion,
         unSubscribeToDiscussion: unSubscribeToDiscussion,
         isSubscribedToDiscussion: isSubscribedToDiscussion,
-        getSubscribePreferenceFilter: getSubscribePreferenceFilter
+        getSubscribePreferenceFilter: getSubscribePreferenceFilter,
+        getDiscussionFromNodeRef: getDiscussionFromNodeRef
     };
 
     function getSelectedDiscussion() {
-        console.log(selectedDiscussion);
         return selectedDiscussion;
+    }
+
+    function getDiscussionFromNodeRef(siteShortName,nodeRef) {
+        getDiscussions(siteShortName).then(function(response) {
+            var discussions = response;
+            console.log('find diskussion fra noderef');
+            console.log(discussions);
+
+            discussions.items.forEach(function(discussion) {
+                if(discussion.nodeRef.split('/')[3] == nodeRef) {
+                    console.log('den udvalgte');
+                    console.log(discussion);
+                    return discussion;
+                }
+            });
+        });
     }
 
     function getDiscussions(siteShortName) {
@@ -35,35 +49,6 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
             console.log('get discussions data');
             console.log(response.data);
             return response.data;
-        });
-    }
-
-    //slet denne
-    function getMyDiscussions(siteShortName) {
-        return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts/myposts', {}).then(function (response) {
-            return response.data;
-        });
-    }
-
-    //slet denne
-    function getSubscribedDiscussions(siteShortName) {
-        return getDiscussions(siteShortName).then(function (discussionResponse) {
-
-            var discussions = discussionResponse.data.items;
-            var subscriptionsPreferenceFilter = getSiteSubscriptionsPreferenceFilter(siteShortName);
-
-            return preferenceService.getPreferences(currentUser, subscriptionsPreferenceFilter).then(function (preferenceResponse) {
-
-                var subscribedDiscussions = [];
-                for (var i = 0; i < discussions.length; i++) {
-                    var postItem = discussions[i];
-                    var id = nodeRefUtilsService.getId(postItem.nodeRef);
-                    var postPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id);
-                    if (preferenceResponse[postPreferenceFilter])
-                        subscribedDiscussions.push(postItem);
-                }
-                return subscribedDiscussions;
-            });
         });
     }
 

@@ -9,7 +9,7 @@ angular
         };
     });
 
-function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, discussionService, nodeRefUtilsService, 
+function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $interval, discussionService, nodeRefUtilsService, 
                             userService, sessionService, notificationsService, siteService, preferenceService) {
     var dc = this;
 
@@ -32,7 +32,13 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
     }
 
     dc.getReplies = function(postItem) {
+        if(dc.selectedDiscussion.length == 0) {
+            console.log($stateParams.path);
+            console.log('projektet er: ');
+            console.log(discussionService.getDiscussionFromNodeRef($stateParams.projekt,$stateParams.path));
+        }
         console.log('get replies');
+        console.log(postItem);
         discussionService.getReplies(postItem).then(function(response) {
             dc.replies = response;
 
@@ -44,7 +50,6 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
     }
 
     function init() {
-        console.log('return user info');
         dc.user = sessionService.getUserInfo().user;
         dc.getDiscussions($stateParams.projekt);
         getAllMembers($stateParams.projekt,'PD-Project');
@@ -67,6 +72,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,dc.selectedDiscussion);
             dc.createNotification(response.item);
+            dc.getReplies(dc.selectedDiscussion);
             $mdDialog.cancel();
         })
     },
@@ -87,6 +93,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,response.item);
             $mdDialog.cancel();
+            dc.getDiscussions($stateParams.projekt);
         });
     },
 
@@ -96,7 +103,8 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
 
     dc.deleteDiscussion = function(postItem) {
         discussionService.deletePost(postItem).then(function(response) {
-            console.log(response);
+            dc.getDiscussions($stateParams.projekt);
+            dc.getReplies(dc.selectedDiscussion);
         });
     }
 
@@ -104,6 +112,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
         discussionService.updatePost(postItem,'',content).then(function(response) {
             console.log(response);
             $mdDialog.cancel();
+            dc.getReplies(dc.selectedDiscussion);
         });
     }
 
@@ -171,6 +180,8 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
             dc.searchSubscribed = undefined;
             dc.searchUser = dc.user.userName;
         }
+
+        $interval(function(){}, 1,1000);
     }
 
     dc.changeSubscription = function(postItem) {
@@ -220,7 +231,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, dis
                         console.log("Sending notification to : " + username);
                         var subject = 'Ny kommentar på en samtale du følger';
                         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-                        var link = '';
+                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
                         
                         notificationsService.addNotice(username, subject, message, link, 'new-reply', $stateParams.projekt);
                     }
