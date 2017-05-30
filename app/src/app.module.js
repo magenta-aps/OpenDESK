@@ -34,7 +34,6 @@ angular
         'm43nu.auto-height',
         'dcbImgFallback',
         'openDeskApp.notifications',
-        'openDeskApp.discussion',
         'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.menu',

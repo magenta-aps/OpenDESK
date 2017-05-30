@@ -49,8 +49,8 @@ exports.config = {
         //}));
 
 
-        browser.driver.manage().window().setSize(1440, 800);
-        browser.get('http://localhost:8000/#');
+        //browser.driver.manage().window().setSize(1440, 800);
+        browser.get('http://localhost:8000/#!/login');
         browser.getCapabilities().then(function (capabilities) {
             browser.capabilities = capabilities;
         });
@@ -89,8 +89,8 @@ exports.config = {
 
     },
     suites: {
-        projects: './projects/*.test.js',
-            //login: './login/*.test.js',
+        //projects: './projects/*.test.js',
+            login: './login/*.test.js',
         //folders: './folders/*.test.js',
         //documents: './documents/*.test.js',
         //members: './members/*.test.js'
