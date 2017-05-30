@@ -1,0 +1,26 @@
+
+<md-dialog aria-label="Besvar" ng-cloak>
+    <form name="newReplyForm" ng-submit="dc.reply(replyContent)">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Besvar 
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="dc.cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding" layout='column'>
+                <ng-ckeditor ng-model="replyContent" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button type="submit" class="md-primary">{{'COMMON.REPLY' | translate}}</md-button>
+        </md-dialog-actions>
+
+        
+    </form>
+</md-dialog>

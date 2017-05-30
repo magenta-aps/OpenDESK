@@ -30,7 +30,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     $scope.role_mapping_reverse["3"] = "SiteConsumer";
 
     $scope.contents = [];
-    $scope.object = [];
     $scope.history = [];
     $scope.members = [];
     $scope.roles = [];
@@ -41,7 +40,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
     vm.project = {};
     vm.userManagedProjects = [];
-    vm.path = $stateParams.path;
+    vm.path = $stateParams.path == undefined ? '' : $stateParams.path;
     vm.userRole = 'Consumer';
     vm.editRole = 'Collaborator';
     vm.managerRole = 'Manager';
@@ -71,6 +70,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
     vm.deleteFile = deleteFile;
 
+    vm.documentTab = '/dokumenter';
+
     $scope.searchProjects = searchProjects;
 
     siteService.getTemplateDocuments().then(function (response) {
@@ -80,8 +81,12 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             vm.addThumbnailUrl($scope.templateDocuments);
     })
 
+    $scope.tabs = {};
+    $scope.tabs.selected = $state.current.data.selectedTab;
+  
     function loadSiteData() {
         console.log('load site data');
+        console.log($state.current.data.selectedTab);
         siteService.loadSiteData($stateParams.projekt).then(
             function (result) {
 
@@ -172,6 +177,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     }
 
 
+
     function buildBreadCrumbPath(project_title) {
         var title, link;
         if (vm.project.type == vm.strings.templateProject) {
@@ -187,18 +193,20 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             },
             {
                 title: project_title,
-                link: '#!/projekter/' + vm.project.shortName
+                link: '#!/projekter/' + vm.project.shortName + vm.documentTab
             }
         ];
-        var pathArr = $stateParams.path.split('/');
-        var pathLink = '/';
-        for (var a in pathArr) {
-            if (pathArr[a] !== '') {
-                paths.push({
-                    title: pathArr[a],
-                    link: '#!/projekter/' + vm.project.shortName + pathLink + pathArr[a]
-                });
-                pathLink = pathLink + pathArr[a] + '/';
+        if ($stateParams.path != undefined) {
+            var pathArr = $stateParams.path.split('/');
+            var pathLink = '/';
+            for (var a in pathArr) {
+                if (pathArr[a] !== '') {
+                    paths.push({
+                        title: pathArr[a],
+                        link: '#!/projekter/' + vm.project.shortName + vm.documentTab + pathLink + pathArr[a]
+                    });
+                    pathLink = pathLink + pathArr[a] + '/';
+                }
             }
         }
         return paths;
@@ -261,11 +269,9 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
             $scope.contents = response;
-            $scope.object.contents = response;
+            //$scope.object.contents = response;
             vm.addThumbnailUrl($scope.contents);
             console.log('load contents');
-            console.log($scope.object.contents);
-            console.log($scope.$id);
         });
 
     };
@@ -309,7 +315,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             return '#!/dokument/' + content.shortRef;
         }
         if (content.contentType === 'cmis:folder') {
-            return '#!/projekter/' + vm.project.shortName + vm.path + '/' + content.name;
+            return '#!/projekter/' + vm.project.shortName + vm.documentTab + vm.path + '/' + content.name;
         }
         if (content.contentType === 'cmis:link') {
             return '#!/projekter/' + content.destination_link;
@@ -524,9 +530,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     function createDocumentNotification(projekt, shortName, ref, fileName) {
-        var creatorFirstName = vm.currentUser.firstName;
-        var creatorLastName = vm.currentUser.lastName;
-        var creatorFullName = creatorFirstName + " " + creatorLastName;
+        var creatorFullName = vm.currentUser.firstName + " " + vm.currentUser.lastName;;
         var subject = "Nyt dokument i " + projekt;
         var message = "Et nyt dokument \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
         var link = "#!/dokument/" + ref;
@@ -878,7 +882,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             'fileName': fileName
         });
     };
-
 
     function editSiteDialog(ev) {
         $mdDialog.show({

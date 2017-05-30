@@ -4,7 +4,7 @@ angular
 
 function customDateFilterFactory(dateFilter) {
     function customDateFilter(dateValue, givenFormat) {
-        var seconds = Math.floor((new Date() - dateValue) / 1000);
+        var seconds = Math.floor((new Date() - new Date(dateValue)) / 1000);
 
         var interval = Math.floor(seconds / 86400); //dage
         if(interval == 1)

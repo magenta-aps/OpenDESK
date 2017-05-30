@@ -47,6 +47,7 @@
     "test-loaddata": "protractor app/tests/e2e/loaddata_conf.js"
   },
   "dependencies": {
+    "angular-ui-router": "^1.0.3",
     "gulp-install": "^0.6.0",
     "gulp-nsp": "~2.4.0"
   }

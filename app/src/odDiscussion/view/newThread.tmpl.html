@@ -1,0 +1,31 @@
+
+<md-dialog aria-label="Slet projekt" ng-cloak>
+    <form name="newDiscussionForm" ng-submit="dc.newDiscussion(newDiscussionTitle,newDiscussionContent)">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Ny tråd 
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="dc.cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding" layout='column'>
+                <md-input-container>
+                    <label>{{'PROJECT.NAME' | translate}}</label>
+                    <input type="text" name="newDiscussionTitle" required ng-model="newDiscussionTitle" md-autofocus>
+                </md-input-container>
+
+                <ng-ckeditor ng-model="newDiscussionContent" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button type="submit" class="md-primary">{{'COMMON.CREATE' | translate}}</md-button>
+        </md-dialog-actions>
+
+        
+    </form>
+</md-dialog>

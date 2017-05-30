@@ -7,8 +7,7 @@ angular.module('openDeskApp.auth', ['ngMaterial'])
 function config($stateProvider, USER_ROLES) {
 
     $stateProvider.state('login', {
-        parent: 'site',
-        url: '/login?error&nosso',
+        url: '/login',
         views: {
             'content@': {
                 templateUrl: 'app/src/authentication/view/login.html',
