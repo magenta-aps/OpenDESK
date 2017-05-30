@@ -30,7 +30,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     $scope.role_mapping_reverse["3"] = "SiteConsumer";
 
     $scope.contents = [];
-    //$scope.object = [];
     $scope.history = [];
     $scope.members = [];
     $scope.allMembers = [];
@@ -84,10 +83,12 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             vm.addThumbnailUrl($scope.templateDocuments);
     })
 
-    $scope.selectedTab = $state.current.data.selectedTab;
+    $scope.tabs = {};
+    $scope.tabs.selected = $state.current.data.selectedTab;
   
     function loadSiteData() {
         console.log('load site data');
+        console.log($state.current.data.selectedTab);
         siteService.loadSiteData($stateParams.projekt).then(
             function (result) {
 

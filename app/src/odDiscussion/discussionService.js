@@ -28,16 +28,12 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     }
 
     function getDiscussionFromNodeRef(siteShortName,nodeRef) {
-        getDiscussions(siteShortName).then(function(response) {
+        return getDiscussions(siteShortName).then(function(response) {
             var discussions = response;
-            console.log('find diskussion fra noderef');
-            console.log(discussions);
 
             discussions.items.forEach(function(discussion) {
                 if(discussion.nodeRef.split('/')[3] == nodeRef) {
-                    console.log('den udvalgte');
-                    console.log(discussion);
-                    return discussion;
+                    selectedDiscussion = discussion;
                 }
             });
         });
@@ -46,8 +42,6 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     function getDiscussions(siteShortName) {
         return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {}).then(function (response) {
             addSubscriptionFlag(siteShortName,response.data.items);
-            console.log('get discussions data');
-            console.log(response.data);
             return response.data;
         });
     }

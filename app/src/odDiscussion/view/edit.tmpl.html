@@ -14,10 +14,7 @@
         </md-toolbar>
 
         <md-dialog-content class="md-padding" layout='column'>
-                <md-input-container>
-                    <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
-                    <ng-ckeditor ng-model="postItem.content" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
-                </md-input-container>
+            <ng-ckeditor ng-model="postItem.content" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
         </md-dialog-content>
 
         <md-dialog-actions>

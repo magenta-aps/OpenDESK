@@ -25,13 +25,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
     }
 
     dc.getReplies = function(postItem) {
-        if(dc.selectedDiscussion.length == 0) {
-            console.log($stateParams.path);
-            console.log('projektet er: ');
-            console.log(discussionService.getDiscussionFromNodeRef($stateParams.projekt,$stateParams.path));
-        }
         console.log('get replies');
-        console.log(postItem);
         discussionService.getReplies(postItem).then(function(response) {
             dc.replies = response;
 
@@ -46,6 +40,15 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         dc.user = sessionService.getUserInfo().user;
         dc.getDiscussions($stateParams.projekt);
         getAllMembers($stateParams.projekt,'PD-Project');
+
+        $scope.tabs.selected = $state.current.data.selectedTab;
+
+        if($stateParams.path) {
+            discussionService.getDiscussionFromNodeRef($stateParams.projekt,$stateParams.path).then(function(response) {
+                dc.selectedDiscussion = discussionService.getSelectedDiscussion();
+                dc.getReplies(dc.selectedDiscussion);
+            });
+        }
     }
     init();
 

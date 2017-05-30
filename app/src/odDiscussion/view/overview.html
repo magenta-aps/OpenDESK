@@ -1,4 +1,4 @@
-<!--<div ng-controller="DiscussionController as dc">-->
+
 <md-list class="sortHead">
     <table class="od-members od-members-row">
         <thead fix-head>
@@ -10,7 +10,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody> <!-- | exactMatch:['isSubscribed','username']:[dc.searchSubscribed,dc.searchUser]" -->
+        <tbody>
             <tr ng-repeat="discussion in dc.discussions | orderBy: '-lastReplyOn' 
                         | filter:{isSubscribed: dc.searchSubscribed, author: {username: dc.searchUser}}">
                 <td class="icon">
@@ -83,4 +83,3 @@
             </span>
     </md-button>
 </md-card-actions>
-<!--</div>-->

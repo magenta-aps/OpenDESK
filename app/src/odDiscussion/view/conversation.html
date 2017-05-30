@@ -14,7 +14,7 @@
             <td class="comment od-primary">
                 <span ng-bind-html='dc.selectedDiscussion.content'></span>
 
-                <p class="od-secondary">Skrevet {{dc.selectedDiscussion.createdOn | customDate}}</p>
+                <p class="od-secondary">{{dc.selectedDiscussion.createdOn | customDate}}</p>
             </td>
             <td class="comment-actions">
                 <md-menu ng-if="dc.selectedDiscussion.permissions.delete || dc.selectedDiscussion.permissions.edit">
