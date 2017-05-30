@@ -140,8 +140,6 @@ angular
                     $scope.newSite.template.name
                 ).then(
                     function(response) {
-                        
-                        if(response.data[0].status === 'success') {
 
                             var siteShortName = response.data[0].shortName;
                             var siteName = $scope.newSite.siteName;
@@ -156,13 +154,12 @@ angular
                             addUserToGroup(siteShortName, siteName, $scope.folgeGruppe, 'PD_MONITORS', link);
 
                             $mdDialog.cancel();
-                            $state.go( 'project', { projekt: siteShortName , path: ""}  );
+                            $state.go( 'project', { projekt: siteShortName } );
                             $mdToast.show(
                                 $mdToast.simple()
                                         .textContent('Du har oprettet projekt: ' + $scope.newSite.siteName)
                                         .hideDelay(3000)
                             );
-                        }
                     },
                     function(err) {
                         console.log(err);

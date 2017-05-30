@@ -1,7 +1,12 @@
 'use strict';
 
 angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
-        .config(config);;
+        .config(config)
+        .run(function ($rootScope, $transitions, $state) {
+            $transitions.onSuccess({to:'project'}, function (transition) {
+                $state.go('project.filebrowser', { path: '' });
+            });
+        });
 
 
 function config($stateProvider, USER_ROLES) {

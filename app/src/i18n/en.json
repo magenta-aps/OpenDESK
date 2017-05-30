@@ -102,7 +102,8 @@
     "CLOSEEDIT": "Close editing",
     "FILETYPE": "File type",
     "LOCAL_DOCUMENT": "Local document",
-    "REPLY": "Besvar"
+    "REPLY": "Reply",
+    "NO_DISCUSSIONS": "No conversations"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -959,6 +960,20 @@
       "REVIEW_REQUEST": "Review request",
       "REVIEW_RESPONSE": "Review response",
       "NEW_FILE_IN": "New file in"
+    }
+  },
+  "DISCUSSIONS": {
+    "DISCUSSIONS": "Conversations",
+    "NEW": "New conversation",
+    "TITLE": "Title",
+    "LATEST_REPLY": "Latest reply",
+    "REPLIES": "Replies",
+    
+    "SORT": {
+      "SORT": "Sort after",
+      "ALL": "All",
+      "MINE": "Created by me",
+      "FOLLOW": "Followed by me"
     }
   },
   "ESDH": "SBSYS"
