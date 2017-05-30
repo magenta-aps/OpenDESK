@@ -3,10 +3,10 @@
     <table class="od-members od-members-row">
         <thead fix-head>
             <tr>
-                <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">Tråd</th>
-                <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">Seneste svar</th>
+                <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'DISCUSSIONS.TITLE' | translate}}</th>
+                <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'DISCUSSIONS.LATEST_REPLY' | translate}}</th>
                 <th class="od-secondary" colspan="3">
-                    Svar
+                    {{'DISCUSSIONS.REPLIES' | translate}}
                 </th>
             </tr>
         </thead>
@@ -58,8 +58,8 @@
     </table>
 </md-list>
 
-<p ng-show="contents.length === 0">
-    {{'COMMON.EMPTY_FOLDER' | translate}}
+<p ng-show="dc.discussions.length === 0">
+    {{'COMMON.NO_DISCUSSIONS' | translate}}
 </p>
 
 <md-divider></md-divider>
@@ -67,11 +67,11 @@
 <md-card-actions layout="row" layout-align="start center">
 
     <md-input-container>
-        <label>Sorter efter</label>
+        <label>{{'DISCUSSIONS.SORT.SORT' | translate}}</label>
         <md-select name="type" ng-model="dc.search" md-on-close='dc.evaluateFilter()'>
-            <md-option value="all">Alle</md-option>
-            <md-option value="mine">Oprettet af mig</md-option>
-            <md-option value="follow">Jeg følger</md-option>
+            <md-option value="all">{{'DISCUSSIONS.SORT.ALL' | translate}}</md-option>
+            <md-option value="mine">{{'DISCUSSIONS.SORT.MINE' | translate}}</md-option>
+            <md-option value="follow">{{'DISCUSSIONS.SORT.FOLLOW' | translate}}</md-option>
         </md-select>
     </md-input-container>
 
@@ -79,7 +79,7 @@
 
     <md-button ng-click="dc.newDiscussionDialog()" class="md-primary" aria-label="ny-diskussion">
         <span>
-                Start ny samtale
+                {{'DISCUSSIONS.NEW' | translate}}
             </span>
     </md-button>
 </md-card-actions>
