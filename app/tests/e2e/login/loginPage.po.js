@@ -8,11 +8,11 @@ var LoginPage = function () {
      * Default login as admin.
      */
     public.login = function() {
-        public.loginAs(browser.params.loginDetails.admin.username, browser.params.loginDetails.admin.password);
+        public.loginAsAdmin();
     };
 
     public.loginAsAdmin = function () {
-        public.loginAs("admin", "bullerfisk1992");
+        public.loginAsUser('admin');
     };
 
     public.loginAsUser = function (user) {
@@ -44,12 +44,13 @@ var LoginPage = function () {
     };
 
     public.logout = function() {
-        //globalHeaderMenu.getHeaderMenuItem().userMenuBtn.click();
-        //element(by.xpath('//button[@id="logout"]')).click();
-        //browser.driver.sleep(2000);
+        globalHeaderMenu.getHeaderMenuItem().userMenuBtn.click();
+        element(by.xpath('//button[@id="logout"]')).click();
+        browser.driver.sleep(2000);
     };
 
     return public;
 };
 
 module.exports = LoginPage();
+

@@ -1,0 +1,27 @@
+<md-dialog aria-label="Rename project"  ng-cloak>
+	<form name="createFolderForm" ng-submit="vm.updateSiteName(vm.currentDialogSite.shortName, newSiteName);">
+	
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Opret nyt folder</h2>
+			</div>
+		</md-toolbar>
+		
+		<md-dialog-content class="md-padding">
+				<div>
+				  <md-input-container>
+					<label>Navn</label>
+					<input type="text" name="newSiteName" required ng-model="newSiteName">
+					<div ng-messages="createSiteForm.newSiteName.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				  </md-input-container>
+				</div>
+		</md-dialog-content>
+		
+		<md-dialog-actions>
+			<md-button ng-click="vm.cancel()">Annullér</md-button>
+			<md-button type="submit" class="md-primary">Tilføj</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

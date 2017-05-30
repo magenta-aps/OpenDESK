@@ -2,6 +2,48 @@
  * Search styles
  */
 
+od-searchbar {
+  md-autocomplete {
+    //height: 20px;
+  }
+
+  md-input-focused {
+    border: none !important;
+  }
+
+  .od-search {
+  padding-top: 10px;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: calc(50vw - 175px);
+  form {
+    width: 350px;
+    height: 30px;
+    position: relative;
+    background: white;
+    border-radius: 0.25em;
+    margin-right: $u/2;
+    margin-bottom: $u;
+    //box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  }
+  i {
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    color: rgba(0, 0, 0, 0.25);
+  }
+  input {
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    border-radius: 0.25em;
+  }
+  label {
+    padding-left: $u*2 !important;
+    padding-bottom: 3px;
+  }
+}
+}
+
 .search__header {
   margin: 8px 16px;
   padding: 0;

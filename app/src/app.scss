@@ -86,9 +86,22 @@ legend {
   margin: $u*3 0 auto;
 }
 
+.od-content-height {
+  height: -webkit-calc(100vh - 48px - #{$u*9}) !important;
+  height: -moz-calc(100vh - 48px - #{$u*9}) !important;
+  height: calc(100vh - 48px - #{$u*9}) !important;
+}
+
+.od-list-height {
+  height: -webkit-calc(100vh - 48px - #{$u*20}) !important;
+  height: -moz-calc(100vh - 48px - #{$u*20}) !important;
+  height: calc(100vh - 48px - #{$u*20}) !important;
+}
+
 // Title that is placed in the header
 .od-title {
   position: fixed;
+  width:30%;
   top: 0;
   left: $u*3;
   right: $u*6;

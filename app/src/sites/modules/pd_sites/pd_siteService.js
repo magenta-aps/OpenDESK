@@ -68,30 +68,26 @@ angular
 
 
         function getAllManagers() {
-            return groupService.getGroupMembers("GLOBAL_Projectmanagers").then(
+            return groupService.getGroupMembers("OPENDESK_ProjectOwners").then(
                 function (response) {
                     //console.log(response.data);
                     return response;
                 },
-                function (err) {
-                    //console.log(err);
-                    return err;
+                function (error) {
+                    console.log("Error retrieving list of all managers.");
+                    console.log(error);
                 }
             );
         }
 
 
         function getAllOrganizationalCenters() {
-            return groupService.getSubGroups("OrganizationalCenters").then(function (response) {
+            return groupService.getSubGroups("OPENDESK_OrganizationalCenters").then(function (response) {
                 //console.log(response);
                 return response;
-            });
-        }
-
-        function getAllTemplates() {
-            return groupService.getGroupMembers("OrganizationalCenters").then(function (response) {
-                //console.log(response);
-                return response;
+            }, function (error) {
+                console.log("Error retrieving list of all organizational centers.");
+                console.log(error);
             });
         }
 

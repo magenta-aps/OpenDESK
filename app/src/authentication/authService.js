@@ -67,13 +67,13 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
             notificationUtilsService = $injector.get('notificationUtilsService');
         $mdDialog.cancel();
         sessionService.retainCurrentLocation();
-        $window.location = "/#!/login";
+        $state.go('login');
         notificationUtilsService.notify($translate.instant('LOGIN.SESSION_TIMEOUT'));
         delete $window._openDeskSessionExpired;
     }
 }
 
-function authService($http, $window, $state, sessionService, userService) {
+function authService($http, $window, $state, sessionService, userService, APP_CONFIG) {
     var service = {
         login: login,
         logout: logout,
@@ -94,7 +94,7 @@ function authService($http, $window, $state, sessionService, userService) {
 
     function ssoLogin() {
         var userInfo = {};
-        return $http.get("alfresco/s/ssologin").then(function (response) {
+        return $http.get("/alfresco/s/ssologin").then(function (response) {
             var username = response.data;
             return $http.get("/api/people/" + username).then(function (response) {
                 userInfo.user = response.data;
@@ -131,9 +131,10 @@ function authService($http, $window, $state, sessionService, userService) {
 
 
         if (userInfo) {
-            return $http.delete('/api/login/ticket/' + userInfo.ticket, {alf_ticket: userInfo.ticket}).then(function (response) {
-                sessionService.setUserInfo(null);
-                sessionService.clearRetainedLocation();
+            var ticket =  userInfo.ticket;
+            sessionService.setUserInfo(null);
+            sessionService.clearRetainedLocation();
+            return $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function (response) {
                 return response;
             });
         }
@@ -185,8 +186,8 @@ function authService($http, $window, $state, sessionService, userService) {
     }
 
     function revalidateUser() {
-        return $http.get('/api/opendesk/currentUser').then(function (response) {
-            return addUserToSession(response.data.userName);
+        return $http.get('/alfresco/s/ssologin').then(function (response) {
+            return addUserToSession(response.data);
         });
     }
 

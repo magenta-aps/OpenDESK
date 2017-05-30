@@ -57,7 +57,7 @@
                             <md-input-container class="org-input">
                                 <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
                                 <md-select ng-model="newSite.center_id" required>
-                                    <md-option ng-repeat="org in availOrgs" value="{{ org.shortName }}">
+                                    <md-option ng-repeat="org in availOrgs | orderBy:'+displayName'" value="{{ org.shortName }}">
                                         {{ org.displayName }}
                                     </md-option>
                                 </md-select>
@@ -87,7 +87,7 @@
                             </md-autocomplete>
                             
                             <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
-                                {{'COMMON.PRIVATE' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
+                                {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
                             </md-checkbox>
                         </div>
                     </md-content>

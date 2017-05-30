@@ -26,13 +26,6 @@
         </md-menu-item>
 
         <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
-                <md-icon md-menu-align-target>unarchive</md-icon>
-                {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
-            </md-button>
-        </md-menu-item>
-
-        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}

@@ -25,7 +25,11 @@ angular
         //'openDeskApp.workflows',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
+
+        'openDeskApp.testdata',
+
         //'openDeskApp.templates',
+
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
@@ -38,39 +42,28 @@ angular
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
-    .run(function ($rootScope, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
-        var ssoLoginEnabled = false;
+    .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
+        var ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
         angular.element(window.document)[0].title = APP_CONFIG.appName;
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
 
-        $rootScope.$on('$stateChangeStart', function (event, next, params) {
-            $rootScope.toState = next;
-            $rootScope.toStateParams = params;
-            if (next.data.authorizedRoles.length === 0) {
-                return;
-            }
-
-            if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                if(ssoLoginEnabled) {
-                    authService.ssoLogin().then(function (response) {
-                        if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                            event.preventDefault();
-                            sessionService.retainCurrentLocation();
-                            $state.go('login');
-                        }
-                    });
-                }
-                else if (!authService.isAuthenticated() || !authService.isAuthorized(next.data.authorizedRoles)) {
-                    event.preventDefault();
-                    sessionService.retainCurrentLocation();
-                    $state.go('login');
-                }
-            }
-
-            // If we got any open dialogs, close them before route change
-            $mdDialog.cancel();
+        $transitions.onError({}, function (transition) {
+            $state.go('login');
         });
+
+        if (!authService.isAuthenticated()) {
+            if (ssoLoginEnabled) {
+                authService.ssoLogin().then(function (response) {
+                    if (!authService.isAuthenticated()) {
+                        sessionService.retainCurrentLocation();
+                        $state.go('login');
+                    }
+                    else
+                        $state.reload();
+                });
+            }
+        }
     });
 
 function config($stateProvider, $urlRouterProvider, USER_ROLES) {
@@ -82,7 +75,17 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
     $stateProvider.state('site', {
         abstract: true,
         resolve: {
-            authorize: ['authService', function (authService) {
+            authorize:
+                ['authService', '$q', function (authService, $q) {
+                var d = $q.defer();
+                if (authService.isAuthenticated()) {
+                    // I also provide the user for child controllers
+                    d.resolve(authService.user);
+                } else {
+                    // here the rejection
+                    d.reject('not logged');
+                }
+                return d.promise;
             }]
         },
         views: {
@@ -143,8 +146,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             authorizedRoles: [USER_ROLES.user]
         }
     }).state('login', {
-        parent: 'site',
-        url: '/login?error&nosso',
+        url: '/login',
         views: {
             'content@': {
                 templateUrl: 'app/src/authentication/view/login.html',
@@ -164,6 +166,19 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
             'content@': {
                 templateUrl: 'app/src/sites/view/sites.html',
                 controller: 'SitesController',
+                controllerAs: 'vm'
+            }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    }).state('testdata', {
+        parent: 'site',
+        url: '/testdata',
+        views: {
+            'content@': {
+                //templateUrl: 'app/src/sites/view/sites.html',
+                controller: 'TestController',
                 controllerAs: 'vm'
             }
         },

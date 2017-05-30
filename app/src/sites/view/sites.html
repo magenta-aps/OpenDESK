@@ -2,11 +2,10 @@
 
 	<h1 class="od-title">{{'PROJECT.HEADER' | translate}}</h1>
 
-	<div ng-include="'app/src/sites/view/search.tmpl.html'"></div>
-
 	<div layout='row'>
-		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0'>
+		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0' ng-show="vm.showFilters">
 			<md-card-content>
+				<h3 class="od-primary">{{'COMMON.FILTER' | translate}}</h3>
 				<md-input-container class="md-block show-all">
 					<md-checkbox name="show-all" ng-model="vm.showall">
 						{{'COMMON.SHOW' | translate}} {{'COMMON.ALL' | translate | lowercase}}
@@ -66,7 +65,7 @@
 		</md-card>
 
 		<md-card flex>
-			<md-card-content>
+			<md-card-content class="">
 				<md-button aria-label="filter" class="md-icon-button" ng-click="vm.toggleFilters()">
 					<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
 					<md-icon>filter_list</md-icon>
@@ -146,7 +145,7 @@
 												</md-button>
 											</md-menu-item>
 											<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
-												<md-button ng-click="vm.deleteSiteDialog(project)"> <!--shortname-->
+												<md-button ng-click="vm.deleteSiteDialog(project, $event)"> <!--shortname-->
 													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 													{{'COMMON.REMOVE' | translate}}
 												</md-button>
@@ -160,7 +159,7 @@
 				</md-list>
 				<md-divider></md-divider>
 
-				<div layout="row" layout-align="start center" class="btnAlign">
+				<md-card-actions layout="row" layout-align="start center" class="btnAlign">
 					<md-button ng-click="vm.newSite($event)" class="md-primary" aria-label="Opret nyt grupperum">
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate}}</span>
@@ -171,7 +170,7 @@
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate}}</span>
 					</md-button>
-				</div>
+				</md-card-actions>
 			</md-card-content>
 		</md-card>
 	</div>

@@ -1,0 +1,14 @@
+<md-dialog aria-label="upload-files" ng-cloak>
+
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Upload filer</h2>
+			</div>
+		</md-toolbar>
+		
+		<md-dialog-content class="md-padding">
+			<input  id="upload" file-model="files" multiple="" type="file">
+			<button class="md-button" ng-click="vm.upload(files)" ><i class="material-icons">file_upload</i>upload dokumenter</button>
+		</md-dialog-content>
+	</form>
+</md-dialog>

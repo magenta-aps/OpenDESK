@@ -1,0 +1,34 @@
+<md-dialog aria-label="New site" ng-cloak>
+	<form name="createSiteForm" ng-submit="vm.createSite(newSiteName, newSiteDescription);">
+	
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Opret nyt projekt</h2>
+			</div>
+		</md-toolbar>
+		
+		<md-dialog-content class="md-padding">
+				<div>
+				  <md-input-container>
+					<label>Navn</label>
+					<input type="text" name="newSiteName" required ng-model="newSiteName">
+					<div ng-messages="createSiteForm.newSiteName.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				  </md-input-container>
+				  <md-input-container>
+					<label>Beskrivelse</label>
+					<textarea required name="newSiteDesc" ng-model="newSiteDescription"></textarea>
+					<div ng-messages="createSiteForm.newSiteDesc.$error">
+						<div ng-message="required">Dette felt skal udfyldes</div>
+					</div>
+				  </md-input-container>
+				</div>
+		</md-dialog-content>
+		
+		<md-dialog-actions>
+			<md-button ng-click="vm.cancel()">Annullér</md-button>
+			<md-button type="submit" class="md-primary">Tilføj</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

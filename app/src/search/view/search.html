@@ -4,14 +4,12 @@
 
     <h1 class="od-title">{{'SEARCH.SEARCH' | translate}}</h1>
 
-    <div ng-include="'app/src/sites/view/search.tmpl.html'"></div>
-
     <div layout='row'>
         <md-card class="od-filter-sidebar transition" ng-class="showFilters ? 'flex-15' : ''" flex='0'>
             <md-card-content>
 
                 <section class="facetgroup" data-ng-repeat="facet in facets" ng-if="(fullSearchResults.results | filter: search).length > 0">
-                    <md-autocomplete 
+                   <!-- <md-autocomplete 
 					md-selected-item="selectedLead"
 					md-selected-item-change="search[facet.shortname] === param ? search[facet.shortname] = undefined : search[facet.shortname] = param" 
 					md-search-text="searchParam" 
@@ -20,7 +18,16 @@
 					md-floating-label="{{facet.title}}"
 					md-clear-button=true>
 					<span md-highlight-text="searchParam">{{ param }} ({{ (fullSearchResults.results | filter: search | filter:count(facet.shortname, param)).length }})</span>
-				</md-autocomplete>
+				</md-autocomplete> -->
+
+                <md-input-container class="md-block">
+					<label>{{facet.title}}</label>
+					<md-select ng-model="search[facet.shortname]">
+						<md-option ng-repeat="param in facet.array" value="{{ param }}">
+							{{ param }} ({{ (fullSearchResults.results | filter: search | filter:count(facet.shortname, param)).length }})
+						</md-option>
+					</md-select>
+				</md-input-container>
                 </section>
             </md-card-content>
         </md-card>
