@@ -22,7 +22,7 @@
     "angular-swfobject": "",
     "angular-translate": "",
     "angular-translate-loader-static-files": "",
-    "angular-ui-router": "",
+    "@uirouter/angularjs": "",
     "angular-cookies": "^1.6.x",
     "angular-fixed-table-header": "",
     "angular-i18n": "",
@@ -44,8 +44,8 @@
     "angular-material": "master",
     "bootstrap": "~3.3.6",
     "requirejs": "~2.2.0",
-    "jquery": "^3.1.1",
+    "jquery": "~2.2.0",
     "backbone": "1.1.2",
-    "angular-translate": "2.14.0"
+    "angular-translate": "~2.15.1"
   }
 }
