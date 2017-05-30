@@ -1,0 +1,30 @@
+
+<md-dialog aria-label="Rediger" ng-cloak>
+    <form name="newReplyForm" ng-submit="dc.editFirstPost(postItem,postItem.title,postItem.content)">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.EDIT' | translate}} 
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="dc.cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding" layout='column'>
+            <md-input-container>
+                    <label>{{'PROJECT.NAME' | translate}}</label>
+                    <input type="text" name="postTitle" required ng-model="postItem.title" md-autofocus>
+                </md-input-container>
+                <ng-ckeditor ng-model="postItem.content" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button type="submit" class="md-primary">{{'COMMON.EDIT' | translate}}</md-button>
+        </md-dialog-actions>
+
+        
+    </form>
+</md-dialog>

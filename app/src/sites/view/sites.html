@@ -96,12 +96,12 @@
 							isContained:vm.searchMembers |
 							filter: vm.search">
 								<td class="icon">
-									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">
 										<i class="material-icons od-primary">{{project.type === "Project" ? "forum" : "content_paste"}}</i>
 									</a>
 								</td>
 								<td>
-									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}">
+									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}/dokumenter">
             							<h3 class="od-primary">{{ project.title }}</h3>
 										
 										{{ project.description }}
@@ -109,17 +109,17 @@
 
 								</td>
 								<td>
-									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">
 										{{ project.manager.fullName }}
 									<a>
 								</td>
 								<td>
-									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}">
+									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}/dokumenter">
 										{{ project.center_name }}
 									</a>
 								</td>
 								<td>
-									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}">
+									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">
 										<div ng-switch on="project.state">
 											<span ng-switch-when="ACTIVE">{{'PROJECT.STATUS.IN_PROGRESS' | translate}}</span>
 											<span ng-switch-when="CLOSED">{{'PROJECT.STATUS.COMPLETED' | translate}}</span>
@@ -128,7 +128,7 @@
 									</a>
 								</td>
 								<td>
-									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}">
+									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}/dokumenter">
 										{{ project.modified | date:'dd. MMMM yyyy' }}
 									</a>
 								</td>

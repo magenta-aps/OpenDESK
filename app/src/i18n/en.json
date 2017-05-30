@@ -101,7 +101,8 @@
     "EDITINLIBRE": "Online editing",
     "CLOSEEDIT": "Close editing",
     "FILETYPE": "File type",
-    "LOCAL_DOCUMENT": "Local document"
+    "LOCAL_DOCUMENT": "Local document",
+    "REPLY": "Besvar"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"

@@ -89,7 +89,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         getSitesPerUser: function () {
             return $http.post("/alfresco/service/sites", { PARAM_METHOD : "getSitesPerUser" }).then(
                 function(response) {
-                    //console.log(response);
                     return response.data;
                 },
                 function(err) {
@@ -423,14 +422,12 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
         getTemplateDocuments : function() {
             return $http.get("/alfresco/service/template?method=getAllTemplateDocuments", {
             }).then(function(response) {
-                console.log(response);
                 return response.data[0];
             });
         },
         createDocumentFromTemplate : function(nodeid, currentfolder, newName) {
             return $http.get("/alfresco/service/template?method=makeNewDocumentFromTemplate&template_nodeid=" + nodeid + "&destination_nodeRefid=" + currentfolder + "&fileName=" + newName, {
             }).then(function(response) {
-                console.log(response);
                 return response;
             });
         }

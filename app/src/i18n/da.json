@@ -101,7 +101,8 @@
     "EDITINLIBRE": "Online redigering",
     "CLOSEEDIT": "Luk redigering",
     "FILETYPE": "Dokumenttype",
-    "LOCAL_DOCUMENT": "Lokalt dokument"
+    "LOCAL_DOCUMENT": "Lokalt dokument",
+    "REPLY": "Besvar"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"

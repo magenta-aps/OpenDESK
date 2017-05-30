@@ -28,11 +28,13 @@
     "angular-i18n": "",
     "angular-utf8-base64": "^0.0.5",
     "angular-auto-height": "https://github.com/m43nu/angular-auto-height.git",
+    "angular-ckeditor": "",
     "checklist-model": "~0.9.0",
     "isteven-angular-multiselect": "3.0.0",
     "material-wizard": "",
     "pdfjs-dist": "",
-    "converse.js": "https://github.com/magenta-aps/converse.js.git#master"
+    "converse.js": "https://github.com/magenta-aps/converse.js.git#master",
+    "ng-ckeditor": "ng.ckeditor#^2.0.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.6.x"
