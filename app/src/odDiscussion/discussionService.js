@@ -49,8 +49,10 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     function getReplies(postItem) {
         selectedDiscussion = postItem;
         selectedDiscussion.author.avatarUrl = '';
-        var avatarId = postItem.author.avatarRef.split('/')[3];
-        selectedDiscussion.author.avatarUrl = sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
+        if(postItem.author.avatarRef != undefined) {
+            var avatarId = postItem.author.avatarRef.split('/')[3];
+            selectedDiscussion.author.avatarUrl = sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
+        }
         return $http.get(restBaseUrl + postItem.repliesUrl, {}).then(function (response) {
             return response.data.items;
         });

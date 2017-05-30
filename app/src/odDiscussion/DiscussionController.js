@@ -199,6 +199,8 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
     }
 
     dc.getAvatarUrl = function(avatarRef) {
+        if(avatarRef == undefined)
+            return;
         var avatarId = avatarRef.split('/')[3];
         return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
     }
