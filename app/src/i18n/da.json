@@ -102,7 +102,8 @@
     "CLOSEEDIT": "Luk redigering",
     "FILETYPE": "Dokumenttype",
     "LOCAL_DOCUMENT": "Lokalt dokument",
-    "REPLY": "Besvar"
+    "REPLY": "Besvar",
+    "NO_DISCUSSIONS": "Ingen samtaler"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -933,6 +934,20 @@
       "REVIEW_REQUEST": "Review forespørgsel",
       "REVIEW_RESPONSE": "Review svar",
       "NEW_FILE_IN": "Ny fil i"
+    }
+  },
+  "DISCUSSIONS": {
+    "DISCUSSIONS": "Samtaler",
+    "NEW": "Ny samtale",
+    "TITLE": "Overskrift",
+    "LATEST_REPLY": "Seneste svar",
+    "REPLIES": "Svar",
+    
+    "SORT": {
+      "SORT": "Sorter efter",
+      "ALL": "Alle",
+      "MINE": "Oprettet af mig",
+      "FOLLOW": "Jeg følger"
     }
   },
   "ESDH": "SBSYS"

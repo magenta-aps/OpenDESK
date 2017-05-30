@@ -4,7 +4,7 @@
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Ny tråd 
+                <h2>{{'DISCUSSIONS.NEW' | translate }}
                 </h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="dc.cancel()">
@@ -15,7 +15,7 @@
 
         <md-dialog-content class="md-padding" layout='column'>
                 <md-input-container>
-                    <label>{{'PROJECT.NAME' | translate}}</label>
+                    <label>{{'DISCUSSIONS.TITLE' | translate}}</label>
                     <input type="text" name="newDiscussionTitle" required ng-model="newDiscussionTitle" md-autofocus>
                 </md-input-container>
 
