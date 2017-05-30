@@ -15,6 +15,8 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     vm.showArchived = false;
 
+    vm.documentTab = '/dokumenter';
+
     vm.notificationFrom = '';
 
     if ($location.search().archived != undefined && $location.search().archived == "true") {
@@ -205,7 +207,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 },
                 {
                     title: response.item.location.siteTitle,
-                    link: '#!/projekter/' + response.item.location.site
+                    link: '#!/projekter/' + response.item.location.site + vm.documentTab
                 }
             ];
             var pathArr = response.item.location.path.split('/');
@@ -214,7 +216,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 if (pathArr[a] !== '') {
                     paths.push({
                         title: pathArr[a],
-                        link: '#!/projekter/' + response.item.location.site + pathLink + pathArr[a]
+                        link: '#!/projekter/' + response.item.location.site + vm.documentTab + pathLink + pathArr[a]
                     });
                     pathLink = pathLink + pathArr[a] + '/';
                 };
