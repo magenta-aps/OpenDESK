@@ -94,7 +94,7 @@
 							orderObjectBy:orderByAttribute:reverseOrder |
 							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
 							isContained:vm.searchMembers |
-							filter: vm.search">
+							filter: vm.search" id="{{project.shortName}}">
 								<td class="icon">
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">
 										<i class="material-icons od-primary">{{project.type === "Project" ? "forum" : "content_paste"}}</i>
@@ -145,7 +145,7 @@
 												</md-button>
 											</md-menu-item>
 											<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
-												<md-button ng-click="vm.deleteSiteDialog(project, $event)"> <!--shortname-->
+												<md-button ng-click="vm.deleteSiteDialog(project, $event)" aria-label="remove"> <!--shortname-->
 													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 													{{'COMMON.REMOVE' | translate}}
 												</md-button>

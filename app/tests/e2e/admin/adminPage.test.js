@@ -14,6 +14,7 @@ describe('openESDH case page tests', function () {
     ////logout and wait for 2 secs
     //afterEach(function () {
     //    loginPage.logout();
+    
     //});
     //
     //it('login as admin and navigate to users page', function () {

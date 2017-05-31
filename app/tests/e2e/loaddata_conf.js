@@ -25,14 +25,6 @@ exports.config = {
     //seleniumArgs: ["-Djava.security.egd=file:/dev/./urandom"],
 
     onPrepare: function () {
-
-
-        //console.log("It's located in " + __dirname);
-
-
-
-
-
         browser.driver.manage().window().setSize(1440, 800);
         browser.get('http://localhost:8000/#');
         browser.getCapabilities().then(function (capabilities) {
