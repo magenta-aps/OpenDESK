@@ -5,7 +5,7 @@ angular
 function userService($http, sessionService) {
     return {
         getPerson: getPerson,
-        getPeople: getPeople,
+        getUsers: getUsers,
         getAuthorities: getAuthorities,
         getPersons: getPersons,
         uploadAvatar : uploadAvatar,
@@ -42,8 +42,11 @@ function userService($http, sessionService) {
         });
     }
 
-    function getPeople(filter) {
-        return $http.get('/api/people' + filter).then(function (response) {
+    function getUsers(filter) {
+        return $http.post("/alfresco/service/users", {
+            PARAM_METHOD : "getUsers",
+            PARAM_FILTER: filter
+        }).then(function(response) {
             return response.data;
         });
     }

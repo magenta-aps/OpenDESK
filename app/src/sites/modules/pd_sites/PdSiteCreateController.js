@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteCreateController', PdSiteCreateController);
     
-    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, authService, $mdToast) {
+    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, userService, $mdToast) {
         
         var pdc = this;
         
@@ -25,17 +25,15 @@ angular
         
         function PdSiteCreateDiaglogController($scope, notificationsService, authService) {
 
-            var user = authService.getUserInfo().user;
-            var currentUser = user.userName;
-            var userName = user.firstName + ' ' + user.lastName;
+            var currentUser = authService.getUserInfo().user;
             var availProjectOwners = [];
         
             $scope.cancel = cancel;
             
             $scope.newSite = {
                 isPrivate: false,
-                manager: user,
-                presetManager: userName
+                manager: currentUser,
+                presetManager: currentUser.displayName
             };
             $scope.availOrgs = [];
             $scope.projektGruppe = [];
@@ -101,7 +99,7 @@ angular
             
             function searchPeople(query) {
                 if (query) {
-                    return siteService.getAllUsers(query);
+                    return userService.getUsers(query);
                 }
             }
             
@@ -189,7 +187,7 @@ angular
             }
             
             function createSiteNotification (siteName, userName, link) {
-                if(userName !== currentUser) {
+                if(userName !== currentUser.userName) {
                     var subject = "Du er blevet tilføjet til " + siteName;
                     var message = "har tilføjet dig til projektet " + siteName + ".";
                     notificationsService.addNotice(userName, subject, message, link,'project', siteName).then(function (val) {

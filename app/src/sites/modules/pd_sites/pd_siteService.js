@@ -70,7 +70,6 @@ angular
         function getAllManagers() {
             return groupService.getGroupMembers("OPENDESK_ProjectOwners").then(
                 function (response) {
-                    //console.log(response.data);
                     return response;
                 },
                 function (error) {

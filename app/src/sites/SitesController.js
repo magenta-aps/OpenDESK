@@ -172,7 +172,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		vm.currentDialogDescription = description;
 		vm.currentDialogShortName = shortName;
 		$mdDialog.show({
-			templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+			templateUrl: 'app/src/sites/view/updateSite.tmpl.html',
 			parent: angular.element(document.body),
 			targetEvent: event,
 			scope: $scope, // use parent scope in template

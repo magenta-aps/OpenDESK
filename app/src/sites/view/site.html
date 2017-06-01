@@ -3,7 +3,6 @@
     <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
     <span ng-if="vm.project.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span> {{ vm.project.title }}
 </h1>
-
 <div class="od-projects" ng-show="vm.isMember || vm.project.visibility == 'PUBLIC'">
     <div layout-gt-sm="row">
         <md-card flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">

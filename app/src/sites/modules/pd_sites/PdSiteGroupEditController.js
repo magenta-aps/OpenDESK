@@ -47,7 +47,7 @@ angular
                             .textContent('Den eksterne bruger, ' + firstName + " " + lastName + ', er blevet oprettet.')
                             .hideDelay(3000)
                     );
-                    $scope.groups[groupName].push({firstName: firstName, lastName: lastName});
+                    $scope.groups[groupName].push({displayName: firstName + " " + lastName});
                 },
                 function (err) {
                     $mdToast.show(

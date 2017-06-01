@@ -1,10 +1,11 @@
 <md-dialog aria-label="Edit member role">
 
-    <form name="editRoleForm" ng-submit="vm.updateRoleOnSiteMember(vm.project.shortName, vm.currentDialogUser, vm.currentDialogRole);">
+    <form name="editRoleForm" ng-submit="vm.updateRoleOnSiteMember(vm.project.shortName, vm.currentDialogUser,
+    vm.currentDialogRole, vm.currentParentIndex, vm.currentIndex);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Redigér {{vm.currentDialogUser.fullName}}'s rolle </h2>
+                <h2>Redigér {{vm.currentDialogUser.displayName}}'s rolle </h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.cancel()">
                     <i class="material-icons" aria-label="Luk dialogboks">close</i>
@@ -17,7 +18,7 @@
                 <md-input-container>
                     <label>Rolle</label>
                     <md-select required ng-model="vm.currentDialogRole">
-                        <md-option ng-repeat="r in roles_translated" ng-value="r">{{ r }}</md-option>
+                        <md-option ng-repeat="r in roles" ng-value="r">{{ role_mapping[r] }}</md-option>
                     </md-select>
                     <div ng-messages="vm.editRoleForm.newMemberRole.$error">
                         <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>

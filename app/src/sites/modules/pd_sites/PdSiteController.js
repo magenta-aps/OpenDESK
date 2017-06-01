@@ -23,7 +23,6 @@ angular
         pd.doPDF = doPDF;
         pd.editPdSiteGroups = editPdSiteGroups;
 		pd.stateStr = "";
-		pd.visibilityStr = "";
 		pd.hasDescription = false;
 
         pd.groups = [   'PD_PROJECTOWNER', 'PD_PROJECTMANAGER', 'PD_PROJECTGROUP',
@@ -35,7 +34,6 @@ angular
                     function (response) {
                         pd.site = response;
 						pd.stateStr = pd.site.state === "ACTIVE" ? "Igang" : "Afsluttet";
-						pd.visibilityStr = pd.site.visibility === "PUBLIC" ? "Offentlig" : "Privat";
 						pd.hasDescription = pd.site.description.trim() === "" ? false : true;
                         getProjectMembers();
                     }
@@ -44,11 +42,9 @@ angular
         }
         loadSiteData();
         
-        function loadProjectMembers(projectShortname, memberType) {
+        function loadProjectMembers(groupShortName, memberType) {
             pd.projectMembers = [];
-            siteService.getGroupMembers(projectShortname, memberType).then (function (val){
-
-
+            groupService.getGroupMembers(groupShortName, memberType).then (function (val){
                 pd.projectMembers = val;
             });
         }
@@ -80,13 +76,12 @@ angular
             angular.forEach(pd.groups, function (groupName) {
                 var siteShortName = pd.site.shortName;
                 var groupShortName = pd_siteService.getPDGroupName(siteShortName, groupName);
-                promise = groupService.getGroupMembers(groupShortName).then(
+                promise = groupService.getGroupMembers(groupShortName, 'USER').then(
                     function (response) {
                         var groupFullName = pd_siteService.getPDGroupFullName(groupShortName);
-                        var members = response;
 
                         pd.site.groups[groupName] = {};
-                        pd.site.groups[groupName].members = members;
+                        pd.site.groups[groupName].members = response;
                         siteService.getMemberFromSite(siteShortName, groupFullName).then(
                             function (response) {
                                 pd.site.groups[groupName].permissions = response.role;

@@ -1,6 +1,6 @@
 
 <md-dialog aria-label="New member">
-    <form name="addMemberForm" ng-submit="vm.addMemberToSite(vm.project.shortName, newMemberName.userName, newMemberRole);">
+    <form name="addMemberForm" ng-submit="vm.addMemberToSite(vm.project.shortName, newMember, newMemberRole);">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -15,10 +15,10 @@
         <md-dialog-content class="md-padding">
             <div>
 
-                <md-autocomplete required md-input-name="addMemberAutocomplete" md-selected-item="newMemberName" md-search-text="searchMemText"
-                    md-items="user in vm.getAllUsers(searchMemText)" md-item-text="user.firstName + ' ' + user.lastName" md-floating-label="{{'MEMBER.WHO_TO_ADD' | translate}}">
+                <md-autocomplete required md-input-name="addMemberAutocomplete" md-selected-item="newMember" md-search-text="searchMemText"
+                    md-items="user in vm.getAllUsers(searchMemText)" md-item-text="user.displayName" md-floating-label="{{'MEMBER.WHO_TO_ADD' | translate}}">
                     <md-item-template>
-                        <span md-highlight-text="searchMemText">{{ user.firstName }} {{ user.lastName }}</span>
+                        <span md-highlight-text="searchMemText" md-highlight-flags="i">{{ user.displayName }}</span>
                     </md-item-template>
                     <div ng-messages="autocompleteForm.autocomplete.$error">
                         <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
@@ -28,7 +28,7 @@
                 <md-input-container>
                     <label>{{'MEMBER.ROLE' | translate}}</label>
                     <md-select required ng-model="newMemberRole">
-                        <md-option ng-repeat="r in roles_translated" ng-value="r">{{ r }}</md-option>
+                        <md-option ng-repeat="r in roles" ng-value="r">{{ role_mapping[r] }}</md-option>
                     </md-select>
                     <div ng-messages="vm.addMemberForm.newMemberRole.$error">
                         <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>

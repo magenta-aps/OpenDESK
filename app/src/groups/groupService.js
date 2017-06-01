@@ -1,6 +1,6 @@
 angular.module('openDeskApp.groups').factory('groupService', GroupService);
 
-function GroupService(ALFRESCO_URI, $http, $q, userService) {
+function GroupService(ALFRESCO_URI, $http, $q) {
     var GROUP_PROXY_URI = ALFRESCO_URI.serviceApiProxy + 'groups/';
     return {
         listAllSystemGroups: listAllSystemGroups,
@@ -15,7 +15,7 @@ function GroupService(ALFRESCO_URI, $http, $q, userService) {
         updateGroup: updateGroup,
         deleteGroup: deleteGroup,
         uploadGroupsCSVFile: uploadGroupsCSVFile,
-        getGroupInfo: getGroupInfo,
+        getGroupsAndMembers: getGroupsAndMembers,
         getSubGroups: getSubGroups
     };
 
@@ -62,11 +62,10 @@ function GroupService(ALFRESCO_URI, $http, $q, userService) {
         return $http.get(ALFRESCO_URI.serviceApiProxy + "groups?zone=APP.DEFAULT&maxItems=250&sortBy=displayName&shortNameFilter=" + term).then(successOrReject);
     }
 
-    function getGroupInfo (shortName, groupName) {
+    function getGroupsAndMembers (shortName) {
         return $http.post("/alfresco/service/groups", {
-            PARAM_METHOD : "getAllMembers",
-            PARAM_SITE_SHORT_NAME: shortName,
-            PARAM_GROUP_NAME: groupName
+            PARAM_METHOD : "getGroupsAndMembers",
+            PARAM_SITE_SHORT_NAME: shortName
         }).then(function(response) {
             return response.data;
         });
@@ -81,19 +80,14 @@ function GroupService(ALFRESCO_URI, $http, $q, userService) {
         return $http.get(GROUP_PROXY_URI + groupShortName).then(successOrReject);
     }
 
-    /**
-     * Lists all the direct children of a group given it's shortName
-     * @param groupShortName
-     * @returns [authorities]
-     */
-    function getGroupMembers(groupShortName) {
-        return $http.get(GROUP_PROXY_URI + groupShortName + '/children?maxItems=500').then(
-            function(response) {
-                return response.data.data;
-            }
-        );
+    function getGroupMembers (groupShortName) {
+        return $http.post("/alfresco/service/groups", {
+            PARAM_METHOD : "getGroupMembers",
+            PARAM_GROUP_NAME: groupShortName
+        }).then(function(response) {
+            return response.data;
+        });
     }
-
 
     // use this for groups that contain groups
 

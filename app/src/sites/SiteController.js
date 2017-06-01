@@ -4,9 +4,9 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, siteService, cmisService, $stateParams, documentPreviewService,
+function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
     alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, $translate,
-    searchService, $state, userService, groupService, preferenceService, sessionService, filterService, fileUtilsService) {
+    searchService, $state, userService, preferenceService, sessionService, filterService, fileUtilsService, groupService) {
 
 
     $scope.role_mapping = {};
@@ -31,7 +31,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
     $scope.contents = [];
     $scope.history = [];
-    $scope.members = [];
+    $scope.members = {};
+    $scope.members.list = [];
     $scope.roles = [];
     $scope.roles_translated = [];
 
@@ -66,7 +67,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
     vm.editSiteDialog = editSiteDialog;
     vm.goToLOEditPage = goToLOEditPage;
-    vm.updateSiteName = updateSiteName;
+    vm.updateSite = updateSite;
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
     vm.deleteFile = deleteFile;
 
@@ -86,8 +87,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             function (result) {
 
                 vm.project = result;
+                vm.project.visibilityStr = vm.project.visibility === "PUBLIC" ? "Offentlig" : "Privat";
                 vm.hasDescription = vm.project.description.trim() !== "";
-                vm.project.visibility = vm.project.visibility != 'PUBLIC';
 
                 siteService.setType(vm.project.type);
 
@@ -262,9 +263,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
             $scope.contents = response;
-            //$scope.object.contents = response;
             vm.addThumbnailUrl($scope.contents);
-            console.log('load contents');
             $scope.selectedTab = $state.current.data.selectedTab;
         });
 
@@ -524,33 +523,28 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     function createDocumentNotification(projekt, shortName, ref, fileName) {
-        var creatorFullName = vm.currentUser.firstName + " " + vm.currentUser.lastName;;
+
         var subject = "Nyt dokument i " + projekt;
-        var message = "Et nyt dokument \"" + fileName + "\" er blevet uploadet af " + creatorFullName;
+        var message = "Et nyt dokument \"" + fileName + "\" er blevet uploadet af " + vm.currentUser.displayName;
         var link = "#!/dokument/" + ref;
 
-        // Creating an empty initial promise that always resolves itself.
-        var promise = $q.all([]);
-
         // Iterating list of items.
-        angular.forEach($scope.members, function (member) {
-            if (member.authority.userName != vm.currentUser.userName) {
-                var preferenceFilter = "dk.magenta.sites.receiveNotifications";
-
-                promise = preferenceService.getPreferences(member.authority.userName, preferenceFilter).then(function (data) {
+        angular.forEach($scope.groups.list, function (group) {
+            angular.forEach(group[1], function (member) {
+                if (member.userName != vm.currentUser.userName) {
+                    var preferenceFilter = "dk.magenta.sites.receiveNotifications";
                     var receiveNotifications = "true";
-                    if (data[preferenceFilter] != null) {
-                        receiveNotifications = data[preferenceFilter];
-                    }
-                    if (receiveNotifications != null && receiveNotifications == "true") {
-                        console.log("Sending notification to : " + member.authority.userName);
-                        createNotification(member.authority.userName, subject, message, link, 'new-doc', shortName);
-                    }
-                });
-            }
-        });
-    }
 
+                    if (member.preferences[preferenceFilter] != null)
+                        receiveNotifications = member.preferences[preferenceFilter];
+
+                    if (receiveNotifications != null && receiveNotifications == "true") {
+                        createNotification(member.userName, subject, message, link, 'new-doc', shortName);
+                    }
+                }
+            })
+        })
+    }
 
     vm.createReviewNotification = function (documentNodeRef, userName, message, project) {
         var creator = vm.currentUser.userName;
@@ -564,13 +558,22 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
 
     function loadMembers() {
+        /*
         siteService.getSiteMembers(vm.project.shortName).then(function (val) {
-            $scope.members = val;
+            $scope.members.list = val;
+        });
+        */
+
+        $scope.groups = {};
+        $scope.groups.list = [];
+        groupService.getGroupsAndMembers(vm.project.shortName).then(function (val) {
+            $scope.groups.list = val;
         });
     }
 
-
     vm.newMember = function (event) {
+        $scope.newMember = null;
+        $scope.newMemberRole = null;
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/newMember.tmpl.html',
             parent: angular.element(document.body),
@@ -600,13 +603,12 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     function loadSiteRoles() {
         if (vm.project.type !== 'PD-Project') {
             siteService.getSiteRoles(vm.project.shortName).then(function (response) {
-                $scope.roles_translated = [];
                 for (var x in response.siteRoles) {
                     if ($scope.role_mapping[response.siteRoles[x]] !== undefined) {
                         $scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
+                        $scope.roles.push(response.siteRoles[x]);
                     }
                 }
-                //$scope.roles = response.siteRoles;
             });
         } else {
             $scope.roles_translated = [];
@@ -618,9 +620,11 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
     vm.currentDialogUser = '';
 
-    vm.updateMemberRoleDialog = function (event, currentUser, currentRole) {
-        vm.currentDialogUser = currentUser;
-        vm.currentDialogRole = currentRole;
+    vm.updateMemberRoleDialog = function (event, user, role, parentIndex, index) {
+        vm.currentDialogUser = user;
+        vm.currentDialogRole = role;
+        vm.currentParentIndex = parentIndex;
+        vm.currentIndex = index;
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
             parent: angular.element(document.body),
@@ -632,33 +636,26 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     };
 
 
-    vm.updateRoleOnSiteMember = function (siteName, user, role) {
-        // getTheValue
-        var role_int_value = translation_to_value(role);
-        var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
-
-        siteService.updateRoleOnSiteMember(siteName, user.userName, role_alfresco_value).then(function (val) {
-            loadMembers();
-        });
-        $mdDialog.hide();
-    };
-
-
-    vm.addMemberToSite = function (siteName, userName, role) {
-
-        // getTheValue
-        var role_int_value = translation_to_value(role);
-        var role_alfresco_value = $scope.role_mapping_reverse[role_int_value];
-
-        siteService.addMemberToSite(siteName, userName, role_alfresco_value).then(function (val) {
+    vm.addMemberToSite = function (siteName, user, role) {
+        var userName = user.userName;
+        siteService.addMemberToSite(siteName, userName, role).then(function (response) {
             createSiteNotification(userName, siteName);
-            loadMembers();
+            addMemberToGroup(user, role, $scope.groups.list);
+        });
+        $mdDialog.hide();
+    };
+
+    vm.updateRoleOnSiteMember = function (siteName, user, role, groupIndex) {
+        var userName = user.userName;
+        siteService.updateRoleOnSiteMember(siteName, userName, role).then(function (response) {
+            removeMemberFromGroup(user, $scope.groups.list[groupIndex][1]);
+            addMemberToGroup(user, role, $scope.groups.list);
         });
         $mdDialog.hide();
     };
 
 
-    vm.deleteMemberDialog = function (ev, siteName, userName) {
+    vm.deleteMemberDialog = function (ev, siteName, user, groupIndex) {
         var confirm = $mdDialog.confirm()
             .title('Slette dette medlem?')
             .textContent('')
@@ -669,26 +666,39 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
         $mdDialog.show(confirm).then(
             function () {
-                vm.removeMemberFromSite(siteName, userName);
+                vm.removeMemberFromGroup(siteName, user, groupIndex);
             },
             function () {
-                console.log('cancelled delete');
             }
         );
     };
 
 
-    vm.removeMemberFromSite = function (siteName, userName) {
-        siteService.removeMemberFromSite(siteName, userName).then(function (val) {
-            loadMembers();
+    vm.removeMemberFromGroup = function (siteName, user, groupIndex) {
+        var userName = user.userName;
+        siteService.removeMemberFromSite(siteName, userName).then(function (response) {
+            removeMemberFromGroup(user, $scope.groups.list[groupIndex][1]);
         });
-
         $mdDialog.hide();
     };
 
+    function removeMemberFromGroup (user, group) {
+        var memberIndex = group.indexOf(user);
+        group.splice(memberIndex, 1);
+    }
+
+    function addMemberToGroup (user, role, groups) {
+        for (var i = 0; i < groups.length; i++) {
+            if (groups[i][0].role == role) {
+                groups[i][1].push(user);
+                break;
+            }
+        }
+    }
+
 
     vm.getAllUsers = function (filter) {
-        return siteService.getAllUsers(filter);
+        return userService.getUsers(filter);
     };
 
 
@@ -879,7 +889,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
     function editSiteDialog(ev) {
         $mdDialog.show({
-            templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+            templateUrl: 'app/src/sites/view/updateSite.tmpl.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             scope: $scope, // use parent scope in template
@@ -889,12 +899,9 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
     }
 
 
-    function updateSiteName() {
-        console.log('jeg er ' + vm.project.visibility);
-        siteService.updateSiteName(vm.project.shortName, vm.project.title, vm.project.description,vm.project.visibility).then(
+    function updateSite() {
+        siteService.updateSite(vm.project.shortName, vm.project.title, vm.project.description, vm.project.visibility).then(
             function (result) {
-                console.log('kig her');
-                console.log(result);
                 vm.project.title = result.title;
                 vm.project.description = result.description;
                 vm.project.visibility = result.visibility;

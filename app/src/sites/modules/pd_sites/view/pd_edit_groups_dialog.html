@@ -29,8 +29,7 @@
 							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
 						</md-autocomplete>
 						<md-chip-template>
-                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span><br>
+							<span>{{ $chip.displayName }}</span>
 						</md-chip-template>
 					</md-chips>
 
@@ -78,10 +77,7 @@
 							<span md-highlight-text="srchstrgrptxt">{{ sgitem.firstName }} {{ sgitem.lastName }}</span>
 						</md-autocomplete>
 						<md-chip-template>
-							<span>
-                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
-							</span>
+							<span>{{ $chip.displayName }}</span>
 						</md-chip-template>
 					</md-chips>
 					<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
@@ -128,10 +124,7 @@
 							<span md-highlight-text="srchrbjdgrptxt">{{ agitem.firstName }} {{ agitem.lastName }}</span>
 						</md-autocomplete>
 						<md-chip-template>
-							<span>
-                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
-							</span>
+                            <span>{{ $chip.displayName }}</span>
 						</md-chip-template>
 					</md-chips>
 					<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
@@ -178,10 +171,7 @@
 							<span md-highlight-text="srchflggrptxt">{{ fgitem.firstName }} {{ fgitem.lastName }}</span>
 						</md-autocomplete>
 						<md-chip-template>
-							<span>
-                            <span ng-if="$chip.displayName">{{ $chip.displayName }}</span>
-							<span ng-if="$chip.firstName">{{ $chip.firstName }} {{ $chip.lastName }}</span>
-							</span>
+							<span>{{ $chip.displayName }}</span>
 						</md-chip-template>
 					</md-chips>
 					<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
