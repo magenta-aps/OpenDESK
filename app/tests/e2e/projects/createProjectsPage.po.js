@@ -1,28 +1,46 @@
 var globalHeaderMenu = require('../common/globalHeader.po.js');
-var oeUtils = require('../common/utils');
-var date = new Date();
-var projectName;
-var projectList;
+var projectName = '';
+var projectList = [];
 
 var CreateProjectPage = function () {
-    
+
     var public = {};
-    
-	public.getProjectList = function() {
-		projectList = element.all(by.repeater('project in vm.sites'));
-	    return projectList	
-	}
-    
-    public.getCreatedProject = function() {
-    	return projectName;
+
+    public.getProjectList = function () {
+        //projectList = element.all(by.repeater('project in vm.sites'));
+        element.all(by.repeater('project in vm.showall')).map(function (elm) {
+            return elm.element(by.css("a.od-filebrowser-link")).getAttribute("href");
+        }).then(function (links) {
+            for (var i = 0; i < links.length; i++) {
+                console.log(links[i]);
+                projectList.push(links[i]);
+            }
+
+            return projectList;
+        });
     }
 
-    public.createProject = function(name,isPrivate) {
+    public.getCreatedProject = function () {
+        return projectName;
+    }
+
+    public.getProjectPageTitle = function() {
+        return element(by.css('h1.od-title'));
+    }
+
+    public.getCreatedProjectUrl = function () {
+        return 'http://localhost:8000/#!/projekter/'+projectName+'/dokumenter';
+    }
+
+    public.openCreateProjectDialog = function() {
+        element(by.css('[ng-click="pdc.openPdSiteCreateDialog($event)"]')).click();
+    }
+
+    public.fillInputFields = function (name, isPrivate) {
         projectName = name;
         var private = isPrivate ? 'privat' : 'offentlig';
 
         var createProjectDialog = element(by.css('.pd-site-create-form'));
-    	var newProjectBtn = element(by.css('[ng-click="pdc.openPdSiteCreateDialog($event)"]'));
 
         var templateInput = element(by.model('newSite.template.name'));
         var firstTemplate = element(by.css('[value="no-template"]'));
@@ -30,17 +48,13 @@ var CreateProjectPage = function () {
 
         var projectOwnerInput = createProjectDialog.element(by.model(['$mdAutocompleteCtrl.scope.searchText']));
         var firstProjectOwner = element(by.css('.md-autocomplete-suggestions li'));
-        
+
         var descriptionInput = element(by.model('newSite.desc'));
         var centerInput = element(by.model('newSite.center_id'));
         var firstCenter = element(by.css('.md-active md-option'));
         var sbsysInput = element(by.model('newSite.sbsys'));
         var privateInput = element(by.model('newSite.isPrivate'));
-        var addProjectBtn = element(by.css('[aria-label="Opret projekt"]'));
 
-        newProjectBtn.click();
-        browser.driver.sleep(100);
-        
         templateInput.click();
         firstTemplate.click();
         projectNameInput.sendKeys(name);
@@ -55,40 +69,17 @@ var CreateProjectPage = function () {
 
         sbsysInput.sendKeys("123456");
 
-        if(isPrivate) {
+        if (isPrivate) {
             privateInput.click();
         }
-        browser.driver.sleep(1000);
-               
-        addProjectBtn.click();
-    }; 
+    }
 
-    public.createGroupRoom = function(name,isPrivate) {
-        projectName = name;
-        var private = isPrivate ? 'privat' : 'offentlig';
+    public.createProject = function() {
+        element(by.css('[aria-label="Opret projekt"]')).click();
+    };
 
-    	var newGroupRoomBtn = element(by.css('[ng-click="vm.newSite($event)"]'));
-    	var nameInput = element(by.model('newSiteName'));
-        var descriptionInput = element(by.model('newSiteDescription'));
-        var privateInput = element(by.model('newSiteIsPrivate'));
-        var addBtn = element(by.css('[aria-label="create group room"]'));
 
-        newGroupRoomBtn.click();
-        browser.driver.sleep(100);
-
-        nameInput.sendKeys(name+ " grupperum " + private);
-        descriptionInput.sendKeys("Jeg er en beskrivelse");
-
-        if(isPrivate) {
-            privateInput.click();
-        }
-        browser.driver.sleep(500);
-               
-        addBtn.click();
-        browser.driver.sleep(1000);
-    }; 
     return public;
 };
 
 module.exports = CreateProjectPage();
-// module.exports = CreateGroupRoom();

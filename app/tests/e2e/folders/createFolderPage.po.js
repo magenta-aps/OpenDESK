@@ -13,20 +13,21 @@ var CreateFolderPage = function () {
     
 	public.getFolderList = function() {
 		folderList = element.all(by.repeater('content in contents'));
-	    return folderList	
+	    return folderList;
 	}
     
     public.getCreatedFolder = function() {
     	return folderName;
     }
 
-    public.createFolder = function() {
-    	
+	public.openCreateFolderDialog = function() {
+		return element(by.css('[aria-label="Create folder"]')).click();
+	}
 
+    public.fillInputFields = function() {
     	var folderNameInput = element(by.model('newFolderName'));
     	var addFolderBtn = element(by.css('[aria-label="Tilføj"]'));
     	
-
     	newFolderBtn = element(by.css('[ng-click="vm.newFolderDialog($event)"]'));
     	
     	newFolderBtn.click();
@@ -39,11 +40,13 @@ var CreateFolderPage = function () {
 		browser.driver.navigate().refresh();
 
 		browser.driver.sleep(1000);
-
-
     }; 
-    
 
+	public.createFolder = function () {
+		return element(by.css('[aria-label="New folder"] button[type="submit"]')).click();
+
+	}
+    
     return public;
 };
 

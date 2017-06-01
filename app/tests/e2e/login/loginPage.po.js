@@ -20,15 +20,11 @@ var LoginPage = function () {
     };
 
     /**
-     * Lpgin as an arbitral user
+     * Login as an arbitral user
      * @param userName
      * @param password
      */
     public.loginAs = function (userName, password) {
-        console.log("userName");
-        console.log(userName);
-
-        //following PageObject pattern define the functions here.
         browser.get('http://localhost:8000').then(function (response) {
             //The fields
             var userNameInput = element(by.model('vm.credentials.username'));
@@ -44,7 +40,7 @@ var LoginPage = function () {
 
     public.logout = function () {
         globalHeaderMenu.getHeaderMenuItem().userMenuBtn.click();
-        element(by.xpath('//button[@id="logout"]')).click();
+        element(by.css('#logout')).click();
         browser.driver.sleep(2000);
     };
 

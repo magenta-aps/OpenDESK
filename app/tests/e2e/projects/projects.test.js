@@ -7,61 +7,38 @@ var deleteProjectPage = require('./deleteProjectPage.po.js');
 var constants = require('../common/constants');
 
 
-describe('openDESK search document', function() {
+describe('openDESK login', function() {
     it('should login', function() {
         loginPage.loginAsAdmin();
     });
 });
 
-describe('openDESK create project', function() {
-    it('should be able to create a new project', function() {
-        createProjectPage.createProject(constants.PROJECT_NAME_1,false);
-        
-        //the created project is represented in the project list
-        //expect(createProjectPage.getProjectList().getText()).toMatch(createProjectPage.getCreatedProject());
+describe('public projects', function() {
+    it('should be able to be created', function() {
+        createProjectPage.openCreateProjectDialog();
+        createProjectPage.fillInputFields(constants.PROJECT_NAME_1,false);
+        createProjectPage.createProject();
+        expect(createProjectPage.getProjectPageTitle().getInnerHtml()).toContain(constants.PROJECT_NAME_1);
     });
-});
 
-describe('openDESK delete project', function() {
-    it('should be able to delete a project', function() {
+    it('should be able to be deleted', function() {
         return browser.get("http://localhost:8000/#!/projekter").then (function(response) {
             deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
         });
-        //the created project is represented in the project list
-        //expect(createProjectPage.getProjectList().getText()).toMatch(createProjectPage.getCreatedProject());
     });
 });
 
+xdescribe('projects list',function () {
+    it('should be able to open a project', function() {
 
-// DE HER VIRKER, DE ER BARE KOMMENTERET UD FOR AT TESTE!!
-// describe('openDESK create group room', function() {
-//     it('should be able to create a new public group room', function() {
-//         createProjectPage.createGroupRoom(constants.PROJECT_NAME_2,false);
-//     });
-    
-//     it('should be able to create a new private group room', function() {
-//         return browser.get("http://localhost:8000/#!/projekter").then (function(response) {
-//             createProjectPage.createGroupRoom(constants.PROJECT_NAME_create_delete,true);
-//        });
-//     });
-// });
+    });
+});
 
-// describe('openDESK delete project', function() {
-//    browser.driver.sleep(5000);
-
-//    it('should be able to delete an existing project', function() {
-//        return browser.get("http://localhost:8000/#!/projekter").then (function(response) {
-//            deleteProjectPage.deleteProject(constants.PROJECT_NAME_create_delete);
-//         //    expect(deleteProjectPage.getProjectList().getText()).not.toMatch(constants.PROJECT_NAME_create_delete);
-//        });
-//    });
-
-//    browser.driver.sleep(5000);
-// });
-//SLUT JEG HAR IKKE HAFT NOGET AT GØRE MED DEM HERUNDER
-
-
-
+describe('openDESK logout', function() {
+    it('should logout', function() {
+        loginPage.logout();
+    });
+});
 
 
 

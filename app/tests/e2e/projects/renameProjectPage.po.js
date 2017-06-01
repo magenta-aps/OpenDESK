@@ -13,7 +13,7 @@ var RenameProjectPage = function () {
     
 	public.getProjectList = function() {
 		projectList = element.all(by.repeater('project in vm.sites'));
-	    return projectList	
+	    return projectList;
 	}
     
     public.getRenamedProject = function() {
