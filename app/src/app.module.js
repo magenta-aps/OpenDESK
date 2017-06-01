@@ -49,6 +49,7 @@ angular
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
 
         $transitions.onError({}, function (transition) {
+            sessionService.retainCurrentLocation();
             $state.go('login');
         });
 

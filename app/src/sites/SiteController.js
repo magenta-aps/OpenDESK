@@ -81,21 +81,15 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
 
         if($scope.templateDocuments != undefined)
             vm.addThumbnailUrl($scope.templateDocuments);
-    })
+    });
 
-    $scope.tabs = {};
-    $scope.tabs.selected = $state.current.data.selectedTab;
-  
     function loadSiteData() {
-        console.log('load site data');
-        console.log($state.current.data.selectedTab);
         siteService.loadSiteData($stateParams.projekt).then(
             function (result) {
 
                 vm.project = result;
-                vm.hasDescription = vm.project.description.trim() === "" ? false : true;
-
-                vm.project.visibility = vm.project.visibility == 'PUBLIC' ? false : true;
+                vm.hasDescription = vm.project.description.trim() !== "";
+                vm.project.visibility = vm.project.visibility != 'PUBLIC';
 
                 siteService.setType(vm.project.type);
 
@@ -115,7 +109,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
                     // The loading function for contents depend on the currentFolder variables having been read beforehand
                     vm.loadContents();
                 });
-
             }
         );
     }
@@ -282,6 +275,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             //$scope.object.contents = response;
             vm.addThumbnailUrl($scope.contents);
             console.log('load contents');
+            $scope.selectedTab = $state.current.data.selectedTab;
         });
 
     };

@@ -14,20 +14,6 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     vm.showForgotDialog = showForgotDialog;
     vm.updateValidator = updateValidator;
 
-    /*if ( !authService.isAuthenticated()) {
-     authService.login().then(function (response) {
-     if (response.status == 401) {
-     return;
-     }
-     if (response.userName) {
-     userService.getPerson(response.userName).then(function (response) {
-     vm.user = response;
-     restoreLocation();
-     });
-     }
-     });
-     }*/
-
     function login(credentials) {
         authService.login(credentials.username, credentials.password).then(function (response) {
             // Logged in
@@ -55,8 +41,7 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
         if (!retainedLocation || retainedLocation === undefined) {
             $state.go('projects');
         } else {
-            $state.go('projects');
-            //$window.location = retainedLocation;
+            $window.location = retainedLocation;
         }
     }
 

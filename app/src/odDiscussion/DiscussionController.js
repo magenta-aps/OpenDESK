@@ -41,7 +41,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         dc.getDiscussions($stateParams.projekt);
         getAllMembers($stateParams.projekt,'PD-Project');
 
-        $scope.tabs.selected = $state.current.data.selectedTab;
+        $scope.selectedTab = $state.current.data.selectedTab;
 
         if($stateParams.path) {
             discussionService.getDiscussionFromNodeRef($stateParams.projekt,$stateParams.path).then(function(response) {
