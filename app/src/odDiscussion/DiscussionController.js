@@ -249,12 +249,13 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
 
         dc.allMembers.forEach(function (username) {
             if (username != postItem.author.username) {
-                var nodeRef = postItem.nodeRef.split('/')[3];
+                var nodeRef = isToAll ? postItem.nodeRef : dc.selectedDiscussion.nodeRef;
+                nodeRef = nodeRef.split('/')[3];
+
                 var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt,nodeRef);
                 var anchor = '#' + postItem.name;
 
                 if(isToAll) {
-                    nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
                     preferenceFilter = "dk.magenta.sites.receiveNotifications";
                     anchor = '';
                 }
