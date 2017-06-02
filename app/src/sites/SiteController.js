@@ -272,9 +272,8 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             //$scope.object.contents = response;
             vm.addThumbnailUrl($scope.contents);
             console.log('load contents');
-            $scope.selectedTab = $state.current.data.selectedTab;
+            $scope.tab.selected = $state.current.data.selectedTab;
         });
-
     };
 
     vm.addThumbnailUrl = function (files) {

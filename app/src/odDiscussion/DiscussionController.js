@@ -2,8 +2,8 @@ angular
     .module('openDeskApp.discussion', ['ng.ckeditor'])
     .controller('DiscussionController', DiscussionController);
 
-function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location, discussionService, nodeRefUtilsService, 
-                            userService, sessionService, notificationsService, siteService, preferenceService) {
+function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location, 
+                                discussionService, nodeRefUtilsService, userService, sessionService, notificationsService, siteService, preferenceService) {
     var dc = this;
 
     dc.discussions = [];
@@ -13,7 +13,8 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
     dc.search = '';
     dc.user = '';
 
-    $scope.scrollTo = function(id) {
+    dc.scrollTo = function(id) {
+        console.log('scroll to ' + id);
       $location.hash(id);
       $anchorScroll();
    }
@@ -39,6 +40,12 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
             });
             
         });
+
+        $timeout(function() {
+            if($location.hash()) {
+                dc.scrollTo($location.hash());
+            }
+        });
     }
 
     function init() {
@@ -46,9 +53,12 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         dc.getDiscussions($stateParams.projekt);
         getAllMembers($stateParams.projekt,'PD-Project');
 
-        $scope.selectedTab = $state.current.data.selectedTab;
+        $scope.tab.selected = $state.current.data.selectedTab;
+
+        console.log('får jeg et id: ' + $location.hash());
 
         if($stateParams.path) {
+            console.log($stateParams.path);
             discussionService.getDiscussionFromNodeRef($stateParams.projekt,$stateParams.path).then(function(response) {
                 dc.selectedDiscussion = discussionService.getSelectedDiscussion();
                 dc.getReplies(dc.selectedDiscussion);
@@ -72,7 +82,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         discussionService.addReply(dc.selectedDiscussion,content).then(function(response) {
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,dc.selectedDiscussion);
-            dc.createNotification(response.item);
+            dc.createNotification(response.item,false);
             dc.getReplies(dc.selectedDiscussion);
             $mdDialog.cancel();
         })
@@ -93,7 +103,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         discussionService.addDiscussion($stateParams.projekt, title, content).then(function(response) {
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,response.item);
-            dc.newDiscussionNotification(response.item);
+            dc.createNotification(response.item,true);
             dc.getDiscussions($stateParams.projekt);
             $mdDialog.cancel();
         });
@@ -234,41 +244,19 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         });
     }
 
-    dc.newDiscussionNotification = function(postItem) {
-        console.log('creating notification...');
-
-        dc.allMembers.forEach(function (username) {
-            if (username != postItem.author.username) {
-                var nodeRef = postItem.nodeRef.split('/')[3];
-                var preferenceFilter = "dk.magenta.sites.receiveNotifications";
-
-                preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
-                    var receiveNotifications = "true";
-                    if (data[preferenceFilter] != null) {
-                        receiveNotifications = data[preferenceFilter];
-                    }
-                    console.log(receiveNotifications);
-                    if (receiveNotifications != null && receiveNotifications == "true") {
-                        console.log("Sending notification to : " + username);
-                        var subject = 'Ny samtale i [projekt navn]';
-                        var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny samtale med titlen ' + postItem.title;
-                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
-                        
-                        notificationsService.addNotice(username, subject, message, link, 'new-reply', $stateParams.projekt);
-                    }
-                });
-            }
-        });
-    }
-
-
-    dc.createNotification = function(postItem) {
+    dc.createNotification = function(postItem,isToAll) {
         console.log('creating notification...');
 
         dc.allMembers.forEach(function (username) {
             if (username != postItem.author.username) {
                 var nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
                 var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt,nodeRef);
+                var anchor = '#' + postItem.name;
+
+                if(isToAll) {
+                    preferenceFilter = "dk.magenta.sites.receiveNotifications";
+                    anchor = '';
+                }
 
                 preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
 
@@ -280,7 +268,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
                         console.log("Sending notification to : " + username);
                         var subject = 'Ny kommentar på en samtale du følger';
                         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
+                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef + anchor;
                         
                         notificationsService.addNotice(username, subject, message, link, 'new-reply', $stateParams.projekt);
                     }
