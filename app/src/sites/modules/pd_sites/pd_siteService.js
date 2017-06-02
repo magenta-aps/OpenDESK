@@ -9,7 +9,7 @@ angular
         var service = {
             createPDSite: createPDSite,
             addTemplate: addTemplate,
-            getAllManagers: getAllManagers,
+            getAllOwners: getAllOwners,
             getAllOrganizationalCenters: getAllOrganizationalCenters,
             updatePDSite: updatePDSite,
             getTemplateNames: getTemplateNames,
@@ -67,7 +67,7 @@ angular
         }
 
 
-        function getAllManagers() {
+        function getAllOwners() {
             return groupService.getGroupMembers("OPENDESK_ProjectOwners").then(
                 function (response) {
                     return response;

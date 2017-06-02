@@ -8,7 +8,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
     alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, $translate,
     searchService, $state, userService, preferenceService, sessionService, filterService, fileUtilsService, groupService) {
 
-
+/*
     $scope.role_mapping = {};
     $scope.role_mapping["SiteManager"] = "Projektleder";
     $scope.role_mapping["SiteCollaborator"] = "Kan skrive";
@@ -28,6 +28,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
     $scope.role_mapping_reverse["1"] = "SiteManager";
     $scope.role_mapping_reverse["2"] = "SiteCollaborator";
     $scope.role_mapping_reverse["3"] = "SiteConsumer";
+*/
 
     $scope.contents = [];
     $scope.history = [];
@@ -558,16 +559,15 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
 
 
     function loadMembers() {
-        /*
-        siteService.getSiteMembers(vm.project.shortName).then(function (val) {
-            $scope.members.list = val;
-        });
-        */
-
         $scope.groups = {};
         $scope.groups.list = [];
         groupService.getGroupsAndMembers(vm.project.shortName).then(function (val) {
+
             $scope.groups.list = val;
+            $scope.groups.list.forEach(function (group) {
+                    $scope.roles.push(group[0].shortName);
+            });
+
         });
     }
 
@@ -598,25 +598,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
         }
         $mdDialog.cancel();
     };
-
-
-    function loadSiteRoles() {
-        if (vm.project.type !== 'PD-Project') {
-            siteService.getSiteRoles(vm.project.shortName).then(function (response) {
-                for (var x in response.siteRoles) {
-                    if ($scope.role_mapping[response.siteRoles[x]] !== undefined) {
-                        $scope.roles_translated.push($scope.role_mapping[response.siteRoles[x]]);
-                        $scope.roles.push(response.siteRoles[x]);
-                    }
-                }
-            });
-        } else {
-            $scope.roles_translated = [];
-            $scope.roles_translated.push("Kan læse");
-            $scope.roles_translated.push("Kan skrive");
-        }
-    }
-
 
     vm.currentDialogUser = '';
 

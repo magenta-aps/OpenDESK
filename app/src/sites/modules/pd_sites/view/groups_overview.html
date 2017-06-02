@@ -57,130 +57,60 @@
 	<md-card-content>
 		<h3 class="od-title-icon od-primary"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
 
-		<div ng-if="vm.project.type != 'PD-Project'">
 			<md-list class="od-members">
 				<div ng-repeat="(groupIndex, group) in groups.list">
 					<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
-						<div flex="50" flex-gt-lg="60">
-							<a class="od-primary" ng-click="vm.openMemberInfo(member.userName)">{{ member.displayName }}</a>
-						</div>
-						<div flex="30" class="od-secondary">
-							{{ role_mapping[group[0].permission] }}
-						</div>
-						<div flex="10" flex-gt-lg="10" style="text-align: right;">
-							<md-menu ng-if="vm.isManager">
-								<md-button class="md-icon-button" ng-click="$mdMenu.open()">
-									<md-icon md-menu-origin>more_vert</md-icon>
-								</md-button>
 
-								<md-menu-content width="5">
-									<md-menu-item>
-										<md-button ng-click="vm.updateMemberRoleDialog($event, member, group[0].role, groupIndex)">
-											<md-icon md-menu-align-target>create</md-icon>
-											{{'MEMBER.EDIT_MEMBER' | translate }}
-										</md-button>
-									</md-menu-item>
-
-									<md-menu-item>
-										<md-button ng-click="vm.deleteMemberDialog($event, vm.project.shortName, member, groupIndex);">
-											<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-											{{'COMMON.REMOVE' | translate }}
-										</md-button>
-									</md-menu-item>
-								</md-menu-content>
-							</md-menu>
+						<div ng-if="group[0].collapsed" flex="100" flex-gt-lg="100">
+							<h4 ng-click="group[0].open = !group[0].open" class="pd-group-toggle" ng-class="group[0].open ? 'open' : 'closed'"
+								layout="row">
+								<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
+								<span flex></span>
+								<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+							</h4>
+							<ul ng-show="group[0].open">
+								<div class="pd-member" layout="row" ng-repeat="mem in group[1]">
+									<div flex="{{vm.canEdit ? 85 : 95}}">
+										<a class="od-primary" ng-click="vm.openMemberInfo(mem.userName, $event)">{{ mem.displayName }}</a>
+									</div>
+								</div>
+							</ul>
 						</div>
-						<md-divider></md-divider>
-					</div>
-				</md-list-item>
+
+						<div ng-if="!group[0].collapsed" class="md-no-style md-list-item-inner">
+							<div flex="50" flex-gt-lg="60">
+								<a class="od-primary" ng-click="vm.openMemberInfo(member.userName)">{{ member.displayName }}</a>
+							</div>
+							<div flex="30" class="od-secondary">
+								{{ role_mapping[group[0].permission] }}
+							</div>
+							<div flex="10" flex-gt-lg="10" style="text-align: right;">
+								<md-menu ng-if="vm.isManager">
+									<md-button class="md-icon-button" ng-click="$mdMenu.open()">
+										<md-icon md-menu-origin>more_vert</md-icon>
+									</md-button>
+
+									<md-menu-content width="5">
+										<md-menu-item>
+											<md-button ng-click="vm.updateMemberRoleDialog($event, member, group[0].shortName, groupIndex)">
+												<md-icon md-menu-align-target>create</md-icon>
+												{{'MEMBER.EDIT_MEMBER' | translate }}
+											</md-button>
+										</md-menu-item>
+
+										<md-menu-item>
+											<md-button ng-click="vm.deleteMemberDialog($event, vm.project.shortName, member, groupIndex);">
+												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+												{{'COMMON.REMOVE' | translate }}
+											</md-button>
+										</md-menu-item>
+									</md-menu-content>
+								</md-menu>
+							</div>
+						</div>
+					</md-list-item>
+				</div>
 			</md-list>
-		</div>
-
-		<div ng-if="vm.project.type === 'PD-Project'">
-			<div flex="100" flex-gt-lg="100">
-				<p>
-					<div class="od-secondary" style="font-weight: bold;">{{'PROJECT.PROJECTLEAD' | translate}}</div>
-					<div layout="row">
-						<div flex="85" class="pd-manager">
-							<a class="od-primary" ng-click="vm.openMemberInfo(pd.site.groups['PD_PROJECTMANAGER'].members[0].shortName)">
-						{{ pd.site.groups['PD_PROJECTMANAGER'].members[0].displayName }}
-						</a>
-						</div>
-					</div>
-				</p>
-				<p>
-					<div class="od-secondary" style="font-weight: bold;">{{'PROJECT.PROJECTOWNER' | translate}}</div>
-					<div layout="row">
-						<div flex="85" class="pd-owner">
-							<a class="od-primary" ng-click="vm.openMemberInfo(pd.site.groups['PD_PROJECTOWNER'].members[0].shortName)">
-							{{ pd.site.groups['PD_PROJECTOWNER'].members[0].displayName }}
-						</a>
-						</div>
-
-					</div>
-				</p>
-			</div>
-
-			<div flex="100" flex-gt-lg="100">
-				<h4 ng-click="pd.showProjGroupList = !pd.showProjGroupList" class="pd-group-toggle" ng-class="pd.showProjGroupList ? 'open' : 'closed'"
-				    layout="row">
-					<span>{{'PROJECT.GROUPS.PROJECT_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<ul ng-show="pd.showProjGroupList">
-					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_PROJECTGROUP'].members">
-						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a class="od-primary" ng-click="vm.openMemberInfo(mem.shortName, $event)">{{ mem.displayName }}</a>
-						</div>
-					</div>
-				</ul>
-
-				<h4 ng-click="pd.showSteerGroupList = !pd.showSteerGroupList" class="pd-group-toggle" ng-class="pd.showSteerGroupList ? 'open' : 'closed'"
-				    layout="row">
-					<span>{{'PROJECT.GROUPS.MANAGEMENT_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<ul ng-show="pd.showSteerGroupList">
-					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_STEERING_GROUP'].members">
-						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a class="od-primary" ng-click="vm.openMemberInfo(mem.shortName, $event)">{{ mem.displayName }}</a>
-						</div>
-					</div>
-				</ul>
-
-				<h4 ng-click="pd.showWorkGroupList = !pd.showWorkGroupList" class="pd-group-toggle" ng-class="pd.showWorkGroupList ? 'open' : 'closed'"
-				    layout="row">
-					<span>{{'PROJECT.GROUPS.WORK_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<ul ng-show="pd.showWorkGroupList">
-					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_WORKGROUP'].members">
-						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a class="od-primary" ng-click="vm.openMemberInfo(mem.shortName, $event)">{{ mem.displayName }}</a>
-						</div>
-					</div>
-				</ul>
-
-				<h4 ng-click="pd.showMonitorsList = !pd.showMonitorsList" class="pd-group-toggle" ng-class="pd.showMonitorsList ? 'open' : 'closed'"
-				    layout="row">
-					<span>{{'PROJECT.GROUPS.FOLLOW_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<ul ng-show="pd.showMonitorsList">
-					<div class="pd-member" layout="row" ng-repeat="mem in pd.site.groups['PD_MONITORS'].members">
-						<div flex="{{vm.canEdit ? 85 : 95}}">
-							<a class="od-primary" ng-click="vm.openMemberInfo(mem.shortName, $event)">
-							{{ mem.displayName }}
-							</a>
-						</div>
-					</div>
-				</ul>
-			</div>
-		</div>
 
 		<md-card-actions layout="row" layout-align="start center" class="btnAlign">
 			<md-button ng-if="vm.project.type == 'PD-Project'" class="md-primary md-icon-button" ng-style="vm.isManager ? 'margin-left: 30px;' : ''"

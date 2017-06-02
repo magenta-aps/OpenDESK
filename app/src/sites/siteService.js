@@ -128,11 +128,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data;
             });
         },
-        getSiteRoles: function (siteName) {
-            return $http.get('/api/sites/' + siteName + "/roles").then(function (response) {
-                return response.data;
-            });
-        },
         deleteSite: function (siteName) {
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "deleteSite",
@@ -334,6 +329,14 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "getSiteType",
                 PARAM_SITE_SHORT_NAME: shortName
+            }).then(function(response) {
+                return response.data;
+            });
+        },
+        getSiteGroups : function (siteType) {
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "getSiteGroups",
+                PARAM_SITE_TYPE: siteType
             }).then(function(response) {
                 return response.data;
             });

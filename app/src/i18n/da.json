@@ -920,10 +920,17 @@
     },
 
     "GROUPS": {
-      "PROJECT_GROUP": "Projektgruppe",
-      "MANAGEMENT_GROUP": "Styregruppe",
-      "WORK_GROUP": "Arbejdsgruppe",
-      "FOLLOW_GROUP": "Følgegruppe"
+      "SiteManager": "Projektleder",
+      "SiteCollaborator": "Redigere",
+      "SiteContributor": "Redigere begrænset",
+      "SiteConsumer": "Læse",
+
+      "PD_PROJECTMANAGER": "Projektleder",
+      "PD_PROJECTOWNER": "Projektejer",
+      "PD_PROJECTGROUP": "Projektgruppe",
+      "PD_STEERING_GROUP": "Styregruppe",
+      "PD_WORKGROUP": "Arbejdsgruppe",
+      "PD_MONITORS": "Følgegruppe"
     }
   },
   "NOTIFICATION": {

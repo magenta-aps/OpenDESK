@@ -18,7 +18,7 @@
                 <md-input-container>
                     <label>Rolle</label>
                     <md-select required ng-model="vm.currentDialogRole">
-                        <md-option ng-repeat="r in roles" ng-value="r">{{ role_mapping[r] }}</md-option>
+                        <md-option ng-repeat="r in roles" ng-value="r">{{'PROJECT.GROUPS.' + r | translate}}</md-option>
                     </md-select>
                     <div ng-messages="vm.editRoleForm.newMemberRole.$error">
                         <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
