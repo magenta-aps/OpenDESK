@@ -252,17 +252,12 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
                 var nodeRef = isToAll ? postItem.nodeRef : dc.selectedDiscussion.nodeRef;
                 nodeRef = nodeRef.split('/')[3];
 
-                var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt,nodeRef);
-                var anchor = '#' + postItem.name;
-
-                if(isToAll) {
-                    preferenceFilter = "dk.magenta.sites.receiveNotifications";
-                    anchor = '';
-                }
+                var preferenceFilter = isToAll ? "dk.magenta.sites.receiveNotifications" : discussionService.getSubscribePreferenceFilter($stateParams.projekt,nodeRef);
+                var anchor = isToAll ? '' : '#' + postItem.name;
 
                 preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
 
-                    var receiveNotifications = "false";
+                    var receiveNotifications = isToAll ? 'true' : "false";
                     if (data[preferenceFilter] != null) {
                         receiveNotifications = data[preferenceFilter];
                     }
