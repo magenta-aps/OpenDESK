@@ -2,7 +2,7 @@ angular
     .module('openDeskApp.discussion', ['ng.ckeditor'])
     .controller('DiscussionController', DiscussionController);
 
-function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $interval, discussionService, nodeRefUtilsService, 
+function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location, discussionService, nodeRefUtilsService, 
                             userService, sessionService, notificationsService, siteService, preferenceService) {
     var dc = this;
 
@@ -12,6 +12,11 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
     dc.allMembers = [];
     dc.search = '';
     dc.user = '';
+
+    $scope.scrollTo = function(id) {
+      $location.hash(id);
+      $anchorScroll();
+   }
 
     dc.getDiscussions = function(siteShortName) {
         discussionService.getDiscussions(siteShortName).then(function(response) {
@@ -88,8 +93,9 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         discussionService.addDiscussion($stateParams.projekt, title, content).then(function(response) {
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,response.item);
-            $mdDialog.cancel();
+            dc.newDiscussionNotification(response.item);
             dc.getDiscussions($stateParams.projekt);
+            $mdDialog.cancel();
         });
     },
 
@@ -145,6 +151,23 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
                 postItem: postItem
             },
             templateUrl: 'app/src/odDiscussion/view/editFirstPost.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    }
+
+    dc.editTitleDialog = function(postItem) {
+        $mdDialog.show({
+            controller: ['$scope', 'postItem', function ($scope, postItem) {
+                $scope.postItem = postItem;
+            }],
+            locals: {
+                postItem: postItem
+            },
+            templateUrl: 'app/src/odDiscussion/view/editTitle.tmpl.html',
             parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
@@ -211,6 +234,34 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
         });
     }
 
+    dc.newDiscussionNotification = function(postItem) {
+        console.log('creating notification...');
+
+        dc.allMembers.forEach(function (username) {
+            if (username != postItem.author.username) {
+                var nodeRef = postItem.nodeRef.split('/')[3];
+                var preferenceFilter = "dk.magenta.sites.receiveNotifications";
+
+                preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
+                    var receiveNotifications = "true";
+                    if (data[preferenceFilter] != null) {
+                        receiveNotifications = data[preferenceFilter];
+                    }
+                    console.log(receiveNotifications);
+                    if (receiveNotifications != null && receiveNotifications == "true") {
+                        console.log("Sending notification to : " + username);
+                        var subject = 'Ny samtale i [projekt navn]';
+                        var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny samtale med titlen ' + postItem.title;
+                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+                        
+                        notificationsService.addNotice(username, subject, message, link, 'new-reply', $stateParams.projekt);
+                    }
+                });
+            }
+        });
+    }
+
+
     dc.createNotification = function(postItem) {
         console.log('creating notification...');
 
@@ -229,7 +280,7 @@ function DiscussionController($scope, $log, $mdDialog, $state, $stateParams, $in
                         console.log("Sending notification to : " + username);
                         var subject = 'Ny kommentar på en samtale du følger';
                         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
                         
                         notificationsService.addNotice(username, subject, message, link, 'new-reply', $stateParams.projekt);
                     }

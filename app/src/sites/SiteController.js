@@ -182,10 +182,7 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, $location, sit
             title = $translate.instant('PROJECT.PROJECTS');
             link = '#!/projekter';
         }
-        var paths = [{
-                title: title,
-                link: link
-            },
+        var paths = [
             {
                 title: project_title,
                 link: '#!/projekter/' + vm.project.shortName + vm.documentTab
