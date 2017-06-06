@@ -25,6 +25,8 @@ describe('User Henrik', function() {
     it('should rename the project', function() {
         renameProjectPage.showDetails();
         renameProjectPage.openEditDialog();
+        renameProjectPage.editProjectName();
+        renameProjectPage.renameProject();
     });
 
     xit('should add a new member', function() {

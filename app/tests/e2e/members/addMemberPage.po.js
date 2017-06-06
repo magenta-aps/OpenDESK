@@ -14,13 +14,11 @@ var AddMemberPage = function () {
 
 
     public.openAddMemberDialog = function () {
-        var newMemberBtn = element(by.css('[aria-label="Tilføj gruppemedlemmer"]'));
-
-        newMemberBtn.click();
-
+        return element(by.css('[aria-label="Tilføj gruppemedlemmer"]')).click();
     }
 
     public.fillInputFields = function() {
+        
 
     }
 
