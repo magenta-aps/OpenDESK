@@ -927,8 +927,8 @@
     }
   },
   "NOTIFICATION": {
-    "NOTIFICATION": "Besked",
-    "NOTIFICATIONS": "Beskeder",
+    "NOTIFICATION": "Notifikation",
+    "NOTIFICATIONS": "Notifikationer",
 
     "LABEL": {
       "REVIEW_REQUEST": "Review forespørgsel",
@@ -941,6 +941,7 @@
     "NEW": "Ny samtale",
     "TITLE": "Overskrift",
     "LATEST_REPLY": "Seneste svar",
+    "CREATED_AT": "Oprettet",
     "REPLIES": "Svar",
     
     "SORT": {
