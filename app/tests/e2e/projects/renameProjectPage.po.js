@@ -20,6 +20,17 @@ var RenameProjectPage = function () {
     	return projectRenamed;
     }
 
+	public.showDetails = function() {
+		element(by.css('#details')).click();
+	}
+
+	public.openEditDialog = function() {
+		return element(by.css('[aria-label="Redigér site"]')).click();
+
+	}
+
+
+
     public.renameProject = function() {
 
 			'use strict';

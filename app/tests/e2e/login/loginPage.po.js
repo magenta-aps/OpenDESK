@@ -25,7 +25,7 @@ var LoginPage = function () {
      * @param password
      */
     public.loginAs = function (userName, password) {
-        browser.get('http://localhost:8000').then(function (response) {
+        browser.get('http://localhost:8000/#!/projekter').then(function (response) {
             //The fields
             var userNameInput = element(by.model('vm.credentials.username'));
             var passwordInput = element(by.model('vm.credentials.password'));
@@ -36,12 +36,6 @@ var LoginPage = function () {
             loginBtn.click();
             browser.driver.sleep(2000);
         });
-    };
-
-    public.logout = function () {
-        globalHeaderMenu.getHeaderMenuItem().userMenuBtn.click();
-        element(by.css('#logout')).click();
-        browser.driver.sleep(2000);
     };
 
     return public;

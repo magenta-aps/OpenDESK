@@ -1,5 +1,6 @@
 var globalHeader = require('../common/globalHeader.po.js');
 var loginPage = require('./loginPage.po.js');
+var logouPage = require('./logoutPage.po.js');
 
 describe('OpenDesk AuthController', function () {
 
@@ -11,7 +12,7 @@ describe('OpenDesk AuthController', function () {
     });
 
     it('should be able to logout', function () {
-        loginPage.logout();
+        logoutPage.logout();
         expect(browser.getCurrentUrl()).toContain('/#!/login');
     });
 });
