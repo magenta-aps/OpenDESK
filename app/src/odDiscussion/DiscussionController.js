@@ -13,12 +13,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     dc.search = '';
     dc.user = '';
 
-    dc.scrollTo = function(id) {
-        console.log('scroll to ' + id);
-      $location.hash(id);
-      $anchorScroll();
-   }
-
     dc.getDiscussions = function(siteShortName) {
         discussionService.getDiscussions(siteShortName).then(function(response) {
             response.items.forEach(function (item) {
@@ -31,20 +25,21 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     }
 
     dc.getReplies = function(postItem) {
-        console.log('get replies');
+        dc.replies = '';
         discussionService.getReplies(postItem).then(function(response) {
             dc.replies = response;
 
             dc.replies.forEach(function (reply) {
                 reply.author.avatarUrl = dc.getAvatarUrl(reply.author.avatarRef);
             });
-            
-        });
 
-        $timeout(function() {
+            $timeout(function() {
             if($location.hash()) {
-                dc.scrollTo($location.hash());
+                console.log('scroll til ' + $location.hash());
+                 $anchorScroll();
             }
+        });
+            
         });
     }
 
@@ -55,7 +50,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
 
         $scope.tab.selected = $state.current.data.selectedTab;
 
-        console.log('får jeg et id: ' + $location.hash());
+        console.log('init får jeg et id: ' + $location.hash());
 
         if($stateParams.path) {
             console.log($stateParams.path);
@@ -82,7 +77,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         discussionService.addReply(dc.selectedDiscussion,content).then(function(response) {
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,dc.selectedDiscussion);
-            dc.createNotification(response.item,false);
+            dc.createReplyNotification(response.item);
             dc.getReplies(dc.selectedDiscussion);
             $mdDialog.cancel();
         })
@@ -103,7 +98,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         discussionService.addDiscussion($stateParams.projekt, title, content).then(function(response) {
             console.log(response);
             discussionService.subscribeToDiscussion($stateParams.projekt,response.item);
-            dc.createNotification(response.item,true);
+            dc.createNewDiscussionNotification(response.item);
             dc.getDiscussions($stateParams.projekt);
             $mdDialog.cancel();
         });
@@ -198,7 +193,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         if(dc.search == 'all') {
             dc.searchSubscribed = undefined;
             dc.searchUser = undefined;
-            console.log('clear search');
         }
         if(dc.search == 'follow') {
             dc.searchUser = undefined;
@@ -224,11 +218,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     }
 
     dc.subscriptionIcon = function(value) {
-        if(value) {
-            return 'notifications_active';
-        } else {
-            return 'notifications_none';
-        }
+        return value ? 'notifications_active' : 'notifications_none';
     }
 
     dc.getAvatarUrl = function(avatarRef) {
@@ -244,20 +234,47 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         });
     }
 
-    dc.createNotification = function(postItem,isToAll) {
+    dc.createNewDiscussionNotification = function(postItem) {
         console.log('creating notification...');
 
         dc.allMembers.forEach(function (username) {
             if (username != postItem.author.username) {
-                var nodeRef = isToAll ? postItem.nodeRef : dc.selectedDiscussion.nodeRef;
-                nodeRef = nodeRef.split('/')[3];
+                var nodeRef = postItem.nodeRef.split('/')[3];
 
-                var preferenceFilter = isToAll ? "dk.magenta.sites.receiveNotifications" : discussionService.getSubscribePreferenceFilter($stateParams.projekt,nodeRef);
-                var anchor = isToAll ? '' : '#' + postItem.name;
+                var preferenceFilter = "dk.magenta.sites.receiveNotifications";
 
                 preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
 
-                    var receiveNotifications = isToAll ? 'true' : "false";
+                    var receiveNotifications = 'true';
+                    if (data[preferenceFilter] != null) {
+                        receiveNotifications = data[preferenceFilter];
+                    }
+                    if (receiveNotifications != null && receiveNotifications == "true") {
+                        console.log("Sending notification to : " + username);
+                        var subject = 'Ny samtale i et projekt';
+                        var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
+                        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+                        
+                        notificationsService.addNotice(username, subject, message, link, 'new-discussion', $stateParams.projekt);
+                    }
+                });
+            }
+        });
+    }
+
+    dc.createReplyNotification = function(postItem) {
+        console.log('creating notification...');
+
+        dc.allMembers.forEach(function (username) {
+            if (username != postItem.author.username) {
+                var nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
+
+                var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt,nodeRef);
+                var anchor = '#' + postItem.name;
+
+                preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
+
+                    var receiveNotifications = "false";
                     if (data[preferenceFilter] != null) {
                         receiveNotifications = data[preferenceFilter];
                     }
