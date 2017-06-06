@@ -7,7 +7,8 @@
                                          ng-show="content.contentType === 'cmis:document'" 
                                          ng-src="app/assets/images/filetypes/{{content.thumbNailURL}}"
                                          onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
-                                    </i> {{content.name}}
+                                    </i> 
+                                    <span class='content-name'>{{content.name}}</span>
     </a>
 </td>
 <td>

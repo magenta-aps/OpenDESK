@@ -22,9 +22,8 @@ describe('public projects', function() {
     });
 
     it('should be able to be deleted', function() {
-        return browser.get("http://localhost:8000/#!/projekter").then (function(response) {
-            deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
-        });
+        deleteProjectPage.backToProjects();
+        deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
     });
 });
 

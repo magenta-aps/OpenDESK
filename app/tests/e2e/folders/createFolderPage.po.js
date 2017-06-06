@@ -11,8 +11,8 @@ var CreateFolderPage = function () {
     console.log("create new folder");
     
 	public.getFolderList = function() {
-		folderList = element.all(by.repeater('content in contents'));
-	    return folderList;
+		folderList = element.all(by.css('td a.od-filebrowser-link span.content-name'));
+	    return folderList.getInnerHtml();
 	}
     
     public.getCreatedFolder = function() {
@@ -31,7 +31,6 @@ var CreateFolderPage = function () {
 
 	public.createFolder = function () {
 		return element(by.css('[aria-label="New folder"] button[type="submit"]')).click();
-
 	}
     
     return public;

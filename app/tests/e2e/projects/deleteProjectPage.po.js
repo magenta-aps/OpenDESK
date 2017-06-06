@@ -10,6 +10,11 @@ var DeleteProjectPage = function () {
 
     var public = {};
 
+    public.backToProjects = function() {
+        element(by.css(".od-back-btn")).click();
+        expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+    }
+
     public.getProjectList = function () {
         projectList = element.all(by.repeater('project in vm.sites'));
         return projectList;
@@ -20,7 +25,6 @@ var DeleteProjectPage = function () {
     }
 
     public.deleteProject = function (titleText) {
-        
         var projectRow = element(by.css('#' + titleText));
         var menuBtn = element(by.css('#' + titleText + ' md-menu button'));
         var deleteBtn = element(by.css('.md-active [aria-label="remove"]'));
