@@ -6,20 +6,6 @@ var CreateProjectPage = function () {
 
     var public = {};
 
-    public.getProjectList = function () {
-        //projectList = element.all(by.repeater('project in vm.sites'));
-        element.all(by.repeater('project in vm.showall')).map(function (elm) {
-            return elm.element(by.css("a.od-filebrowser-link")).getAttribute("href");
-        }).then(function (links) {
-            for (var i = 0; i < links.length; i++) {
-                console.log(links[i]);
-                projectList.push(links[i]);
-            }
-
-            return projectList;
-        });
-    }
-
     public.getCreatedProject = function () {
         return projectName;
     }

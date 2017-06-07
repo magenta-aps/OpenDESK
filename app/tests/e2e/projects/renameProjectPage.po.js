@@ -1,9 +1,4 @@
-var globalHeaderMenu = require('../common/globalHeader.po.js');
-var constants = require('../common/constants');
-var date = new Date();
-
 var projectList;
-var constants = require('../common/constants');
 
 var RenameProjectPage = function () {
     

@@ -21,6 +21,9 @@ constants.file_2 = {name : "github.odt", path : "app/src/testdata/github.odt", m
 constants.file_3 = {name : "github_toBeDeleted.odt", path : "app/src/testdata/github_toBeDeleted.odt", mimetype : "application/vnd.oasis.opendocument.text"};
 
 constants.folder_to_be_created_and_deleted = "sletmigigen";
+constants.folder_to_be_created_an_manipulated = 'Testmappe';
+
+constants.DISCUSSION_NAME = 'Et emne at diskutere';
 
 module.exports = constants;
 
