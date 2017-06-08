@@ -40,13 +40,13 @@
 <md-card-actions layout="row" layout-align="start center" class="btnAlign">
     <div layout="column">
         <md-menu>
-            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Upload dokumenter">
+            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}">
                 <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</md-tooltip>
                 <i class="material-icons">file_upload</i>
             </md-button>
             <md-menu-content>
                 <md-menu-item>
-                    <md-button ng-click="vm.uploadDocumentsDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
+                    <md-button ng-click="vm.uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
                 </md-menu-item>
                 <md-menu-item ng-if="vm.project.type != vm.strings.templateProject">
                     <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}} </md-button>
@@ -57,7 +57,7 @@
 
     <div layout="column">
         <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
-            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="Opret dokument">
+            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary z-index-0" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
                 <i class="material-icons">note_add</i>
                 <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
             </md-button>

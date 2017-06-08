@@ -16,6 +16,9 @@ var deleteMemberPage = require('../members/deleteMemberPage.po.js');
 var createFolderPage = require('../folders/createFolderPage.po.js');
 var createProjectlinkPage = require('../projectlinks/createProjectlinkPage.po.js');
 
+var uploadDocumentPage = require('../documents/uploadDocumentPage.po.js');
+var deleteDocumentPage = require('../documents/deleteDocumentPage.po.js');
+var renameDocumentPage = require('../documents/renameDocumentPage.po.js');
 
 var createDiscussionPage = require('../discussions/createDiscussionPage.po.js');
 var createReplyPage = require('../discussions/createReplyPage.po.js');
@@ -104,7 +107,7 @@ describe('User Henrik', function () {
     xit('should delete the project', function () {
         deleteProjectPage.backToProjects();
         deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
-        browser.driver.sleep(2000);
+        browser.driver.sleep(1000);
         expect(deleteProjectPage.getProjectList()).not.toContain(constants.PROJECT_NAME_RENAME_NEW_NAME);
     });
 
@@ -128,18 +131,47 @@ describe('User Henrik', function () {
             browser.driver.sleep(1000);
         });
 
-        it('should add a new member', function () {
-            addMemberPage.openAddMemberDialog();
-            addMemberPage.fillInputFields();
-            addMemberPage.addMember();
-            expect(addMemberPage.getProjectMembers()).toContain('Bruce Lee');
+        describe('should work with documents', function () {
+            it('should upload a new document', function () {
+                uploadDocumentPage.openUploadDocumentDialog();
+                uploadDocumentPage.fillInputFields();
+                uploadDocumentPage.uploadDocument();
+                browser.driver.sleep(1000);
+                expect(uploadDocumentPage.getDocumentList()).toContain(uploadDocumentPage.getDocumentName());
+            });
+
+            it('should rename the document', function () {
+                renameDocumentPage.renameDocument(constants.file_renamed);
+                expect(renameDocumentPage.getDocumentList()).toContain(constants.file_renamed);
+            });
+
+            it('should open the document', function () {
+
+            });
+
+            it('should delete the document', function () {
+                browser.driver.sleep('1000');
+                expect(deleteDocumentPage.getDocumentList()).toContain(constants.file_renamed);
+                deleteDocumentPage.deleteDocument();
+                expect(deleteDocumentPage.getDocumentList()).not.toContain(constants.file_renamed);
+
+            });
         });
 
-        it('should delete a member', function() {
-            deleteMemberPage.openDeleteMemberDialog();
-            deleteMemberPage.deleteChip();
-            deleteMemberPage.deleteMember();
-            expect(deleteMemberPage.getProjectMembers()).not.toContain('Bruce Lee');
+        xdescribe('should add a member', function () {
+            it('should add a new member', function () {
+                addMemberPage.openAddMemberDialog();
+                addMemberPage.fillInputFields();
+                addMemberPage.addMember();
+                expect(addMemberPage.getProjectMembers()).toContain(constants.added_member);
+            });
+
+            it('should delete a member', function () {
+                deleteMemberPage.openDeleteMemberDialog();
+                deleteMemberPage.deleteChip();
+                deleteMemberPage.deleteMember();
+                expect(deleteMemberPage.getProjectMembers()).not.toContain(constants.added_member);
+            });
         });
     });
 

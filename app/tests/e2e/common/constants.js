@@ -19,6 +19,8 @@ constants.role_for_update_member = "SiteManager"
 constants.file_1 = {name : "android.pdf", path : "app/src/testdata/android.pdf", mimetype : "application/pdf"};
 constants.file_2 = {name : "github.odt", path : "app/src/testdata/github.odt", mimetype : "application/vnd.oasis.opendocument.text"};
 constants.file_3 = {name : "github_toBeDeleted.odt", path : "app/src/testdata/github_toBeDeleted.odt", mimetype : "application/vnd.oasis.opendocument.text"};
+constants.file_uploaded = 'Medlemsoversigt.pdf';
+constants.file_renamed = 'Medlemsoversigt redigeret';
 
 constants.folder_to_be_created_and_deleted = "sletmigigen";
 constants.folder_to_be_created_an_manipulated = 'Testmappe';
@@ -26,6 +28,8 @@ constants.folder_to_be_created_an_manipulated = 'Testmappe';
 constants.DISCUSSION_NAME = 'Et emne at diskutere';
 constants.DISCUSSION_CONTENT = 'Jeg synes vi skal diskutere dette, hvad siger i?';
 constants.REPLY_CONTENT = 'Dette er svaret på tråden';
+
+constants.added_member = 'Bruce Lee';
 
 module.exports = constants;
 
