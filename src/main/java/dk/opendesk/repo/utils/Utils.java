@@ -12,16 +12,14 @@ import java.util.stream.Collectors;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.action.evaluator.HasTagEvaluator;
 import org.alfresco.repo.action.executer.MailActionExecuter;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.repo.search.SearcherException;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionService;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.i18n.MessageLookup;
+import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
@@ -37,11 +35,9 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.I18NUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,13 +48,58 @@ import javax.xml.transform.stream.StreamResult;
 import static org.alfresco.model.ContentModel.*;
 import static org.alfresco.service.namespace.NamespaceService.CONTENT_MODEL_1_0_URI;
 
-
-/**
- * Created by syastrov on 8/26/14.
- */
 public class Utils {
 
-    private static final String ROLE_NAME_MESSAGE_PREFIX = "role.";
+    /*
+        Setup permissions
+        Consumer - can read content
+        Contributor - can create and upload content
+        Editor - can read and update content
+        Collaborator - can do everything except moving and deleting other users content
+        Coordinator - full access
+    */
+
+    public static final Map<String, JSONArray> siteGroups = Collections.unmodifiableMap(
+            new HashMap<String, JSONArray>() {
+                {
+                    put(OpenDeskModel.project, createSiteGroups(OpenDeskModel.project));
+                    put(OpenDeskModel.pd_project, createSiteGroups(OpenDeskModel.pd_project));
+                }});
+
+    private static JSONArray createSiteGroups(String siteType) {
+        JSONArray result = new JSONArray();
+
+        switch (siteType) {
+            case OpenDeskModel.pd_project:
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_PROJECTOWNER, OpenDeskModel.SITE_COLLABORATOR, false, false));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_PROJECTMANAGER, OpenDeskModel.SITE_MANAGER, false, false));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_PROJECTGROUP, OpenDeskModel.SITE_COLLABORATOR, true, true));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_WORKGROUP, OpenDeskModel.SITE_COLLABORATOR, true, true));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_MONITORS, OpenDeskModel.SITE_CONSUMER, true, true));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_STEERING_GROUP, OpenDeskModel.SITE_CONSUMER, true, true));
+                break;
+            case OpenDeskModel.project:
+                result.add(createSiteGroup(OpenDeskModel.SITE_MANAGER, null, false, true));
+                result.add(createSiteGroup(OpenDeskModel.SITE_COLLABORATOR, null, false, true));
+                result.add(createSiteGroup(OpenDeskModel.SITE_CONTRIBUTOR, null, false, true));
+                result.add(createSiteGroup(OpenDeskModel.SITE_CONSUMER, null, false, true));
+                break;
+        }
+        return result;
+    }
+
+    private static JSONObject createSiteGroup(String shortName, String authority, Boolean collapsed, Boolean multipleMembers){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("shortName", shortName);
+            json.put("authority", authority);
+            json.put("collapsed", collapsed);
+            json.put("multipleMembers", multipleMembers);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 
     private static Map<String, String> PD_GROUPS = new HashMap<>();
 
@@ -132,7 +173,7 @@ public class Utils {
 
     public static JSONArray getJSONError (Exception e) {
         Map<String, Serializable> map = new HashMap<>();
-        map.put("error", e.toString());
+        map.put("error", e.getStackTrace()[0].toString());
         return getJSONReturnArray(map);
     }
 
@@ -155,6 +196,17 @@ public class Utils {
         return result;
     }
 
+    public static JSONObject getJSONReturnObject(Map<String, Serializable> map) {
+        JSONObject result = new JSONObject();
+        try {
+            for (Map.Entry<String, Serializable> pair : map.entrySet())
+                result.put(pair.getKey(), pair.getValue().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static void writeJSONArray (Writer writer, JSONArray result) {
         try {
             result.writeJSONString(writer);
@@ -163,16 +215,20 @@ public class Utils {
         }
     }
 
-    public static String getGroupUserRole (AuthorityService authorityService, Set<AccessPermission> permissions, String group) {
+    public static String getGroupPermission (AuthorityService authorityService, Set<AccessPermission> permissions,
+                                             String group) {
 
         for (AccessPermission a : permissions) {
-            if(a.getAuthority().equals(PermissionService.ALL_AUTHORITIES))
-                continue;
-
-            Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.GROUP, a.getAuthority(), true);
-            if (authorities.contains(group)) {
+            String authority = a.getAuthority();
+            if(group.equals(authority))
                 return a.getPermission();
-            }
+        }
+
+        // If the group is a sub group of standard alfresco groups then we need to fetch the parent group to get permissions
+        Set<String> parentGroups = authorityService.getContainingAuthorities(AuthorityType.GROUP, group, true);
+        if(parentGroups.size() > 0) {
+            String parentGroup = parentGroups.iterator().next();
+            return getGroupPermission(authorityService, permissions, parentGroup);
         }
         return null;
     }
@@ -460,5 +516,69 @@ public class Utils {
             return name + "(" + currentHighest + ")." + ext;
         }
         return nodeName;
+    }
+
+    public static JSONObject convertUserToJSON (NodeService nodeService, PreferenceService preferenceService,
+                                                NodeRef person) throws JSONException {
+        JSONObject json = new JSONObject();
+
+        String userName = (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
+        json.put("userName", userName);
+
+        String firstName = (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME);
+        json.put("firstName", firstName);
+
+        String lastName = (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
+        json.put("lastName", lastName);
+
+        String displayName = (firstName + " " + lastName).trim();
+        json.put("displayName", displayName);
+
+        String email = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
+        json.put("email", email);
+
+        String telephone = (String) nodeService.getProperty(person, ContentModel.PROP_TELEPHONE);
+        json.put("telephone", telephone);
+
+        String mobile = (String) nodeService.getProperty(person, ContentModel.PROP_MOBILE);
+        json.put("mobile", mobile);
+
+        String jobTitle = (String) nodeService.getProperty(person, ContentModel.PROP_JOBTITLE);
+        json.put("jobTitle", jobTitle);
+
+        String organization = (String) nodeService.getProperty(person, ContentModel.PROP_ORGANIZATION);
+        json.put("organization", organization);
+
+        List<AssociationRef> assocRefs = nodeService.getTargetAssocs(person,ContentModel.ASSOC_AVATAR);
+        if(assocRefs.size() > 0) {
+            NodeRef avatarNodeRef = assocRefs.get(0).getTargetRef();
+            String avatar = "api/node/workspace/SpacesStore/" + avatarNodeRef.getId() + "/content";
+            json.put("avatar", avatar);
+        }
+
+        Map<String, Serializable> preferences = getPreferences(preferenceService, userName, "");
+        json.put("preferences", Utils.getJSONReturnObject(preferences));
+
+        return json;
+    }
+
+    public static Map<String, Serializable> getPreferences(PreferenceService preferenceService, String userName, String filter) {
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
+            return preferenceService.getPreferences(userName, filter);
+        }
+        finally {
+            AuthenticationUtil.popAuthentication();
+        }
+    }
+
+    public static String getSiteType(NodeService nodeService, NodeRef nodeRef) {
+        String type = OpenDeskModel.project;
+        if (nodeService.hasAspect(nodeRef, OpenDeskModel.ASPECT_PD)) {
+            type = OpenDeskModel.pd_project;
+        }
+        return type;
     }
 }

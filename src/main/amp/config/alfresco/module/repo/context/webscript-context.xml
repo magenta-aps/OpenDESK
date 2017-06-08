@@ -36,9 +36,9 @@
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
-		<property name="permissionService" ref="PermissionService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="siteService" ref="SiteService"/>
+		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
     <bean id="webscript.preferences.get"
@@ -109,12 +109,14 @@
 		<property name="permissionService" ref="PermissionService"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="searchService" ref="SearchService"/>
+		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
 	<bean id="webscript.users.post"
 		  class="dk.opendesk.webscripts.users.Users"
 		  parent="webscript">
 		<property name="personService" ref="PersonService"/>
+		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="mutableAuthenticationService" ref="authenticationService"/>
 		<property name="actionService" ref="ActionService"/>
@@ -123,6 +125,7 @@
 		<property name="messageService" ref="messageService"/>
 		<property name="properties"> <ref bean="global-properties"/> </property>
 		<property name="serviceRegistry"> <ref bean="ServiceRegistry"/> </property>
+		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
 	<bean id="webscript.cleanupandpurge.get"

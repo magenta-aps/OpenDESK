@@ -3,6 +3,9 @@ package dk.opendesk.webscripts;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.preference.PreferenceService;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.*;
@@ -23,50 +26,27 @@ public class Groups extends AbstractWebScript {
 
     final Logger logger = LoggerFactory.getLogger(Groups.class);
 
+    private SiteService siteService;
+    private NodeService nodeService;
+    private AuthorityService authorityService;
+    private PersonService personService;
+    private PreferenceService preferenceService;
+
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
-
-    private SiteService siteService;
-
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
-    private NodeService nodeService;
-
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
-
-    private AuthorityService authorityService;
-
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
-
-    private PersonService personService;
-
-    public void setPermissionService(PermissionService permissionService) {
-        this.permissionService = permissionService;
+    public void setPreferenceService(PreferenceService preferenceService) {
+        this.preferenceService = preferenceService;
     }
-
-    private PermissionService permissionService;
-
-
-    // todo to be extended when the proper implementation of change permission for a single user is implemented
-    private String translatePermission(String permission) {
-        switch(permission.replaceFirst("Site", "")) {
-            case OpenDeskModel.COLLABORATOR:
-            case OpenDeskModel.MANAGER:
-            case OpenDeskModel.OWNER:
-                return OpenDeskModel.COLLABORATOR_DANISH;
-            case OpenDeskModel.CONSUMER:
-                return OpenDeskModel.CONSUMER_DANISH;
-        }
-        return null;
-    }
-
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
@@ -82,13 +62,18 @@ public class Groups extends AbstractWebScript {
             // Read all used parameters no matter what method is used.
             // Those parameters that are not sent are set to an empty string
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
+            String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
             String groupName = Utils.getJSONObject(json, "PARAM_GROUP_NAME");
-            String shortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
 
             if(method != null) {
                 switch (method) {
-                    case "getAllMembers":
-                        result = this.getAllMembers(shortName, groupName);
+
+                    case "getGroupsAndMembers":
+                        result = this.getGroupsAndMembers(siteShortName);
+                        break;
+
+                    case "getGroupMembers":
+                        result = getGroupMembers("GROUP_" + groupName);
                         break;
                 }
             }
@@ -100,46 +85,42 @@ public class Groups extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private JSONArray getAllMembers(String shortName, String groupName) throws JSONException {
+    private JSONArray getGroupsAndMembers(String siteShortName)
+            throws JSONException {
 
-        NodeRef siteNodeRef = siteService.getSite(shortName).getNodeRef();
+        NodeRef siteNodeRef = siteService.getSite(siteShortName).getNodeRef();
+        String siteType = OpenDeskModel.project;
+        if (nodeService.hasAspect(siteNodeRef, OpenDeskModel.ASPECT_PD))
+            siteType = OpenDeskModel.pd_project;
+
 
         JSONArray result = new JSONArray();
-        JSONArray members = new JSONArray();
-        JSONObject json = new JSONObject();
+        for (Object groupObject : Utils.siteGroups.get(siteType)) {
 
-        String group = Utils.getAuthorityName(shortName, groupName);
-        Boolean onlyDirectMembers = true;
-        if (groupName.isEmpty())
-            onlyDirectMembers = false;
+            JSONArray json = new JSONArray();
+            JSONObject groupJSON = (JSONObject) groupObject;
+            json.add(groupJSON);
 
-        Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, onlyDirectMembers);
-
-        Set<AccessPermission> permissions = permissionService.getAllSetPermissions(siteNodeRef);
-
-        String permission = Utils.getGroupUserRole(authorityService, permissions, group);
-        if (permission != null) {
-            json.put("permission", this.translatePermission(permission));
+            String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
+            JSONArray members = getGroupMembers(groupAuthorityName);
+            json.add(members);
             result.add(json);
         }
 
-        for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            String username = (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
-            String displayName = nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
-            String email = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
+        return result;
+    }
 
-            json = new JSONObject();
+    private JSONArray getGroupMembers(String group) throws JSONException {
 
-            json.put("username", username);
-            json.put("displayName", displayName);
-            json.put("email", email);
+        Set<String> users = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
 
+        JSONArray members = new JSONArray();
+        for (String userName : users) {
+            NodeRef user = personService.getPerson(userName);
+            JSONObject json = Utils.convertUserToJSON(nodeService, preferenceService, user);
             members.add(json);
         }
 
-        result.add(members);
-
-        return result;
+        return members;
     }
 }

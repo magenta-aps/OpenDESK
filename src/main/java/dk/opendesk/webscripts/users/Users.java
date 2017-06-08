@@ -17,16 +17,23 @@ limitations under the License.
 package dk.opendesk.webscripts.users;
 
 import dk.opendesk.repo.utils.Utils;
+import org.alfresco.model.ContentModel;
+import org.alfresco.query.PagingRequest;
+import org.alfresco.query.PagingResults;
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.template.TemplateNode;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.ActionService;
+import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.security.PersonService.PersonInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
@@ -37,55 +44,53 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class Users extends AbstractWebScript {
 
     private PersonService personService;
+    private NodeService nodeService;
+    private AuthorityService authorityService;
+    private MutableAuthenticationService mutableAuthenticationService;
+    private ActionService actionService;
+    private SearchService searchService;
+    private MessageService messageService;
+    private SiteService siteService;
+    private Properties properties;
+    private ServiceRegistry serviceRegistry;
+    private PreferenceService preferenceService;
+
+
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
-
-    private AuthorityService authorityService;
+    public void setNodeService(NodeService nodeService) { this.nodeService = nodeService; }
     public void setAuthorityService (AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
-
-    private MutableAuthenticationService mutableAuthenticationService;
     public void setMutableAuthenticationService(MutableAuthenticationService mutableAuthenticationService) {
         this.mutableAuthenticationService = mutableAuthenticationService;
     }
-
-    private ActionService actionService;
     public void setActionService (ActionService actionService) {
         this.actionService = actionService;
     }
-
-    private SearchService searchService;
     public void setSearchService (SearchService searchService) {
         this.searchService = searchService;
     }
-
-    private MessageService messageService;
     public void setMessageService (MessageService messageService) {
         this.messageService = messageService;
     }
-
-    private SiteService siteService;
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
-
-    private Properties properties;
     public void setProperties (Properties properties) {
         this.properties = properties;
     }
-
-    private ServiceRegistry serviceRegistry;
     public void setServiceRegistry (ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+    }
+    public void setPreferenceService(PreferenceService preferenceService) {
+        this.preferenceService = preferenceService;
     }
 
     @Override
@@ -105,11 +110,17 @@ public class Users extends AbstractWebScript {
             String email = Utils.getJSONObject(json, "PARAM_EMAIL");
             String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
             String groupName = Utils.getJSONObject(json, "PARAM_GROUP_NAME");
+            String filter = Utils.getJSONObject(json, "PARAM_FILTER");
 
             if(method != null) {
                 switch (method) {
+
                     case "createExternalUser":
-                        result = this.createExternalUser(firstName, lastName, email, siteShortName, groupName);
+                        result = createExternalUser(firstName, lastName, email, siteShortName, groupName);
+                        break;
+
+                    case "getUsers":
+                        result = getUsers(filter);
                         break;
                 }
             }
@@ -167,6 +178,24 @@ public class Users extends AbstractWebScript {
             AuthenticationUtil.popAuthentication();
         }
         return Utils.getJSONReturnPair("userName", userName);
+    }
+
+    private JSONArray getUsers(String filter) throws Exception {
+
+        List<QName> filterProps = new ArrayList<>();
+        filterProps.add(ContentModel.PROP_FIRSTNAME);
+        filterProps.add(ContentModel.PROP_LASTNAME);
+
+        List<Pair<QName,Boolean>> sortProps = new ArrayList<>();
+        sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
+
+        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(100000));
+        JSONArray result = new JSONArray();
+        for (PersonInfo user : users.getPage()) {
+            JSONObject json = Utils.convertUserToJSON(nodeService, preferenceService, user.getNodeRef());
+            result.add(json);
+        }
+        return result;
     }
 }
 

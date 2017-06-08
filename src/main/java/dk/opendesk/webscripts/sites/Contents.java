@@ -88,6 +88,15 @@ public class Contents extends AbstractWebScript {
 
         JSONArray result = new JSONArray();
 
+        List<String> contentTypes = new ArrayList<>();
+        contentTypes.add("cmis:document");
+        contentTypes.add("cmis:folder");
+        contentTypes.add("cmis:link");
+
+        Map<String, JSONArray> contentTypeMap = new HashMap();
+        for (String contentType : contentTypes)
+            contentTypeMap.put(contentType, new JSONArray());
+
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(parentNodeRef);
 
         for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
@@ -161,9 +170,14 @@ public class Contents extends AbstractWebScript {
                         json.put("name", linkSiteDisplayName);
                     }
                 }
-                result.add(json);
+
+                contentTypeMap.get(type).add(json);
             }
         }
+
+        for (String contentType : contentTypes)
+            result.add(contentTypeMap.get(contentType));
+
         return result;
     }
 }

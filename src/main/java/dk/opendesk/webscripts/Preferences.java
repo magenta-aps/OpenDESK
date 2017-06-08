@@ -25,29 +25,22 @@ public class Preferences extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-        JSONArray result = new JSONArray();
-        AuthenticationUtil.pushAuthentication();
+        JSONArray result;
         try {
-            AuthenticationUtil.setRunAsUserSystem();
-            // ...code to be run as Admin...
-
             Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
             String username = params.get("username");
             String pf = params.get("pf");
-
-            Map<String, Serializable> preferences = preferenceService.getPreferences(username, pf);
-
+            Map<String, Serializable> preferences = Utils.getPreferences(preferenceService, username, pf);
             result = Utils.getJSONReturnArray(preferences);
 
         } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);
             webScriptResponse.setStatus(400);
-        } finally {
-            AuthenticationUtil.popAuthentication();
         }
 
         result.writeJSONString(webScriptResponse.getWriter());
+
     }
 }

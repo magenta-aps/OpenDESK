@@ -7,15 +7,14 @@ import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface OpenDeskModel {
 
-    //SPECIAL SITES
+    // Sites
+    public static String SITE = "Site";
 
+    // SPECIAL SITES
     public static String DOC_TEMPLATE = "Dokumentskabeloner";
 
     // Containers
@@ -27,10 +26,6 @@ public interface OpenDeskModel {
 
     public static String OD_URI = "http://www.magenta-aps.dk/model/content/1.0";
     public static String OD_PREFIX = "od";
-
-    // Tilladelser
-    public static String COLLABORATOR_DANISH = "Kan skrive";
-    public static String CONSUMER_DANISH = "Kan læse";
 
     // Roller
     public static String COLLABORATOR = "Collaborator";
@@ -51,6 +46,12 @@ public interface OpenDeskModel {
     public static String PD_GROUP_WORKGROUP = "PD_WORKGROUP"; // (arbejdsgruppe)
     public static String PD_GROUP_MONITORS = "PD_MONITORS"; // følgegruppe
     public static String PD_GROUP_STEERING_GROUP = "PD_STEERING_GROUP"; // styregruppe
+
+    //Default site groups
+    public static String SITE_MANAGER = SITE + MANAGER;
+    public static String SITE_COLLABORATOR = SITE + COLLABORATOR;
+    public static String SITE_CONTRIBUTOR = SITE + CONTRIBUTOR;
+    public static String SITE_CONSUMER = SITE + CONSUMER;
 
     /**
      * project states

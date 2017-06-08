@@ -246,53 +246,31 @@ public class ProjectDepartment extends AbstractWebScript {
         authorityService.addAuthority(group, userName);
     }
 
-    private void createGroupAddMembers(NodeRef nodeRef, String owner, String site_manager, String creator) {
+    private void createGroupAddMembers(NodeRef nodeRef, String owner, String manager, String creator) throws JSONException {
 
         String siteShortName = siteService.getSiteShortName(nodeRef);
-        String prefix = "site_" + siteShortName + "_";
-        String projectowner = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTOWNER);
-        String projectmanager = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTMANAGER);
-        String monitors = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_MONITORS);
-        String projectgroup = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_PROJECTGROUP);
-        String workgroup = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_WORKGROUP);
-        String steeringgroup = authorityService.createAuthority(AuthorityType.GROUP, prefix + OpenDeskModel.PD_GROUP_STEERING_GROUP);
+        String groupPrefix = "site_" + siteShortName + "_";
+        String authorityPrefix = "GROUP_" + groupPrefix;
 
-        /*
-            Setup permissions
-            Consumer - can read content
-            Contributor - can create and upload content
-            Editor - can read and update content
-            Collaborator - can do everything except moving and deleting other users content
-            Coordinator - full access
-         */
+        for (Object groupObject :  Utils.siteGroups.get(OpenDeskModel.pd_project)) {
 
-        Map<String, String> authorities = new HashMap<>();
-        authorities.put(OpenDeskModel.MANAGER, "");
-        authorities.put(OpenDeskModel.COLLABORATOR, "");
-        authorities.put(OpenDeskModel.CONTRIBUTOR, "");
-        authorities.put(OpenDeskModel.CONSUMER, "");
+            JSONObject groupJSON = (JSONObject) groupObject;
+            String shortName = groupJSON.getString("shortName");
 
-        for (Map.Entry<String, String> authority : authorities.entrySet()) {
-            authority.setValue("GROUP_site_" + siteShortName + "_Site" + authority.getKey());
+            String groupAuthority = authorityService.createAuthority(AuthorityType.GROUP, groupPrefix + shortName);
+            String authority = groupJSON.getString("authority");
+
+            authorityService.addAuthority(authorityPrefix + authority,  groupAuthority);
         }
 
-        authorityService.addAuthority(authorities.get(OpenDeskModel.MANAGER), projectmanager);
-
-        authorityService.addAuthority(authorities.get(OpenDeskModel.COLLABORATOR), projectowner);
-        authorityService.addAuthority(authorities.get(OpenDeskModel.COLLABORATOR), projectgroup);
-        authorityService.addAuthority(authorities.get(OpenDeskModel.COLLABORATOR), workgroup);
-
-        authorityService.addAuthority(authorities.get(OpenDeskModel.CONSUMER), steeringgroup);
-        authorityService.addAuthority(authorities.get(OpenDeskModel.CONSUMER), monitors);
-
         // allow all other projectmanagers to access this project
-        permissionService.setPermission(nodeRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, OpenDeskModel.COLLABORATOR, true);
+        permissionService.setPermission(nodeRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, OpenDeskModel.SITE_COLLABORATOR, true);
 
         // Add Owner and Manager to their groups
-        authorityService.addAuthority(projectowner, owner);
-        authorityService.addAuthority(projectmanager, site_manager);
+        authorityService.addAuthority(authorityPrefix + OpenDeskModel.PD_GROUP_PROJECTOWNER, owner);
+        authorityService.addAuthority(authorityPrefix + OpenDeskModel.PD_GROUP_PROJECTMANAGER, manager);
 
         //Remove Project creator from SiteManager-group
-        authorityService.removeAuthority(authorities.get(OpenDeskModel.MANAGER), creator);
+        authorityService.removeAuthority(authorityPrefix + OpenDeskModel.SITE_MANAGER, creator);
     }
 }

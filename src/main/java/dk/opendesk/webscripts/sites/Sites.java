@@ -22,6 +22,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
@@ -55,6 +56,7 @@ public class Sites extends AbstractWebScript {
     private PersonService personService;
     private PermissionService permissionService;
     private AuthorityService authorityService;
+    private PreferenceService preferenceService;
 
     public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
@@ -79,6 +81,9 @@ public class Sites extends AbstractWebScript {
     }
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
+    }
+    public void setPreferenceService(PreferenceService preferenceService) {
+        this.preferenceService = preferenceService;
     }
 
     @Override
@@ -105,6 +110,7 @@ public class Sites extends AbstractWebScript {
             String fileName = Utils.getJSONObject(json, "PARAM_FILENAME");
             String siteVisibilityStr = Utils.getJSONObject(json, "PARAM_VISIBILITY");
             SiteVisibility siteVisibility = Utils.getVisibility(siteVisibilityStr);
+            String siteType = Utils.getJSONObject(json, "PARAM_SITE_TYPE");
 
             if (method != null) {
                 switch (method) {
@@ -157,6 +163,10 @@ public class Sites extends AbstractWebScript {
 
                     case "getSiteType":
                         result = getSiteType(siteShortName);
+                        break;
+
+                    case "getSiteGroups":
+                        result = getSiteGroups(siteType);
                         break;
 
                     case "getTemplates":
@@ -352,15 +362,21 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
-    private JSONArray getSiteType(String shortName) {
+    private JSONArray getSiteType(String siteShortName) {
 
-        NodeRef n = siteService.getSite(shortName).getNodeRef();
-
-        String type = OpenDeskModel.project;
-        if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-            type = OpenDeskModel.pd_project;
-        }
+        NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
+        String type = Utils.getSiteType(nodeService, nodeRef);
         return Utils.getJSONReturnPair("type", type);
+    }
+
+    private JSONArray getSiteGroups(String siteType) throws JSONException {
+
+        JSONArray result = new JSONArray();
+        for (Object groupObject :  Utils.siteGroups.get(siteType)) {
+            JSONObject groupJSON = (JSONObject) groupObject;
+            result.add(groupJSON);
+        }
+        return result;
     }
 
     private JSONObject convertSiteInfoToJSON(SiteInfo s) throws JSONException {
@@ -439,19 +455,22 @@ public class Sites extends AbstractWebScript {
 
         //Get Manager
         if (!manager.isEmpty()) {
-            JSONObject managerObj = getUserInfo(manager);
+            NodeRef managerRef = personService.getPerson(manager);
+            JSONObject managerObj = Utils.convertUserToJSON(nodeService, preferenceService, managerRef);
             json.put("manager", managerObj);
         }
 
         //Get Owner
         if (!owner.isEmpty()) {
-            JSONObject ownerObj = getUserInfo(owner);
+            NodeRef ownerRef = personService.getPerson(owner);
+            JSONObject ownerObj = Utils.convertUserToJSON(nodeService, preferenceService, ownerRef);
             json.put("owner", ownerObj);
         }
 
         //Get Creator
         String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
-        JSONObject creatorObj = getUserInfo(creator);
+        NodeRef creatorRef = personService.getPerson(creator);
+        JSONObject creatorObj = Utils.convertUserToJSON(nodeService, preferenceService, creatorRef);
         json.put("creator", creatorObj);
 
         //Get Member list
@@ -465,19 +484,6 @@ public class Sites extends AbstractWebScript {
         json.put("members", membersArray);
 
         return json;
-    }
-
-    private JSONObject getUserInfo(String userName) throws JSONException {
-
-        NodeRef cn = this.personService.getPerson(userName);
-
-        JSONObject user = new JSONObject();
-        user.put("userName", nodeService.getProperty(cn, ContentModel.PROP_USERNAME));
-        user.put("firstName", nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME));
-        user.put("lastName", nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-        user.put("fullName", nodeService.getProperty(cn, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(cn, ContentModel.PROP_LASTNAME));
-
-        return user;
     }
 
     private JSONArray getSiteInfo(String shortName) throws JSONException {
@@ -540,8 +546,7 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
-    //TODO: Move this to ProjectDepartment or add functionality for normal sites.
-    private JSONArray createMembersPDF(String siteShortName) {
+    private JSONArray createMembersPDF(String siteShortName) throws JSONException {
 
         AuthenticationUtil.pushAuthentication();
         try {
@@ -551,15 +556,14 @@ public class Sites extends AbstractWebScript {
             SiteInfo site = siteService.getSite(siteShortName);
             String output = "Medlemsliste for projektet: " + site.getTitle() + "\n\n\n\n\n";
 
-            // extra groups for the PD_sites
-            NodeRef n = siteService.getSite(siteShortName).getNodeRef();
-            if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_PROJECTGROUP) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_WORKGROUP) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_MONITORS) + "\n\n";
-                output += getAuthorityMembersToString(siteShortName, OpenDeskModel.PD_GROUP_STEERING_GROUP) + "\n\n";
+            // Print members
+            NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
+            String type = Utils.getSiteType(nodeService, nodeRef);
+
+            for (Object groupObject :  Utils.siteGroups.get(type)) {
+                JSONObject groupJSON = (JSONObject) groupObject;
+                String shortName = groupJSON.getString("shortName");
+                output += getAuthorityMembersToString(siteShortName, shortName) + "\n\n";
             }
 
             // delete the pdf if it is already present
