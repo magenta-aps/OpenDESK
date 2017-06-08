@@ -48,11 +48,6 @@ angular
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
 
-        $transitions.onError({}, function (transition) {
-            sessionService.retainCurrentLocation();
-            $state.go('login');
-        });
-
         if (!authService.isAuthenticated()) {
             if (ssoLoginEnabled) {
                 authService.ssoLogin().then(function (response) {
@@ -67,7 +62,7 @@ angular
         }
     });
 
-function config($stateProvider, $urlRouterProvider, USER_ROLES) {
+function config($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider
         .when('/admin/system-settings', '/admin/system-settings/general-configuration')
@@ -77,7 +72,7 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
         abstract: true,
         resolve: {
             authorize:
-                ['authService', '$q', function (authService, $q) {
+                ['authService', '$q', 'sessionService', '$state', function (authService, $q, sessionService, $state) {
                 var d = $q.defer();
                 if (authService.isAuthenticated()) {
                     // I also provide the user for child controllers
@@ -85,6 +80,8 @@ function config($stateProvider, $urlRouterProvider, USER_ROLES) {
                 } else {
                     // here the rejection
                     d.reject('not logged');
+                    sessionService.retainCurrentLocation();
+                    $state.go('login');
                 }
                 return d.promise;
             }]

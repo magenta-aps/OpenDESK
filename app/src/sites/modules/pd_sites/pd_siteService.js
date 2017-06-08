@@ -9,13 +9,12 @@ angular
         var service = {
             createPDSite: createPDSite,
             addTemplate: addTemplate,
-            getAllManagers: getAllManagers,
+            getAllOwners: getAllOwners,
             getAllOrganizationalCenters: getAllOrganizationalCenters,
             updatePDSite: updatePDSite,
             getTemplateNames: getTemplateNames,
             getPDGroupName: getPDGroupName,
-            getPDGroupFullName: getPDGroupFullName,
-            createExternalUser: createExternalUser
+            getPDGroupFullName: getPDGroupFullName
         };
         
 
@@ -67,10 +66,9 @@ angular
         }
 
 
-        function getAllManagers() {
+        function getAllOwners() {
             return groupService.getGroupMembers("OPENDESK_ProjectOwners").then(
                 function (response) {
-                    //console.log(response.data);
                     return response;
                 },
                 function (error) {
@@ -109,19 +107,6 @@ angular
 
         function getPDGroupFullName(groupName) {
             return "GROUP_" + groupName;
-        }
-
-        function createExternalUser(siteShortName, firstName, lastName, email, groupName) {
-            return $http.post('/alfresco/service/users', {
-                PARAM_METHOD: "createExternalUser",
-                PARAM_SITE_SHORT_NAME: siteShortName,
-                PARAM_FIRSTNAME: firstName,
-                PARAM_LASTNAME: lastName,
-                PARAM_EMAIL: email,
-                PARAM_GROUP_NAME: groupName
-            }).then(function (response) {
-                return response;
-            });
         }
 
         return service;

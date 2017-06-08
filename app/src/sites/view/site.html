@@ -4,7 +4,6 @@
     <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
     <span ng-if="vm.project.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span> {{ vm.project.title }}
 </h1>
-
 <div class="od-projects" ng-show="vm.isMember || vm.project.visibility == 'PUBLIC'">
     <div layout-gt-sm="row">
         <md-card flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
@@ -30,7 +29,8 @@
         </md-card-content>
                     </md-card>
         <div flex-gt-sm="25" ng-if="vm.project.type != vm.strings.templateProject">
-            <div ng-include="'app/src/sites/modules/pd_sites/view/groups_overview.html'"></div>
+            <div ng-include="'app/src/sites/view/siteDetails.html'"></div>
+            <div ng-controller="SiteGroupController as sgc" ng-include="'app/src/sites/view/siteMembers.html'"></div>
         </div>
     </div>
 </div>

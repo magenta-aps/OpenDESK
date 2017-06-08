@@ -1,6 +1,6 @@
 <md-dialog>
     <form name="renameFolderForm"
-          ng-submit="vm.updateSiteName();">
+          ng-submit="vm.updateSite();">
         <div>
             <md-toolbar>
                 <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
@@ -25,13 +25,12 @@
                         <textarea ng-model="vm.project.description" md-maxlength="250" maxlength="250"></textarea>
                     </md-input-container>
 
-                <md-checkbox ng-model="vm.project.visibility" aria-label="Gør grupperummet privat">
+                <md-checkbox ng-model="vm.project.visibility" ng-true-value="'PRIVATE'" ng-false-value="'PUBLIC'" aria-label="Gør grupperummet privat">
                     {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
                 </md-checkbox>
             </md-content>
 
             <md-dialog-actions>
-                <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
                 <md-button type="submit" class="md-primary">{{'COMMON.UPDATE' | translate}}</md-button>
             </md-dialog-actions>
         </div>

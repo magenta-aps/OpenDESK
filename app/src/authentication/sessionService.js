@@ -32,6 +32,11 @@ function sessionService($window) {
 
     function setUserInfo(info) {
         userInfo = info;
+        if(userInfo.user != undefined) {
+            userInfo.user.displayName = userInfo.user.firstName;
+            if (userInfo.user.lastName != "")
+                userInfo.user.displayName += " " + userInfo.user.lastName;
+        }
         $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));
     }
 

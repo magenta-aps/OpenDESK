@@ -5,11 +5,12 @@ angular
 function userService($http, sessionService) {
     return {
         getPerson: getPerson,
-        getPeople: getPeople,
+        getUsers: getUsers,
         getAuthorities: getAuthorities,
         getPersons: getPersons,
         uploadAvatar : uploadAvatar,
-        getAvatar : getAvatar
+        getAvatar : getAvatar,
+        getAvatarFromUser : getAvatarFromUser
     };
 
 
@@ -41,8 +42,11 @@ function userService($http, sessionService) {
         });
     }
 
-    function getPeople(filter) {
-        return $http.get('/api/people' + filter).then(function (response) {
+    function getUsers(filter) {
+        return $http.post("/alfresco/service/users", {
+            PARAM_METHOD : "getUsers",
+            PARAM_FILTER: filter
+        }).then(function(response) {
             return response.data;
         });
     }
@@ -79,15 +83,16 @@ function userService($http, sessionService) {
         });
     }
 
-    function getAvatar(username) {
-        if(username == undefined)
+    function getAvatarFromUser(user) {
+        if(user.avatar == undefined)
             return "http://placehold.it/128x128";
-        return getPerson(username).then(function (data) {
-            if(data.avatar == undefined)
-                return "http://placehold.it/128x128";
+        var avatar = user.avatar.replace("/thumbnails/avatar", "");
+        return sessionService.makeURL("/alfresco/s/" + avatar);
+    }
 
-            var avatar = data.avatar.replace("/thumbnails/avatar", "");
-            return sessionService.makeURL("/alfresco/s/" + avatar);
+    function getAvatar(username) {
+        return getPerson(username).then(function (data) {
+            return getAvatarFromUser(data);
         });
     }
 

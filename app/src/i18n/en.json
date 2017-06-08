@@ -640,7 +640,8 @@
     "FLT_STAFF": "Staff case groups",
     "UPLOAD_GROUPS": "Upload groups (csv)",
     "UPLOAD_GROUPS_NOTE": "Upload groups. CSV files only",
-    "UPLOAD_GROUPS_SUCCESS": "Groups csv successfully uploaded"
+    "UPLOAD_GROUPS_SUCCESS": "Groups csv successfully uploaded",
+    "UPDATED": "Groups have been updated"
   },
   "ORG": {
     "ORGANIZATIONS": "Organisations",
@@ -941,15 +942,22 @@
 
     "STATUS": {
       "STATUS": "Status",
-      "COMPLETED": "Completed",
-      "IN_PROGRESS": "In progress"
+      "CLOSED": "Completed",
+      "ACTIVE": "In progress"
     },
 
     "GROUPS": {
-      "PROJECT_GROUP": "Project Group",
-      "MANAGEMENT_GROUP": "Management Group",
-      "WORK_GROUP": "Work Group",
-      "FOLLOW_GROUP": "Follow Group"
+      "SiteManager": "Project Manager",
+      "SiteCollaborator": "Can write",
+      "SiteContributor": "Can write limited",
+      "SiteConsumer": "Can read",
+
+      "PD_PROJECTMANAGER": "Project Manager",
+      "PD_PROJECTOWNER": "Project Owner",
+      "PD_PROJECTGROUP": "Project Group",
+      "PD_STEERING_GROUP": "Steering Group",
+      "PD_WORKGROUP": "Work Group",
+      "PD_MONITORS": "Monitors"
     }
   },
   "NOTIFICATION": {

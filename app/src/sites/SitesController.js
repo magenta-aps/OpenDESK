@@ -4,7 +4,8 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, $state, $interval, siteService, cmisService, $stateParams, searchService, $rootScope, $translate, documentService, authService, pd_siteService, sessionService,fileUtilsService) {
+function SitesController($scope, $mdDialog, $window, $state, $interval, siteService, searchService, documentService,
+						 pd_siteService, sessionService,fileUtilsService, userService) {
 
 
 	var vm = this;
@@ -138,8 +139,6 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 			getSitesPerUser().then(function (val) {
 				vm.sitesPerUser = val;
 			});
-			
-			//vm.reload();
 		});
 	};
 
@@ -172,7 +171,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		vm.currentDialogDescription = description;
 		vm.currentDialogShortName = shortName;
 		$mdDialog.show({
-			templateUrl: 'app/src/sites/view/renameSite.tmpl.html',
+			templateUrl: 'app/src/sites/view/updateSite.tmpl.html',
 			parent: angular.element(document.body),
 			targetEvent: event,
 			scope: $scope, // use parent scope in template
@@ -200,23 +199,6 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 
 	vm.getSearchresults = function getSearchReslts(term) {
 		$state.go('search', {'searchTerm': term});
-		/*
-		return searchService.getSearchResults(term).then(function (val) {
-
-			console.log(val);
-
-			if (val != undefined) {
-
-				$rootScope.searchResults = [];
-				$rootScope.searchResults = val.data.items;
-
-				window.location.href = "#!/search";
-
-			} else {
-				return [];
-			}
-		});
-		*/
 	};
 
 
@@ -252,17 +234,9 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	};
 
 	vm.searchPeople = function (query) {
-		console.log('search people');
 		if (query) {
-			return siteService.getAllUsers(query);
+			return userService.getUsers(query);
 		}
-	}
-
-	vm.getFullName = function(user) {
-		try {
-			return user.firstName + " " + user.lastName;
-		}
-		catch(err) {	}
 	}
 
 

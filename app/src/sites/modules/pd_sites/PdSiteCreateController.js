@@ -4,14 +4,12 @@ angular
     .module('openDeskApp.pd_sites')
     .controller('PdSiteCreateController', PdSiteCreateController);
     
-    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, authService, $mdToast) {
+    function PdSiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, userService, $mdToast) {
         
         var pdc = this;
         
         pdc.openPdSiteCreateDialog = openPdSiteCreateDialog;
-        
-        //getProjectMembers();
-        
+
         function openPdSiteCreateDialog(ev) {
             $mdDialog.show({
                 controller: PdSiteCreateDiaglogController,
@@ -25,23 +23,17 @@ angular
         
         function PdSiteCreateDiaglogController($scope, notificationsService, authService) {
 
-            var user = authService.getUserInfo().user;
-            var currentUser = user.userName;
-            var userName = user.firstName + ' ' + user.lastName;
-            var availProjectOwners = [];
+            var currentUser = authService.getUserInfo().user;
+            var availOwners = [];
         
             $scope.cancel = cancel;
             
             $scope.newSite = {
                 isPrivate: false,
-                manager: user,
-                presetManager: userName
+                manager: currentUser,
+                presetManager: currentUser
             };
             $scope.availOrgs = [];
-            $scope.projektGruppe = [];
-            $scope.styreGruppe = [];
-            $scope.arbejdsGruppe = [];
-            $scope.folgeGruppe = [];
             $scope.selectedProjGrpItem = null;
             $scope.srchprjgrptxt = null;
             $scope.selectedStyreGrpItem = null;
@@ -51,15 +43,20 @@ angular
             $scope.selectedFolgeGrpItem = null;
             $scope.srchflggrptxt = null;
             
-            $scope.searchProjectOwners = searchProjectOwners;
+            $scope.searchOwners = searchOwners;
             $scope.searchPeople = searchPeople;
             $scope.createPdSite = createPdSite;
+
+            loadTemplateNames();
+            getOwners();
+            getAvailOrgs();
+            loadSiteGroups();
 
             function loadTemplateNames() {
 
                 pd_siteService.getTemplateNames().then (function (response) {
 
-                    var result = new Array();
+                    var result = [];
 
                     for (var i in response) {
 
@@ -72,7 +69,6 @@ angular
                 })
 
             }
-           loadTemplateNames();
 
             
             function cancel() {
@@ -80,28 +76,27 @@ angular
             }
             
             
-            function getProjectOwners() {
-                pd_siteService.getAllManagers().then(
+            function getOwners() {
+                pd_siteService.getAllOwners().then(
                     function(response) {
                         console.log(response);
-                        availProjectOwners = response;
+                        availOwners = response;
                     },
                     function(err) {
                         console.log(err);
                     }
                 );
             }
-            getProjectOwners();
             
             
-            function searchProjectOwners(query) {
-                return filterService.search(availProjectOwners, { displayName: query });
+            function searchOwners(query) {
+                return filterService.search(availOwners, { displayName: query });
             }
             
             
             function searchPeople(query) {
                 if (query) {
-                    return siteService.getAllUsers(query);
+                    return userService.getUsers(query);
                 }
             }
             
@@ -113,18 +108,24 @@ angular
                     }
                 );
             }
-            getAvailOrgs();
-            
+
+            function loadSiteGroups() {
+                siteService.getSiteGroups("PD-Project").then(function (response) {
+                    $scope.newSite.groups = response;
+                    angular.forEach($scope.newSite.groups, function (group) {
+                        group.members = [];
+                        if(group.collapsed)
+                            group.open = false;
+                    });
+                });
+            }
             
             function createPdSite() {
                 if ($scope.newSite.template == undefined  || $scope.newSite.template == "no-template") {
-
                     $scope.newSite.template = {"name" : ""};
-
                 }
 
-                console.log('creating new site with sitename: ' + $scope.newSite.siteName + '; sbsys: ' + $scope.newSite.sbsys + '; center id: ' + $scope.newSite.center_id + '; owner: ' + $scope.newSite.projectOwner.shortName + '; manager: '  + $scope.newSite.manager.userName + " template: " + $scope.newSite.template.name);
-                var visibility = "PUBLIC"; // Visibility is set to public
+              var visibility = "PUBLIC"; // Visibility is set to public
                 if ($scope.newSite.isPrivate) {
                     visibility = "PRIVATE";
                 }
@@ -134,7 +135,7 @@ angular
                     $scope.newSite.desc,
                     $scope.newSite.sbsys,
                     $scope.newSite.center_id,
-                    $scope.newSite.projectOwner.userName,
+                    $scope.newSite.owner.userName,
                     $scope.newSite.manager.userName,
                     visibility,
                     $scope.newSite.template.name
@@ -145,13 +146,13 @@ angular
                             var siteName = $scope.newSite.siteName;
                             var link = "#!/projekter/" + siteShortName;
                             
-                            createSiteNotification(siteName, $scope.newSite.projectOwner.userName, link);
+                            createSiteNotification(siteName, $scope.newSite.owner.userName, link);
                             createSiteNotification(siteName, $scope.newSite.manager.userName, link);
 
-                            addUserToGroup(siteShortName, siteName, $scope.projektGruppe, 'PD_PROJECTGROUP', link);
-                            addUserToGroup(siteShortName, siteName, $scope.styreGruppe, 'PD_STEERING_GROUP', link);
-                            addUserToGroup(siteShortName, siteName, $scope.arbejdsGruppe, 'PD_WORKGROUP', link);
-                            addUserToGroup(siteShortName, siteName, $scope.folgeGruppe, 'PD_MONITORS', link);
+                            angular.forEach($scope.newSite.groups, function (group) {
+                                if (group.multipleMembers)
+                                    addUserToGroup(siteShortName, siteName, group.members, group.shortName, link);
+                            });
 
                             $mdDialog.cancel();
                             $state.go( 'project', { projekt: siteShortName } );
@@ -189,7 +190,7 @@ angular
             }
             
             function createSiteNotification (siteName, userName, link) {
-                if(userName !== currentUser) {
+                if(userName !== currentUser.userName) {
                     var subject = "Du er blevet tilføjet til " + siteName;
                     var message = "har tilføjet dig til projektet " + siteName + ".";
                     notificationsService.addNotice(userName, subject, message, link,'project', siteName).then(function (val) {
