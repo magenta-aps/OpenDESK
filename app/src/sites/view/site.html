@@ -13,6 +13,11 @@
                     <i class="material-icons">arrow_back</i> Projekter
                 </md-tab-label>
             </md-tab>
+            <div ng-repeat="contentTypeList in contents">
+                <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder"
+                    ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">{{content.lastChanged | openeDate}}
+                </tr>
+            </div>
             <md-tab ui-sref="project.filebrowser({path:''})">
                 <md-tab-label>
                     <i class="material-icons">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}
@@ -33,7 +38,8 @@
         </md-card-content>
                     </md-card>
         <div flex-gt-sm="25" ng-if="vm.project.type != vm.strings.templateProject">
-            <div ng-include="'app/src/sites/modules/pd_sites/view/groups_overview.html'"></div>
+            <div ng-include="'app/src/sites/view/siteDetails.html'"></div>
+            <div ng-controller="SiteGroupController as sgc" ng-include="'app/src/sites/view/siteMembers.html'"></div>
         </div>
     </div>
 </div>

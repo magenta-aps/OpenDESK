@@ -10,35 +10,17 @@ angular
         
         pdg.site = sitedata;
 
-        $scope.groups = [];
-        
-        $scope.selectedProjGrpItem = null;
-        $scope.srchprjgrptxt = null;
-        $scope.groups['PD_PROJECTGROUP'] = pdg.site.groups['PD_PROJECTGROUP'].members ? pdg.site.groups['PD_PROJECTGROUP'].members : [];
-        
-        $scope.selectedStyreGrpItem = null;
-        $scope.srchstrgrptxt = null;
-        $scope.groups['PD_STEERING_GROUP'] = pdg.site.groups['PD_STEERING_GROUP'].members ? pdg.site.groups['PD_STEERING_GROUP'].members : [];
-        
-        $scope.selectedArbejdsGrpItem = null;
-        $scope.srchrbjdgrptxt = null;
-        $scope.groups['PD_WORKGROUP'] = pdg.site.groups['PD_WORKGROUP'].members ? pdg.site.groups['PD_WORKGROUP'].members : [];
-        
-        $scope.selectedFolgeGrpItem = null;
-        $scope.srchflggrptxt = null;
-        $scope.groups['PD_MONITORS'] = pdg.site.groups['PD_MONITORS'].members ? pdg.site.groups['PD_MONITORS'].members : [];
-        
-        $scope.cancel = cancel;
-        $scope.updatePDSiteGroups = updatePDSiteGroups;
-        $scope.searchPeople = searchPeople;
+        //$scope.cancel = cancel;
+        //$scope.updatePDSiteGroups = updatePDSiteGroups;
+        //$scope.searchPeople = searchPeople;
         $scope.addMember = addMember;
         $scope.removeMember = removeMember;
-        $scope.addExternalUserToGroup = addExternalUserToGroup;
-        $scope.getFullName = getFullName;
+        //$scope.addExternalUserToGroup = addExternalUserToGroup;
 
         var user = authService.getUserInfo().user;
         var currentUser = user.userName;
 
+        /*
         function addExternalUserToGroup (firstName, lastName, email, groupName) {
             pd_siteService.createExternalUser(pdg.site.shortName, firstName, lastName, email, groupName).then(
                 function (response) {
@@ -47,7 +29,7 @@ angular
                             .textContent('Den eksterne bruger, ' + firstName + " " + lastName + ', er blevet oprettet.')
                             .hideDelay(3000)
                     );
-                    $scope.groups[groupName].push({displayName: firstName + " " + lastName});
+                    // TODO: REPLACE $scope.groups[groupName].push({displayName: firstName + " " + lastName});
                 },
                 function (err) {
                     $mdToast.show(
@@ -57,17 +39,16 @@ angular
                     );
                 });
         }
-        
         function cancel() {
             $mdDialog.cancel();
         }
-        
         
         function searchPeople(query) {
             if (query) {
                 return siteService.getAllUsers(query);
             }
         }
+         */
         
         
         function addMember(member, group) {
@@ -75,8 +56,6 @@ angular
                 function(response) {
                     var link = "#!/projekter/" + pdg.site.shortName;
                     createSiteNotification(pdg.site.title, member.userName, link);
-                    console.log('Added user ' + member.userName + ' to ' + group + ' in project ');
-                    console.log(pdg.site.title);
                 },
                 function(err) {
                     console.log('ERROR: Problem creating user ' + member.userName + ' in project group ' + group);
@@ -90,7 +69,6 @@ angular
             siteService.removeUser( pdg.site.shortName, member.userName, group ).then(
 
                 function(response) {
-                    console.log('Removed user ' + member.userName + ' from ' + group);
                 },
                 function(err) {
                     console.log('ERROR: Problem removing user ' + member.userName + ' from project group ' + group);
@@ -98,16 +76,8 @@ angular
                 }
             );   
         }
-
-        function getFullName(user) {
-            console.log(user);
-		    try {
-			    return user.firstName + " " + user.lastName;
-		    }
-		    catch(err) {	}
-	    }
         
-        
+        /*
         function updatePDSiteGroups() { 
             $mdDialog.cancel();
             $mdToast.show(
@@ -116,6 +86,7 @@ angular
                         .hideDelay(3000)
             );
         }
+*/
 
         function createSiteNotification (siteName, userName, link) {
             if(userName !== currentUser) {

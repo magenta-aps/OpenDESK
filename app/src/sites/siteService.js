@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+angular.module('openDeskApp.sites').factory('siteService', function ($http, $window, alfrescoNodeUtils) {
     
     var restBaseUrl = '/alfresco/s/api/';
 
@@ -309,19 +309,10 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         createMembersPDF : function (shortName) {
-
-            //console.log("hvad er ");
-            //console.log(shortName)
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD : "createMembersPDF",
                 PARAM_SITE_SHORT_NAME: shortName
             }).then(function(response) {
-
-                  // do a get on the returned noderef
-                //alfresco/service/api/node/content/workspace/SpacesStore/90defc67-622f-4bd4-acb2-e20d569b16f4
-
-                //console.log("**********");
-                //console.log(response.data)
                 return response.data;
             });
         },
@@ -359,7 +350,6 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             });
         },
         loadFromSbsys : function() {
-
             return $http.get("/alfresco/s/slingshot/doclib2/doclist/type/site/sbsysfakedata/documentLibrary", {}).then(function (sbsysfakedataResponse) {
                 var nodeRefs = [];
                 for (var i in sbsysfakedataResponse.data.items)
@@ -388,10 +378,20 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             }).then(function(response) {
                 return response;
             });
+        },
+
+        createExternalUser : function(siteShortName, firstName, lastName, email, groupName) {
+            return $http.post('/alfresco/service/users', {
+                PARAM_METHOD: "createExternalUser",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_FIRSTNAME: firstName,
+                PARAM_LASTNAME: lastName,
+                PARAM_EMAIL: email,
+                PARAM_GROUP_NAME: groupName
+            }).then(function (response) {
+                return response;
+            });
         }
-
-
-
 
     };
 });

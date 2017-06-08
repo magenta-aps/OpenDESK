@@ -4,38 +4,20 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
+function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
     alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, $translate,
-    searchService, $state, userService, preferenceService, sessionService, filterService, fileUtilsService, groupService) {
-
-/*
-    $scope.role_mapping = {};
-    $scope.role_mapping["SiteManager"] = "Projektleder";
-    $scope.role_mapping["SiteCollaborator"] = "Kan skrive";
-    $scope.role_mapping["SiteConsumer"] = "Kan læse";
-
-    $scope.role_mapping_id = {};
-    $scope.role_mapping_id["SiteManager"] = 1;
-    $scope.role_mapping_id["SiteCollaborator"] = 2;
-    $scope.role_mapping_id["SiteConsumer"] = 3;
-
-    $scope.role_translation = {};
-    $scope.role_translation["1"] = "Projektleder";
-    $scope.role_translation["2"] = "Kan skrive";
-    $scope.role_translation["3"] = "Kan læse";
-
-    $scope.role_mapping_reverse = {};
-    $scope.role_mapping_reverse["1"] = "SiteManager";
-    $scope.role_mapping_reverse["2"] = "SiteCollaborator";
-    $scope.role_mapping_reverse["3"] = "SiteConsumer";
-*/
+    searchService, $state, userService, sessionService, filterService, fileUtilsService, groupService) {
 
     $scope.contents = [];
     $scope.history = [];
-    $scope.members = {};
-    $scope.members.list = [];
     $scope.roles = [];
     $scope.roles_translated = [];
+    $scope.showDetails = false;
+    $scope.showGroupList = [];
+    $scope.searchTextList = [];
+    $scope.groups = {};
+    $scope.groups.list = [];
+    $scope.hasDescription = false;
 
     var originatorEv;
     var vm = this;
@@ -64,13 +46,14 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
     vm.currentUser = authService.getUserInfo().user;
     vm.uploadedToSbsys = false;
     vm.showProgress = false;
-    vm.hasDescription = false;
 
-    vm.editSiteDialog = editSiteDialog;
+    $scope.editSiteDialog = editSiteDialog;
+    $scope.editPdSiteDialog = editPdSiteDialog;
     vm.goToLOEditPage = goToLOEditPage;
     vm.updateSite = updateSite;
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
     vm.deleteFile = deleteFile;
+    $scope.editSiteGroups = editSiteGroups;
 
     vm.documentTab = '/dokumenter';
 
@@ -88,15 +71,15 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
             function (result) {
 
                 vm.project = result;
+                $scope.site = vm.project;
                 vm.project.visibilityStr = vm.project.visibility === "PUBLIC" ? "Offentlig" : "Privat";
-                vm.hasDescription = vm.project.description.trim() !== "";
+                $scope.hasDescription = vm.project.description.trim() !== "";
 
                 siteService.setType(vm.project.type);
 
                 getUserManagedProjects();
                 getSiteUserRole();
                 loadMembers();
-                loadSiteRoles();
 
                 // Compile paths for breadcrumb directive
                 vm.paths = buildBreadCrumbPath(vm.project.title);
@@ -161,18 +144,6 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
         }
     }
 
-
-    function translation_to_value(translation) {
-        for (var x in $scope.role_translation) {
-            var v = $scope.role_translation[x];
-            if (v === translation) {
-                return x;
-            }
-        }
-    }
-
-
-
     function buildBreadCrumbPath(project_title) {
         var title, link;
         if (vm.project.type == vm.strings.templateProject) {
@@ -218,34 +189,29 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
     };
 
 
+
     vm.openMenu = function ($mdOpenMenu, event) {
         originatorEv = event;
         $mdOpenMenu(event);
     };
 
-    vm.openMemberInfo = function (username, event) {
-        userService.getPerson(username).then(function (member) {
-            var avatar = userService.getAvatarFromUser(member);
-            $mdDialog.show({
-                controller: ['$scope', 'member', function ($scope, member) {
-                    $scope.member = member;
-                    $scope.avatar = avatar;
-                }],
-                templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
-                locals: {
-                    member: member
-                },
-                parent: angular.element(document.body),
-                targetEvent: event,
-                scope: $scope,
-                preserveScope: true,
-                clickOutsideToClose: true
-            });
+    vm.openMemberInfo = function (member, event) {
+        var avatar = userService.getAvatarFromUser(member);
+        $mdDialog.show({
+            controller: ['$scope', 'member', function ($scope, member) {
+                $scope.member = member;
+                $scope.avatar = avatar;
+            }],
+            templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
+            locals: {
+                member: member
+            },
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
         });
-    }
-
-    vm.roleComparator = function (user) {
-        return $scope.role_mapping_id[user.role];
     }
 
     vm.fileComparator = function (files) {
@@ -264,7 +230,9 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
             $scope.contents = response;
-            vm.addThumbnailUrl($scope.contents);
+            $scope.contents.forEach(function (contentTypeList) {
+                vm.addThumbnailUrl(contentTypeList);
+            });
             $scope.selectedTab = $state.current.data.selectedTab;
         });
 
@@ -559,13 +527,13 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
 
 
     function loadMembers() {
-        $scope.groups = {};
-        $scope.groups.list = [];
         groupService.getGroupsAndMembers(vm.project.shortName).then(function (val) {
 
             $scope.groups.list = val;
             $scope.groups.list.forEach(function (group) {
                     $scope.roles.push(group[0].shortName);
+                    $scope.showGroupList.push(false);
+                    $scope.searchTextList.push(null);
             });
 
         });
@@ -879,6 +847,20 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
         });
     }
 
+    function editPdSiteDialog(ev) {
+        $mdDialog.show({
+            controller: 'PdSiteEditController',
+            templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_site_dialog.html',
+            locals: {
+                sitedata: $scope.site
+            },
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            scope: $scope, // use parent scope in template
+            preserveScope: true, // do not forget this if use parent scope
+            clickOutsideToClose: true
+        });
+    }
 
     function updateSite() {
         siteService.updateSite(vm.project.shortName, vm.project.title, vm.project.description, vm.project.visibility).then(
@@ -897,6 +879,18 @@ function SiteController($q, $scope, $timeout, $mdDialog, $window, siteService, c
             var ref = response.data[0].nodeRef.split("/")[3];
             createDocumentNotification(vm.project.title, vm.project.shortName, ref, response.data[0].fileName);
             loadSiteData();
+        });
+    }
+
+    function editSiteGroups(ev) {
+        $mdDialog.show({
+            controller: 'SiteGroupController',
+            templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
+            parent: angular.element(document.body),
+            scope: $scope,
+            preserveScope: true,
+            targetEvent: ev,
+            clickOutsideToClose: true
         });
     }
 }

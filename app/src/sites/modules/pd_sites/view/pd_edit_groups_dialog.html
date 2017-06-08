@@ -12,197 +12,69 @@
 
 		<md-dialog-content>
 			<md-content class="md-padding" layout="column">
-				<h4 ng-click="showProjGroupList = !showProjGroupList" class="pd-group-toggle" layout="row" ng-class="showProjGroupList ? 'open' : 'closed'">
-					<span>{{'PROJECT.GROUPS.PROJECT_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<div>
-					<md-chips ng-model="groups['PD_PROJECTGROUP']" md-autocomplete-snap md-require-match="true" md-on-remove="removeMember($chip, 'PD_PROJECTGROUP')"
-					    md-on-add="addMember($chip, 'PD_PROJECTGROUP')">
-						<md-autocomplete
-							md-selected-item="selectedProjGrpItem"
-							md-search-text="srchprjgrptxt"
-							md-items="pgitem in searchPeople(srchprjgrptxt)"
-						    md-item-text="pgitem.firstName"
-							placeholder="{{'PROJECT.MEMBER' | translate}}">
-							<span md-highlight-text="srchprjgrptxt">{{ pgitem.firstName }} {{ pgitem.lastName }}</span>
-						</md-autocomplete>
-						<md-chip-template>
-							<span>{{ $chip.displayName }}</span>
-						</md-chip-template>
-					</md-chips>
 
-					<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
-					<div style="padding-left: 15px;" layout-gt-sm="row">
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.FIRST_NAME' | translate}}</label>
-							<input type="text" name="pgxfirstname" ng-model="pgxfirstname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.LAST_NAME' | translate}}</label>
-							<input type="text" name="pgxlastname" ng-model="pgxlastname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'COMMON.EMAIL' | translate}}</label>
-							<input type="email" name="pgxemail" ng-model="pgxemail" ng-pattern="/^.+@.+\..+$/">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<div style="position: relative; top: -25px;" class="btnAlign">
-							<md-button class="md-primary" ng-click="addExternalUserToGroup (pgxfirstname, pgxlastname, pgxemail, 'PD_PROJECTGROUP')">
-								<i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
-							</md-button>
+				<div ng-repeat="(groupIndex, group) in groups.list">
+					<div ng-if="group[0].multipleMembers">
+						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="pd-group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+							<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
+							<span flex></span>
+							<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+						</h4>
+						<div ng-show="showGroupList[groupIndex]">
+							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
+									  md-on-remove="removeMember($chip, group[0].shortName)"
+									  md-on-add="addMember($chip, group[0].shortName)">
+								<md-autocomplete
+									md-selected-item="selectedProjGrpItem"
+									md-search-text="searchTextList[groupIndex]"
+									md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+									md-item-text="pgitem.displayName"
+									placeholder="{{'PROJECT.MEMBER' | translate}}">
+									<span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
+								</md-autocomplete>
+								<md-chip-template>
+									<span>{{ $chip.displayName }}</span>
+								</md-chip-template>
+							</md-chips>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<h4 ng-click="showSteerGroupList = !showSteerGroupList" class="pd-group-toggle" layout="row" ng-class="showSteerGroupList ? 'open' : 'closed'">
-					<span>{{'PROJECT.GROUPS.MANAGEMENT_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<div ng-show="showSteerGroupList">
-					<md-chips ng-model="groups['PD_STEERING_GROUP']" md-autocomplete-snap md-require-match="true" md-on-remove="removeMember($chip, 'PD_STEERING_GROUP')"
-					    md-on-add="addMember($chip, 'PD_STEERING_GROUP')">
-						<md-autocomplete md-selected-item="selectedStyreGrpItem" md-search-text="srchstrgrptxt" md-items="sgitem in searchPeople(srchstrgrptxt)"
-						    md-item-text="sgitem.firstName" placeholder="{{'PROJECT.MEMBER' | translate}}">
-							<span md-highlight-text="srchstrgrptxt">{{ sgitem.firstName }} {{ sgitem.lastName }}</span>
-						</md-autocomplete>
-						<md-chip-template>
-							<span>{{ $chip.displayName }}</span>
-						</md-chip-template>
-					</md-chips>
-					<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
-					<div style="padding-left: 15px;" layout-gt-sm="row">
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.FIRST_NAME' | translate}}</label>
-							<input type="text" name="stxfirstname" ng-model="stxfirstname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.LAST_NAME' | translate}}</label>
-							<input type="text" name="stxlastname" ng-model="stxlastname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'COMMON.EMAIL' | translate}}</label>
-							<input type="email" name="stxemail" ng-model="stxemail">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<div style="position: relative; top: -25px;" class="btnAlign">
-							<md-button class="md-primary" ng-click="addExternalUserToGroup (stxfirstname, stxlastname, stxemail, 'PD_STEERING_GROUP')">
-								<i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
-							</md-button>
-						</div>
+				<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>{{'USER.FIRST_NAME' | translate}}</label>
+						<input type="text" name="externalUser.firstName" ng-model="externalUser.firstName">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm>
+						<!-- Spacer //-->
 					</div>
-				</div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>{{'USER.LAST_NAME' | translate}}</label>
+						<input type="text" name="externalUser.lastName" ng-model="externalUser.lastName">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm>
+						<!-- Spacer //-->
+					</div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>{{'COMMON.EMAIL' | translate}}</label>
+						<input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm>
+						<!-- Spacer //-->
+					</div>
+					<md-input-container>
+						<label>Rolle</label>
+						<md-select required ng-model="externalUser.group">
+							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</md-option>
+						</md-select>
+					</md-input-container>
+					<div style="position: relative; top: -25px;" class="btnAlign">
+						<md-button class="md-primary" ng-click="addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
+							<i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
+						</md-button>
+					</div>
 
-				<h4 ng-click="showWorkGroupList = !showWorkGroupList" class="pd-group-toggle" layout="row" ng-class="showWorkGroupList ? 'open' : 'closed'">
-					<span>{{'PROJECT.GROUPS.WORK_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<div ng-show="showWorkGroupList">
-					<md-chips ng-model="groups['PD_WORKGROUP']" md-autocomplete-snap md-require-match="true" md-on-remove="removeMember($chip, 'PD_WORKGROUP')"
-					    md-on-add="addMember($chip, 'PD_WORKGROUP')">
-						<md-autocomplete md-selected-item="selectedArbejdsGrpItem" md-search-text="srchrbjdgrptxt" md-items="agitem in searchPeople(srchrbjdgrptxt)"
-						    md-item-text="agitem.firstName" placeholder="{{'PROJECT.MEMBER' | translate}}">
-							<span md-highlight-text="srchrbjdgrptxt">{{ agitem.firstName }} {{ agitem.lastName }}</span>
-						</md-autocomplete>
-						<md-chip-template>
-                            <span>{{ $chip.displayName }}</span>
-						</md-chip-template>
-					</md-chips>
-					<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
-					<div style="padding-left: 15px;" layout-gt-sm="row">
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.FIRST_NAME' | translate}}</label>
-							<input type="text" name="arbxfirstname" ng-model="arbxfirstname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.LAST_NAME' | translate}}</label>
-							<input type="text" name="arbxlastname" ng-model="arbxlastname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'COMMON.EMAIL' | translate}}</label>
-							<input type="email" name="arbxemail" ng-model="arbxemail">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<div style="position: relative; top: -25px;" class="btnAlign">
-							<md-button class="md-primary" ng-click="addExternalUserToGroup (arbxfirstname, arbxlastname, arbxemail, 'PD_WORKGROUP')">
-								<i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
-							</md-button>
-						</div>
-					</div>
-				</div>
-
-				<h4 ng-click="showMonitorsList = !showMonitorsList" class="pd-group-toggle" layout="row" ng-class="showMonitorsList ? 'open' : 'closed'">
-					<span>{{'PROJECT.GROUPS.FOLLOW_GROUP' | translate}}</span>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</h4>
-				<div ng-show="showMonitorsList">
-					<md-chips ng-model="groups['PD_MONITORS']" md-autocomplete-snap md-require-match="true" md-on-remove="removeMember($chip, 'PD_MONITORS')"
-					    md-on-add="addMember($chip, 'PD_MONITORS')">
-						<md-autocomplete md-selected-item="selectedFolgeGrpItem" md-search-text="srchflggrptxt" md-items="fgitem in searchPeople(srchflggrptxt)"
-						    md-item-text="fgitem.firstName" placeholder="{{'PROJECT.MEMBER' | translate}}">
-							<span md-highlight-text="srchflggrptxt">{{ fgitem.firstName }} {{ fgitem.lastName }}</span>
-						</md-autocomplete>
-						<md-chip-template>
-							<span>{{ $chip.displayName }}</span>
-						</md-chip-template>
-					</md-chips>
-					<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
-					<div style="padding-left: 15px;" layout-gt-sm="row">
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.FIRST_NAME' | translate}}</label>
-							<input type="text" name="flgxfirstname" ng-model="flgxfirstname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'USER.LAST_NAME' | translate}}</label>
-							<input type="text" name="flgxlastname" ng-model="flgxlastname">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<md-input-container class="md-block" flex-gt-sm>
-							<label>{{'COMMON.EMAIL' | translate}}</label>
-							<input type="email" name="flgxemail" ng-model="flgxemail">
-						</md-input-container>
-						<div flex="5" hide-xs hide-sm>
-							<!-- Spacer //-->
-						</div>
-						<div style="position: relative; top: -25px;" class="btnAlign">
-							<md-button class="md-primary" ng-click="addExternalUserToGroup (flgxfirstname, flgxlastname, flgxemail, 'PD_MONITORS')">
-								<i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
-							</md-button>
-						</div>
-					</div>
 				</div>
 			</md-content>
 		</md-dialog-content>

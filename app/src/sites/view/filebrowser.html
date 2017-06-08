@@ -15,18 +15,10 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-
-            <tr ng-show="content.contentType === 'cmis:document'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
-                ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+        <tbody ng-repeat="contentTypeList in contents">
+            <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder"
+                 ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
             </tr>
-            <tr ng-show="content.contentType === 'cmis:folder'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
-                ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
-            </tr>
-            <tr ng-show="content.contentType === 'cmis:link'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder"
-                ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
-            </tr>
-
         </tbody>
     </table>
 </md-list>

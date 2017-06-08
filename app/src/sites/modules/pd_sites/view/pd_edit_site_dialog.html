@@ -58,13 +58,13 @@
                             md-selected-item="newSite.manager"
                             md-search-text="searchTextManager"
                             md-items="man in searchPeople(searchTextManager)"
-                            md-item-text="man.firstName + ' ' + man.lastName"
+                            md-item-text="man.displayName"
                             md-min-length="1"
                             md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
                             md-clear-button=true
                             placeholder="{{'PROJECT.PROJECTLEAD' | translate}}">
                         <md-item-template>
-                            <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.firstName }} {{man.lastName}}</span>
+                            <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.displayName}}</span>
                         </md-item-template>
                         <md-not-found>
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".
