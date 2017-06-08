@@ -41,7 +41,7 @@
             </td>
         </tr>
 
-         <tr class="seperator" ng-repeat="reply in dc.replies">
+         <tr class="seperator" ng-repeat="reply in dc.replies" id="{{reply.name}}">
             <td class="avatar-container">
                 <img src="{{reply.author.avatarUrl}}" class="avatar">
                 <h3>{{reply.author.firstName}} {{reply.author.lastName}}</h3>

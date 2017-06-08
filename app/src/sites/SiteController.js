@@ -153,10 +153,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
             title = $translate.instant('PROJECT.PROJECTS');
             link = '#!/projekter';
         }
-        var paths = [{
-                title: title,
-                link: link
-            },
+        var paths = [
             {
                 title: project_title,
                 link: '#!/projekter/' + vm.project.shortName + vm.documentTab
@@ -178,17 +175,13 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         return paths;
     }
 
-
     vm.cancel = function () {
         $mdDialog.cancel();
     };
 
-
     vm.reload = function () {
         $window.location.reload();
     };
-
-
 
     vm.openMenu = function ($mdOpenMenu, event) {
         originatorEv = event;
@@ -233,9 +226,8 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
             $scope.contents.forEach(function (contentTypeList) {
                 vm.addThumbnailUrl(contentTypeList);
             });
-            $scope.selectedTab = $state.current.data.selectedTab;
+            $scope.tab.selected = $state.current.data.selectedTab;
         });
-
     };
 
     vm.addThumbnailUrl = function (files) {
@@ -603,7 +595,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         $mdDialog.hide();
     };
 
-
     vm.deleteMemberDialog = function (ev, siteName, user, groupIndex) {
         var confirm = $mdDialog.confirm()
             .title('Slette dette medlem?')
@@ -644,7 +635,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
             }
         }
     }
-
 
     vm.getAllUsers = function (filter) {
         return userService.getUsers(filter);
@@ -894,6 +884,3 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     }
 }
-
-
-//TODO: refactor all the methods that dont belong here to a relevant server- and pass on the call to them in the controller

@@ -2,6 +2,22 @@
   //padding: $u*2;
 }
 
+.od-back-btn {
+  cursor: pointer;
+  font-size: $u*0.88;
+  text-transform: uppercase;
+  padding-right: $u;
+
+  i {
+    font-size: $u*0.88;
+  }
+
+}
+
+.icon-small {
+  font-size: 14px !important;
+}
+
 .projects-wrap {
   width: 90%;
   margin: 1rem auto;
@@ -217,7 +233,9 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 }
 
 .od-filebrowser-breadcrumb {
-  font-size: 16px;
+  height: 23px;
+  line-height: 23px;
+  font-size: $u;
   background-color: #d9d9d9;
   box-shadow: 1px 2px 1px #bdbdbd;
   a {

@@ -37,12 +37,12 @@ function config($stateProvider, USER_ROLES) {
         },
         data: {
             authorizedRoles: [USER_ROLES.user],
-            selectedTab: 1
+            selectedTab: 0
         }
     }).state('project.discussions', {
         url: '/diskussioner',
         data: {
-            selectedTab: 2
+            selectedTab: 1
         },
         views: {
             'discussions': {
@@ -55,7 +55,7 @@ function config($stateProvider, USER_ROLES) {
     .state('project.viewthread', {
         url: '/diskussioner/{path:.*}',
         data: {
-            selectedTab: 2
+            selectedTab: 1
         },
         views: {
             'discussions': {

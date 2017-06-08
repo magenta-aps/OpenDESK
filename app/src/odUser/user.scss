@@ -1,7 +1,7 @@
 .od-user {}
 
 .od-avatar {
-  width: 50%;
+  width: 100%;
   border-radius: 50%;
 }
 
@@ -55,12 +55,14 @@
     display: none;
   }
   .container {
-    position: relative; //width: 50%;
+    position: relative; 
+    width: 50%;
+    margin: auto;
   }
   .middle {
     position: absolute;
     height: 100%;
-    width: 50%;
+    width: 100%;
     opacity: 0;
     border-radius: 50%;
     transition: .5s ease;
