@@ -16,7 +16,7 @@ var CreateProjectlinkPage = function () {
     	var projectInput = element(by.css('[aria-label="Choose project"]'));
         var firstProject = element(by.css('.md-autocomplete-suggestions li'));
     	
-    	projectInput.sendKeys('n');
+    	projectInput.sendKeys('sa');
         firstProject.click();
     }; 
 

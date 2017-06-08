@@ -18,7 +18,7 @@ var CreateGroupRoomPage = function () {
         var descriptionInput = element(by.model('newSiteDescription'));
         var privateInput = element(by.model('newSiteIsPrivate'));
 
-        newGroupRoomBtn.click();
+        //newGroupRoomBtn.click();
         browser.driver.sleep(100);
 
         nameInput.sendKeys(name);

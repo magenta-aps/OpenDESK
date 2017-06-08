@@ -24,6 +24,8 @@ constants.folder_to_be_created_and_deleted = "sletmigigen";
 constants.folder_to_be_created_an_manipulated = 'Testmappe';
 
 constants.DISCUSSION_NAME = 'Et emne at diskutere';
+constants.DISCUSSION_CONTENT = 'Jeg synes vi skal diskutere dette, hvad siger i?';
+constants.REPLY_CONTENT = 'Dette er svaret på tråden';
 
 module.exports = constants;
 

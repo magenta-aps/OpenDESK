@@ -10,15 +10,19 @@ var CreateDiscussionPage = function () {
 		},
 
 		getDiscussionThreadTitle: function() {
-			return element(by.css('.discussion-title"]'));
+			return element(by.css('h1.discussion-title'));
 		},
 
 		getCreatedDiscussion: function () {
 			return discussionName;
 		},
 
-		gotoDiscussions: function() {
+		gotoDiscussionsTab: function() {
 			return element(by.xpath('//md-tabs/md-tabs-wrapper/md-tabs-canvas/md-pagination-wrapper/md-tab-item[2]')).click();
+		},
+
+		goBackToDiscussions: function() {
+			return element(by.css('.discussion-back')).click();
 		},
 
 		openCreateDiscussionDialog: function () {
@@ -37,8 +41,8 @@ var CreateDiscussionPage = function () {
 			return element(by.css('[aria-label="New conversation"] button[type="submit"]')).click();
 		},
 
-		openDiscussion: function () {
-
+		openFirstDiscussion: function () {
+            element.all(by.css('td a.od-filebrowser-link')).first().click();
 		}
 	};
 };
