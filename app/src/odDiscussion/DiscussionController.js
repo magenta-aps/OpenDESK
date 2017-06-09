@@ -49,10 +49,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
 
         $scope.tab.selected = $state.current.data.selectedTab;
 
-        console.log('init får jeg et id: ' + $location.hash());
-
         if ($stateParams.path) {
-            console.log($stateParams.path);
             discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path).then(function (response) {
                 dc.selectedDiscussion = discussionService.getSelectedDiscussion();
                 dc.getReplies(dc.selectedDiscussion);
@@ -74,7 +71,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
 
     dc.reply = function (content) {
             discussionService.addReply(dc.selectedDiscussion, content).then(function (response) {
-                console.log(response);
                 discussionService.subscribeToDiscussion($stateParams.projekt, dc.selectedDiscussion);
                 createReplyNotification(response.item);
                 dc.getReplies(dc.selectedDiscussion);
@@ -95,7 +91,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
 
     dc.newDiscussion = function (title, content) {
             discussionService.addDiscussion($stateParams.projekt, title, content).then(function (response) {
-                console.log(response);
                 discussionService.subscribeToDiscussion($stateParams.projekt, response.item);
                 createNewDiscussionNotification(response.item);
                 dc.getDiscussions($stateParams.projekt);
@@ -116,7 +111,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
 
     dc.editReply = function (postItem, content) {
         discussionService.updatePost(postItem, '', content).then(function (response) {
-            console.log(response);
             $mdDialog.cancel();
             dc.getReplies(dc.selectedDiscussion);
         });
@@ -141,7 +135,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
 
     dc.editFirstPost = function (postItem, title, content) {
         discussionService.updatePost(postItem, title, content).then(function (response) {
-            console.log(response);
             $mdDialog.cancel();
         });
     }
@@ -217,7 +210,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     }
 
     dc.subscriptionIcon = function (value) {
-        return value ? 'notifications_active' : 'notifications_none';
+        return String(value) == "true" ? 'notifications_active' : 'notifications_none';
     }
 
     dc.getAvatarUrl = function (avatarRef) {
@@ -227,12 +220,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
     }
 
-    // function getAllMembers(siteShortName, siteType) {
-    //     siteService.getAllMembers(siteShortName, siteType).then(function (response) {
-    //         dc.allMembers = response;
-    //     });
-    // }
-
     function createNotification(userName, subject, message, link, wtype, project) {
         console.log('creating notification...');
         notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
@@ -240,11 +227,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         });
     }
 
-    //siteservice.getAllMembers mangler pga notifikationer.
-    //kopier den nye løsning fra sitecontroller, så er du kørende
-    //brug også scope.groups.list fra sitecontroller for at få brugerne
     function createNewDiscussionNotification(postItem) {
-
         var nodeRef = postItem.nodeRef.split('/')[3];
         var subject = 'Ny samtale i et projekt';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
@@ -262,7 +245,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
                         receiveNotifications = member.preferences[preferenceFilter];
 
                     if (receiveNotifications != null && receiveNotifications == "true") {
-                        console.log("Sending notification to : " + member.userName + postItem.author.userName);
+                        console.log("Sending notification to : " + member.userName);
                         createNotification(member.userName, subject, message, link, 'new-discussion', $stateParams.projekt);
                     }
                 }
@@ -271,8 +254,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     }
 
     function createReplyNotification(postItem) {
-
-        var nodeRef = postItem.nodeRef.split('/')[3];
+        var nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
         var subject = 'Ny kommentar på en samtale du følger';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
         var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
@@ -281,77 +263,18 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         angular.forEach($scope.groups.list, function (group) {
             angular.forEach(group[1], function (member) {
                 if (member.userName != postItem.author.username) {
-
-                    var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt, nodeRef);;
+                    var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt, nodeRef);
                     var receiveNotifications = "false";
 
                     if (member.preferences[preferenceFilter] != null)
                         receiveNotifications = member.preferences[preferenceFilter];
 
                     if (receiveNotifications != null && receiveNotifications == "true") {
-                        console.log("Sending notification to : " + member.userName + postItem.author.userName);
+                        console.log("Sending notification to : " + member.userName);
                         createNotification(member.userName, subject, message, link, 'new-reply', $stateParams.projekt);
                     }
                 }
             })
         })
     }
-
-    // dc.createNewDiscussionNotification = function (postItem) {
-    //     console.log('creating notification...');
-
-    //     dc.allMembers.forEach(function (username) {
-    //         if (username != postItem.author.username) {
-    //             var nodeRef = postItem.nodeRef.split('/')[3];
-
-    //             var preferenceFilter = "dk.magenta.sites.receiveNotifications";
-
-    //             preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
-
-    //                 var receiveNotifications = 'true';
-    //                 if (data[preferenceFilter] != null) {
-    //                     receiveNotifications = data[preferenceFilter];
-    //                 }
-    //                 if (receiveNotifications != null && receiveNotifications == "true") {
-    //                     console.log("Sending notification to : " + username);
-    //                     var subject = 'Ny samtale i et projekt';
-    //                     var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
-    //                     var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
-
-    //                     notificationsService.addNotice(username, subject, message, link, 'new-discussion', $stateParams.projekt);
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
-
-    // dc.createReplyNotification = function (postItem) {
-    //     console.log('creating notification...');
-
-    //     dc.allMembers.forEach(function (username) {
-    //         if (username != postItem.author.username) {
-    //             var nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
-
-    //             var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt, nodeRef);
-    //             var anchor = '#' + postItem.name;
-
-    //             preferenceService.getPreferences(username, preferenceFilter).then(function (data) {
-
-    //                 var receiveNotifications = "false";
-    //                 if (data[preferenceFilter] != null) {
-    //                     receiveNotifications = data[preferenceFilter];
-    //                 }
-    //                 if (receiveNotifications != null && receiveNotifications == "true") {
-    //                     console.log("Sending notification to : " + username);
-    //                     var subject = 'Ny kommentar på en samtale du følger';
-    //                     var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-    //                     var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef + anchor;
-
-    //                     notificationsService.addNotice(username, subject, message, link, 'new-reply', $stateParams.projekt);
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
-
 };
