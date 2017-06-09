@@ -62,7 +62,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         $mdDialog.show({
             templateUrl: 'app/src/odDiscussion/view/reply.tmpl.html',
             parent: angular.element(document.body),
-            targetEvent: event,
             scope: $scope,
             preserveScope: true,
             clickOutsideToClose: true
@@ -82,7 +81,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
             $mdDialog.show({
                 templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
                 parent: angular.element(document.body),
-                targetEvent: event,
                 scope: $scope,
                 preserveScope: true,
                 clickOutsideToClose: true
@@ -126,7 +124,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
             },
             templateUrl: 'app/src/odDiscussion/view/edit.tmpl.html',
             parent: angular.element(document.body),
-            targetEvent: event,
             scope: $scope,
             preserveScope: true,
             clickOutsideToClose: true
@@ -149,7 +146,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
             },
             templateUrl: 'app/src/odDiscussion/view/editFirstPost.tmpl.html',
             parent: angular.element(document.body),
-            targetEvent: event,
             scope: $scope,
             preserveScope: true,
             clickOutsideToClose: true
@@ -166,7 +162,6 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
             },
             templateUrl: 'app/src/odDiscussion/view/editTitle.tmpl.html',
             parent: angular.element(document.body),
-            targetEvent: event,
             scope: $scope,
             preserveScope: true,
             clickOutsideToClose: true
