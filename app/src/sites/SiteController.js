@@ -531,20 +531,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     }
 
-    vm.newMember = function (event) {
-        $scope.newMember = null;
-        $scope.newMemberRole = null;
-        $mdDialog.show({
-            templateUrl: 'app/src/sites/view/newMember.tmpl.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
-            clickOutsideToClose: true
-        });
-    };
-
-
     vm.upload = function (files) {
         for (var i = 0; i < files.length; i++) {
             siteService.uploadFiles(files[i], vm.currentFolderNodeRef).then(function (response) {
@@ -559,82 +545,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         $mdDialog.cancel();
     };
 
-    vm.currentDialogUser = '';
-
-    vm.updateMemberRoleDialog = function (event, user, role, parentIndex, index) {
-        vm.currentDialogUser = user;
-        vm.currentDialogRole = role;
-        vm.currentParentIndex = parentIndex;
-        vm.currentIndex = index;
-        $mdDialog.show({
-            templateUrl: 'app/src/sites/view/updateRole.tmpl.html',
-            parent: angular.element(document.body),
-            scope: $scope,
-            preserveScope: true,
-            targetEvent: event,
-            clickOutsideToClose: true
-        });
-    };
-
-
-    vm.addMemberToSite = function (siteName, user, role) {
-        var userName = user.userName;
-        siteService.addMemberToSite(siteName, userName, role).then(function (response) {
-            createSiteNotification(userName, siteName);
-            addMemberToGroup(user, role, $scope.groups.list);
-        });
-        $mdDialog.hide();
-    };
-
-    vm.updateRoleOnSiteMember = function (siteName, user, role, groupIndex) {
-        var userName = user.userName;
-        siteService.updateRoleOnSiteMember(siteName, userName, role).then(function (response) {
-            removeMemberFromGroup(user, $scope.groups.list[groupIndex][1]);
-            addMemberToGroup(user, role, $scope.groups.list);
-        });
-        $mdDialog.hide();
-    };
-
-    vm.deleteMemberDialog = function (ev, siteName, user, groupIndex) {
-        var confirm = $mdDialog.confirm()
-            .title('Slette dette medlem?')
-            .textContent('')
-            .ariaLabel('Slet medlem')
-            .targetEvent(ev)
-            .ok('Slet')
-            .cancel('Nej, tak');
-
-        $mdDialog.show(confirm).then(
-            function () {
-                vm.removeMemberFromGroup(siteName, user, groupIndex);
-            },
-            function () {
-            }
-        );
-    };
-
-
-    vm.removeMemberFromGroup = function (siteName, user, groupIndex) {
-        var userName = user.userName;
-        siteService.removeMemberFromSite(siteName, userName).then(function (response) {
-            removeMemberFromGroup(user, $scope.groups.list[groupIndex][1]);
-        });
-        $mdDialog.hide();
-    };
-
-    function removeMemberFromGroup (user, group) {
-        var memberIndex = group.indexOf(user);
-        group.splice(memberIndex, 1);
-    }
-
-    function addMemberToGroup (user, role, groups) {
-        for (var i = 0; i < groups.length; i++) {
-            if (groups[i][0].role == role) {
-                groups[i][1].push(user);
-                break;
-            }
-        }
-    }
+    
 
     vm.getAllUsers = function (filter) {
         return userService.getUsers(filter);
@@ -873,6 +784,9 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     }
 
     function editSiteGroups(ev) {
+        $scope.project = {};
+        $scope.project.shortName = vm.project.shortName;
+
         $mdDialog.show({
             controller: 'SiteGroupController',
             templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',

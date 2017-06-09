@@ -13,6 +13,8 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
     $scope.cancel = cancel;
     $scope.updatePDSiteGroups = updatePDSiteGroups;
     $scope.doPDF = doPDF;
+    $scope.addMemberToSite = addMemberToSite;
+    $scope.removeMemberFromSite = removeMemberFromSite;
 
     $scope.groupFilter = function (group) {
         if (group[0].multipleMembers) {
@@ -72,4 +74,30 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
 
         });
     }
+
+    function addMemberToSite(user, role) {
+        var userName = user.userName;
+        var siteShortName = $scope.project.shortName;
+
+        siteService.addMemberToSite(siteShortName, userName, role).then(function (response) {
+            createSiteNotification(userName, siteShortName);
+
+            for (var i = 0; i < $scope.groups.list.length; i++) {
+            if ($scope.groups.list[i][0].role == role) {
+                $scope.groups.list[i][1].push(user);
+                break;
+            }
+        }
+        });
+        $mdDialog.hide();
+    };
+
+    function removeMemberFromSite (siteName, user, groupIndex) {
+        var userName = user.userName;
+        siteService.removeMemberFromSite(siteName, userName).then(function (response) {
+            var memberIndex = $scope.groups.list[groupIndex][1].indexOf(user);
+            group.splice(memberIndex, 1);
+        });
+        $mdDialog.hide();
+    };
 }
