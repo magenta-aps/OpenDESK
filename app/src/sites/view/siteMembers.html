@@ -30,29 +30,6 @@
 							<div flex="30" class="od-secondary">
 								{{'PROJECT.GROUPS.' + group[0].shortName | translate}}
 							</div>
-							<div  flex="10" flex-gt-lg="10" style="text-align: right;">
-								<md-menu ng-if="vm.isManager && group[0].multipleMembers">
-									<md-button class="md-icon-button" ng-click="$mdMenu.open()">
-										<md-icon md-menu-origin>more_vert</md-icon>
-									</md-button>
-
-									<md-menu-content width="5">
-										<md-menu-item>
-											<md-button ng-click="vm.updateMemberRoleDialog($event, member, group[0].shortName, groupIndex)">
-												<md-icon md-menu-align-target>create</md-icon>
-												{{'MEMBER.EDIT_MEMBER' | translate }}
-											</md-button>
-										</md-menu-item>
-
-										<md-menu-item>
-											<md-button ng-click="vm.deleteMemberDialog($event, vm.project.shortName, member, groupIndex);">
-												<md-icon md-menu-align-target>remove_circle_outline</md-icon>
-												{{'COMMON.REMOVE' | translate }}
-											</md-button>
-										</md-menu-item>
-									</md-menu-content>
-								</md-menu>
-							</div>
 						</div>
 					</md-list-item>
 

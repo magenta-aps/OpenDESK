@@ -22,8 +22,8 @@
 						</h4>
 						<div ng-show="showGroupList[groupIndex]">
 							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
-									  md-on-remove="removeMember($chip, group[0].shortName)"
-									  md-on-add="addMember($chip, group[0].shortName)">
+									  md-on-remove="removeMemberFromSite($chip, group[0].shortName, groupIndex)"
+									  md-on-add="addMemberToSite($chip, group[0].shortName)">
 								<md-autocomplete
 									md-selected-item="selectedProjGrpItem"
 									md-search-text="searchTextList[groupIndex]"
