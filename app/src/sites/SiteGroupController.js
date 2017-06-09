@@ -5,7 +5,7 @@ angular
     .controller('SiteGroupController', SiteGroupController);
 
 
-function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteService, userService) {
+function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteService, userService,notificationsService) {
 
     $scope.externalUser = {};
     $scope.searchPeople = searchPeople;
@@ -28,13 +28,13 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
         }
     }
 
-    function addExternalUserToGroup (firstName, lastName, email, group) {
+    function addExternalUserToGroup(firstName, lastName, email, group) {
         siteService.createExternalUser($scope.site.shortName, firstName, lastName, email, group[0].shortName).then(
             function (response) {
                 $mdToast.show(
                     $mdToast.simple()
-                        .textContent('Den eksterne bruger, ' + firstName + " " + lastName + ', er blevet oprettet.')
-                        .hideDelay(3000)
+                    .textContent('Den eksterne bruger, ' + firstName + " " + lastName + ', er blevet oprettet.')
+                    .hideDelay(3000)
                 );
                 $scope.externalUser = {};
                 group[1].push({
@@ -47,8 +47,8 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
             function (err) {
                 $mdToast.show(
                     $mdToast.simple()
-                        .textContent('Brugeren kunne ikke oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
-                        .hideDelay(3000)
+                    .textContent('Brugeren kunne ikke oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
+                    .hideDelay(3000)
                 );
             });
     }
@@ -62,14 +62,14 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
         $translate('GROUP.UPDATED').then(function (msg) {
             $mdToast.show(
                 $mdToast.simple()
-                    .textContent(msg)
-                    .hideDelay(3000)
+                .textContent(msg)
+                .hideDelay(3000)
             );
         });
     }
 
     function doPDF() {
-        siteService.createMembersPDF($scope.site.shortName).then(function(response) {
+        siteService.createMembersPDF($scope.site.shortName).then(function (response) {
             alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
 
         });
@@ -83,16 +83,16 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
             createSiteNotification(userName, siteShortName);
 
             for (var i = 0; i < $scope.groups.list.length; i++) {
-            if ($scope.groups.list[i][0].role == role) {
-                $scope.groups.list[i][1].push(user);
-                break;
+                if ($scope.groups.list[i][0].role == role) {
+                    $scope.groups.list[i][1].push(user);
+                    break;
+                }
             }
-        }
         });
         $mdDialog.hide();
     };
 
-    function removeMemberFromSite (siteName, user, groupIndex) {
+    function removeMemberFromSite(siteName, user, groupIndex) {
         var userName = user.userName;
         siteService.removeMemberFromSite(siteName, userName).then(function (response) {
             var memberIndex = $scope.groups.list[groupIndex][1].indexOf(user);
@@ -100,4 +100,20 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
         });
         $mdDialog.hide();
     };
+
+    function createNotification(userName, subject, message, link, wtype, project) {
+        console.log('creating notification...');
+        notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
+            $mdDialog.hide();
+        });
+    }
+
+    function createSiteNotification(userName, site) {
+        var subject = "Du er blevet tilføjet til " + $scope.site.title;
+        var author = $scope.currentUser.firstName + ' ' + $scope.currentUser.lastName;
+
+        var message = author + " har tilføjet dig til projektet " + $scope.site.title + ".";
+        var link = "#!/projekter/" + site;
+        createNotification(userName, subject, message, link, 'project', site);
+    }
 }
