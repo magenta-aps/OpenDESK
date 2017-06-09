@@ -10,14 +10,14 @@ angular
     });
 
 
-function NotificationsController($scope, $timeout, $log, $mdToast, notificationsService, sessionService, $interval) {
+function NotificationsController($scope, $mdToast, notificationsService, sessionService) {
     var vm = this;
 
     var userInfo = sessionService.getUserInfo();
     var currentUser = userInfo.user.userName;
 
 
-    vm.notifications = new Array();
+    vm.notifications = [];
     vm.on = false;
     vm.toggleNotices = function () {
         vm.on = !vm.on;
@@ -32,20 +32,6 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
                 .action('Luk')
         );
     };
-
-
-    $interval(callAtTimeout, 10000);
-
-    function callAtTimeout() {
-        vm.updateNotifications();
-    }
-
-    vm.updateNotifications = function updateNotifications() {
-        notificationsService.getNotices(currentUser).then(function (val) {
-            $scope.notifications = val;
-        });
-    }
-    vm.updateNotifications();
 
     vm.rmNotice = function (nIndex) {
         notificationsService.delNotice(currentUser, nIndex).then(function () {
@@ -72,6 +58,12 @@ function NotificationsController($scope, $timeout, $log, $mdToast, notifications
         });
     };
 
+    function updateNotifications() {
+        notificationsService.getNotices(currentUser).then(function (val) {
+            $scope.notifications = val;
+        });
+    }
 
+    notificationsService.startUpdate(updateNotifications);
 
 };
