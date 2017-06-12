@@ -16,7 +16,7 @@
 						<md-list-item ng-class="group[0].open ? '' : 'ng-hide'" ng-repeat="member in group[1] | orderBy: 'displayName'">
 							<ul>
 								<div class="member" layout="row">
-										<a class="od-primary" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
+									<a class="od-primary" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
 								</div>
 							</ul>
 						</md-list-item>
