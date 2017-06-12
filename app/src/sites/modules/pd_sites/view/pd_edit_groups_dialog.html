@@ -13,6 +13,8 @@
 		<md-dialog-content>
 			<md-content class="md-padding" layout="column">
 
+				{{site}}
+
 				<div ng-repeat="(groupIndex, group) in groups.list">
 					<div ng-if="group[0].multipleMembers">
 						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="pd-group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">

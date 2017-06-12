@@ -47,9 +47,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     vm.showProgress = false;
 
     $scope.editSiteDialog = editSiteDialog;
-    $scope.editPdSiteDialog = editPdSiteDialog;
     vm.goToLOEditPage = goToLOEditPage;
-    vm.updateSite = updateSite;
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
     vm.deleteFile = deleteFile;
     $scope.editSiteGroups = editSiteGroups;
@@ -700,19 +698,8 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
     function editSiteDialog(ev) {
         $mdDialog.show({
-            templateUrl: 'app/src/sites/view/updateSite.tmpl.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
-            clickOutsideToClose: true
-        });
-    }
-
-    function editPdSiteDialog(ev) {
-        $mdDialog.show({
-            controller: 'PdSiteEditController',
-            templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_site_dialog.html',
+            controller: 'SiteEditController',
+            templateUrl: 'app/src/sites/view/editSite.tmpl.html',
             locals: {
                 sitedata: $scope.site
             },
@@ -722,18 +709,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    }
-
-    function updateSite() {
-        siteService.updateSite(vm.project.shortName, vm.project.title, vm.project.description, vm.project.visibility).then(
-            function (result) {
-                vm.project.title = result.title;
-                vm.project.description = result.description;
-                vm.project.visibility = result.visibility;
-                $mdDialog.hide();
-                loadSiteData();
-            }
-        );
     }
 
     function createDocumentFromTemplate(template_name,template_id) {

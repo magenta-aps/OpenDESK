@@ -10,7 +10,7 @@ function SiteCreateController($q, $mdDialog, $state, filterService, siteService,
 
     sc.openSiteCreateDialog = openSiteCreateDialog;
 
-    function openSiteCreateDialog(ev) {
+    function openSiteCreateDialog(ev,type) {
         $mdDialog.show({
             controller: SiteCreateDialogController,
             templateUrl: 'app/src/sites/view/newProject.tmpl.html',

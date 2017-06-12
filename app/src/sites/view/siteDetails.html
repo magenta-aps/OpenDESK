@@ -16,11 +16,7 @@
 				</dd>
 				<dd class="od-primary" ng-if="!hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
 			</dl>
-			<md-button ng-if="vm.isManager && vm.project.type == 'PD-Project'" class="md-primary md-icon-button" ng-click="editPdSiteDialog($event)"
-				aria-label="Redigér site">
-				<i class="material-icons">edit</i>
-			</md-button>
-			<md-button ng-if="vm.isManager && vm.project.type != 'PD-Project'" class="md-primary md-icon-button" ng-click="editSiteDialog($event)"
+			<md-button ng-if="vm.isManager" class="md-primary md-icon-button" ng-click="editSiteDialog($event)"
 				aria-label="Redigér site">
 				<i class="material-icons">edit</i>
 			</md-button>
