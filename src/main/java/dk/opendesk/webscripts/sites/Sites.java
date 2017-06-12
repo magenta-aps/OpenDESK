@@ -425,11 +425,13 @@ public class Sites extends AbstractWebScript {
 
             String projectManagerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
             Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
+            if (authorities.iterator().hasNext())
             manager = authorities.iterator().next();
 
             String projectOwnerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
             authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
-            owner = authorities.iterator().next();
+            if (authorities.iterator().hasNext())
+                owner = authorities.iterator().next();
         } else {
             json.put("title", s.getTitle());
             json.put("description", s.getDescription());
@@ -450,7 +452,8 @@ public class Sites extends AbstractWebScript {
 
             String SiteManager = Utils.getAuthorityName(siteShortName, "SiteManager");
             Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
-            manager = authorities.iterator().next();
+            if (authorities.iterator().hasNext())
+                manager = authorities.iterator().next();
         }
 
         //Get Manager
