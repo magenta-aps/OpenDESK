@@ -20,7 +20,6 @@ angular
             });
         }
         
-        
         function PdSiteCreateDiaglogController($scope, notificationsService, authService) {
 
             var currentUser = authService.getUserInfo().user;

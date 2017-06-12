@@ -1,15 +1,15 @@
 <md-dialog aria-label="Opret/redigér avanceret projekt" class="pd-create-site-diag">
     <form ng-submit="createPdSite()" class="pd-site-create-form" name="pdcreatesite">
         <md-toolbar>
-          <div class="md-toolbar-tools">
-            <h2>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-click="cancel()">
-                <i class="material-icons" aria-label="Luk dialogboks">close</i>
-            </md-button>
-          </div>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
         </md-toolbar>
-        
+
         <md-dialog-content>
             <md-tabs md-dynamic-height md-border-bottom>
 
@@ -32,15 +32,9 @@
                                 <input type="text" ng-model="newSite.siteName" required>
                             </md-input-container>
 
-                            <md-autocomplete
-									required
-                                    md-selected-item="newSite.owner"
-                                    md-search-text="prjownsrchtxt"
-                                    md-items="own in searchOwners(prjownsrchtxt)"
-                                    md-item-text="own.displayName"
-                                    md-min-length="1"
-                                    md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}"
-                                    placeholder="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}">
+                            <md-autocomplete required md-selected-item="newSite.owner" md-search-text="prjownsrchtxt" md-items="own in searchOwners(prjownsrchtxt)"
+                                md-item-text="own.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}"
+                                placeholder="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}">
                                 <md-item-template>
                                     <span md-highlight-text="prjownsrchtxt" md-highlight-flags="^i">{{ own.displayName }}</span>
                                 </md-item-template>
@@ -48,7 +42,7 @@
                                     {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ prjownsrchtxt }}".
                                 </md-not-found>
                             </md-autocomplete>
-                            
+
                             <md-input-container style="width: 100%;">
                                 <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
                                 <textarea ng-model="newSite.desc" md-maxlength='250' maxlength="250"></textarea>
@@ -63,22 +57,16 @@
                                     </md-option>
                                 </md-select>
                             </md-input-container>
-                            
+
                             <md-input-container style="width: 100%;">
                                 <label>{{'ESDH' | translate}} {{'CASE.CASE_NUMBER' | translate | lowercase}}</label>
                                 <input type="text" ng-model="newSite.sbsys" required>
                             </md-input-container>
 
                             <!--searchTextManager-->
-                            <md-autocomplete
-									required
-                                    md-selected-item="newSite.manager"
-                                    md-search-text="newSite.presetManager" 
-                                    md-items="man in searchPeople(newSite.presetManager)"
-                                    md-item-text="man.displayName"
-                                    md-min-length="1"
-                                    md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}"
-                                    placeholder="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}">
+                            <md-autocomplete required md-selected-item="newSite.manager" md-search-text="newSite.presetManager" md-items="man in searchPeople(newSite.presetManager)"
+                                md-item-text="man.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}"
+                                placeholder="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}">
                                 <md-item-template>
                                     <span md-highlight-text="newSite.presetManager" md-highlight-flags="^i">{{ man.displayName }}</span>
                                 </md-item-template>
@@ -86,7 +74,7 @@
                                     {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ newSite.presetManager }}".
                                 </md-not-found>
                             </md-autocomplete>
-                            
+
                             <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
                                 {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
                             </md-checkbox>
@@ -95,38 +83,74 @@
                 </md-tab>
 
                 <md-tab label="{{'GROUP.GROUPS' | translate}}">
-                    <md-content id="groups" class="md-padding" layout="row" layout-padding>
+                    <md-content id="groups" class="md-padding" layout="row" layout-padding style="width:100%">
 
-                        <fieldset ng-repeat="group in newSite.groups" ng-if="group.multipleMembers">
-                            <legend>{{'PROJECT.GROUPS.' + group.shortName | translate}}</legend>
-                            <md-chips ng-model="group.members"
-                                      md-autocomplete-snap
-                                      md-require-match="true">
-                                <md-autocomplete md-selected-item="selectedProjGrpItem"
-                                                 md-search-text="srchprjgrptxt"
-                                                 md-items="pgitem in searchPeople(srchprjgrptxt)"
-                                                 md-item-text="pgitem.displayName"
-                                                 placeholder="{{'MEMBER.MEMBERS' | translate}}">
-                                    <span md-highlight-text="srchprjgrptxt">{{ pgitem.displayName }}</span>
-                                </md-autocomplete>
-                                <md-chip-template>
-                                    <span>
-                                        <strong>{{ $chip.displayName }}</strong>
-                                    </span>
-                                </md-chip-template>
-                            </md-chips>
-                        </fieldset>
+                        <div ng-repeat="(groupIndex, group) in newSite.groups" ng-if="group.multipleMembers" flex="100">
+                            <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="pd-group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+                                <span>{{'PROJECT.GROUPS.' + group.shortName | translate}}</span>
+                                <span flex></span>
+                                <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+                            </h4>
+                            <div ng-show="showGroupList[groupIndex]">
+                                <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"
+                                    md-on-add="addMemberToSite($chip, group.shortName)">
+                                    <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+                                        md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
+                                        <span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
+                                    </md-autocomplete>
+                                    <md-chip-template>
+                                        <span>{{ $chip.displayName }}</span>
+                                    </md-chip-template>
+                                </md-chips>
+                            </div>
+                        </div>
+
+                        <div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
+                        <div style="padding-left: 15px;" layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>{{'USER.FIRST_NAME' | translate}}</label>
+                                <input type="text" name="externalUser.firstName" ng-model="externalUser.firstName">
+                            </md-input-container>
+                            <div flex="5" hide-xs hide-sm>
+                                <!-- Spacer //-->
+                            </div>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>{{'USER.LAST_NAME' | translate}}</label>
+                                <input type="text" name="externalUser.lastName" ng-model="externalUser.lastName">
+                            </md-input-container>
+                            <div flex="5" hide-xs hide-sm>
+                                <!-- Spacer //-->
+                            </div>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>{{'COMMON.EMAIL' | translate}}</label>
+                                <input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/">
+                            </md-input-container>
+                            <div flex="5" hide-xs hide-sm>
+                                <!-- Spacer //-->
+                            </div>
+                            <md-input-container>
+                                <label>Rolle</label>
+                                <md-select required ng-model="externalUser.group">
+                                    <md-option ng-repeat="group in newSite.groups | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group.shortName | translate}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <div style="position: relative; top: -25px;" class="btnAlign">
+                                <md-button class="md-primary" ng-click="addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
+                                    <i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
+                                </md-button>
+                            </div>
+                        </div>
 
                     </md-content>
                 </md-tab>
 
             </md-tabs>
         </md-dialog-content>
-        
+
         <md-dialog-actions layout="row">
             <span flex></span>
             <input type="submit" ng-disabled="pdcreatesite.$invalid" class="md-button md-raised md-primary" value="{{'COMMON.CREATE' | translate}}">
         </md-dialog-actions>
-        
+
     </form>
 </md-dialog>

@@ -36,25 +36,25 @@ function NotificationsController($scope, $mdToast, notificationsService, session
     vm.rmNotice = function (nIndex) {
         notificationsService.delNotice(currentUser, nIndex).then(function () {
 
-            vm.updateNotifications();
+            updateNotifications();
         });
     };
 
     vm.setRead = function (noticeObj) {
         notificationsService.setReadNotice(currentUser, noticeObj).then(function (val) {
-            vm.updateNotifications();
+            updateNotifications();
         });
     };
 
     vm.setSeen = function (noticeObj) {
         notificationsService.setSeenNotice(currentUser, noticeObj).then(function (val) {
-            vm.updateNotifications();
+            updateNotifications();
         });
     };
 
     vm.setAllSeen = function () {
         notificationsService.setAllSeen(currentUser).then(function (val) {
-            vm.updateNotifications();
+            updateNotifications();
         });
     };
 

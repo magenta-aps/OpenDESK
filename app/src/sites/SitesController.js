@@ -70,46 +70,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	getAllOrganizationalCenters();
 
 
-	vm.newSite = function (event) {
-		$mdDialog.show({
-			templateUrl: 'app/src/sites/view/newProject.tmpl.html',
-			parent: angular.element(document.body),
-			scope: $scope,
-			preserveScope: true,
-			targetEvent: event,
-			clickOutsideToClose: true
-		});
-	};
-
-
-	vm.createSite = function (name, description, isPrivateVisibility) {
-
-		var visibility = "PUBLIC"; // Visibility is set to public
-		if (isPrivateVisibility) {
-			visibility = "PRIVATE";
-		}
-
-		return siteService.createSite(name, description, visibility).then(function (val) {
-
-			$mdDialog.hide();
-
-			getSites().then(function (val) {
-				vm.sites = val;
-			});
-
-			getSitesPerUser().then(function (val) {
-				vm.sitesPerUser = val;
-			});
-
-			$state.go( 'project', { projekt: val[0].shortName , path: ""}  );
-
-		});
-	};
-
 	vm.deleteSiteDialog = function (project, event) {
-		console.log('deletesite dialog');
-		console.log(project);
-
 		$mdDialog.show({
             controller: ['$scope', 'project', function ($scope, project) {
                 $scope.project = project;

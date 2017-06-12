@@ -1,4 +1,4 @@
-<md-dialog aria-label="New site" ng-cloak>
+<!--<md-dialog aria-label="New site" ng-cloak>
     <form name="createSiteForm" ng-submit="vm.createSite(newSiteName, newSiteDescription, newSiteIsPrivate);">
 
         <md-toolbar>
@@ -29,8 +29,79 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-            <!--<md-button ng-click="vm.cancel()">Annullér</md-button>-->
             <md-button type="submit" class="md-primary">{{'COMMON.CREATE' | translate}}</md-button>
         </md-dialog-actions>
+    </form>
+</md-dialog>-->
+
+<md-dialog aria-label="New site" ng-cloak class="pd-create-site-diag">
+    <form name="createSiteForm" class="pd-site-create-form" ng-submit="createSite();">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <md-tabs md-dynamic-height md-border-bottom>
+
+                <md-tab label="{{'COMMON.NAME' | translate}}">
+                    <md-content id="details" class="md-padding" layout="row" layout-padding>
+                        <div flex="50">
+
+                            <md-input-container style="width: 100%;">
+                                <label>{{'PROJECT.NAME' | translate}}</label>
+                                <input type="text" ng-model="newSite.siteName" required>
+                            </md-input-container>
+
+                            <md-input-container style="width: 100%;">
+                                <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
+                                <textarea ng-model="newSite.desc" md-maxlength='250' maxlength="250"></textarea>
+                            </md-input-container>
+                        </div>
+                        <div flex="50">
+                            <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
+                                {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
+                            </md-checkbox>
+                        </div>
+                    </md-content>
+                </md-tab>
+
+                <md-tab label="{{'GROUP.GROUPS' | translate}}">
+                    <md-content id="groups" class="md-padding" layout="row" layout-padding style="width:100%">
+
+                        <div ng-repeat="(groupIndex, group) in newSite.groups" ng-if="group.multipleMembers" flex="100">
+                            <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="pd-group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+                                <span>{{'PROJECT.GROUPS.' + group.shortName | translate}}</span>
+                                <span flex></span>
+                                <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+                            </h4>
+                            <div ng-show="showGroupList[groupIndex]">
+                                <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"
+                                    md-on-add="addMemberToSite($chip, group.shortName)">
+                                    <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+                                        md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
+                                        <span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
+                                    </md-autocomplete>
+                                    <md-chip-template>
+                                        <span>{{ $chip.displayName }}</span>
+                                    </md-chip-template>
+                                </md-chips>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <input type="submit" ng-disabled="createsite.$invalid" class="md-button md-raised md-primary" value="{{'COMMON.CREATE' | translate}}">
+        </md-dialog-actions>
+
     </form>
 </md-dialog>
