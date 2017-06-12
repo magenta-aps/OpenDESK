@@ -22,7 +22,7 @@
 						</h4>
 						<div ng-show="showGroupList[groupIndex]">
 							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
-									  md-on-remove="removeMemberFromSite($chip, group[0].shortName, groupIndex)"
+									  md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
 									  md-on-add="addMemberToSite($chip, group[0].shortName)">
 								<md-autocomplete
 									md-selected-item="selectedProjGrpItem"

@@ -75,36 +75,31 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
         });
     }
 
-    function addMemberToSite(user, role) {
+    function addMemberToSite(user, groupName) {
         var userName = user.userName;
         var siteShortName = $scope.project.shortName;
 
-        siteService.addMemberToSite(siteShortName, userName, role).then(function (response) {
+        siteService.addMemberToSite(siteShortName, userName, groupName).then(function (response) {
             createSiteNotification(userName, siteShortName);
 
             for (var i = 0; i < $scope.groups.list.length; i++) {
-                if ($scope.groups.list[i][0].role == role) {
+                if ($scope.groups.list[i][0].role == groupName) {
                     $scope.groups.list[i][1].push(user);
                     break;
                 }
             }
         });
-        $mdDialog.hide();
     };
 
-    function removeMemberFromSite(siteName, user, groupIndex) {
+    function removeMemberFromSite(user,groupName) {
         var userName = user.userName;
-        siteService.removeMemberFromSite(siteName, userName).then(function (response) {
-            var memberIndex = $scope.groups.list[groupIndex][1].indexOf(user);
-            group.splice(memberIndex, 1);
+        siteService.removeMemberFromSite($scope.site.shortName, userName,groupName).then(function (response) {
         });
-        $mdDialog.hide();
     };
 
     function createNotification(userName, subject, message, link, wtype, project) {
         console.log('creating notification...');
         notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
-            $mdDialog.hide();
         });
     }
 
