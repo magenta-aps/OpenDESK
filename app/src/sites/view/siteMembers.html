@@ -24,10 +24,10 @@
 
 					<md-list-item ng-if="!group[0].collapsed" ng-repeat="member in group[1] | orderBy: 'displayName'">
 						<div class="md-no-style md-list-item-inner">
-							<div flex="50" flex-gt-lg="60">
+							<div flex="50">
 								<a class="od-primary" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
 							</div>
-							<div flex="30" class="od-secondary">
+							<div flex="50" class="od-secondary">
 								{{'PROJECT.GROUPS.' + group[0].shortName | translate}}
 							</div>
 						</div>
