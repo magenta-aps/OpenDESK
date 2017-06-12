@@ -155,14 +155,14 @@
 				</md-list>
 				<md-divider></md-divider>
 
-				<md-card-actions layout="row" layout-align="start center" class="btnAlign">
-					<md-button ng-controller="SiteCreateController as sc" ng-click="sc.openSiteCreateDialog($event)" class="md-primary" 
-						aria-label="Opret nyt grupperum">
+				<md-card-actions ng-controller="SiteCreateController as sc"  layout="row" layout-align="start center" class="btnAlign">
+					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" 
+						aria-label="Opret nyt grupperum"> <!-- ng-click="sc.openSiteCreateDialog($event)" -->
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate}}</span>
 					</md-button>
 
-					<md-button ng-controller="PdSiteCreateController as pdc" ng-click="pdc.openPdSiteCreateDialog($event)" class="md-primary"
+					<md-button ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary"
 					    aria-label="Opret nyt projekt">
 						<i class="material-icons">add</i>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate}}</span>

@@ -1,8 +1,9 @@
 <md-dialog aria-label="Opret/redigér avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="createPdSite()" class="pd-site-create-form" name="pdcreatesite">
+    <form ng-submit="type == 'PD-Project' ? createPdSite() : createSite()" class="pd-site-create-form" name="pdcreatesite">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
+                <h2 ng-if="type == 'PD-Project'">{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
+                <h2 ng-if="type != 'PD-Project'">{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <i class="material-icons" aria-label="Luk dialogboks">close</i>
@@ -12,12 +13,11 @@
 
         <md-dialog-content>
             <md-tabs md-dynamic-height md-border-bottom>
-
                 <md-tab label="{{'COMMON.NAME' | translate}} {{'COMMON.AND' | translate}} {{'COMMON.MANAGEMENT' | translate}}">
                     <md-content id="details" class="md-padding" layout="row" layout-padding>
                         <div flex="50">
-                            {{ variable }}
-                            <md-input-container class="template-input">
+                            
+                            <md-input-container class="template-input" ng-if="type == 'PD-Project'">
                                 <label>{{'COMMON.TEMPLATE' | translate}}</label>
                                 <md-select ng-model="newSite.template.name">
                                     <md-option ng-repeat="x in templates" value="{{ x.shortName }}">
@@ -32,7 +32,7 @@
                                 <input type="text" ng-model="newSite.siteName" required>
                             </md-input-container>
 
-                            <md-autocomplete required md-selected-item="newSite.owner" md-search-text="prjownsrchtxt" md-items="own in searchOwners(prjownsrchtxt)"
+                            <md-autocomplete ng-if="type == 'PD-Project'" required md-selected-item="newSite.owner" md-search-text="prjownsrchtxt" md-items="own in searchOwners(prjownsrchtxt)"
                                 md-item-text="own.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}"
                                 placeholder="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}">
                                 <md-item-template>
@@ -49,7 +49,7 @@
                             </md-input-container>
                         </div>
                         <div flex="50">
-                            <md-input-container class="org-input">
+                            <md-input-container ng-if="type == 'PD-Project'" class="org-input">
                                 <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
                                 <md-select ng-model="newSite.center_id" required>
                                     <md-option ng-repeat="org in availOrgs | orderBy:'+displayName'" value="{{ org.shortName }}">
@@ -58,13 +58,13 @@
                                 </md-select>
                             </md-input-container>
 
-                            <md-input-container style="width: 100%;">
+                            <md-input-container ng-if="type == 'PD-Project'" style="width: 100%;">
                                 <label>{{'ESDH' | translate}} {{'CASE.CASE_NUMBER' | translate | lowercase}}</label>
                                 <input type="text" ng-model="newSite.sbsys" required>
                             </md-input-container>
 
                             <!--searchTextManager-->
-                            <md-autocomplete required md-selected-item="newSite.manager" md-search-text="newSite.presetManager" md-items="man in searchPeople(newSite.presetManager)"
+                            <md-autocomplete ng-if="type == 'PD-Project'" required md-selected-item="newSite.manager" md-search-text="newSite.presetManager" md-items="man in searchPeople(newSite.presetManager)"
                                 md-item-text="man.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}"
                                 placeholder="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}">
                                 <md-item-template>
@@ -130,7 +130,7 @@
                             </div>
                             <md-input-container>
                                 <label>Rolle</label>
-                                <md-select required ng-model="externalUser.group">
+                                <md-select ng-model="externalUser.group">
                                     <md-option ng-repeat="group in newSite.groups | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group.shortName | translate}}</md-option>
                                 </md-select>
                             </md-input-container>
@@ -140,7 +140,6 @@
                                 </md-button>
                             </div>
                         </div>
-
                     </md-content>
                 </md-tab>
 

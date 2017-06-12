@@ -725,7 +725,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
         $mdDialog.show({
             controller: 'SiteGroupController',
-            templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
+            templateUrl: 'app/src/sites/view/editGroups.tmpl.html',
             parent: angular.element(document.body),
             scope: $scope,
             preserveScope: true,
