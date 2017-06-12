@@ -19,7 +19,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     $scope.groups.list = [];
     $scope.hasDescription = false;
 
-    var originatorEv;
     var vm = this;
 
     vm.project = {};
@@ -185,7 +184,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     };
 
     vm.openMenu = function ($mdOpenMenu, event) {
-        originatorEv = event;
         $mdOpenMenu(event);
     };
 
@@ -208,18 +206,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     }
 
-    vm.fileComparator = function (files) {
-        switch (files.contentType) {
-            case 'cmis:document':
-                return 1;
-
-            case 'cmis:folder':
-                return 2;
-
-            case 'cmis:link':
-                return 3;
-        }
-    }
 
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
@@ -231,11 +217,13 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     };
 
+
     vm.addThumbnailUrl = function (files) {
         files.forEach(function (item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
         });
     };
+
 
     vm.loadHistory = function (doc) {
         $scope.history = [];
@@ -448,11 +436,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     };
 
-    vm.reviewDocument = function (document, reviewer, comment) {
-
-    };
-
-
     function deleteFile(nodeRef) {
         siteService.deleteFile(nodeRef).then(function (response) {
             loadSiteData();
@@ -559,11 +542,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         vm.source = [];
         vm.source.push(nodeRef);
         vm.parentId = parentNodeRef;
-        console.log("vm.parentId");
-        console.log(vm.parentId);
-
-        console.log("nodeRef");
-        console.log(nodeRef);
 
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/moveNodeRefs.tmpl.html',
@@ -696,27 +674,17 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
     vm.getAutoSuggestions = function getAutoSuggestions(term) {
         return searchService.getSearchSuggestions(term).then(function (val) {
-
-            if (val !== undefined) {
-                return val;
-            } else {
-                return [];
-            }
+            return val !== undefined ? val : [];
         });
     };
 
 
-    vm.gotoPath = function (nodeRef) {
-
-        var ref = nodeRef;
-
+    vm.gotoPath = function (ref) {
         documentService.getPath(ref.split("/")[3]).then(function (val) {
-
             $scope.selectedDocumentPath = val.container;
-
             var path = ref.replace("workspace://SpacesStore/", "");
-            $window.location.href = "/#!/dokument/" + path;
 
+            $window.location.href = "/#!/dokument/" + path;
         });
     };
 

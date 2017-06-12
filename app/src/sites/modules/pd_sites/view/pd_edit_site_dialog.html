@@ -1,5 +1,5 @@
 <md-dialog aria-label="Opret/redigér avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="updatePdSite()" class="pd-site-create-form" name="pdcreatesite">
+    <form ng-submit="updatePdSite()" class="pd-site-create-form" name="pdeditsite">
         <md-toolbar>
           <div class="md-toolbar-tools">
             <h2>{{'COMMON.EDIT' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
@@ -88,7 +88,9 @@
                 Annullér
             </md-button>-->
             <span flex></span>
-            <input type="submit" class="md-button md-raised md-primary" value="{{'COMMON.SAVE' | translate}}">
+            <md-button type="submit" class="md-button md-raised md-primary" ng-disabled="pdeditsite.$invalid">
+                {{'COMMON.SAVE' | translate}}
+            </md-button>
         </md-dialog-actions>
         
     </form>

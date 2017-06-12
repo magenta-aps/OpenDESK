@@ -74,7 +74,6 @@ function SiteCreateController($q, $mdDialog, $state, filterService, siteService,
                         addUserToGroup(siteShortName, siteName, group.members, group.shortName, link);
                 });
 
-                $mdDialog.cancel();
                 $state.go('project', {
                     projekt: siteShortName
                 });

@@ -44,7 +44,6 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	function getSites() {
 		return siteService.getSites().then(function (response) {
 			vm.sites = response;
-			return response;
 		});
 	}
 	getSites();
@@ -52,7 +51,6 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	function getSitesPerUser() {
 		return siteService.getSitesPerUser().then(function (response) {
 			vm.sitesPerUser = response;
-			return response;
 		});
 	}
 	getSitesPerUser();
@@ -88,10 +86,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	};
 
 	vm.deleteSite = function (siteName) {
-		var r = siteService.deleteSite(siteName);
-
-		r.then(function (result) {
-			$mdDialog.hide();
+		siteService.deleteSite(siteName).then(function (result) {
 
 			getSites().then(function (val) {
 				vm.sites = val;
@@ -100,6 +95,8 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 			getSitesPerUser().then(function (val) {
 				vm.sitesPerUser = val;
 			});
+
+			$mdDialog.hide();
 		});
 	};
 
@@ -108,13 +105,13 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		$mdDialog.cancel();
 	};
 
+
 	vm.reload = function () {
 		$window.location.reload();
 	};
 
-	var originatorEv;
+
 	vm.openMenu = function ($mdOpenMenu, event) {
-		originatorEv = event;
 		$mdOpenMenu(event);
 	};
 
@@ -178,18 +175,11 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	};
 
 
-	vm.gotoPath = function (nodeRef) {
-
-		var ref = nodeRef;
-
+	vm.gotoPath = function (ref) {
 		documentService.getPath(ref.split("/")[3]).then(function (val) {
-
 			$scope.selectedDocumentPath = val.container
-			// var project = val.site;
-			// var container = val.container;
-			// var path = val.path;
-
 			var path = ref.replace("workspace://SpacesStore/", "");
+
 			$window.location.href = "/#!/dokument/" + path;
 		});
 	};

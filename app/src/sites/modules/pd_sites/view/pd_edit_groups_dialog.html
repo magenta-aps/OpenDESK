@@ -21,44 +21,39 @@
 							<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 						</h4>
 						<div ng-show="showGroupList[groupIndex]">
-							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
-									  md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
-									  md-on-add="addMemberToSite($chip, group[0].shortName)">
-								<md-autocomplete
-									md-selected-item="selectedProjGrpItem"
-									md-search-text="searchTextList[groupIndex]"
-									md-items="pgitem in searchPeople(searchTextList[groupIndex])"
-									md-item-text="pgitem.displayName"
-									placeholder="{{'PROJECT.MEMBER' | translate}}">
+							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
+							    md-on-add="addMemberToSite($chip, group[0].shortName)">
+								<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
 									<span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
 								</md-autocomplete>
 								<md-chip-template>
 									<span>{{ $chip.displayName }}</span>
 								</md-chip-template>
 							</md-chips>
-							</div>
 						</div>
 					</div>
+				</div>
 
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'USER.FIRST_NAME' | translate}}</label>
-						<input type="text" name="externalUser.firstName" ng-model="externalUser.firstName">
+						<input type="text" name="externalUser.firstName" ng-model="externalUser.firstName" required>
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm>
 						<!-- Spacer //-->
 					</div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'USER.LAST_NAME' | translate}}</label>
-						<input type="text" name="externalUser.lastName" ng-model="externalUser.lastName">
+						<input type="text" name="externalUser.lastName" ng-model="externalUser.lastName" required>
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm>
 						<!-- Spacer //-->
 					</div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'COMMON.EMAIL' | translate}}</label>
-						<input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/">
+						<input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/" required>
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm>
 						<!-- Spacer //-->
@@ -74,7 +69,6 @@
 							<i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
 						</md-button>
 					</div>
-
 				</div>
 			</md-content>
 		</md-dialog-content>
