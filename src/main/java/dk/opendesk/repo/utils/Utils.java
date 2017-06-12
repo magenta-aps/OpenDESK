@@ -562,6 +562,68 @@ public class Utils {
         return json;
     }
 
+    public static JSONObject convertNotificationToJSON (NodeService nodeService, SiteService siteService,
+                                                        PersonService personService, NodeRef notification) throws JSONException {
+        JSONObject json = new JSONObject();
+
+        Map<QName, Serializable> props = nodeService.getProperties(notification);
+
+        String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
+        String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
+        Boolean read = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
+        Boolean seen = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
+        String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
+        String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
+        String shortName = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
+        String projectName = "";
+
+        // project contains the shortName, we want the display name
+        if (shortName != null) {
+            SiteInfo site = siteService.getSite(shortName);
+            if (site != null) {
+                projectName = siteService.getSite(shortName).getTitle();
+            }
+        }
+
+        String creatorUserName = (String) nodeService.getProperty(notification, ContentModel.PROP_CREATOR);
+        NodeRef creator = personService.getPerson(creatorUserName);
+
+        String firstName = (String) nodeService.getProperty(creator, ContentModel.PROP_FIRSTNAME);
+        String lastName = (String) nodeService.getProperty(creator, ContentModel.PROP_LASTNAME);
+        String fromName = (firstName + " " + lastName).trim();
+
+        String fileName = "";
+
+        if (OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST.equals(type) || OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED.equals(type) ||
+                OpenDeskModel.PD_NOTIFICATION_REJECTED.equals(type) || OpenDeskModel.PD_NOTIFICATION_NEWDOC.equals(type)) {
+
+            NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("#!/dokument/", "").split("\\?")[0]);
+
+            String symbol = link.contains("?") ? "&" : "?";
+
+            link = link + symbol + "NID=" + notification; // add this to the link, makes it easy to lookup the notification from the ui
+
+            if(nodeService.exists(document))
+                fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
+        }
+
+        json.put("nodeRef", notification);
+        json.put("subject", subject);
+        json.put("message", message);
+        json.put("link", link);
+        json.put("read", read);
+        json.put("seen", seen);
+        json.put("filename", fileName);
+        json.put("project", projectName);
+        json.put("from", fromName);
+        json.put("type", type);
+
+        Date d = (Date) nodeService.getProperty(notification, ContentModel.PROP_CREATED);
+        json.put("created", d.getTime());
+
+        return json;
+    }
+
     public static Map<String, Serializable> getPreferences(PreferenceService preferenceService, String userName, String filter) {
         AuthenticationUtil.pushAuthentication();
         try {

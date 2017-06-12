@@ -84,6 +84,11 @@ public class Notifications extends AbstractWebScript {
                         result = this.getAllNotifications(userName);
                         break;
 
+                    case "getInfo":
+                        if (nodeRef != null)
+                            result = this.getInfo(nodeRef);
+                        break;
+
                     case "add":
                         result = addNotification(userName, message, subject, link, type, project);
                         break;
@@ -105,11 +110,6 @@ public class Notifications extends AbstractWebScript {
                     case "setSeen":
                         if (nodeRef != null)
                             result = this.setNotificationSeen(nodeRef);
-                        break;
-
-                    case "getInfo": //TODO: Change name to GetDocumentInfo - remember frontend refactoring
-                        if (nodeRef != null)
-                            result = this.getDocumentInfo(nodeRef);
                         break;
 
                     case "setAllNotificationsSeen":
@@ -146,75 +146,10 @@ public class Notifications extends AbstractWebScript {
         stats.put("unread", unReadSize);
         result.add(stats);
 
-        int i = 0;
-
         for (ChildAssociationRef child : childAssociationRefs) {
-            i++;
-
-            JSONObject json = new JSONObject();
-
-            Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
-
-            String subject = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_SUBJECT);
-            String message = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
-            Boolean read = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
-            Boolean seen = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
-            String link = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_LINK);
-            String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
-            String shortName = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_PROJECT);
-            String projectName = "";
-
-            // project contains the shortName, we want the display name
-            if (shortName != null) {
-
-                SiteInfo site = siteService.getSite(shortName);
-
-                if (site != null) {
-                    projectName = siteService.getSite(shortName).getTitle();
-                }
-            }
-
-            String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATOR);
-            NodeRef from = personService.getPerson(name);
-
-            String from_name = (String) nodeService.getProperty(from, ContentModel.PROP_FIRSTNAME) + " " + (String) nodeService.getProperty(from, ContentModel.PROP_LASTNAME);
-            String fileName = "";
-
-            if (OpenDeskModel.PD_NOTIFICATION_REVIEW_REQUEST.equals(type) || OpenDeskModel.PD_NOTIFICATION_REVIEW_APPROVED.equals(type) ||
-                    OpenDeskModel.PD_NOTIFICATION_REJECTED.equals(type) || OpenDeskModel.PD_NOTIFICATION_NEWDOC.equals(type)) {
-
-                NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("#!/dokument/", "").split("\\?")[0]);
-
-                String symbol = link.contains("?") ? "&" : "?";
-
-                link = link + symbol + "NID=" + child.getChildRef(); // add this to the link, makes it easy to lookup the notification from the ui
-
-                try {
-                    fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-
-                } catch (InvalidNodeRefException e) {
-                    continue; // Skip this notification if the document is no longer available.
-                }
-            } else {
-                fileName = "";
-            }
-            json.put("nodeRef", child.getChildRef());
-            json.put("subject", subject);
-            json.put("message", message);
-            json.put("link", link);
-            json.put("read", read);
-            json.put("seen", seen);
-            json.put("filename", fileName);
-            json.put("project", projectName);
-            json.put("from", from_name);
-            json.put("type", type);
-
-
-            Date d = (Date) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CREATED);
-            json.put("created", d.getTime());
+            JSONObject json = Utils.convertNotificationToJSON(nodeService, siteService, personService, child.getChildRef());
             children.add(json);
         }
-
 
         result.add(children);
 
@@ -233,7 +168,6 @@ public class Notifications extends AbstractWebScript {
 
         NodeRef user = personService.getPerson(userName);
 
-
         childAssocRef = this.nodeService.createNode(
                 user,
                 OpenDeskModel.PROP_NOTIFICATION_ASSOC,
@@ -251,15 +185,11 @@ public class Notifications extends AbstractWebScript {
                 contentProps.put(OpenDeskModel.PROP_NOTIFICATION_PROJECT, project);
 
                 nodeService.setProperties(childAssocRef.getChildRef(),contentProps);
-
                 nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
-
         } finally {
             AuthenticationUtil.popAuthentication();
         }
-        if(childAssocRef != null)
-            return Utils.getJSONReturnPair("nodeRef", childAssocRef.getChildRef().toString());
-        return Utils.getJSONError(new Exception("Failed to add notification"));
+        return Utils.getJSONReturnPair("nodeRef", childAssocRef.getChildRef().toString());
     }
 
     private JSONArray removeNotification(NodeRef nodeRef) {
@@ -291,20 +221,11 @@ public class Notifications extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
-    private JSONArray getDocumentInfo (NodeRef nodeRef) {
-        String comment = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_MESSAGE);
-        String link = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_LINK);
-        String project = (String)nodeService.getProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_PROJECT);
-
-        NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("#!/dokument/", "").split("\\?")[0]);
-        String fileName = (String)nodeService.getProperty(document, ContentModel.PROP_NAME);
-
-        Map<String, Serializable> map = new HashMap<>();
-        map.put("comment", comment);
-        map.put("project", project);
-        map.put("filename", fileName);
-
-        return Utils.getJSONReturnArray(map);
+    private JSONArray getInfo (NodeRef notification) throws JSONException {
+        JSONArray result = new JSONArray();
+        JSONObject json = Utils.convertNotificationToJSON(nodeService, siteService, personService, notification);
+        result.add(json);
+        return result;
     }
 
     private int countPropertyValue(String userName, QName property, Serializable value) {
