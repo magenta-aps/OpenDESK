@@ -101,23 +101,33 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
                 return response.data[0];
             });
         },
-        addMemberToSite: function (siteName, member, role) {
-            return $http.post('/api/sites/' + siteName + '/memberships', {
-                role: role,
-                person: {userName: member}
-            }).then(function (response) {
+        addMemberToSite: function (siteShortName, user, group) {
+             return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "addUser",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_USER: user,
+                PARAM_GROUP: group
+            }).then(function(response) {
                 return response.data;
             });
+
         },
         getMemberFromSite: function (siteName, member) {
             return $http.get('/api/sites/' + siteName + '/memberships/' + member).then(function(response) {
                 return response.data;
             });
         },
-        removeMemberFromSite: function (siteName, member) {
-            return $http.delete('/api/sites/' + siteName + '/memberships/' + member).then(function(response) {
+        removeMemberFromSite: function (siteShortName, user, group) {
+             return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD : "removeUser",
+                PARAM_SITE_SHORT_NAME: siteShortName,
+                PARAM_USER: user,
+                PARAM_GROUP: group
+            }).then(function(response) {
+                console.log(response);
                 return response.data;
             });
+
         },
         updateRoleOnSiteMember: function (siteName, member, newRole) {
 

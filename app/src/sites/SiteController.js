@@ -72,6 +72,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
                 vm.project = result;
                 $scope.site = vm.project;
+                $scope.currentUser = vm.currentUser;
                 vm.project.visibilityStr = vm.project.visibility === "PUBLIC" ? "Offentlig" : "Privat";
                 $scope.hasDescription = vm.project.description.trim() !== "";
 
@@ -472,14 +473,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
             $mdDialog.hide();
         });
-    }
-
-
-    function createSiteNotification(userName, site) {
-        var subject = "Du er blevet tilføjet til " + vm.project.title;
-        var message = "har tilføjet dig til projektet " + vm.project.title + ".";
-        var link = "#!/projekter/" + site;
-        createNotification(userName, subject, message, link, 'project', site);
     }
 
 
