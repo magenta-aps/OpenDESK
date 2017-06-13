@@ -13,6 +13,7 @@ import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.util.ajax.JSON;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,8 +81,26 @@ public class GroupsTest extends BaseWebScriptTest {
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_THREE);
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_FOUR);
 
-        assertWebScriptGetAllMembers(TestUtils.SITE_ONE, group, 3);
+        assertWebScriptGetGroupMembers(consumerGroup.replace("GROUP_", ""), 3);
     }
+
+    public void testGetGroupsAndMembers() throws IOException, JSONException {
+        log.debug("NotificationsTest.testUserHasNoUnseenNotifications");
+
+        String group = "Site" + OpenDeskModel.CONSUMER;
+
+        SiteInfo siteONE = sites.get(TestUtils.SITE_ONE);
+
+        String consumerGroup = Utils.getAuthorityName(TestUtils.SITE_ONE, group);
+        TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_ONE);
+        TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_THREE);
+        TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_FOUR);
+
+        assertWebScriptGetGroupsAndMembers(siteONE.getShortName());
+    }
+
+
+
 
     private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {
         TestWebScriptServer.Request request = new TestWebScriptServer.PostRequest("/groups", data.toString(), "application/json");
@@ -89,17 +108,55 @@ public class GroupsTest extends BaseWebScriptTest {
         return new JSONArray(response.getContentAsString());
     }
 
-    private JSONArray executeWebScriptGetAllMembers (String siteShortName, String groupName) throws IOException, JSONException {
+    private JSONArray executeWebScriptGetGroupMembers (String groupName) throws IOException, JSONException {
         JSONObject data = new JSONObject();
-        data.put("PARAM_METHOD", "getAllMembers");
-        data.put("PARAM_SITE_SHORT_NAME", siteShortName);
+        data.put("PARAM_METHOD", "getGroupMembers");
         data.put("PARAM_GROUP_NAME", groupName);
         return executeWebScript(data);
     }
 
-    private JSONArray assertWebScriptGetAllMembers (String siteShortName, String groupName, int memberCount) throws IOException, JSONException {
-        JSONArray returnJSON = executeWebScriptGetAllMembers(siteShortName, groupName);
-        assertEquals(memberCount, returnJSON.getJSONArray(0).length());
+    private JSONArray assertWebScriptGetGroupMembers (String groupName, int memberCount) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptGetGroupMembers(groupName);
+        assertEquals(memberCount, returnJSON.length());
+        return returnJSON;
+    }
+
+    private JSONArray executeWebScriptGetGroupsAndMembers(String groupName) throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getGroupsAndMembers");
+        data.put("PARAM_SITE_SHORT_NAME", groupName);
+        return executeWebScript(data);
+    }
+
+    private JSONArray assertWebScriptGetGroupsAndMembers (String groupName) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptGetGroupsAndMembers(groupName);
+
+        int numberOfGroups = 4;
+        assertEquals(numberOfGroups, returnJSON.length());
+
+        int l = 0;
+        boolean found = false;
+        JSONArray result = null;
+
+        while (!found && l<numberOfGroups) {
+
+            JSONArray group = returnJSON.getJSONArray(l);
+
+            String shortName = group.getJSONObject(0).getString("shortName");
+            System.out.println(shortName);
+
+            if (shortName.equals("Site" + OpenDeskModel.CONSUMER)) {
+                found = true;
+                result = group;
+            }
+            l++;
+        }
+
+
+        int numberOfMembers = 3;
+        assertEquals(numberOfMembers, result.getJSONArray(1).length());
+
+
         return returnJSON;
     }
 
