@@ -1,13 +1,13 @@
 <md-card id="details">
-	<md-card-title class="detail-header-container" ng-click="showProjDetails = !showProjDetails" ng-class="showProjDetails ? 'open' : 'closed'">
-		<div class="detail-header">
+	<md-card-title ng-click="showProjDetails = !showProjDetails" ng-class="showProjDetails ? 'open' : 'closed'">
+		<div>
 			<i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>{{'COMMON.DETAILS' | translate }}
 		</div>
 		<span flex></span>
 			<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 	</md-card-title>
 
-	<md-card-content ng-class="showProjDetails ? 'fold-out' : 'fold-in'" id='project-info'>
+	<md-card-content ng-class="showProjDetails ? 'fold-out' : 'fold-in'">
 		<div layout="row" layout-align="space-between">
 			<dl style="margin-bottom: 0;">
 				<dt class="od-secondary">{{'PROJECT.DESCRIPTION' | translate }}</dt>
