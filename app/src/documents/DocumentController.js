@@ -92,6 +92,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     };
 
 
+    // TODO: Check if this method is used. There is another method with same name and logic in SiteController
     vm.uploadNewVersion = function (file) {
 
         if (vm.paths[vm.paths.length - 1].title != file.name) {
@@ -99,7 +100,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         } else {
             documentService.getDocument(docHasParent ? parentDocumentNode : selectedDocumentNode).then(function (response) {
 
-                var cmisQuery = response.item.location.site + "/documentLibrary/" + response.item.location.path
+                var cmisQuery = response.item.location.site + "/documentLibrary" + response.item.location.path
 
 
                 cmisService.getNode(cmisQuery).then(function (val) {
