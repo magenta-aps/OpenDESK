@@ -88,13 +88,9 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	vm.deleteSite = function (siteName) {
 		siteService.deleteSite(siteName).then(function (result) {
 
-			getSites().then(function (val) {
-				vm.sites = val;
-			});
+			getSites();
 
-			getSitesPerUser().then(function (val) {
-				vm.sitesPerUser = val;
-			});
+			getSitesPerUser();
 
 			$mdDialog.hide();
 		});
