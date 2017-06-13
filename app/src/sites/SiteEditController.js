@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('openDeskApp.pd_sites')
+    .module('openDeskApp.sites')
     .controller('SiteEditController', SiteEditController);
 
 function SiteEditController(sitedata, $state, $scope, $mdDialog, pd_siteService, siteService, userService, $mdToast, filterService) {

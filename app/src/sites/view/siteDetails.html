@@ -7,7 +7,7 @@
 			<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 	</md-card-title>
 
-	<md-card-content ng-show="showProjDetails" id='project-info'>
+	<md-card-content ng-class="showProjDetails ? 'fold-out' : 'fold-in'" id='project-info'>
 		<div layout="row" layout-align="space-between">
 			<dl style="margin-bottom: 0;">
 				<dt class="od-secondary">{{'PROJECT.DESCRIPTION' | translate }}</dt>

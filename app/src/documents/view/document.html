@@ -37,19 +37,19 @@
 			<md-content>
 
 				<div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
-					<h4 ng-click="vm.showArchived = !vm.showArchived" class="pd-group-toggle" ng-class="vm.showArchived ? 'open' : 'closed'"
+					<h4 ng-click="vm.showArchived = !vm.showArchived" class="group-toggle" ng-class="vm.showArchived ? 'open' : 'closed'"
 					    layout="row">
 						<i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">{{'COMMON.HISTORY' | translate}}</span>
 						<span flex></span>
 						<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 					</h4>
 					<ul ng-show="vm.showArchived">
-						<p class="transition pHeader">
+						<p class="pHeader">
 							<span style="width: 164px;">{{'COMMON.LAST_MODIFIED' | translate}}</span>
 							<span>{{'COMMON.LAST_MODIFIED_BY' | translate}}</span>
 							<br>
 						</p>
-						<p class="transition pContent">
+						<p class="pContent">
 							<span id="{{h.nodeRef}}" ng-repeat="h in history">
 						<a class="od-secondary" href="#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
 							<span style="width: 138px;">{{ h.created | openeDate }}</span>{{ h.modifier }}

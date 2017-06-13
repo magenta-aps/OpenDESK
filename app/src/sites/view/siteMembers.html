@@ -5,27 +5,28 @@
 			<md-list class="od-members">
 				<div ng-repeat="(groupIndex, group) in groups.list">
 
-					<div ng-if="group[0].collapsed" flex="100" flex-gt-lg="100">
+					<div ng-if="group[0].collapsed" flex="100">
 						<h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'"
 							layout="row">
 							<span >{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 						</h4>
-
-						<md-list-item ng-class="group[0].open ? '' : 'ng-hide'" ng-repeat="member in group[1] | orderBy: 'displayName'">
+						<div ng-class="group[0].open ? 'fold-out' : 'fold-in'">
+						<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
 							<ul>
-								<div class="member" layout="row">
-									<a class="od-primary" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
+								<div layout="row">
+									<a class="member od-primary" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
 								</div>
 							</ul>
 						</md-list-item>
+						</div>
 					</div>
 
 					<md-list-item ng-if="!group[0].collapsed" ng-repeat="member in group[1] | orderBy: 'displayName'">
 						<div class="md-no-style md-list-item-inner">
 							<div flex="50">
-								<a class="od-primary" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
+								<a class="member od-primary" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
 							</div>
 							<div flex="50" class="od-secondary">
 								{{'PROJECT.GROUPS.' + group[0].shortName | translate}}

@@ -14,7 +14,7 @@
 			<md-content class="md-padding" layout="column">
 				<div ng-repeat="(groupIndex, group) in groups.list">
 					<div ng-if="group[0].multipleMembers">
-						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="pd-group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
 							<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
@@ -38,28 +38,28 @@
 				<div style="padding-left: 15px;" layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'USER.FIRST_NAME' | translate}}</label>
-						<input type="text" name="externalUser.firstName" ng-model="externalUser.firstName" required>
+						<input type="text" name="externalUser.firstName" ng-model="externalUser.firstName">
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm>
 						<!-- Spacer //-->
 					</div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'USER.LAST_NAME' | translate}}</label>
-						<input type="text" name="externalUser.lastName" ng-model="externalUser.lastName" required>
+						<input type="text" name="externalUser.lastName" ng-model="externalUser.lastName">
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm>
 						<!-- Spacer //-->
 					</div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'COMMON.EMAIL' | translate}}</label>
-						<input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/" required>
+						<input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/">
 					</md-input-container>
 					<div flex="5" hide-xs hide-sm>
 						<!-- Spacer //-->
 					</div>
 					<md-input-container>
 						<label>Rolle</label>
-						<md-select required ng-model="externalUser.group">
+						<md-select ng-model="externalUser.group">
 							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</md-option>
 						</md-select>
 					</md-input-container>

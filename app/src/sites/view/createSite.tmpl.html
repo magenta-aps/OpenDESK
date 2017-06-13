@@ -86,7 +86,7 @@
                     <md-content id="groups" class="md-padding" layout="row" layout-padding style="width:100%">
 
                         <div ng-repeat="(groupIndex, group) in newSite.groups" ng-if="group.multipleMembers" flex="100">
-                            <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="pd-group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+                            <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
                                 <span>{{'PROJECT.GROUPS.' + group.shortName | translate}}</span>
                                 <span flex></span>
                                 <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
