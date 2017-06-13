@@ -14,11 +14,11 @@
         </md-toolbar>
 
         <md-dialog-content class="md-padding" layout='column'>
-            <ng-ckeditor ng-model="postItem.content" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash"></ng-ckeditor>
+            <ng-ckeditor ng-model="postItem.content" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash" required></ng-ckeditor>
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button type="submit" class="md-primary">{{'COMMON.EDIT' | translate}}</md-button>
+            <md-button ng-disabled="newReplyForm.$invalid" type="submit" class="md-primary">{{'COMMON.EDIT' | translate}}</md-button>
         </md-dialog-actions>
 
         

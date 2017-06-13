@@ -16,7 +16,7 @@ function customDateFilterFactory(dateFilter) {
             var format = 'dd. MMMM';
 
             if(new Date(dateValue).getFullYear() != new Date().getFullYear()) {
-                format += 'dd. MMMM yyyy kl. HH:mm';
+                format += ' yyyy';
             }
 
             if(givenFormat = 'showTime') {

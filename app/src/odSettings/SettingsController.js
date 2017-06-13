@@ -9,10 +9,6 @@ angular
         };
     });
 
-function goto(path) {
-
-}
-
 function SettingsController($scope, $log) {
     var vm = this;
 
@@ -21,9 +17,7 @@ function SettingsController($scope, $log) {
         vm.on = !vm.on;
     };
 
-    var originatorEv;
     vm.openMenu = function ($mdOpenMenu, event) {
-        originatorEv = event;
         $mdOpenMenu(event);
     };
 

@@ -46,11 +46,9 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     }
 
     function logout() {
-        authService.logout().then(function (response) {
-            chatService.logout();
-            delete vm.user;
-            $state.go('login');
-        });
+        chatService.logout();
+        delete vm.user;
+        authService.logout();
     }
 
     function loggedin() {

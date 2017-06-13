@@ -16,12 +16,12 @@
         <md-dialog-content class="md-padding" layout='column'>
             <md-input-container>
                 <label>{{'DISCUSSIONS.TITLE' | translate}}</label>
-                <input type="text" name="postTitle" required ng-model="postItem.title" md-autofocus>
+                <input type="text" name="postTitle" required ng-model="postItem.title" required md-autofocus>
             </md-input-container>
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button type="submit" class="md-primary">{{'COMMON.EDIT' | translate}}</md-button>
+            <md-button ng-disabled="editTitleForm.$invalid" type="submit" class="md-primary">{{'COMMON.EDIT' | translate}}</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>

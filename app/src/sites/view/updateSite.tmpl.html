@@ -1,5 +1,5 @@
 <md-dialog>
-    <form name="renameFolderForm"
+    <form name="updateSiteForm"
           ng-submit="vm.updateSite();">
         <div>
             <md-toolbar>
@@ -15,7 +15,7 @@
                     <md-input-container class="md-block">
                         <label>{{'COMMON.NAME' | translate}}</label>
                         <input type="text" name="newSiteName" required ng-model="vm.project.title" md-autofocus>
-                        <div ng-messages="renameFolderForm.newSiteName.$error">
+                        <div ng-messages="updateSiteForm.newSiteName.$error">
                             <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                         </div>
                     </md-input-container>
@@ -31,7 +31,7 @@
             </md-content>
 
             <md-dialog-actions>
-                <md-button type="submit" class="md-primary">{{'COMMON.UPDATE' | translate}}</md-button>
+                <md-button ng-disabled="updateSiteForm.$invalid" type="submit" class="md-primary">{{'COMMON.UPDATE' | translate}}</md-button>
             </md-dialog-actions>
         </div>
     </form>

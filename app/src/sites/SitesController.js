@@ -44,7 +44,6 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	function getSites() {
 		return siteService.getSites().then(function (response) {
 			vm.sites = response;
-			return response;
 		});
 	}
 	getSites();
@@ -52,7 +51,6 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	function getSitesPerUser() {
 		return siteService.getSitesPerUser().then(function (response) {
 			vm.sitesPerUser = response;
-			return response;
 		});
 	}
 	getSitesPerUser();
@@ -70,46 +68,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	getAllOrganizationalCenters();
 
 
-	vm.newSite = function (event) {
-		$mdDialog.show({
-			templateUrl: 'app/src/sites/view/newProject.tmpl.html',
-			parent: angular.element(document.body),
-			scope: $scope,
-			preserveScope: true,
-			targetEvent: event,
-			clickOutsideToClose: true
-		});
-	};
-
-
-	vm.createSite = function (name, description, isPrivateVisibility) {
-
-		var visibility = "PUBLIC"; // Visibility is set to public
-		if (isPrivateVisibility) {
-			visibility = "PRIVATE";
-		}
-
-		return siteService.createSite(name, description, visibility).then(function (val) {
-
-			$mdDialog.hide();
-
-			getSites().then(function (val) {
-				vm.sites = val;
-			});
-
-			getSitesPerUser().then(function (val) {
-				vm.sitesPerUser = val;
-			});
-
-			$state.go( 'project', { projekt: val[0].shortName , path: ""}  );
-
-		});
-	};
-
 	vm.deleteSiteDialog = function (project, event) {
-		console.log('deletesite dialog');
-		console.log(project);
-
 		$mdDialog.show({
             controller: ['$scope', 'project', function ($scope, project) {
                 $scope.project = project;
@@ -127,18 +86,13 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	};
 
 	vm.deleteSite = function (siteName) {
-		var r = siteService.deleteSite(siteName);
+		siteService.deleteSite(siteName).then(function (result) {
 
-		r.then(function (result) {
+			getSites();
+
+			getSitesPerUser();
+
 			$mdDialog.hide();
-
-			getSites().then(function (val) {
-				vm.sites = val;
-			});
-
-			getSitesPerUser().then(function (val) {
-				vm.sitesPerUser = val;
-			});
 		});
 	};
 
@@ -147,13 +101,13 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		$mdDialog.cancel();
 	};
 
+
 	vm.reload = function () {
 		$window.location.reload();
 	};
 
-	var originatorEv;
+
 	vm.openMenu = function ($mdOpenMenu, event) {
-		originatorEv = event;
 		$mdOpenMenu(event);
 	};
 
@@ -217,18 +171,11 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	};
 
 
-	vm.gotoPath = function (nodeRef) {
-
-		var ref = nodeRef;
-
+	vm.gotoPath = function (ref) {
 		documentService.getPath(ref.split("/")[3]).then(function (val) {
-
 			$scope.selectedDocumentPath = val.container
-			// var project = val.site;
-			// var container = val.container;
-			// var path = val.path;
-
 			var path = ref.replace("workspace://SpacesStore/", "");
+
 			$window.location.href = "/#!/dokument/" + path;
 		});
 	};

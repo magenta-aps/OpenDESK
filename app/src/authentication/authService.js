@@ -73,7 +73,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
 }
 
-function authService($http, $window, $state, sessionService, userService, APP_CONFIG) {
+function authService($http, $window, $state, sessionService, userService, notificationsService) {
     var service = {
         login: login,
         logout: logout,
@@ -132,10 +132,10 @@ function authService($http, $window, $state, sessionService, userService, APP_CO
 
         if (userInfo) {
             var ticket =  userInfo.ticket;
-            sessionService.setUserInfo(null);
             sessionService.clearRetainedLocation();
-            return $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function (response) {
-                return response;
+            $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function (response) {
+                notificationsService.stopUpdate();
+                $state.go('login');
             });
         }
 

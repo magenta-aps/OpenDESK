@@ -1,5 +1,5 @@
-<md-dialog aria-label="{{'COMMON.EDIT' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}" class="pd-create-site-diag">
-    <form ng-submit="updatePdSite()" class="pd-site-create-form" name="pdcreatesite">
+<md-dialog aria-label="redigér projekt" class="pd-create-site-diag">
+    <form ng-submit="site.type == 'PD-Project' ? updatePdSite(): updateSite()" class="pd-site-create-form" name="pdeditsite">
         <md-toolbar>
           <div class="md-toolbar-tools">
             <h2>{{'COMMON.EDIT' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
@@ -9,19 +9,22 @@
             </md-button>
           </div>
         </md-toolbar>
-        
+       
         <md-dialog-content>
             <md-content class="md-padding" layout="row" layout-padding>
-                <div flex="50">
+                <div flex="site.type == 'PD-Project' ? 50 : 100">
                     <md-input-container style="width: 100%;">
                         <label>{{'COMMON.NAME' | translate}}</label>
                         <input type="text" ng-model="newSite.siteName" required>
                     </md-input-container>
+
                     <md-input-container style="width: 100%;">
                         <label>{{'COMMON.DESCRIPTION' | translate}}</label>
-                        <textarea ng-model="newSite.desc"></textarea>
+                        <textarea ng-model="newSite.desc" md-maxlength='250' maxlength="250"></textarea>
                     </md-input-container>
+
                     <md-autocomplete
+                        ng-if="site.type == 'PD-Project'"
                         md-selected-item="newSite.owner"
                         md-search-text="searchTextOwner"
                         md-items="own in searchProjectOwners(searchTextOwner)"
@@ -41,12 +44,14 @@
                         {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
                     </md-checkbox>
                 </div>
-                <div flex="50">
-                    <md-input-container style="width: 100%;">
+
+                <div ng-if="site.type == 'PD-Project'" flex="50">
+                    <md-input-container ng-if="site.type == 'PD-Project'" style="width: 100%;">
                         <label>{{'ESDH' | translate}} {{'CASE.CASE_NUMBER' | translate}}</label>
                         <input type="text" ng-model="newSite.sbsys" required>
                     </md-input-container>
-                    <md-input-container class="org-input">
+
+                    <md-input-container ng-if="site.type == 'PD-Project'" class="org-input">
                         <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
                         <md-select ng-model="newSite.center_id" required>
                             <md-option ng-repeat="org in availOrgs" value="{{ org.shortName }}">
@@ -54,7 +59,9 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
+
                     <md-autocomplete
+                            ng-if="site.type == 'PD-Project'"
                             md-selected-item="newSite.manager"
                             md-search-text="searchTextManager"
                             md-items="man in searchPeople(searchTextManager)"
@@ -70,7 +77,8 @@
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".
                         </md-not-found>
                     </md-autocomplete>
-                    <md-input-container>
+
+                    <md-input-container ng-if="site.type == 'PD-Project'">
                         <label>{{'PROJECT.STATUS' | translate}}</label>
                         <md-select ng-model="newSite.state">
                             <md-option ng-repeat="state in newSite.availStates" ng-value="state">
@@ -84,11 +92,8 @@
         </md-dialog-content>
         
         <md-dialog-actions layout="row">
-            <!--<md-button ng-click="cancel()" >
-                Annullér
-            </md-button>-->
             <span flex></span>
-            <md-button type="submit" class="md-primary">
+            <md-button type="submit" class="md-button md-raised md-primary" ng-disabled="pdeditsite.$invalid">
                 {{'COMMON.SAVE' | translate}}
             </md-button>
         </md-dialog-actions>

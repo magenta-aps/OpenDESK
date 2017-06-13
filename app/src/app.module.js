@@ -15,7 +15,6 @@ angular
         'openDeskApp.auth',
         'openDeskApp.sites',
         'openDeskApp.site',
-        'openDeskApp.pd_sites',
         'openDeskApp.translations.init',
         'openDeskApp.header',
         'openDeskApp.dashboard',

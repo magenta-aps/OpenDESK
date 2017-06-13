@@ -12,33 +12,27 @@
 
 		<md-dialog-content>
 			<md-content class="md-padding" layout="column">
-
 				<div ng-repeat="(groupIndex, group) in groups.list">
 					<div ng-if="group[0].multipleMembers">
-						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="pd-group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
 							<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 						</h4>
 						<div ng-show="showGroupList[groupIndex]">
-							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
-									  md-on-remove="removeMemberFromSite($chip, group[0].shortName, groupIndex)"
-									  md-on-add="addMemberToSite($chip, group[0].shortName)">
-								<md-autocomplete
-									md-selected-item="selectedProjGrpItem"
-									md-search-text="searchTextList[groupIndex]"
-									md-items="pgitem in searchPeople(searchTextList[groupIndex])"
-									md-item-text="pgitem.displayName"
-									placeholder="{{'PROJECT.MEMBER' | translate}}">
+							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
+							    md-on-add="addMemberToSite($chip, group[0].shortName)">
+								<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
 									<span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
 								</md-autocomplete>
 								<md-chip-template>
 									<span>{{ $chip.displayName }}</span>
 								</md-chip-template>
 							</md-chips>
-							</div>
 						</div>
 					</div>
+				</div>
 
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
@@ -65,7 +59,7 @@
 					</div>
 					<md-input-container>
 						<label>Rolle</label>
-						<md-select required ng-model="externalUser.group">
+						<md-select ng-model="externalUser.group">
 							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</md-option>
 						</md-select>
 					</md-input-container>
@@ -74,7 +68,6 @@
 							<i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
 						</md-button>
 					</div>
-
 				</div>
 			</md-content>
 		</md-dialog-content>

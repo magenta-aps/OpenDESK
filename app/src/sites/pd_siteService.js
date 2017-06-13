@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('openDeskApp.pd_sites')
+    .module('openDeskApp.sites')
     .factory('pd_siteService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService, systemSettingsService) {
     
     

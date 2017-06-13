@@ -4,8 +4,9 @@
         .factory('notificationsService', notificationsService);
 
     var restBaseUrl = '/alfresco/service';
+    var update;
 
-    function notificationsService($http) {
+    function notificationsService($http, $interval) {
         var service = {
             getNotices: getNotices,
             addNotice: addNotice,
@@ -13,7 +14,9 @@
             setReadNotice: setRead,
             getInfo: getInfo,
             setSeenNotice: setSeen,
-            setAllSeen: setAllSeen
+            setAllSeen: setAllSeen,
+            startUpdate: startUpdate,
+            stopUpdate: stopUpdate
         };
 
         return service;
@@ -92,6 +95,14 @@
                 return response;
             })
         };
+
+        function startUpdate(updateNotifications) {
+            update = $interval(updateNotifications, 10000);
+        }
+
+        function stopUpdate() {
+            $interval.cancel(update);
+        }
 
     }
     

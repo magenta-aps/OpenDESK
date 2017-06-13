@@ -19,7 +19,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     $scope.groups.list = [];
     $scope.hasDescription = false;
 
-    var originatorEv;
     var vm = this;
 
     vm.project = {};
@@ -48,9 +47,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     vm.showProgress = false;
 
     $scope.editSiteDialog = editSiteDialog;
-    $scope.editPdSiteDialog = editPdSiteDialog;
     vm.goToLOEditPage = goToLOEditPage;
-    vm.updateSite = updateSite;
     vm.createDocumentFromTemplate = createDocumentFromTemplate;
     vm.deleteFile = deleteFile;
     $scope.editSiteGroups = editSiteGroups;
@@ -72,6 +69,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
                 vm.project = result;
                 $scope.site = vm.project;
+                $scope.currentUser = vm.currentUser;
                 vm.project.visibilityStr = vm.project.visibility === "PUBLIC" ? "Offentlig" : "Privat";
                 $scope.hasDescription = vm.project.description.trim() !== "";
 
@@ -184,7 +182,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     };
 
     vm.openMenu = function ($mdOpenMenu, event) {
-        originatorEv = event;
         $mdOpenMenu(event);
     };
 
@@ -207,18 +204,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     }
 
-    vm.fileComparator = function (files) {
-        switch (files.contentType) {
-            case 'cmis:document':
-                return 1;
-
-            case 'cmis:folder':
-                return 2;
-
-            case 'cmis:link':
-                return 3;
-        }
-    }
 
     vm.loadContents = function () {
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
@@ -230,11 +215,13 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     };
 
+
     vm.addThumbnailUrl = function (files) {
         files.forEach(function (item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
         });
     };
+
 
     vm.loadHistory = function (doc) {
         $scope.history = [];
@@ -447,11 +434,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         });
     };
 
-    vm.reviewDocument = function (document, reviewer, comment) {
-
-    };
-
-
     function deleteFile(nodeRef) {
         siteService.deleteFile(nodeRef).then(function (response) {
             loadSiteData();
@@ -472,14 +454,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
             $mdDialog.hide();
         });
-    }
-
-
-    function createSiteNotification(userName, site) {
-        var subject = "Du er blevet tilføjet til " + vm.project.title;
-        var message = "har tilføjet dig til projektet " + vm.project.title + ".";
-        var link = "#!/projekter/" + site;
-        createNotification(userName, subject, message, link, 'project', site);
     }
 
 
@@ -566,11 +540,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         vm.source = [];
         vm.source.push(nodeRef);
         vm.parentId = parentNodeRef;
-        console.log("vm.parentId");
-        console.log(vm.parentId);
-
-        console.log("nodeRef");
-        console.log(nodeRef);
 
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/moveNodeRefs.tmpl.html',
@@ -703,27 +672,17 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
     vm.getAutoSuggestions = function getAutoSuggestions(term) {
         return searchService.getSearchSuggestions(term).then(function (val) {
-
-            if (val !== undefined) {
-                return val;
-            } else {
-                return [];
-            }
+            return val !== undefined ? val : [];
         });
     };
 
 
-    vm.gotoPath = function (nodeRef) {
-
-        var ref = nodeRef;
-
+    vm.gotoPath = function (ref) {
         documentService.getPath(ref.split("/")[3]).then(function (val) {
-
             $scope.selectedDocumentPath = val.container;
-
             var path = ref.replace("workspace://SpacesStore/", "");
-            $window.location.href = "/#!/dokument/" + path;
 
+            $window.location.href = "/#!/dokument/" + path;
         });
     };
 
@@ -739,19 +698,8 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
     function editSiteDialog(ev) {
         $mdDialog.show({
-            templateUrl: 'app/src/sites/view/updateSite.tmpl.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
-            clickOutsideToClose: true
-        });
-    }
-
-    function editPdSiteDialog(ev) {
-        $mdDialog.show({
-            controller: 'PdSiteEditController',
-            templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_site_dialog.html',
+            controller: 'SiteEditController',
+            templateUrl: 'app/src/sites/view/editSite.tmpl.html',
             locals: {
                 sitedata: $scope.site
             },
@@ -761,18 +709,6 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    }
-
-    function updateSite() {
-        siteService.updateSite(vm.project.shortName, vm.project.title, vm.project.description, vm.project.visibility).then(
-            function (result) {
-                vm.project.title = result.title;
-                vm.project.description = result.description;
-                vm.project.visibility = result.visibility;
-                $mdDialog.hide();
-                loadSiteData();
-            }
-        );
     }
 
     function createDocumentFromTemplate(template_name,template_id) {
@@ -789,7 +725,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
         $mdDialog.show({
             controller: 'SiteGroupController',
-            templateUrl: 'app/src/sites/modules/pd_sites/view/pd_edit_groups_dialog.html',
+            templateUrl: 'app/src/sites/view/editGroups.tmpl.html',
             parent: angular.element(document.body),
             scope: $scope,
             preserveScope: true,
