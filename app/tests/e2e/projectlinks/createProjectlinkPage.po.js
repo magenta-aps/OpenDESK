@@ -21,7 +21,7 @@ var CreateProjectlinkPage = function () {
     }; 
 
 	public.createProjectlink = function () {
-		return element(by.css('[aria-label="New project link"] button[type="submit"]')).click();
+		return element(by.css('[aria-label="Create project link"] button[type="submit"]')).click();
 
 	}
     

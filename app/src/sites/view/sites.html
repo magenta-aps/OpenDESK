@@ -17,25 +17,15 @@
 					<input type="text" ng-model="vm.search.title">
 				</md-input-container>
 
-				<md-autocomplete 
-					md-selected-item="selectedLead"
-					md-selected-item-change="vm.search.manager.displayName = lead.displayName"
-					md-search-text="searchlead" 
-					md-items="lead in vm.searchPeople(searchlead)"
-					md-item-text="lead.displayName"
-					md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
-					md-clear-button=true>
+				<md-autocomplete md-selected-item="selectedLead" md-selected-item-change="vm.search.manager.displayName = lead.displayName"
+				    md-search-text="searchlead" md-items="lead in vm.searchPeople(searchlead)" md-item-text="lead.displayName" md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
+				    md-clear-button=true>
 					<span md-highlight-text="searchlead">{{ lead.displayName }}</span>
 				</md-autocomplete>
 
-				<md-autocomplete 
-					md-selected-item="selectedProjGrpItem"
-					md-selected-item-change="vm.searchMembers = [pgitem]" 
-					md-search-text="srchprjgrptxt" 
-					md-items="pgitem in vm.searchPeople(srchprjgrptxt)"
-					md-item-text="lead.displayName"
-					md-floating-label="{{'PROJECT.MEMBER' | translate}}"
-					md-clear-button=true>
+				<md-autocomplete md-selected-item="selectedProjGrpItem" md-selected-item-change="vm.searchMembers = [pgitem]" md-search-text="srchprjgrptxt"
+				    md-items="pgitem in vm.searchPeople(srchprjgrptxt)" md-item-text="lead.displayName" md-floating-label="{{'PROJECT.MEMBER' | translate}}"
+				    md-clear-button=true>
 					<span md-highlight-text="srchprjgrptxt">{{ pgitem.displayName }}</span>
 				</md-autocomplete>
 
@@ -72,14 +62,14 @@
 				</md-button>
 
 				<md-list class="">
-				<table class="od-members od-members-row od-project-table">
-					<col style="width:32px">
-					<col style="width:40%">
-        			<col style="width:15%">
-        			<col style="width:20%">
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:32px">
+					<table class="od-members od-members-row od-project-table">
+						<col style="width:32px">
+						<col style="width:40%">
+						<col style="width:15%">
+						<col style="width:20%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:32px">
 						<thead fix-head>
 							<tr>
 								<th class="od-secondary" colspan="2" sort-table="title" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
@@ -102,8 +92,8 @@
 								</td>
 								<td>
 									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}/dokumenter">
-            							<h3 class="od-primary">{{ project.title }}</h3>
-										
+										<h3 class="od-primary">{{ project.title }}</h3>
+
 										{{ project.description }}
 									</a>
 
@@ -141,7 +131,8 @@
 												</md-button>
 											</md-menu-item>
 											<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
-												<md-button ng-click="vm.deleteSiteDialog(project, $event)" aria-label="remove"> <!--shortname-->
+												<md-button ng-click="vm.deleteSiteDialog(project, $event)" aria-label="remove">
+													<!--shortname-->
 													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 													{{'COMMON.REMOVE' | translate}}
 												</md-button>
@@ -151,21 +142,22 @@
 								</td>
 							</tr>
 						</tbody>
-				</table>
+					</table>
 				</md-list>
+				<div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
+			<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+		</div>
 				<md-divider></md-divider>
 
-				<md-card-actions ng-controller="SiteCreateController as sc"  layout="row" layout-align="start center" class="btnAlign">
-					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" 
-						aria-label="Opret nyt grupperum">
+				<md-card-actions ng-controller="SiteCreateController as sc" layout="row" layout-align="start center" class="btnAlign">
+					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}">
 						<i class="material-icons">add</i>
-						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate}}</span>
+						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</span>
 					</md-button>
 
-					<md-button ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary"
-					    aria-label="Opret nyt projekt">
+					<md-button ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}">
 						<i class="material-icons">add</i>
-						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate}}</span>
+						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</span>
 					</md-button>
 				</md-card-actions>
 			</md-card-content>

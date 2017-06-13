@@ -12,8 +12,10 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     dc.allMembers = [];
     dc.search = '';
     dc.user = '';
+    dc.isLoading = true;
 
     dc.getDiscussions = function (siteShortName) {
+        dc.isLoading = true;
         discussionService.getDiscussions(siteShortName).then(function (response) {
             response.items.forEach(function (item) {
                 if (item.lastReplyOn == undefined) {
@@ -21,6 +23,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
                 }
             });
             dc.discussions = response.items;
+            dc.isLoading = false;
         });
     }
 

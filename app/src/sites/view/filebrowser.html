@@ -1,4 +1,6 @@
-<breadcrumb paths="vm.paths"></breadcrumb>
+<breadcrumb paths="vm.paths">
+
+</breadcrumb>
 
 <md-list class="sortHead">
 
@@ -14,14 +16,17 @@
             </tr>
         </thead>
         <tbody ng-repeat="contentTypeList in contents">
-            <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder"
-                 ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+            <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder" ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
             </tr>
         </tbody>
     </table>
 </md-list>
 
-<p ng-show="contents.length === 0">
+<div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
+    <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+</div>
+
+<p  ng-show="contents.length === 0 && !vm.isLoading">
     {{'COMMON.EMPTY_FOLDER' | translate}}
 </p>
 
@@ -39,7 +44,8 @@
                     <md-button ng-click="vm.uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
                 </md-menu-item>
                 <md-menu-item ng-if="vm.project.type != vm.strings.templateProject">
-                    <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}} </md-button>
+                    <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
+                    </md-button>
                 </md-menu-item>
             </md-menu-content>
         </md-menu>

@@ -19,7 +19,7 @@ var CreateProjectPage = function () {
     }
 
     public.openCreateProjectDialog = function() {
-        element(by.css('[ng-click="pdc.openPdSiteCreateDialog($event)"]')).click();
+        element(by.css('[aria-label="Create new project"]')).click();
     }
 
     public.fillInputFields = function (name, isPrivate) {
@@ -61,7 +61,7 @@ var CreateProjectPage = function () {
     }
 
     public.createProject = function() {
-        element(by.css('[aria-label="Opret projekt"]')).click();
+        element(by.css('[aria-label="Create"]')).click();
     };
 
 

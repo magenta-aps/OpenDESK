@@ -30,7 +30,7 @@ describe('User Henrik', function () {
         expect(browser.getCurrentUrl()).toContain('/#!/projekter');
     });
 
-    xdescribe('should create a new project', function () {
+    describe('should create a new project', function () {
         it('should create a new project', function () {
             createProjectPage.openCreateProjectDialog();
             createProjectPage.fillInputFields(constants.PROJECT_NAME_1, false);
@@ -65,7 +65,7 @@ describe('User Henrik', function () {
             createProjectlinkPage.createProjectlink();
         });
 
-        describe('should create a new discussion', function () {
+        xdescribe('should create a new discussion', function () {
             it('should go to discussions tab', function () {
                 createDiscussionPage.gotoDiscussionsTab();
                 expect(browser.getCurrentUrl()).toContain('diskussioner');
@@ -104,7 +104,7 @@ describe('User Henrik', function () {
         });
     });
 
-    xit('should delete the project', function () {
+    it('should delete the project', function () {
         deleteProjectPage.backToProjects();
         deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
         browser.driver.sleep(1000);
@@ -158,7 +158,7 @@ describe('User Henrik', function () {
             });
         });
 
-        xdescribe('should add a member', function () {
+        describe('should add a member', function () {
             it('should add a new member', function () {
                 addMemberPage.openAddMemberDialog();
                 addMemberPage.fillInputFields();
