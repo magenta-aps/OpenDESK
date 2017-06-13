@@ -371,7 +371,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     vm.uploadNewVersion = function (file, nodeRef) {
         documentService.getDocument(nodeRef).then(function (response) {
 
-            var cmisQuery = response.item.location.site + "/documentLibrary/" + response.item.location.path
+            var cmisQuery = response.item.location.site + "/documentLibrary" + response.item.location.path
 
             cmisService.getNode(cmisQuery).then(function (val) {
 
