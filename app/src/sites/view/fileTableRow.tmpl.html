@@ -21,8 +21,8 @@
 
             <td ng-show="content.contentType === 'cmis:document' && content.hasHistory" style="border: none; margin: 0; padding: 0">
                 <md-menu md-position-mode="left bottom">
-                    <md-button class="md-icon-button" aria-label="Se historik" ng-click="$mdMenu.open(); vm.loadHistory(content.shortRef)">
-                        <md-icon md-menu-origin title="Se historik " style="font-size: 22px; position: relative; top: 5px ">history</md-icon>
+                    <md-button style="float: left" class="md-icon-button" aria-label="Se historik" ng-click="$mdMenu.open(); vm.loadHistory(content.shortRef)">
+                        <md-icon md-menu-origin title="Se historik " style="font-size: 22px; position: relative; top: 5px">history</md-icon>
                     </md-button>
                     <md-menu-content>
                         <md-menu-item class="menuListHead ">

@@ -102,8 +102,7 @@
     "CLOSEEDIT": "Close editing",
     "FILETYPE": "File type",
     "LOCAL_DOCUMENT": "Local document",
-    "REPLY": "Reply",
-    "NO_DISCUSSIONS": "No conversations"
+    "REPLY": "Reply"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -971,12 +970,13 @@
     }
   },
   "DISCUSSIONS": {
-    "DISCUSSIONS": "Conversations",
-    "NEW": "New conversation",
+    "DISCUSSIONS": "Comments",
+    "NEW": "New comment",
     "TITLE": "Title",
     "LATEST_REPLY": "Latest reply",
     "CREATED_AT": "Created at",
     "REPLIES": "Replies",
+    "NO_DISCUSSIONS": "No comments",
     
     "SORT": {
       "SORT": "Sort after",

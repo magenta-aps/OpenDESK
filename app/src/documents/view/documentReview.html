@@ -1,0 +1,27 @@
+<md-card ng-if="vm.wfr || vm.wf">
+    <md-card-title>
+        <h3 class="od-title-icon od-primary"><i class="material-icons">playlist_add_check</i> Review</h3>
+    </md-card-title>
+
+    <md-card-content ng-if="vm.wfr">
+        <p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har svaret: </p>
+        <p><i>{{wf_comment}}</i></p>
+    </md-card-content>
+
+    <md-card-content ng-if="vm.wf">
+        <p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har bedt dig om at reviewe:</p>
+        <p><i>{{wf_comment}}</i></p>
+
+        Du kan
+        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage()">
+            Redigere
+        </md-button>
+        dokumentet, inden du godkender eller afviser.
+    </md-card-content>
+
+    <md-card-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="vm.afvisDialog($event)">Afvis</md-button>
+        <md-button class="md-primary" ng-click="vm.godkendDialog($event)">Godkend</md-button>
+    </md-card-actions>
+</md-card>

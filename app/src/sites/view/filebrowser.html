@@ -1,11 +1,8 @@
-<breadcrumb paths="vm.paths">
+<breadcrumb paths="vm.paths"></breadcrumb>
 
-</breadcrumb>
-
-<md-list class="sortHead">
-
+<md-list class="sortHead" ng-show="contentLength > 0">
     <table class="od-members od-members-row">
-        <thead fix-head>
+        <thead ng-show="contentLength > 0" fix-head>
             <tr>
                 <th class="od-secondary" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                 <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
@@ -26,9 +23,10 @@
     <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
 
-<p  ng-show="contents.length === 0 && !vm.isLoading">
-    {{'COMMON.EMPTY_FOLDER' | translate}}
-</p>
+<div layout="column" ng-show="contentLength == 0 && !vm.isLoading">
+    <md-icon class="md-icon--large">library_books</md-icon>
+    <p class="md-display-1" style="text-align:center">{{'COMMON.EMPTY_FOLDER' | translate}}</p>
+</div>
 
 <md-divider></md-divider>
 

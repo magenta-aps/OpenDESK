@@ -1,10 +1,8 @@
-<md-card id="details">
+<md-card class="dropdown-card" id="details">
 	<md-card-title ng-click="showProjDetails = !showProjDetails" ng-class="showProjDetails ? 'open' : 'closed'">
-		<div>
-			<i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>{{'COMMON.DETAILS' | translate }}
-		</div>
+		<h3 class="md-title od-title-icon od-primary"><i class="material-icons">info_outline</i> {{'COMMON.DETAILS' | translate }}</h3>
 		<span flex></span>
-			<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+		<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 	</md-card-title>
 
 	<md-card-content ng-class="showProjDetails ? 'fold-out' : 'fold-in'">
@@ -16,16 +14,12 @@
 				</dd>
 				<dd class="od-primary" ng-if="!hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
 			</dl>
-			<md-button ng-if="vm.isManager" class="md-primary md-icon-button" ng-click="editSiteDialog($event)"
-				aria-label="Redigér site">
-				<i class="material-icons">edit</i>
-			</md-button>
 		</div>
 		<div layout="row">
 			<dl flex="55">
 				<dt class="od-secondary">{{'COMMON.CREATEDBY' | translate }}</dt>
 				<dd class="od-primary">{{ site.creator.displayName }} <br>
-				<span class="muted">{{ site.created | date }}</span>
+					<span class="muted">{{ site.created | date }}</span>
 				</dd>
 				<span ng-if="vm.project.type === 'PD-Project'">
 					<dt class="od-secondary">{{'PROJECT.ORG_UNIT' | translate }}</dt>
@@ -49,6 +43,12 @@
 
 			</dl>
 		</div>
+		<md-card-actions layout="row" layout-align="start center" class="btnAlign">
+				<span flex></span>
+				<md-button ng-if="vm.isManager" class="md-primary md-icon-button" ng-click="editSiteDialog($event)" aria-label="Redigér site">
+					<i class="material-icons">edit</i>
+				</md-button>
+		</md-card-actions>
 
 	</md-card-content>
 </md-card>

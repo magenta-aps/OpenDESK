@@ -1,5 +1,6 @@
-<md-dialog aria-label="Opret/redigér avanceret projekt" class="pd-create-site-diag">
-    <form ng-submit="type == 'PD-Project' ? createPdSite() : createSite()" class="pd-site-create-form" name="pdcreatesite">
+
+<md-dialog aria-label="Opret projekt" class="site-dialog">
+    <form ng-submit="type == 'PD-Project' ? createPdSite() : createSite()" name="pdcreatesite">
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2 ng-if="type == 'PD-Project'">{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
@@ -83,7 +84,7 @@
                 </md-tab>
 
                 <md-tab label="{{'GROUP.GROUPS' | translate}}">
-                    <md-content id="groups" class="md-padding" layout="row" layout-padding style="width:100%">
+                    <md-content id="groups" layout="row" layout-padding style="width:100%">
 
                         <div ng-repeat="(groupIndex, group) in newSite.groups" ng-if="group.multipleMembers" flex="100">
                             <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
@@ -91,7 +92,7 @@
                                 <span flex></span>
                                 <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
                             </h4>
-                            <div ng-show="showGroupList[groupIndex]">
+                            <div ng-class="showGroupList[groupIndex] ? 'fold-out' : 'fold-in'">
                                 <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"
                                     md-on-add="addMemberToSite($chip, group.shortName)">
                                     <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
