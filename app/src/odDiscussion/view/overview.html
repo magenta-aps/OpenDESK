@@ -2,7 +2,7 @@
     <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
 
-<md-list class="sortHead">
+<md-list class="sortHead" ng-if="dc.discussions.length > 0">
     <table class="od-members od-members-row">
         <thead fix-head>
             <tr>
@@ -65,7 +65,10 @@
     </table>
 </md-list>
 
-<p ng-show="dc.discussions.length === 0">{{'COMMON.NO_DISCUSSIONS' | translate}}</p>
+<div layout="column" ng-show="dc.discussions.length === 0">
+    <md-icon class="md-icon--large">chat_bubble_outline</md-icon>
+    <p class="md-display-1" style="text-align:center">{{'DISCUSSIONS.NO_DISCUSSIONS' | translate}}</p>
+</div>
 
 <md-divider></md-divider>
 

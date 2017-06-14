@@ -9,6 +9,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     searchService, $state, userService, sessionService, filterService, fileUtilsService, groupService) {
 
     $scope.contents = [];
+    $scope.contentLength = 0;
     $scope.history = [];
     $scope.roles = [];
     $scope.roles_translated = [];
@@ -212,6 +213,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
         siteService.getContents(vm.currentFolderUUID).then(function (response) {
             $scope.contents = response;
             $scope.contents.forEach(function (contentTypeList) {
+                $scope.contentLength += contentTypeList.length;
                 vm.addThumbnailUrl(contentTypeList);
             });
             $scope.tab.selected = $state.current.data.selectedTab;

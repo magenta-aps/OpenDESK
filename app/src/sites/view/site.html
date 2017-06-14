@@ -9,27 +9,27 @@
     <div layout-gt-sm="row">
         <md-card flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
             <md-card-content>
-        <md-tabs md-selected="tab.selected" md-dynamic-height md-border-bottom flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
-            <md-tab ui-sref="project.filebrowser({path:''})">
-                <md-tab-label>
-                    <i class="material-icons icon-small">library_books</i>{{'DOCUMENT.DOCUMENTS' | translate }}
-                </md-tab-label>
-                <md-tab-body>
-                    <div ui-view='filebrowser'></div>
-                </md-tab-body>
-            </md-tab>
-            <md-tab ui-sref="project.discussions">
-                <md-tab-label>
-                    <i class="material-icons icon-small">chat_bubble_outline</i>{{'DISCUSSIONS.DISCUSSIONS' | translate }}
-                </md-tab-label>
-                <md-tab-body>
-                    <div ui-view='discussions'></div>
-                </md-tab-body>
-            </md-tab>
-        </md-tabs>
-        </md-card-content>
-                    </md-card>
-        <div flex-gt-sm="25" ng-if="vm.project.type != vm.strings.templateProject">
+                <md-tabs md-selected="tab.selected" md-dynamic-height md-border-bottom flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
+                    <md-tab ui-sref="project.filebrowser({path:''})">
+                        <md-tab-label>
+                            <i class="material-icons icon-small">library_books</i> {{'DOCUMENT.DOCUMENTS' | translate}}
+                        </md-tab-label>
+                        <md-tab-body>
+                            <div ui-view='filebrowser'></div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab ui-sref="project.discussions">
+                        <md-tab-label>
+                            <i class="material-icons icon-small">chat_bubble_outline</i> {{'DISCUSSIONS.DISCUSSIONS' | translate}}
+                        </md-tab-label>
+                        <md-tab-body>
+                            <div ui-view='discussions'></div>
+                        </md-tab-body>
+                    </md-tab>
+                </md-tabs>
+            </md-card-content>
+        </md-card>
+        <div flex="25" ng-if="vm.project.type != vm.strings.templateProject">
             <div ng-include="'app/src/sites/view/siteDetails.html'"></div>
             <div ng-controller="SiteGroupController as sgc" ng-include="'app/src/sites/view/siteMembers.html'"></div>
         </div>

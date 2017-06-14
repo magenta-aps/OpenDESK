@@ -3,7 +3,7 @@
 	<span ng-if="vm.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
 	<span ng-if="vm.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span> {{ vm.title }}
 </h1>
-<div class="od-projects">
+<div>
 	<div layout-gt-sm="row">
 		<md-card flex-gt-sm="75">
 			<md-content class="od-content-height" layout="column" layout-padding>
@@ -31,76 +31,70 @@
 				</div>
 			</md-content>
 		</md-card>
+		<div flex="25">
+			<md-card class="dropdown-card">
+				<md-card-title ng-click="vm.showArchived = !vm.showArchived" ng-class="vm.showArchived ? 'open' : 'closed'">
+					<div>
+						<i class="material-icons" style="vertical-align: bottom; margin-right: 10px;">info_outline</i>{{'COMMON.HISTORY' |
+						translate}}
+					</div>
+					<span flex></span>
+					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+				</md-card-title>
 
-
-		<md-card flex-gt-sm="25">
-			<md-content>
-
-				<div flex-gt-sm="33" style="padding: 0 1rem; background-color: #f9f9f9;">
-					<h4 ng-click="vm.showArchived = !vm.showArchived" class="group-toggle" ng-class="vm.showArchived ? 'open' : 'closed'"
-					    layout="row">
-						<i class="material-icons header">history</i>&nbsp;<span style="position: relative; top: 3px;">{{'COMMON.HISTORY' | translate}}</span>
-						<span flex></span>
-						<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-					</h4>
-					<ul ng-show="vm.showArchived">
-						<p class="pHeader">
-							<span style="width: 164px;">{{'COMMON.LAST_MODIFIED' | translate}}</span>
-							<span>{{'COMMON.LAST_MODIFIED_BY' | translate}}</span>
-							<br>
-						</p>
-						<p class="pContent">
-							<span id="{{h.nodeRef}}" ng-repeat="h in history">
-						<a class="od-secondary" href="#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
-							<span style="width: 138px;">{{ h.created | openeDate }}</span>{{ h.modifier }}
-							</a>
-							</span>
-						</p>
-					</ul>
-					<dl>
-						<div class="od-notifylist--item--nolink">
-							<br>
-							<md-divider></md-divider>
-							<h4 ng-if="vm.wfr || vm.wf">Review</h4>
-
-							<dd ng-if="vm.wfr">
-								<div layout="row" style="margin: 10px 0 20px 0;">
-									<span style="position:relative; top: 4px;">
-								{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har svaret: 
-								<p><i>{{wf_comment}}</i></p>
-							</span>
-								</div>
-							</dd>
-
-							<dd ng-if="vm.wf">
-								<div layout="row" style="margin: 10px 0 20px 0;">
-									<span style="position:relative; top: 4px;">
-								{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har bedt dig om at reviewe: 
-								<p><i>{{wf_comment}}</i></p>
-							</span>
-								</div>
-
-								Du kan
-								<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage()">
-									Redigere
-								</md-button>
-								dokumentet, inden du godkender eller afviser.
-
-								<div style="margin-top: 20px" ng-controller="DocumentController as dc">
-
-									<md-button class="md-raised md-primary" ng-click="dc.godkendDialog($event)">
-										Godkend
-									</md-button>
-
-									<md-button class="md-raised" ng-click="dc.afvisDialog($event)">
-										Afvis
-									</md-button>
-								</div>
-							</dd>
+				<md-card-content ng-class="vm.showArchived ? 'fold-out' : 'fold-in'">
+					<div layout="row">
+						<div flex="50">
+							<span class="od-secondary">{{'COMMON.LAST_MODIFIED' | translate}}</span>
 						</div>
-					</dl>
-				</div>
-			</md-content>
-		</md-card>
+						<div flex="50">
+							<span class="od-secondary">{{'COMMON.LAST_MODIFIED_BY' | translate}}</span>
+						</div>
+					</div>
+
+					<div id="{{h.nodeRef}}" ng-repeat="h in history" layout="row" style="line-height:2">
+						<div flex="50">
+							<a class="od-primary" href="#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
+									{{ h.created | openeDate }}
+								</a>
+						</div>
+
+						<div flex="50">
+							<a class="od-primary" href="#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
+									{{ h.modifier }}
+								</a>
+						</div>
+					</div>
+				</md-card-content>
+			</md-card>
+
+			<md-card ng-if="vm.wfr || vm.wf">
+				<md-card-title>
+					<h3 class="od-title-icon od-primary"><i class="material-icons">playlist_add_check</i> Review</h3>
+				</md-card-title>
+
+				<md-card-content ng-if="vm.wfr">
+					<p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har svaret: </p>
+					<p><i>{{wf_comment}}</i></p>
+				</md-card-content>
+
+				<md-card-content ng-if="vm.wf">
+					<p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har bedt dig om at reviewe:</p>
+					<p><i>{{wf_comment}}</i></p>
+
+					Du kan
+					<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage()">
+						Redigere
+					</md-button>
+					dokumentet, inden du godkender eller afviser.
+				</md-card-content>
+
+				<md-card-actions layout="row">
+					<span flex></span>
+					<md-button ng-click="vm.afvisDialog($event)">Afvis</md-button>
+					<md-button class="md-primary" ng-click="vm.godkendDialog($event)">Godkend</md-button>
+				</md-card-actions>
+			</md-card>
+		</div>
 	</div>
 </div>

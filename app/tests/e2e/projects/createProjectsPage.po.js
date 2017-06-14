@@ -26,7 +26,7 @@ var CreateProjectPage = function () {
         projectName = name;
         var private = isPrivate ? 'privat' : 'offentlig';
 
-        var createProjectDialog = element(by.css('.pd-site-create-form'));
+        var createProjectDialog = element(by.css('[aria-label="Opret projekt"]'));
 
         var templateInput = element(by.model('newSite.template.name'));
         var firstTemplate = element(by.css('[value="no-template"]'));

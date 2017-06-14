@@ -236,7 +236,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 }
 
-
 /*expand collapse*/
 
 .transition {
@@ -281,9 +280,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   button {
     top: 0 !important;
   }
-  md-card-content {
-    min-width: 100px;
-  }
+  md-card-content,
   md-autocomplete {
     min-width: 100px;
   }
@@ -335,22 +332,40 @@ md-tooltip {
   }
 }
 
-//member list
-#od-site-members {
-  .group-toggle {
-    outline: none;
-    background-color: #eaeaea;
-    padding: $u*0.5 $u;
-    margin: $u 0 0;
-    box-shadow: 0 $u*0.25 $u*0.5 rgba(125, 125, 125, 0.3);
-    cursor: pointer;
-    &:hover {
-      box-shadow: 0 $u*0.5 $u*0.5 rgba(125, 125, 125, 0.3);
-    }
+.group-toggle {
+  outline: none;
+  background-color: #eaeaea;
+  padding: $u*0.5 $u;
+  margin: $u 0 0;
+  transition: box-shadow 0.15s ease-out;
+  box-shadow: 0 $u*0.25 $u*0.5 rgba(125, 125, 125, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    transition: box-shadow 0.25s ease-in;
+    box-shadow: 0 $u*0.5 $u*0.5 rgba(125, 125, 125, 0.3);
   }
+}
+
+//member list
+.od-site-members {
   .member {
     cursor: pointer;
     margin-left: -20px;
+  }
+}
+
+.dropdown-card {
+  md-card-title {
+    outline: none;
+    padding: 0 8px;
+    margin: 8px;
+    div {
+      display: block;
+      width: 100%;
+      font-size: 1.17em;
+      font-weight: bold;
+    }
   }
 }
 
@@ -369,6 +384,7 @@ md-tooltip {
   dl {
     padding-left: 0.25*$u;
     padding-right: 0.25*$u;
+    margin-bottom: 0;
     dd,
     dt {
       white-space: nowrap;
@@ -376,4 +392,40 @@ md-tooltip {
       text-overflow: ellipsis;
     }
   }
+}
+
+.site-dialog {
+  width: 50vw;
+  md-autocomplete {
+    margin-bottom: $u;
+  }
+  md-content {
+    padding: $u;
+  }
+  md-content#groups {
+    display: inline-block;
+    fieldset {
+      display: inline-flex;
+      margin-right: 40px;
+      margin-left: 40px;
+    }
+  }
+  md-input-container {
+    margin: $u*0.5 0;
+  }
+  md-autocomplete {
+    margin: $u*0.5 0 $u;
+  }
+  .org-input,
+  .template-input {
+    margin: $u*0.5 0 $u*2;
+    width: 100%;
+  }
+}
+
+.md-icon--large {
+  font-size:96px !important;
+  height: 96px;
+  width: 96px;
+  margin-top: 34px;
 }

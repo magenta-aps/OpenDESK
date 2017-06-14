@@ -102,8 +102,7 @@
     "CLOSEEDIT": "Luk redigering",
     "FILETYPE": "Dokumenttype",
     "LOCAL_DOCUMENT": "Lokalt dokument",
-    "REPLY": "Besvar",
-    "NO_DISCUSSIONS": "Ingen samtaler"
+    "REPLY": "Besvar"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -945,12 +944,13 @@
     }
   },
   "DISCUSSIONS": {
-    "DISCUSSIONS": "Samtaler",
-    "NEW": "Ny samtale",
+    "DISCUSSIONS": "Kommentarer",
+    "NEW": "Ny kommentar",
     "TITLE": "Overskrift",
     "LATEST_REPLY": "Seneste svar",
     "CREATED_AT": "Oprettet",
     "REPLIES": "Svar",
+    "NO_DISCUSSIONS": "Ingen kommentarer",
     
     "SORT": {
       "SORT": "Sorter efter",
