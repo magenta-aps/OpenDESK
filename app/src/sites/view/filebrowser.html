@@ -1,8 +1,8 @@
 <breadcrumb paths="vm.paths"></breadcrumb>
 
-<md-list class="sortHead" ng-if="contentLength > 0">
+<md-list class="sortHead" ng-show="contentLength > 0">
     <table class="od-members od-members-row">
-        <thead fix-head>
+        <thead ng-show="contentLength > 0" fix-head>
             <tr>
                 <th class="od-secondary" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                 <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
