@@ -92,7 +92,7 @@
                                 <span flex></span>
                                 <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
                             </h4>
-                            <div ng-show="showGroupList[groupIndex]">
+                            <div ng-class="showGroupList[groupIndex] ? 'fold-out' : 'fold-in'">
                                 <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"
                                     md-on-add="addMemberToSite($chip, group.shortName)">
                                     <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
