@@ -202,10 +202,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         console.log(response.item);
 
         function buildBreadCrumbPath(response) {
-            var paths = [{
-                    title: $translate.instant('PROJECT.PROJECTS'),
-                    link: '#!/projekter'
-                },
+            var paths = [
                 {
                     title: response.item.location.siteTitle,
                     link: '#!/projekter/' + response.item.location.site + vm.documentTab

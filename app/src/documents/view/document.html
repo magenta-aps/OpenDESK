@@ -1,4 +1,5 @@
 <h1 class="od-title">
+	<span class="od-back-btn" ui-sref="projects"><i class="material-icons">arrow_back</i> {{'COMMON.BACK' | translate}}</span>
 	<span ng-if="vm.type == vm.strings.templateProject">{{'COMMON.TEMPLATEPROJECT' | translate}} :</span>
 	<span ng-if="vm.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
 	<span ng-if="vm.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span> {{ vm.title }}
