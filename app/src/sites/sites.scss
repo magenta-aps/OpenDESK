@@ -358,29 +358,14 @@ md-tooltip {
 .dropdown-card {
   md-card-title {
     outline: none;
-    padding: 0 8px;
-    margin: 8px;
-    div {
-      display: block;
-      width: 100%;
-      font-size: 1.17em;
-      font-weight: bold;
-    }
   }
 }
 
+md-card-title h3 {
+  margin: 0;
+}
+
 #details {
-  md-card-title {
-    outline: none;
-    padding: 0 8px;
-    margin: 8px;
-    div {
-      display: block;
-      width: 100%;
-      font-size: 1.17em;
-      font-weight: bold;
-    }
-  }
   dl {
     padding-left: 0.25*$u;
     padding-right: 0.25*$u;
