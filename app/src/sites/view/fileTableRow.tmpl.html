@@ -7,11 +7,12 @@
                                          ng-show="content.contentType === 'cmis:document'" 
                                          ng-src="app/assets/images/filetypes/{{content.thumbNailURL}}"
                                          onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
-                                    </i> {{content.name}}
+                                    </i> 
+                                    <span class='content-name'>{{content.name}}</span>
     </a>
 </td>
 <td>
-    <table>
+    <table style="width:100%">
         <tr>
             <td style="border: none; margin: 0; padding: 0">
                 <a class="od-filebrowser-link" ng-href="{{vm.getLink(content)}}">

@@ -2,54 +2,43 @@ var globalHeader = require('../common/globalHeader.po.js');
 var loginPage = require('../login/loginPage.po.js');
 var openProjectsPage = require('./openProjectsPage.po.js');
 var createProjectPage = require('./createProjectsPage.po.js');
-//var deleteProjectPage = require('./deleteProjectPage.po.js');
+var deleteProjectPage = require('./deleteProjectPage.po.js');
 //var renameProjectPage = require('./renameProjectPage.po.js');
 var constants = require('../common/constants');
 
 
-describe('openDESK search document', function() {
-
-    it('login', function() {
-
+describe('openDESK login', function() {
+    it('should login', function() {
         loginPage.loginAsAdmin();
+    });
+});
+
+describe('public projects', function() {
+    it('should be able to be created', function() {
+        createProjectPage.openCreateProjectDialog();
+        createProjectPage.fillInputFields(constants.PROJECT_NAME_1,false);
+        createProjectPage.createProject();
+        expect(createProjectPage.getProjectPageTitle().getInnerHtml()).toContain(constants.PROJECT_NAME_1);
+    });
+
+    it('should be able to be deleted', function() {
+        deleteProjectPage.backToProjects();
+        deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
+    });
+});
+
+xdescribe('projects list',function () {
+    it('should be able to open a project', function() {
 
     });
 });
 
-
-describe('openDESK create project', function() {
-
-
-    it('should be able to create a new project', function() {
-    	openProjectsPage.openProjects().then (function (response) {
-            createProjectPage.createProject(constants.PROJECT_NAME_create_delete);
-            console.log("heyyyyyy");
-        })
-
-
-
-        //the created project is represented in the project list
-        expect(createProjectPage.getProjectList().getText()).toMatch(createProjectPage.getCreatedProject());
+describe('openDESK logout', function() {
+    it('should logout', function() {
+        loginPage.logout();
     });
 });
 
-//
-//describe('openDESK delete project', function() {
-//
-//    browser.driver.sleep(5000);
-//
-//    it('should be able to delete an existing project', function() {
-//
-//
-//        return browser.get("http://localhost:8000/#/projekter").then (function(response) {
-//
-//            deleteProjectPage.deleteProject(constants.PROJECT_NAME_create_delete);
-//
-//            expect(deleteProjectPage.getProjectList().getText()).not.toMatch(constants.PROJECT_NAME_create_delete);
-//        });
-//
-//    });
-//});
 
 
 //

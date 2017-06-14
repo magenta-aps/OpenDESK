@@ -21,6 +21,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 	vm.showFilters = false;
 
 	vm.infoSiteDialog = infoSiteDialog;
+	vm.isLoading = true;
 
 	vm.states = [
 		  		{key:'ACTIVE', name:'Igang'},
@@ -42,8 +43,10 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 
 
 	function getSites() {
+		vm.isLoading = true;
 		return siteService.getSites().then(function (response) {
 			vm.sites = response;
+			vm.isLoading = false;
 		});
 	}
 	getSites();

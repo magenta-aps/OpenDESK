@@ -148,7 +148,9 @@
 
         <md-dialog-actions layout="row">
             <span flex></span>
-            <input type="submit" ng-disabled="pdcreatesite.$invalid" class="md-button md-raised md-primary" value="{{'COMMON.CREATE' | translate}}">
+            <md-button type="submit" aria-label="{{'COMMON.CREATE' | translate}}" ng-disabled="pdcreatesite.$invalid" class="md-raised md-primary">
+                {{'COMMON.CREATE' | translate}}
+            </md-button>
         </md-dialog-actions>
 
     </form>

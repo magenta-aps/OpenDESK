@@ -1,15 +1,18 @@
 var globalHeader = require('../common/globalHeader.po.js');
 var loginPage = require('./loginPage.po.js');
+var logouPage = require('./logoutPage.po.js');
 
-describe('openESDH login page', function() {
+describe('OpenDesk AuthController', function () {
 
-    it('should be able to access login page and login to user dashboard', function() {
+    //TODO: refactor so the expects checks the session cookie instead
 
-        console.log("trying to login")
+    it('should be able to login', function () {
         loginPage.loginAsAdmin();
-        
-        //detect the userMenu button
-        expect(globalHeader.getHeaderMenuItem().userMenuBtn);
-        loginPage.logout();
+        expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+    });
+
+    it('should be able to logout', function () {
+        logoutPage.logout();
+        expect(browser.getCurrentUrl()).toContain('/#!/login');
     });
 });

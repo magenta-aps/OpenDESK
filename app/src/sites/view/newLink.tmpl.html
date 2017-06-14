@@ -16,18 +16,18 @@
         <md-autocomplete
                 md-autofocus
                 required
-                md-input-name="addMemberAutocomplete"
+                md-input-name="addProjectAutocomplete"
                 md-selected-item="project"
-                md-search-text="searchMemText"
-                md-items="site in searchProjects(searchMemText)"
+                md-search-text="searchProjectText"
+                md-items="site in searchProjects(searchProjectText)"
                 md-item-text="site.title"
                 md-min-length="1"
                 md-floating-label="{{'COMMON.CHOOSE' | translate }} {{'PROJECT.PROJECT' | translate | lowercase}}">
             <md-item-template>
-                <span md-highlight-text="searchMemText">{{site.title}}</span>
+                <span md-highlight-text="searchProjectText">{{site.title}}</span>
             </md-item-template>
             <md-not-found>
-                Ingen projekter matcher "{{ prjownsrchtxt }}".
+                Ingen projekter matcher "{{ searchProjectText }}".
             </md-not-found>
             <div ng-messages="autocompleteForm.autocomplete.$error">
                 <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>

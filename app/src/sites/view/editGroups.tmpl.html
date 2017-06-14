@@ -1,4 +1,4 @@
-<md-dialog aria-label="Opdatér grupper i projekt" class="pd-create-site-diag">
+<md-dialog aria-label="{{'MEMBER.ADD_REMOVE_MEMBERS' | translate}}" class="pd-create-site-diag">
 	<form name="membersForm" ng-submit="updatePDSiteGroups()" class="pd-site-create-form">
 		<md-toolbar>
 			<div class="md-toolbar-tools">
@@ -74,7 +74,7 @@
 
 		<md-dialog-actions layout="row">
 			<span flex></span>
-			<input type="submit" class="md-button md-primary" value="{{'COMMON.UPDATE' | translate}}">
+			<md-button type="submit" class="md-primary">{{'COMMON.UPDATE' | translate}}</md-button>
 		</md-dialog-actions>
 	</form>
 </md-dialog>

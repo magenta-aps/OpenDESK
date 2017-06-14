@@ -1,3 +1,6 @@
+<div ng-if="dc.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
+    <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+</div>
 
 <md-list class="sortHead">
     <table class="od-members od-members-row">
@@ -6,9 +9,7 @@
                 <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'DISCUSSIONS.TITLE' | translate}}</th>
                 <th class="od-secondary" sort-table="created" title="Sortér kolonne">{{'DISCUSSIONS.CREATED_AT' | translate}}</th>
                 <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'DISCUSSIONS.LATEST_REPLY' | translate}}</th>
-                <th class="od-secondary" colspan="3">
-                    {{'DISCUSSIONS.REPLIES' | translate}}
-                </th>
+                <th class="od-secondary" colspan="3">{{'DISCUSSIONS.REPLIES' | translate}}</th>
             </tr>
         </thead>
         <tbody>
@@ -19,16 +20,12 @@
                 </td>
                 <td>
                     <a class="od-filebrowser-link od-secondary overflow" ng-href="{{dc.viewThread(discussion)}}" ng-click="dc.getReplies(discussion)">
-                        <h3 class="od-primary">
-                            {{discussion.title}}
-                        </h3>
-                        {{discussion.author.firstName}} {{discussion.author.lastName}}
+                        <h3 class="od-primary">{{discussion.title}}</h3>
+                        <span>{{discussion.author.firstName}} {{discussion.author.lastName}}</span>
                     </a>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary" ng-href="{{dc.viewThread(discussion)}}">
-                                {{discussion.createdOn | customDate}}
-                            </a>
+                    <a class="od-filebrowser-link od-secondary" ng-href="{{dc.viewThread(discussion)}}">{{discussion.createdOn | customDate}}</a>
                 </td>
                 <td>
                     <a ng-if="discussion.lastReplyBy" class="od-filebrowser-link od-secondary" ng-href="{{dc.viewThread(discussion)}}">
@@ -36,9 +33,7 @@
                             </a>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary" ng-href="">
-                                {{discussion.totalReplyCount}}
-                            </a>
+                    <a class="od-filebrowser-link od-secondary" ng-href="">{{discussion.totalReplyCount}}</a>
                 </td>
                 <td style="width:32px">
                     <i ng-click='dc.changeSubscription(discussion)' class="material-icons od-secondary" style="outline:0;">{{dc.subscriptionIcon(discussion.isSubscribed)}}</i>
@@ -70,9 +65,7 @@
     </table>
 </md-list>
 
-<p ng-show="dc.discussions.length === 0">
-    {{'COMMON.NO_DISCUSSIONS' | translate}}
-</p>
+<p ng-show="dc.discussions.length === 0">{{'COMMON.NO_DISCUSSIONS' | translate}}</p>
 
 <md-divider></md-divider>
 
@@ -89,8 +82,6 @@
     <span flex></span>
 
     <md-button ng-click="dc.newDiscussionDialog()" class="md-primary" aria-label="ny diskussion">
-        <span>
-                {{'DISCUSSIONS.NEW' | translate}}
-            </span>
+        <span>{{'DISCUSSIONS.NEW' | translate}}</span>
     </md-button>
 </md-card-actions>

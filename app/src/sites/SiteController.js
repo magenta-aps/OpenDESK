@@ -53,6 +53,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     $scope.editSiteGroups = editSiteGroups;
 
     vm.documentTab = '/dokumenter';
+    vm.isLoading = true;
 
     $scope.searchProjects = searchProjects;
 
@@ -64,6 +65,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     });
 
     function loadSiteData() {
+        vm.isLoading = true;
         siteService.loadSiteData($stateParams.projekt).then(
             function (result) {
 
@@ -89,6 +91,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
                     vm.currentFolderUUID = vm.currentFolderNodeRef.split("/")[3];
                     // The loading function for contents depend on the currentFolder variables having been read beforehand
                     vm.loadContents();
+                    vm.isLoading = false;
                 });
             }
         );

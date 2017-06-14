@@ -1,9 +1,9 @@
-<md-card>
+<md-card id="od-site-members">
 	<md-card-content>
 		<h3 class="od-title-icon od-primary"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
 
-			<md-list class="od-members">
-				<div ng-repeat="(groupIndex, group) in groups.list">
+			<md-list>
+				<div ng-repeat="group in groups.list">
 
 					<div ng-if="group[0].collapsed" flex="100">
 						<h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'"

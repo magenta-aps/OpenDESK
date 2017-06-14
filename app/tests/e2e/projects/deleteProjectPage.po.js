@@ -1,62 +1,41 @@
-var globalHeaderMenu = require('../common/globalHeader.po.js');
 var deletedProjectName;
 var projectList;
-var constants = require('../common/constants');
-
-var BreakException = {};
-
 
 var DeleteProjectPage = function () {
-    
-    var public = {};
-    
-    console.log("delete1");
-    
-	public.getProjectList = function() {
 
+    return {
+        backToProjects: function () {
+            element(by.css(".od-back-btn")).click();
+            expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+        },
 
-            projectList = element.all(by.repeater('project in vm.sites'));
-            return projectList
+        getProjectList: function () {
+            projectList = element.all(by.css('td a.od-filebrowser-link h3'));
+            return projectList.getInnerHtml();
+        },
 
-	}
-    
-    public.getDeletedProject = function() {
-    	return deletedProjectName;
-    }
+        // public.getProjectList = function () {
+        //     projectList = element.all(by.repeater('project in vm.sites'));
+        //     return projectList;
+        // }
 
-    public.deleteProject = function(tileText) {
+        getDeletedProject: function () {
+            return deletedProjectName;
+        },
 
-            'use strict';
-            //Select all date elements and apply filter function
-            element.all(by.repeater('project in vm.sites')).filter(function (elem) {
-                //Return the element or elements
-                return elem.getText().then(function (text) {
-                    //Match the text
+        deleteProject: function (titleText) {
+            var projectRow = element(by.css('#' + titleText));
+            var menuBtn = element(by.css('#' + titleText + ' md-menu button'));
+            var deleteBtn = element(by.css('.md-active [aria-label="remove"]'));
+            var deleteConfirmBtn = element(by.css('[aria-label="Slet projekt"] button[aria-label="remove"]'))
 
-                    console.log(text);
+            menuBtn.click();
+            deleteBtn.click();
+            deleteConfirmBtn.click();
 
-                    return text.indexOf(constants.PROJECT_NAME_create_delete) >= 0;
-                });
-            }).then(function (filteredElements) {
-                //filteredElements is the list of filtered elements
-
-                var documentOptionsBtn = filteredElements[0].all(by.css('[ng-click="vm.openMenu($mdOpenMenu, $event)"]')).first();
-
-                documentOptionsBtn.click();
-                browser.driver.sleep(5000);
-
-                var selectDeleteBtn = element.all(by.css('[ng-click="vm.deleteSiteDialog(project.shortName)"]')).last();
-                var deleteProjectBtn = element.all(by.css('[aria-label="Ja"]'));
-
-                selectDeleteBtn.click();
-                browser.driver.sleep(2000);
-
-                deleteProjectBtn.click();
-                browser.driver.sleep(2000);
-            });
+            browser.driver.sleep(2000);
+        }
     };
-
-    return public;
 };
 
 module.exports = DeleteProjectPage();
