@@ -155,7 +155,8 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 
 
 	vm.getSearchresults = function getSearchReslts(term) {
-		$state.go('search', {'searchTerm': term});
+		if(term != "")
+			$state.go('search', {'searchTerm': term});
 	};
 
 
