@@ -33,66 +33,8 @@
 			</md-content>
 		</md-card>
 		<div flex="25">
-			<md-card class="dropdown-card">
-				<md-card-title ng-click="vm.showArchived = !vm.showArchived" ng-class="vm.showArchived ? 'open' : 'closed'">
-					<h3 class="md-title od-title-icon od-primary"><i class="material-icons">history</i> {{'COMMON.HISTORY' | translate }}</h3>
-					<span flex></span>
-					<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-				</md-card-title>
-
-				<md-card-content ng-class="vm.showArchived ? 'fold-out' : 'fold-in'">
-					<div layout="row">
-						<div flex="50">
-							<span class="od-secondary">{{'COMMON.LAST_MODIFIED' | translate}}</span>
-						</div>
-						<div flex="50">
-							<span class="od-secondary">{{'COMMON.LAST_MODIFIED_BY' | translate}}</span>
-						</div>
-					</div>
-
-					<div id="{{h.nodeRef}}" ng-repeat="h in history" layout="row" style="line-height:2">
-						<div flex="50">
-							<a class="od-primary" href="#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
-									{{ h.created | openeDate }}
-								</a>
-						</div>
-
-						<div flex="50">
-							<a class="od-primary" href="#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">
-									{{ h.modifier }}
-								</a>
-						</div>
-					</div>
-				</md-card-content>
-			</md-card>
-
-			<md-card ng-if="vm.wfr || vm.wf">
-				<md-card-title>
-					<h3 class="od-title-icon od-primary"><i class="material-icons">playlist_add_check</i> Review</h3>
-				</md-card-title>
-
-				<md-card-content ng-if="vm.wfr">
-					<p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har svaret: </p>
-					<p><i>{{wf_comment}}</i></p>
-				</md-card-content>
-
-				<md-card-content ng-if="vm.wf">
-					<p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har bedt dig om at reviewe:</p>
-					<p><i>{{wf_comment}}</i></p>
-
-					Du kan
-					<md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage()">
-						Redigere
-					</md-button>
-					dokumentet, inden du godkender eller afviser.
-				</md-card-content>
-
-				<md-card-actions layout="row">
-					<span flex></span>
-					<md-button ng-click="vm.afvisDialog($event)">Afvis</md-button>
-					<md-button class="md-primary" ng-click="vm.godkendDialog($event)">Godkend</md-button>
-				</md-card-actions>
-			</md-card>
+			<div ng-include="'app/src/documents/view/documentHistory.html'"></div>
+			<div ng-include="'app/src/documents/view/documentReview.html'"></div>
 		</div>
 	</div>
 </div>
