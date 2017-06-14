@@ -46,6 +46,6 @@ function nodePicker() {
             };
 
         },
-        templateUrl: '/app/src/shared/directives/nodePicker.html'
+        templateUrl: 'app/src/shared/directives/nodePicker.html'
     }
 }
