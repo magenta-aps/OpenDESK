@@ -137,9 +137,7 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 		});
 	};
 
-
 	vm.currentDialogSite = '';
-
 
 	function infoSiteDialog(site) {
 		vm.currentDialogSite = site;
@@ -152,43 +150,4 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 			clickOutsideToClose: true
 		});
 	}
-
-
-	vm.getSearchresults = function getSearchReslts(term) {
-		if(term != "")
-			$state.go('search', {'searchTerm': term});
-	};
-
-
-	vm.getAutoSuggestions = function getAutoSuggestions(term) {
-		return searchService.getSearchSuggestions(term).then(function (val) {
-
-			if (val != undefined) {
-				val.forEach(function(item) {
-                	item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24);
-            	});
-				return val;
-			} else {
-				return [];
-			}
-		});
-	};
-
-
-	vm.gotoPath = function (ref) {
-		documentService.getPath(ref.split("/")[3]).then(function (val) {
-			$scope.selectedDocumentPath = val.container
-			var path = ref.replace("workspace://SpacesStore/", "");
-
-			$window.location.href = "/#!/dokument/" + path;
-		});
-	};
-
-	vm.searchPeople = function (query) {
-		if (query) {
-			return userService.getUsers(query);
-		}
-	}
-
-
-} // SiteCtrl close
+}

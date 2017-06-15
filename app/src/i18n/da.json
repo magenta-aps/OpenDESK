@@ -92,6 +92,7 @@
     "FOLDER": "Mappe",
     "CHOOSE": "Vælg",
     "EMPTY_FOLDER": "Denne mappe er tom",
+    "NO_SEARCH_RESULTS" : "Søgningen matchede ikke noget",
     "FILTER": "Filtre",
     "LAST_MODIFIED": "Senest ændret",
     "LAST_MODIFIED_BY": "Senest ændret af",
