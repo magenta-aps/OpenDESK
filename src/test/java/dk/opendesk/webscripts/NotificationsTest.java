@@ -54,7 +54,7 @@ public class NotificationsTest extends BaseWebScriptTest {
         super();
     }
 
-    x@Override
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
