@@ -264,7 +264,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     } else {
         vm.store = 'workspace://SpacesStore/';
-
+        vm.pdfLink = documentService.getPDFLink(vm.store.replace("://", "/") + $stateParams.doc);
         documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function (plugin) {
 
             vm.plugin = plugin;
@@ -318,8 +318,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     //Goes to the libreOffice online edit page
     vm.openPDF = function () {
-        var pdfLink = documentService.getPDFLink(vm.store.replace("://", "/") + $stateParams.doc);
-        var pdfFinalLink = sessionService.makeURL(pdfLink);
+        var pdfFinalLink = sessionService.makeURL(vm.pdfLink);
         $window.open(pdfFinalLink);
     };
 

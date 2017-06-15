@@ -32,7 +32,8 @@
 				<breadcrumb paths="vm.paths"></breadcrumb>
 
 				<div layout-sm="column" layout="row">
-					<div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
+					<div style="max-width:1500px;height:600px; overflow: auto;" flex-gt-sm="66">
+						<!--iframe id="pdf" name="pdf" ng-src="{{ vm.pdfLink }}" style="width: 99%; height: 98%"></iframe-->
 						<ng-include src="viewerTemplateUrl"></ng-include>
 					</div>
 				</div>
@@ -44,4 +45,5 @@
 			<div ng-include="'app/src/documents/view/documentReview.html'"></div>
 		</div>
 	</div>
+
 </div>
