@@ -59,6 +59,7 @@ public class TestUtils {
     public static final String FILE_TEST_TEMPLATE3 = "Test_Template3.pdf";
     public static final String FILE_TEST_TEMPLATE4 = "Test_Template4.pdf";
     public static final String FILE_TEST_FROM_TEMPLATE1 = "Test_From_Template1.pdf";
+    public static final String FILE_TEST_TEMPLATE1_WITHOUT_EXT = "Test_Template1";
 
     public static NodeRef createUser(TransactionService transactionService, PersonService personService,
                                   MutableAuthenticationService authenticationService, String userName) {

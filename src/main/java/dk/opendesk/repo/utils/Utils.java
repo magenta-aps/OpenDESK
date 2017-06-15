@@ -489,7 +489,10 @@ public class Utils {
         int currentHighest = 0;
         String[] nodeNameParts = nodeName.split(dotSplit);
         String name = nodeNameParts[0];
-        String ext = nodeNameParts[1];
+        String ext = "";
+        if(nodeNameParts.length > 1)
+            ext = "." + nodeNameParts[1];
+
         boolean match = false;
 
         for (ChildAssociationRef child : childAssociationRefs) {
@@ -513,7 +516,7 @@ public class Utils {
 
         if (match) {
             currentHighest++;
-            return name + "(" + currentHighest + ")." + ext;
+            return name + "(" + currentHighest + ")" + ext;
         }
         return nodeName;
     }
