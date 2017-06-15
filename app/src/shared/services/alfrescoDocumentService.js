@@ -11,9 +11,6 @@ function AlfrescoDocumentService($http, alfrescoNodeUtils) {
     return service;
 
     function retrieveSingleDocument(nodeRef) {
-        console.log("nodeRef");
-        console.log(nodeRef);
-
         var params = "?view=browse&noCache=" + new Date().getTime() + "&includeThumbnails=true";
         var url = "/slingshot/doclib2/node/" + alfrescoNodeUtils.processNodeRef(nodeRef).uri + params;
         return $http.get(url).then(function (result) {
