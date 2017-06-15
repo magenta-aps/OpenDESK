@@ -11,7 +11,8 @@ function documentService($http) {
         UploadNewVersion: uploadNewVersion,
         createThumbnail: createThumbnail,
         cleanupThumbnail: cleanupThumbnail,
-        revertToVersion: revertToVersion
+        revertToVersion: revertToVersion,
+        getPDFLink: getPDFLink
     };
 
     return service;
@@ -104,6 +105,10 @@ function documentService($http) {
 			console.log("response = " +  response);
 			return response;
         });
+    }
+
+    function getPDFLink(nodeRef) {
+        return "/alfresco/service/api/node/" + nodeRef + "/content/thumbnails/pdf"
     }
 
 }

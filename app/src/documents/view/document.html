@@ -21,6 +21,12 @@
 							<span>{{'DOCUMENT.EDIT_DOCUMENT' | translate}}</span>
 						</md-button>
 					</div>
+					<div style="position: relative; top: 10px;">
+						<md-button ng-click="vm.openPDF()" class="md-text-icon-button md-primary">
+							<i class='material-icons'>edit</i>
+							<span>{{'DOCUMENT.PRINT' | translate}}</span>
+						</md-button>
+					</div>
 				</div>
 
 				<breadcrumb paths="vm.paths"></breadcrumb>
