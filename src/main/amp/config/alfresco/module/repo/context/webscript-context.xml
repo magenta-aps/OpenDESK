@@ -67,7 +67,7 @@
 		<property name="nodeService" ref="NodeService"/>
 	</bean>
 
-	<bean id="webscript.documents.template.get"
+	<bean id="webscript.documents.template.post"
 		  class="dk.opendesk.webscripts.documents.Template"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
