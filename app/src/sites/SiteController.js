@@ -721,6 +721,7 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
             var ref = response.data[0].nodeRef.split("/")[3];
             createDocumentNotification(vm.project.title, vm.project.shortName, ref, response.data[0].fileName);
             loadSiteData();
+            $mdDialog.hide();
         });
     }
 

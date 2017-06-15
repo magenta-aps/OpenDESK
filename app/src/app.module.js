@@ -78,7 +78,7 @@ function config($stateProvider, $urlRouterProvider) {
                     d.resolve(authService.user);
                 } else {
                     // here the rejection
-                    d.reject('not logged');
+                    d.reject('Not logged in!');
                     sessionService.retainCurrentLocation();
                     $state.go('login');
                 }
@@ -86,10 +86,6 @@ function config($stateProvider, $urlRouterProvider) {
             }]
         },
         views: {
-            'footer@': {
-                templateUrl: 'app/src/footer/view/footer.html',
-                controller: 'FooterController'
-            },
             'header@': {
                 templateUrl: 'app/src/header/view/header.html'
             }
