@@ -4,10 +4,11 @@ angular.module('openDeskApp.search', ['ngMaterial', 'pascalprecht.translate'])
 function config($stateProvider, USER_ROLES) {
 
     $stateProvider.state('search', {
-        url: '/search/:searchTerm',
+        url: '/søg/:searchTerm',
         views: {
             'content@': {
-                templateUrl: 'app/src/search/view/search.html'
+                templateUrl: 'app/src/search/view/search.html',
+                controller: 'SearchController'
             }
         },
         data: {

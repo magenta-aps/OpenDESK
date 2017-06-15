@@ -5,7 +5,8 @@ angular
         return {
             restrict: 'E',
             scope: {},
-            templateUrl: 'app/src/search/view/searchbar.html'
+            templateUrl: 'app/src/search/view/searchbar.html',
+            controller: 'SearchController'
         };
     })
     .filter('count', function() {
@@ -14,12 +15,9 @@ angular
         }
     });
 
-/**
- * Main Controller for the Search module
- * @param $scope
- * @constructor
- */
-function SearchController($scope, $interval, $translate, $stateParams, searchService, fileUtilsService, siteService) {
+function SearchController($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService,
+                          documentService, userService) {
+
     $scope.searchTerm = $stateParams.searchTerm;
     $scope.selectedFilters = {}; //Keep track of the selected filters
     $scope.filtersQueryString=""; // the selected filters as query string
@@ -57,6 +55,8 @@ function SearchController($scope, $interval, $translate, $stateParams, searchSer
      * @param term
      */
     function executeSearch() {
+
+        $scope.isLoading = true;
 
         var queryObj = {
             facetFields: parseFacetsForQueryFilter(),
@@ -128,11 +128,16 @@ function SearchController($scope, $interval, $translate, $stateParams, searchSer
                     results: displayedItems
                 };
                 setActiveFacets();
+
+                $scope.contentLength = displayedItems.length;
             }
+            else
+                $scope.contentLength = 0;
 
             $scope.facets.push(fileType);
             $scope.facets.push(modifiedBy);
             $scope.facets.push(site);
+            $scope.isLoading = false;
         });
     }
 
@@ -189,9 +194,11 @@ function SearchController($scope, $interval, $translate, $stateParams, searchSer
      * Extracts the QName from each defined facet and 'stringifies' them for the query object
      * @returns {string}
      */
-    function parseFacetsForQueryFilter(){
-        var stringFacet="";
-        $scope.definedFacets.forEach(function(item){stringFacet ==""? stringFacet+= item.facetQName : stringFacet = stringFacet+','+item.facetQName});
+    function parseFacetsForQueryFilter() {
+        var stringFacet = "";
+        $scope.definedFacets.forEach(function (item) {
+            stringFacet == "" ? stringFacet += item.facetQName : stringFacet = stringFacet + ',' + item.facetQName;
+        });
         return stringFacet;
     }
 
@@ -224,6 +231,43 @@ function SearchController($scope, $interval, $translate, $stateParams, searchSer
 
         $scope.filtersQueryString = filterQueryStringArr.toString();
         executeSearch();
+    }
+
+
+    $scope.getSearchresults = function getSearchReslts(term) {
+        if(term != "")
+            $state.go('search', {'searchTerm': term});
+    };
+
+
+    $scope.getAutoSuggestions = function getAutoSuggestions(term) {
+        return searchService.getSearchSuggestions(term).then(function (val) {
+
+            if (val != undefined) {
+                val.forEach(function(item) {
+                    item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24);
+                });
+                return val;
+            } else {
+                return [];
+            }
+        });
+    };
+
+
+    $scope.gotoPath = function (ref) {
+        documentService.getPath(ref.split("/")[3]).then(function (val) {
+            $scope.selectedDocumentPath = val.container;
+            var path = ref.replace("workspace://SpacesStore/", "");
+
+            $window.location.href = "/#!/dokument/" + path;
+        });
+    };
+
+    $scope.searchPeople = function (query) {
+        if (query) {
+            return userService.getUsers(query);
+        }
     }
 
 }

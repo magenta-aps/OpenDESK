@@ -3,7 +3,9 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state, documentPreviewService, alfrescoDownloadService, $mdDialog, notificationsService, authService, cmisService, siteService, $window) {
+function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
+                            documentPreviewService, alfrescoDownloadService, sessionService,
+                            $mdDialog, notificationsService, authService, cmisService, siteService, $window) {
 
     var vm = this;
     vm.doc = [];
@@ -257,7 +259,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     } else {
         vm.store = 'workspace://SpacesStore/';
-
+        vm.pdfLink = documentService.getPDFLink(vm.store.replace("://", "/") + $stateParams.doc);
         documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function (plugin) {
 
             vm.plugin = plugin;
@@ -312,5 +314,11 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             vm.highlightVersion();
         }
     });
+
+    //Goes to the libreOffice online edit page
+    vm.openPDF = function () {
+        var pdfFinalLink = sessionService.makeURL(vm.pdfLink);
+        $window.open(pdfFinalLink);
+    };
 
 };

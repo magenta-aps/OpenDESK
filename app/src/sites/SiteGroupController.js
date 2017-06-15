@@ -5,7 +5,8 @@ angular
     .controller('SiteGroupController', SiteGroupController);
 
 
-function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteService, userService,notificationsService) {
+function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteService, userService, notificationsService,
+                             alfrescoDownloadService) {
 
     $scope.externalUser = {};
     $scope.searchPeople = searchPeople;

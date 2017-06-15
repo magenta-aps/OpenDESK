@@ -11,7 +11,8 @@ function documentService($http) {
         UploadNewVersion: uploadNewVersion,
         createThumbnail: createThumbnail,
         cleanupThumbnail: cleanupThumbnail,
-        revertToVersion: revertToVersion
+        revertToVersion: revertToVersion,
+        getPDFLink: getPDFLink
     };
 
     return service;
@@ -49,10 +50,9 @@ function documentService($http) {
     }
 
     function createThumbnail(node, versionNode) {
-        var url = '/alfresco/s/previewhelper?version_node=' + node + '&parent_node=' + versionNode + "&method=create";
+        var url = '/alfresco/s/previewhelper?version_node=' + versionNode + '&parent_node=' + node + "&method=createThumbnail";
 
         return $http.get(url).then(function (response) {
-
             return response;
         });
     }
@@ -101,6 +101,10 @@ function documentService($http) {
 			console.log("response = " +  response);
 			return response;
         });
+    }
+
+    function getPDFLink(nodeRef) {
+        return "/alfresco/service/api/node/" + nodeRef + "/content/thumbnails/pdf"
     }
 
 }

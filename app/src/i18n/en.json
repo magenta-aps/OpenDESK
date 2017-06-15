@@ -94,6 +94,7 @@
     "FOLDER": "Folder",
     "CHOOSE": "Choose",
     "EMPTY_FOLDER": "This folder is empty",
+    "NO_SEARCH_RESULTS" : "There are no matches to the search term",
     "FILTER": "Filters",
     "FROM": "From",
     "COMPUTER": "PC",
@@ -221,6 +222,7 @@
     "EDIT_PROPERTIES": "Edit information",
     "EDIT_DOCUMENT": "Edit document",
     "EDIT_DOCUMENT_SHAREPOINT": "Edit document in MS Office",
+    "PRINT": "Print",
     "UPLOAD_NEW_VERSION": "Upload new version",
     "PREVIEW": "Preview",
     "ATTACHMENTS": {

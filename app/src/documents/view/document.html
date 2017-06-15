@@ -21,12 +21,18 @@
 							<span>{{'DOCUMENT.EDIT_DOCUMENT' | translate}}</span>
 						</md-button>
 					</div>
+					<!--div style="position: relative; top: 10px;">
+						<md-button ng-click="vm.openPDF()" class="md-text-icon-button md-primary">
+							<i class='material-icons'>edit</i>
+							<span>{{'DOCUMENT.PRINT' | translate}}</span>
+						</md-button>
+					</div-->
 				</div>
 
 				<breadcrumb paths="vm.paths"></breadcrumb>
 
 				<div layout-sm="column" layout="row">
-					<div style="max-width:1500px;max-height:610px; overflow: auto;" flex-gt-sm="66">
+					<div style="max-width:1500px;height:600px; overflow: auto;" flex-gt-sm="66">
 						<ng-include src="viewerTemplateUrl"></ng-include>
 					</div>
 				</div>
@@ -38,4 +44,5 @@
 			<div ng-include="'app/src/documents/view/documentReview.html'"></div>
 		</div>
 	</div>
+
 </div>

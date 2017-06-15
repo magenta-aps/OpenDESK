@@ -1,4 +1,3 @@
 <div>
-    <ng-pdf template-url="app/src/shared/services/document/preview/view/partials/pdfViewer.html" scale="page-fit"
-            canvasid="{{canvasid}}"></ng-pdf>
+    <iframe id="pdf" name="pdf" ng-src="{{ config.contentUrl }}" style="width: 99%; height: 500px"></iframe>
 </div>
