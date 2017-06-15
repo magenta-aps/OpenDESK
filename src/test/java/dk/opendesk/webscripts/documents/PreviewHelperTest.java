@@ -42,7 +42,6 @@ public class PreviewHelperTest extends BaseWebScriptTest {
     private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
 
     private Map<String, SiteInfo> sites = new HashMap<>();
-    private String parentFolderId;
     private String docId;
     private String versionId;
 
@@ -65,9 +64,6 @@ public class PreviewHelperTest extends BaseWebScriptTest {
 
         NodeRef docRef = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
                 sites.get(TestUtils.SITE_ONE).getNodeRef(), TestUtils.FILE_TEST_UPLOAD);
-
-        NodeRef parentFolderRef = nodeService.getParentAssocs(docRef).get(0).getParentRef();
-        parentFolderId = parentFolderRef.getId();
 
         docId = docRef.getId();
 
@@ -106,21 +102,21 @@ public class PreviewHelperTest extends BaseWebScriptTest {
     public void testCreateThumbnail() throws IOException, JSONException {
         log.debug("PreviewHelperTest.testCreateThumbnail");
 
-        assertWebScriptCreateThumbnail(parentFolderId, versionId);
+        assertWebScriptCreateThumbnail(docId, versionId);
     }
 
-    private JSONArray executeWebScriptCreateThumbnail (String parentFolderId, String versionNodeId) throws IOException, JSONException {
+    private JSONArray executeWebScriptCreateThumbnail (String parentDocRef, String versionNodeId) throws IOException, JSONException {
         Map<String, String> args = new HashMap<String, String>() {
             {
-                put("parent_node", parentFolderId);
+                put("parent_node", parentDocRef);
                 put("version_node", versionNodeId);
             }
         };
         return executeWebScript(args);
     }
 
-    private JSONArray assertWebScriptCreateThumbnail(String parentFolderId, String versionNodeId) throws IOException, JSONException {
-        JSONArray returnJSON = executeWebScriptCreateThumbnail(parentFolderId, versionNodeId);
+    private JSONArray assertWebScriptCreateThumbnail(String parentDocRef, String versionNodeId) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptCreateThumbnail(parentDocRef, versionNodeId);
         assertTrue(returnJSON.getJSONObject(0).has(TestUtils.NODE_REF));
         return returnJSON;
     }

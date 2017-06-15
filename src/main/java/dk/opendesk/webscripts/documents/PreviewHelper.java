@@ -93,7 +93,10 @@ public class PreviewHelper extends AbstractWebScript {
 
     private JSONArray createThumbnail(String parentNode, String versionNode) {
 
-        NodeRef parentRef = new NodeRef("workspace", "SpacesStore", parentNode);
+        NodeRef parentDocRef = new NodeRef("workspace", "SpacesStore", parentNode);
+        ChildAssociationRef childAssociationRef = nodeService.getPrimaryParent(parentDocRef);
+        NodeRef folderRef = childAssociationRef.getParentRef();
+
         NodeRef versionRef = new NodeRef("versionStore", "version2Store", versionNode);
         NodeRef thumbnailNodeRef;
 
@@ -103,7 +106,7 @@ public class PreviewHelper extends AbstractWebScript {
             // ...code to be run as Admin...
 
             ChildAssociationRef childAssocRef = nodeService.createNode(
-                    parentRef,
+                    folderRef,
                     ContentModel.ASSOC_CONTAINS,
                     QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
                             QName.createValidLocalName("copyofthefly_of " + versionRef.toString())),
