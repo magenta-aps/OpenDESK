@@ -1,6 +1,6 @@
-<nav class="od-filebrowser-breadcrumb">
-    <span ng-repeat="path in bcPath">  
+<ol class="od-breadcrumb">
+    <li ng-repeat="path in bcPath">
         <a ng-hide="$last" href="{{path.link}}">{{ path.title }}</a>
         <span ng-show="$last">{{ path.title }}</span>
-    </span>
-</nav>
+    </li>
+</ol>

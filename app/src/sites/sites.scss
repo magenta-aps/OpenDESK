@@ -1,10 +1,10 @@
 .od-back-btn {
   cursor: pointer;
-  font-size: $u*0.88;
+  font-size: $u * .88;
   text-transform: uppercase;
   padding-right: $u;
   i {
-    font-size: $u*0.88;
+    font-size: $u * .88;
   }
 }
 
@@ -13,12 +13,12 @@
 }
 
 .od-filebrowser-link {
+  color: rgba(0, 0, 0, .54) !important;
   display: block;
   width: 100%; //padding: $u*0.75 0 $u*0.5;
-  color: rgba(0, 0, 0, 0.54) !important;
   .material-icons {
+    margin-top: -($u * .25);
     vertical-align: middle;
-    margin-top: -($u*0.25);
   }
   h3,
   p {
@@ -26,34 +26,33 @@
     line-height: 0;
   }
   p {
-    font-size: $u * 0.9;
+    font-size: $u * .9;
   }
 }
 
 .od-primary {
-  color: rgba(0, 0, 0, 0.87) !important;
+  color: rgba(0, 0, 0, .87) !important;
 }
 
 .od-secondary {
-  color: rgba(0, 0, 0, 0.54) !important;
+  color: rgba(0, 0, 0, .54) !important;
 }
 
 .od-title-icon {
   @extend .od-filebrowser-link;
   margin-top: 0;
   .material-icons {
-    margin-right: $u/2;
+    margin-right: $u / 2;
   }
 }
 
 md-input-container {
   margin: 0;
   padding: 0 !important;
-}
-
-md-input-container.md-input-focused label,
-md-input-container.md-input-has-value label {
-  font-size: 120%;
+  .md-input-focused label,
+  .md-input-has-value label {
+    font-size: 120%;
+  }
 }
 
 md-list {
@@ -64,18 +63,18 @@ md-list {
 
 .md-button {
   font-size: 13px;
-  letter-spacing: 0.04em;
+  letter-spacing: .04em;
 }
 
 .od-title {
   font-size: 22px;
-  letter-spacing: 0.02em;
+  letter-spacing: .02em;
   padding-top: 14px;
   right: 145px;
 }
 
 .sortHead {
-  padding-top: 0px;
+  padding-top: 0;
 }
 
 md-card {
@@ -102,35 +101,37 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   width: 99%;
   td {
     max-width: 0;
-    a.overflow {
+    .overflow {
       display: block;
-      text-overflow: ellipsis;
       overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
       width: 85%;
     }
   }
   th {
-    text-align: left;
     cursor: hand;
-    padding: 10px 0 5px 0;
-    i.material-icons {
+    padding: 10px 0 5px;
+    text-align: left;
+    .material-icons {
       font-size: 15px;
-    } // width: 20%;
+    }
   }
   tr {
-    td:last-child {
-      text-align: right;
-      button {
-        margin: 0;
+    td {
+      &:last-child {
+        text-align: right;
+        button {
+          margin: 0;
+        }
       }
     }
   }
-  i.material-icons {
-    font-size: $u*1.5;
+  .material-icons {
+    font-size: $u * 1.5;
   }
   .icon {
-    width: $u*2;
+    width: $u * 2;
   }
   .description-label {
     padding-right: 10px;
@@ -156,29 +157,6 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 }
 
-.od-filebrowser-breadcrumb {
-  height: 23px;
-  line-height: 23px;
-  font-size: $u;
-  background-color: #d9d9d9;
-  box-shadow: 1px 2px 1px #bdbdbd;
-  a {
-    padding: 0 0 2px 0;
-    color: rgba(0, 0, 0, 0.54); //color: #333399;
-  }
-  a:after {
-    content: '';
-    position: relative;
-    top: 3px;
-    left: -8px;
-    width: 14px;
-    height: 17px;
-    transform: scale(0.999) rotate(45deg);
-    box-shadow: 2px -2px 0px #fff;
-    border-radius: 0 5px 0 50px;
-  }
-}
-
 .btnAlign {
   margin-top: 20px;
 }
@@ -187,7 +165,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   position: relative;
   overflow: hidden;
   margin: 10px;
-  input.upload {
+  .upload {
     position: absolute;
     top: 0;
     right: 0;
@@ -201,47 +179,46 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 }
 
 .chosenFile {
-  float: left;
   background-color: #fff;
-  border: none;
+  border: 0;
+  float: left;
   padding: 0 10px 40px 20px;
   i {
+    color: #6b6b6b;
     position: relative;
     top: 5px;
-    color: #6b6b6b;
   }
 }
 
 .menuListHead {
-  padding-left: 15px;
-  font-weight: bold;
   color: #5e5e5e;
   font-size: 90%;
-  letter-spacing: 0.05em;
+  font-weight: bold;
+  letter-spacing: .05em;
+  padding-left: 15px;
 }
 
 .menuList {
-  position: relative;
-  top: -15px;
   border-top: 1px solid #efefef;
   font-size: 90%;
   letter-spacing: 0.04em;
   line-height: 50px;
+  position: relative;
+  top: -15px;
   a {
-    color: rgba(0, 0, 0, 0.54);
-  }
-  a:hover {
-    background-color: #efefef;
-    text-decoration: none;
+    color: rgba(0, 0, 0, .54);
+    &:hover {
+      background-color: #efefef;
+      text-decoration: none;
+    }
   }
 }
+
 
 /*expand collapse*/
 
 .transition {
-  transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
-  /* Safari */
+  transition: all .4s ease-in-out;
 }
 
 .pHeader {
@@ -249,10 +226,10 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   letter-spacing: 1px;
   margin: 12px 0 12px 0;
   span {
+    border-bottom: 1px solid #ccc;
     float: left;
     font-size: 90%;
     font-weight: bold;
-    border-bottom: 1px solid #ccc;
   }
 }
 
@@ -287,13 +264,13 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   md-input-container {
     height: 56px;
     label {
-      color: rgba(0, 0, 0, 0.38) !important; //38
+      color: rgba(0, 0, 0, .38) !important;
     }
   }
   .show-all {
     height: auto;
     padding-left: 3px !important;
-    color: rgba(0, 0, 0, 0.38) !important; //54
+    color: rgba(0, 0, 0, .38) !important;
     text-overflow: ellipsis;
     md-checkbox {
       margin-bottom: $u * 2;
@@ -308,42 +285,42 @@ md-tooltip {
 .fold-in {
   max-height: 0;
   padding: 0;
-  transition: max-height 0.15s ease-out, padding 0.1s ease-out 0.15s;
+  transition: max-height .15s ease-out, padding .1s ease-out .15s;
   overflow: hidden;
 }
 
 .fold-out {
   max-height: 500px;
-  transition: max-height 0.25s ease-in;
+  transition: max-height .25s ease-in;
 }
 
 //control arrow for open and closing
 .open {
   #rotateArrow {
-    transition: transform 0.25s ease;
+    transition: transform .25s ease;
     transform: rotate(180deg);
   }
 }
 
 .closed {
   #rotateArrow {
-    transition: transform 0.15s ease;
+    transition: transform .15s ease;
     transform: rotate(0deg);
   }
 }
 
 .group-toggle {
-  outline: none;
   background-color: #eaeaea;
-  padding: $u*0.5 $u;
+  border-radius: 4px;
+  box-shadow: 0 $u * .25 $u * .5 rgba(125, 125, 125, .3);
+  cursor: pointer;
+  outline: none;
+  padding: $u * .5 $u;
   margin: $u 0 0;
   transition: box-shadow 0.15s ease-out;
-  box-shadow: 0 $u*0.25 $u*0.5 rgba(125, 125, 125, 0.3);
-  border-radius: 4px;
-  cursor: pointer;
   &:hover {
-    transition: box-shadow 0.25s ease-in;
-    box-shadow: 0 $u*0.5 $u*0.5 rgba(125, 125, 125, 0.3);
+    box-shadow: 0 $u * .5 $u * .5 rgba(125, 125, 125, .3);
+    transition: box-shadow .25s ease-in;
   }
 }
 
@@ -367,14 +344,14 @@ md-card-title h3 {
 
 #details {
   dl {
-    padding-left: 0.25*$u;
-    padding-right: 0.25*$u;
     margin-bottom: 0;
+    padding-left: .25 * $u;
+    padding-right: .25 * $u;
     dd,
     dt {
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
@@ -391,29 +368,29 @@ md-card-title h3 {
     display: inline-block;
     fieldset {
       display: inline-flex;
-      margin-right: 40px;
       margin-left: 40px;
+      margin-right: 40px;
     }
     .md-chip-input-container {
       width: 100%;
     }
   }
   md-input-container {
-    margin: $u*0.5 0;
+    margin: $u * .5 0;
   }
   md-autocomplete {
-    margin: $u*0.5 0 $u;
+    margin: $u * .5 0 $u;
   }
   .org-input,
   .template-input {
-    margin: $u*0.5 0 $u*2;
+    margin: $u * .5 0 $u * 2;
     width: 100%;
   }
 }
 
 .md-icon--large {
-  font-size:96px !important;
+  font-size: 96px !important;
   height: 96px;
-  width: 96px;
   margin-top: 34px;
+  width: 96px;
 }

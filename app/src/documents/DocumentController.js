@@ -134,7 +134,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
         var NID = $location.search().NID;
 
-        notificationsService.getInfo(NID).then (function(response) {
+        notificationsService.getInfo(NID).then(function (response) {
             $scope.wf_comment = response.comment;
         });
 
@@ -144,7 +144,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         vm.wfr = true;
 
         var NID = $location.search().NID;
-        notificationsService.getInfo(NID).then (function(response) {
+        notificationsService.getInfo(NID).then(function (response) {
             $scope.wf_comment = response.comment;
         });
     }
@@ -155,8 +155,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         });
     };
     vm.getNotificationFrom();
-    
-    vm.createWFNotification = function(comment, wtype) {
+
+    vm.createWFNotification = function (comment, wtype) {
 
         var creator = authService.getUserInfo().user.userName;
         var link = "#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
@@ -164,10 +164,10 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         var status = wtype == 'review-approved' ? 'godkendt' : 'afvist';
 
         var NID = $location.search().NID;
-        notificationsService.getInfo(NID).then (function(response) {
+        notificationsService.getInfo(NID).then(function (response) {
             var project = response.project;
 
-            notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then (function (val) {
+            notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then(function (val) {
                 $mdDialog.hide();
                 vm.goBack();
             });
@@ -195,7 +195,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
         vm.doc = response.item;
 
-
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
 
@@ -204,12 +203,10 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         console.log(response.item);
 
         function buildBreadCrumbPath(response) {
-            var paths = [
-                {
-                    title: response.item.location.siteTitle,
-                    link: '#!/projekter/' + response.item.location.site + vm.documentTab
-                }
-            ];
+            var paths = [{
+                title: response.item.location.siteTitle,
+                link: '#!/projekter/' + response.item.location.site + vm.documentTab
+            }];
             var pathArr = response.item.location.path.split('/');
             var pathLink = '/';
             for (var a in pathArr) {
@@ -233,8 +230,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     // todo check if not ok type like pdf, jpg and png - then skip this step
     if (docHasParent) {
-
-
         vm.store = 'versionStore://version2Store/';
 
         documentService.createThumbnail(parentDocumentNode, selectedDocumentNode).then(function (response) {
@@ -292,7 +287,9 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         $mdDialog.show(confirm).then(function () {
             var selectedVersion = $location.search().version;
             documentService.revertToVersion(vm.doc.description, true, vm.doc.nodeRef, selectedVersion).then(function (response) {
-                $state.go('lool', { 'nodeRef': vm.doc.nodeRef });
+                $state.go('lool', {
+                    'nodeRef': vm.doc.nodeRef
+                });
             });
         });
     }
@@ -306,7 +303,9 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             //first promote doc to latest version
             confirmLoolEditDocDialog();
         } else {
-            $state.go('lool', { 'nodeRef': vm.doc.nodeRef });
+            $state.go('lool', {
+                'nodeRef': vm.doc.nodeRef
+            });
         }
     };
 

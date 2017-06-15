@@ -1,11 +1,11 @@
 .discussion-back {
-    display: inline-block;
-    width: $u*8;
-    padding-right: $u*4;
+  display: inline-block;
+  padding-right: $u * 4;
+  width: $u * 8;
 }
 
 .discussion-title {
-    display: inline-block;
+  display: inline-block;
 }
 
 .od-discussion {
@@ -17,30 +17,30 @@
         text-align: left !important;
     }
     .avatar-container {
-        padding-right: $u*4;
+        padding-right: $u * 4;
         vertical-align: top;
         .avatar {
-            width: $u*8;
             border-radius: 50%;
+            width: $u * 8;
         }
         h3 {
-            text-align: center;
             margin-top: 0;
+            text-align: center;
         }
     }
     .comment {
-        padding: $u*1.5 $u*12 0 0;
-        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
         vertical-align: top;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        width: 100%;
+        padding: $u * 1.5 $u * 12 0 0;
     }
     .comment-actions {
-        width: $u*2;
+        width: $u * 2;
         vertical-align: top;
     }
     .seperator {
         td {
-            padding-top: $u*1.5; //border-bottom: 1px solid black;
+            padding-top: $u * 1.5;
         }
     }
 }
