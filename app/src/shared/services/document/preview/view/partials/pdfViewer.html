@@ -1,16 +1,15 @@
-<nav ng-class="getNavStyle(scroll)">
-    <button ng-click="goPrevious()"><</span></button>
-    <button ng-click="goNext()">></span></button>
+<nav class="pdf-controls">
+    <md-button class="md-icon-button" ng-click="goPrevious()"><md-icon>navigate_before</md-icon></md-button>
+    <md-button class="md-icon-button" ng-click="goNext()"><md-icon>navigate_next</md-icon></md-button>
 
-    <button ng-click="zoomIn()">+</span></button>
-    <button ng-click="zoomOut()">-</span></button>
+    <md-button class="md-icon-button" ng-click="zoomIn()"><md-icon>zoom_in</md-icon></md-button>
+    <md-button class="md-icon-button" ng-click="zoomOut()"><md-icon>zoom_out</md-icon></md-button>
+    <md-button class="md-icon-button" ng-click="rotate()"><md-icon>rotate_right</md-icon></md-button>
 
     <span>Page: </span>
-    <input type="text" min=1 ng-model="pageNum">
+    <input type="text" min=1 size="4" ng-model="pageNum">
     <span> / {{pageCount}}</span>
 </nav>
-
-<hr>
 
 {{loading}}
 <canvas assign-id="canvasid" class="rotate0"></canvas>
