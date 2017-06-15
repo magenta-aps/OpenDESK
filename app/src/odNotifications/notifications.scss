@@ -25,7 +25,7 @@
     padding: 2px;
     border: none;
     background: transparent;
-    color: $main-color;
+    color: $primary-color;
     float: right;
   }
 }
@@ -39,13 +39,13 @@
 .od-notifications--counter {
   display: block;
   position: absolute;
-  top: $u*0.25;
-  right: $u*0.25;
-  font-size: $u*0.75;
+  top: $u * .25;
+  right: $u * .25;
+  font-size: $u * .75;
   color: #fff;
-  background-color: adjust-hue($main-color, 120deg);
-  padding: $u*0.25;
-  border-radius: $u*0.25;
+  background-color: adjust-hue($primary-color, 120deg);
+  padding: $u * .25;
+  border-radius: $u * .25;
 }
 
 .od-notifylist {
@@ -94,10 +94,10 @@
 }
 
 .od-notifylist--item--desc {
-  font-size: $u*0.9;
+  font-size: $u * .9;
   color: #666;
-  padding-top: $u*0.25;
-  padding-bottom: $u*0.25;
+  padding-top: $u * .25;
+  padding-bottom: $u * .25;
 }
 
 .od-notifylist--item--date {
@@ -108,7 +108,7 @@
 .od-notifylist--item--close {
   flex: 0 0 auto;
   background-color: transparent;
-  color: $main-color;
+  color: $primary-color;
 }
 
 .od-notifylist--item--read {

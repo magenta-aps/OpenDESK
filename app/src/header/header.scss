@@ -1,5 +1,5 @@
 .od-header {
-  background-color: $main-color;
+  background-color: $primary-color;
   position: fixed;
   top: 0;
   right: 0;
@@ -9,10 +9,10 @@
   height: 48px;
 
   .od-header--body {
-    height: $u*3;
+    height: $u * 3;
   }
   .od-btn {
-    height: $u*3;
+    height: $u * 3;
   }
 
   .avatar {

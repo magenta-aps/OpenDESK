@@ -7,8 +7,6 @@
   right: $u*6;
   position: fixed;
   z-index: 2;
-  /*height: $u*2;
-  width: $u*2;*/
   padding: 0;
   &::-moz-focus-inner {
     padding: 0;
@@ -44,9 +42,9 @@
 }
 
 .od-userlist--avatar {
-  width: $u*3;
+  width: $u * 3;
 }
 
 .od-userlist--name {
-  padding: $u*0.5;
+  padding: $u * .5;
 }

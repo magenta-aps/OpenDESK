@@ -9,6 +9,7 @@
 
         <div class="od-flyout right fixed" ng-class="{ open: vm.on, closed: !vm.on }" ng-click="vm.toggleUser()">
             <div class="od-flyout--body" ng-click="$event.stopPropagation()">
+                <h2 class="od-flyout--title">{{'USER.USER' | translate}}</h2>
                 <button ng-click="vm.toggleUser()" class="od-btn od-flyout--close">
                 <i class="material-icons">keyboard_arrow_right</i>
             </button>

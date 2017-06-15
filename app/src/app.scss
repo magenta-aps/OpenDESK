@@ -1,17 +1,42 @@
-/*
- * Sass constants
+/**
+ * SASS constants
  */
 
-$main-color: rgb(63, 81, 181);
+//$main-color: rgb(63, 81, 181);
 // Main color. We use lighten() and darken() to make variations of this color
+$black: #000;
+$white: #fff;
+
+$primary-color: rgb(63, 81, 181);
+$primary-color-light: lighten($primary-color, 15%);
+$primary-color-dark: darken($primary-color, 15%);
+
+$secondary-color: rgb(255, 215, 89);
+$secondary-color-light: lighten($secondary-color, 15%);
+$secondary-color-dark: darken($secondary-color, 15%);
+
+$primary-text-color: $black;
+$secondary-text-color: $white;
+
+$headline-color: $white;
+
+$gray-90: #eee;
+$gray-80: #ccc;
+$gray-60: #999;
+$gray-40: #666;
+$gray-20: #333;
+
+$overlay: rgba($black, .38);
+
 $u: 16px;
 // Unit of measurement - usually default font size
 $br-sm-md: $u * 40;
 // Breakpoint between small and medium screens
 
-/*
- * Element level (atom) styles
+/**
+ * Mixins
  */
+
 @mixin fade-in {
   opacity: 1;
   transition: opacity .25s ease-in;
@@ -23,6 +48,10 @@ $br-sm-md: $u * 40;
 }
 
 
+/**
+ * Element level (atom) styles
+ */
+
 .z-index-0 {
   z-index: 0 !important;
 }
@@ -31,19 +60,18 @@ a {
   &,
   &:link,
   &:visited {
-    color: $main-color;
+    color: $primary-color;
     text-decoration: none;
+  }
+  &:hover,
+  &:active {
+    color: $primary-color-dark;
+    text-decoration: underline;
   }
 }
 
-a:hover,
-a:active {
-  color: darken($main-color, 20%);
-  text-decoration: underline;
-}
-
 body {
-  background: #ddd;
+  background: $gray-90;
 }
 
 article {
@@ -61,7 +89,7 @@ img {
 
 dl {
   dt {
-    color: lighten($main-color, 20%);
+    color: $primary-color-light, 20%;
     font-size: $u * .9;
   }
   dd {
@@ -71,7 +99,7 @@ dl {
 }
 
 fieldset {
-  border: solid 1px #eee;
+  border: solid 1px $gray-90;
   margin-bottom: $u;
 }
 
@@ -110,7 +138,7 @@ legend {
 
 // Title that is placed in the header
 .od-title {
-  color: #fff;
+  color: $headline-color;
   font-size: $u * 1.5;
   font-weight: normal;
   left: $u * 3;
@@ -134,9 +162,9 @@ legend {
   list-style: none;
   li {
     display: block;
-    background-color: #eee;
+    background-color: $gray-90;
     margin-top: 1px;
-    padding: $u*0.5 $u;
+    padding: $u * .5 $u;
   }
 }
 
@@ -145,23 +173,23 @@ legend {
   &,
   &:link,
   &:visited {
+    border: none;
     display: inline-block;
     box-sizing: border-box;
-    background-color: darken($main-color, 20%);
-    color: #fff;
+    background-color: $primary-color-dark;
+    color: $secondary-text-color;
     padding: $u * .5;
     min-width: $u * 3;
     min-height: $u * 3;
     text-align: center;
-    border: none;
   }
   &:hover,
   &:active {
-    background-color: darken($main-color, 30%);
+    background-color: $primary-color-dark;
     text-decoration: none;
   }
   &.disabled {
-    background-color: #999;
+    background-color: $gray-60;
     cursor: inherit;
   }
   .material-icons {
@@ -174,24 +202,23 @@ legend {
 
 // Sliding sidebar
 .od-flyout {
-  display: block;
-  position: fixed;
-  top: 0;
+  background-color: $overlay;
   bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
+  display: block;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 5;
+  left: 0;
   opacity: 0;
-  transition: all .3s;
-  transition-timing-function: ease-in-out;
   pointer-events: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: all .3s ease-in-out;
+  width: 100%;
+  z-index: 5;
   .od-flyout--body {
-    background-color: #fff;
-    color: #000;
-    width: $u*20;
+    background-color: $white;
+    color: $primary-text-color;
+    width: $u * 20;
     position: absolute;
     display: flex;
     flex-flow: column nowrap;
@@ -225,8 +252,8 @@ legend {
   }
   .od-flyout--title {
     font-size: $u * 1.5;
-    background-color: $main-color;
-    color: #fff;
+    background-color: $primary-color;
+    color: $headline-color;
     padding: $u * .625 $u;
     margin: 0;
     height: $u * 3;
@@ -235,11 +262,11 @@ legend {
   .od-flyout--close {
     background-color: transparent;
     position: absolute;
-    top: 0;
     right: 0;
+    top: 0;
     &:hover,
     &:active {
-      background-color: rgba(0, 0, 0, .3);
+      background-color: $overlay;
     }
   }
 }
@@ -248,17 +275,15 @@ legend {
   padding: 8px 15px;
   margin-bottom: 20px;
   list-style: none;
-  background-color: #f5f5f5;
+  background-color: $gray-90;
   border-radius: 4px;
-
   li {
     display: inline-block;
-
     &:not(:last-child):after {
       content: '/';
       padding: 0 4px;
-      }
     }
+  }
 }
 
 // Icons in buttons
@@ -288,64 +313,24 @@ legend {
 .search-documents-container,
 .search-documents {
   width: 400px;
-}
-
-.search-documents li {
-  border-bottom: 1px solid #ccc;
-  height: auto;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  white-space: normal;
-  min-width: 200px;
-}
-
-.search-documents li:last-child {
-  border-bottom-width: 0;
-}
-
-.search-documents.item-title,
-.search-documents .item-metadata {
-  display: block;
-  line-height: 2;
-}
-
-.search-documents .item-title md-icon {
-  height: 18px;
-  width: 18px;
-}
-
-//Rotation in document preview
-.rotate0 {
-  -webkit-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-
-.rotate90 {
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-
-.rotate180 {
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-
-.rotate270 {
-  -webkit-transform: rotate(270deg);
-  transform: rotate(270deg);
-}
-
-//fixed header for document preview
-.pdf-controls {
-  @include fade-out;
-  width: 100%;
-  display: block;
-  background: rgba(238, 238, 238, .9);
-  padding: 1em;
-  position: absolute;
-  z-index: 1;
-
-  &:hover {
-    @include fade-in;
+  li {
+    border-bottom: 1px solid $gray-80;
+    height: auto;
+    min-width: 200px;
+    padding-bottom: $u * .5;
+    padding-top: $u * .5;
+    white-space: normal;
+    &:last-child {
+      border-bottom-width: 0;
+    }
+  }
+  .item-title,
+  .item-metadata {
+    display: block;
+    line-height: 2;
+    md-icon {
+      height: 18px;
+      width: 18px;
+    }
   }
 }
