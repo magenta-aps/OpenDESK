@@ -50,6 +50,7 @@ public class TestUtils {
     public static final String SITE_TWO = "reserved_for_test_site_two";
     public static final String SITE_THREE = "reserved_for_test_site_three";
     public static final String SITE_FOUR = "reserved_for_test_site_four";
+    public static final String SITE_FIVE = "reserved_for_test_site_five";
 
     public static final String SITE_NAME = "Reserved for test site";
 

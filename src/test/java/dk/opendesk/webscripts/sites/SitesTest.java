@@ -141,6 +141,18 @@ public class SitesTest extends BaseWebScriptTest {
         assertAddUser(TestUtils.SITE_ONE, TestUtils.USER_ONE, group);
     }
 
+    public void testGetSitesPerUser() throws IOException, JSONException {
+        log.debug("SitesTest.testGetSitesPerUser");
+
+        assertGetSitesPerUser(TestUtils.USER_ONE);
+    }
+
+
+
+
+
+
+
     public void testRemoveUser() throws IOException, JSONException {
         log.debug("SitesTest.testRemoveUser");
 
@@ -314,6 +326,21 @@ public class SitesTest extends BaseWebScriptTest {
         return returnJSON;
     }
 
+    private JSONArray assertGetSitesPerUser (String userName) throws IOException, JSONException {
+
+
+        String group = "Site" + OpenDeskModel.CONSUMER;
+        executeAddUser(TestUtils.SITE_ONE, userName, group);
+
+        TestUtils.createSite(transactionService, siteService, TestUtils.SITE_FIVE);
+        executeAddUser(TestUtils.SITE_FIVE, userName, group);
+
+        JSONArray returnJSON = executeGetSitesPerUser(userName);
+
+        assertEquals(2, returnJSON.length());
+        return returnJSON;
+    }
+
     private JSONArray assertRemoveUser (String siteShortName, String userName, String groupName) throws IOException, JSONException {
         JSONArray returnJSON = executeRemoveUser(siteShortName, userName, groupName);
         assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
@@ -334,7 +361,7 @@ public class SitesTest extends BaseWebScriptTest {
 
     private JSONArray assertGetCurrentUserSiteRole (String siteShortName, String userName, String roleName) throws IOException, JSONException {
         JSONArray returnJSON = executeGetCurrentUserSiteRole(siteShortName, userName);
-        assertEquals(roleName,  returnJSON.getJSONObject(0).getString("role"));
+        assertEquals(roleName, returnJSON.getJSONObject(0).getString("role"));
         return returnJSON;
     }
 
@@ -430,6 +457,15 @@ public class SitesTest extends BaseWebScriptTest {
             throws IOException, JSONException {
         return executeUserWebScripts("addUser", siteShortName, userName, groupName);
     }
+
+    private JSONArray executeGetSitesPerUser (String userName)
+            throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getSitesPerUser");
+        return executeWebScript(data, userName);
+    }
+
+
 
     private JSONArray executeRemoveUser (String siteShortName, String userName, String groupName)
             throws IOException, JSONException {

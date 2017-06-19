@@ -165,7 +165,7 @@ public class Sites extends AbstractWebScript {
                         result = getSiteType(siteShortName);
                         break;
 
-                    case "getSiteGroups":
+                    case "getSiteGroups": // test not needed
                         result = getSiteGroups(siteType);
                         break;
 
@@ -181,7 +181,7 @@ public class Sites extends AbstractWebScript {
                         result = makeSiteATemplate(siteShortName);
                         break;
 
-                    case "createMembersPDF":
+                    case "createMembersPDF": // test not needed
                         result = createMembersPDF(siteShortName);
                         break;
 
