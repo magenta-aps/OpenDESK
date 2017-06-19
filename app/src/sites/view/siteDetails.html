@@ -2,7 +2,7 @@
 	<md-card-title ng-click="showProjDetails = !showProjDetails" ng-class="showProjDetails ? 'open' : 'closed'">
 		<h3 class="md-title od-title-icon "><i class="material-icons">info_outline</i> {{'COMMON.DETAILS' | translate }}</h3>
 		<span flex></span>
-		<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+		<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 	</md-card-title>
 
 	<md-card-content ng-class="showProjDetails ? 'fold-out' : 'fold-in'">

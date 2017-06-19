@@ -1,8 +1,9 @@
 .od-back-btn {
   cursor: pointer;
   font-size: $u * .88;
-  text-transform: uppercase;
   padding-right: $u;
+  text-transform: uppercase;
+
   i {
     font-size: $u * .88;
   }
@@ -16,10 +17,12 @@
   color: $gray-text-color;
   display: block;
   width: 100%;
+
   .material-icons {
     margin-top: -($u * .25);
     vertical-align: middle;
   }
+
   h3,
   i,
   .content-name {
@@ -29,18 +32,15 @@
   }
 }
 
-.od-primary {
-  color: rgba(0, 0, 0, .87) !important;
-}
-
 .od-secondary {
   color: rgba(0, 0, 0, .54) !important;
 }
 
 .od-title-icon {
   margin-top: 0;
+
   .material-icons {
-    margin-right: $u / 2;
+    margin-right: $u * .5;
     margin-top: -($u * .25);
     vertical-align: middle;
   }
@@ -49,9 +49,16 @@
 md-input-container {
   margin: 0;
   padding: 0 !important;
-  .md-input-focused label,
-  .md-input-has-value label {
-    font-size: 120%;
+
+  label:not(.md-no-float):not(.md-container-ignore) {
+    z-index: 0;
+  }
+
+  .md-input-focused,
+  .md-input-has-value {
+    label {
+      font-size: 120%;
+    }
   }
 }
 
@@ -73,7 +80,7 @@ md-list {
   right: 145px;
 }
 
-.sortHead {
+.sort-head {
   padding-top: 0;
 }
 
@@ -81,9 +88,7 @@ md-card {
   position: relative;
 }
 
-md-input-container label:not(.md-no-float):not(.md-container-ignore) {
-  z-index: 0;
-}
+
 
 .od-sbsys-logo {
   display: inline-block;
@@ -92,6 +97,7 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 
 .od-esdh-checkbox {
   width: 92px;
+
   input {
     float: right;
   }
@@ -99,8 +105,10 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 
 .od-members {
   width: 99%;
+
   td {
     max-width: 0;
+
     .overflow {
       display: block;
       overflow: hidden;
@@ -109,31 +117,39 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
       width: 85%;
     }
   }
+
   th {
-    cursor: pointer;
     color: $dark-gray-text-color;
+    cursor: pointer;
     padding: 10px 0 5px;
     text-align: left;
+
     .material-icons {
       font-size: 15px;
     }
   }
+
   tr {
+
     td {
       &:last-child {
         text-align: right;
+
         button {
           margin: 0;
         }
       }
     }
   }
+
   .material-icons {
     font-size: $u * 1.5;
   }
+
   .icon {
     width: $u * 2;
   }
+
   .description-label {
     padding-right: 10px;
   }
@@ -141,18 +157,23 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 
 .od-members-row {
   border-collapse: collapse;
+
   tr {
+
     td {
       border-top: 1px solid #ededed;
-      padding-top: 2px;
       padding-bottom: 2px;
+      padding-top: 2px;
     }
   }
+
   tbody {
+
     tr:hover {
       background-color: #efefef;
     }
   }
+
   a:hover {
     text-decoration: none;
   }
@@ -162,28 +183,30 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   margin-top: 20px;
 }
 
-.fileUpload {
-  position: relative;
-  overflow: hidden;
+.file-upload {
   margin: 10px;
+  overflow: hidden;
+  position: relative;
+
   .upload {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
     cursor: pointer;
-    opacity: 0;
     filter: alpha(opacity=0);
+    font-size: 20px;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 }
 
-.chosenFile {
+.chosen-file {
   background-color: #fff;
   border: 0;
   float: left;
   padding: 0 10px 40px 20px;
+
   i {
     color: #6b6b6b;
     position: relative;
@@ -191,23 +214,25 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 }
 
-.menuListHead {
+.menu-list-head {
   color: #5e5e5e;
   font-size: 90%;
   font-weight: bold;
   letter-spacing: .05em;
-  padding-left: 15px;
+  padding-left: $u;
 }
 
-.menuList {
+.menu-list {
   border-top: 1px solid #efefef;
   font-size: 90%;
-  letter-spacing: 0.04em;
+  letter-spacing: .04em;
   line-height: 50px;
   position: relative;
-  top: -15px;
+  top: -$u;
+
   a {
     color: rgba(0, 0, 0, .54);
+
     &:hover {
       background-color: #efefef;
       text-decoration: none;
@@ -215,38 +240,10 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 }
 
-
-/*expand collapse*/
+//expand collapse
 
 .transition {
   transition: all .4s ease-in-out;
-}
-
-.pHeader {
-  line-height: 30px;
-  letter-spacing: 1px;
-  margin: 12px 0 12px 0;
-  span {
-    border-bottom: 1px solid #ccc;
-    float: left;
-    font-size: 90%;
-    font-weight: bold;
-  }
-}
-
-.pContent {
-  letter-spacing: 0.05em;
-  margin-top: 0;
-  max-height: 250px;
-  overflow: auto;
-  width: 98%;
-  span {
-    float: left;
-    width: 92%;
-    padding: 0 10px 0 10px;
-    font-size: 90%;
-    line-height: 28px;
-  }
 }
 
 .md-select-value {
@@ -255,10 +252,12 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 
 .od-filter-sidebar {
   overflow: hidden;
+
   button {
     top: 0 !important;
   }
-  md-card-title{
+
+  md-card-title {
     max-height: 40px;
   }
 
@@ -268,16 +267,19 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   }
 
   md-input-container {
-    height: 56px;
+    height: $u * 3.5;
+
     label {
       color: $gray-text-color;
     }
   }
+
   .show-all {
+    color: $gray-text-color;
     height: auto;
     padding-left: $u * .2;
-    color: $gray-text-color;
     text-overflow: ellipsis;
+
     md-checkbox {
       margin-bottom: $u * 2;
     }
@@ -285,14 +287,14 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
 }
 
 md-tooltip {
-  font-size: $u * 0.75 !important;
+  font-size: $u * .75 !important;
 }
 
 .fold-in {
   max-height: 0;
+  overflow: hidden;
   padding: 0;
   transition: max-height .15s ease-out, padding .1s ease-out .15s;
-  overflow: hidden;
 }
 
 .fold-out {
@@ -302,16 +304,16 @@ md-tooltip {
 
 //control arrow for open and closing
 .open {
-  #rotateArrow {
-    transition: transform .25s ease;
+  .rotate-arrow {
     transform: rotate(180deg);
+    transition: transform .25s ease;
   }
 }
 
 .closed {
-  #rotateArrow {
-    transition: transform .15s ease;
+  .rotate-arrow {
     transform: rotate(0deg);
+    transition: transform .15s ease;
   }
 }
 
@@ -373,24 +375,24 @@ md-card-title h3 {
   width: 50vw;
 
   md-autocomplete {
-    margin-bottom: $u;
+    margin: $u * .5 0 $u;
   }
 
   md-content {
     padding: $u;
-  }
 
-  md-content#groups {
-    display: inline-block;
+    #groups {
+      display: inline-block;
 
-    fieldset {
-      display: inline-flex;
-      margin-left: 40px;
-      margin-right: 40px;
-    }
+      fieldset {
+        display: inline-flex;
+        margin-left: 40px;
+        margin-right: 40px;
+      }
 
-    .md-chip-input-container {
-      width: 100%;
+      .md-chip-input-container {
+        width: 100%;
+      }
     }
   }
 
@@ -398,10 +400,6 @@ md-card-title h3 {
     margin: $u * .5 0;
   }
 
-  md-autocomplete {
-    margin: $u * .5 0 $u;
-  }
-  
   .org-input,
   .template-input {
     margin: $u * .5 0 $u * 2;

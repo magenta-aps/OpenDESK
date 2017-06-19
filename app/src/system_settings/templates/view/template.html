@@ -14,7 +14,7 @@
 
                 <breadcrumb paths="vm.paths"></breadcrumb>
 
-                <md-list class="sortHead">
+                <md-list class="sort-head">
 
                     <table class="od-members od-members-row">
                         <thead fix-head>
@@ -44,11 +44,11 @@
                                                 top: 5px">history</md-icon>
                                                     </md-button>
                                                     <md-menu-content>
-                                                        <md-menu-item class="menuListHead">
+                                                        <md-menu-item class="menu-list-head">
                                                             Ændret
                                                             <span style="width: 70px;"></span> Ændret af
                                                         </md-menu-item>
-                                                        <md-menu-item ng-repeat="h in history" class="menuList">
+                                                        <md-menu-item ng-repeat="h in history" class="menu-list">
                                                             <a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">
                                                         {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{
                                                         h.modifier }}</a>
@@ -224,7 +224,7 @@
                     layout="row" style="margin: 8px;">
                     <span>{{ vm.project.title }} <span class="muted">detaljer</span></span>
                     <span flex></span>
-                    <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+                    <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
                 </h3>
                 <md-card ng-show="vm.showProjDetails">
                     <md-card-content>

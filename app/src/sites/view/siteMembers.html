@@ -1,6 +1,6 @@
 <md-card class="od-site-members">
 	<md-card-title>
-		<h3 class="md-title od-title-icon"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
+		<h3 class="md-title od-title-icon"><md-icon>group</md-icon> {{'MEMBER.MEMBERS' | translate }}</h3>
 	</md-card-title>
 	<md-card-content>
 			<md-list>
@@ -11,7 +11,7 @@
 							layout="row">
 							<span >{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
-							<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 						</h4>
 						<div ng-class="group[0].open ? 'fold-out' : 'fold-in'">
 						<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">

@@ -63,6 +63,7 @@ a {
     color: $gray-text-color;
     text-decoration: none;
   }
+
   &:hover,
   &:active {
     color: $dark-gray-text-color;
@@ -73,6 +74,9 @@ a {
 body {
   background: $gray-85;
   color: $primary-text-color;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
 }
 
 img {
@@ -85,6 +89,7 @@ dl {
     color: $primary-color-light, 20%;
     font-size: $u * .9;
   }
+
   dd {
     margin: 0;
     padding: 0 0 $u;
@@ -102,63 +107,8 @@ dl {
  * Molecule level styles
  */
 
-.od-app {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-}
-
-.od-body {
+main {
   margin: $u * 3 0 auto;
-}
-
-// Title that is placed in the header
-.od-title {
-  color: $headline-color;
-  font-size: $u * 1.5;
-  font-weight: normal;
-  left: $u * 3;
-  line-height: 1;
-  right: $u * 6;
-  position: fixed;
-  width: 30%;
-  top: 0;
-  margin: 0;
-  padding: $u * .75 $u;
-  z-index: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-// Simple button class can be added to <a> or <button> elements
-.od-btn {
-  outline: none;
-  &,
-  &:link,
-  &:visited {
-    border: none;
-    display: inline-block;
-    box-sizing: border-box;
-    background-color: $primary-color-dark;
-    color: $secondary-text-color;
-    padding: $u * .5;
-    min-width: $u * 3;
-    min-height: $u * 3;
-    text-align: center;
-  }
-  &:hover,
-  &:active {
-    background-color: $primary-color-dark;
-    text-decoration: none;
-  }
-  &.disabled {
-    background-color: $gray-60;
-    cursor: inherit;
-  }
-  .material-icons {
-    font-size: $u * 2;
-  }
 }
 
 // Sliding sidebar
@@ -176,55 +126,65 @@ dl {
   transition: all .3s ease-in-out;
   width: 100%;
   z-index: 5;
+
   .od-flyout--body {
     background-color: $white;
+    bottom: 0;
     color: $primary-text-color;
-    width: $u * 20;
-    position: absolute;
     display: flex;
     flex-flow: column nowrap;
-    top: 0;
-    bottom: 0;
-    right: 0;
     height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
     transform: translateX(100%);
+    width: $u * 20;
   }
-  &.right .od-flyout--body {
+
+  &.right {
     right: 0;
   }
-  &.left .od-flyout--body {
+
+  &.left {
     left: 0;
   }
+
   &.open {
-    pointer-events: auto;
     opacity: 1;
+    pointer-events: auto;
     transform: translateX(0);
+
     .od-flyout--body {
-      transition: all .5s;
       transform: translateX(0);
+      transition: transform .5s;
     }
   }
+
   &.closed {
     opacity: 0;
+
     .od-flyout--body {
-      transition: all .5s;
       transform: translateX(1);
+      transition: transform .5s;
     }
   }
+
   .od-flyout--title {
-    font-size: $u * 1.5;
     background-color: $primary-color;
-    color: $headline-color;
-    padding: $u * .625 $u;
-    margin: 0;
-    height: $u * 3;
     box-sizing: border-box;
+    color: $headline-color;
+    font-size: $u * 1.5;
+    height: $u * 3;
+    margin: 0;
+    padding: $u * .625 $u;
   }
+
   .od-flyout--close {
     background-color: transparent;
     position: absolute;
     right: 0;
     top: 0;
+
     &:hover,
     &:active {
       background-color: $overlay;
@@ -233,14 +193,16 @@ dl {
 }
 
 .od-breadcrumb {
-  padding: 8px 15px;
-  margin-bottom: 20px;
-  list-style: none;
   background-color: $gray-90;
   border-radius: 4px;
+  list-style: none;
+  margin-bottom: 20px;
+  padding: $u * .5 $u;
+
   li {
     display: inline-block;
-    &:not(:last-child):after {
+
+    &:not(:last-child)::after {
       content: '/';
       padding: 0 4px;
     }
@@ -249,20 +211,13 @@ dl {
 
 // Icons in buttons
 .md-button .material-icons {
-  vertical-align: middle;
   margin-top: -($u * .25);
+  vertical-align: middle;
 }
 
 .md-text-icon-button {
   padding-right: $u;
 }
-
-/*
- * General media queries 
- */
-
-// Screens larger than small (breaks between small and medium screens)
-@media screen and (min-width: $br-sm-md) {}
 
 //make the chat window appear behind notifcation slide out
 #conversejs {
@@ -272,6 +227,7 @@ dl {
 //Search results
 .search-documents {
   width: 400px;
+
   li {
     border-bottom: 1px solid $gray-80;
     height: auto;
@@ -279,14 +235,17 @@ dl {
     padding-bottom: $u * .5;
     padding-top: $u * .5;
     white-space: normal;
+
     &:last-child {
       border-bottom-width: 0;
     }
   }
+
   .item-title,
   .item-metadata {
     display: block;
     line-height: 2;
+
     md-icon {
       height: 18px;
       width: 18px;

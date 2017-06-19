@@ -90,7 +90,7 @@
                             <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
                                 <span>{{'PROJECT.GROUPS.' + group.shortName | translate}}</span>
                                 <span flex></span>
-                                <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+                                <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
                             </h4>
                             <div ng-class="showGroupList[groupIndex] ? 'fold-out' : 'fold-in'">
                                 <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"

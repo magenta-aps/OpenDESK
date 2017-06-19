@@ -1,10 +1,57 @@
-.od-header {
+header {
   background-color: $primary-color;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 1;
   color: $headline-color;
   height: $u * 3;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+
+// Title that is placed in the header
+.od-title {
+  color: $headline-color;
+  font-size: $u * 1.5;
+  font-weight: normal;
+  left: $u * 3;
+  line-height: 1;
+  margin: 0;
+  overflow: hidden;
+  padding: $u * .75 $u;
+  position: fixed;
+  right: $u * 6;
+  text-overflow: ellipsis;
+  top: 0;
+  white-space: nowrap;
+  width: 30%;
+  z-index: 1;
+}
+
+.od-btn {
+  outline: none;
+
+  &,
+  &:link,
+  &:visited {
+    background-color: $primary-color-dark;
+    border: 0;
+    box-sizing: border-box;
+    color: $secondary-text-color;
+    display: inline-block;
+    min-height: $u * 3;
+    min-width: $u * 3;
+    padding: $u * .5;
+    text-align: center;
+  }
+
+  &:hover,
+  &:active {
+    background-color: darken($primary-color-dark, 20%);
+    text-decoration: none;
+  }
+
+  .material-icons {
+    font-size: $u * 2;
+  }
 }

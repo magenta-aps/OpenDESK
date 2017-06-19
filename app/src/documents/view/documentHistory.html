@@ -2,7 +2,7 @@
     <md-card-title ng-click="vm.showArchived = !vm.showArchived" ng-class="vm.showArchived ? 'open' : 'closed'">
         <h3 class="md-title od-title-icon"><i class="material-icons">history</i> {{'COMMON.HISTORY' | translate }}</h3>
         <span flex></span>
-        <i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
     </md-card-title>
 
     <md-card-content ng-class="vm.showArchived ? 'fold-out' : 'fold-in'">
