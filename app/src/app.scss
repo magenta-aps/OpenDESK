@@ -30,6 +30,7 @@ $dark-gray-text-color: rgba($black, .54);
 $headline-color: $white;
 
 $overlay: rgba($black, .4);
+$card-shadow: rgba($black, .2);
 
 $u: 16px;
 // Unit of measurement - usually default font size
@@ -55,10 +56,6 @@ $br-sm-md: $u * 40;
  * Element level (atom) styles
  */
 
-.z-index-0 {
-  z-index: 0 !important;
-}
-
 a {
   &,
   &:link,
@@ -78,14 +75,6 @@ body {
   color: $primary-text-color;
 }
 
-article {
-  padding: $u $u * 2;
-}
-
-hr {
-  padding: 0;
-}
-
 img {
   height: auto;
   width: 100%;
@@ -100,15 +89,6 @@ dl {
     margin: 0;
     padding: 0 0 $u;
   }
-}
-
-fieldset {
-  border: solid 1px $gray-90;
-  margin-bottom: $u;
-}
-
-legend {
-  opacity: .66;
 }
 
 // Muted (greyed) text

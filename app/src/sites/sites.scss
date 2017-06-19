@@ -316,16 +316,17 @@ md-tooltip {
 }
 
 .group-toggle {
-  background-color: #eaeaea;
+  background-color: $gray-90;
   border-radius: 4px;
-  box-shadow: 0 $u * .25 $u * .5 rgba(125, 125, 125, .3);
+  box-shadow: 0 $u * .25 $u * .5 $card-shadow;
   cursor: pointer;
+  margin: $u 0 0;
   outline: none;
   padding: $u * .5 $u;
-  margin: $u 0 0;
-  transition: box-shadow 0.15s ease-out;
+  transition: box-shadow .15s ease-out;
+
   &:hover {
-    box-shadow: 0 $u * .5 $u * .5 rgba(125, 125, 125, .3);
+    box-shadow: 0 $u * .5 $u * .5 $card-shadow;
     transition: box-shadow .25s ease-in;
   }
 }
@@ -354,40 +355,53 @@ md-card-title h3 {
     margin-bottom: 0;
     padding-left: .25 * $u;
     padding-right: .25 * $u;
+
     dd,
     dt {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+
+    dt {
+      color: $gray-text-color;
+    }
   }
 }
 
 .site-dialog {
   width: 50vw;
+
   md-autocomplete {
     margin-bottom: $u;
   }
+
   md-content {
     padding: $u;
   }
+
   md-content#groups {
     display: inline-block;
+
     fieldset {
       display: inline-flex;
       margin-left: 40px;
       margin-right: 40px;
     }
+
     .md-chip-input-container {
       width: 100%;
     }
   }
+
   md-input-container {
     margin: $u * .5 0;
   }
+
   md-autocomplete {
     margin: $u * .5 0 $u;
   }
+  
   .org-input,
   .template-input {
     margin: $u * .5 0 $u * 2;

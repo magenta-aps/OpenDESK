@@ -8,7 +8,7 @@
 	<md-card-content ng-class="showProjDetails ? 'fold-out' : 'fold-in'">
 		<div layout="row" layout-align="space-between">
 			<dl style="margin-bottom: 0;">
-				<dt class="od-secondary">{{'PROJECT.DESCRIPTION' | translate }}</dt>
+				<dt >{{'PROJECT.DESCRIPTION' | translate }}</dt>
 				<dd ng-if="hasDescription">
 					{{ site.description }}
 				</dd>
@@ -17,26 +17,24 @@
 		</div>
 		<div layout="row">
 			<dl flex="55">
-				<dt class="od-secondary">{{'COMMON.CREATEDBY' | translate }}</dt>
+				<dt>{{'COMMON.CREATEDBY' | translate }}</dt>
 				<dd>{{ site.creator.displayName }} <br>
 					<span class="muted">{{ site.created | date }}</span>
 				</dd>
 				<span ng-if="vm.project.type === 'PD-Project'">
-					<dt class="od-secondary">{{'PROJECT.ORG_UNIT' | translate }}</dt>
-					<dd>
-						{{ site.center_name }}
-					</dd>
+					<dt >{{'PROJECT.ORG_UNIT' | translate }}</dt>
+					<dd>{{ site.center_name }}</dd>
 				</span>
 			</dl>
 			<dl flex="30">
-				<dt class="od-secondary">{{'COMMON.VISIBILITY' | translate }}</dt>
+				<dt>{{'COMMON.VISIBILITY' | translate }}</dt>
 				<dd>{{ vm.project.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>
-				<dt ng-if="vm.project.type === 'PD-Project'" class="od-secondary">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
-				<dd ng-if="vm.project.type === 'PD-Project'" >{{ site.sbsys }}</dd>
+				<dt ng-if="vm.project.type === 'PD-Project'">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
+				<dd ng-if="vm.project.type === 'PD-Project'">{{ site.sbsys }}</dd>
 
 			</dl>
 			<dl flex="15" ng-if="vm.project.type === 'PD-Project'">
-				<dt class="od-secondary">{{'COMMON.STATUS' | translate }}</dt>
+				<dt>{{'COMMON.STATUS' | translate }}</dt>
 				<dd>
 					{{'PROJECT.STATUS.' + site.state | translate}}
 				</dd>
