@@ -21,7 +21,6 @@ angular
         'openDeskApp.lool',
         'openDeskApp.documents',
         'openDeskApp.administration',
-        'openDeskApp.groups',
         'openDeskApp.users',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
