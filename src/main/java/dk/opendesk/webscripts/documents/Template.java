@@ -24,12 +24,12 @@ import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -62,16 +62,16 @@ public class Template extends AbstractWebScript {
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
         webScriptResponse.setContentEncoding("UTF-8");
+        Content c = webScriptRequest.getContent();
         Writer webScriptWriter = webScriptResponse.getWriter();
         JSONArray result = new JSONArray();
 
         try {
-            Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
-
-            String method = params.get("method");
-            String nodeName = params.get("fileName"); //TODO: Change param name
-            String templateNodeId = params.get("template_nodeid");
-            String destinationNodeRefStr = params.get("destination_nodeRefid"); //TODO: Change param name
+            JSONObject json = new JSONObject(c.getContent());
+            String method = Utils.getJSONObject(json, "PARAM_METHOD");
+            String nodeName = Utils.getJSONObject(json, "PARAM_NODE_NAME");
+            String templateNodeId = Utils.getJSONObject(json, "PARAM_TEMPLATE_NODE_ID");
+            String destinationNodeRefStr = Utils.getJSONObject(json, "PARAM_DESTINATION_NODEREF");
 
             switch (method) {
                 case "getAllTemplateDocuments":

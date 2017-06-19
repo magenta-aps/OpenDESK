@@ -114,6 +114,19 @@ public class TemplateTest extends BaseWebScriptTest {
         assertWebScriptMakeNewDocumentFromTemplate(TestUtils.FILE_TEST_FROM_TEMPLATE1, templateNodeId, destinationNodeId);
     }
 
+    public void testMakeNewDocumentFromTemplateWithoutExtension() throws IOException, JSONException {
+        log.debug("TemplateTest.testMakeNewDocumentFromTemplateWithoutExtension");
+
+        NodeRef docTemplate = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                templateDocLib, TestUtils.FILE_TEST_TEMPLATE1_WITHOUT_EXT);
+        String templateNodeId = docTemplate.getId();
+
+        NodeRef docLib = siteService.getContainer(TestUtils.SITE_ONE, OpenDeskModel.DOC_LIBRARY);
+        String destinationNodeId = docLib.toString();
+
+        assertWebScriptMakeNewDocumentFromTemplate(TestUtils.FILE_TEST_TEMPLATE1_WITHOUT_EXT, templateNodeId, destinationNodeId);
+    }
+
     private JSONArray assertWebScriptMakeNewDocumentFromTemplate(String nodeName, String templateNodeId,
                                                                  String destinationNodeRefStr)
             throws IOException, JSONException {
