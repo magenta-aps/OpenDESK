@@ -5,7 +5,7 @@
             <h2>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="vm.cancel()">
-                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                <md-icon>close</md-icon>
             </md-button>
         </div>
     </md-toolbar>
@@ -15,7 +15,7 @@
     </md-dialog-content>
 
     <md-dialog-actions>
-        <md-button class="md-primary" type="submit" ng-click="vm.upload(files)"><i class="material-icons">file_upload</i>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}
+        <md-button class="md-primary" type="submit" ng-click="vm.upload(files)"><md-icon>file_upload</md-icon>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}
         </md-button>
     </md-dialog-actions>
     </form>

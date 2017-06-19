@@ -2,15 +2,15 @@
 <section  class="od-notifications" ng-controller="NotificationsController as nc">
 
     <button ng-click="nc.toggleNotices();nc.setAllSeen()" class="od-btn od-notifications--toggle">
-        <i class="material-icons">notifications</i>
+        <md-icon>notifications</md-icon>
         <span ng-if="notifications[0].unseen > 0" class="od-notifications--counter">{{ notifications[0].unseen }}</span>
     </button>
 
     <div class="od-flyout right" ng-class="{ open: nc.on, closed: !nc.on }" ng-click="nc.toggleNotices()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
-            <h2 class="od-flyout--title">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</h2>
+            <h2 class="od-flyout--title md-headline">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</h2>
             <button ng-click="nc.toggleNotices()" class="od-btn od-flyout--close">
-                <i class="material-icons">keyboard_arrow_right</i>
+                <md-icon>keyboard_arrow_right</md-icon>
             </button>
 
             <ul class="od-notifylist">

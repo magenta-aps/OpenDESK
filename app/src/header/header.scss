@@ -39,7 +39,7 @@ header {
     box-sizing: border-box;
     color: $secondary-text-color;
     display: inline-block;
-    min-height: $u * 3;
+    height: $u * 3;
     min-width: $u * 3;
     padding: $u * .5;
     text-align: center;
@@ -51,7 +51,10 @@ header {
     text-decoration: none;
   }
 
-  .material-icons {
+  md-icon {
+    color: $secondary-text-color;
     font-size: $u * 2;
+    height: $u * 2;
+    width: $u * 2;
   }
 }

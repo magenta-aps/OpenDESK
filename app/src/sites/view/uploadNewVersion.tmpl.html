@@ -5,7 +5,7 @@
             <h2>{{'COMMON.NEWVERSION' | translate}}</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="vm.cancel()">
-                <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                <md-icon>close</md-icon>
             </md-button>
         </div>
     </md-toolbar>
@@ -15,7 +15,8 @@
     </md-dialog-content>
 
     <md-dialog-actions>
-        <button class="md-button md-primary" ng-click="vm.uploadNewVersion(file, nodeRef)"><i class="material-icons">file_upload</i>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENT' | translate | lowercase}}
+        <button class="md-button md-primary" ng-click="vm.uploadNewVersion(file, nodeRef)">
+            <md-icon>file_upload</md-icon> {{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENT' | translate | lowercase}}
         </button>
     </md-dialog-actions>
     </form>

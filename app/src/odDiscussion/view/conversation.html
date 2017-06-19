@@ -1,15 +1,15 @@
 
 <span class="discussion-back" ng-click="dc.viewDiscussions()">
-            <i class="material-icons">arrow_back</i> {{'DISCUSSIONS.DISCUSSIONS' | translate }}
+            <md-icon>arrow_back</md-icon> {{'DISCUSSIONS.DISCUSSIONS' | translate }}
         </span>
-<h1 class="discussion-title">{{dc.selectedDiscussion.title}}</h1>
+<h1 class="discussion-title md-display-1">{{dc.selectedDiscussion.title}}</h1>
 
 <table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)" ng-init="dc.getReplies(dc.selectedDiscussion)">
     <tbody>
         <tr class="seperator">
             <td class="avatar-container">
                 <img src="{{dc.selectedDiscussion.author.avatarUrl}}" class="avatar">
-                <h3>{{dc.selectedDiscussion.author.firstName}} {{dc.selectedDiscussion.author.lastName}}</h3>
+                <h3 class="md-title">{{dc.selectedDiscussion.author.firstName}} {{dc.selectedDiscussion.author.lastName}}</h3>
             </td>
             <td class="comment">
                 <span ng-bind-html='dc.selectedDiscussion.content'></span>
@@ -43,7 +43,7 @@
          <tr class="seperator" ng-repeat="reply in dc.replies" id="{{reply.name}}">
             <td class="avatar-container">
                 <img src="{{reply.author.avatarUrl}}" class="avatar">
-                <h3>{{reply.author.firstName}} {{reply.author.lastName}}</h3>
+                <h3 class="md-title">{{reply.author.firstName}} {{reply.author.lastName}}</h3>
             </td>
             <td class="comment">
                 <span ng-bind-html='reply.content'></span>

@@ -35,7 +35,7 @@
         <md-menu>
             <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}">
                 <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</md-tooltip>
-                <i class="material-icons">file_upload</i>
+                <md-icon>file_upload</md-icon>
             </md-button>
             <md-menu-content>
                 <md-menu-item>
@@ -52,7 +52,7 @@
     <div layout="column">
         <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
             <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
-                <i class="material-icons">note_add</i>
+                <md-icon>note_add</md-icon>
                 <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
             </md-button>
             <md-menu-content>
@@ -71,13 +71,13 @@
 
     <md-button ng-if="vm.canEdit" class="md-icon-button md-primary" ng-click="vm.newFolderDialog($event)">
         <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
-        <i class="material-icons">create_new_folder</i>
+        <md-icon>create_new_folder</md-icon>
     </md-button>
 
     <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.isManager" class="md-icon-button md-primary "
         ng-click="vm.newLinkDialog($event)">
         <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
-        <i class="material-icons">link</i>
+        <md-icon>link</md-icon>
     </md-button>
 
     <span flex></span>

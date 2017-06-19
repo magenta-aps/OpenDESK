@@ -1,6 +1,6 @@
 <div class="picker-header">
     <md-button ng-show="currentNode[0].primaryParent_nodeRef != undefined" class="md-icon-button" ng-click="browseParent();">
-        <i class="material-icons">navigate_before</i>
+        <md-icon>navigate_before</md-icon>
     </md-button>
     <strong>{{ currentNode[0].currentNodeRef_name }}</strong>
 </div>
@@ -10,7 +10,7 @@
         <p>{{ dir.name }}</p>
         <md-button class="md-icon-button"
                    ng-click="browseChild(dir.nodeRef); $event.stopPropagation();" class="md-raised">
-            <i class="material-icons">navigate_next</i>
+            <md-icon>navigate_next</md-icon>
         </md-button>
     </md-list-item>
 </md-list>

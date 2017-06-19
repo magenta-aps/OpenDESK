@@ -7,7 +7,7 @@
                 <h2 ng-if="type != 'PD-Project'">{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
-                    <i class="material-icons" aria-label="Luk dialogboks">close</i>
+                    <md-icon>close</md-icon>
                 </md-button>
             </div>
         </md-toolbar>
@@ -137,7 +137,7 @@
                             </md-input-container>
                             <div style="position: relative; top: -25px;" class="btnAlign">
                                 <md-button class="md-primary" ng-click="addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
-                                    <i class="material-icons">add</i> {{'COMMON.ADD' | translate}}
+                                    <md-icon>add</md-icon> {{'COMMON.ADD' | translate}}
                                 </md-button>
                             </div>
                         </div>

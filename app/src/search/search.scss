@@ -3,173 +3,42 @@
  */
 
 od-searchbar {
-  md-autocomplete {
-    //height: 20px;
-  }
-
   md-input-focused {
-    border: none !important;
+    border: 0 !important;
   }
 
   .od-search {
-  padding-top: 10px;
-  z-index: 2;
-  position: absolute;
-  top: 0;
-  left: calc(50vw - 175px);
-  form {
-    width: 350px;
-    height: 30px;
-    position: relative;
-    background: white;
-    border-radius: 0.25em;
-    margin-right: $u/2;
-    margin-bottom: $u;
-    //box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
-  }
-  i {
+    left: calc(50vw - 175px);
+    padding-top: 10px;
     position: absolute;
-    left: 5px;
-    top: 3px;
-    color: rgba(0, 0, 0, 0.25);
-  }
-  input {
-    padding: 0.5rem 0.5rem 0.5rem 2rem;
-    border-radius: 0.25em;
-  }
-  label {
-    padding-left: $u*2 !important;
-    padding-bottom: 3px;
-  }
-}
-}
+    top: 0;
+    z-index: 2;
 
-.search__header {
-  margin: 8px 16px;
-  padding: 0;
-  font-size: 1.3em;
-}
-
-.search__list {
-  background-color: #fff;
-}
-
-.search__item-case,
-.search__item-document {
-  display: flex;
-  flex-flow: row nowrap;
-  background-color: #fff;
-  padding: 16px 24px;
-  border-top: solid 1px #eee;
-}
-
-.search__item__info {
-  height: 100%;
-  flex-grow: 1;
-}
-
-.search__item__icon {
-  width: auto;
-  margin-right: 8px;
-  height: 100%;
-}
-
-.search__item__title {
-  font-weight: 400;
-  margin: 0;
-  font-size: 1.1em;
-}
-
-a.search__item__link:link,
-a.search__item__link:visited {
-  color: rgb(30,136,229);
-}
-
-.search__item__title .muted {
-  font-size: 0.8em;
-}
-
-.search__item__bonusinfo {
-  float: right;
-  width: auto;
-}
-
-.search__item__desc {
-  margin: 0;
-}
-
-.search__item__changed {
-  float: right;
-  width: auto;
-  font-size: 0.8em;
-}
-
-/*
- * View search results as table list
- */
-
-.list-search {
-  table {
-    max-width: 100%;
-  }
-  th {
-    border-top: solid 1px #ddd;
-  }
-  td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  td:first-child {
-    padding-left: 24px;
-  }
-  td:last-child {
-    padding-right: 24px;
-  }
-}
-
-
-/*
- * Search filter menu styles
- */
-
-.menu {
-  background-color: #eee;
-}
-
-.filters {
-
-  .filter-title {
-    font-weight: 500;
-    font-size: 0.9em;
-    padding: 16px 24px;
-    display: block;
-  }
-
-  fieldset {
-    display: block;
-    margin: 0;
-    padding: 0;
-    border-top-color: #ccc;
-  }
-
-  .toggle-btn {
-    display: block;
-    margin: 0;
-    padding: 8px 16px 8px 24px;
-    color: rgb(30,136,229);
-
-    .material-icons {
-      float: right;
+    form {
+      background: $white;
+      border-radius: .25em;
+      height: 30px;
+      margin-bottom: $u;
+      margin-right: $u * .5;
+      position: relative;
+      width: 350px;
     }
-  }
 
-  .toggle-obj {
-    margin: 0;
-    padding: 16px 24px 8px;
-    border-top: dashed 1px #ccc;
-  }
+    md-icon {
+      color: $gray-60;
+      left: 5px;
+      position: absolute;
+      top: 3px;
+    }
 
-  md-checkbox {
-    display: block;
+    input {
+      border-radius: .25em;
+      padding: .5rem .5rem .5rem 2rem;
+    }
+
+    label {
+      padding-bottom: 3px;
+      padding-left: $u * 2 !important;
+    }
   }
 }

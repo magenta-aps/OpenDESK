@@ -96,6 +96,10 @@ dl {
   }
 }
 
+md-icon {
+  color: $primary-text-color;
+}
+
 // Muted (greyed) text
 .muted {
   font-size: .9em;
@@ -173,7 +177,7 @@ main {
     background-color: $primary-color;
     box-sizing: border-box;
     color: $headline-color;
-    font-size: $u * 1.5;
+    //font-size: $u * 1.5;
     height: $u * 3;
     margin: 0;
     padding: $u * .625 $u;

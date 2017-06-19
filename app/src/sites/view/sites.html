@@ -91,7 +91,7 @@
 							filter: vm.search" id="{{project.shortName}}">
 								<td class="icon">
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">
-										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i>
+										<md-icon>{{project.type === "Project" ? "forum" : "content_paste"}}</md-icon>
 									</a>
 								</td>
 								<td>
@@ -154,12 +154,12 @@
 
 				<md-card-actions ng-controller="SiteCreateController as sc" layout="row" layout-align="start center" class="btnAlign">
 					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}">
-						<i class="material-icons">add</i>
+						<md-icon>add</md-icon>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</span>
 					</md-button>
 
 					<md-button ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}">
-						<i class="material-icons">add</i>
+						<md-icon>add</md-icon>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</span>
 					</md-button>
 				</md-card-actions>

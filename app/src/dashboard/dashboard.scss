@@ -1,39 +1,43 @@
 .dashboard-grid {
-  margin: $u*2;
+  align-content: space-between;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  align-content: space-between;
+  margin: $u * 2;
+
   .tile {
-    flex: 1 0 auto;
-    background: #eee;
+    background: $gray-90;
+    color: $primary-text-color;
     display: inline-block;
-    width: $u*5;
-    height: $u*5;
-    padding: $u;
+    flex: 1 0 auto;
+    height: $u * 5;
+    margin: $u * .25;
     overflow: hidden;
-    margin: $u*0.25;
+    padding: $u;
     text-align: center;
-    color: rgba(0,0,0,0.87);
+    width: $u * 5;
+
     &:hover,
     &:active {
+      background-color: $gray-85;
       text-decoration: none;
-      background-color: #ddd;
     }
-    .material-icons {
-      font-size: $u*3;
+
+    md-icon {
       display: block;
-      margin: 0 0 $u*0.5;
+      font-size: $u * 3;
+      margin: 0 0 $u * .5;
     }
   }
   @media screen and (min-width: $br-sm-md) {
     .tile {
-      width: $u*10;
-      height: $u*10;
+      height: $u * 10;
       text-align: left;
-      .material-icons {
+      width: $u * 10;
+
+      md-icon {
         display: inline-block;
-        font-size: $u*1.5;
+        font-size: $u * 1.5;
         margin: 0;
       }
     }
