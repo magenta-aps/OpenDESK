@@ -119,7 +119,7 @@ public class Users extends AbstractWebScript {
                         result = createExternalUser(firstName, lastName, email, siteShortName, groupName);
                         break;
 
-                    case "getUsers":
+                    case "getUsers": // no test needed
                         result = getUsers(filter);
                         break;
                 }
