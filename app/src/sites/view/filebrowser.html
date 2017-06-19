@@ -4,8 +4,8 @@
     <table class="od-members od-members-row">
         <thead ng-show="contentLength > 0" fix-head>
             <tr>
-                <th class="od-secondary" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
-                <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
+                <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
+                <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
                 <th colspan="2">
                     <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
                     <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToEsdh">

@@ -11,9 +11,8 @@
                 <img src="{{dc.selectedDiscussion.author.avatarUrl}}" class="avatar">
                 <h3>{{dc.selectedDiscussion.author.firstName}} {{dc.selectedDiscussion.author.lastName}}</h3>
             </td>
-            <td class="comment od-primary">
+            <td class="comment">
                 <span ng-bind-html='dc.selectedDiscussion.content'></span>
-
                 <p class="od-secondary">{{dc.selectedDiscussion.createdOn | customDate}}</p>
             </td>
             <td class="comment-actions">
@@ -46,7 +45,7 @@
                 <img src="{{reply.author.avatarUrl}}" class="avatar">
                 <h3>{{reply.author.firstName}} {{reply.author.lastName}}</h3>
             </td>
-            <td class="comment od-primary">
+            <td class="comment">
                 <span ng-bind-html='reply.content'></span>
 
                 <p class="od-secondary">{{reply.createdOn | customDate}}</p>

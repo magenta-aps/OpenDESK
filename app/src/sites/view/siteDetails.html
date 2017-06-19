@@ -1,6 +1,6 @@
 <md-card class="dropdown-card" id="details">
 	<md-card-title ng-click="showProjDetails = !showProjDetails" ng-class="showProjDetails ? 'open' : 'closed'">
-		<h3 class="md-title od-title-icon od-primary"><i class="material-icons">info_outline</i> {{'COMMON.DETAILS' | translate }}</h3>
+		<h3 class="md-title od-title-icon "><i class="material-icons">info_outline</i> {{'COMMON.DETAILS' | translate }}</h3>
 		<span flex></span>
 		<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
 	</md-card-title>
@@ -9,35 +9,35 @@
 		<div layout="row" layout-align="space-between">
 			<dl style="margin-bottom: 0;">
 				<dt class="od-secondary">{{'PROJECT.DESCRIPTION' | translate }}</dt>
-				<dd class="od-primary" ng-if="hasDescription">
+				<dd ng-if="hasDescription">
 					{{ site.description }}
 				</dd>
-				<dd class="od-primary" ng-if="!hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
+				<dd ng-if="!hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
 			</dl>
 		</div>
 		<div layout="row">
 			<dl flex="55">
 				<dt class="od-secondary">{{'COMMON.CREATEDBY' | translate }}</dt>
-				<dd class="od-primary">{{ site.creator.displayName }} <br>
+				<dd>{{ site.creator.displayName }} <br>
 					<span class="muted">{{ site.created | date }}</span>
 				</dd>
 				<span ng-if="vm.project.type === 'PD-Project'">
 					<dt class="od-secondary">{{'PROJECT.ORG_UNIT' | translate }}</dt>
-					<dd class="od-primary">
+					<dd>
 						{{ site.center_name }}
 					</dd>
 				</span>
 			</dl>
 			<dl flex="30">
 				<dt class="od-secondary">{{'COMMON.VISIBILITY' | translate }}</dt>
-				<dd class="od-primary">{{ vm.project.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>
+				<dd>{{ vm.project.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>
 				<dt ng-if="vm.project.type === 'PD-Project'" class="od-secondary">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
-				<dd ng-if="vm.project.type === 'PD-Project'" class="od-primary">{{ site.sbsys }}</dd>
+				<dd ng-if="vm.project.type === 'PD-Project'" >{{ site.sbsys }}</dd>
 
 			</dl>
 			<dl flex="15" ng-if="vm.project.type === 'PD-Project'">
 				<dt class="od-secondary">{{'COMMON.STATUS' | translate }}</dt>
-				<dd class="od-primary">
+				<dd>
 					{{'PROJECT.STATUS.' + site.state | translate}}
 				</dd>
 

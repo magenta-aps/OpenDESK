@@ -13,20 +13,19 @@
 }
 
 .od-filebrowser-link {
-  color: rgba(0, 0, 0, .54) !important;
+  color: $gray-text-color;
   display: block;
-  width: 100%; //padding: $u*0.75 0 $u*0.5;
+  width: 100%;
   .material-icons {
     margin-top: -($u * .25);
     vertical-align: middle;
   }
   h3,
-  p {
-    padding: 0;
+  i,
+  .content-name {
+    color: $primary-text-color;
     line-height: 0;
-  }
-  p {
-    font-size: $u * .9;
+    padding: 0;
   }
 }
 
@@ -39,10 +38,11 @@
 }
 
 .od-title-icon {
-  @extend .od-filebrowser-link;
   margin-top: 0;
   .material-icons {
     margin-right: $u / 2;
+    margin-top: -($u * .25);
+    vertical-align: middle;
   }
 }
 
@@ -110,7 +110,8 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
     }
   }
   th {
-    cursor: hand;
+    cursor: pointer;
+    color: $dark-gray-text-color;
     padding: 10px 0 5px;
     text-align: left;
     .material-icons {
@@ -257,20 +258,25 @@ md-input-container label:not(.md-no-float):not(.md-container-ignore) {
   button {
     top: 0 !important;
   }
+  md-card-title{
+    max-height: 40px;
+  }
+
   md-card-content,
   md-autocomplete {
-    min-width: 100px;
+    min-width: 150px;
   }
+
   md-input-container {
     height: 56px;
     label {
-      color: rgba(0, 0, 0, .38) !important;
+      color: $gray-text-color;
     }
   }
   .show-all {
     height: auto;
-    padding-left: 3px !important;
-    color: rgba(0, 0, 0, .38) !important;
+    padding-left: $u * .2;
+    color: $gray-text-color;
     text-overflow: ellipsis;
     md-checkbox {
       margin-bottom: $u * 2;
@@ -327,6 +333,7 @@ md-tooltip {
 //member list
 .od-site-members {
   .member {
+    color: $primary-text-color;
     cursor: pointer;
     margin-left: -20px;
   }

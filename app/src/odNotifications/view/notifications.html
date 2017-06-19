@@ -17,7 +17,7 @@
                 <li ng-repeat="notice in notifications[1] | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                     <span class="od-notifylist--item--link">
                         <a href="{{ notice.link }}" ng-click="nc.toggleNotices();nc.setRead(notice.nodeRef)">
-                        <h3 class="od-notifylist--item--notice od-primary">{{ notice.subject }}</h3>
+                        <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p ng-if="notice.type == 'review-request'" class="od-notifylist--item--desc">{{notice.from}} har bedt dig om at reviewe <i>{{notice.filename}}</i> i projektet {{notice.project}}</p>
                         <p ng-if="notice.type == 'review-approved'"  class="od-notifylist--item--desc">{{notice.from}} har godkendt <i>{{notice.filename}}</i> i projektet {{notice.project}} med en kommentar</p>
                         <p ng-if="notice.type == 'review-rejected'"  class="od-notifylist--item--desc">{{notice.from}} har afvist <i>{{notice.filename}}</i> i projektet {{notice.project}} med en kommentar</p>

@@ -1,6 +1,6 @@
 <md-card class="od-site-members">
 	<md-card-title>
-		<h3 class="md-title od-title-icon od-primary"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
+		<h3 class="md-title od-title-icon"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
 	</md-card-title>
 	<md-card-content>
 			<md-list>
@@ -17,7 +17,7 @@
 						<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
 							<ul>
 								<div layout="row">
-									<a class="member od-primary" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
+									<a class="member" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
 								</div>
 							</ul>
 						</md-list-item>
@@ -27,7 +27,7 @@
 					<md-list-item ng-if="!group[0].collapsed" ng-repeat="member in group[1] | orderBy: 'displayName'">
 						<div class="md-no-style md-list-item-inner">
 							<div flex="50">
-								<a class="member od-primary" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
+								<a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
 							</div>
 							<div flex="50" class="od-secondary">
 								{{'PROJECT.GROUPS.' + group[0].shortName | translate}}

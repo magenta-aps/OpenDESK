@@ -1,51 +1,24 @@
-.od-notifications {
-
-}
 
 .od-notifications--toggle {
-  top: 0;
-  right: 0;
-  position: fixed;
-  z-index: 1;
-  height: $u*3;
-  width: $u*3;
+  height: $u * 3;
   padding: 0;
-}
-
-.od-notify-btns {
+  position: fixed;
   right: 0;
-  padding-top: $u;
-  padding-right: $u * 0.5;
-  padding-left: $u * 0.5;
-  display: block;
-  width: 30px;
-
-  button {
-    font-size: $u/2 !important;
-    padding: 2px;
-    border: none;
-    background: transparent;
-    color: $primary-color;
-    float: right;
-  }
-}
-
-.od-notifications--close {
-  position: absolute;
   top: 0;
-  right: 0;
+  width: $u * 3;
+  z-index: 1;
 }
 
 .od-notifications--counter {
-  display: block;
-  position: absolute;
-  top: $u * .25;
-  right: $u * .25;
-  font-size: $u * .75;
-  color: #fff;
   background-color: adjust-hue($primary-color, 120deg);
-  padding: $u * .25;
   border-radius: $u * .25;
+  color: $white;
+  display: block;
+  font-size: $u * .75;
+  padding: $u * .25;
+  position: absolute;
+  right: $u * .25;
+  top: $u * .25;
 }
 
 .od-notifylist {
@@ -55,17 +28,17 @@
 
 .od-notifylist,
 .od-notifylist--item--notice,
-.od-notifylist--item--desc, {
+.od-notifylist--item--desc {
   margin: 0;
   padding: 0;
 }
 
 .od-notifylist--item {
+  align-items: start;
+  background-color: $gray-85;
   display: flex;
   flex-flow: row nowrap;
-  align-items: start;
   justify-content: space-between;
-  background-color: #ddd;
   margin-top: 1px;
 }
 
@@ -77,9 +50,10 @@
 
 .od-notifylist--item--link {
   cursor: pointer;
+
   &:hover,
   &:active {
-    background-color: #ccc;
+    background-color: $gray-80;
     text-decoration: none;
   }
 
@@ -89,32 +63,23 @@
 }
 
 .od-notifylist--item--notice {
+  color: $primary-text-color;
   font-size: $u;
   font-weight: bold;
 }
 
 .od-notifylist--item--desc {
+  color: $gray-40;
   font-size: $u * .9;
-  color: #666;
-  padding-top: $u * .25;
   padding-bottom: $u * .25;
+  padding-top: $u * .25;
 }
 
 .od-notifylist--item--date {
-  color: #999;
-  padding-top: 0px;
-}
-
-.od-notifylist--item--close {
-  flex: 0 0 auto;
-  background-color: transparent;
-  color: $primary-color;
+  color: $gray-60;
+  padding-top: 0;
 }
 
 .od-notifylist--item--read {
-  background: #eee;
-
-  .od-notifylist--item--read-btn {
-    display: none;
-  }
+  background: $gray-90;
 }

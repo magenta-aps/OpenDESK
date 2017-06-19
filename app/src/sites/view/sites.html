@@ -4,8 +4,10 @@
 
 	<div layout='row'>
 		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0' ng-show="vm.showFilters">
+			<md-card-title>
+				<h3 class="md-title">{{'COMMON.FILTER' | translate}}</h3>
+			</md-card-title>
 			<md-card-content>
-				<h3 class="od-primary">{{'COMMON.FILTER' | translate}}</h3>
 				<md-input-container class="md-block show-all">
 					<md-checkbox name="show-all" ng-model="vm.showall">
 						{{'COMMON.SHOW' | translate}} {{'COMMON.ALL' | translate | lowercase}}
@@ -55,11 +57,13 @@
 		</md-card>
 
 		<md-card flex>
-			<md-card-content class="">
+			<md-card-title>
 				<md-button aria-label="filter" class="md-icon-button" ng-click="vm.toggleFilters()">
 					<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
 					<md-icon>filter_list</md-icon>
 				</md-button>
+			</md-card-title>
+			<md-card-content>
 
 				<md-list class="">
 					<table class="od-members od-members-row">
@@ -72,11 +76,11 @@
 						<col style="width:32px">
 						<thead fix-head>
 							<tr>
-								<th class="od-secondary" colspan="2" sort-table="title" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
-								<th class="od-secondary" sort-table="manager.displayName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
-								<th class="od-secondary" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
-								<th class="od-secondary" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
-								<th class="od-secondary" colspan="2" sort-table="modified" sort-default="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
+								<th colspan="2" sort-table="title" title="Sortér kolonne">{{'PROJECT.NAME' | translate}}</th>
+								<th sort-table="manager.displayName" title="Sortér kolonne">{{'PROJECT.PROJECTLEAD' | translate}}</th>
+								<th sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th colspan="2" sort-table="modified" sort-default="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -87,14 +91,13 @@
 							filter: vm.search" id="{{project.shortName}}">
 								<td class="icon">
 									<a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">
-										<i class="material-icons od-primary">{{project.type === "Project" ? "forum" : "content_paste"}}</i>
+										<i class="material-icons">{{project.type === "Project" ? "forum" : "content_paste"}}</i>
 									</a>
 								</td>
 								<td>
 									<a class="od-filebrowser-link overflow" href="#!/projekter/{{project.shortName}}/dokumenter">
-										<h3 class="od-primary">{{ project.title }}</h3>
-
-										{{ project.description }}
+										<h3 class="">{{ project.title }}</h3>
+										<span>{{ project.description }}</span>
 									</a>
 
 								</td>

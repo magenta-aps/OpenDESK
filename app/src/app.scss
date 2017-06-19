@@ -7,6 +7,13 @@
 $black: #000;
 $white: #fff;
 
+$gray-90: #eee;
+$gray-85: #ddd;
+$gray-80: #ccc;
+$gray-60: #999;
+$gray-40: #666;
+$gray-20: #333;
+
 $primary-color: rgb(63, 81, 181);
 $primary-color-light: lighten($primary-color, 15%);
 $primary-color-dark: darken($primary-color, 15%);
@@ -15,19 +22,14 @@ $secondary-color: rgb(255, 215, 89);
 $secondary-color-light: lighten($secondary-color, 15%);
 $secondary-color-dark: darken($secondary-color, 15%);
 
-$primary-text-color: $black;
+$primary-text-color: rgba($black, .87);
 $secondary-text-color: $white;
+$gray-text-color: rgba($black, .38);
+$dark-gray-text-color: rgba($black, .54);
 
 $headline-color: $white;
 
-$gray-90: #eee;
-$gray-85: #ddd;
-$gray-80: #ccc;
-$gray-60: #999;
-$gray-40: #666;
-$gray-20: #333;
-
-$overlay: rgba($black, .38);
+$overlay: rgba($black, .4);
 
 $u: 16px;
 // Unit of measurement - usually default font size
@@ -61,18 +63,19 @@ a {
   &,
   &:link,
   &:visited {
-    color: $primary-color;
+    color: $gray-text-color;
     text-decoration: none;
   }
   &:hover,
   &:active {
-    color: $primary-color-dark;
+    color: $dark-gray-text-color;
     text-decoration: underline;
   }
 }
 
 body {
   background: $gray-85;
+  color: $primary-text-color;
 }
 
 article {
@@ -129,14 +132,6 @@ legend {
   margin: $u * 3 0 auto;
 }
 
-.od-content-height {
-  height: calc(100vh - 48px - #{$u * 9}) !important;
-}
-
-.od-list-height {
-  height: calc(100vh - 48px - #{$u * 20}) !important;
-}
-
 // Title that is placed in the header
 .od-title {
   color: $headline-color;
@@ -156,21 +151,9 @@ legend {
   text-overflow: ellipsis;
 }
 
-// Basic styled list
-.od-list {
-  margin: $u 0;
-  padding: 0;
-  list-style: none;
-  li {
-    display: block;
-    background-color: $gray-90;
-    margin-top: 1px;
-    padding: $u * .5 $u;
-  }
-}
-
 // Simple button class can be added to <a> or <button> elements
 .od-btn {
+  outline: none;
   &,
   &:link,
   &:visited {
@@ -195,9 +178,6 @@ legend {
   }
   .material-icons {
     font-size: $u * 2;
-  }
-  &.od-btn-small {
-    transform: scale(.75);
   }
 }
 
@@ -297,7 +277,6 @@ legend {
   padding-right: $u;
 }
 
-
 /*
  * General media queries 
  */
@@ -311,7 +290,6 @@ legend {
 }
 
 //Search results
-.search-documents-container,
 .search-documents {
   width: 400px;
   li {
