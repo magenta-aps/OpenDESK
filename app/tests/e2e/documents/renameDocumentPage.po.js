@@ -8,7 +8,7 @@ var RenameDocumentPage = function () {
 
 	return {
 		getDocumentList: function () {
-			var documentList = element.all(by.repeater('content in contents'));
+			var documentList = element.all(by.repeater('content in contentTypeList'));
 			var documentNames = documentList.all(by.css('.content-name'));
 			return documentNames.getInnerHtml();
 		},
@@ -19,7 +19,7 @@ var RenameDocumentPage = function () {
 
 		renameDocument: function (newName) {
 			//Select all data elements and apply filter function
-			element.all(by.repeater('content in contents')).filter(function (elem) {
+			element.all(by.repeater('content in contentTypeList')).filter(function (elem) {
 				//Return the element or elements
 				return elem.getText().then(function (text) {
 					//Match the text

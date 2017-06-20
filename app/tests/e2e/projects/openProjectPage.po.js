@@ -9,10 +9,19 @@ var OpenProjectPage = function () {
             return goToProjectBtn.click();
         },
 
-        openFirstProject: function() {
-            var projectList = element.all(by.css('td a.od-filebrowser-link')).first();
-            projectList.click();
-        }
+        openProject: function (projectName) {
+			//Select all data elements and apply filter function
+			element.all(by.repeater('project in vm.showall')).filter(function (elem) {
+				//Return the element or elements
+				return elem.getText().then(function (text) {
+					//Match the text
+					return text.indexOf(projectName) >= 0;
+				});
+			}).then(function (filteredElements) {
+                var projectList = filteredElements[0].all(by.css('.od-filebrowser-link')).first();
+                projectList.click();
+			});
+		}
     };
 };
 

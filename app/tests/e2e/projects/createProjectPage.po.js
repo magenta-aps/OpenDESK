@@ -10,10 +10,6 @@ var CreateProjectPage = function () {
         return projectName;
     }
 
-    public.getProjectPageTitle = function() {
-        return element(by.css('h1.od-title'));
-    }
-
     public.getCreatedProjectUrl = function () {
         return 'http://localhost:8000/#!/projekter/'+projectName+'/dokumenter';
     }

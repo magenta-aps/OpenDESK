@@ -79,12 +79,13 @@ exports.config = {
 
     },
     suites: {
-        //login: './login/*.test.js',
-        //projects: './projects/*.test.js'
+        login: './login/login.test.js',
+        projects: './projects/*.test.js',
         //grouprooms: './groupRooms/*.test.js'
         //folders: './folders/*.test.js',
         //documents: './documents/*.test.js',
         //members: './members/*.test.js'
-        userHenrik: './userJourneys/henrik.test.js'
+        //logout: './login/logout.test.js',
+        //userHenrik: './userJourneys/henrik.test.js'
     }
 };
