@@ -9,12 +9,7 @@ var DeleteProjectLinkPage = function () {
                 expect(response.length).toBe(1);
 
                 documentHelper.openOptionMenu(response[0]);
-
-                var deleteOptionBtn = element.all(by.css('[ng-click="vm.deleteFileDialog($event, content)"]')).last();
-                deleteOptionBtn.click();
-
-                var deleteBtn = element.all(by.css('[aria-label="Remove"]')).first();
-                deleteBtn.click();
+                documentHelper.deleteAction()
             });
         }
     }

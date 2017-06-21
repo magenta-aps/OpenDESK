@@ -83,10 +83,9 @@ exports.config = {
         //projects: './projects/*.test.js',
         //grouprooms: './groupRooms/*.test.js',
         //folders: './folders/*.test.js',
-        projectlinks: './projectlinks/*.test.js',
-        //documents: './documents/*.test.js',
+        //projectlinks: './projectlinks/*.test.js',
+        documents: './documents/*.test.js',
         //members: './members/*.test.js'
         //logout: './login/logout.test.js',
-        //userHenrik: './userJourneys/henrik.test.js'
     }
 };

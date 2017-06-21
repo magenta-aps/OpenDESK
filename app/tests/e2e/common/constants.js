@@ -12,6 +12,13 @@ constants.FOLDER_RENAME = 'Nyt mappenavn';
 constants.PROJECTLINK = 'Sample: Web Site Design Project';
 constants.PROJECTLINK_SEARCH = 'sam';
 
+constants.FILE_UPLOAD = 'Medlemsoversigt.pdf';
+constants.FILE_UPLOAD_RENAME = 'Medlemsoversigt redigeret';
+constants.FILE_UPLOAD_URL = '/Users/andersjepsen/Downloads/Medlemsoversigt.pdf';
+
+
+/////////////////////////////
+
 constants.PROJECT_NAME_USED_FOR_MOVE = "swsdp/Presentations";
 constants.PROJECT_NAME_USED_FOR_MOVE_AFTER_MOVE = "swsdp/Agency%20Files";
 
@@ -25,8 +32,7 @@ constants.role_for_update_member = "SiteManager"
 constants.file_1 = {name : "android.pdf", path : "app/src/testdata/android.pdf", mimetype : "application/pdf"};
 constants.file_2 = {name : "github.odt", path : "app/src/testdata/github.odt", mimetype : "application/vnd.oasis.opendocument.text"};
 constants.file_3 = {name : "github_toBeDeleted.odt", path : "app/src/testdata/github_toBeDeleted.odt", mimetype : "application/vnd.oasis.opendocument.text"};
-constants.file_uploaded = 'Medlemsoversigt.pdf';
-constants.file_renamed = 'Medlemsoversigt redigeret';
+
 
 constants.folder_to_be_created_and_deleted = "sletmigigen";
 

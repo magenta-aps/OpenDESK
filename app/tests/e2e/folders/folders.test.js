@@ -42,6 +42,8 @@ describe('OpenDesk folders', function () {
         });
     });
 
-
-
+    it('should go back to project list', function () {
+        projectHelper.backToProjects();
+    });
+    
 });

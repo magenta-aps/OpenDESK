@@ -31,4 +31,8 @@ describe('OpenDesk project links', function () {
             expect(response.length).toBe(0);
         });
     });
+
+    it('should go back to project list', function () {
+        projectHelper.backToProjects();
+    });
 });
