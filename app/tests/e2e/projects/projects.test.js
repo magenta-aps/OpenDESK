@@ -9,17 +9,17 @@ var constants = require('../common/constants');
 describe('new project', function () {
     it('should create a new project', function () {
         createProjectPage.openCreateProjectDialog();
-        createProjectPage.fillInputFields(constants.PROJECT_NAME_1, false);
+        createProjectPage.fillInputFields(constants.PROJECT_NAME, false);
         createProjectPage.createProject();
-        expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_NAME_1);
+        expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_NAME);
     });
 
     it('should rename the project', function () {
         renameProjectPage.showDetails();
         renameProjectPage.openEditDialog();
-        renameProjectPage.editProjectName(constants.PROJECT_NAME_RENAME_NEW_NAME);
+        renameProjectPage.editProjectName(constants.PROJECT_NAME_RENAME);
         renameProjectPage.renameProject();
-        expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_NAME_RENAME_NEW_NAME);
+        expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_NAME_RENAME);
     });
 });
 
@@ -31,7 +31,7 @@ describe('back to project list', function () {
     });
 
     it('should see project info', function () {
-        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME_NEW_NAME).then(function (filteredElements) {
+        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME).then(function (filteredElements) {
             expect(filteredElements.length).toBe(1);
             var menuBtn = filteredElements[0].all(by.css('md-menu button')).first();
             var infoBtn = element(by.css('.md-active [aria-label="info_outline"]'));
@@ -43,18 +43,17 @@ describe('back to project list', function () {
             closeBtn.click();
             browser.driver.sleep(1000);
         });
-
     });
 
     it('should delete the project', function () {
-        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME_NEW_NAME).then(function (filteredElements) {
+        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME).then(function (filteredElements) {
             expect(filteredElements.length).toBe(1);
         });
 
-        deleteProjectPage.deleteProject(constants.PROJECT_NAME_RENAME_NEW_NAME);
+        deleteProjectPage.deleteProject(constants.PROJECT_NAME_RENAME);
         browser.driver.sleep(1000);
 
-        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME_NEW_NAME).then(function (filteredElements) {
+        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME).then(function (filteredElements) {
             expect(filteredElements.length).toBe(0);
         });
     });

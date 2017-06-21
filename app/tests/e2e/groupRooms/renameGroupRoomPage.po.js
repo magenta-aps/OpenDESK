@@ -1,4 +1,4 @@
-var RenameProjectPage = function () {
+var RenameGroupRoomPage = function () {
 
 	return {
 
@@ -10,17 +10,17 @@ var RenameProjectPage = function () {
 			return element(by.css('[aria-label="Redigér site"]')).click();
 		},
 
-		editProjectName: function (newName) {
+		editGroupRoomName: function (newName) {
 			var projectNameInput = element(by.model('newSite.siteName'));
 			projectNameInput.clear();
 			projectNameInput.sendKeys(newName);
 		},
 
-		renameProject: function () {
+		renameGroupRoom: function () {
 			var saveBtn = element(by.css('[aria-label="Edit project"] button[type="submit"]'));
 			saveBtn.click();
 		}
 	}
 };
 
-module.exports = RenameProjectPage();
+module.exports = RenameGroupRoomPage();

@@ -1,31 +1,41 @@
-var globalHeader = require('../common/globalHeader.po.js');
 var constants = require('../common/constants');
-var loginPage = require('../login/loginPage.po.js');
+var projectHelper = require('../projects/projectHelper.js');
 var createGroupRoom = require('./createGroupRoomPage.po.js');
+var renameGroupRoomPage = require('./renameGroupRoomPage.po.js');
+var deleteGroupRoomPage = require('./deleteGroupRoomPage.po.js');
 
-
-describe('openDESK login', function() {
-    it('should login', function() {
-        loginPage.loginAsAdmin();
-    });
-});
-
-describe('public group rooms', function() {
-    it('should be able to be created', function() {
+describe('new group room', function () {
+    it('should create a new group room', function () {
         createGroupRoom.openCreateGroupRoomDialog();
-        createGroupRoom.fillInputFields(constants.PROJECT_NAME_2,false);
+        createGroupRoom.fillInputFields(constants.GROUPROOM_NAME, false);
         createGroupRoom.createGroupRoom();
     });
 
-    xit('should be able to be deleted', function() {
-        return browser.get("http://localhost:8000/#!/projekter").then (function(response) {
-            deleteProjectPage.deleteProject(constants.PROJECT_NAME_2);
-        });
+    it('should rename the group room', function () {
+        renameGroupRoomPage.showDetails();
+        renameGroupRoomPage.openEditDialog();
+        renameGroupRoomPage.editGroupRoomName(constants.GROUPROOM_NAME_RENAME);
+        renameGroupRoomPage.renameGroupRoom();
+        expect(projectHelper.getProjectPageTitle()).toMatch(constants.GROUPROOM_NAME_RENAME);
     });
 });
 
-describe('openDESK logout', function() {
-    it('should logout', function() {
-        loginPage.logout();
+describe('back to project list', function () {
+    it('should go back to project list', function () {
+        projectHelper.backToProjects();
+        expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+    });
+
+    it('should delete group room', function () {
+        projectHelper.findProjectInList(constants.GROUPROOM_NAME_RENAME).then(function (filteredElements) {
+            expect(filteredElements.length).toBe(1);
+        });
+
+        deleteGroupRoomPage.deleteGroupRoom(constants.GROUPROOM_NAME_RENAME);
+        browser.driver.sleep(1000);
+
+        projectHelper.findProjectInList(constants.GROUPROOM_NAME_RENAME).then(function (filteredElements) {
+            expect(filteredElements.length).toBe(0);
+        });
     });
 });
