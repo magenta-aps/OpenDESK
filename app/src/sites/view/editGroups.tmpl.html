@@ -63,7 +63,7 @@
 							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</md-option>
 						</md-select>
 					</md-input-container>
-					<div style="position: relative; top: -25px;" class="btnAlign">
+					<div style="position: relative; top: -25px;" class="btn-align">
 						<md-button class="md-primary" ng-click="addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
 							<md-icon>add</md-icon> {{'COMMON.ADD' | translate}}
 						</md-button>
