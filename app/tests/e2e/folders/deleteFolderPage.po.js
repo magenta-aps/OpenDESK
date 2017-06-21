@@ -1,64 +1,25 @@
-var globalHeaderMenu = require('../common/globalHeader.po.js');
-var deletedFolderName;
-var folderList;
 var constants = require('../common/constants');
-
+var documentHelper = require('../documents/documentHelper.js');
 
 var DeleteFolderPage = function () {
-    
-    var public = {};
-    
-    console.log("delete");
-    
-	public.getFolderList = function() {
-		folderList = element.all(by.repeater('content in contents'));
-	    return folderList	
-	}
-    
-    public.getDeletedFolder = function() {
-    	return deletedFolderName;
-    }
 
+    return {
+        deleteFolder: function (folder) {
+            documentHelper.findDocumentInList(folder).then(function (response) {
+                expect(response.length).toBe(1);
 
-    public.deleteFolder = function() {
+                var documentOptionsBtn = response[0].all(by.css('[ng-click="$mdMenu.open()"]')).first();
+                documentOptionsBtn.click();
+                browser.driver.sleep(1000);
 
-        'use strict';
-        //Select all date elements and apply filter function
-        element.all(by.repeater('content in contents')).filter(function (elem) {
-            //Return the element or elements
-            return elem.getText().then(function (text) {
-                //Match the text
-                console.log(text);
+                var deleteOptionBtn = element.all(by.css('[ng-click="vm.deleteFileDialog($event, content)"]')).last();
+                deleteOptionBtn.click();
 
-                return text.indexOf(constants.folder_to_be_created_and_deleted) >= 0;
+                var deleteBtn = element.all(by.css('[aria-label="Remove"]')).first();
+                deleteBtn.click();
             });
-        }).then(function (filteredElements) {
-            //filteredElements is the list of filtered elements
-
-            console.log(filteredElements[0].getInnerHtml().then (function(val) {
-                console.log(val);
-            }));
-
-            var documentOptionsBtn = filteredElements[0].all(by.css('[ng-click="vm.openMenu($mdOpenMenu, $event)"]')).last();
-
-            documentOptionsBtn.click();
-
-            browser.driver.sleep(2000);
-
-
-            var selectdeleteBtn = element.all(by.css('[ng-click="vm.deleteFoldereDialog($event, content.nodeRef)"]')).last()
-            selectdeleteBtn.click();
-
-            browser.driver.sleep(2000);
-
-            var deleteProjectBtn = element(by.css('[aria-label="Slet"]'));
-            deleteProjectBtn.click();
-
-            browser.driver.sleep(2000);
-        });
-    };
-
-    return public;
+        }
+    }
 };
 
 module.exports = DeleteFolderPage();

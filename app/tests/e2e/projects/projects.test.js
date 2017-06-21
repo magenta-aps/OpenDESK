@@ -46,15 +46,15 @@ describe('back to project list', function () {
     });
 
     it('should delete the project', function () {
-        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME).then(function (filteredElements) {
-            expect(filteredElements.length).toBe(1);
+        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME).then(function (response) {
+            expect(response.length).toBe(1);
         });
 
         deleteProjectPage.deleteProject(constants.PROJECT_NAME_RENAME);
         browser.driver.sleep(1000);
 
-        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME).then(function (filteredElements) {
-            expect(filteredElements.length).toBe(0);
+        projectHelper.findProjectInList(constants.PROJECT_NAME_RENAME).then(function (respone) {
+            expect(respone.length).toBe(0);
         });
     });
 });

@@ -4,9 +4,10 @@ constants.PROJECT_NAME = "magenta_1";
 constants.PROJECT_NAME_RENAME = "Magenta_rename";
 constants.GROUPROOM_NAME= "magenta_2";
 constants.GROUPROOM_NAME_RENAME = "Magenta_newname"
-constants.PROJECT_NAME_create_delete = "Magenta_38";
-constants.PROJECT_NAME_RENAME = "Magenta_rename";
-constants.PROJECT_EXISTING = "test";
+
+constants.PROJECT_DEFAULT = "Test Project";
+constants.FOLDER = 'Testmappe';
+constants.FOLDER_RENAME = 'Nyt mappenavn';
 
 constants.PROJECT_NAME_USED_FOR_MOVE = "swsdp/Presentations";
 constants.PROJECT_NAME_USED_FOR_MOVE_AFTER_MOVE = "swsdp/Agency%20Files";
@@ -25,7 +26,6 @@ constants.file_uploaded = 'Medlemsoversigt.pdf';
 constants.file_renamed = 'Medlemsoversigt redigeret';
 
 constants.folder_to_be_created_and_deleted = "sletmigigen";
-constants.folder_to_be_created_an_manipulated = 'Testmappe';
 
 constants.DISCUSSION_NAME = 'Et emne at diskutere';
 constants.DISCUSSION_CONTENT = 'Jeg synes vi skal diskutere dette, hvad siger i?';

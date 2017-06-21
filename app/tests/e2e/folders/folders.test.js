@@ -1,34 +1,47 @@
-var globalHeader = require('../common/globalHeader.po.js');
-var createFolderPage = require('./createFolderPage.po.js');
-var deleteFolderPage = require('./deleteFolderPage.po.js');
 var constants = require('../common/constants');
-var loginPage = require('../login/loginPage.po.js');
+var projectHelper = require('../projects/projectHelper.js');
+var documentHelper = require('../documents/documentHelper.js');
+var createFolderPage = require('./createFolderPage.po.js');
+var renameFolderPage = require('./renameFolderPage.po.js');
+var deleteFolderPage = require('./deleteFolderPage.po.js');
 
-describe('OpenDesk FOLDERS', function() {
+describe('OpenDesk folders', function () {
 
-    it('should be able to be CREATED', function() {
-
-        browser.get("http://localhost:8000/#/projekter/" + constants.PROJECT_NAME_1).then (function(response) {
-            createFolderPage.createFolder();
-            
-            //the created folder is represented in the list
-            expect(createFolderPage.getFolderList().getText()).toMatch(constants.folder_to_be_created_and_deleted);
+    it('should go to a project', function () {
+        projectHelper.findProjectInList(constants.PROJECT_DEFAULT).then(function (response) {
+            expect(response.length).toBe(1);
+            response[0].click();
+            browser.driver.sleep(1000);
+            expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_DEFAULT);
         });
     });
 
+    it('create a new folder', function () {
+        createFolderPage.openCreateFolderDialog();
+        createFolderPage.fillInputFields(constants.FOLDER);
+        createFolderPage.createFolder();
 
-    it('should be able to be DELETED', function() {
+        documentHelper.findDocumentInList(constants.FOLDER).then(function (response) {
+            expect(response.length).toBe(1);
+        });
+    });
 
-        browser.get("http://localhost:8000/#/projekter/" + constants.PROJECT_NAME_1).then (function(response) {
-            deleteFolderPage.deleteFolder();
+    it('should rename the folder', function() {
+        renameFolderPage.renameFolder(constants.FOLDER,constants.FOLDER_RENAME);
 
-            //the deleted folder is not represented in the list
-            expect(deleteFolderPage.getFolderList().getText()).not.toMatch(constants.folder_to_be_created_and_deleted);
+        documentHelper.findDocumentInList(constants.FOLDER_RENAME).then(function (response) {
+            expect(response.length).toBe(1);
+        });
+    });
+
+    it('should delete folder', function () {
+        deleteFolderPage.deleteFolder(constants.FOLDER_RENAME);
+
+        documentHelper.findDocumentInList(constants.FOLDER_RENAME).then(function (response) {
+            expect(response.length).toBe(0);
         });
     });
 
 
 
 });
-
-

@@ -81,8 +81,8 @@ exports.config = {
     suites: {
         login: './login/login.test.js',
         //projects: './projects/*.test.js',
-        grouprooms: './groupRooms/*.test.js'
-        //folders: './folders/*.test.js',
+        //grouprooms: './groupRooms/*.test.js'
+        folders: './folders/*.test.js',
         //documents: './documents/*.test.js',
         //members: './members/*.test.js'
         //logout: './login/logout.test.js',
