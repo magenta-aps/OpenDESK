@@ -20,8 +20,7 @@ var DeleteProjectPage = function () {
                 menuBtn.click();
                 deleteBtn.click();
                 deleteConfirmBtn.click();
-
-                browser.driver.sleep(2000);
+                browser.driver.sleep(1000);
             });
         }
     };
