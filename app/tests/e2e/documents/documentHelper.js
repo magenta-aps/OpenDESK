@@ -33,6 +33,16 @@ var DocumentHelper = function () {
 
             var renameBtn = element.all(by.css('[aria-label="Rename"]')).first();
             renameBtn.click();
+        },
+
+        previewAction: function() {
+            var previewOptionBtn = element.all(by.css('[ng-click="vm.previewDocument(content.nodeRef)"]')).last();
+            previewOptionBtn.click();
+
+            browser.driver.sleep(2000);
+
+            var closeBtn = element.all(by.css('[aria-label="Close"]')).first();
+            closeBtn.click();
         }
     }
 }

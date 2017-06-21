@@ -4,6 +4,7 @@ var documentHelper = require('./documentHelper.js');
 var uploadDocumentPage = require('./uploadDocumentPage.po.js');
 var deleteDocumentPage = require('./deleteDocumentPage.po.js');
 var renameDocumentPage = require('./renameDocumentPage.po.js');
+var previewDocumentPage = require('./previewDocumentPage.po.js');
 
 describe('OpenDesk documents', function () {
 
@@ -31,6 +32,11 @@ describe('OpenDesk documents', function () {
         documentHelper.findDocumentInList(constants.FILE_UPLOAD_RENAME).then(function (response) {
             expect(response.length).toBe(1);
         });
+    });
+
+    it('should preview the document', function () {
+        previewDocumentPage.previewDocument(constants.FILE_UPLOAD_RENAME);
+        //expect(previewDocumentPage.getPreviewDocumentTitle()).toContain(constants.FILE_UPLOAD_RENAME);
     });
 
     it('should delete the document', function () {
