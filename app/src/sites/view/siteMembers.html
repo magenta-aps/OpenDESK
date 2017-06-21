@@ -8,7 +8,7 @@
 
 					<div ng-if="group[0].collapsed" flex="100">
 						<h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'"
-							layout="row">
+							layout="row" aria-label="{{'PROJECT.GROUPS.' + group[0].shortName | translate}}">
 							<span >{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>

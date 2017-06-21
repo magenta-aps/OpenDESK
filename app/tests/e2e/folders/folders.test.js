@@ -7,13 +7,8 @@ var deleteFolderPage = require('./deleteFolderPage.po.js');
 
 describe('OpenDesk folders', function () {
 
-    it('should go to a project', function () {
-        projectHelper.findProjectInList(constants.PROJECT_DEFAULT).then(function (response) {
-            expect(response.length).toBe(1);
-            response[0].click();
-            browser.driver.sleep(1000);
-            expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_DEFAULT);
-        });
+    it('should go to the default project', function () {
+        projectHelper.openDefaultProject();
     });
 
     it('create a new folder', function () {
@@ -45,5 +40,5 @@ describe('OpenDesk folders', function () {
     it('should go back to project list', function () {
         projectHelper.backToProjects();
     });
-    
+
 });

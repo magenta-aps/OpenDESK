@@ -7,12 +7,13 @@ var deleteProjectLinkPage = require('./deleteProjectLinkPage.po.js');
 describe('OpenDesk project links', function () {
 
     it('should go to default project', function () {
-        projectHelper.findProjectInList(constants.PROJECT_DEFAULT).then(function (response) {
-            expect(response.length).toBe(1);
-            response[0].click();
-            browser.driver.sleep(1000);
-            expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_DEFAULT);
-        });
+        projectHelper.openDefaultProject();
+        // projectHelper.findProjectInList(constants.PROJECT_DEFAULT).then(function (response) {
+        //     expect(response.length).toBe(1);
+        //     response[0].click();
+        //     browser.driver.sleep(1000);
+        //     expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_DEFAULT);
+        // });
     });
 
     it('should create a new project link', function () {

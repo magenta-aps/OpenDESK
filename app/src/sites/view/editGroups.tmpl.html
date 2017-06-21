@@ -14,7 +14,11 @@
 			<md-content class="md-padding" layout="column">
 				<div ng-repeat="(groupIndex, group) in groups.list">
 					<div ng-if="group[0].multipleMembers">
-						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" 
+							class="group-toggle" 
+							layout="row" 
+							ng-class="showGroupList[groupIndex] ? 'open' : 'closed'"
+							aria-label="{{'PROJECT.GROUPS.' + group[0].shortName | translate}}">
 							<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>

@@ -9,12 +9,7 @@ var previewDocumentPage = require('./previewDocumentPage.po.js');
 describe('OpenDesk documents', function () {
 
     it('should go to default project', function () {
-        projectHelper.findProjectInList(constants.PROJECT_DEFAULT).then(function (response) {
-            expect(response.length).toBe(1);
-            response[0].click();
-            browser.driver.sleep(1000);
-            expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_DEFAULT);
-        });
+        projectHelper.openDefaultProject();
     });
 
     it('should upload a new document', function () {
