@@ -8,9 +8,7 @@ var RenameFolderPage = function () {
             documentHelper.findDocumentInList(folder).then(function (response) {
                 expect(response.length).toBe(1);
 
-                var documentOptionsBtn = response[0].all(by.css('[ng-click="$mdMenu.open()"]')).first();
-                documentOptionsBtn.click();
-                browser.driver.sleep(1000);
+                documentHelper.openOptionMenu(response[0]);
 
                 var renameOptionBtn = element.all(by.css('[ng-click="vm.renameDocumentDialog($event, content)"]')).last();
                 renameOptionBtn.click();

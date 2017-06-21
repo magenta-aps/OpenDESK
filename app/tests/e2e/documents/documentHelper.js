@@ -9,6 +9,11 @@ var DocumentHelper = function () {
                     return text.indexOf(documentName) >= 0;
                 });
             })
+        },
+
+        openOptionMenu: function(document) {
+            document.all(by.css('[ng-click="$mdMenu.open()"]')).first().click();
+            browser.driver.sleep(1000);
         }
     }
 }

@@ -1,3 +1,5 @@
+var constants = require('../common/constants');
+
 var ProjectHelper = function () {
 
     return {

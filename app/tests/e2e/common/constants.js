@@ -9,6 +9,9 @@ constants.PROJECT_DEFAULT = "Test Project";
 constants.FOLDER = 'Testmappe';
 constants.FOLDER_RENAME = 'Nyt mappenavn';
 
+constants.PROJECTLINK = 'Sample: Web Site Design Project';
+constants.PROJECTLINK_SEARCH = 'sam';
+
 constants.PROJECT_NAME_USED_FOR_MOVE = "swsdp/Presentations";
 constants.PROJECT_NAME_USED_FOR_MOVE_AFTER_MOVE = "swsdp/Agency%20Files";
 
