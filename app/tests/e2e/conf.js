@@ -85,7 +85,8 @@ exports.config = {
         //folders: './folders/*.test.js',
         //projectlinks: './projectlinks/*.test.js',
         //documents: './documents/*.test.js',
-        members: './members/*.test.js'
+        //members: './members/*.test.js',
+        discussions: './discussions/*.test.js'
         //logout: './login/logout.test.js',
     }
 };

@@ -20,6 +20,10 @@ constants.MEMBER_ADDED = 'Bruce Lee';
 constants.MEMBER_DELETED = constants.MEMBER_ADDED;
 constants.MEMBER_SEARCH = 'br';
 
+constants.DISCUSSION_TITLE = 'Spicy jalapeno ham burgdoggen ball tip';
+constants.DISCUSSION_CONTENT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac odio sagittis nulla dapibus efficitur vel laoreet est. Vestibulum suscipit dui neque, ac finibus ex finibus sed. Proin nibh dui, convallis vel consectetur non, sodales vitae lorem. Praesent sem ipsum, ornare et gravida non, auctor nec dolor. Suspendisse non nibh porttitor, efficitur dui quis, tempus felis. Ut libero risus, finibus et justo tincidunt, fermentum aliquet quam. Donec quam nibh, aliquam nec maximus nec, tincidunt in ex. Maecenas nisl libero, cursus nec porttitor eget, rhoncus sit amet ex. Sed vel velit sed tellus rhoncus venenatis vitae non purus.';
+constants.REPLY_CONTENT = 'Cillum prosciutto eiusmod, pork loin consequat irure nulla tenderloin burgdoggen aliqua labore frankfurter lorem pork chop. Ipsum nisi pariatur tenderloin capicola tongue officia excepteur ham hock salami. Sed pancetta jowl, non exercitation landjaeger est brisket cow. Fugiat irure sirloin, leberkas elit hamburger nisi swine chuck.';
+
 
 /////////////////////////////
 
@@ -37,12 +41,6 @@ constants.file_1 = {name : "android.pdf", path : "app/src/testdata/android.pdf",
 constants.file_2 = {name : "github.odt", path : "app/src/testdata/github.odt", mimetype : "application/vnd.oasis.opendocument.text"};
 constants.file_3 = {name : "github_toBeDeleted.odt", path : "app/src/testdata/github_toBeDeleted.odt", mimetype : "application/vnd.oasis.opendocument.text"};
 
-
-constants.folder_to_be_created_and_deleted = "sletmigigen";
-
-constants.DISCUSSION_NAME = 'Et emne at diskutere';
-constants.DISCUSSION_CONTENT = 'Jeg synes vi skal diskutere dette, hvad siger i?';
-constants.REPLY_CONTENT = 'Dette er svaret på tråden';
 
 module.exports = constants;
 

@@ -200,6 +200,7 @@ main {
   list-style: none;
   margin-bottom: 20px;
   padding: $u * .5 $u;
+  min-height: 1em;
 
   li {
     display: inline-block;
