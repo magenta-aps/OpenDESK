@@ -16,6 +16,10 @@ constants.FILE_UPLOAD = 'Medlemsoversigt.pdf';
 constants.FILE_UPLOAD_RENAME = 'Medlemsoversigt redigeret';
 constants.FILE_UPLOAD_URL = '/Users/andersjepsen/Downloads/Medlemsoversigt.pdf';
 
+constants.MEMBER_ADDED = 'Bruce Lee';
+constants.MEMBER_DELETED = constants.MEMBER_ADDED;
+constants.MEMBER_SEARCH = 'br';
+
 
 /////////////////////////////
 
@@ -39,8 +43,6 @@ constants.folder_to_be_created_and_deleted = "sletmigigen";
 constants.DISCUSSION_NAME = 'Et emne at diskutere';
 constants.DISCUSSION_CONTENT = 'Jeg synes vi skal diskutere dette, hvad siger i?';
 constants.REPLY_CONTENT = 'Dette er svaret på tråden';
-
-constants.added_member = 'Bruce Lee';
 
 module.exports = constants;
 

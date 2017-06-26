@@ -5,32 +5,22 @@ var memberHelper = function () {
             return element(by.css('[aria-label="Tilføj gruppemedlemmer"]')).click();
         },
 
-        fillInputFields: function () {
-            var memberInput = element(by.css('md-autocomplete[md-selected-item="selectedProjGrpItem"] input'));
-            var firstMember = element.all(by.css('md-virtual-repeat-container[aria-hidden="false"] ul li')).first();
-            memberInput.sendKeys('br'); //assumes an existing user called bruce lee (or something else with the letters br)
-            firstMember.click();
-            browser.driver.sleep('1000');
-        },
-
         unfoldProjectGroup: function() {
             element(by.css('[aria-label="Add and remove members"] h4[aria-label="Project Group"]')).click();
         },
 
-        addProjectMember: function() {
-            var memberInput = element.all(by.css('[aria-label="Add and remove members"] [md-selected-item="selectedProjGrpItem"]')).first();
-            memberInput.click();
-            memberInput.sendKeys('br');
+        unfoldProjectGroupList: function() {
+            element(by.css('h4[aria-label="Project Group"]')).click();
         },
 
-        unfoldGroup: function(groupName) {
-            return element.all(by.repeater('(groupIndex, group) in groups.list')).filter(function (elem) {
+        findMemberInProjectList: function(member) {
+            return element.all(by.repeater('member in group[1]')).filter(function (elem) {
                 //Return the element or elements
-                return elem.getText().then(function (group) {
+                return elem.getText().then(function (text) {
                     //Match the text
-                    return group.indexOf(groupName) >= 0;
+                    return text.indexOf(member) >= 0;
                 });
-            });
+            })
         },
 
         update: function () {
