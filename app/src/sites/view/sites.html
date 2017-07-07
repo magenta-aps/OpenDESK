@@ -65,6 +65,34 @@
 			</md-card-title>
 			<md-card-content>
 
+				<md-table-container>
+					<table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+						<thead md-head md-order="query.order" md-on-reorder="getDesserts">
+							<tr md-row>
+								<th md-column md-order-by="nameToLower"><span>{{'PROJECT.NAME' | translate}}</span></th>
+								<th md-column md-numeric md-order-by="calories.value"><span>{{'PROJECT.PROJECTLEAD' | translate}}</span></th>
+								<th md-column md-numeric>{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th md-column md-numeric>{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th md-column md-numeric>{{'COMMON.MODIFIED' | translate}}</th>
+							</tr>
+						</thead>
+						<tbody md-body>
+							<tr md-row md-select="dessert" md-select-id="name" md-auto-select 
+							ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser |
+							orderObjectBy:orderByAttribute:reverseOrder |
+							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
+							isContained:vm.searchMembers |
+							filter: vm.search">
+								<td md-cell><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">{{ project.title }}</a></td>
+								<td md-cell><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">{{ project.manager.displayName }}</a></td>
+								<td md-cell><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">{{ project.center_name }}</a></td>
+								<td md-cell><span ng-if="project.state != ''"><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">{{'PROJECT.STATUS.' + project.state | translate}}</a></span></td>
+								<td md-cell><a class="od-filebrowser-link" href="#!/projekter/{{project.shortName}}/dokumenter">{{ project.modified | date:'dd. MMMM yyyy' }}</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</md-table-container>
+<!--
 				<md-list class="">
 					<table class="od-members od-members-row">
 						<col style="width:32px">
@@ -135,8 +163,9 @@
 											</md-menu-item>
 											<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
 												<md-button ng-click="vm.deleteSiteDialog(project, $event)" aria-label="remove">
+													-->
 													<!--shortname-->
-													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
+													<!--<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 													{{'COMMON.REMOVE' | translate}}
 												</md-button>
 											</md-menu-item>
@@ -146,10 +175,10 @@
 							</tr>
 						</tbody>
 					</table>
-				</md-list>
+				</md-list>-->
 				<div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
-			<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
-		</div>
+					<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+				</div>
 				<md-divider></md-divider>
 
 				<md-card-actions ng-controller="SiteCreateController as sc" layout="row" layout-align="start center" class="btn-align">
