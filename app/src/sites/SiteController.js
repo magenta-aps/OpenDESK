@@ -58,6 +58,10 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
 
     $scope.searchProjects = searchProjects;
 
+    //sets the margin to the width of sidenav
+	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("#filebrowser-breadcrumb").outerHeight() - $("md-tabs-wrapper").outerHeight() - $("#table-actions").outerHeight();
+    $("#table-container").css("max-height", tableHeight+"px");
+
     siteService.getTemplateDocuments().then(function (response) {
         $scope.templateDocuments = response;
 
