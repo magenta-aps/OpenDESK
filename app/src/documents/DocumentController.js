@@ -21,6 +21,13 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     vm.notificationFrom = '';
 
+    var height = $(window).height() - 300 - $("header").outerHeight();
+
+    $scope.iframeStyle = {
+        "height" : height + 'px',
+        "width" : "99%",
+    }
+
     if ($location.search().archived != undefined && $location.search().archived == "true") {
         vm.showArchived = true;
     }
@@ -29,8 +36,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     var parentDocumentNode = $location.search().parent != undefined ? $location.search().parent : selectedDocumentNode;
     var docHasParent = $location.search().parent != undefined ? true : false;
     var firstDocumentNode = "";
-
-
 
     documentService.getHistory(parentDocumentNode).then(function (val) {
         $scope.history = val;
