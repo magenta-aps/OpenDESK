@@ -47,7 +47,7 @@ angular
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
     });
 
-function config($stateProvider, $urlRouterProvider, $rootScope) {
+function config($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider
         .when('/admin/system-settings', '/admin/system-settings/general-configuration')
@@ -57,7 +57,8 @@ function config($stateProvider, $urlRouterProvider, $rootScope) {
         abstract: true,
         resolve: {
             authorize:
-                ['authService', '$q', 'sessionService', '$state', function (authService, $q, sessionService, $state) {
+                ['authService', '$q', 'sessionService', '$state', function (authService, $q, sessionService, $state,
+                                                                            $rootScope) {
                 var d = $q.defer();
                 if (authService.isAuthenticated()) {
                     // I also provide the user for child controllers
