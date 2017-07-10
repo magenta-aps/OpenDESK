@@ -71,9 +71,11 @@ function config($stateProvider, $urlRouterProvider) {
                                 $state.reload();
                         });
                     }
-                    d.reject('Not logged in!');
-                    sessionService.retainCurrentLocation();
-                    $state.go('login');
+                    else {
+                        d.reject('Not logged in!');
+                        sessionService.retainCurrentLocation();
+                        $state.go('login');
+                    }
                 }
                 return d.promise;
             }]
