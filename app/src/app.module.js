@@ -68,7 +68,7 @@ function config($stateProvider, $urlRouterProvider) {
                     if ($rootScope.ssoLoginEnabled) {
                         authService.ssoLogin().then(function (response) {
                             if (authService.isAuthenticated())
-                                $state.reload();
+                                d.resolve(authService.user);
                         });
                     }
                     else {
