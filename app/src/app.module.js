@@ -57,7 +57,7 @@ function config($stateProvider, $urlRouterProvider) {
         abstract: true,
         resolve: {
             authorize:
-                ['authService', '$q', 'sessionService', '$state', function (authService, $q, sessionService, $state,
+                ['authService', '$q', 'sessionService', '$state', '$rootScope', function (authService, $q, sessionService, $state,
                                                                             $rootScope) {
                 var d = $q.defer();
                 if (authService.isAuthenticated()) {
