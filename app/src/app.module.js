@@ -42,26 +42,13 @@ angular
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
-        var ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
+        $rootScope.ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
         angular.element(window.document)[0].title = APP_CONFIG.appName;
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
-
-        if (!authService.isAuthenticated()) {
-            if (ssoLoginEnabled) {
-                authService.ssoLogin().then(function (response) {
-                    if (!authService.isAuthenticated()) {
-                        sessionService.retainCurrentLocation();
-                        $state.go('login');
-                    }
-                    else
-                        $state.reload();
-                });
-            }
-        }
     });
 
-function config($stateProvider, $urlRouterProvider) {
+function config($stateProvider, $urlRouterProvider, $rootScope) {
 
     $urlRouterProvider
         .when('/admin/system-settings', '/admin/system-settings/general-configuration')
@@ -78,6 +65,12 @@ function config($stateProvider, $urlRouterProvider) {
                     d.resolve(authService.user);
                 } else {
                     // here the rejection
+                    if ($rootScope.ssoLoginEnabled) {
+                        authService.ssoLogin().then(function (response) {
+                            if (authService.isAuthenticated())
+                                $state.reload();
+                        });
+                    }
                     d.reject('Not logged in!');
                     sessionService.retainCurrentLocation();
                     $state.go('login');
