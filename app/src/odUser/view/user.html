@@ -3,15 +3,16 @@
         <div class="od-user-header-menu">
             <h2 class="od-user-name" ng-class="ac.getUserInfo().user.capabilities.isAdmin ? 'od-user-admin' : ''">{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h2>
             <button ng-click="vm.toggleUser()" class="od-btn od-user--toggle">
-                <i class="material-icons">person</i>
+                <md-icon>person</md-icon>
              </button>
         </div>
 
         <div class="od-flyout right fixed" ng-class="{ open: vm.on, closed: !vm.on }" ng-click="vm.toggleUser()">
             <div class="od-flyout--body" ng-click="$event.stopPropagation()">
+                <h2 class="od-flyout--title md-headline">{{'USER.USER' | translate}}</h2>
                 <button ng-click="vm.toggleUser()" class="od-btn od-flyout--close">
-                <i class="material-icons">keyboard_arrow_right</i>
-            </button>
+                    <md-icon>keyboard_arrow_right</md-icon>
+                </button>
 
                 <div class="od-me">
                     <label for="uploadBtn">
@@ -24,7 +25,7 @@
                      </label>
                      <input type="file" id="uploadBtn" class="upload" file-model="file" ng-model="avatar" onchange="angular.element(this).scope().uploadAvatar(this)"/>
                     <div layout="column" layout-align="center center">
-                        <h1>{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h1>
+                        <h2 class="md-headline">{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h2>
                     </div>
                     <md-subheader>{{'USER.USERINFO' | translate}}</md-subheader>
                     <md-list>

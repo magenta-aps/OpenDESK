@@ -9,11 +9,11 @@
 
     <div id="project-docs">
 
-        <button><i class="material-icons">file_upload</i> Upload</button>
-        <button ng-click="newDocument()"><i class="material-icons">create</i> Nyt dokument</button>
+        <button><md-icon>file_upload</md-icon> Upload</button>
+        <button ng-click="newDocument()"><md-icon>create</md-icon> Nyt dokument</button>
         <button ng-show="selectedItems.length"
                 ng-click="journalizeToESDH(selectedItems)">
-            <i class="material-icons">archive</i> Journalisér til ESDH
+            <md-icon>archive</md-icon> Journalisér til ESDH
         </button>
 
 
@@ -38,7 +38,7 @@
     <div id="project-members" ng-show="site">
         <h2>{{'MEMBER.MEMBERS' | translate}}</h2>
         <ul class="list-plain" ng-repeat="node in siteMembers">
-            <li><i class="material-icons">person</i>
+            <li><md-icon>person</md-icon>
                 {{node.authority.firstName}} {{node.authority.lastName}}
             </li>
         </ul>

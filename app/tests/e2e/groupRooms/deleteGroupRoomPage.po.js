@@ -1,13 +1,14 @@
-var DeleteProjectPage = function () {
+
+var DeleteGroupRoomPage = function () {
 
     return {
 
-        deleteProject: function (projectName) {
+        deleteGroupRoom: function (groupRoomName) {
             element.all(by.repeater('project in vm.showall')).filter(function (elem) {
                 //Return the element or elements
                 return elem.getText().then(function (text) {
                     //Match the text
-                    return text.indexOf(projectName) >= 0;
+                    return text.indexOf(groupRoomName) >= 0;
                 });
             }).then(function (filteredElements) {
                 var menuBtn = filteredElements[0].all(by.css('md-menu button')).first();
@@ -23,4 +24,4 @@ var DeleteProjectPage = function () {
     };
 };
 
-module.exports = DeleteProjectPage();
+module.exports = DeleteGroupRoomPage();

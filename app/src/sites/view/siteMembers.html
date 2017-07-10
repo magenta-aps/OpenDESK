@@ -1,56 +1,51 @@
 <md-card class="od-site-members">
 	<md-card-title>
-		<h3 class="md-title od-title-icon od-primary"><i class="material-icons">group</i> {{'MEMBER.MEMBERS' | translate }}</h3>
+		<h3 class="md-title od-title-icon">
+			<md-icon>group</md-icon> {{'MEMBER.MEMBERS' | translate }}</h3>
 	</md-card-title>
 	<md-card-content>
-			<md-list>
-				<div ng-repeat="group in groups.list">
 
-					<div ng-if="group[0].collapsed" flex="100">
-						<h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'"
-							layout="row">
-							<span >{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
-							<span flex></span>
-							<i id="rotateArrow" class="material-icons">keyboard_arrow_down</i>
-						</h4>
-						<div ng-class="group[0].open ? 'fold-out' : 'fold-in'">
-						<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
-							<ul>
-								<div layout="row">
-									<a class="member od-primary" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
-								</div>
-							</ul>
-						</md-list-item>
-						</div>
-					</div>
+		<div ng-repeat="group in groups.list">
 
-					<md-list-item ng-if="!group[0].collapsed" ng-repeat="member in group[1] | orderBy: 'displayName'">
-						<div class="md-no-style md-list-item-inner">
-							<div flex="50">
-								<a class="member od-primary" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
-							</div>
-							<div flex="50" class="od-secondary">
-								{{'PROJECT.GROUPS.' + group[0].shortName | translate}}
-							</div>
-						</div>
+			<div ng-if="group[0].collapsed" flex="100">
+				<h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'" layout="row"
+				    aria-label="{{'PROJECT.GROUPS.' + group[0].shortName | translate}}">
+					<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
+					<span flex></span>
+					<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+				</h4>
+				<md-list ng-class="group[0].open ? 'fold-out' : 'fold-in'" aria-label="{{'PROJECT.GROUPS.' + group[0].shortName | translate}} List">
+					<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
+						<a class="member" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
 					</md-list-item>
+				</md-list>
+			</div>
 
-				</div>
+			<md-list ng-if="!group[0].collapsed">
+				<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
+					<div flex="50">
+						<a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
+					</div>
+					<div flex="50" class="od-secondary">
+						{{'PROJECT.GROUPS.' + group[0].shortName | translate}}
+					</div>
+				</md-list-item>
 			</md-list>
 
-		<md-card-actions layout="row" layout-align="start center" class="btnAlign">
+		</div>
+
+		<md-card-actions layout="row" layout-align="start center" class="btn-align">
 			<md-button ng-if="vm.project.type == 'PD-Project'" class="md-primary md-icon-button" ng-style="vm.isManager ? 'margin-left: 30px;' : ''"
-				ng-click="doPDF()" aria-label="Download PDF med grupper">
+			    ng-click="doPDF()" aria-label="Download PDF med grupper">
 				<md-tooltip md-direction="top">{{'MEMBER.DOWNLOAD_PDF' | translate}}</md-tooltip>
-				<i class='material-icons'>picture_as_pdf</i>
+				<md-icon>picture_as_pdf</md-icon>
 			</md-button>
 
 			<span flex></span>
 
-			<md-button ng-if="vm.isManager" class="md-primary md-icon-button" ng-click="editSiteGroups($event)"
-				aria-label="Tilføj gruppemedlemmer">
+			<md-button ng-if="vm.isManager" class="md-primary md-icon-button" ng-click="editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">
 				<md-tooltip md-direction="top">{{vm.project.type == 'PD-Project' ? 'MEMBER.ADD_REMOVE_MEMBERS' : 'MEMBER.ADD_MEMBER'| translate}}</md-tooltip>
-				<i class="material-icons">person_add</i>
+				<md-icon>person_add</md-icon>
 			</md-button>
 		</md-card-actions>
 	</md-card-content>

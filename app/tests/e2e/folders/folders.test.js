@@ -1,34 +1,44 @@
-var globalHeader = require('../common/globalHeader.po.js');
-var createFolderPage = require('./createFolderPage.po.js');
-var deleteFolderPage = require('./deleteFolderPage.po.js');
 var constants = require('../common/constants');
-var loginPage = require('../login/loginPage.po.js');
+var projectHelper = require('../projects/projectHelper.js');
+var documentHelper = require('../documents/documentHelper.js');
+var createFolderPage = require('./createFolderPage.po.js');
+var renameFolderPage = require('./renameFolderPage.po.js');
+var deleteFolderPage = require('./deleteFolderPage.po.js');
 
-describe('OpenDesk FOLDERS', function() {
+describe('OpenDesk folders', function () {
 
-    it('should be able to be CREATED', function() {
+    it('should go to the default project', function () {
+        projectHelper.openDefaultProject();
+    });
 
-        browser.get("http://localhost:8000/#/projekter/" + constants.PROJECT_NAME_1).then (function(response) {
-            createFolderPage.createFolder();
-            
-            //the created folder is represented in the list
-            expect(createFolderPage.getFolderList().getText()).toMatch(constants.folder_to_be_created_and_deleted);
+    it('create a new folder', function () {
+        createFolderPage.openCreateFolderDialog();
+        createFolderPage.fillInputFields(constants.FOLDER);
+        createFolderPage.createFolder();
+
+        documentHelper.findDocumentInList(constants.FOLDER).then(function (response) {
+            expect(response.length).toBe(1);
         });
     });
 
+    it('should rename the folder', function() {
+        renameFolderPage.renameFolder(constants.FOLDER,constants.FOLDER_RENAME);
 
-    it('should be able to be DELETED', function() {
-
-        browser.get("http://localhost:8000/#/projekter/" + constants.PROJECT_NAME_1).then (function(response) {
-            deleteFolderPage.deleteFolder();
-
-            //the deleted folder is not represented in the list
-            expect(deleteFolderPage.getFolderList().getText()).not.toMatch(constants.folder_to_be_created_and_deleted);
+        documentHelper.findDocumentInList(constants.FOLDER_RENAME).then(function (response) {
+            expect(response.length).toBe(1);
         });
     });
 
+    it('should delete folder', function () {
+        deleteFolderPage.deleteFolder(constants.FOLDER_RENAME);
 
+        documentHelper.findDocumentInList(constants.FOLDER_RENAME).then(function (response) {
+            expect(response.length).toBe(0);
+        });
+    });
+
+    it('should go back to project list', function () {
+        projectHelper.backToProjects();
+    });
 
 });
-
-

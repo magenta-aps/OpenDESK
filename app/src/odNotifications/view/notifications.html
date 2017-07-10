@@ -2,22 +2,22 @@
 <section  class="od-notifications" ng-controller="NotificationsController as nc">
 
     <button ng-click="nc.toggleNotices();nc.setAllSeen()" class="od-btn od-notifications--toggle">
-        <i class="material-icons">notifications</i>
+        <md-icon>notifications</md-icon>
         <span ng-if="notifications[0].unseen > 0" class="od-notifications--counter">{{ notifications[0].unseen }}</span>
     </button>
 
     <div class="od-flyout right" ng-class="{ open: nc.on, closed: !nc.on }" ng-click="nc.toggleNotices()">
         <div class="od-flyout--body" ng-click="$event.stopPropagation()">
-            <h2 class="od-flyout--title">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</h2>
+            <h2 class="od-flyout--title md-headline">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</h2>
             <button ng-click="nc.toggleNotices()" class="od-btn od-flyout--close">
-                <i class="material-icons">keyboard_arrow_right</i>
+                <md-icon>keyboard_arrow_right</md-icon>
             </button>
 
             <ul class="od-notifylist">
                 <li ng-repeat="notice in notifications[1] | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                     <span class="od-notifylist--item--link">
                         <a href="{{ notice.link }}" ng-click="nc.toggleNotices();nc.setRead(notice.nodeRef)">
-                        <h3 class="od-notifylist--item--notice od-primary">{{ notice.subject }}</h3>
+                        <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p ng-if="notice.type == 'review-request'" class="od-notifylist--item--desc">{{notice.from}} har bedt dig om at reviewe <i>{{notice.filename}}</i> i projektet {{notice.project}}</p>
                         <p ng-if="notice.type == 'review-approved'"  class="od-notifylist--item--desc">{{notice.from}} har godkendt <i>{{notice.filename}}</i> i projektet {{notice.project}} med en kommentar</p>
                         <p ng-if="notice.type == 'review-rejected'"  class="od-notifylist--item--desc">{{notice.from}} har afvist <i>{{notice.filename}}</i> i projektet {{notice.project}} med en kommentar</p>

@@ -10,9 +10,9 @@
 
 .od-discussion {
     display: block;
+    border-collapse: collapse;
     height: 400px;
     overflow-y: scroll;
-    border-collapse: collapse;
     .title {
         text-align: left !important;
     }

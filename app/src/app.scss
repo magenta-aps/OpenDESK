@@ -1,17 +1,44 @@
-/*
- * Sass constants
- */
+//
+// SASS constants
+//
 
-$main-color: rgb(63, 81, 181);
-// Main color. We use lighten() and darken() to make variations of this color
+$black: #000;
+$white: #fff;
+
+$gray-90: #eee;
+$gray-85: #ddd;
+$gray-80: #ccc;
+$gray-60: #999;
+$gray-40: #666;
+$gray-20: #333;
+
+$primary-color: rgb(63, 81, 181);
+$primary-color-light: lighten($primary-color, 15%);
+$primary-color-dark: darken($primary-color, 15%);
+
+$secondary-color: rgb(255, 215, 89);
+$secondary-color-light: lighten($secondary-color, 15%);
+$secondary-color-dark: darken($secondary-color, 15%);
+
+$primary-text-color: rgba($black, .87);
+$secondary-text-color: $white;
+$gray-text-color: rgba($black, .38);
+$dark-gray-text-color: rgba($black, .54);
+
+$headline-color: $white;
+
+$overlay: rgba($black, .4);
+$card-shadow: rgba($black, .2);
+
 $u: 16px;
 // Unit of measurement - usually default font size
 $br-sm-md: $u * 40;
 // Breakpoint between small and medium screens
 
-/*
- * Element level (atom) styles
- */
+//
+// Mixins
+//
+
 @mixin fade-in {
   opacity: 1;
   transition: opacity .25s ease-in;
@@ -23,35 +50,31 @@ $br-sm-md: $u * 40;
 }
 
 
-.z-index-0 {
-  z-index: 0 !important;
-}
+//
+// Element level (atom) styles
+//
 
 a {
   &,
   &:link,
   &:visited {
-    color: $main-color;
+    color: $gray-text-color;
     text-decoration: none;
+  }
+
+  &:hover,
+  &:active {
+    color: $dark-gray-text-color;
+    text-decoration: underline;
   }
 }
 
-a:hover,
-a:active {
-  color: darken($main-color, 20%);
-  text-decoration: underline;
-}
-
 body {
-  background: #ddd;
-}
-
-article {
-  padding: $u $u * 2;
-}
-
-hr {
-  padding: 0;
+  background: $gray-85;
+  color: $primary-text-color;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
 }
 
 img {
@@ -61,22 +84,18 @@ img {
 
 dl {
   dt {
-    color: lighten($main-color, 20%);
+    color: $primary-color-light, 20%;
     font-size: $u * .9;
   }
+
   dd {
     margin: 0;
     padding: 0 0 $u;
   }
 }
 
-fieldset {
-  border: solid 1px #eee;
-  margin-bottom: $u;
-}
-
-legend {
-  opacity: .66;
+md-icon {
+  color: $primary-text-color;
 }
 
 // Muted (greyed) text
@@ -86,266 +105,155 @@ legend {
 }
 
 
-/*
- * Molecule level styles
- */
+//
+// Molecule level styles
+//
 
-.od-app {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-}
-
-.od-body {
+main {
   margin: $u * 3 0 auto;
-}
-
-.od-content-height {
-  height: calc(100vh - 48px - #{$u * 9}) !important;
-}
-
-.od-list-height {
-  height: calc(100vh - 48px - #{$u * 20}) !important;
-}
-
-// Title that is placed in the header
-.od-title {
-  color: #fff;
-  font-size: $u * 1.5;
-  font-weight: normal;
-  left: $u * 3;
-  line-height: 1;
-  right: $u * 6;
-  position: fixed;
-  width: 30%;
-  top: 0;
-  margin: 0;
-  padding: $u * .75 $u;
-  z-index: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-// Basic styled list
-.od-list {
-  margin: $u 0;
-  padding: 0;
-  list-style: none;
-  li {
-    display: block;
-    background-color: #eee;
-    margin-top: 1px;
-    padding: $u*0.5 $u;
-  }
-}
-
-// Simple button class can be added to <a> or <button> elements
-.od-btn {
-  &,
-  &:link,
-  &:visited {
-    display: inline-block;
-    box-sizing: border-box;
-    background-color: darken($main-color, 20%);
-    color: #fff;
-    padding: $u * .5;
-    min-width: $u * 3;
-    min-height: $u * 3;
-    text-align: center;
-    border: none;
-  }
-  &:hover,
-  &:active {
-    background-color: darken($main-color, 30%);
-    text-decoration: none;
-  }
-  &.disabled {
-    background-color: #999;
-    cursor: inherit;
-  }
-  .material-icons {
-    font-size: $u * 2;
-  }
-  &.od-btn-small {
-    transform: scale(.75);
-  }
 }
 
 // Sliding sidebar
 .od-flyout {
-  display: block;
-  position: fixed;
-  top: 0;
+  background-color: $overlay;
   bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
+  display: block;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 5;
+  left: 0;
   opacity: 0;
-  transition: all .3s;
-  transition-timing-function: ease-in-out;
   pointer-events: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: all .3s ease-in-out;
+  width: 100%;
+  z-index: 5;
+
   .od-flyout--body {
-    background-color: #fff;
-    color: #000;
-    width: $u*20;
-    position: absolute;
+    background-color: $white;
+    bottom: 0;
+    color: $primary-text-color;
     display: flex;
     flex-flow: column nowrap;
-    top: 0;
-    bottom: 0;
-    right: 0;
     height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
     transform: translateX(100%);
+    width: $u * 20;
   }
-  &.right .od-flyout--body {
+
+  &.right {
     right: 0;
   }
-  &.left .od-flyout--body {
+
+  &.left {
     left: 0;
   }
+
   &.open {
-    pointer-events: auto;
     opacity: 1;
+    pointer-events: auto;
     transform: translateX(0);
+
     .od-flyout--body {
-      transition: all .5s;
       transform: translateX(0);
+      transition: transform .5s;
     }
   }
+
   &.closed {
     opacity: 0;
+
     .od-flyout--body {
-      transition: all .5s;
       transform: translateX(1);
+      transition: transform .5s;
     }
   }
+
   .od-flyout--title {
-    font-size: $u * 1.5;
-    background-color: $main-color;
-    color: #fff;
-    padding: $u * .625 $u;
-    margin: 0;
-    height: $u * 3;
+    background-color: $primary-color;
     box-sizing: border-box;
+    color: $headline-color;
+    //font-size: $u * 1.5;
+    height: $u * 3;
+    margin: 0;
+    padding: $u * .625 $u;
   }
+
   .od-flyout--close {
     background-color: transparent;
     position: absolute;
-    top: 0;
     right: 0;
+    top: 0;
+
     &:hover,
     &:active {
-      background-color: rgba(0, 0, 0, .3);
+      background-color: $overlay;
     }
   }
 }
 
 .od-breadcrumb {
-  padding: 8px 15px;
-  margin-bottom: 20px;
-  list-style: none;
-  background-color: #f5f5f5;
+  background-color: $gray-90;
   border-radius: 4px;
+  list-style: none;
+  margin-bottom: 20px;
+  padding: $u * .5 $u;
+  min-height: 1em;
 
   li {
     display: inline-block;
 
-    &:not(:last-child):after {
+    &:not(:last-child)::after {
       content: '/';
       padding: 0 4px;
-      }
     }
+  }
 }
 
 // Icons in buttons
-.md-button .material-icons {
-  vertical-align: middle;
-  margin-top: -($u * .25);
+.md-button {
+  .material-icons {
+    margin-top: -($u * .25);
+    vertical-align: middle;
+  }
 }
 
 .md-text-icon-button {
   padding-right: $u;
 }
 
-
-/*
- * General media queries 
- */
-
-// Screens larger than small (breaks between small and medium screens)
-@media screen and (min-width: $br-sm-md) {}
-
 //make the chat window appear behind notifcation slide out
 #conversejs {
-  z-index: 0 !important;
+  z-index: 0;
 }
 
 //Search results
-.search-documents-container,
 .search-documents {
   width: 400px;
-}
 
-.search-documents li {
-  border-bottom: 1px solid #ccc;
-  height: auto;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  white-space: normal;
-  min-width: 200px;
-}
+  li {
+    border-bottom: 1px solid $gray-80;
+    height: auto;
+    min-width: 200px;
+    padding-bottom: $u * .5;
+    padding-top: $u * .5;
+    white-space: normal;
 
-.search-documents li:last-child {
-  border-bottom-width: 0;
-}
+    &:last-child {
+      border-bottom-width: 0;
+    }
+  }
 
-.search-documents.item-title,
-.search-documents .item-metadata {
-  display: block;
-  line-height: 2;
-}
+  .item-title,
+  .item-metadata {
+    display: block;
+    line-height: 2;
 
-.search-documents .item-title md-icon {
-  height: 18px;
-  width: 18px;
-}
-
-//Rotation in document preview
-.rotate0 {
-  -webkit-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-
-.rotate90 {
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-
-.rotate180 {
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-
-.rotate270 {
-  -webkit-transform: rotate(270deg);
-  transform: rotate(270deg);
-}
-
-//fixed header for document preview
-.pdf-controls {
-  @include fade-out;
-  width: 100%;
-  display: block;
-  background: rgba(238, 238, 238, .9);
-  padding: 1em;
-  position: absolute;
-  z-index: 1;
-
-  &:hover {
-    @include fade-in;
+    md-icon {
+      height: 18px;
+      width: 18px;
+    }
   }
 }

@@ -6,8 +6,10 @@
 
     <div layout='row'>
         <md-card ng-show="contentLength > 0" class="od-filter-sidebar transition" ng-class="showFilters ? 'flex-15' : ''" flex='0'>
+            <md-card-title>
+				<h3 class="md-title">{{'COMMON.FILTER' | translate}}</h3>
+			</md-card-title>
             <md-card-content>
-
                 <section class="facetgroup" data-ng-repeat="facet in facets" ng-if="(fullSearchResults.results | filter: search).length > 0">
 
                 <md-input-container class="md-block">
@@ -23,11 +25,13 @@
         </md-card>
 
         <md-card flex>
-            <md-card-content>
+            <md-card-title>
                 <md-button ng-show="contentLength > 0" aria-label="filter" class="md-icon-button" ng-click="toggleFilters()">
                     <md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
                     <md-icon>filter_list</md-icon>
                 </md-button>
+            </md-card-title>
+            <md-card-content>
 
                 <md-list>
                     <table ng-show="contentLength > 0" class="od-members od-members-row">
@@ -55,7 +59,7 @@
                                 </td>
                                 <td>
                                     <div ng-if="item.type == 'document'">
-                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link od-primary" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
                                             {{ item.displayName }}
                                         </a>
                                     </div>

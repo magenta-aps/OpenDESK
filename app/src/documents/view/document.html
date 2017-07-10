@@ -1,5 +1,5 @@
 <h1 class="od-title">
-	<span class="od-back-btn" ui-sref="projects"><i class="material-icons">arrow_back</i> {{'COMMON.BACK' | translate}}</span>
+	<span class="od-back-btn" ui-sref="projects"><md-icon>arrow_back</md-icon> {{'COMMON.BACK' | translate}}</span>
 	<span ng-if="vm.type == vm.strings.templateProject">{{'COMMON.TEMPLATEPROJECT' | translate}} :</span>
 	<span ng-if="vm.type == 'PD-Project'">{{'PROJECT.PROJECT' | translate}} :</span>
 	<span ng-if="vm.type == 'Project'">{{'PROJECT.GROUPROOM' | translate}} :</span> {{ vm.title }}
@@ -7,36 +7,27 @@
 <div>
 	<div layout="row">
 		<md-card flex="75">
-			<md-content class="od-content-height" layout="column" layout-padding>
-				<div layout="row">
-					<div>
-						<h1 class="md-headline">
-							{{ vm.doc.fileName }}
-						</h1>
-					</div>
-					<span flex></span>
-					<div ng-show="vm.canEdit" style="position: relative; top: 10px;">
-						<md-button ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
-							<i class='material-icons'>edit</i>
-							<span>{{'DOCUMENT.EDIT_DOCUMENT' | translate}}</span>
-						</md-button>
-					</div>
-					<!--div style="position: relative; top: 10px;">
-						<md-button ng-click="vm.openPDF()" class="md-text-icon-button md-primary">
-							<i class='material-icons'>edit</i>
-							<span>{{'DOCUMENT.PRINT' | translate}}</span>
-						</md-button>
-					</div-->
-				</div>
-
+			<md-card-title layout="row">
+				<h3 class="md-title">{{ vm.doc.fileName }}</h3>
+			</md-card-title>
+			<md-card-content layout="column" layout-padding>
 				<breadcrumb paths="vm.paths"></breadcrumb>
 
-				<div layout-sm="column" layout="row">
-					<div style="max-width:1500px;height:600px; overflow: auto;" flex-gt-sm="66">
-						<ng-include src="viewerTemplateUrl"></ng-include>
-					</div>
+				<div style="max-width:1500px; overflow: auto;">
+					<ng-include src="viewerTemplateUrl"></ng-include>
 				</div>
-			</md-content>
+			</md-card-content>
+			<md-card-actions layout="row">
+				<span flex></span>
+				<!--<md-button ng-click="vm.openPDF()" class="md-text-icon-button md-primary">
+					<md-icon>print</md-icon>
+					<span>{{'DOCUMENT.PRINT' | translate}}</span>
+				</md-button>-->
+				<md-button ng-show="vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
+					<md-icon>edit</md-icon>
+					<span>{{'DOCUMENT.EDIT_DOCUMENT' | translate}}</span>
+				</md-button>
+			</md-card-actions>
 		</md-card>
 
 		<div flex="25">

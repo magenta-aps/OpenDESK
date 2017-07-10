@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.systemsettings').factory('systemSettingsService', function ($http, $window, alfrescoNodeUtils, userService, documentService, groupService) {
+angular.module('openDeskApp.systemsettings').factory('systemSettingsService', function ($http, $window, alfrescoNodeUtils, userService, documentService) {
 
     var restBaseUrl = '/alfresco/s/api/';
 
