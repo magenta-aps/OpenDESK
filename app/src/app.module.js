@@ -41,23 +41,10 @@ angular
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, APP_CONFIG) {
-        var ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
+        $rootScope.ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled == "true";
         angular.element(window.document)[0].title = APP_CONFIG.appName;
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
-
-        if (!authService.isAuthenticated()) {
-            if (ssoLoginEnabled) {
-                authService.ssoLogin().then(function (response) {
-                    if (!authService.isAuthenticated()) {
-                        sessionService.retainCurrentLocation();
-                        $state.go('login');
-                    }
-                    else
-                        $state.reload();
-                });
-            }
-        }
     });
 
 function config($stateProvider, $urlRouterProvider) {
@@ -70,16 +57,25 @@ function config($stateProvider, $urlRouterProvider) {
         abstract: true,
         resolve: {
             authorize:
-                ['authService', '$q', 'sessionService', '$state', function (authService, $q, sessionService, $state) {
+                ['authService', '$q', 'sessionService', '$state', '$rootScope', function (authService, $q, sessionService, $state,
+                                                                            $rootScope) {
                 var d = $q.defer();
                 if (authService.isAuthenticated()) {
                     // I also provide the user for child controllers
                     d.resolve(authService.user);
                 } else {
                     // here the rejection
-                    d.reject('Not logged in!');
-                    sessionService.retainCurrentLocation();
-                    $state.go('login');
+                    if ($rootScope.ssoLoginEnabled) {
+                        authService.ssoLogin().then(function (response) {
+                            if (authService.isAuthenticated())
+                                d.resolve(authService.user);
+                        });
+                    }
+                    else {
+                        d.reject('Not logged in!');
+                        sessionService.retainCurrentLocation();
+                        $state.go('login');
+                    }
                 }
                 return d.promise;
             }]
