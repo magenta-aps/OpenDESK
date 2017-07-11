@@ -407,7 +407,13 @@ angular.module('openDeskApp.sites').factory('siteService', function ($http, $win
             }).then(function (response) {
                 return response;
             });
-        }
+        },
+
+        getNode: function (siteName, container, path) {
+            return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function(response) {
+                return response.data;
+            });
+        },
 
     };
 });

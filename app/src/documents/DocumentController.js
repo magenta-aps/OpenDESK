@@ -5,7 +5,7 @@ angular.module('openDeskApp.documents')
 
 function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
                             documentPreviewService, alfrescoDownloadService, sessionService,
-                            $mdDialog, notificationsService, authService, cmisService, siteService, $window) {
+                            $mdDialog, notificationsService, authService, siteService, $window) {
 
     var vm = this;
     vm.doc = [];
@@ -107,12 +107,9 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         } else {
             documentService.getDocument(docHasParent ? parentDocumentNode : selectedDocumentNode).then(function (response) {
 
-                var cmisQuery = response.item.location.site + "/documentLibrary" + response.item.location.path
+                siteService.getNode(response.item.location.site, "documentLibrary", response.item.location.path).then(function (val) {
 
-
-                cmisService.getNode(cmisQuery).then(function (val) {
-
-                    var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                    var currentFolderNodeRef = val.parent.nodeRef;
 
                     siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function (response) {
                         var param = docHasParent ? parentDocumentNode : selectedDocumentNode;

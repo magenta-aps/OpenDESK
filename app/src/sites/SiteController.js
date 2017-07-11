@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisService, $stateParams, documentPreviewService,
+function SiteController($scope, $timeout, $mdDialog, $window, siteService, $stateParams, documentPreviewService,
     alfrescoDownloadService, documentService, notificationsService, authService, $rootScope, $translate,
     searchService, $state, userService, sessionService, filterService, fileUtilsService, groupService) {
 
@@ -89,10 +89,8 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
                 // Compile paths for breadcrumb directive
                 vm.paths = buildBreadCrumbPath(vm.project.title);
 
-                vm.currentFolderNodeRef_cmisQuery = vm.project.shortName + "/documentLibrary/" + vm.path;
-
-                cmisService.getNode(vm.currentFolderNodeRef_cmisQuery).then(function (val) {
-                    vm.currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                siteService.getNode(vm.project.shortName, "documentLibrary", vm.path).then(function (val) {
+                    vm.currentFolderNodeRef = val.parent.nodeRef;
                     vm.currentFolderUUID = vm.currentFolderNodeRef.split("/")[3];
                     // The loading function for contents depend on the currentFolder variables having been read beforehand
                     vm.loadContents();
@@ -377,11 +375,9 @@ function SiteController($scope, $timeout, $mdDialog, $window, siteService, cmisS
     vm.uploadNewVersion = function (file, nodeRef) {
         documentService.getDocument(nodeRef).then(function (response) {
 
-            var cmisQuery = response.item.location.site + "/documentLibrary" + response.item.location.path
+            siteService.getNode(response.item.location.site, "documentLibrary", response.item.location.path).then(function (val) {
 
-            cmisService.getNode(cmisQuery).then(function (val) {
-
-                var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                var currentFolderNodeRef = val.parent.nodeRef;
 
                 siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function (response) {
                     vm.loadContents();

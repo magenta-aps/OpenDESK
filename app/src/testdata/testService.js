@@ -2,7 +2,7 @@
 
 
 
-angular.module('openDeskApp.testdata').factory('testService', function ($http, $window, alfrescoNodeUtils, siteService, cmisService, $q) {
+angular.module('openDeskApp.testdata').factory('testService', function ($http, $window, alfrescoNodeUtils, siteService, $q) {
 
 
     var restBaseUrl = '/alfresco/service';
@@ -38,15 +38,14 @@ angular.module('openDeskApp.testdata').factory('testService', function ($http, $
                 console.log("upload til " + siteName);
 
                 var currentFolderNodeRef;
-                var cmisQuery = siteName + "/documentLibrary/";
 
-                return cmisService.getNode(cmisQuery).then(function (val) {
+                return siteService.getNode(siteName, "documentLibrary", "").then(function (val) {
 
                     console.log("hej: " + ":" + siteName + ":= "+ val);
 
-                    currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                    currentFolderNodeRef = val.parent.nodeRef;
 
-                    console.log("hej fra cmisService: " + siteName + " : " + currentFolderNodeRef);
+                    console.log("hej fra siteService: " + siteName + " : " + currentFolderNodeRef);
 
                     for (var i in files) {
 
