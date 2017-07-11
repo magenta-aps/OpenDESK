@@ -84,7 +84,7 @@
                 </md-tab>
 
                 <md-tab label="{{'GROUP.GROUPS' | translate}}">
-                    <md-content id="groups" layout="row" layout-padding style="width:100%">
+                    <md-content id="groups" layout="column" layout-padding style="width:100%">
 
                         <div ng-repeat="(groupIndex, group) in newSite.groups" ng-if="group.multipleMembers" flex="100">
                             <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
