@@ -1,6 +1,6 @@
-<breadcrumb paths="vm.paths"></breadcrumb>
+<breadcrumb paths="vm.paths" id="filebrowser-breadcrumb"></breadcrumb>
 
-<md-list class="sort-head" ng-show="contentLength > 0">
+<md-list class="sort-head" ng-show="contentLength > 0" id="table-container">
     <table class="od-members od-members-row">
         <thead ng-show="contentLength > 0" fix-head>
             <tr>
@@ -49,7 +49,7 @@
         </md-menu>
     </div>
 
-    <div layout="column">
+    <div layout="column" id="table-actions">
         <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
             <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
                 <md-icon>note_add</md-icon>

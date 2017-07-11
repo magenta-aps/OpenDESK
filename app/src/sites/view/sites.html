@@ -57,7 +57,7 @@
 		</md-card>
 
 		<md-card flex>
-			<md-card-title>
+			<md-card-title id="table-header">
 				<md-button aria-label="filter" class="md-icon-button" ng-click="vm.toggleFilters()">
 					<md-tooltip ng-if="vm.project.type != 'PD-Project'" md-direction="top">{{'COMMON.FILTER' | translate}}</md-tooltip>
 					<md-icon>filter_list</md-icon>
@@ -65,7 +65,7 @@
 			</md-card-title>
 			<md-card-content>
 
-				<md-list class="">
+				<md-list id="table-container">
 					<table class="od-members od-members-row">
 						<col style="width:32px">
 						<col style="width:40%">
@@ -135,6 +135,7 @@
 											</md-menu-item>
 											<md-menu-item ng-if="project.current_user_role == vm.managerRole || vm.isAdmin">
 												<md-button ng-click="vm.deleteSiteDialog(project, $event)" aria-label="remove">
+													
 													<!--shortname-->
 													<md-icon md-menu-align-target>remove_circle_outline</md-icon>
 													{{'COMMON.REMOVE' | translate}}
@@ -148,11 +149,11 @@
 					</table>
 				</md-list>
 				<div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
-			<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
-		</div>
+					<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+				</div>
 				<md-divider></md-divider>
 
-				<md-card-actions ng-controller="SiteCreateController as sc" layout="row" layout-align="start center" class="btn-align">
+				<md-card-actions ng-controller="SiteCreateController as sc" layout="row" layout-align="start center" class="btn-align" id="table-actions">
 					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}">
 						<md-icon>add</md-icon>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</span>

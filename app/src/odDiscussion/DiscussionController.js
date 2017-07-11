@@ -14,6 +14,10 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     dc.user = '';
     dc.isLoading = true;
 
+    //sets the margin to the width of sidenav
+	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("md-tabs-wrapper").outerHeight();
+    $(".od-discussion").css("max-height", tableHeight+"px");
+
     dc.getDiscussions = function (siteShortName) {
         dc.isLoading = true;
         discussionService.getDiscussions(siteShortName).then(function (response) {
