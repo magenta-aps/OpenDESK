@@ -12,7 +12,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.plugin = [];
     vm.paths = [];
     vm.title = [];
-    vm.type = siteService.getType();
+    vm.type = siteService.getSite().type;
     vm.canEdit = false;
 
     vm.showArchived = false;
@@ -137,7 +137,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         var NID = $location.search().NID;
 
         notificationsService.getInfo(NID).then(function (response) {
-            $scope.wf_comment = response.comment;
+            $scope.wf_comment = response.message;
         });
 
 
@@ -147,7 +147,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
         var NID = $location.search().NID;
         notificationsService.getInfo(NID).then(function (response) {
-            $scope.wf_comment = response.comment;
+            $scope.wf_comment = response.message;
         });
     }
 
