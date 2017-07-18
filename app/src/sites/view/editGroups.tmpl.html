@@ -24,11 +24,16 @@
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 						</h4>
 						<div ng-show="showGroupList[groupIndex]">
-							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
+							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
+									  md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
 							    md-on-add="addMemberToSite($chip, group[0].shortName)">
-								<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+								<md-autocomplete md-selected-item="selectedProjGrpItem"
+												 md-search-text="searchTextList[groupIndex]"
+												 md-items="pgitem in searchPeople(searchTextList[groupIndex])"
 								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
-									<span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
+									<span md-highlight-text="searchTextList[groupIndex]" md-highlight-flags="gi">
+										{{ pgitem.displayName }}
+									</span>
 								</md-autocomplete>
 								<md-chip-template>
 									<span>{{ $chip.displayName }}</span>

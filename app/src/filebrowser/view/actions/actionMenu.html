@@ -5,63 +5,63 @@
 
     <md-menu-content width="4">
         <md-menu-item ng-if="content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
+            <md-button ng-click="downloadDocument(content.nodeRef, content.name)">
                 <md-icon md-menu-align-target>get_app</md-icon>
                 {{'COMMON.DOWNLOAD' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.previewDocument(content.nodeRef)">
+            <md-button ng-click="previewDocument(content.nodeRef)">
                 <md-icon md-menu-align-target>search</md-icon>
                 {{'COMMON.PREVIEW' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.goToLOEditPage(content.nodeRef)">
+        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="goToLOEditPage(content.nodeRef)">
                 <md-icon md-menu-align-target>library_books</md-icon>
                 {{'COMMON.EDIT' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
+        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="reviewDocumentsDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document' && vm.project.type != vm.strings.templateProject">
-            <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef)">
+        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document' && site.type != strings.templateProject">
+            <md-button ng-click="uploadNewVersionDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="vm.canEdit && content.contentType != 'cmis:link'">
-            <md-button ng-click="vm.renameDocumentDialog($event, content)">
+        <md-menu-item ng-if="permissions.canEdit && content.contentType != 'cmis:link'">
+            <md-button ng-click="renameContentDialog($event, content)">
                 <md-icon md-menu-align-target>create</md-icon>
                 {{'COMMON.RENAME' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="vm.moveFileDialog($event, content.nodeRef, content.parentNodeRef)">
+            <md-button ng-click="moveContentDialog($event, content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>compare_arrows</md-icon>
                 {{'COMMON.MOVE' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="vm.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.copyFileDialog($event, content.nodeRef, content.parentNodeRef)">
+        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="copyContentDialog($event, content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>content_copy</md-icon>
                 {{'COMMON.COPY' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="vm.deleteFileDialog($event, content)">
+            <md-button ng-click="deleteContentDialog($event, content)">
                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                 {{'COMMON.REMOVE' | translate }}
             </md-button>

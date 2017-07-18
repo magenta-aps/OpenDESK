@@ -4,7 +4,7 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
-                            documentPreviewService, alfrescoDownloadService, sessionService,
+                            documentPreviewService, alfrescoDownloadService, sessionService, alfrescoNodeUtils,
                             $mdDialog, notificationsService, authService, siteService, $window) {
 
     var vm = this;
@@ -213,9 +213,16 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             var pathLink = '/';
             for (var a in pathArr) {
                 if (pathArr[a] !== '') {
+                    var link;
+                    if(response.item.location.site == "") {
+                        link = '#!/dokumenter' + pathLink + pathArr[a];
+                    }
+                    else {
+                        link = '#!/projekter/' + response.item.location.site + vm.documentTab + pathLink + pathArr[a];
+                    }
                     paths.push({
                         title: pathArr[a],
-                        link: '#!/projekter/' + response.item.location.site + vm.documentTab + pathLink + pathArr[a]
+                        link: link
                     });
                     pathLink = pathLink + pathArr[a] + '/';
                 };

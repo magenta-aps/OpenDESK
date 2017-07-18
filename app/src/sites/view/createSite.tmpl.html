@@ -37,7 +37,7 @@
                                 md-item-text="own.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}"
                                 placeholder="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}">
                                 <md-item-template>
-                                    <span md-highlight-text="prjownsrchtxt" md-highlight-flags="^i">{{ own.displayName }}</span>
+                                    <span md-highlight-text="prjownsrchtxt" md-highlight-flags="gi">{{ own.displayName }}</span>
                                 </md-item-template>
                                 <md-not-found>
                                     {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ prjownsrchtxt }}".
@@ -69,7 +69,7 @@
                                 md-item-text="man.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}"
                                 placeholder="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}">
                                 <md-item-template>
-                                    <span md-highlight-text="newSite.presetManager" md-highlight-flags="^i">{{ man.displayName }}</span>
+                                    <span md-highlight-text="newSite.presetManager" md-highlight-flags="gi">{{ man.displayName }}</span>
                                 </md-item-template>
                                 <md-not-found>
                                     {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ newSite.presetManager }}".
@@ -97,7 +97,7 @@
                                     md-on-add="addMemberToSite($chip, group.shortName)">
                                     <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
                                         md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
-                                        <span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
+                                        <span md-highlight-text="searchTextList[groupIndex]" md-highlight-flags="gi">{{ pgitem.displayName }}</span>
                                     </md-autocomplete>
                                     <md-chip-template>
                                         <span>{{ $chip.displayName }}</span>

@@ -15,7 +15,7 @@ function config($stateProvider, USER_ROLES) {
                 controllerAs: 'vm'
             }
         },
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.user]
         }
     });

@@ -8,7 +8,6 @@ angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
             });
         });
 
-
 function config($stateProvider, USER_ROLES) {
 
     $stateProvider.state('project', {
@@ -21,7 +20,7 @@ function config($stateProvider, USER_ROLES) {
                 controllerAs: 'vm'
             },
         },
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.user]
         }
 
@@ -30,18 +29,20 @@ function config($stateProvider, USER_ROLES) {
         url: '/dokumenter{path:.*}',
         views: {
             'filebrowser': {
-                templateUrl: 'app/src/sites/view/filebrowser.html',
-                controller: 'SiteController',
-                controllerAs: 'vm'
+                templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+                controller: 'FilebrowserController',
+                controllerAs: 'fc'
             }
         },
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.user],
-            selectedTab: 0
+            selectedTab: 0,
+            folderNodeRef: null,
+            isSite: true
         }
     }).state('project.discussions', {
         url: '/diskussioner',
-        data: {
+        params: {
             selectedTab: 1
         },
         views: {
@@ -54,7 +55,7 @@ function config($stateProvider, USER_ROLES) {
     })
     .state('project.viewthread', {
         url: '/diskussioner/{path:.*}',
-        data: {
+        params: {
             selectedTab: 1
         },
         views: {

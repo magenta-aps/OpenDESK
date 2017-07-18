@@ -15,6 +15,7 @@ angular
         'openDeskApp.auth',
         'openDeskApp.sites',
         'openDeskApp.site',
+        'openDeskApp.filebrowser',
         'openDeskApp.translations.init',
         'openDeskApp.header',
         'openDeskApp.dashboard',
@@ -57,22 +58,29 @@ function config($stateProvider, $urlRouterProvider) {
         abstract: true,
         resolve: {
             authorize:
-                ['authService', '$q', 'sessionService', '$state', '$rootScope', function (authService, $q, sessionService, $state,
-                                                                            $rootScope) {
+                ['authService', '$q', 'sessionService', '$state', '$rootScope', '$stateParams',
+                    function (authService, $q, sessionService, $state, $rootScope, $stateParams) {
                 var d = $q.defer();
-                if (authService.isAuthenticated()) {
+                    var test = $state.target();
+                    var test2 = $state.target;
+                if (authService.isAuthenticated() && authService.isAuthorized($stateParams.authorizedRoles)) {
                     // I also provide the user for child controllers
                     d.resolve(authService.user);
                 } else {
                     // here the rejection
                     if ($rootScope.ssoLoginEnabled) {
                         authService.ssoLogin().then(function (response) {
-                            if (authService.isAuthenticated())
+                            if (authService.isAuthenticated() && authService.isAuthorized($stateParams.authorizedRoles))
                                 d.resolve(authService.user);
+                            else {
+                                d.reject('Not logged in or lacking authorization!');
+                                sessionService.retainCurrentLocation();
+                                $state.go('login');
+                            }
                         });
                     }
                     else {
-                        d.reject('Not logged in!');
+                        d.reject('Not logged in or lacking authorization!');
                         sessionService.retainCurrentLocation();
                         $state.go('login');
                     }

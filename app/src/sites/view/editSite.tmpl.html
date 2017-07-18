@@ -34,7 +34,7 @@
                         md-clear-button=true
                         placeholder="{{'PROJECT.PROJECTOWNER' | translate}}">
                         <md-item-template>
-                            <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ own.displayName }}</span>
+                            <span md-highlight-text="searchTextOwner" md-highlight-flags="gi">{{ own.displayName }}</span>
                         </md-item-template>
                         <md-not-found>
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextOwner }}".
@@ -71,7 +71,7 @@
                             md-clear-button=true
                             placeholder="{{'PROJECT.PROJECTLEAD' | translate}}">
                         <md-item-template>
-                            <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.displayName}}</span>
+                            <span md-highlight-text="searchTextManager" md-highlight-flags="gi">{{ man.displayName}}</span>
                         </md-item-template>
                         <md-not-found>
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".

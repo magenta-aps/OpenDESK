@@ -92,6 +92,7 @@
     "WITH": "With",
     "UPDATE": "Update",
     "FOLDER": "Folder",
+    "DOCUMENT": "Document",
     "CHOOSE": "Choose",
     "EMPTY_FOLDER": "This folder is empty",
     "NO_SEARCH_RESULTS" : "There are no matches to the search term",
@@ -103,7 +104,8 @@
     "CLOSEEDIT": "Close editing",
     "FILETYPE": "File type",
     "LOCAL_DOCUMENT": "Local document",
-    "REPLY": "Reply"
+    "REPLY": "Reply",
+    "EMPTY": "Empty"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"

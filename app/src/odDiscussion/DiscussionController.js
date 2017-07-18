@@ -2,8 +2,8 @@ angular
     .module('openDeskApp.discussion', ['ng.ckeditor'])
     .controller('DiscussionController', DiscussionController);
 
-function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
-    discussionService, nodeRefUtilsService, userService, sessionService, notificationsService, siteService, preferenceService) {
+function DiscussionController($scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
+    discussionService, nodeRefUtilsService, sessionService, notificationsService) {
     var dc = this;
 
     dc.discussions = [];
@@ -52,9 +52,8 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     function init() {
         dc.user = sessionService.getUserInfo().user;
         dc.getDiscussions($stateParams.projekt);
-        //getAllMembers($stateParams.projekt, 'PD-Project');
 
-        $scope.tab.selected = $state.current.data.selectedTab;
+        $scope.tab.selected = $stateParams.selectedTab;
 
         if ($stateParams.path) {
             discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path).then(function (response) {

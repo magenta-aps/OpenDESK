@@ -17,7 +17,7 @@ function config($stateProvider, USER_ROLES) {
             'header@': {},
             'footer@': {}
         },
-        data: {
+        params: {
             authorizedRoles: []
         }
     });

@@ -1,11 +1,11 @@
 <md-dialog aria-label="{{'COMMON.CREATE' | translate }} {{'PROJECT.PROJECTLINK' | translate | lowercase }}" ng-cloak>
-    <form name="createLink" ng-submit="vm.createLink(project);">
+    <form name="createLink" ng-submit="createProjectLink(project)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>{{'COMMON.CREATE' | translate }} {{'PROJECT.PROJECTLINK' | translate | lowercase }}</h2>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <md-button class="md-icon-button" ng-click="cancelDialog()">
                     <md-icon>close</md-icon>
                 </md-button>
             </div>

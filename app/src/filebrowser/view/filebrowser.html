@@ -1,29 +1,28 @@
-<breadcrumb paths="vm.paths" id="filebrowser-breadcrumb"></breadcrumb>
-
-<md-list class="sort-head" ng-show="contentLength > 0" id="table-container">
+<breadcrumb paths="paths" id="filebrowser-breadcrumb"></breadcrumb>
+<md-list class="sort-head" ng-show="contentListLength > 0" id="table-container">
     <table class="od-members od-members-row">
-        <thead ng-show="contentLength > 0" fix-head>
+        <thead ng-show="contentListLength > 0" fix-head>
             <tr>
                 <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                 <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
-                <th colspan="2">
+                <th ng-if="isSite" colspan="2">
                     <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
-                    <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToEsdh">
+                    <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="sendToSbsys">
                 </th>
             </tr>
         </thead>
-        <tbody ng-repeat="contentTypeList in contents">
-            <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder" ng-include="'app/src/sites/view/fileTableRow.tmpl.html'">
+        <tbody ng-repeat="contentTypeList in contentList">
+            <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
             </tr>
         </tbody>
     </table>
 </md-list>
 
-<div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
+<div ng-if="isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
     <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
 
-<div layout="column" ng-show="contentLength == 0 && !vm.isLoading">
+<div layout="column" ng-show="contentListLength == 0 && !isLoading">
     <md-icon class="md-icon--large">library_books</md-icon>
     <p class="md-display-1" style="text-align:center">{{'COMMON.EMPTY_FOLDER' | translate}}</p>
 </div>
@@ -32,32 +31,32 @@
 
 <md-card-actions layout="row" layout-align="start center" class="btn-align">
     <div layout="column">
-        <md-menu>
+        <md-menu ng-if="permissions.canEdit">
             <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}">
                 <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</md-tooltip>
                 <md-icon>file_upload</md-icon>
             </md-button>
             <md-menu-content>
                 <md-menu-item>
-                    <md-button ng-click="vm.uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
+                    <md-button ng-click="uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
                 </md-menu-item>
-                <md-menu-item ng-if="vm.project.type != vm.strings.templateProject">
-                    <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
+                <md-menu-item ng-if="isSite">
+                    <md-button ng-click="loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
                     </md-button>
                 </md-menu-item>
             </md-menu-content>
         </md-menu>
     </div>
 
-    <div layout="column" id="table-actions">
-        <md-menu ng-if="vm.project.type != vm.strings.templateProject && vm.canEdit">
+    <div layout="column" id="create-document">
+        <md-menu ng-if="permissions.canEdit">
             <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
                 <md-icon>note_add</md-icon>
                 <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
             </md-button>
             <md-menu-content>
-                <md-menu-item ng-repeat="template in templateDocuments">
-                    <md-button ng-click="vm.newTemplateDialog($event,template)">
+                <md-menu-item ng-repeat="template in documentTemplates">
+                    <md-button ng-click="createContentFromTemplateDialog($event, template, 'DOCUMENT')">
                         <i class="material-icons">
                                         <img class="md-avatar" 
                                          ng-src="app/assets/images/filetypes/{{template.thumbNailURL}}"
@@ -69,20 +68,33 @@
         </md-menu>
     </div>
 
-    <md-button ng-if="vm.canEdit" class="md-icon-button md-primary" ng-click="vm.newFolderDialog($event)">
-        <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
-        <md-icon>create_new_folder</md-icon>
-    </md-button>
+    <div layout="column" id="create-folder">
+        <md-menu ng-if="permissions.canEdit">
+            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}">
+                <md-icon>create_new_folder</md-icon>
+                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
+            </md-button>
+            <md-menu-content>
+                <md-menu-item ng-repeat="template in folderTemplates">
+                    <md-button ng-click="createContentFromTemplateDialog($event, template, 'FOLDER')">
+                        <i class="material-icons">
+                            <img class="md-avatar" ng-src="app/assets/images/filetypes/generic-folder-24.png">
+                        </i> {{template.name}}
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
 
-    <md-button ng-if="vm.project.type != vm.strings.templateProject && vm.isManager" class="md-icon-button md-primary "
-        ng-click="vm.newLinkDialog($event)">
+    <md-button ng-if="isSite && permissions.isManager" class="md-icon-button md-primary "
+        ng-click="newLinkDialog($event)">
         <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
         <md-icon>link</md-icon>
     </md-button>
 
     <span flex></span>
 
-    <md-button ng-show="vm.sendToEsdh" ng-if="vm.project.type != vm.strings.templateProject" ng-click="vm.uploadSbsysDialog($event)"
+    <md-button ng-show="sendToSbsys" ng-if="isSite" ng-click="uploadSbsysDialog($event)"
         class="md-primary" aria-label="SBSYS">
         <md-tooltip md-direction="top">
             {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}

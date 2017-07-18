@@ -14,7 +14,7 @@ They are defined like so:
             controllerAs: 'vm'
         }
     },
-    data: {
+    params: {
         authorizedRoles: [USER_ROLES.user]
     }
 }).state('project', {
@@ -27,7 +27,7 @@ They are defined like so:
             controllerAs: 'vm'
         }
     },
-    data: {
+    params: {
         authorizedRoles: [USER_ROLES.user],
         selectedTab: 0
     }

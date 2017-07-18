@@ -4,7 +4,7 @@
         <div class="md-toolbar-tools">
             <h2>{{'COMMON.NEWVERSION' | translate}}</h2>
             <span flex></span>
-            <md-button class="md-icon-button" ng-click="vm.cancel()">
+            <md-button class="md-icon-button" ng-click="cancelDialog()">
                 <md-icon>close</md-icon>
             </md-button>
         </div>
@@ -15,7 +15,7 @@
     </md-dialog-content>
 
     <md-dialog-actions>
-        <button class="md-button md-primary" ng-click="vm.uploadNewVersion(file, nodeRef)">
+        <button class="md-button md-primary" ng-click="uploadNewVersion(file)">
             <md-icon>file_upload</md-icon> {{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENT' | translate | lowercase}}
         </button>
     </md-dialog-actions>

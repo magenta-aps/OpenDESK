@@ -1,5 +1,5 @@
 <td>
-    <a class="od-filebrowser-link" ng-href="{{vm.getLink(content)}}">
+    <a class="od-filebrowser-link" ng-href="{{getLink(content)}}">
         <i class="material-icons">
                                     {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
                                     {{content.contentType == 'cmis:link' ? 'link' : ''}}
@@ -15,13 +15,13 @@
     <table style="width:100%">
         <tr>
             <td style="border: none; margin: 0; padding: 0">
-                <a class="od-filebrowser-link" ng-href="{{vm.getLink(content)}}">
+                <a class="od-filebrowser-link" ng-href="{{getLink(content)}}">
                                             {{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
             </td>
 
             <td ng-show="content.contentType === 'cmis:document' && content.hasHistory" style="border: none; margin: 0; padding: 0">
                 <md-menu md-position-mode="left bottom">
-                    <md-button style="float: left" class="md-icon-button" aria-label="Se historik" ng-click="$mdMenu.open(); vm.loadHistory(content.shortRef)">
+                    <md-button style="float: left" class="md-icon-button" aria-label="Se historik" ng-click="$mdMenu.open(); loadHistory(content.shortRef)">
                         <md-icon md-menu-origin title="Se historik " style="font-size: 22px; position: relative; top: 5px">history</md-icon>
                     </md-button>
                     <md-menu-content>
@@ -41,9 +41,9 @@
         </tr>
     </table>
 </td>
-<td class="od-esdh-checkbox">
-    <input type="checkbox" name="to-esdh" ng-model="vm.sendToEsdh" ng-if="content.contentType!='cmis:link' " aria-label="Vælg">
+<td ng-if="isSite" class="od-esdh-checkbox">
+    <input type="checkbox" name="to-esdh" ng-model="sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg">
 </td>
 <td style="width:32px">
-    <div ng-include=" 'app/src/sites/view/siteActionMenu.html' "></div>
+    <div ng-include=" 'app/src/filebrowser/view/actions/actionMenu.html' "></div>
 </td>

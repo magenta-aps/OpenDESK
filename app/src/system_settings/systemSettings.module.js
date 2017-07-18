@@ -4,13 +4,13 @@ angular
 
 function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) {
     systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'administration.systemsettings.templateList', true);
-    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'document_templates', true);
+    systemSettingsPagesServiceProvider.addPage('Mappeskabeloner', 'administration.systemsettings.folder_templates', true);
+    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'administration.systemsettings.document_templates', true);
 
     $stateProvider.state('administration.systemsettings', {
         url: '/systemopsætning',
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 4
+        params: {
+            authorizedRoles: [USER_ROLES.admin]
         },
         views: {
             'systemsettings': {
@@ -21,8 +21,8 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         }
     }).state('administration.systemsettings.notifications', {
         url: '/notifikationer',
-        data: {
-            authorizedRoles: [USER_ROLES.user]
+        params: {
+            authorizedRoles: [USER_ROLES.admin]
         },
         views: {
             'systemsetting-view': {
@@ -31,24 +31,37 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 controllerAs: 'vm'
             }
         }
-    }).state('document_templates', {
-        parent: 'site',
-        url: 'projekter/DokumentSkabeloner',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/sites/view/site.html',
-                controller: 'SiteController',
-                controllerAs: 'vm'
-            }
+    }).state('administration.systemsettings.folder_templates', {
+        url: '/mappeskabeloner',
+        params: {
+            authorizedRoles: [USER_ROLES.admin],
+            folderPath: "Data Dictionary/Space Templates",
+            isSite: false
         },
-        data: {
-            authorizedRoles: [USER_ROLES.user],
-            selectedTab: 0
+        views: {
+            'systemsetting-view': {
+                templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+                controller: 'FilebrowserController',
+                controllerAs: 'fc'
+            }
         }
-
+    }).state('administration.systemsettings.document_templates', {
+        url: '/dokumentskabeloner',
+        params: {
+            authorizedRoles: [USER_ROLES.admin],
+            folderPath: "Data Dictionary/Node Templates",
+            isSite: false
+        },
+        views: {
+            'systemsetting-view': {
+                templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+                controller: 'FilebrowserController',
+                controllerAs: 'fc'
+            }
+        }
     }).state('administration.systemsettings.templateList', {
         url: '/skabeloner',
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.admin]
         },
         views: {
@@ -60,7 +73,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         }
     }).state('administration.systemsettings.editTemplate', {
         url: '/skabelon',
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.admin]
         },
         views: {
