@@ -2,6 +2,7 @@ package dk.opendesk.webscripts.documents;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.webscripts.TestUtils;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
@@ -31,13 +32,13 @@ public class TemplateTest extends BaseWebScriptTest {
 
     private static Logger log = Logger.getLogger(TemplateTest.class);
 
-    private NodeService nodeService = (NodeService) getServer().getApplicationContext().getBean("nodeService");
     private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
     private TransactionService transactionService = (TransactionService) getServer().getApplicationContext().getBean("transactionService");
     private ContentService contentService = (ContentService) getServer().getApplicationContext().getBean("contentService");
     private FileFolderService fileFolderService = (FileFolderService) getServer().getApplicationContext().getBean("fileFolderService");
     private AuthorityService authorityService = (AuthorityService) getServer().getApplicationContext().getBean("authorityService");
+    private Repository repository = (Repository) getServer().getApplicationContext().getBean("repositoryHelper");
 
     private Map<String, SiteInfo> sites = new HashMap<>();
     private NodeRef templateDocLib;
@@ -53,19 +54,13 @@ public class TemplateTest extends BaseWebScriptTest {
         AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
         // SITES
-        sites.put(OpenDeskModel.DOC_TEMPLATE, null);
         sites.put(TestUtils.SITE_ONE, null);
 
         for (Map.Entry<String, SiteInfo> site : sites.entrySet()) {
             site.setValue(TestUtils.createSite(transactionService, siteService, site.getKey()));
         }
 
-        Map<QName, Serializable> aspectProps = new HashMap<>();
-        NodeRef templateDocumentRef = sites.get(OpenDeskModel.DOC_TEMPLATE).getNodeRef();
-        templateDocLib = siteService.getContainer(OpenDeskModel.DOC_TEMPLATE, OpenDeskModel.DOC_LIBRARY);
-
-        TestUtils.addAspect(transactionService, nodeService, templateDocumentRef, OpenDeskModel.ASPECT_PD_DOCUMENT,
-                aspectProps);
+        templateDocLib = TestUtils.getDocumentTemplateRef(repository, fileFolderService);
     }
 
     public void testGetAll4TemplateDocuments() throws IOException, JSONException {

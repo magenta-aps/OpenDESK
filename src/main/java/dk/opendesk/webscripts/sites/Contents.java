@@ -114,14 +114,18 @@ public class Contents extends AbstractWebScript {
                 String type;
                 if (qname.equals(ContentModel.TYPE_FOLDER)) {
                     type = "cmis:folder";
-                } else if (qname.equals(OpenDeskModel.PROP_LINK)) {
+                }
+                else if (qname.equals(OpenDeskModel.PROP_LINK)) {
                     type = "cmis:link";
-                } else {
+                }
+                else if (qname.equals(ContentModel.TYPE_CONTENT)) {
                     type = "cmis:document";
                     ContentData contentData = (ContentData) nodeService.getProperty(childNodeRef, ContentModel.PROP_CONTENT);
                     String mimeType = contentData.getMimetype();
                     json.put("mimeType", mimeType);
                 }
+                else
+                    type = "cmis:folder";
 
                 AccessStatus accessStatus = permissionService.hasPermission(childNodeRef, PermissionService.DELETE);
                 json.put("canMoveAndDelete", accessStatus == AccessStatus.ALLOWED);

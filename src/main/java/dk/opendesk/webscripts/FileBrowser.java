@@ -16,8 +16,12 @@ limitations under the License.
 */
 package dk.opendesk.webscripts;
 
+import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.search.SearcherException;
 import org.alfresco.repo.site.SiteModel;
+import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
@@ -37,8 +41,14 @@ import dk.opendesk.repo.utils.Utils;
 public class FileBrowser extends AbstractWebScript {
 
     private NodeService nodeService;
+    private Repository repository;
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+    public void setRepository(Repository repository)
+    {
+        this.repository = repository;
     }
 
     @Override
@@ -64,7 +74,10 @@ public class FileBrowser extends AbstractWebScript {
             if (method != null) {
                 switch (method) {
                     case "getAll":
-                        result = this.getChildNodes(nodeRef);
+                        result = getChildNodes(nodeRef);
+                        break;
+                    case "getCompanyHome":
+                        result = getCompanyHome();
                         break;
                 }
             }
@@ -140,5 +153,10 @@ public class FileBrowser extends AbstractWebScript {
 
         result.add(children);
         return result;
+    }
+
+    public JSONArray getCompanyHome() throws SearcherException, JSONException, FileNotFoundException {
+        NodeRef companyHome = repository.getCompanyHome();
+        return Utils.getJSONReturnPair("nodeRef", companyHome.toString());
     }
 }

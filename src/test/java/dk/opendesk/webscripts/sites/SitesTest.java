@@ -273,12 +273,6 @@ public class SitesTest extends BaseWebScriptTest {
         assertGetAll("", initialCount - 1);
     }
 
-    public void testGetDocumentTemplateSite()  throws IOException, JSONException {
-        log.debug("SitesTest.GetDocumentTemplateSite");
-
-        assertGetDocumentTemplateSite();
-    }
-
     public void testReturnFileName()  throws IOException, JSONException {
         log.debug("SitesTest.testReturnFileName");
 
@@ -406,12 +400,6 @@ public class SitesTest extends BaseWebScriptTest {
     private JSONArray assertDeleteSite (String siteShortName) throws IOException, JSONException {
         JSONArray returnJSON = executeDeleteSite(siteShortName);
         assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
-        return returnJSON;
-    }
-
-    private JSONArray assertGetDocumentTemplateSite () throws IOException, JSONException {
-        JSONArray returnJSON = executeGetDocumentTemplateSite();
-        assertEquals(OpenDeskModel.DOC_TEMPLATE, returnJSON.getJSONObject(0).getString(SHORTNAME));
         return returnJSON;
     }
 

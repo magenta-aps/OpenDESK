@@ -189,10 +189,6 @@ public class Sites extends AbstractWebScript {
                         result = this.deleteSite(siteShortName);
                         break;
 
-                    case "getDocumentTemplateSite":
-                        result = getDocumentTemplateSite();
-                        break;
-
                     case "returnFileName":
                         result = returnFileName(destination, fileName);
                         break;
@@ -652,10 +648,6 @@ public class Sites extends AbstractWebScript {
         authorityService.deleteAuthority(authority, true);
 
         return Utils.getJSONSuccess();
-    }
-
-    private JSONArray getDocumentTemplateSite() {
-        return Utils.getJSONReturnPair("shortName", OpenDeskModel.DOC_TEMPLATE);
     }
 
     private JSONArray returnFileName (String destination, String nodeName) {

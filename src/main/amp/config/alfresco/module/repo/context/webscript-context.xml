@@ -29,6 +29,7 @@
 		  class="dk.opendesk.webscripts.FileBrowser"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
+		<property name="repository" ref="repositoryHelper"/>
 	</bean>
 
 	<bean id="webscript.groups.post"
@@ -71,8 +72,8 @@
 		  class="dk.opendesk.webscripts.documents.Template"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
-		<property name="siteService" ref="SiteService"/>
 		<property name="fileFolderService" ref="fileFolderService"/>
+		<property name="repository" ref="repositoryHelper"/>
 	</bean>
 
 	<bean id="webscript.sites.projectdepartment.post"

@@ -19,12 +19,12 @@ package dk.opendesk.webscripts.documents;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.SearcherException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +46,7 @@ public class Template extends AbstractWebScript {
 
     private FileFolderService fileFolderService;
     private NodeService nodeService;
-    private SiteService siteService;
+    private Repository repository;
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
@@ -54,8 +54,9 @@ public class Template extends AbstractWebScript {
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-    public void setSiteService(SiteService siteService) {
-        this.siteService = siteService;
+    public void setRepository(Repository repository)
+    {
+        this.repository = repository;
     }
 
     @Override
@@ -74,11 +75,17 @@ public class Template extends AbstractWebScript {
             String destinationNodeRefStr = Utils.getJSONObject(json, "PARAM_DESTINATION_NODEREF");
 
             switch (method) {
-                case "getAllTemplateDocuments":
-                    result = getAllTemplateDocuments();
+
+                case "getDocumentTemplates":
+                    result = getTemplates(OpenDeskModel.NODE_TEMPLATES_PATH);
                     break;
-                case "makeNewDocumentFromTemplate":
-                    result = makeNewDocumentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
+
+                case "getFolderTemplates":
+                    result = getTemplates(OpenDeskModel.SPACE_TEMPLATES_PATH);
+                    break;
+
+                case "createContentFromTemplate":
+                    result = createContentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
                     break;
             }
 
@@ -90,25 +97,32 @@ public class Template extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private JSONArray getAllTemplateDocuments() throws SearcherException, JSONException {
+    private NodeRef getTemplateFolderRef(List<String> templateFolderPath) throws SearcherException, JSONException, FileNotFoundException {
+        NodeRef companyHome = repository.getCompanyHome();
+        return fileFolderService.resolveNamePath(companyHome, templateFolderPath).getNodeRef();
+    }
 
-        NodeRef documentLibrary = siteService.getContainer(OpenDeskModel.DOC_TEMPLATE, OpenDeskModel.DOC_LIBRARY);
+    private JSONArray getTemplates(List<String> path) throws SearcherException, JSONException, FileNotFoundException {
 
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(documentLibrary);
+        NodeRef templateFolder = getTemplateFolderRef(path);
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(templateFolder);
 
         JSONArray children = new JSONArray();
         for (ChildAssociationRef child : childAssociationRefs) {
             JSONObject json = new JSONObject();
-
-            ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
-            String originalMimeType = contentData.getMimetype();
 
             Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
             String name = (String) props.get(ContentModel.PROP_NAME);
 
             json.put("nodeRef", child.getChildRef().getId());
             json.put("name", name);
-            json.put("mimeType", originalMimeType);
+
+            ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
+            if(contentData != null) {
+                String originalMimeType = contentData.getMimetype();
+                json.put("mimeType", originalMimeType);
+            }
 
             children.add(json);
         }
@@ -118,10 +132,10 @@ public class Template extends AbstractWebScript {
         return response;
     }
 
-    private JSONArray makeNewDocumentFromTemplate(String nodeName, String templateNodeId, String destinationNodeRefStr)
+    private JSONArray createContentFromTemplate(String nodeName, String templateNodeId, String destinationNodeRefStr)
             throws JSONException, FileNotFoundException {
 
-        NodeRef templateNodeRef = new NodeRef("workspace://SpacesStore/" + templateNodeId);
+        NodeRef templateNodeRef = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, templateNodeId);
         NodeRef destinationNodeRef = new NodeRef(destinationNodeRefStr);
         String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
 

@@ -15,7 +15,9 @@ public interface OpenDeskModel {
     public static String SITE = "Site";
 
     // SPECIAL SITES
-    public static String DOC_TEMPLATE = "Dokumentskabeloner";
+    public static List<String> NODE_TEMPLATES_PATH = new ArrayList<>(Arrays.asList("Data Dictionary", "Node Templates"));
+    public static List<String> SPACE_TEMPLATES_PATH = new ArrayList<>(Arrays.asList("Data Dictionary", "Space Templates"));
+
 
     // Containers
     public static String DISCUSSIONS = "discussions";
