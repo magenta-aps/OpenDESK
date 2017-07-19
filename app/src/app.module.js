@@ -56,8 +56,6 @@ function config($stateProvider) {
                 ['authService', '$q', 'sessionService', '$state', '$rootScope', '$stateParams',
                     function (authService, $q, sessionService, $state, $rootScope, $stateParams) {
                 var d = $q.defer();
-                    var test = $state.target();
-                    var test2 = $state.target;
                 if (authService.isAuthenticated() && authService.isAuthorized($stateParams.authorizedRoles)) {
                     // I also provide the user for child controllers
                     d.resolve(authService.user);
