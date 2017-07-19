@@ -21,7 +21,6 @@ angular
         'openDeskApp.dashboard',
         'openDeskApp.lool',
         'openDeskApp.documents',
-        'openDeskApp.administration',
         'openDeskApp.users',
         'openDeskApp.systemsettings',
         'openDeskApp.search',
@@ -48,11 +47,7 @@ angular
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
     });
 
-function config($stateProvider, $urlRouterProvider) {
-
-    $urlRouterProvider
-        .when('/admin/system-settings', '/admin/system-settings/general-configuration')
-        .otherwise('/');
+function config($stateProvider) {
 
     $stateProvider.state('site', {
         abstract: true,

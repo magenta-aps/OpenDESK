@@ -1,5 +1,5 @@
 <td style="width:40%">
-    <a class="od-filebrowser-link" ng-href="{{getLink(content)}}">
+    <a class="od-filebrowser-link" ui-sref="{{getLink(content)}}" ui-sref-active="active">
         <i class="material-icons">
                                     {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
                                     {{content.contentType == 'cmis:link' ? 'link' : ''}}
@@ -15,7 +15,7 @@
     <table style="width:100%">
         <tr>
             <td style="border: none; margin: 0; padding: 0">
-                <a class="od-filebrowser-link" ng-href="{{getLink(content)}}">
+                <a class="od-filebrowser-link" ui-sref="{{getLink(content)}}" ui-sref-active="active">
                                             {{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
             </td>
 

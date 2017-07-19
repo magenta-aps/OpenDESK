@@ -215,7 +215,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
                 if (pathArr[a] !== '') {
                     var link;
                     if(response.item.location.site == "") {
-                        link = '#!/dokumenter' + pathLink + pathArr[a];
+                        link = '#!/administration/dokumenter' + pathLink + pathArr[a];
                     }
                     else {
                         link = '#!/projekter/' + response.item.location.site + vm.documentTab + pathLink + pathArr[a];

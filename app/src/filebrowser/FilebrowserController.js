@@ -109,13 +109,17 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
 
     $scope.getLink = function (content) {
         if (content.contentType === 'cmis:document') {
-            return '#!/dokument/' + content.shortRef;
+            return 'document({doc: "' + content.shortRef + '"})';
+            // '#!/dokument/' + content.shortRef;
         }
         if (content.contentType === 'cmis:folder') {
             if($scope.isSite)
-                return '#!/projekter/' + $stateParams.projekt + $scope.documentTab + $stateParams.path + '/' + content.name;
+                return 'project.filebrowser({projekt: "' + $stateParams.projekt +
+                    '", path: "' + $stateParams.path + '/' + content.name + '"})';
+                //'#!/projekter/' + $stateParams.projekt + $scope.documentTab + $stateParams.path + '/' + content.name;
             else
-                return '#!/dokumenter' + $stateParams.path + '/' + content.name;
+                return 'systemsettings.filebrowser({path: "' + $stateParams.path + '/' + content.name + '"})';
+                // '#!/administration/dokumenter' + $stateParams.path + '/' + content.name;
         }
         if (content.contentType === 'cmis:link') {
             return '#!/projekter/' + content.destination_link;
@@ -135,7 +139,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
         if ($scope.isSite)
             homeLink = '#!/projekter/' + $stateParams.projekt + $scope.documentTab;
         else
-            homeLink = '#!/dokumenter';
+            homeLink = '#!/administration/dokumenter';
 
         paths = [{
             title: 'Home',
@@ -151,7 +155,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
                     if ($scope.isSite)
                         link = '#!/projekter/' + $stateParams.projekt + $scope.documentTab + pathLink + pathArr[a];
                     else
-                        link = '#!/dokumenter' + pathLink + pathArr[a];
+                        link = '#!/administration/dokumenter' + pathLink + pathArr[a];
                     paths.push({
                         title: pathArr[a],
                         link: link

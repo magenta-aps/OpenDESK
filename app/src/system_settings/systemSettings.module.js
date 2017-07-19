@@ -3,23 +3,25 @@ angular
     .config(config);
 
 function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) {
-    systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'administration.systemsettings.templateList', true);
-    systemSettingsPagesServiceProvider.addPage('Mappeskabeloner', 'administration.systemsettings.folder_templates', true);
-    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'administration.systemsettings.document_templates', true);
+    systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'systemsettings.templateList', true);
+    systemSettingsPagesServiceProvider.addPage('Mappeskabeloner', 'systemsettings.folder_templates', true);
+    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'systemsettings.document_templates', true);
+    systemSettingsPagesServiceProvider.addPage('Dokumenter', 'systemsettings.filebrowser({path: ""})', true);
 
-    $stateProvider.state('administration.systemsettings', {
-        url: '/systemopsætning',
+    $stateProvider.state('systemsettings', {
+        parent: 'site',
+        url: '/administration',
         params: {
             authorizedRoles: [USER_ROLES.admin]
         },
         views: {
-            'systemsettings': {
+            'content@': {
                 templateUrl: 'app/src/system_settings/system_settings.html',
                 controller: 'SystemSettingsController',
                 controllerAs: 'vm'
             }
         }
-    }).state('administration.systemsettings.notifications', {
+    }).state('systemsettings.notifications', {
         url: '/notifikationer',
         params: {
             authorizedRoles: [USER_ROLES.admin]
@@ -31,7 +33,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 controllerAs: 'vm'
             }
         }
-    }).state('administration.systemsettings.folder_templates', {
+    }).state('systemsettings.folder_templates', {
         url: '/mappeskabeloner',
         params: {
             authorizedRoles: [USER_ROLES.admin],
@@ -45,7 +47,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 controllerAs: 'fc'
             }
         }
-    }).state('administration.systemsettings.document_templates', {
+    }).state('systemsettings.document_templates', {
         url: '/dokumentskabeloner',
         params: {
             authorizedRoles: [USER_ROLES.admin],
@@ -59,7 +61,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 controllerAs: 'fc'
             }
         }
-    }).state('administration.systemsettings.templateList', {
+    }).state('systemsettings.templateList', {
         url: '/skabeloner',
         params: {
             authorizedRoles: [USER_ROLES.admin]
@@ -71,7 +73,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 controllerAs: 'vm'
             }
         }
-    }).state('administration.systemsettings.editTemplate', {
+    }).state('systemsettings.editTemplate', {
         url: '/skabelon',
         params: {
             authorizedRoles: [USER_ROLES.admin]
@@ -81,6 +83,19 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
                 templateUrl: 'app/src/system_settings/templates/view/editTemplate.html',
                 controller: 'TemplatesController',
                 controllerAs: 'vm'
+            }
+        }
+    }).state('systemsettings.filebrowser', {
+        url: '/dokumenter{path:.*}',
+        params: {
+            authorizedRoles: [USER_ROLES.admin],
+            isSite: false,
+        },
+        views: {
+            'systemsetting-view': {
+                templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
+                controller: 'FilebrowserController',
+                controllerAs: 'fc'
             }
         }
     });
