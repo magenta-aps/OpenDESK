@@ -40,7 +40,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         },
         views: {
             'systemsetting-view': {
-                templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+                templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
                 controller: 'FilebrowserController',
                 controllerAs: 'fc'
             }

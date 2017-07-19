@@ -12,7 +12,7 @@ function config($stateProvider, USER_ROLES) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+                templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
                 controller: 'FilebrowserController',
                 controllerAs: 'fc'
             }

@@ -1,106 +1,108 @@
-<breadcrumb paths="paths" id="filebrowser-breadcrumb"></breadcrumb>
-<md-list class="sort-head" ng-show="contentListLength > 0" id="table-container">
-    <table class="od-members od-members-row">
-        <thead ng-show="contentListLength > 0" fix-head>
-            <tr>
-                <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
-                <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
-                <th ng-if="isSite" colspan="2">
-                    <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
-                    <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="sendToSbsys">
-                </th>
-            </tr>
-        </thead>
-        <tbody ng-repeat="contentTypeList in contentList">
-            <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
-            </tr>
-        </tbody>
-    </table>
-</md-list>
+<div class="filebrowser">
+    <breadcrumb paths="paths" id="filebrowser-breadcrumb"></breadcrumb>
+    <md-list class="sort-head" ng-show="contentListLength > 0" id="table-container">
+        <table class="od-members od-members-row">
+            <thead ng-show="contentListLength > 0" fix-head>
+                <tr>
+                    <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
+                    <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
+                    <th ng-if="isSite" colspan="2">
+                        <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
+                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="sendToSbsys">
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="contentTypeList in contentList">
+                <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
+                </tr>
+            </tbody>
+        </table>
+    </md-list>
 
-<div ng-if="isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
-    <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    <div ng-if="isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
+        <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    </div>
+
+    <div layout="column" ng-show="contentListLength == 0 && !isLoading">
+        <md-icon class="md-icon--large">library_books</md-icon>
+        <p class="md-display-1" style="text-align:center">{{'COMMON.EMPTY_FOLDER' | translate}}</p>
+    </div>
+
+    <md-divider></md-divider>
+
+    <md-card-actions layout="row" layout-align="start center" class="btn-align">
+        <div layout="column">
+            <md-menu ng-if="permissions.canEdit">
+                <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}">
+                    <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</md-tooltip>
+                    <md-icon>file_upload</md-icon>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-button ng-click="uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-if="isSite">
+                        <md-button ng-click="loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+
+        <div layout="column" id="create-document">
+            <md-menu ng-if="permissions.canEdit">
+                <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
+                    <md-icon>note_add</md-icon>
+                    <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item ng-repeat="template in documentTemplates">
+                        <md-button ng-click="createContentFromTemplateDialog($event, template, 'DOCUMENT')">
+                            <i class="material-icons">
+                                            <img class="md-avatar"
+                                             ng-src="app/assets/images/filetypes/{{template.thumbNailURL}}"
+                                             onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
+                                        </i> {{template.name}}
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+
+        <div layout="column" id="create-folder">
+            <md-menu ng-if="permissions.canEdit">
+                <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}">
+                    <md-icon>create_new_folder</md-icon>
+                    <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item ng-repeat="template in folderTemplates">
+                        <md-button ng-click="createContentFromTemplateDialog($event, template, 'FOLDER')">
+                            <i class="material-icons">
+                                <img class="md-avatar" ng-src="app/assets/images/filetypes/generic-folder-24.png">
+                            </i> {{template.name}}
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+
+        <md-button ng-if="isSite && permissions.isManager" class="md-icon-button md-primary "
+            ng-click="newLinkDialog($event)">
+            <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
+            <md-icon>link</md-icon>
+        </md-button>
+
+        <span flex></span>
+
+        <md-button ng-show="sendToSbsys" ng-if="isSite" ng-click="uploadSbsysDialog($event)"
+            class="md-primary" aria-label="SBSYS">
+            <md-tooltip md-direction="top">
+                {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
+            </md-tooltip>
+            <span style="margin-left: 10px; margin-right: 20px;">
+                                            {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
+                                        </span>
+        </md-button>
+    </md-card-actions>
 </div>
-
-<div layout="column" ng-show="contentListLength == 0 && !isLoading">
-    <md-icon class="md-icon--large">library_books</md-icon>
-    <p class="md-display-1" style="text-align:center">{{'COMMON.EMPTY_FOLDER' | translate}}</p>
-</div>
-
-<md-divider></md-divider>
-
-<md-card-actions layout="row" layout-align="start center" class="btn-align">
-    <div layout="column">
-        <md-menu ng-if="permissions.canEdit">
-            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}">
-                <md-tooltip md-direction="top">{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</md-tooltip>
-                <md-icon>file_upload</md-icon>
-            </md-button>
-            <md-menu-content>
-                <md-menu-item>
-                    <md-button ng-click="uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
-                </md-menu-item>
-                <md-menu-item ng-if="isSite">
-                    <md-button ng-click="loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-    </div>
-
-    <div layout="column" id="create-document">
-        <md-menu ng-if="permissions.canEdit">
-            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
-                <md-icon>note_add</md-icon>
-                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
-            </md-button>
-            <md-menu-content>
-                <md-menu-item ng-repeat="template in documentTemplates">
-                    <md-button ng-click="createContentFromTemplateDialog($event, template, 'DOCUMENT')">
-                        <i class="material-icons">
-                                        <img class="md-avatar" 
-                                         ng-src="app/assets/images/filetypes/{{template.thumbNailURL}}"
-                                         onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">    
-                                    </i> {{template.name}}
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-    </div>
-
-    <div layout="column" id="create-folder">
-        <md-menu ng-if="permissions.canEdit">
-            <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}">
-                <md-icon>create_new_folder</md-icon>
-                <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
-            </md-button>
-            <md-menu-content>
-                <md-menu-item ng-repeat="template in folderTemplates">
-                    <md-button ng-click="createContentFromTemplateDialog($event, template, 'FOLDER')">
-                        <i class="material-icons">
-                            <img class="md-avatar" ng-src="app/assets/images/filetypes/generic-folder-24.png">
-                        </i> {{template.name}}
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-    </div>
-
-    <md-button ng-if="isSite && permissions.isManager" class="md-icon-button md-primary "
-        ng-click="newLinkDialog($event)">
-        <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
-        <md-icon>link</md-icon>
-    </md-button>
-
-    <span flex></span>
-
-    <md-button ng-show="sendToSbsys" ng-if="isSite" ng-click="uploadSbsysDialog($event)"
-        class="md-primary" aria-label="SBSYS">
-        <md-tooltip md-direction="top">
-            {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
-        </md-tooltip>
-        <span style="margin-left: 10px; margin-right: 20px;">
-                                        {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
-                                    </span>
-    </md-button>
-</md-card-actions>
