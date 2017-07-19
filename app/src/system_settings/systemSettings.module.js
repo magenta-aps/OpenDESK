@@ -86,7 +86,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
             }
         }
     }).state('systemsettings.filebrowser', {
-        url: '/dokumenter{path:.*}',
+        url: '/dokumenter{path:any}',
         params: {
             authorizedRoles: [USER_ROLES.admin],
             isSite: false,

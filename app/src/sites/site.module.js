@@ -26,7 +26,7 @@ function config($stateProvider, USER_ROLES) {
 
     })
     .state('project.filebrowser', {
-        url: '/dokumenter{path:.*}',
+        url: '/dokumenter{path:any}',
         views: {
             'filebrowser': {
                 templateUrl: 'app/src/filebrowser/view/filebrowser.html',
@@ -54,7 +54,7 @@ function config($stateProvider, USER_ROLES) {
         }
     })
     .state('project.viewthread', {
-        url: '/diskussioner/{path:.*}',
+        url: '/diskussioner/{path:any}',
         params: {
             selectedTab: 1
         },
