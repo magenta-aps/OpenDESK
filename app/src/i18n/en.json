@@ -95,6 +95,7 @@
     "DOCUMENT": "Document",
     "CHOOSE": "Choose",
     "EMPTY_FOLDER": "This folder is empty",
+    "MISSING_FOLDER": "This folder can not be accessed",
     "NO_SEARCH_RESULTS" : "There are no matches to the search term",
     "FILTER": "Filters",
     "FROM": "From",

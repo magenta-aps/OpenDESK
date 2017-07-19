@@ -93,6 +93,7 @@
     "DOCUMENT": "Dokument",
     "CHOOSE": "Vælg",
     "EMPTY_FOLDER": "Denne mappe er tom",
+    "MISSING_FOLDER": "Denne mappe kan ikke tilgås",
     "NO_SEARCH_RESULTS" : "Søgningen matchede ikke noget",
     "FILTER": "Filtre",
     "LAST_MODIFIED": "Senest ændret",

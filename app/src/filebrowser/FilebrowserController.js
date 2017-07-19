@@ -29,6 +29,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     $scope.permissions = {};
     $scope.documentNodeRef = "";
 
+    $scope.error = false;
+
     if($scope.isSite) {
         $scope.tab.selected = $stateParams.selectedTab;
         $scope.$watch('siteService.getSite()', function (newVal) {
@@ -69,10 +71,16 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
 
         filebrowserService.getCompanyHome().then(function (val) {
             var companyHomeUri = alfrescoNodeUtils.processNodeRef(val).uri;
-            filebrowserService.getNode(companyHomeUri, path).then(function (response) {
-                setFolder(response.metadata.parent.nodeRef);
-                $scope.permissions.canEdit = response.metadata.parent.permissions.user.Write;
-            });
+            filebrowserService.getNode(companyHomeUri, path).then(
+                function (response) {
+                    setFolder(response.metadata.parent.nodeRef);
+                    $scope.permissions.canEdit = response.metadata.parent.permissions.user.Write;
+                },
+                function (error) {
+                    $scope.isLoading = false;
+                    $scope.error = true;
+                }
+            );
         });
     }
 
@@ -83,18 +91,24 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     }
 
     function loadContentList() {
-        filebrowserService.getContentList($scope.folderUUID).then(function (response) {
-            $scope.contentList = response;
-            $scope.contentList.forEach(function (contentTypeList) {
-                $scope.contentListLength += contentTypeList.length;
-                addThumbnailUrl(contentTypeList);
-            });
+        filebrowserService.getContentList($scope.folderUUID).then(
+            function (response) {
+                $scope.contentList = response;
+                $scope.contentList.forEach(function (contentTypeList) {
+                    $scope.contentListLength += contentTypeList.length;
+                    addThumbnailUrl(contentTypeList);
+                });
 
-            // Compile paths for breadcrumb directive
-            $scope.paths = buildBreadCrumbPath();
+                // Compile paths for breadcrumb directive
+                $scope.paths = buildBreadCrumbPath();
 
-            $scope.isLoading = false;
-        });
+                $scope.isLoading = false;
+            },
+            function (error) {
+                $scope.isLoading = false;
+                $scope.error = true;
+            }
+        );
     }
 
     function addThumbnailUrl(files) {

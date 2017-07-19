@@ -25,7 +25,7 @@
 
     <div layout="column" ng-show="contentListLength == 0 && !isLoading">
         <md-icon class="md-icon--large">library_books</md-icon>
-        <p class="md-display-1" style="text-align:center">{{'COMMON.EMPTY_FOLDER' | translate}}</p>
+        <p class="md-display-1" style="text-align:center">{{'COMMON.' + (error ? 'MISSING_FOLDER' : 'EMPTY_FOLDER') | translate}}</p>
     </div>
 
     <md-divider></md-divider>
