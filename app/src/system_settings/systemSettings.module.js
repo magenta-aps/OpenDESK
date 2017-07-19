@@ -37,7 +37,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         url: '/mappeskabeloner',
         params: {
             authorizedRoles: [USER_ROLES.admin],
-            folderPath: "Data Dictionary/Space Templates",
+            path: "Data Dictionary/Space Templates",
             isSite: false
         },
         views: {
@@ -51,7 +51,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         url: '/dokumentskabeloner',
         params: {
             authorizedRoles: [USER_ROLES.admin],
-            folderPath: "Data Dictionary/Node Templates",
+            path: "Data Dictionary/Node Templates",
             isSite: false
         },
         views: {
