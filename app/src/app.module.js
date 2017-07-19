@@ -45,6 +45,8 @@ angular
         angular.element(window.document)[0].title = APP_CONFIG.appName;
         $rootScope.appName = APP_CONFIG.appName;
         $rootScope.logoSrc = APP_CONFIG.logoSrc;
+        if($state.current.url == "^")
+            $state.go(APP_CONFIG.landingPage);
     });
 
 function config($stateProvider) {
