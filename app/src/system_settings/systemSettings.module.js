@@ -6,7 +6,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
     systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'systemsettings.templateList', true);
     systemSettingsPagesServiceProvider.addPage('Mappeskabeloner', 'systemsettings.folder_templates', true);
     systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'systemsettings.document_templates', true);
-    systemSettingsPagesServiceProvider.addPage('Dokumenter', 'systemsettings.filebrowser({path: ""})', true);
+    systemSettingsPagesServiceProvider.addPage('Systemmapper', 'systemsettings.filebrowser({path: ""})', true);
 
     $stateProvider.state('systemsettings', {
         parent: 'site',
@@ -86,7 +86,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
             }
         }
     }).state('systemsettings.filebrowser', {
-        url: '/dokumenter{path:any}',
+        url: '/systemmapper{path:any}',
         params: {
             authorizedRoles: [USER_ROLES.admin],
             isSite: false,
