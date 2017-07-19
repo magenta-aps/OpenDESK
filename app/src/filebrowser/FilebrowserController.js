@@ -46,9 +46,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
             setFolder(val.parent.nodeRef);
         });
     }
-    else if($stateParams.folderPath != undefined) {
-        setFolderAndPermissions($stateParams.folderPath);
-    }
     else
         setFolderAndPermissions($stateParams.path);
 
@@ -124,19 +121,16 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     $scope.getLink = function (content) {
         if (content.contentType === 'cmis:document') {
             return 'document({doc: "' + content.shortRef + '"})';
-            // '#!/dokument/' + content.shortRef;
         }
         if (content.contentType === 'cmis:folder') {
             if($scope.isSite)
                 return 'project.filebrowser({projekt: "' + $stateParams.projekt +
                     '", path: "' + $stateParams.path + '/' + content.name + '"})';
-                //'#!/projekter/' + $stateParams.projekt + $scope.documentTab + $stateParams.path + '/' + content.name;
             else
                 return 'systemsettings.filebrowser({path: "' + $stateParams.path + '/' + content.name + '"})';
-                // '#!/administration/dokumenter' + $stateParams.path + '/' + content.name;
         }
         if (content.contentType === 'cmis:link') {
-            return '#!/projekter/' + content.destination_link;
+            return 'project({projekt: "' + content.destination_link + '"})';
         }
     };
 
