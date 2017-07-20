@@ -323,11 +323,4 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             vm.highlightVersion();
         }
     });
-
-    //Goes to the libreOffice online edit page
-    vm.openPDF = function () {
-        var pdfFinalLink = sessionService.makeURL(vm.pdfLink);
-        $window.open(pdfFinalLink);
-    };
-
 };
