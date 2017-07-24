@@ -268,7 +268,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     } else {
         vm.store = 'workspace://SpacesStore/';
-        vm.pdfLink = documentService.getPDFLink(vm.store.replace("://", "/") + $stateParams.doc);
         documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function (plugin) {
 
             vm.plugin = plugin;
