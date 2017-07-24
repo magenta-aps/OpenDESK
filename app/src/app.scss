@@ -98,6 +98,10 @@ md-icon {
   color: $primary-text-color;
 }
 
+.md-chips .md-chip-input-container {
+  width: 100%;
+}
+
 // Muted (greyed) text
 .muted {
   font-size: .9em;
