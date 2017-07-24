@@ -8,7 +8,7 @@
                     <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
                     <th ng-if="isSite" colspan="2">
                         <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
-                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="sendToSbsys">
+                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="primitives.sendToSbsys">
                     </th>
                 </tr>
             </thead>
@@ -94,15 +94,14 @@
         </md-button>
 
         <span flex></span>
-
-        <md-button ng-show="sendToSbsys" ng-if="isSite" ng-click="uploadSbsysDialog($event)"
+        <md-button ng-show="primitives.sendToSbsys" ng-if="isSite" ng-click="uploadSbsysDialog($event)"
             class="md-primary" aria-label="SBSYS">
             <md-tooltip md-direction="top">
                 {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
             </md-tooltip>
             <span style="margin-left: 10px; margin-right: 20px;">
-                                            {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
-                                        </span>
+                {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
+            </span>
         </md-button>
     </md-card-actions>
 </div>

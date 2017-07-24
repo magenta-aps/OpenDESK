@@ -5,7 +5,6 @@ angular
 function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteService, fileUtilsService,
                                filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
                                userService, documentService, alfrescoNodeUtils, $translate) {
-
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;
@@ -22,7 +21,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     $scope.documentTemplates = {};
     $scope.newContentName = "";
 
-    $scope.sendToSbsys = false;
+    $scope.primitives = {};
+    $scope.primitives.sendToSbsys = false;
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
 
