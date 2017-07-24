@@ -207,7 +207,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         function buildBreadCrumbPath(response) {
             var paths = [{
                 title: response.item.location.siteTitle,
-                link: '#!/projekter/' + response.item.location.site + vm.documentTab
+                link: 'project.filebrowser({projekt: "' + response.item.location.site + '", path: ""})'
             }];
             var pathArr = response.item.location.path.split('/');
             var pathLink = '/';
@@ -215,10 +215,11 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
                 if (pathArr[a] !== '') {
                     var link;
                     if(response.item.location.site == "") {
-                        link = '#!/administration/dokumenter' + pathLink + pathArr[a];
+                        link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
                     }
                     else {
-                        link = '#!/projekter/' + response.item.location.site + vm.documentTab + pathLink + pathArr[a];
+                        link = 'project.filebrowser({projekt: "' + response.item.location.site +
+                            '", path: "' + pathLink + pathArr[a] + '"})';
                     }
                     paths.push({
                         title: pathArr[a],

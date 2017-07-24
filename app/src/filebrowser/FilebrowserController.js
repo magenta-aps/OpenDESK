@@ -142,14 +142,13 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
 
     function buildBreadCrumbPath() {
 
-        var paths = [];
         var homeLink;
         if ($scope.isSite)
-            homeLink = '#!/projekter/' + $stateParams.projekt + $scope.documentTab;
+            homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})';
         else
-            homeLink = '#!/administration/dokumenter';
+            homeLink = 'systemsettings.filebrowser({path: ""})';
 
-        paths = [{
+        var paths = [{
             title: 'Home',
             link: homeLink
         }];
@@ -161,9 +160,10 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
                 if (pathArr[a] !== '') {
                     var link;
                     if ($scope.isSite)
-                        link = '#!/projekter/' + $stateParams.projekt + $scope.documentTab + pathLink + pathArr[a];
+                        link = 'project.filebrowser({projekt: "' + $stateParams.projekt +
+                        '", path: "' + pathLink + pathArr[a] + '"})';
                     else
-                        link = '#!/administration/dokumenter' + pathLink + pathArr[a];
+                        link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
                     paths.push({
                         title: pathArr[a],
                         link: link
