@@ -45,7 +45,7 @@
                     <a class="od-filebrowser-link od-secondary" ng-href="">{{discussion.totalReplyCount}}</a>
                 </td>
                 <td>
-                    <i ng-click='dc.changeSubscription(discussion)' class="material-icons od-secondary" style="outline:0;">{{dc.subscriptionIcon(discussion.isSubscribed)}}</i>
+                    <i ng-click='dc.changeSubscription(discussion)' class="clickable material-icons od-secondary" style="outline:0;">{{dc.subscriptionIcon(discussion.isSubscribed)}}</i>
                 </td>
                 <td>
                     <md-menu ng-if="discussion.permissions.delete">
