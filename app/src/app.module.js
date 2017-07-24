@@ -51,12 +51,12 @@ angular
 
 function config($stateProvider) {
 
-    $stateProvider.state('site', {
-        abstract: true,
-        resolve: {
-            authorize:
-                ['authService', '$q', 'sessionService', '$state', '$rootScope', '$stateParams',
-                    function (authService, $q, sessionService, $state, $rootScope, $stateParams) {
+    $stateProvider.decorator('data', function(state, parent) {
+        var stateData = parent(state);
+
+        state.resolve = state.resolve || {};
+        state.resolve.authorize = ['authService', '$q', 'sessionService', '$state', '$rootScope', '$stateParams',
+            function (authService, $q, sessionService, $state, $rootScope, $stateParams) {
                 var d = $q.defer();
                 if (authService.isAuthenticated() && authService.isAuthorized($stateParams.authorizedRoles)) {
                     // I also provide the user for child controllers
@@ -81,8 +81,12 @@ function config($stateProvider) {
                     }
                 }
                 return d.promise;
-            }]
-        },
+            }];
+        return stateData;
+    });
+
+    $stateProvider.state('site', {
+        abstract: true,
         views: {
             'header@': {
                 templateUrl: 'app/src/header/view/header.html'
