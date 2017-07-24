@@ -121,8 +121,10 @@ public class Contents extends AbstractWebScript {
                 else if (qname.equals(ContentModel.TYPE_CONTENT)) {
                     type = "cmis:document";
                     ContentData contentData = (ContentData) nodeService.getProperty(childNodeRef, ContentModel.PROP_CONTENT);
-                    String mimeType = contentData.getMimetype();
-                    json.put("mimeType", mimeType);
+                    if(contentData != null) {
+                        String mimeType = contentData.getMimetype();
+                        json.put("mimeType", mimeType);
+                    }
                 }
                 else
                     type = "cmis:folder";
