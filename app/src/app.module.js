@@ -91,6 +91,9 @@ function config($stateProvider) {
             'header@': {
                 templateUrl: 'app/src/header/view/header.html'
             }
+        },
+        params: {
+            authorizedRoles: [USER_ROLES.user]
         }
     });
 }
