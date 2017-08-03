@@ -90,7 +90,7 @@ public class History extends AbstractWebScript {
             if (method != null) {
                 switch (method) {
                     case "getAll":
-                        result = getVersion(nodeRef);
+                        result = getVersions(nodeRef);
                         break;
                 }
             }
@@ -102,7 +102,7 @@ public class History extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    private JSONArray getVersion(NodeRef nodeRef) throws JSONException {
+    private JSONArray getVersions(NodeRef nodeRef) throws JSONException {
 
         System.out.println("nodeRef" + nodeRef);
 
