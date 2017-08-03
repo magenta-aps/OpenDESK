@@ -68,6 +68,11 @@ public class Utils {
                     put(OpenDeskModel.pd_project, createSiteGroups(OpenDeskModel.pd_project));
                 }});
 
+    /**
+     * Creates JSONArray of site groups.
+     * @param siteType type of the site.
+     * @return a JSONArray of site groups.
+     */
     private static JSONArray createSiteGroups(String siteType) {
         JSONArray result = new JSONArray();
 
@@ -90,6 +95,14 @@ public class Utils {
         return result;
     }
 
+    /**
+     * Creates a site group.
+     * @param shortName short name of the site group.
+     * @param authority of the group.
+     * @param collapsed true if the group is possible to collapse.
+     * @param multipleMembers true if the group can contain multiple members.
+     * @return a JSONObject representing the site group.
+     */
     private static JSONObject createSiteGroup(String shortName, String authority, Boolean collapsed, Boolean multipleMembers){
         JSONObject json = new JSONObject();
         try {
@@ -103,6 +116,9 @@ public class Utils {
         return json;
     }
 
+    /**
+     * A list of Project Department groups.
+     */
     private static Map<String, String> PD_GROUPS = new HashMap<>();
 
     /**
@@ -147,6 +163,11 @@ public class Utils {
         return parameters;
     }
 
+    /**
+     * Converts parameter values to a string.
+     * @param paramValues parameter values.
+     * @return a string containing parameters.
+     */
     private static String paramValuesToString(List<NameValuePair> paramValues) {
         if (paramValues.size() == 1) {
             return paramValues.get(0).getValue();
@@ -321,10 +342,25 @@ public class Utils {
         return site.getNodeRef();
     }
 
+    /**
+     * Creates a container.
+     * @param siteService alfresco standard service.
+     * @param shortName of the parent site.
+     * @param componentId component id of the container.
+     * @return a nodeRef to the container.
+     */
     private static NodeRef createContainer(SiteService siteService, String shortName, String componentId) {
         return siteService.createContainer(shortName, componentId, ContentModel.TYPE_FOLDER, null);
     }
 
+    /**
+     * Creates a child node.
+     * @param nodeService alfresco standard service.
+     * @param n parent nodeRef.
+     * @param name of the child node.
+     * @param type of the child node.
+     * @return the nodeRef to the child node.
+     */
     private static NodeRef createChildNode(NodeService nodeService, NodeRef n, String name, QName type) {
         Map<QName, Serializable> props = new HashMap<>();
         props.put(ContentModel.PROP_NAME, name);
@@ -334,6 +370,13 @@ public class Utils {
                 type, props).getChildRef();
     }
 
+    /**
+     * Creates a site dashboard for Share
+     * @param nodeService alfresco standard service.
+     * @param contentService alfresco standard service.
+     * @param siteNodeRef nodeRef of the site.
+     * @param siteShortName short name of the site.
+     */
     private static void createSiteDashboard(NodeService nodeService, ContentService contentService,
                                             NodeRef siteNodeRef, String siteShortName) {
 
@@ -377,6 +420,15 @@ public class Utils {
         createXMLFile(nodeService, contentService, siteShortNameRef, "dashboard", dashboardDoc);
     }
 
+    /**
+     * Creates a component xml document.
+     * @param docBuilder a DocumentBuilder.
+     * @param siteShortName short name of the site.
+     * @param region_id region id of the component.
+     * @param url of the component.
+     * @param height of the component.
+     * @return an xml document representation of the component.
+     */
     private static Document createComponentXML(DocumentBuilder docBuilder, String siteShortName, String region_id,
                                                String url, String height) {
         Document doc = docBuilder.newDocument();
@@ -399,6 +451,11 @@ public class Utils {
         return doc;
     }
 
+    /**
+     * Creates a page xml document.
+     * @param docBuilder a DocumentBuilder.
+     * @return an xml document representation of the page.
+     */
     private static Document createPageXML(DocumentBuilder docBuilder) {
         Document doc = docBuilder.newDocument();
         Element rootElement = doc.createElement("page");
@@ -421,12 +478,27 @@ public class Utils {
         return doc;
     }
 
+    /**
+     * Adds an xml child element to a parent element.
+     * @param doc a parent xml document.
+     * @param parent a parent element
+     * @param name of the child element.
+     * @param textContent text content of the child element.
+     */
     private static void addXMLChild(Document doc, Element parent, String name, String textContent) {
         Element e = doc.createElement(name);
         e.setTextContent(textContent);
         parent.appendChild(e);
     }
 
+    /**
+     * Creates an xml file.
+     * @param nodeService alfresco standard service.
+     * @param contentService alfresco standard service.
+     * @param parent nodeRef of the parent folder.
+     * @param fileName file name of the new xml file.
+     * @param xmlDoc the xml document to be saved.
+     */
     private static void createXMLFile(NodeService nodeService, ContentService contentService, NodeRef parent,
                                       String fileName, Document xmlDoc) {
         fileName += ".xml";
