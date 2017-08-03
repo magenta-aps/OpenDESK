@@ -97,11 +97,23 @@ public class Template extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Gets the nodeRef for a template folder.
+     * @param templateFolderPath path of the template folder.
+     * @return nodeRef of the template folder.
+     */
     private NodeRef getTemplateFolderRef(List<String> templateFolderPath) throws SearcherException, JSONException, FileNotFoundException {
         NodeRef companyHome = repository.getCompanyHome();
         return fileFolderService.resolveNamePath(companyHome, templateFolderPath).getNodeRef();
     }
 
+    /**
+     * Gets templates from path.
+     * (method = getDocumentTemplates)
+     * (method = getFolderTemplates)
+     * @param path of the templates.
+     * @return a JSONArray containing nodeRef, name and mimeType of each template.
+     */
     private JSONArray getTemplates(List<String> path) throws SearcherException, JSONException, FileNotFoundException {
 
         NodeRef templateFolder = getTemplateFolderRef(path);
@@ -132,6 +144,14 @@ public class Template extends AbstractWebScript {
         return response;
     }
 
+    /**
+     * Creates content from a template.
+     * (method = createContentFromTemplate)
+     * @param nodeName name of node.
+     * @param templateNodeId id of template node.
+     * @param destinationNodeRefStr nodeRef of destination.
+     * @return a JSONArray containing nodeRef and filename of each template.
+     */
     private JSONArray createContentFromTemplate(String nodeName, String templateNodeId, String destinationNodeRefStr)
             throws JSONException, FileNotFoundException {
 

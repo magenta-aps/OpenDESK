@@ -25,7 +25,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -73,6 +72,12 @@ public class PreviewHelper extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Deletes a node.
+     * (method = cleanUp)
+     * @param nodeId id of the node.
+     * @return JSONSuccess.
+     */
     private JSONArray cleanUp(String nodeId) throws InterruptedException {
         NodeRef n = new NodeRef("workspace", "SpacesStore", nodeId);
 
@@ -91,6 +96,13 @@ public class PreviewHelper extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Creates a thumbnail of a version
+     * (method = createThumbnail)
+     * @param parentNode parent node.
+     * @param versionNode version node.
+     * @return a JSONArray containing a JSONObject 'nodeRef'.
+     */
     private JSONArray createThumbnail(String parentNode, String versionNode) {
 
         NodeRef parentDocRef = new NodeRef("workspace", "SpacesStore", parentNode);

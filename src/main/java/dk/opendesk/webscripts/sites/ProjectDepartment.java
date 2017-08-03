@@ -42,7 +42,6 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -126,7 +125,11 @@ public class ProjectDepartment extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-
+    /**
+     * Applies a template to a site.
+     * @param newSiteRef nodeRef of the site.
+     * @param template_name name of the template.
+     */
     private void executeTemplate(NodeRef newSiteRef, String template_name) {
 
         System.out.println(template_name);
@@ -151,6 +154,19 @@ public class ProjectDepartment extends AbstractWebScript {
 
     }
 
+    /**
+     * Creates a Project Department site aka. Project
+     * (method = createPDSITE)
+     * @param site_name name of the project.
+     * @param site_description description of the project.
+     * @param site_sbsys sbsys id of the project.
+     * @param site_center_id center id of the project.
+     * @param site_owner project owner.
+     * @param site_manager project manager.
+     * @param site_visibility project visibility.
+     * @param template template to apply on the project.
+     * @return a JSONArray containing nodeRef and shortName of site.
+     */
     private JSONArray createPDSite(String site_name, String site_description, String site_sbsys, String site_center_id,
                                    String site_owner, String site_manager, SiteVisibility site_visibility, String template) {
 
@@ -188,6 +204,20 @@ public class ProjectDepartment extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Updates a Project Department site aka. Project
+     * (method = updatePDSITE)
+     * @param site_short_name short name of the project.
+     * @param site_name name of the project.
+     * @param site_description description of the project.
+     * @param site_sbsys sbsys id of the project.
+     * @param site_center_id center id of the project.
+     * @param site_owner project owner.
+     * @param site_manager project manager.
+     * @param site_state project state.
+     * @param site_visibility project visibility.
+     * @return JSONSuccess.
+     */
     private JSONArray updatePDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
                                    String site_center_id, String site_owner, String site_manager, String site_state,
                                    SiteVisibility site_visibility) {
@@ -222,6 +252,15 @@ public class ProjectDepartment extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Updates the site with Project properties.
+     * @param nodeRef nodeRef of the site.
+     * @param name name of the site.
+     * @param description description of the site.
+     * @param sbsys sbsys id of the site.
+     * @param center_id center id of the site.
+     * @param state state of the site.
+     */
     private void updateSite(NodeRef nodeRef, String name, String description, String sbsys, String center_id, String state) {
 
         // add the projectdepartment aspect
@@ -235,6 +274,12 @@ public class ProjectDepartment extends AbstractWebScript {
         nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_PD, aspectProps);
     }
 
+    /**
+     * Updates group that can only contain one member.
+     * It deletes all other members and adds the user as new sole member.
+     * @param group short name of the group.
+     * @param userName of the member.
+     */
     private void updateSingleGroupMember(String group, String userName) {
 
         //Clear group
@@ -246,6 +291,13 @@ public class ProjectDepartment extends AbstractWebScript {
         authorityService.addAuthority(group, userName);
     }
 
+    /**
+     * Creates Project Department groups and add owner and manager to it.
+     * @param nodeRef of the project.
+     * @param owner project owner.
+     * @param manager project manager.
+     * @param creator project creator.
+     */
     private void createGroupAddMembers(NodeRef nodeRef, String owner, String manager, String creator) throws JSONException {
 
         String siteShortName = siteService.getSiteShortName(nodeRef);

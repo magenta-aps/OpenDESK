@@ -84,6 +84,12 @@ public class Contents extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Gets child nodes
+     * (standard method of webscript)
+     * @param parentNodeRef nodeRef of the parent node.
+     * @return a JSONArray containing a list of properties of each child node.
+     */
     private JSONArray getChildNodes(NodeRef parentNodeRef) throws JSONException {
 
         JSONArray result = new JSONArray();

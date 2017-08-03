@@ -636,7 +636,7 @@ public class Utils {
     /**
      * Gets the next available file name for a new file.
      * @param nodeService alfresco standard service.
-     * @param nodeRef of the new file.
+     * @param nodeRef of the destination folder.
      * @param nodeName original name of the new file.
      * @return the next available file name.
      */

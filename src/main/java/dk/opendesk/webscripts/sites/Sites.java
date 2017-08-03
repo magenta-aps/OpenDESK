@@ -202,6 +202,12 @@ public class Sites extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Gets all sites based on a search query.
+     * (method = getAll)
+     * @param q search query. Leave this blank to get all sites.
+     * @return a JSONArray containing JSONObjects of all sites.
+     */
     private JSONArray getAllSites(String q) throws JSONException {
         JSONArray result = new JSONArray();
 
@@ -223,6 +229,11 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Gets all sites that the current user is explicitly part of.
+     * (method = getSitesPerUser)
+     * @return a JSONArray containing JSONObjects of all sites that the current user is explicitly part of.
+     */
     private JSONArray getAllSitesForCurrentUser() throws JSONException {
 
         JSONArray result = new JSONArray();
@@ -239,12 +250,26 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Checks if a site is special.
+     * A site is special if it has aspects; 'projecttype_templates' or 'document_template'.
+     * @param siteInfo of the site.
+     * @return true if the site is special. False if the site is not special.
+     */
     private boolean CheckIfSiteIsSpecial(SiteInfo siteInfo) {
         NodeRef n = siteInfo.getNodeRef();
         return nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES) ||
         nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD_DOCUMENT);
     }
 
+    /**
+     * Adds a user to an authority group.
+     * (method = addUser)
+     * @param siteShortName short name of a site.
+     * @param user username.
+     * @param group group name.
+     * @return JSONSuccess.
+     */
     private JSONArray addUser(String siteShortName, String user, String group) {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
@@ -252,6 +277,14 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Removes a user from an authority group.
+     * (method = removeUser)
+     * @param siteShortName short name of a site.
+     * @param user username.
+     * @param group group name.
+     * @return JSONSuccess.
+     */
     private JSONArray removeUser(String siteShortName, String user, String group) {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
@@ -259,6 +292,14 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Adds a permission for a site to a user.
+     * (method = addPermission)
+     * @param siteShortName short name of a site.
+     * @param user username.
+     * @param permission permission name.
+     * @return JSONSuccess.
+     */
     private JSONArray addPermission(String siteShortName, String user, String permission) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
@@ -266,6 +307,14 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Removes a permission for a site from a user.
+     * (method = removePermission)
+     * @param siteShortName short name of a site.
+     * @param user username.
+     * @param permission permission name.
+     * @return JSONSuccess.
+     */
     private JSONArray removePermission(String siteShortName, String user, String permission) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
@@ -273,6 +322,12 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Gets the role of the current user in a site.
+     * (method = getCurrentUserSiteRole)
+     * @param siteShortName short name of a site.
+     * @return a JSONArray containing role.
+     */
     private JSONArray getCurrentUserSiteRole(String siteShortName) {
 
         Map<String, Boolean> authorities = new HashMap<>();
@@ -314,6 +369,13 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONReturnPair("role", role);
     }
 
+    /**
+     * Adds a link from one project to another.
+     * (method = addLink)
+     * @param sourceProject short name of the source project.
+     * @param destinationProject short name of the destination project.
+     * @return a JSONArray containing sourceLinkRef and destinationLinkRef that links to each other.
+     */
     private JSONArray addLink(String sourceProject, String destinationProject) {
 
         SiteInfo source = siteService.getSite(sourceProject);
@@ -351,6 +413,13 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONReturnArray(map);
     }
 
+    /**
+     * Deletes a link.
+     * (method = deleteLink)
+     * @param source nodeRef of source link.
+     * @param destination nodeRef of destination link.
+     * @return JSONSuccess.
+     */
     private JSONArray deleteLink(NodeRef source, NodeRef destination) {
 
         nodeService.deleteNode(source);
@@ -358,6 +427,12 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Gets the type of a site
+     * (method = getSiteType)
+     * @param siteShortName shortname of a site.
+     * @return a JSONArray containing type.
+     */
     private JSONArray getSiteType(String siteShortName) {
 
         NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
@@ -365,6 +440,12 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONReturnPair("type", type);
     }
 
+    /**
+     * Gets all groups of a type of site.
+     * (method = getSiteGroups)
+     * @param siteType type of site.
+     * @return a JSONArray containing a JSONObject for each group.
+     */
     private JSONArray getSiteGroups(String siteType) throws JSONException {
 
         JSONArray result = new JSONArray();
@@ -375,6 +456,11 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Converts a site into a standard structured JSONObject.
+     * @param s site info.
+     * @return a JSONObject representing the site.
+     */
     private JSONObject convertSiteInfoToJSON(SiteInfo s) throws JSONException {
         JSONObject json = new JSONObject();
         String siteShortName = s.getShortName();
@@ -485,6 +571,12 @@ public class Sites extends AbstractWebScript {
         return json;
     }
 
+    /**
+     * Gets information of a site.
+     * (method = getSite)
+     * @param shortName short name of the site.
+     * @return a JSONObject representing the site.
+     */
     private JSONArray getSiteInfo(String shortName) throws JSONException {
 
         SiteInfo siteInfo = siteService.getSite(shortName);
@@ -493,6 +585,11 @@ public class Sites extends AbstractWebScript {
         return json;
     }
 
+    /**
+     * Gets all sites with a certain aspect.
+     * @param aspect aspect to filter by.
+     * @return a JSONArray containing JSONObjects for each site.
+     */
     private JSONArray getSitesWithAspect(QName aspect) throws JSONException {
 
         NodeRef sitesNodeRef = siteService.getSiteRoot();
@@ -511,10 +608,23 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Gets all site templates.
+     * (method = getTemplates)
+     * @return a JSONArray containing JSONObjects for each site template.
+     */
     private JSONArray getTemplates() throws JSONException {
         return getSitesWithAspect(OpenDeskModel.ASPECT_PD_TEMPLATE_SITES);
     }
 
+    /**
+     * Creates a site.
+     * (method = createSite)
+     * @param displayName display name of the site.
+     * @param description description of the site.
+     * @param site_visibility visibility of the site.
+     * @return a JSONObject representing the site.
+     */
     private JSONArray createSite(String displayName, String description, SiteVisibility site_visibility)
             throws JSONException {
 
@@ -524,6 +634,13 @@ public class Sites extends AbstractWebScript {
         return getSiteInfo(siteService.getSiteShortName(nodeRef));
     }
 
+    /**
+     * Creates a site template.
+     * (method = createTemplate)
+     * @param displayName display name of the site template.
+     * @param description description of the site template.
+     * @return a JSONObject representing the site template.
+     */
     private JSONArray createTemplate(String displayName, String description) throws JSONException {
 
         NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
@@ -532,12 +649,23 @@ public class Sites extends AbstractWebScript {
         return getSiteInfo(siteService.getSiteShortName(nodeRef));
     }
 
+    /**
+     * Makes a site into a site template.
+     * (method = makeSiteATemplate)
+     * @param shortName short name of the site to be made into a site template.
+     * @return JSONSuccess.
+     */
     private JSONArray makeSiteATemplate(String shortName) {
 
         SiteInfo s = siteService.getSite(shortName);
         return makeSiteATemplate(s.getNodeRef());
     }
 
+    /**
+     * Makes a site into a site template.
+     * @param nodeRef of the site to be made into a site template.
+     * @return JSONSuccess.
+     */
     private JSONArray makeSiteATemplate(NodeRef nodeRef) {
 
         Map<QName, Serializable> aspectProps = new HashMap<>();
@@ -545,6 +673,12 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Creates a PDF containing information about the members of the site.
+     * (method = createMembersPDF)
+     * @param siteShortName short name of a site.
+     * @return a JSONArray containing nodeRef to the PDF.
+     */
     private JSONArray createMembersPDF(String siteShortName) throws JSONException {
 
         AuthenticationUtil.pushAuthentication();
@@ -608,7 +742,13 @@ public class Sites extends AbstractWebScript {
         }
     }
 
-    // Used by createMembersPDF
+    /**
+     * Gets authority members as a double line break separated string.
+     * Used by createMembersPDF
+     * @param siteShortName short name of a site.
+     * @param groupName group name.
+     * @return group members.
+     */
     private String getAuthorityMembersToString(String siteShortName, String groupName) {
         String group = Utils.getAuthorityName(siteShortName, groupName);
         String groupMembers = groupName + ": \n\n";
@@ -620,6 +760,12 @@ public class Sites extends AbstractWebScript {
         return groupMembers;
     }
 
+    /**
+     * Deletes a site.
+     * (method = deleteSite)
+     * @param siteShortName short name of a site.
+     * @return JSONSuccess.
+     */
     public JSONArray deleteSite(String siteShortName) {
 
         // Find all links pointing from this site
@@ -650,6 +796,12 @@ public class Sites extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Gets the next available file name for a new file.
+     * @param destination nodeRef of the destination folder.
+     * @param nodeName original name of the new file.
+     * @return the next available file name.
+     */
     private JSONArray returnFileName (String destination, String nodeName) {
 
         NodeRef destinationNodeRef = new NodeRef(destination);

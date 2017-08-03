@@ -74,6 +74,12 @@ public class Permissions extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Gets edit permissions of the current user on a node.
+     * (method = getEditPermission)
+     * @param nodeRef of the node.
+     * @return a JSONArray containing an AccessStatus 'edit_permissions'.
+     */
     private JSONArray getEditPermission(NodeRef nodeRef) throws JSONException {
 
         JSONArray result = new JSONArray();

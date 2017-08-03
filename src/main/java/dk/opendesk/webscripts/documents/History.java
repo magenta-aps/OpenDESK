@@ -102,6 +102,12 @@ public class History extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Gets all versions of a node.
+     * (method = getAll)
+     * @param nodeRef of the node.
+     * @return a JSONArray containing all versions of the node.
+     */
     private JSONArray getVersions(NodeRef nodeRef) throws JSONException {
 
         System.out.println("nodeRef" + nodeRef);
