@@ -687,7 +687,7 @@ public class Utils {
      * @param nodeService alfresco standard service.
      * @param preferenceService alfresco standard service.
      * @param person the nodeRef of the user to be converted.
-     * @return an JSONObject representing the user.
+     * @return a JSONObject representing the user.
      */
     public static JSONObject convertUserToJSON (NodeService nodeService, PreferenceService preferenceService,
                                                 NodeRef person) throws JSONException {
@@ -738,7 +738,7 @@ public class Utils {
      * @param siteService alfresco standard service.
      * @param personService alfresco standard service.
      * @param notification the nodeRef of the notification to be converted.
-     * @return an JSONObject representing the notification.
+     * @return a JSONObject representing the notification.
      */
     public static JSONObject convertNotificationToJSON (NodeService nodeService, SiteService siteService,
                                                         PersonService personService, NodeRef notification) throws JSONException {

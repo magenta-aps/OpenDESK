@@ -2,13 +2,12 @@ package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.preference.PreferenceService;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.AuthorityType;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,15 +15,15 @@ import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.*;
+import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
+import java.util.Set;
 
 public class Groups extends AbstractWebScript {
-
-    final Logger logger = LoggerFactory.getLogger(Groups.class);
 
     private SiteService siteService;
     private NodeService nodeService;
@@ -85,6 +84,12 @@ public class Groups extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Gets all groups of a site and their members.
+     * (method = getGroupsAndMembers)
+     * @param siteShortName short name of a site.
+     * @return a JSONArray containing JSONObjects for each group and each of their members.
+     */
     private JSONArray getGroupsAndMembers(String siteShortName)
             throws JSONException {
 
@@ -110,6 +115,12 @@ public class Groups extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Gets all members of a group.
+     * (method = getGroupMembers)
+     * @param group name of a group.
+     * @return a JSONArray containing JSONObjects for each group member.
+     */
     private JSONArray getGroupMembers(String group) throws JSONException {
 
         Set<String> users = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);

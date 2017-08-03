@@ -1,12 +1,6 @@
 package dk.opendesk.webscripts;
 
-/**
- * Created by flemmingheidepedersen on 10/10/2016.
- */
-
-
 import dk.opendesk.repo.utils.Utils;
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -14,8 +8,6 @@ import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Cache;
@@ -23,16 +15,11 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author mturatti
- */
 public class CleanupAndPurge extends DeclarativeWebScript {
 
 
@@ -46,7 +33,7 @@ public class CleanupAndPurge extends DeclarativeWebScript {
         this.contentService = contentService;
     }
 
-    ContentService contentService;
+    private ContentService contentService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -54,7 +41,7 @@ public class CleanupAndPurge extends DeclarativeWebScript {
 
     private NodeService nodeService;
 
-    final Logger logger = LoggerFactory.getLogger(CleanupAndPurge.class);
+    private final Logger logger = LoggerFactory.getLogger(CleanupAndPurge.class);
     private NodeArchiveService nodeArchiveService;
 
     public void setNodeArchiveService(NodeArchiveService nodeArchiveService) {
@@ -66,17 +53,11 @@ public class CleanupAndPurge extends DeclarativeWebScript {
 
         List<SiteInfo> sites = siteService.listSites("","",100);
 
-        Iterator i = sites.iterator();
-
-        while (i.hasNext()) {
-            SiteInfo s = (SiteInfo)i.next();
+        for (SiteInfo s : sites) {
             System.out.println(s.getShortName());
 
             siteService.deleteSite(s.getShortName());
         }
-
-
-
 
         logger.info("@@@ Purging all archived nodes... ");
         final long start = System.currentTimeMillis();
@@ -99,12 +80,21 @@ public class CleanupAndPurge extends DeclarativeWebScript {
         return model;
     }
 
+    /**
+     * Sets an error message.
+     * @param status of the error.
+     * @param code of the error.
+     * @param message of the error.
+     */
     private void errorMessage(Status status, int code, final String message) {
         status.setCode(code);
         status.setMessage(message);
         status.setRedirect(true);
     }
 
+    /**
+     * Sets up three test sites.
+     */
     private void setupSites() {
 
         Utils.createSite(nodeService, contentService, siteService, "Magenta_1", "no comments", SiteVisibility.PUBLIC);

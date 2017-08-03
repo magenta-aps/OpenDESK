@@ -17,12 +17,14 @@ limitations under the License.
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import dk.opendesk.repo.utils.Utils;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -30,13 +32,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.Writer;
 import java.util.*;
-
-import dk.opendesk.repo.utils.Utils;
 
 public class Notifications extends AbstractWebScript {
 
@@ -126,7 +129,13 @@ public class Notifications extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
-    // also returns read notifications
+    /**
+     * Gets all notifications.
+     * (method = getAll)
+     * This method also returns read notifications.
+     * @param userName username of the user whose notifications are to be returned.
+     * @return a JSONArray containing a JSONObject for each notification.
+     */
     private JSONArray getAllNotifications(String userName) throws JSONException {
 
         int unSeenSize = countUnSeenNotifications(userName);
@@ -156,6 +165,17 @@ public class Notifications extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Adds a notification to a user.
+     * (method = add)
+     * @param userName username of the receiving user.
+     * @param message of the notification.
+     * @param subject of the notification.
+     * @param link from the notification.
+     * @param type of the notification.
+     * @param project linked to from the notification.
+     * @return a JSONArray containing nodeRef of the notification.
+     */
     private JSONArray addNotification(String userName, String message, String subject, String link, String type, String project) {
 
         ChildAssociationRef childAssocRef = null;
@@ -164,49 +184,73 @@ public class Notifications extends AbstractWebScript {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-        //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
+            //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
 
-        NodeRef user = personService.getPerson(userName);
+            NodeRef user = personService.getPerson(userName);
 
-        childAssocRef = this.nodeService.createNode(
-                user,
-                OpenDeskModel.PROP_NOTIFICATION_ASSOC,
-                QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(userName)),
-                OpenDeskModel.PROP_NOTIFICATION,
-                null);
+            childAssocRef = this.nodeService.createNode(
+                    user,
+                    OpenDeskModel.PROP_NOTIFICATION_ASSOC,
+                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(userName)),
+                    OpenDeskModel.PROP_NOTIFICATION,
+                    null);
 
-                Map<QName, Serializable> contentProps = new HashMap<>();
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_LINK, link);
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, type);
-                contentProps.put(OpenDeskModel.PROP_NOTIFICATION_PROJECT, project);
+            Map<QName, Serializable> contentProps = new HashMap<>();
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_LINK, link);
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, type);
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_PROJECT, project);
 
-                nodeService.setProperties(childAssocRef.getChildRef(),contentProps);
-                nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
+            nodeService.setProperties(childAssocRef.getChildRef(), contentProps);
+            nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
         } finally {
             AuthenticationUtil.popAuthentication();
         }
         return Utils.getJSONReturnPair("nodeRef", childAssocRef.getChildRef().toString());
     }
 
+    /**
+     * Removes a notification.
+     * (method = remove)
+     * @param nodeRef of the notification.
+     * @return JSONSuccess.
+     */
     private JSONArray removeNotification(NodeRef nodeRef) {
         nodeService.deleteNode(nodeRef);
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Sets a notification as read.
+     * (method = setRead)
+     * @param nodeRef of the notification.
+     * @return JSONSuccess.
+     */
     private JSONArray setNotificationRead (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Sets a notification as seen.
+     * (method = setSeen)
+     * @param nodeRef of the notification.
+     * @return JSONSuccess.
+     */
     private JSONArray setNotificationSeen (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Sets all notifications of a user as seen.
+     * (method = setAllNotificationsSeen)
+     * @param userName username of the user whose notifications are requested.
+     * @return JSONSuccess.
+     */
     private JSONArray setAllNotificationsSeen (String userName) {
 
         NodeRef user = personService.getPerson(userName);
@@ -221,6 +265,12 @@ public class Notifications extends AbstractWebScript {
         return Utils.getJSONSuccess();
     }
 
+    /**
+     * Gets the information of a notification.
+     * (method = getInfo)
+     * @param notification nodeRef of the notification.
+     * @return a JSONObject representing the notification.
+     */
     private JSONArray getInfo (NodeRef notification) throws JSONException {
         JSONArray result = new JSONArray();
         JSONObject json = Utils.convertNotificationToJSON(nodeService, siteService, personService, notification);
@@ -228,14 +278,32 @@ public class Notifications extends AbstractWebScript {
         return result;
     }
 
+    /**
+     * Counts number of child nodes of a user with a specific property value.
+     * @param userName username of the user whose notifications are requested.
+     * @param property to check.
+     * @param value to check.
+     * @return number of child nodes of a user with a specific property value.
+     */
     private int countPropertyValue(String userName, QName property, Serializable value) {
         NodeRef user = personService.getPerson(userName);
         return nodeService.getChildAssocsByPropertyValue(user, property, value).size();
     }
 
+    /**
+     * Counts number of unseen notifications of a user.
+     * @param userName username of the user whose notifications are requested.
+     * @return number of unseen notifications of a user.
+     */
     private int countUnSeenNotifications(String userName) {
         return countPropertyValue(userName, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
     }
+
+    /**
+     * Counts number of unread notifications of a user.
+     * @param userName username of the user whose notifications are requested.
+     * @return number of unread notifications of a user.
+     */
     private int countUnReadNotifications(String userName) {
         return countPropertyValue(userName, OpenDeskModel.PROP_NOTIFICATION_READ, false);
     }

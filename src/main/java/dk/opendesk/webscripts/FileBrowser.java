@@ -16,27 +16,27 @@ limitations under the License.
 */
 package dk.opendesk.webscripts;
 
-import dk.opendesk.repo.model.OpenDeskModel;
+import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.search.SearcherException;
 import org.alfresco.repo.site.SiteModel;
-import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.AbstractWebScript;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.*;
-import dk.opendesk.repo.utils.Utils;
+import java.util.List;
+import java.util.Map;
 
 public class FileBrowser extends AbstractWebScript {
 
@@ -89,6 +89,12 @@ public class FileBrowser extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Gets child nodes.
+     * (method = getChildNodes)
+     * @param nodeRef of the parent node.
+     * @return a JSONArray containing JSONObjects for all child nodes.
+     */
     private JSONArray getChildNodes(NodeRef nodeRef) throws JSONException {
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
@@ -155,7 +161,12 @@ public class FileBrowser extends AbstractWebScript {
         return result;
     }
 
-    public JSONArray getCompanyHome() throws SearcherException, JSONException, FileNotFoundException {
+    /**
+     * Gets the Company Home.
+     * (method = getCompanyHome)
+     * @return a JSONArray containing nodeRef of Company Home.
+     */
+    private JSONArray getCompanyHome() throws JSONException {
         NodeRef companyHome = repository.getCompanyHome();
         return Utils.getJSONReturnPair("nodeRef", companyHome.toString());
     }

@@ -132,6 +132,17 @@ public class Users extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    /**
+     * Creates an external user.
+     * The new user is sent an invitation email to its email address containing user name and password.
+     * (method = createExternalUser)
+     * @param firstName of the external user.
+     * @param lastName of the external user.
+     * @param email of the external user.
+     * @param siteShortName short name of the site that the external user is added.
+     * @param groupName name of the site group that the external user is added to.
+     * @return a JSONArray containing userName.
+     */
     private JSONArray createExternalUser(String firstName, String lastName, String email, String siteShortName,
                                          String groupName) throws Exception {
 
@@ -180,6 +191,12 @@ public class Users extends AbstractWebScript {
         return Utils.getJSONReturnPair("userName", userName);
     }
 
+    /**
+     * Gets a list of filtered users.
+     * (method = getUsers)
+     * @param filter search query to filter by. Leave this empty to get all users.
+     * @return a JSONArray containing JSONObjects for each user.
+     */
     private JSONArray getUsers(String filter) throws Exception {
 
         List<QName> filterProps = new ArrayList<>();
