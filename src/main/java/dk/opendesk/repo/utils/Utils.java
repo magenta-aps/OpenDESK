@@ -58,7 +58,9 @@ public class Utils {
         Collaborator - can do everything except moving and deleting other users content
         Coordinator - full access
     */
-
+    /**
+     * A list of mappings of site types and site groups.
+     */
     public static final Map<String, JSONArray> siteGroups = Collections.unmodifiableMap(
             new HashMap<String, JSONArray>() {
                 {
@@ -103,6 +105,11 @@ public class Utils {
 
     private static Map<String, String> PD_GROUPS = new HashMap<>();
 
+    /**
+     * Gets the danish translation for Project Department groups.
+     * @param group the short name of the group to translate.
+     * @return the translated string.
+     */
     public static String getPDGroupTranslation(String group)
     {
         if(PD_GROUPS.isEmpty()) {
@@ -119,8 +126,8 @@ public class Utils {
     /**
      * Alfresco's (or Java's) query string parsing doesn't handle UTF-8
      * encoded values. We parse the query string ourselves here.
-     * @param url
-     * @return
+     * @param url the requested url.
+     * @return a map of parsed parameters.
      */
     public static Map<String, String> parseParameters(String url) {
         // Do our own parsing to get the query string since java.net.URI can't
@@ -148,6 +155,12 @@ public class Utils {
         return "[" + StringUtils.join(values, ",") + "]";
     }
 
+    /**
+     * Gets a child JSON object from a JSON object.
+     * @param json Parent JSON object.
+     * @param parameter the key of the child JSON object.
+     * @return a child JSON Object with the specified parameter.
+     */
     public static String getJSONObject(JSONObject json, String parameter) throws JSONException {
         if (!json.has(parameter) || json.getString(parameter).length() == 0)
         {
@@ -156,6 +169,11 @@ public class Utils {
         return json.getString(parameter);
     }
 
+    /**
+     * Gets the nodeRef of a JSON object.
+     * @param json JSON object containing PARAM_STORE_TYPE, PARAM_STORE_ID and PARAM_NODE_ID.
+     * @return the nodeRef contained by the JSON object.
+     */
     public static NodeRef getNodeRef(JSONObject json) throws JSONException {
         String storeType = getJSONObject(json, "PARAM_STORE_TYPE");
         String storeId = getJSONObject(json, "PARAM_STORE_ID");
@@ -167,22 +185,42 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Gets a JSONArray representing succes.
+     * @return a JSONArray containing { status : "succes" }.
+     */
     public static JSONArray getJSONSuccess () {
         return getJSONReturnPair("status", "success");
     }
 
+    /**
+     * Gets a JSONArray representing an error.
+     * @param e the exception.
+     * @return a JSONArray containing the error message.
+     */
     public static JSONArray getJSONError (Exception e) {
         Map<String, Serializable> map = new HashMap<>();
         map.put("error", e.getStackTrace()[0].toString());
         return getJSONReturnArray(map);
     }
 
+    /**
+     * Gets a JSONObject from a key-value pair.
+     * @param key key of the object.
+     * @param value value of the object.
+     * @return a JSONArray containing the JSONObject.
+     */
     public static JSONArray getJSONReturnPair (String key, String value) {
         Map<String, Serializable> map = new HashMap<>();
         map.put(key, value);
         return getJSONReturnArray(map);
     }
 
+    /**
+     * Gets a JSONArray from a map.
+     * @param map contains mapping of pairs.
+     * @return a JSONArray containing the pairs as JSONObjects.
+     */
     public static JSONArray getJSONReturnArray(Map<String, Serializable> map) {
         JSONObject return_json = new JSONObject();
         JSONArray result = new JSONArray();
@@ -196,6 +234,11 @@ public class Utils {
         return result;
     }
 
+    /**
+     * Gets a JSONObject from a map.
+     * @param map contains mapping of pairs.
+     * @return a JSONObject containing the pairs as JSONObject children.
+     */
     public static JSONObject getJSONReturnObject(Map<String, Serializable> map) {
         JSONObject result = new JSONObject();
         try {
@@ -207,6 +250,11 @@ public class Utils {
         return result;
     }
 
+    /**
+     * Writes JSON to the webscript writer.
+     * @param writer a webscript writer.
+     * @param result a JSONArray to be written.
+     */
     public static void writeJSONArray (Writer writer, JSONArray result) {
         try {
             result.writeJSONString(writer);
@@ -215,24 +263,12 @@ public class Utils {
         }
     }
 
-    public static String getGroupPermission (AuthorityService authorityService, Set<AccessPermission> permissions,
-                                             String group) {
-
-        for (AccessPermission a : permissions) {
-            String authority = a.getAuthority();
-            if(group.equals(authority))
-                return a.getPermission();
-        }
-
-        // If the group is a sub group of standard alfresco groups then we need to fetch the parent group to get permissions
-        Set<String> parentGroups = authorityService.getContainingAuthorities(AuthorityType.GROUP, group, true);
-        if(parentGroups.size() > 0) {
-            String parentGroup = parentGroups.iterator().next();
-            return getGroupPermission(authorityService, permissions, parentGroup);
-        }
-        return null;
-    }
-
+    /**
+     * Gets the authority name of a site group.
+     * @param siteShortName of the site that the group belongs to.
+     * @param groupName of the site group.
+     * @return the authority name of the site group.
+     */
     public static String getAuthorityName (String siteShortName, String groupName)
     {
         String siteGroup = "GROUP_site_" + siteShortName;
@@ -242,6 +278,16 @@ public class Utils {
             return siteGroup + "_" + groupName;
     }
 
+    /**
+     * Creates a site with dashboard, document library and discussions.
+     * @param nodeService alfresco standard service.
+     * @param contentService alfresco standard service.
+     * @param siteService alfresco standard service.
+     * @param displayName of the site.
+     * @param description of the site.
+     * @param siteVisibility of the site.
+     * @return the nodeRef of the new site.
+     */
     public static NodeRef createSite(NodeService nodeService, ContentService contentService,  SiteService siteService,
                                      String displayName, String description, SiteVisibility siteVisibility) {
 
@@ -410,6 +456,14 @@ public class Utils {
         }
     }
 
+    /**
+     * Creates a person's mapping of properties.
+     * @param userName of the user.
+     * @param firstName of the user.
+     * @param lastName of the user.
+     * @param email of the user.
+     * @return a map of properties.
+     */
     public static Map<QName, Serializable> createPersonProperties(String userName, String firstName, String lastName,
                                                                   String email) {
         Map<QName, Serializable> properties = new HashMap<>();
@@ -420,6 +474,10 @@ public class Utils {
         return properties;
     }
 
+    /**
+     * Generates a new random password.
+     * @return a new random password.
+     */
     public static String generateNewPassword()
     {
         PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
@@ -430,6 +488,11 @@ public class Utils {
         return passwordGenerator.generate(8); // output ex.: lrU12fmM 75iwI90o
     }
 
+    /**
+     * Gets the visibility enum from a string.
+     * @param visibilityStr a string representing the visibility.
+     * @return an enum representing the visibility.
+     */
     public static SiteVisibility getVisibility(String visibilityStr)
     {
         if(visibilityStr.isEmpty())
@@ -438,6 +501,16 @@ public class Utils {
             return SiteVisibility.valueOf(visibilityStr);
     }
 
+    /**
+     * Sends an email to a user using a template.
+     * @param actionService alfresco standard service.
+     * @param searchService alfresco standard service.
+     * @param templatePath the path of the template to use for the email body.
+     * @param subject of the email.
+     * @param to the username of the user that the email is sent to.
+     * @param from the username of the user that the email is sent from.
+     * @param templateArgs the template arguments used in the email template.
+     */
     public static void sendEmail(ActionService actionService, SearchService searchService, String templatePath,
                                  String subject, String to, String from, Map<String, Serializable> templateArgs){
         Action mailAction = actionService.createAction(MailActionExecuter.NAME);
@@ -468,6 +541,15 @@ public class Utils {
         actionService.executeAction(mailAction, null);
     }
 
+    /**
+     * Send invite user email
+     * @param messageService alfresco standard service.
+     * @param actionService alfresco standard service.
+     * @param searchService alfresco standard service.
+     * @param properties alfresco global properties.
+     * @param to the username of the user that the email is sent to.
+     * @param templateArgs the template arguments used in the email template.
+     */
     public static void sendInviteUserEmail(MessageService messageService, ActionService actionService,
                                            SearchService searchService, Properties properties, String to,
                                            Map<String, Serializable> templateArgs){
@@ -479,6 +561,13 @@ public class Utils {
         sendEmail(actionService, searchService, templatePath, subject, to, from, templateArgs);
     }
 
+    /**
+     * Gets the next available file name for a new file.
+     * @param nodeService alfresco standard service.
+     * @param nodeRef of the new file.
+     * @param nodeName original name of the new file.
+     * @return the next available file name.
+     */
     public static String getFileName (NodeService nodeService, NodeRef nodeRef, String nodeName) {
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
@@ -521,6 +610,13 @@ public class Utils {
         return nodeName;
     }
 
+    /**
+     * Converts a user into a standard structured JSONObject.
+     * @param nodeService alfresco standard service.
+     * @param preferenceService alfresco standard service.
+     * @param person the nodeRef of the user to be converted.
+     * @return an JSONObject representing the user.
+     */
     public static JSONObject convertUserToJSON (NodeService nodeService, PreferenceService preferenceService,
                                                 NodeRef person) throws JSONException {
         JSONObject json = new JSONObject();
@@ -564,7 +660,14 @@ public class Utils {
 
         return json;
     }
-
+    /**
+     * Converts a notification into a standard structured JSONObject.
+     * @param nodeService alfresco standard service.
+     * @param siteService alfresco standard service.
+     * @param personService alfresco standard service.
+     * @param notification the nodeRef of the notification to be converted.
+     * @return an JSONObject representing the notification.
+     */
     public static JSONObject convertNotificationToJSON (NodeService nodeService, SiteService siteService,
                                                         PersonService personService, NodeRef notification) throws JSONException {
         JSONObject json = new JSONObject();
@@ -627,6 +730,13 @@ public class Utils {
         return json;
     }
 
+    /**
+     * Gets the filtered preferences of a user.
+     * @param preferenceService alfresco standard service.
+     * @param userName of the user.
+     * @param filter that is used to find a set of preferences. Leave empty to get all preferences.
+     * @return a map of preferences.
+     */
     public static Map<String, Serializable> getPreferences(PreferenceService preferenceService, String userName, String filter) {
         AuthenticationUtil.pushAuthentication();
         try {
@@ -639,6 +749,12 @@ public class Utils {
         }
     }
 
+    /**
+     * Gets the type of a site.
+     * @param nodeService alfresco standard service.
+     * @param nodeRef of the site.
+     * @return the type of the site.
+     */
     public static String getSiteType(NodeService nodeService, NodeRef nodeRef) {
         String type = OpenDeskModel.project;
         if (nodeService.hasAspect(nodeRef, OpenDeskModel.ASPECT_PD)) {
