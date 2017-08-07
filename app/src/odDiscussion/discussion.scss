@@ -1,4 +1,5 @@
 .discussion-back {
+  cursor: pointer;
   display: inline-block;
   padding-right: $u * 4;
   width: $u * 8;
@@ -11,7 +12,6 @@
 .od-discussion {
     display: block;
     border-collapse: collapse;
-    height: 400px;
     overflow-y: scroll;
     .title {
         text-align: left !important;

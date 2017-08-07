@@ -1,9 +1,7 @@
-/**
- * SASS constants
- */
+//
+// SASS constants
+//
 
-//$main-color: rgb(63, 81, 181);
-// Main color. We use lighten() and darken() to make variations of this color
 $black: #000;
 $white: #fff;
 
@@ -37,9 +35,9 @@ $u: 16px;
 $br-sm-md: $u * 40;
 // Breakpoint between small and medium screens
 
-/**
- * Mixins
- */
+//
+// Mixins
+//
 
 @mixin fade-in {
   opacity: 1;
@@ -52,9 +50,9 @@ $br-sm-md: $u * 40;
 }
 
 
-/**
- * Element level (atom) styles
- */
+//
+// Element level (atom) styles
+//
 
 a {
   &,
@@ -100,16 +98,24 @@ md-icon {
   color: $primary-text-color;
 }
 
+.md-chips .md-chip-input-container {
+  width: 100%;
+}
+
 // Muted (greyed) text
 .muted {
   font-size: .9em;
   opacity: .66;
 }
 
+.clickable {
+  cursor: pointer;
+}
 
-/*
- * Molecule level styles
- */
+
+//
+// Molecule level styles
+//
 
 main {
   margin: $u * 3 0 auto;
@@ -202,6 +208,7 @@ main {
   list-style: none;
   margin-bottom: 20px;
   padding: $u * .5 $u;
+  min-height: 1em;
 
   li {
     display: inline-block;
@@ -214,9 +221,11 @@ main {
 }
 
 // Icons in buttons
-.md-button .material-icons {
-  margin-top: -($u * .25);
-  vertical-align: middle;
+.md-button {
+  .material-icons {
+    margin-top: -($u * .25);
+    vertical-align: middle;
+  }
 }
 
 .md-text-icon-button {
@@ -225,7 +234,7 @@ main {
 
 //make the chat window appear behind notifcation slide out
 #conversejs {
-  z-index: 0 !important;
+  z-index: 0;
 }
 
 //Search results

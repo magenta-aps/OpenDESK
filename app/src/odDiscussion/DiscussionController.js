@@ -2,8 +2,8 @@ angular
     .module('openDeskApp.discussion', ['ng.ckeditor'])
     .controller('DiscussionController', DiscussionController);
 
-function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
-    discussionService, nodeRefUtilsService, userService, sessionService, notificationsService, siteService, preferenceService) {
+function DiscussionController($scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
+    discussionService, nodeRefUtilsService, sessionService, notificationsService) {
     var dc = this;
 
     dc.discussions = [];
@@ -13,6 +13,10 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     dc.search = '';
     dc.user = '';
     dc.isLoading = true;
+
+    //sets the margin to the width of sidenav
+	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("md-tabs-wrapper").outerHeight();
+    $(".od-discussion").css("max-height", tableHeight+"px");
 
     dc.getDiscussions = function (siteShortName) {
         dc.isLoading = true;
@@ -48,9 +52,8 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     function init() {
         dc.user = sessionService.getUserInfo().user;
         dc.getDiscussions($stateParams.projekt);
-        //getAllMembers($stateParams.projekt, 'PD-Project');
 
-        $scope.tab.selected = $state.current.data.selectedTab;
+        $scope.tab.selected = $stateParams.selectedTab;
 
         if ($stateParams.path) {
             discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path).then(function (response) {

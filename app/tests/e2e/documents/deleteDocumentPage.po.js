@@ -1,10 +1,11 @@
 var constants = require('../common/constants');
+var documentHelper = require('./documentHelper.js');
 
 var DeleteDocumentPage = function () {
 
 	return {
 		getDocumentList: function () {
-			var documentList = element.all(by.repeater('content in contents'));
+			var documentList = element.all(by.repeater('content in contentTypeList'));
 			var documentNames = documentList.all(by.css('.content-name'));
 			return documentNames.getInnerHtml();
 		},
@@ -13,27 +14,13 @@ var DeleteDocumentPage = function () {
 			return constants.file_4;
 		},
 
-		deleteDocument: function () {
-			//Select all data elements and apply filter function
-			element.all(by.repeater('content in contents')).filter(function (elem) {
-				//Return the element or elements
-				return elem.getText().then(function (text) {
-					//Match the text
-					return text.indexOf(constants.file_4) >= 0;
-				});
-			}).then(function (filteredElements) {
-				var documentOptionsBtn = filteredElements[0].all(by.css('[ng-click="$mdMenu.open()"]')).first();
-
-				documentOptionsBtn.click();
-				browser.driver.sleep(3000);
-
-				var selectDeleteBtn = element.all(by.css('[ng-click="vm.deleteFileDialog($event, content)"]')).last();
-				selectDeleteBtn.click();
-
-				var deleteBtn = element.all(by.css('[aria-label="Remove"]')).first();
-				deleteBtn.click();
-			});
-		}
+		deleteDocument: function (fileName) {
+            documentHelper.findDocumentInList(fileName).then(function (response) {
+                expect(response.length).toBe(1);
+                documentHelper.openOptionMenu(response[0]);
+                documentHelper.deleteAction();
+            });
+        }
 	};
 };
 

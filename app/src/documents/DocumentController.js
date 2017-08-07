@@ -4,15 +4,15 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
-                            documentPreviewService, alfrescoDownloadService, sessionService,
-                            $mdDialog, notificationsService, authService, cmisService, siteService, $window) {
+                            documentPreviewService, alfrescoDownloadService, sessionService, alfrescoNodeUtils,
+                            $mdDialog, notificationsService, authService, siteService, $window) {
 
     var vm = this;
     vm.doc = [];
     vm.plugin = [];
     vm.paths = [];
     vm.title = [];
-    vm.type = siteService.getType();
+    vm.type = siteService.getSite().type;
     vm.canEdit = false;
 
     vm.showArchived = false;
@@ -20,6 +20,13 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.documentTab = '/dokumenter';
 
     vm.notificationFrom = '';
+
+    var height = $(window).height() - 300 - $("header").outerHeight();
+
+    $scope.iframeStyle = {
+        "height" : height + 'px',
+        "width" : "99%",
+    }
 
     if ($location.search().archived != undefined && $location.search().archived == "true") {
         vm.showArchived = true;
@@ -29,8 +36,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     var parentDocumentNode = $location.search().parent != undefined ? $location.search().parent : selectedDocumentNode;
     var docHasParent = $location.search().parent != undefined ? true : false;
     var firstDocumentNode = "";
-
-
 
     documentService.getHistory(parentDocumentNode).then(function (val) {
         $scope.history = val;
@@ -102,12 +107,9 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         } else {
             documentService.getDocument(docHasParent ? parentDocumentNode : selectedDocumentNode).then(function (response) {
 
-                var cmisQuery = response.item.location.site + "/documentLibrary" + response.item.location.path
+                siteService.getNode(response.item.location.site, "documentLibrary", response.item.location.path).then(function (val) {
 
-
-                cmisService.getNode(cmisQuery).then(function (val) {
-
-                    var currentFolderNodeRef = val.data.properties["alfcmis:nodeRef"].value;
+                    var currentFolderNodeRef = val.parent.nodeRef;
 
                     siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function (response) {
                         var param = docHasParent ? parentDocumentNode : selectedDocumentNode;
@@ -135,7 +137,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         var NID = $location.search().NID;
 
         notificationsService.getInfo(NID).then(function (response) {
-            $scope.wf_comment = response.comment;
+            $scope.wf_comment = response.message;
         });
 
 
@@ -145,7 +147,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
         var NID = $location.search().NID;
         notificationsService.getInfo(NID).then(function (response) {
-            $scope.wf_comment = response.comment;
+            $scope.wf_comment = response.message;
         });
     }
 
@@ -205,15 +207,23 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         function buildBreadCrumbPath(response) {
             var paths = [{
                 title: response.item.location.siteTitle,
-                link: '#!/projekter/' + response.item.location.site + vm.documentTab
+                link: 'project.filebrowser({projekt: "' + response.item.location.site + '", path: ""})'
             }];
             var pathArr = response.item.location.path.split('/');
             var pathLink = '/';
             for (var a in pathArr) {
                 if (pathArr[a] !== '') {
+                    var link;
+                    if(response.item.location.site == "") {
+                        link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
+                    }
+                    else {
+                        link = 'project.filebrowser({projekt: "' + response.item.location.site +
+                            '", path: "' + pathLink + pathArr[a] + '"})';
+                    }
                     paths.push({
                         title: pathArr[a],
-                        link: '#!/projekter/' + response.item.location.site + vm.documentTab + pathLink + pathArr[a]
+                        link: link
                     });
                     pathLink = pathLink + pathArr[a] + '/';
                 };
@@ -259,7 +269,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     } else {
         vm.store = 'workspace://SpacesStore/';
-        vm.pdfLink = documentService.getPDFLink(vm.store.replace("://", "/") + $stateParams.doc);
         documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function (plugin) {
 
             vm.plugin = plugin;
@@ -314,11 +323,4 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             vm.highlightVersion();
         }
     });
-
-    //Goes to the libreOffice online edit page
-    vm.openPDF = function () {
-        var pdfFinalLink = sessionService.makeURL(vm.pdfLink);
-        $window.open(pdfFinalLink);
-    };
-
 };

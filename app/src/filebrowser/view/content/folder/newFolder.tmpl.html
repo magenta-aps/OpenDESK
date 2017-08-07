@@ -1,0 +1,31 @@
+<md-dialog aria-label="{{'COMMON.NEW' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}" ng-cloak>
+    <form name="createFolderForm" ng-submit="createFolder(newFolderName);">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.CREATE' | translate}} {{'COMMON.NEW' | translate | lowercase}} {{'COMMON.FOLDER' | translate | lowercase}}</h2>
+                <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancelDialog()">
+                <md-icon>close</md-icon>
+            </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding">
+            <div>
+                <md-input-container>
+                    <label>{{'COMMON.NAME' | translate}}</label>
+                    <input type="text" name="newFolderName" required ng-model="newFolderName" md-autofocus>
+
+                    <div ng-messages="createSiteForm.newSiteName.$error">
+                        <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button ng-disabled="createFolderForm.$invalid" type="submit" class="md-primary">{{'COMMON.ADD' | translate}}</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

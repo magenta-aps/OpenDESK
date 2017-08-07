@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openDeskApp.sites', ['ngMaterial', 'fixed.table.header'])
-        .config(config);;
+        .config(config);
 
 
 function config($stateProvider, USER_ROLES) {
@@ -16,9 +16,9 @@ function config($stateProvider, USER_ROLES) {
                 controllerAs: 'vm'
             }
         },
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.user]
         }
     });
 
-};
+}

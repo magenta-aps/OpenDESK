@@ -3,6 +3,7 @@ var constants = require('../common/constants');
 var loginPage = require('../login/loginPage.po.js');
 var logoutPage = require('../login/logoutPage.po.js');
 
+var projectHelper = require('../projects/projectHelper.js');
 var openProjectPage = require('../projects/openProjectPage.po.js');
 var createProjectPage = require('../projects/createProjectsPage.po.js');
 var renameProjectPage = require('../projects/renameProjectPage.po.js');
@@ -30,12 +31,12 @@ describe('User Henrik', function () {
         expect(browser.getCurrentUrl()).toContain('/#!/projekter');
     });
 
-    describe('should create a new project', function () {
+    xdescribe('should create a new project', function () {
         it('should create a new project', function () {
             createProjectPage.openCreateProjectDialog();
             createProjectPage.fillInputFields(constants.PROJECT_NAME_1, false);
             createProjectPage.createProject();
-            expect(createProjectPage.getProjectPageTitle().getInnerHtml()).toContain(constants.PROJECT_NAME_1);
+            expect(projectHelper.getProjectPageTitle()).toContain(constants.PROJECT_NAME_1);
         });
 
         it('should rename the project', function () {
@@ -43,7 +44,7 @@ describe('User Henrik', function () {
             renameProjectPage.openEditDialog();
             renameProjectPage.editProjectName(constants.PROJECT_NAME_RENAME_NEW_NAME);
             renameProjectPage.renameProject();
-            expect(createProjectPage.getProjectPageTitle().getInnerHtml()).toMatch(constants.PROJECT_NAME_RENAME_NEW_NAME);
+            expect(projectHelper.getProjectPageTitle()).toMatch(constants.PROJECT_NAME_RENAME_NEW_NAME);
         });
 
         describe('should create a new folder', function () {
@@ -78,6 +79,13 @@ describe('User Henrik', function () {
                 expect(createDiscussionPage.getDiscussionList()).toContain(constants.DISCUSSION_NAME);
             });
         });
+
+        it('should delete the project', function () {
+            deleteProjectPage.backToProjects();
+            deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
+            browser.driver.sleep(1000);
+            expect(deleteProjectPage.getProjectList()).not.toContain(constants.PROJECT_NAME_RENAME_NEW_NAME);
+        });
     });
 
     xdescribe('should reply to a discussion', function () {
@@ -104,13 +112,6 @@ describe('User Henrik', function () {
         });
     });
 
-    it('should delete the project', function () {
-        deleteProjectPage.backToProjects();
-        deleteProjectPage.deleteProject(constants.PROJECT_NAME_1);
-        browser.driver.sleep(1000);
-        expect(deleteProjectPage.getProjectList()).not.toContain(constants.PROJECT_NAME_RENAME_NEW_NAME);
-    });
-
     xdescribe('should create a new group room', function () {
         it('should create a new group room', function () {
             createGroupRoomPage.openCreateGroupRoomDialog();
@@ -127,8 +128,9 @@ describe('User Henrik', function () {
 
     describe('should use an existing project', function () {
         it('should open the first project', function () {
-            openProjectPage.openFirstProject();
+            openProjectPage.openProject(constants.PROJECT_EXISTING);
             browser.driver.sleep(1000);
+            expect(projectHelper.getProjectPageTitle()).toContain(constants.PROJECT_EXISTING);
         });
 
         describe('should work with documents', function () {
@@ -145,20 +147,19 @@ describe('User Henrik', function () {
                 expect(renameDocumentPage.getDocumentList()).toContain(constants.file_renamed);
             });
 
-            it('should open the document', function () {
+            xit('should open the document', function () {
 
             });
 
             it('should delete the document', function () {
                 browser.driver.sleep('1000');
                 expect(deleteDocumentPage.getDocumentList()).toContain(constants.file_renamed);
-                deleteDocumentPage.deleteDocument();
+                deleteDocumentPage.deleteDocument(constants.file_renamed);
                 expect(deleteDocumentPage.getDocumentList()).not.toContain(constants.file_renamed);
-
             });
         });
 
-        describe('should add a member', function () {
+        xdescribe('should add a member', function () {
             it('should add a new member', function () {
                 addMemberPage.openAddMemberDialog();
                 addMemberPage.fillInputFields();
@@ -175,7 +176,7 @@ describe('User Henrik', function () {
         });
     });
 
-    xit('should logout', function () {
+    it('should logout', function () {
         logoutPage.logout();
     });
 });

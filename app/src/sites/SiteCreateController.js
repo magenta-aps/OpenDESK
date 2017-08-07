@@ -57,6 +57,12 @@ function SiteCreateController($q, $mdDialog, pd_siteService, $state, filterServi
         getAvailOrgs();
         loadSiteGroups();
 
+        $scope.groupFilter = function (group) {
+            if (group.multipleMembers) {
+                return group;
+            }
+        };
+
         function loadTemplateNames() {
 
             pd_siteService.getTemplateNames().then(function (response) {

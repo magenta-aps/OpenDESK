@@ -9,7 +9,7 @@
             <ng-include src="viewerTemplateUrl"></ng-include>
         </md-dialog-content>
         <div class="md-actions" layout="row">
-            <md-button ng-click="cancel()">
+            <md-button ng-click="cancel()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
                 {{ 'COMMON.CLOSE' | translate }}
             </md-button>
         </div>

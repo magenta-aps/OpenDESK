@@ -33,6 +33,11 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 				{key:'PD-Project', name:'Projekt'},
 				{key:'', name:'Alle'}];
 
+
+	//sets the margin to the width of sidenav
+	var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();
+    $("#table-container").css("max-height", tableHeight+"px");
+
 	vm.exactMatchFilter = function (project) { 
 		if(vm.search == undefined || vm.search.type == '') {
 			return true;

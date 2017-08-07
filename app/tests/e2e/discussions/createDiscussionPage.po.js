@@ -1,4 +1,4 @@
-var discussionName;
+var constants = require('../common/constants');
 var discussionList;
 
 var CreateDiscussionPage = function () {
@@ -9,12 +9,8 @@ var CreateDiscussionPage = function () {
 			return discussionList.getInnerHtml();
 		},
 
-		getDiscussionThreadTitle: function() {
-			return element(by.css('h1.discussion-title'));
-		},
-
-		getCreatedDiscussion: function () {
-			return discussionName;
+		getDiscussionTitle: function() {
+			return element(by.css('h1.discussion-title')).getText();
 		},
 
 		gotoDiscussionsTab: function() {
@@ -32,17 +28,28 @@ var CreateDiscussionPage = function () {
 		fillInputFields: function (discussion) {
 			discussionName = discussion;
 			var disussionTitleInput = element(by.model('newDiscussionTitle'));
-			var disussionContentInput = element(by.css('iframe.cke_wysiwyg_frame'));
+			var disussionContentInput = element(by.css('.cke_wysiwyg_frame'));
 
-			disussionTitleInput.sendKeys(discussionName);
+			disussionTitleInput.sendKeys(constants.DISCUSSION_TITLE);
+
+			browser.switchTo().frame(element(by.css('.cke_wysiwyg_frame')).click());
+			browser.actions().sendKeys(constants.DISCUSSION_CONTENT).perform();
+			browser.driver.sleep(500);
+			browser.switchTo().defaultContent();
 		},
 
 		createDiscussion: function () {
-			return element(by.css('[aria-label="New conversation"] button[type="submit"]')).click();
+			return element(by.css('[aria-label="New comment"] button[type="submit"]')).click();
 		},
 
-		openFirstDiscussion: function () {
-            element.all(by.css('td a.od-filebrowser-link')).first().click();
+		openDiscussionWithTitle: function (title) {
+			return element.all(by.repeater('discussion in dc.discussions')).filter(function(elem) {
+				//Return the element or elements
+                return elem.getText().then(function (text) {
+                    //Match the text
+                    return text.indexOf(title) >= 0;
+                });
+			});
 		}
 	};
 };

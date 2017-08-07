@@ -90,8 +90,10 @@
     "WITH": "Med",
     "UPDATE": "Opdatér",
     "FOLDER": "Mappe",
+    "DOCUMENT": "Dokument",
     "CHOOSE": "Vælg",
     "EMPTY_FOLDER": "Denne mappe er tom",
+    "MISSING_FOLDER": "Denne mappe kan ikke tilgås",
     "NO_SEARCH_RESULTS" : "Søgningen matchede ikke noget",
     "FILTER": "Filtre",
     "LAST_MODIFIED": "Senest ændret",
@@ -103,7 +105,8 @@
     "CLOSEEDIT": "Luk redigering",
     "FILETYPE": "Dokumenttype",
     "LOCAL_DOCUMENT": "Lokalt dokument",
-    "REPLY": "Besvar"
+    "REPLY": "Besvar",
+    "EMPTY": "Tom"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"

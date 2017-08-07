@@ -19,5 +19,6 @@ angular
     .constant('APP_CONFIG', {
         appName: 'OpenDesk',
         logoSrc: './app/assets/images/logo-light.svg',
-        ssoLoginEnabled: "false"
+        ssoLoginEnabled: "false",
+        landingPage: "projects"
     });

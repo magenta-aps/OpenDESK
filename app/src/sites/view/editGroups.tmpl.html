@@ -14,17 +14,26 @@
 			<md-content class="md-padding" layout="column">
 				<div ng-repeat="(groupIndex, group) in groups.list">
 					<div ng-if="group[0].multipleMembers">
-						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" 
+							class="group-toggle" 
+							layout="row" 
+							ng-class="showGroupList[groupIndex] ? 'open' : 'closed'"
+							aria-label="{{'PROJECT.GROUPS.' + group[0].shortName | translate}}">
 							<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 						</h4>
 						<div ng-show="showGroupList[groupIndex]">
-							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
+							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
+									  md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
 							    md-on-add="addMemberToSite($chip, group[0].shortName)">
-								<md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+								<md-autocomplete md-selected-item="selectedProjGrpItem"
+												 md-search-text="searchTextList[groupIndex]"
+												 md-items="pgitem in searchPeople(searchTextList[groupIndex])"
 								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
-									<span md-highlight-text="searchTextList[groupIndex]">{{ pgitem.displayName }}</span>
+									<span md-highlight-text="searchTextList[groupIndex]" md-highlight-flags="gi">
+										{{ pgitem.displayName }}
+									</span>
 								</md-autocomplete>
 								<md-chip-template>
 									<span>{{ $chip.displayName }}</span>
@@ -63,7 +72,7 @@
 							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</md-option>
 						</md-select>
 					</md-input-container>
-					<div style="position: relative; top: -25px;" class="btnAlign">
+					<div style="position: relative; top: -25px;" class="btn-align">
 						<md-button class="md-primary" ng-click="addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
 							<md-icon>add</md-icon> {{'COMMON.ADD' | translate}}
 						</md-button>

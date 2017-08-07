@@ -7,16 +7,16 @@ var CreateGroupRoomPage = function () {
     var public = {};
 
     public.openCreateGroupRoomDialog = function () {
-        return element(by.css('[ng-click="vm.newSite($event)"]')).click();
+        return element(by.css('[aria-label="Create new group room"]')).click();
     }
 
     public.fillInputFields = function (name, isPrivate) {
         groupRoomName = name;
         var private = isPrivate ? 'privat' : 'offentlig';
 
-        var nameInput = element(by.model('newSiteName'));
-        var descriptionInput = element(by.model('newSiteDescription'));
-        var privateInput = element(by.model('newSiteIsPrivate'));
+        var nameInput = element(by.model('newSite.siteName'));
+        var descriptionInput = element(by.model('newSite.desc'));
+        var privateInput = element(by.model('newSite.isPrivate'));
 
         //newGroupRoomBtn.click();
         browser.driver.sleep(100);
@@ -31,7 +31,7 @@ var CreateGroupRoomPage = function () {
     };
 
     public.createGroupRoom = function() {
-        return element(by.css('[aria-label="create group room"]')).click();
+        return element(by.css('[aria-label="Create"]')).click();
     }
     return public;
 };

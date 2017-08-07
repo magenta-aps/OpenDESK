@@ -1,0 +1,26 @@
+<md-dialog aria-label="Slet fil" ng-cloak>
+    <form name="deleteFileForm" ng-submit="content.contentType != 'cmis:link' ? deleteFile(content.nodeRef) : deleteLink(content.nodeid, content.destination_nodeid)">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.REMOVE' | translate}} 
+                    <span ng-show="content.contentType == 'cmis:document'">{{'DOCUMENT.DOCUMENT' | translate | lowercase}}</span>
+                    <span ng-show="content.contentType == 'cmis:folder'">{{'COMMON.FOLDER' | translate | lowercase}}</span>
+                    <span ng-show="content.contentType == 'cmis:link'">{{'PROJECT.PROJECTLINK' | translate | lowercase}}</span>
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancelDialog()">
+                    <md-icon>close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding">
+            <p>{{'COMMON.SURETOREMOVE' | translate}} <em>{{content.name}}</em>?</p>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button type="submit" class="md-primary" aria-label="{{'COMMON.REMOVE' | translate}}">{{'COMMON.REMOVE' | translate}}</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -1,0 +1,22 @@
+<md-dialog aria-label="upload-files" ng-cloak>
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancelDialog()">
+                <md-icon>close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content class="md-padding">
+        <input id="upload" file-model="files" multiple="" type="file">
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <md-button class="md-primary" type="submit" ng-click="uploadFiles(files)"><md-icon>file_upload</md-icon>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}
+        </md-button>
+    </md-dialog-actions>
+    </form>
+</md-dialog>

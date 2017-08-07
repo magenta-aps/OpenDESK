@@ -10,6 +10,7 @@ function config($stateProvider, USER_ROLES) {
         parent: 'site',
         url: '/lool/',
         params: {
+            authorizedRoles: [USER_ROLES.user],
 			nodeRef: null,
 			showArchived: null,
 			backToDocPreview: null
@@ -20,9 +21,6 @@ function config($stateProvider, USER_ROLES) {
                 controller: 'LoolController',
                 controllerAs: 'vm'
             }
-        },
-        data: {
-            authorizedRoles: [USER_ROLES.user]
         }
     });
 }

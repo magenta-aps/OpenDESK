@@ -8,7 +8,6 @@ angular
         var restBaseUrl = '/alfresco/s/api/';
         var service = {
             createPDSite: createPDSite,
-            addTemplate: addTemplate,
             getAllOwners: getAllOwners,
             getAllOrganizationalCenters: getAllOrganizationalCenters,
             updatePDSite: updatePDSite,
@@ -50,17 +49,6 @@ angular
                 PARAM_STATE: state,
                 PARAM_METHOD: "updatePDSITE"
             }).then(function (response) {
-                return response;
-            });
-        }
-
-        
-        function addTemplate(siteName, template) {
-            return $http.post('/alfresco/service/projectdepartment', {
-                PARAM_NAME: siteName,
-                PARAM_TEMPLATE: template
-            }).then(function (response) {
-                //console.log(response);
                 return response;
             });
         }

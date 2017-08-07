@@ -19,9 +19,9 @@ var UploadDocumentPage = function () {
             uploadDialogBtn.click();
         },
 
-        fillInputFields: function () {
+        fillInputFields: function (fileUrl) {
             var uploadBtn = element(by.id('upload'));
-            uploadBtn.sendKeys('/Users/andersjepsen/Downloads/Medlemsoversigt.pdf');
+            uploadBtn.sendKeys(fileUrl);
             browser.driver.sleep('3000');
         },
 

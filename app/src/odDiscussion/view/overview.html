@@ -1,9 +1,18 @@
+<breadcrumb paths=""></breadcrumb>
+
 <div ng-if="dc.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
     <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
 
 <md-list class="sort-head" ng-show="dc.discussions.length > 0">
     <table class="od-members od-members-row">
+        <col style="width:32px">
+        <col style="width:40%">
+		<col style="width:20%">
+		<col style="width:25%">
+		<col style="width:5%">
+        <col style="width:32px">
+        <col style="width:32px">
         <thead ng-show="dc.discussions.length > 0" fix-head>
             <tr>
                 <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'DISCUSSIONS.TITLE' | translate}}</th>
@@ -35,10 +44,10 @@
                 <td>
                     <a class="od-filebrowser-link od-secondary" ng-href="">{{discussion.totalReplyCount}}</a>
                 </td>
-                <td style="width:32px">
-                    <i ng-click='dc.changeSubscription(discussion)' class="material-icons od-secondary" style="outline:0;">{{dc.subscriptionIcon(discussion.isSubscribed)}}</i>
+                <td>
+                    <i ng-click='dc.changeSubscription(discussion)' class="clickable material-icons od-secondary" style="outline:0;">{{dc.subscriptionIcon(discussion.isSubscribed)}}</i>
                 </td>
-                <td style="width:32px">
+                <td>
                     <md-menu ng-if="discussion.permissions.delete">
                         <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                             <md-icon md-menu-origin>more_vert</md-icon>
