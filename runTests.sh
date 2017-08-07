@@ -5,11 +5,11 @@ declare -i LOOP_COUNT=0
 declare -i MAX_LOOP_COUNT=120
 
 #response=$(curl --write-out %{http_code} --silent --output /dev/null  http://178.62.194.129//alfresco/service/api/login\?u=admin\&pw=bullerfisk1992)
-response=$(curl --write-out %{http_code} --silent --output /dev/null  http://localhost:8080/alfresco/service/api/login\?u=admin\&pw=bullerfisk1992)
+response=$(curl --write-out %{http_code} --silent --output /dev/null  http://localhost:8081/alfresco/service/api/login\?u=admin\&pw=bullerfisk1992)
 while [ "$response" -ne "200" ]
 do
 	echo -e "\n-----> OPEN_E_TEST:Waiting for alfresco to start (not able to login as admin)"
-	response=$(curl --write-out %{http_code} --silent --output /dev/null  http://localhost:8080/alfresco/service/api/login\?u=admin\&pw=admin)
+	response=$(curl --write-out %{http_code} --silent --output /dev/null  http://localhost:8081/alfresco/service/api/login\?u=admin\&pw=bullerfisk1992)
 	sleep 5
 	((LOOP_COUNT++))
         if [ "$LOOP_COUNT" -gt "$MAX_LOOP_COUNT" ]; then
@@ -19,7 +19,7 @@ do
         fi
 done
 
-echo -e "\n----------> OPENESDH Alfresco test repository contacted"
+echo -e "\n----------> OPENDESK Alfresco test repository contacted"
 
 npm update
 #npm install gulp
