@@ -22,7 +22,7 @@ done
 echo -e "\n----------> OPENDESK Alfresco test repository contacted"
 
 npm update
-#npm install gulp
+npm install gulp
 #npm install protractor
 npm install
 node node_modules/protractor/bin/webdriver-manager update
