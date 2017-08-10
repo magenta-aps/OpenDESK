@@ -242,7 +242,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     if (docHasParent) {
         vm.store = 'versionStore://version2Store/';
 
-        documentService.createThumbnail(parentDocumentNode, selectedDocumentNode).then(function (response) {
+        documentService.createVersionThumbnail(parentDocumentNode, selectedDocumentNode).then(function (response) {
 
             documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function (plugin) {
 
