@@ -1,7 +1,7 @@
 
 <section  class="od-notifications" ng-controller="NotificationsController as nc">
 
-    <button ng-click="nc.toggleNotices();nc.setAllSeen()" class="od-btn od-notifications--toggle">
+    <button ng-click="nc.toggleNotices();nc.setAllSeen()" title="{{ 'NOTIFICATION.NOTIFICATIONS' | translate }}" class="od-btn od-notifications--toggle">
         <md-icon>notifications</md-icon>
         <span ng-if="notifications[0].unseen > 0" class="od-notifications--counter">{{ notifications[0].unseen }}</span>
     </button>

@@ -2,7 +2,7 @@
     <div ng-controller="AuthController as ac">
         <div class="od-user-header-menu">
             <h2 class="od-user-name" ng-class="ac.getUserInfo().user.capabilities.isAdmin ? 'od-user-admin' : ''">{{ ac.getUserInfo().user.firstName }} {{ ac.getUserInfo().user.lastName }}</h2>
-            <button ng-click="vm.toggleUser()" class="od-btn od-user--toggle">
+            <button ng-click="vm.toggleUser()" title="{{ 'USER.USER' | translate }}" class="od-btn od-user--toggle">
                 <md-icon>person</md-icon>
              </button>
         </div>
