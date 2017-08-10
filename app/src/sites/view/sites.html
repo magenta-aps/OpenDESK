@@ -67,14 +67,14 @@
 
 				<md-list id="table-container">
 					<table class="od-members od-members-row">
-						<col style="width:32px">
+						<col style="width:2.5%">
 						<col ng-if="!vm.config.enableProjects" style="width:60%">
 						<col ng-if="vm.config.enableProjects" style="width:40%">
 						<col style="width:15%">
 						<col style="width:20%">
 						<col ng-if="vm.config.enableProjects" style="width:10%">
 						<col ng-if="vm.config.enableProjects" style="width:10%">
-						<col style="width:32px">
+						<col style="width:2.5%">
 						<thead fix-head>
 							<tr>
 								<th colspan="2" sort-table="title" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.NAME' : 'SITES.Project.NAME_PLURAL' | translate}}</th>
