@@ -927,6 +927,7 @@
     "NAME": "Projects/Group Rooms",
     "Project": {
       "NAME" : "Group Room",
+      "NAME_PLURAL" : "Group Rooms",
       "GROUPS": {
         "SiteManager": "Project Manager",
         "SiteCollaborator": "Can write",
@@ -936,6 +937,7 @@
     },
     "PD-Project": {
       "NAME" : "Project",
+      "NAME_PLURAL" : "Projects",
       "GROUPS": {
         "PD_PROJECTMANAGER": "Project Manager",
         "PD_PROJECTOWNER": "Project Owner",
