@@ -29,7 +29,7 @@ angular.module('openDeskApp.filebrowser').factory('filebrowserService', function
         },
 
         getNode: function (nodeRef, path) {
-            return $http.get('/slingshot/doclib2/doclist/all/node/' + nodeRef + '/' + path).then(function (response) {
+            return $http.get('/slingshot/doclib/doclist/all/node/' + nodeRef + '/' + path).then(function (response) {
                 return response.data;
             });
         },
@@ -44,7 +44,7 @@ angular.module('openDeskApp.filebrowser').factory('filebrowserService', function
         },
 
         loadFromSbsys: function () {
-            return $http.get("/alfresco/s/slingshot/doclib2/doclist/type/site/sbsysfakedata/documentLibrary", {}).then(function (sbsysfakedataResponse) {
+            return $http.get("/alfresco/s/slingshot/doclib/doclist/type/site/sbsysfakedata/documentLibrary", {}).then(function (sbsysfakedataResponse) {
                 var nodeRefs = [];
                 for (var i in sbsysfakedataResponse.data.items)
                     nodeRefs.push(sbsysfakedataResponse.data.items[i].node.nodeRef);

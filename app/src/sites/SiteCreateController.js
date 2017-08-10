@@ -4,7 +4,8 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteCreateController', SiteCreateController);
 
-function SiteCreateController($q, $mdDialog, pd_siteService, $state, filterService, siteService, userService, $mdToast) {
+function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, filterService, siteService,
+                              userService, $mdToast) {
 
     var pdc = this;
 
@@ -159,7 +160,7 @@ function SiteCreateController($q, $mdDialog, pd_siteService, $state, filterServi
 
                     var siteShortName = response.data[0].shortName;
                     var siteName = $scope.newSite.siteName;
-                    var link = "#!/projekter/" + siteShortName;
+                    var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
 
                     createSiteNotification(siteName, $scope.newSite.owner.userName, link);
                     createSiteNotification(siteName, $scope.newSite.manager.userName, link);
@@ -196,7 +197,7 @@ function SiteCreateController($q, $mdDialog, pd_siteService, $state, filterServi
 
                 var siteShortName = response[0].shortName;
                 var siteName = $scope.newSite.siteName;
-                var link = "#!/projekter/" + siteShortName;
+                var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
 
                 angular.forEach($scope.newSite.groups, function (group) {
                     if (group.multipleMembers)

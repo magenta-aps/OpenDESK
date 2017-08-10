@@ -2,7 +2,7 @@ angular
     .module('openDeskApp.discussion', ['ng.ckeditor'])
     .controller('DiscussionController', DiscussionController);
 
-function DiscussionController($scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
+function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
     discussionService, nodeRefUtilsService, sessionService, notificationsService) {
     var dc = this;
 
@@ -103,7 +103,7 @@ function DiscussionController($scope, $timeout, $mdDialog, $state, $stateParams,
         },
 
         dc.viewThread = function (postItem) {
-            return '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
+            return '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
         }
 
     dc.deleteDiscussion = function (postItem) {
@@ -232,7 +232,7 @@ function DiscussionController($scope, $timeout, $mdDialog, $state, $stateParams,
         var nodeRef = postItem.nodeRef.split('/')[3];
         var subject = 'Ny samtale i et projekt';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
-        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
 
         // Iterating list of items.
         angular.forEach($scope.groups.list, function (group) {
@@ -258,7 +258,7 @@ function DiscussionController($scope, $timeout, $mdDialog, $state, $stateParams,
         var nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
         var subject = 'Ny kommentar på en samtale du følger';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
+        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
 
         // Iterating list of items.
         angular.forEach($scope.groups.list, function (group) {

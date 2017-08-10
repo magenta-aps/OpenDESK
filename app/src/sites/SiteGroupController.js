@@ -5,8 +5,8 @@ angular
     .controller('SiteGroupController', SiteGroupController);
 
 
-function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteService, userService, notificationsService,
-                             alfrescoDownloadService) {
+function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
+                             notificationsService, alfrescoDownloadService) {
 
     $scope.externalUser = {};
     $scope.searchPeople = searchPeople;
@@ -109,7 +109,7 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, siteServic
         var author = $scope.currentUser.firstName + ' ' + $scope.currentUser.lastName;
 
         var message = author + " har tilføjet dig til projektet " + $scope.site.title + ".";
-        var link = "#!/projekter/" + site;
+        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + site;
         createNotification(userName, subject, message, link, 'project', site);
     }
 }

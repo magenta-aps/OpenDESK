@@ -1,7 +1,6 @@
 <h1 class="od-title">
     <span class="od-back-btn" ui-sref="projects"><md-icon>arrow_back</md-icon> {{'COMMON.BACK' | translate}}</span>
-    <span ng-if="vm.project.type == vm.strings.templateProject">{{'COMMON.TEMPLATEPROJECT' | translate}} :</span>
-    <span>{{'SITES.' + vm.project.type + '.NAME' | translate}} :</span> {{ vm.project.title }}
+    <span ng-if="vm.project.type">{{'SITES.' + vm.project.type + '.NAME' | translate}} :</span> {{ vm.project.title }}
 </h1>
 
 <div layout="row" class="od-projects" ng-show="permissions.isMember || vm.project.visibility == 'PUBLIC'">

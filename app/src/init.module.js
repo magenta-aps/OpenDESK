@@ -21,6 +21,7 @@ angular
         logoSrc: './app/assets/images/logo-light.svg',
         ssoLoginEnabled: true,
         landingPage: "projects",
+        sitesUrl: "projekter",
         enableProjects: true,
         enableESDH: true
     });

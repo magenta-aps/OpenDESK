@@ -919,6 +919,10 @@
         "PD_WORKGROUP": "Arbejdsgruppe",
         "PD_MONITORS": "Følgegruppe"
       }
+    },
+    "Template-Project": {
+      "NAME" : "Projektskabelon",
+      "NAME_PLURAL" : "Projektskabeloner"
     }
   },
 

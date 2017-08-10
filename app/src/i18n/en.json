@@ -946,6 +946,10 @@
         "PD_WORKGROUP": "Work Group",
         "PD_MONITORS": "Monitors"
       }
+    },
+    "Template-Project": {
+      "NAME" : "Project template",
+      "NAME_PLURAL" : "Project templates"
     }
   },
 
