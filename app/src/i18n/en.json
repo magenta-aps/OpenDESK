@@ -929,7 +929,7 @@
       "NAME" : "Group Room",
       "NAME_PLURAL" : "Group Rooms",
       "GROUPS": {
-        "SiteManager": "Project Manager",
+        "SiteManager": "Responsible",
         "SiteCollaborator": "Can write",
         "SiteContributor": "Can write limited",
         "SiteConsumer": "Can read"
