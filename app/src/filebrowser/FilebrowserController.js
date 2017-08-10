@@ -4,7 +4,9 @@ angular
 
 function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteService, fileUtilsService,
                                filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
-                               userService, documentService, alfrescoNodeUtils, $translate) {
+                               userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG) {
+
+    $scope.config = APP_CONFIG;
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;

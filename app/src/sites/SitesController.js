@@ -4,11 +4,12 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, $state, $interval, siteService, searchService, documentService,
-						 pd_siteService, sessionService,fileUtilsService, userService) {
+function SitesController($scope, $mdDialog, $window,  $interval, siteService, pd_siteService, sessionService,
+						 APP_CONFIG) {
 
 
 	var vm = this;
+    vm.config = APP_CONFIG;
 
 	vm.sites = [];
 	vm.sitesPerUser = [];
@@ -28,11 +29,11 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 				{key:'CLOSED', name:'Afsluttet'},
 				{key:'', name:'Alle'}];
 	
-	vm.types = [
-		  		{key:'Project', name:'Grupperum'},
-				{key:'PD-Project', name:'Projekt'},
-				{key:'', name:'Alle'}];
-
+	vm.types = [];
+	vm.types.push({key: 'Project', name: 'Grupperum'});
+    if(vm.config.enableProjects)
+        vm.types.push({key: 'PD-Project', name: 'Projekt'});
+    vm.types.push({key: '', name: 'Alle'});
 
 	//sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();

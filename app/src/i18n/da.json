@@ -896,8 +896,33 @@
   "@{http://openesdh.dk/model/openesdh/1.0}journalKeyIndexed": "Journalnøgle",
   "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journalfacet",
 
+  "SITES" : {
+    "NAME": "Projekter/Grupperum",
+    "Project": {
+      "NAME" : "Grupperum",
+      "NAME_PLURAL" : "Grupperum",
+      "GROUPS": {
+        "SiteManager": "Ansvarlig",
+        "SiteCollaborator": "Kan skrive",
+        "SiteContributor": "Kan skrive begrænset",
+        "SiteConsumer": "Kan læse"
+      }
+    },
+    "PD-Project": {
+      "NAME" : "Projekt",
+      "NAME_PLURAL" : "Projekter",
+      "GROUPS": {
+        "PD_PROJECTMANAGER": "Projektleder",
+        "PD_PROJECTOWNER": "Projektejer",
+        "PD_PROJECTGROUP": "Projektgruppe",
+        "PD_STEERING_GROUP": "Styregruppe",
+        "PD_WORKGROUP": "Arbejdsgruppe",
+        "PD_MONITORS": "Følgegruppe"
+      }
+    }
+  },
+
   "PROJECT": {
-    "HEADER": "Projekter/Grupperum",
     "PROJECT": "Projekt",
     "PROJECTS": "Projekter",
     "PROJECTNAME": "Projektnavn",
@@ -922,20 +947,6 @@
       "STATUS": "Status",
       "CLOSED": "Afsluttet",
       "ACTIVE": "Igang"
-    },
-
-    "GROUPS": {
-      "SiteManager": "Projektleder",
-      "SiteCollaborator": "Kan skrive",
-      "SiteContributor": "Kan skrive begrænset",
-      "SiteConsumer": "Kan læse",
-
-      "PD_PROJECTMANAGER": "Projektleder",
-      "PD_PROJECTOWNER": "Projektejer",
-      "PD_PROJECTGROUP": "Projektgruppe",
-      "PD_STEERING_GROUP": "Styregruppe",
-      "PD_WORKGROUP": "Arbejdsgruppe",
-      "PD_MONITORS": "Følgegruppe"
     }
   },
   "NOTIFICATION": {

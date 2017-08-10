@@ -922,8 +922,32 @@
   "@{http://openesdh.dk/model/openesdh/1.0}journalKeyIndexed": "Journal key",
   "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journal facet",
 
+
+  "SITES" : {
+    "NAME": "Projects/Group Rooms",
+    "Project": {
+      "NAME" : "Group Room",
+      "GROUPS": {
+        "SiteManager": "Project Manager",
+        "SiteCollaborator": "Can write",
+        "SiteContributor": "Can write limited",
+        "SiteConsumer": "Can read"
+      }
+    },
+    "PD-Project": {
+      "NAME" : "Project",
+      "GROUPS": {
+        "PD_PROJECTMANAGER": "Project Manager",
+        "PD_PROJECTOWNER": "Project Owner",
+        "PD_PROJECTGROUP": "Project Group",
+        "PD_STEERING_GROUP": "Steering Group",
+        "PD_WORKGROUP": "Work Group",
+        "PD_MONITORS": "Monitors"
+      }
+    }
+  },
+
   "PROJECT": {
-    "HEADER": "Projects/Group Rooms",
     "PROJECT": "Project",
     "PROJECTS": "Projects",
     "PROJECTNAME": "Project name",
@@ -948,20 +972,6 @@
       "STATUS": "Status",
       "CLOSED": "Completed",
       "ACTIVE": "In progress"
-    },
-
-    "GROUPS": {
-      "SiteManager": "Project Manager",
-      "SiteCollaborator": "Can write",
-      "SiteContributor": "Can write limited",
-      "SiteConsumer": "Can read",
-
-      "PD_PROJECTMANAGER": "Project Manager",
-      "PD_PROJECTOWNER": "Project Owner",
-      "PD_PROJECTGROUP": "Project Group",
-      "PD_STEERING_GROUP": "Steering Group",
-      "PD_WORKGROUP": "Work Group",
-      "PD_MONITORS": "Monitors"
     }
   },
   "NOTIFICATION": {

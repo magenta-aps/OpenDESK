@@ -1,4 +1,4 @@
-<td style="width:40%">
+<td style="width:45%">
     <a class="od-filebrowser-link" ui-sref="{{getLink(content)}}" ui-sref-active="active">
         <i class="material-icons">
                                     {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
@@ -41,9 +41,9 @@
         </tr>
     </table>
 </td>
-<td style="width:10%" ng-if="isSite" class="od-esdh-checkbox">
+<td ng-if="config.enableESDH" style="width:10%" ng-if="isSite">
     <input type="checkbox" name="to-esdh" ng-model="primitives.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg">
 </td>
-<td style="width:10%">
+<td style="width:5%">
     <div ng-include=" 'app/src/filebrowser/view/actions/actionMenu.html' "></div>
 </td>

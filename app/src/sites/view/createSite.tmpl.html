@@ -3,8 +3,7 @@
     <form ng-submit="type == 'PD-Project' ? createPdSite() : createSite()" name="pdcreatesite">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2 ng-if="type == 'PD-Project'">{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
-                <h2 ng-if="type != 'PD-Project'">{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</h2>
+                <h2>{{'COMMON.CREATE_NEW' | translate}} {{'SITES.' + type + '.NAME' | translate | lowercase}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon>close</md-icon>
@@ -34,8 +33,8 @@
                             </md-input-container>
 
                             <md-autocomplete ng-if="type == 'PD-Project'" required md-selected-item="newSite.owner" md-search-text="prjownsrchtxt" md-items="own in searchOwners(prjownsrchtxt)"
-                                md-item-text="own.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}"
-                                placeholder="{{'PROJECT.GROUPS.PD_PROJECTOWNER' | translate}}">
+                                md-item-text="own.displayName" md-min-length="1" md-floating-label="{{'SITES.' + type + '.GROUPS.PD_PROJECTOWNER' | translate}}"
+                                placeholder="{{'SITES.' + type + '.GROUPS.PD_PROJECTOWNER' | translate}}">
                                 <md-item-template>
                                     <span md-highlight-text="prjownsrchtxt" md-highlight-flags="gi">{{ own.displayName }}</span>
                                 </md-item-template>
@@ -66,8 +65,8 @@
 
                             <!--searchTextManager-->
                             <md-autocomplete ng-if="type == 'PD-Project'" required md-selected-item="newSite.manager" md-search-text="newSite.presetManager" md-items="man in searchPeople(newSite.presetManager)"
-                                md-item-text="man.displayName" md-min-length="1" md-floating-label="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}"
-                                placeholder="{{'PROJECT.GROUPS.PD_PROJECTMANAGER' | translate}}">
+                                md-item-text="man.displayName" md-min-length="1" md-floating-label="{{'SITES.' + type + '.GROUPS.PD_PROJECTMANAGER' | translate}}"
+                                placeholder="{{'SITES.' + type + '.GROUPS.PD_PROJECTMANAGER' | translate}}">
                                 <md-item-template>
                                     <span md-highlight-text="newSite.presetManager" md-highlight-flags="gi">{{ man.displayName }}</span>
                                 </md-item-template>
@@ -77,7 +76,7 @@
                             </md-autocomplete>
 
                             <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
-                                {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
+                                {{'COMMON.CLOSED' | translate}} {{'SITES.' + type + '.NAME' | translate | lowercase}}
                             </md-checkbox>
                         </div>
                     </md-content>
@@ -88,7 +87,7 @@
 
                         <div ng-repeat="(groupIndex, group) in newSite.groups" ng-if="group.multipleMembers" flex="100">
                             <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
-                                <span>{{'PROJECT.GROUPS.' + group.shortName | translate}}</span>
+                                <span>{{'SITES.' + type + '.GROUPS.' + group.shortName | translate}}</span>
                                 <span flex></span>
                                 <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
                             </h4>
@@ -132,7 +131,7 @@
                             <md-input-container>
                                 <label>Rolle</label>
                                 <md-select ng-model="externalUser.group">
-                                    <md-option ng-repeat="group in newSite.groups | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group.shortName | translate}}</md-option>
+                                    <md-option ng-repeat="group in newSite.groups | filter: groupFilter" ng-value="group">{{'SITES.' + type + '.GROUPS.' + group.shortName | translate}}</md-option>
                                 </md-select>
                             </md-input-container>
                             <div style="position: relative; top: -25px;" class="btn-align">
