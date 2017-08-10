@@ -5,7 +5,7 @@ angular
     .controller('SiteCreateController', SiteCreateController);
 
 function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, filterService, siteService,
-                              userService, $mdToast) {
+                              userService, $mdToast, $translate) {
 
     var pdc = this;
 
@@ -176,7 +176,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
                     });
                     $mdToast.show(
                         $mdToast.simple()
-                        .textContent('Du har oprettet projekt: ' + $scope.newSite.siteName)
+                        .textContent('Du har oprettet projekt: ' + $translate.instant('SITES.' + $scope.type + '.NAME').toLowerCase() + ' med navnet ' + $scope.newSite.siteName)
                         .hideDelay(3000)
                     );
                 },
@@ -209,7 +209,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
                 });
                 $mdToast.show(
                     $mdToast.simple()
-                    .textContent('Du har oprettet grupperummet: ' + $scope.newSite.siteName)
+                    .textContent('Du har oprettet et nyt ' + $translate.instant('SITES.' + $scope.type + '.NAME').toLowerCase() + ' med navnet ' + $scope.newSite.siteName)
                     .hideDelay(3000)
                 );
 

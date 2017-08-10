@@ -155,14 +155,14 @@
 				<md-divider></md-divider>
 
 				<md-card-actions ng-controller="SiteCreateController as sc" layout="row" layout-align="start center" class="btn-align" id="table-actions">
-					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}">
+					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'SITES.Project.NAME' | translate | lowercase}}">
 						<md-icon>add</md-icon>
-						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.GROUPROOM' | translate | lowercase}}</span>
+						<span>{{'COMMON.CREATE_NEW' | translate}} {{'SITES.Project.NAME' | translate | lowercase}}</span>
 					</md-button>
 
-					<md-button ng-if="vm.config.enableProjects" ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}">
+					<md-button ng-if="vm.config.enableProjects" ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'SITES.PD-Project.NAME' | translate | lowercase}}">
 						<md-icon>add</md-icon>
-						<span>{{'COMMON.CREATE_NEW' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</span>
+						<span>{{'COMMON.CREATE_NEW' | translate}} {{'SITES.PD-Project.NAME' | translate | lowercase}}</span>
 					</md-button>
 				</md-card-actions>
 			</md-card-content>
