@@ -51,7 +51,7 @@ angular.module('openDeskApp.testdata').factory('testService', function ($http, $
 
                         console.log(i + "til" + siteName);
 
-                        let f = files[i];
+                        var f = files[i];
 
                         $http.get('http://localhost:8000/' + f.path, {responseType: 'arraybuffer'}).then(function (response) {
 
@@ -81,7 +81,7 @@ angular.module('openDeskApp.testdata').factory('testService', function ($http, $
 
              for (var i in sites) {
 
-               let s = sites[i];
+               var s = sites[i];
 
                  console.log("uploading documents" + s);
 
