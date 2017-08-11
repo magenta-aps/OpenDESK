@@ -11,8 +11,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.doc = [];
     vm.plugin = [];
     vm.paths = [];
-    vm.title = [];
-    vm.type = siteService.getSite().type;
     vm.canEdit = false;
 
     vm.showArchived = false;
@@ -200,9 +198,13 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
 
-        vm.title = response.item.location.siteTitle;
+        vm.site = response.item.location.site;
 
-        console.log(response.item);
+        siteService.loadSiteData(vm.site).then(function(response)
+        {
+            vm.type = response.type;
+            vm.title = response.title;
+        });
 
         function buildBreadCrumbPath(response) {
             var paths = [{
