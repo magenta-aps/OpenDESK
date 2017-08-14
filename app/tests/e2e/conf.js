@@ -2,7 +2,14 @@
 //var JasmineReporters = require('jasmine-reporters');
 
 exports.config = {
-    capabilities: {'browserName': 'chrome'},
+    capabilities: {
+        'browserName': 'chrome',
+        'chromeOptions': {
+            binary: '/usr/bin/google-chrome',
+            args: ['--enable-logging','--v=1'],
+            extensions: []
+        }
+    },
 
     /*multiCapabilities: [
      {'browserName': 'chrome'},
