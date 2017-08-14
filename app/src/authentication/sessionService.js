@@ -50,7 +50,8 @@ function sessionService($window) {
     function retainCurrentLocation() {
         this.clearRetainedLocation();
         var location = $window.location.hash;
-        if (location == '#!/login') {
+        location = location.replace("#!#!%2F", "#!/");
+        if (location === '#!/login') {
             return;
         }
         $window.sessionStorage.setItem('retainedLocation', location);
