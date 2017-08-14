@@ -4,11 +4,11 @@ angular.module('openDeskApp.sites', ['ngMaterial', 'fixed.table.header'])
         .config(config);
 
 
-function config($stateProvider, USER_ROLES) {
+function config($stateProvider, APP_CONFIG, USER_ROLES) {
 
     $stateProvider.state('projects', {
         parent: 'site',
-        url: '/projekter',
+        url: '/' + APP_CONFIG.sitesUrl,
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/sites.html',

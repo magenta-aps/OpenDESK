@@ -1,5 +1,5 @@
-<section class="od-menu">
-    <button class="od-btn" title="{{ 'COMMON.HOME' | translate }}" ui-sref="dashboard">
-        <md-icon>dashboard</md-icon>
+<section class="od-menu" ng-controller="MenuController as mc">
+    <button class="od-btn" title="{{ 'COMMON.HOME' | translate }}" ui-sref="{{mc.landingPage}}">
+        <md-icon>home</md-icon>
     </button>
 </section>

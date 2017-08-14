@@ -5,6 +5,9 @@ angular
 function orderObjectBy() {
     return function (items, field, reverse) {
         function index(obj, i) {
+            // Variables can be undefined. In that case fill with empty string.
+            if(obj === undefined)
+                return "";
             return obj[i];
         }
 

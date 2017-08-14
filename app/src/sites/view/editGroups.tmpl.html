@@ -18,8 +18,8 @@
 							class="group-toggle" 
 							layout="row" 
 							ng-class="showGroupList[groupIndex] ? 'open' : 'closed'"
-							aria-label="{{'PROJECT.GROUPS.' + group[0].shortName | translate}}">
-							<span>{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</span>
+							aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}">
+							<span>{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 						</h4>
@@ -69,7 +69,7 @@
 					<md-input-container>
 						<label>Rolle</label>
 						<md-select ng-model="externalUser.group">
-							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'PROJECT.GROUPS.' + group[0].shortName | translate}}</md-option>
+							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</md-option>
 						</md-select>
 					</md-input-container>
 					<div style="position: relative; top: -25px;" class="btn-align">

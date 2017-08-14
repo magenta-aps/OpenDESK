@@ -8,11 +8,11 @@ angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
             });
         });
 
-function config($stateProvider, USER_ROLES) {
+function config($stateProvider, APP_CONFIG, USER_ROLES) {
 
     $stateProvider.state('project', {
         parent: 'site',
-        url: '/projekter/:projekt',
+        url: '/' + APP_CONFIG.sitesUrl + '/:projekt',
         views: {
             'content@': {
                 templateUrl: 'app/src/sites/view/site.html',

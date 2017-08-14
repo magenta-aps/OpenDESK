@@ -4,7 +4,9 @@ angular
 
 function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteService, fileUtilsService,
                                filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
-                               userService, documentService, alfrescoNodeUtils, $translate) {
+                               userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG) {
+
+    $scope.config = APP_CONFIG;
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;
@@ -71,7 +73,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
             filebrowserService.getNode(companyHomeUri, path).then(
                 function (response) {
                     setFolder(response.metadata.parent.nodeRef);
-                    $scope.permissions.canEdit = response.metadata.parent.permissions.user.Write;
+                    $scope.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit;
                 },
                 function (error) {
                     $scope.isLoading = false;

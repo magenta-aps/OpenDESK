@@ -2,8 +2,9 @@ angular
     .module('openDeskApp.systemsettings', ['ngMaterial', 'pascalprecht.translate'])
     .config(config);
 
-function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) {
-    systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'systemsettings.templateList', true);
+function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES, APP_CONFIG) {
+    if(APP_CONFIG.enableProjects)
+        systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'systemsettings.templateList', true);
     systemSettingsPagesServiceProvider.addPage('Mappeskabeloner', 'systemsettings.folder_templates', true);
     systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'systemsettings.document_templates', true);
     systemSettingsPagesServiceProvider.addPage('Systemmapper', 'systemsettings.filebrowser({path: ""})', true);
@@ -37,7 +38,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         url: '/mappeskabeloner',
         params: {
             authorizedRoles: [USER_ROLES.admin],
-            path: "Data Dictionary/Space Templates",
+            path: "/Data Dictionary/Space Templates",
             isSite: false
         },
         views: {
@@ -51,7 +52,7 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         url: '/dokumentskabeloner',
         params: {
             authorizedRoles: [USER_ROLES.admin],
-            path: "Data Dictionary/Node Templates",
+            path: "/Data Dictionary/Node Templates",
             isSite: false
         },
         views: {
@@ -69,18 +70,6 @@ function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES) 
         views: {
             'systemsetting-view': {
                 templateUrl: 'app/src/system_settings/templates/view/templateList.html',
-                controller: 'TemplatesController',
-                controllerAs: 'vm'
-            }
-        }
-    }).state('systemsettings.editTemplate', {
-        url: '/skabelon',
-        params: {
-            authorizedRoles: [USER_ROLES.admin]
-        },
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/system_settings/templates/view/editTemplate.html',
                 controller: 'TemplatesController',
                 controllerAs: 'vm'
             }

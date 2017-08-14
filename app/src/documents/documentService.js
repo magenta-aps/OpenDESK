@@ -9,7 +9,6 @@ function documentService($http) {
         getHistory: getHistory,
         getEditPermission: getEditPermission,
         UploadNewVersion: uploadNewVersion,
-        createThumbnail: createThumbnail,
         createVersionThumbnail: createVersionThumbnail,
         cleanupThumbnail: cleanupThumbnail,
         revertToVersion: revertToVersion
@@ -50,15 +49,7 @@ function documentService($http) {
     }
 
     function createVersionThumbnail(node, versionNode) {
-        var url = '/alfresco/s/previewhelper?version_node=' + versionNode + '&parent_node=' + node + "&method=createVersionThumbnail";
-
-        return $http.get(url).then(function (response) {
-            return response;
-        });
-    }
-
-    function createThumbnail(documentNodeRef) {
-        var url = '/alfresco/s/previewhelper?nodeRef=' + documentNodeRef + "&method=createThumbnail";
+        var url = '/alfresco/s/previewhelper?version_node=' + versionNode + '&parent_node=' + node + "&method=createThumbnail";
 
         return $http.get(url).then(function (response) {
             return response;
