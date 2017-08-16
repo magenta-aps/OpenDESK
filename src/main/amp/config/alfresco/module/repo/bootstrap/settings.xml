@@ -25,7 +25,6 @@
                     <od:appName>OpenDesk</od:appName>
                     <od:logoSrc>./app/assets/images/logo-light.svg</od:logoSrc>
                     <od:landingPage>projects</od:landingPage>
-                    <od:sitesUrl>sites</od:sitesUrl>
                 </view:properties>
                 <view:associations></view:associations>
             </od:settings>
