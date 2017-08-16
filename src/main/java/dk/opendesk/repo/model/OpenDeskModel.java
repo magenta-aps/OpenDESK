@@ -10,8 +10,10 @@ public interface OpenDeskModel {
     String SITE = "Site";
 
     // SPECIAL SITES
-    List<String> NODE_TEMPLATES_PATH = new ArrayList<>(Arrays.asList("Data Dictionary", "Node Templates"));
-    List<String> SPACE_TEMPLATES_PATH = new ArrayList<>(Arrays.asList("Data Dictionary", "Space Templates"));
+    List<String> PATH_NODE_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Node Templates"));
+    List<String> PATH_SPACE_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Space Templates"));
+    List<String> PATH_OD_SETTINGS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "settings.xml"));
 
 
     // Containers
@@ -101,6 +103,22 @@ public interface OpenDeskModel {
     QName PROP_LINK = QName.createQName(OD_URI, "link");
     QName PROP_LINK_TARGET = QName.createQName(OD_URI, "targetproject");
     QName PROP_LINK_TARGET_NODEREF = QName.createQName(OD_URI, "targetproject_noderef");
+
+    /**
+     * settings properties
+     */
+    QName TYPE_SETTINGS = QName.createQName(OD_URI, "settings");
+    QName PROP_APP_NAME = QName.createQName(OD_URI, "appName");
+    QName PROP_LOGO_SRC = QName.createQName(OD_URI, "logoSrc");
+    QName PROP_SSO_LOGIN_ENABLED = QName.createQName(OD_URI, "ssoLoginEnabled");
+    QName PROP_LANDING_PAGE = QName.createQName(OD_URI, "landingPage");
+
+    List<QName> PUBLIC_SETTINGS = new ArrayList<>(Arrays.asList(
+            PROP_APP_NAME,
+            PROP_LOGO_SRC,
+            PROP_SSO_LOGIN_ENABLED,
+            PROP_LANDING_PAGE
+    ));
 
     /**
      * Association Names

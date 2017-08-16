@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get public settings for OpenDesk frontend</shortname>
+    <description>Gets the public settings for OpenDesk frontend</description>
+    <url>/settings/public</url>
+    <authentication>none</authentication>
+</webscript>

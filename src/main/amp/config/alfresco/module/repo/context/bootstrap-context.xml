@@ -17,7 +17,28 @@
             </list>
         </property>
     </bean>
-	
 
+    <bean id="dk.opendesk.bootstrap.patch.settingsLoader"
+          class="org.alfresco.repo.admin.patch.impl.GenericBootstrapPatch"
+          parent="basePatch" >
+        <property name="id" value="dk.opendesk.bootstrap.patch.settingsLoader"/>
+        <property name="description" value="dk.opendesk.bootstrap.patch.settingsLoader.description"/>
+        <property name="fixesFromSchema" value="0"/>
+        <property name="fixesToSchema" value="${version.schema}"/>
+        <property name="targetSchema" value="100000"/>
+        <property name="importerBootstrap">
+            <ref bean="spacesBootstrap" />
+        </property>
+        <!-- Can be used to check if something already exists, if it does then the patch will not be executed -->
+        <property name="checkPath">
+            <value>/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:opendesk_extension</value>
+        </property>
+        <property name="bootstrapView">
+            <props>
+                <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}</prop>
+                <prop key="location">alfresco/module/repo/bootstrap/settings.xml</prop>
+            </props>
+        </property>
+    </bean>
 
 </beans>

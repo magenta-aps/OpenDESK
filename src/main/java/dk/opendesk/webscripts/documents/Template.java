@@ -77,11 +77,11 @@ public class Template extends AbstractWebScript {
             switch (method) {
 
                 case "getDocumentTemplates":
-                    result = getTemplates(OpenDeskModel.NODE_TEMPLATES_PATH);
+                    result = getTemplates(OpenDeskModel.PATH_NODE_TEMPLATES);
                     break;
 
                 case "getFolderTemplates":
-                    result = getTemplates(OpenDeskModel.SPACE_TEMPLATES_PATH);
+                    result = getTemplates(OpenDeskModel.PATH_SPACE_TEMPLATES);
                     break;
 
                 case "createContentFromTemplate":

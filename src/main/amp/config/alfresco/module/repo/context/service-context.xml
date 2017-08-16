@@ -18,4 +18,11 @@
 -->
 <beans>
 
+    <bean id="settingsBean" class="dk.opendesk.repo.beans.SettingsBean">
+        <property name="fileFolderService" ref="FileFolderService"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="repository" ref="repositoryHelper"/>
+        <property name="dictionaryService" ref="DictionaryService"/>
+    </bean>
+
 </beans>

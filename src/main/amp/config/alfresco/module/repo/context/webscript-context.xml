@@ -141,4 +141,22 @@
 		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
+	<bean id="webscript.settings.settings.get"
+		  class="dk.opendesk.webscripts.settings.GetSettings"
+		  parent="webscript">
+		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
+	<bean id="webscript.settings.publicsettings.get"
+		  class="dk.opendesk.webscripts.settings.GetPublicSettings"
+		  parent="webscript">
+		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
+	<bean id="webscript.settings.settings.put"
+		  class="dk.opendesk.webscripts.settings.UpdateSettings"
+		  parent="webscript">
+		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
 </beans>

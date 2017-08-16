@@ -193,7 +193,7 @@ public class TestUtils {
     public static NodeRef getDocumentTemplateRef(Repository repository, FileFolderService fileFolderService)
             throws FileNotFoundException {
         NodeRef companyHome = repository.getCompanyHome();
-        List<String> docTemplatePath = OpenDeskModel.NODE_TEMPLATES_PATH;
+        List<String> docTemplatePath = OpenDeskModel.PATH_NODE_TEMPLATES;
         return fileFolderService.resolveNamePath(companyHome, docTemplatePath).getNodeRef();
     }
 }

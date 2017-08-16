@@ -74,6 +74,34 @@
             </properties>
         </type>
 
+        <type name="od:settings">
+            <title>OpenDesk Settings</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="od:ssoLoginEnabled">
+                    <type>d:boolean</type>
+                </property>
+                <property name="od:enableProjects">
+                    <type>d:boolean</type>
+                </property>
+                <property name="od:enableESDH">
+                    <type>d:boolean</type>
+                </property>
+                <property name="od:enableChat">
+                    <type>d:boolean</type>
+                </property>
+                <property name="od:appName">
+                    <type>d:text</type>
+                </property>
+                <property name="od:logoSrc">
+                    <type>d:text</type>
+                </property>
+                <property name="od:landingPage">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </type>
+
     </types>
 
     <aspects>
