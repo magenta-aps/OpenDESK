@@ -17,11 +17,14 @@ angular
         phone: /^[+]?[0-9\- ]+$/
     })
     .constant('APP_CONFIG', {
-        appName: 'OpenDesk',
-        logoSrc: './app/assets/images/logo-light.svg',
-        ssoLoginEnabled: true,
-        landingPage: "projects",
-        sitesUrl: "projekter",
-        enableProjects: true,
-        enableESDH: true
+        settings: {
+            appName: 'OpenDesk',
+            logoSrc: './app/assets/images/logo-light.svg',
+            ssoLoginEnabled: true,
+            landingPage: "projects",
+            enableProjects: true,
+            enableESDH: true,
+            enableChat: true
+        },
+        sitesUrl: "projekter"
     });

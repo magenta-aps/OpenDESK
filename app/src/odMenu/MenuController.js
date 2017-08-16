@@ -11,6 +11,6 @@ angular
 
 function MenuController(APP_CONFIG) {
     var mc = this;
-    mc.landingPage = APP_CONFIG.landingPage;
+    mc.landingPage = APP_CONFIG.settings.landingPage;
 
 };

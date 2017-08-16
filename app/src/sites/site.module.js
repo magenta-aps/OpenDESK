@@ -18,7 +18,7 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
                 templateUrl: 'app/src/sites/view/site.html',
                 controller: 'SiteController',
                 controllerAs: 'vm'
-            },
+            }
         },
         params: {
             authorizedRoles: [USER_ROLES.user]
@@ -65,7 +65,5 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
                 controllerAs: 'dc'
             }
         }
-    })
-    ;
-
-};
+    });
+}

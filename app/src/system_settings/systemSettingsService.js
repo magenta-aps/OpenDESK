@@ -1,25 +1,36 @@
 'use strict';
 
-angular.module('openDeskApp.systemsettings').factory('systemSettingsService', function ($http) {
+angular.module('openDeskApp.systemsettings')
 
-    var restBaseUrl = '/alfresco/s/api/';
+    .factory('systemSettingsService', function ($http, APP_CONFIG) {
 
-    return {
-        getSiteMembers: function (siteShortName) {
-            return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
-                return response.data;
-            });
-        },
+        var restBaseUrl = '/alfresco/s/api/';
 
-        getTemplates: function() {
-            return $http.post("/alfresco/service/sites", {
-                PARAM_METHOD : "getTemplates"
+        return {
+            getSiteMembers: function (siteShortName) {
+                return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
+                    return response.data;
+                });
+            },
 
-            }).then(function(response) {
-                console.log(response);
+            getTemplates: function () {
+                return $http.post("/alfresco/service/sites", {
+                    PARAM_METHOD: "getTemplates"
+                }).then(function (response) {
+                    return response.data;
+                });
+            },
 
-                return response.data;
-            });
-        }
-    };
-});
+            loadSettings: function () {
+                return $http.get("/alfresco/service/settings").then(function (response) {
+                    APP_CONFIG.settings = response.data;
+                });
+            },
+
+            loadPublicSettings: function () {
+                return $http.get("/alfresco/service/settings/public").then(function (response) {
+                    APP_CONFIG.settings = response.data;
+                });
+            }
+        };
+    });

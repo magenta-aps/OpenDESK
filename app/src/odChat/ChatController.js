@@ -9,8 +9,7 @@ angular
         };
     });
 
-function ChatController($scope, chatService) {
-    var vm = this;
-
-    chatService.initialize();
+function ChatController(chatService, APP_CONFIG) {
+    if(APP_CONFIG.settings.enableChat)
+        chatService.initialize();
 };
