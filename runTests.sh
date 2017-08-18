@@ -22,7 +22,7 @@ done
 echo -e "\n----------> OPENDESK Alfresco test repository contacted"
 
 npm update
-npm install gulp
+#npm install gulp
 #npm install protractor
 npm install
 node node_modules/protractor/bin/webdriver-manager update
@@ -34,8 +34,9 @@ gulp_pid="$!"
 echo -e "\n---------> The current gulp pid is: ${gulp_pid}"
 
 # wait until selenium is up
-while ! curl http://localhost:8000/#/ &>/dev/null; do :; done
+#while ! curl http://localhost:8000/#/ &>/dev/null; do sleep 5; done
 
 echo -e "\n----------> localhost:8000 is up and running. Starting tests"
 
 xvfb-run -a npm test
+
