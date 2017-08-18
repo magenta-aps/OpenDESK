@@ -14,12 +14,11 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.canEdit = false;
 
     vm.showArchived = false;
+    vm.showTools = false;
 
     vm.documentTab = '/dokumenter';
 
     vm.notificationFrom = '';
-
-    vm.expandRightSide = false;
 
     function setPDFViewerHeight () {
         var height = $(window).height() - 150 - $("header").outerHeight();
@@ -329,7 +328,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             confirmLoolEditDocDialog();
         } else {
             $state.go('lool', {
-                'nodeRef': vm.doc.nodeRef
+                'nodeRef': vm.doc.node.nodeRef
             });
         }
     };
