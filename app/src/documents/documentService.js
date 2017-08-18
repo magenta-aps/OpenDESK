@@ -17,9 +17,7 @@ function documentService($http) {
     return service;
 
     function getDocument(documentNodeRef) {
-        return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
-            console.log('doc user access data');
-            console.log(response.data.item.permissions.userAccess.create);
+        return $http.get('/slingshot/doclib2/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
             return response.data;
         });
     }

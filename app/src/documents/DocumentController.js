@@ -194,6 +194,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     documentService.getDocument(parentDocumentNode).then(function (response) {
 
         vm.doc = response.item;
+        vm.docMetadata = response.metadata;
 
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
@@ -317,6 +318,22 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             $state.go('lool', {
                 'nodeRef': vm.doc.nodeRef
             });
+        }
+    };
+
+    vm.editInMSOffice = function () {
+        var pathStart = vm.docMetadata.serverURL;
+        var pathEnd = vm.doc.webdavUrl.replace("webdav", "aos");
+        var file = pathStart + "/alfresco" + pathEnd;
+        console.log(file);
+        try {
+            var objword = new ActiveXObject("SharePoint.OpenDocuments");
+            if (objword != null) {
+                objword.EditDocument(file);
+                // f.i. https://alfresco.ballerup.dk/alfresco/aos/Sites/swsdp/documentLibrary/Meeting%20Notes/Meeting%20Notes%202011-01-27.doc
+            }
+        } catch (e) {
+            console.log(e);
         }
     };
 

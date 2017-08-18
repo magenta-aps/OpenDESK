@@ -32,7 +32,7 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document' && site.type != strings.templateProject">
+        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="uploadNewVersionDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
