@@ -54,7 +54,7 @@ angular
 
 function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
 
-    $urlRouterProvider.when('', '/' + APP_CONFIG.landingPage);
+    $urlRouterProvider.when('', '/' + APP_CONFIG.landingPageUrl);
 
     $stateProvider.decorator('data', function(state, parent) {
         var stateData = parent(state);
@@ -89,7 +89,7 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
             if (authService.isAuthorized($stateParams.authorizedRoles))
                 defer.resolve(authService.user);
             else
-                $state.go(APP_CONFIG.landingPage);
+                $state.go(APP_CONFIG.landingPageState);
         });
     }
 
