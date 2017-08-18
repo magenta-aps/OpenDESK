@@ -18,5 +18,6 @@ angular
     })
     .constant('APP_CONFIG', {
         settings: {},
-        sitesUrl: "projekter"
+        sitesUrl: "projekter",
+        landingPage: "projekter"
     });

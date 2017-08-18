@@ -160,7 +160,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
 
                     var siteShortName = response.data[0].shortName;
                     var siteName = $scope.newSite.siteName;
-                    var link = '#!/' + APP_CONFIG.settings.sitesUrl +'/' + siteShortName;
+                    var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
 
                     createSiteNotification(siteName, $scope.newSite.owner.userName, link);
                     createSiteNotification(siteName, $scope.newSite.manager.userName, link);
@@ -197,7 +197,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
 
                 var siteShortName = response[0].shortName;
                 var siteName = $scope.newSite.siteName;
-                var link = '#!/' + APP_CONFIG.settings.sitesUrl +'/' + siteShortName;
+                var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
 
                 angular.forEach($scope.newSite.groups, function (group) {
                     if (group.multipleMembers)

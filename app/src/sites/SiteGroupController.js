@@ -109,7 +109,7 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG
         var author = $scope.currentUser.firstName + ' ' + $scope.currentUser.lastName;
 
         var message = author + " har tilføjet dig til projektet " + $scope.site.title + ".";
-        var link = '#!/' + APP_CONFIG.settings.sitesUrl +'/' + site;
+        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + site;
         createNotification(userName, subject, message, link, 'project', site);
     }
 }

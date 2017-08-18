@@ -46,12 +46,15 @@ angular
             angular.element(window.document)[0].title = APP_CONFIG.settings.appName;
             $rootScope.appName = APP_CONFIG.settings.appName;
             $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
-            if ($state.current.url == "^")
-                $state.go(APP_CONFIG.settings.landingPage);
         });
     });
 
-function config($stateProvider, USER_ROLES) {
+
+
+
+function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
+
+    $urlRouterProvider.when('', '/' + APP_CONFIG.landingPage);
 
     $stateProvider.decorator('data', function(state, parent) {
         var stateData = parent(state);
@@ -86,7 +89,7 @@ function config($stateProvider, USER_ROLES) {
             if (authService.isAuthorized($stateParams.authorizedRoles))
                 defer.resolve(authService.user);
             else
-                $state.go(APP_CONFIG.settings.landingPage);
+                $state.go(APP_CONFIG.landingPage);
         });
     }
 
@@ -98,6 +101,7 @@ function config($stateProvider, USER_ROLES) {
 
     $stateProvider.state('site', {
         abstract: true,
+        url: '',
         views: {
             'header@': {
                 templateUrl: 'app/src/header/view/header.html'
