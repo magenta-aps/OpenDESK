@@ -298,6 +298,7 @@ md-tooltip {
 
 //control arrow for open and closing
 .open {
+  cursor: pointer;
   .rotate-arrow {
     transform: rotate(180deg);
     transition: transform .25s ease;
@@ -305,6 +306,7 @@ md-tooltip {
 }
 
 .closed {
+  cursor: pointer;
   .rotate-arrow {
     transform: rotate(0deg);
     transition: transform .15s ease;

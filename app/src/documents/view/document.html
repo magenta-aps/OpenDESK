@@ -4,13 +4,10 @@
 <div>
 	<div layout="row">
 		<md-card flex="75">
-			<md-card-title layout="row">
-				<h3 class="md-title">{{ vm.doc.fileName }}</h3>
-			</md-card-title>
-			<md-card-content layout="column" layout-padding>
+			<md-card-content>
 				<breadcrumb paths="vm.paths"></breadcrumb>
 
-				<div style="max-width:1500px; overflow: auto;">
+				<div>
 					<ng-include src="viewerTemplateUrl"></ng-include>
 				</div>
 			</md-card-content>
@@ -32,5 +29,4 @@
 			<div ng-include="'app/src/documents/view/documentReview.html'"></div>
 		</div>
 	</div>
-
 </div>

@@ -19,12 +19,25 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     vm.notificationFrom = '';
 
-    var height = $(window).height() - 300 - $("header").outerHeight();
+    vm.expandRightSide = false;
 
-    $scope.iframeStyle = {
-        "height" : height + 'px',
-        "width" : "99%",
+    function setPDFViewerHeight () {
+        var height = $(window).height() - 150 - $("header").outerHeight();
+
+        $scope.iframeStyle = {
+            "height": height + 'px',
+            "width": "100%"
+        };
     }
+    setPDFViewerHeight();
+
+    angular.element($window).bind('resize', function(){
+
+        setPDFViewerHeight();
+        // manuall $digest required as resize event
+        // is outside of angular
+        $scope.$digest();
+    });
 
     if ($location.search().archived != undefined && $location.search().archived == "true") {
         vm.showArchived = true;
