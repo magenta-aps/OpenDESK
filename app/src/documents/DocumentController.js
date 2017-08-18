@@ -199,7 +199,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
 
-        vm.site = response.item.location.site;
+        vm.site = response.item.location.site.name;
 
         siteService.loadSiteData(vm.site).then(function(response)
         {
@@ -210,7 +210,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         function buildBreadCrumbPath(response) {
             var paths = [{
                 title: response.item.location.siteTitle,
-                link: 'project.filebrowser({projekt: "' + response.item.location.site + '", path: ""})'
+                link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
             }];
             var pathArr = response.item.location.path.split('/');
             var pathLink = '/';
@@ -221,7 +221,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
                         link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
                     }
                     else {
-                        link = 'project.filebrowser({projekt: "' + response.item.location.site +
+                        link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
                             '", path: "' + pathLink + pathArr[a] + '"})';
                     }
                     paths.push({
@@ -229,14 +229,14 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
                         link: link
                     });
                     pathLink = pathLink + pathArr[a] + '/';
-                };
-            };
+                }
+            }
             paths.push({
                 title: response.item.location.file,
                 link: response.item.location.path
             });
             return paths;
-        };
+        }
 
     });
 
