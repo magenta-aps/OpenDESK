@@ -111,13 +111,11 @@ public interface OpenDeskModel {
     QName PROP_APP_NAME = QName.createQName(OD_URI, "appName");
     QName PROP_LOGO_SRC = QName.createQName(OD_URI, "logoSrc");
     QName PROP_SSO_LOGIN_ENABLED = QName.createQName(OD_URI, "ssoLoginEnabled");
-    QName PROP_LANDING_PAGE = QName.createQName(OD_URI, "landingPage");
 
     List<QName> PUBLIC_SETTINGS = new ArrayList<>(Arrays.asList(
             PROP_APP_NAME,
             PROP_LOGO_SRC,
-            PROP_SSO_LOGIN_ENABLED,
-            PROP_LANDING_PAGE
+            PROP_SSO_LOGIN_ENABLED
     ));
 
     /**

@@ -96,9 +96,6 @@
                 <property name="od:logoSrc">
                     <type>d:text</type>
                 </property>
-                <property name="od:landingPage">
-                    <type>d:text</type>
-                </property>
             </properties>
         </type>
 
