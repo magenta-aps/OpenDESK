@@ -78,9 +78,6 @@
             <title>OpenDesk Settings</title>
             <parent>cm:content</parent>
             <properties>
-                <property name="od:ssoLoginEnabled">
-                    <type>d:boolean</type>
-                </property>
                 <property name="od:enableProjects">
                     <type>d:boolean</type>
                 </property>
