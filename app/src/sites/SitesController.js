@@ -9,7 +9,7 @@ function SitesController($scope, $mdDialog, $window,  $interval, $translate, sit
 
 
 	var vm = this;
-    vm.config = APP_CONFIG;
+    vm.config = APP_CONFIG.settings;
 
 	vm.sites = [];
 	vm.sitesPerUser = [];
