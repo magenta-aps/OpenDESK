@@ -184,9 +184,7 @@ angular.module('openDeskApp.sites').factory('siteService',
 
 
         },
-        uploadNewVersion: function (file, destination, existingNodeRef, extras) {
-            console.log("inside uploadNewVersion");
-
+        uploadNewVersion: function (file, destination, existingNodeRef) {
             var formData = new FormData();
             formData.append("filedata", file);
             formData.append("updatenoderef", existingNodeRef);

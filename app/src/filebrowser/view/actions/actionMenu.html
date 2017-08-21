@@ -20,7 +20,7 @@
 
         <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="goToLOEditPage(content.nodeRef)">
-                <md-icon md-menu-align-target>library_books</md-icon>
+                <md-icon md-menu-align-target>edit</md-icon>
                 {{'COMMON.EDIT' | translate }}
             </md-button>
         </md-menu-item>
@@ -41,7 +41,7 @@
 
         <md-menu-item ng-if="permissions.canEdit && content.contentType != 'cmis:link'">
             <md-button ng-click="renameContentDialog($event, content)">
-                <md-icon md-menu-align-target>create</md-icon>
+                <md-icon md-menu-align-target>title</md-icon>
                 {{'COMMON.RENAME' | translate }}
             </md-button>
         </md-menu-item>

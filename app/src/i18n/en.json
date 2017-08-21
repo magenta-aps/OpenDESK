@@ -224,7 +224,7 @@
     "VERSION_DESCRIPTION": "Version description",
     "EDIT_PROPERTIES": "Edit information",
     "EDIT_DOCUMENT": "Edit document",
-    "EDIT_DOCUMENT_SHAREPOINT": "Edit document in MS Office",
+    "EDIT_DOCUMENT_SHAREPOINT": "Edit document in MS Office (Only in IE)",
     "PRINT": "Print",
     "UPLOAD_NEW_VERSION": "Upload new version",
     "PREVIEW": "Preview",

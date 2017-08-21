@@ -4,7 +4,7 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
-                            documentPreviewService, alfrescoDownloadService, sessionService, alfrescoNodeUtils,
+                            documentPreviewService, alfrescoDownloadService,
                             $mdDialog, notificationsService, authService, siteService, $window) {
 
     var vm = this;
@@ -38,13 +38,13 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         $scope.$digest();
     });
 
-    if ($location.search().archived != undefined && $location.search().archived == "true") {
+    if ($location.search().archived !== undefined && $location.search().archived === "true") {
         vm.showArchived = true;
     }
 
-    var selectedDocumentNode = $stateParams.doc != undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3];
-    var parentDocumentNode = $location.search().parent != undefined ? $location.search().parent : selectedDocumentNode;
-    var docHasParent = $location.search().parent != undefined ? true : false;
+    var selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3];
+    var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : selectedDocumentNode;
+    var docHasParent = $location.search().parent !== undefined;
     var firstDocumentNode = "";
 
     documentService.getHistory(parentDocumentNode).then(function (val) {
@@ -139,27 +139,15 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     // prepare to handle a preview of a document to review
     var paramValue = $location.search().dtype;
+    vm.wf_from = $location.search().from;
+    vm.wf = paramValue === "wf";
+    vm.wfr = paramValue === "wf-response";
 
-    if (paramValue == "wf") {
-        vm.wf_from = $location.search().from;
-        vm.wf = true;
-
-        var NID = $location.search().NID;
-
-        notificationsService.getInfo(NID).then(function (response) {
-            $scope.wf_comment = response.message;
-        });
-
-
-    } else if (paramValue == "wf-response") {
-        vm.wf_from = $location.search().from;
-        vm.wfr = true;
-
-        var NID = $location.search().NID;
-        notificationsService.getInfo(NID).then(function (response) {
-            $scope.wf_comment = response.message;
-        });
-    }
+    var NID = $location.search().NID;
+    notificationsService.getInfo(NID).then(function (response) {
+        vm.wf_comment = response.message;
+        vm.wf_subject = response.subject;
+    });
 
     vm.getNotificationFrom = function () {
         userService.getPerson(vm.wf_from).then(function (val) {
@@ -211,7 +199,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         // Compile paths for breadcrumb directive
         vm.paths = buildBreadCrumbPath(response);
 
-        vm.site = response.item.location.site.name;
+        vm.site = vm.doc.location.site.name;
 
         siteService.loadSiteData(vm.site).then(function(response)
         {
@@ -229,7 +217,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             for (var a in pathArr) {
                 if (pathArr[a] !== '') {
                     var link;
-                    if(response.item.location.site == "") {
+                    if(response.item.location.site === "") {
                         link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
                     }
                     else {
@@ -310,9 +298,9 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             .cancel('Fortryd');
         $mdDialog.show(confirm).then(function () {
             var selectedVersion = $location.search().version;
-            documentService.revertToVersion(vm.doc.description, true, vm.doc.nodeRef, selectedVersion).then(function (response) {
+            documentService.revertToVersion(vm.doc.description, true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
                 $state.go('lool', {
-                    'nodeRef': vm.doc.nodeRef
+                    'nodeRef': vm.doc.node.nodeRef
                 });
             });
         });
@@ -347,6 +335,57 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         } catch (e) {
             console.log(e);
         }
+    };
+
+    vm.downloadDocument = function downloadDocument() {
+        var versionRef = vm.store + $stateParams.doc;
+        alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file);
+    };
+
+    vm.reviewDocumentsDialog = function (event) {
+        $mdDialog.show({
+            templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope, // use parent scope in template
+            preserveScope: true, // do not forget this if use parent scope
+            clickOutsideToClose: true
+        });
+    };
+
+    $scope.createReviewNotification = function (userName, comment) {
+        siteService.createReviewNotification(vm.doc.node.nodeRef, userName, comment);
+        hideDialog();
+    };
+
+    vm.uploadNewVersionDialog = function (event) {
+        $mdDialog.show({
+            templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            scope: $scope, // use parent scope in template
+            preserveScope: true, // do not forget this if use parent scope
+            clickOutsideToClose: true
+        });
+    };
+
+    $scope.uploadNewVersion = function (file) {
+        siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
+            hideDialog();
+            $state.go('document', { doc: parentDocumentNode });
+        });
+    };
+
+    function hideDialog () {
+        $mdDialog.hide();
+    }
+
+    $scope.cancelDialog = function () {
+        $mdDialog.cancel();
+    };
+
+    $scope.searchUsers = function (filter) {
+        return userService.getUsers(filter);
     };
 
     angular.element(document).ready(function () {

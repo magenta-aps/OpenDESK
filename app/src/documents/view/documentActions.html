@@ -1,0 +1,46 @@
+<md-card class="dropdown-card">
+    <md-card-title ng-click="vm.showTools = !vm.showTools" ng-class="vm.showTools ? 'open' : 'closed'">
+        <h3 class="md-title od-title-icon"><md-icon>tune</md-icon> {{'COMMON.ACTIONS' | translate }}</h3>
+        <span flex></span>
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+    </md-card-title>
+
+    <md-card-content ng-class="vm.showTools ? 'fold-out' : 'fold-in'">
+
+        <div>
+            <md-button ng-show="vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>edit</md-icon>
+                {{'DOCUMENT.EDIT_DOCUMENT' | translate }}
+            </md-button>
+        </div>
+
+        <div>
+            <md-button ng-show="vm.canEdit" ng-click="vm.editInMSOffice()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>edit</md-icon>
+                {{'DOCUMENT.EDIT_DOCUMENT_SHAREPOINT' | translate }}
+            </md-button>
+        </div>
+
+        <div>
+            <md-button ng-click="vm.downloadDocument()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>get_app</md-icon>
+                {{'COMMON.DOWNLOAD' | translate }}
+            </md-button>
+        </div>
+
+        <div>
+            <md-button ng-show="vm.canEdit" ng-click="vm.uploadNewVersionDialog($event)" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>file_upload</md-icon>
+                {{'COMMON.NEWVERSION' | translate }}
+            </md-button>
+        </div>
+
+        <div>
+            <md-button ng-show="vm.canEdit" ng-click="vm.reviewDocumentsDialog($event)" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>playlist_add_check</md-icon>
+                {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
+            </md-button>
+        </div>
+
+    </md-card-content>
+</md-card>
