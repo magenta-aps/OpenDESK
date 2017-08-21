@@ -39,15 +39,7 @@ angular
 
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
-    .config(config)
-    .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
-                   APP_CONFIG) {
-        systemSettingsService.loadPublicSettings().then(function(response) {
-            angular.element(window.document)[0].title = APP_CONFIG.settings.appName;
-            $rootScope.appName = APP_CONFIG.settings.appName;
-            $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
-        });
-    });
+    .config(config);
 
 
 
@@ -61,25 +53,32 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
 
         state.resolve = state.resolve || {};
         state.resolve.authorize = [
-            'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
-            function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
+            'authService', '$q', '$rootScope', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
+            function (authService, $q, $rootScope, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
                 var d = $q.defer();
 
-                if (authService.isAuthenticated())
-                    resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);
+                systemSettingsService.loadPublicSettings().then(function(response) {
 
-                else if (APP_CONFIG.settings.ssoLoginEnabled) {
-                    authService.ssoLogin().then(function (response) {
-                        if (authService.isAuthenticated())
-                            resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService,
-                                APP_CONFIG, d);
-                        else rejectUnauthenticatedUser($state, sessionService, d);
-                    });
-                }
+                    angular.element(window.document)[0].title = APP_CONFIG.settings.appName;
+                    $rootScope.appName = APP_CONFIG.settings.appName;
+                    $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
 
-                else rejectUnauthenticatedUser($state, sessionService, d);
+                    if (authService.isAuthenticated())
+                        resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);
 
-                return d.promise;
+                    else if (APP_CONFIG.settings.ssoLoginEnabled) {
+                        authService.ssoLogin().then(function (response) {
+                            if (authService.isAuthenticated())
+                                resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService,
+                                    APP_CONFIG, d);
+                            else rejectUnauthenticatedUser($state, sessionService, d);
+                        });
+                    }
+
+                    else rejectUnauthenticatedUser($state, sessionService, d);
+
+                    return d.promise;
+                });
             }];
         return stateData;
     });
