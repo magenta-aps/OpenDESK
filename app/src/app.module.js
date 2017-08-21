@@ -65,24 +65,21 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
             function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
                 var d = $q.defer();
 
-                systemSettingsService.loadPublicSettings().then(function(response) {
+                if (authService.isAuthenticated())
+                    resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);
 
-                    if (authService.isAuthenticated())
-                        resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);
+                else if (APP_CONFIG.ssoLoginEnabled) {
+                    authService.ssoLogin().then(function (response) {
+                        if (authService.isAuthenticated())
+                            resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService,
+                                APP_CONFIG, d);
+                        else rejectUnauthenticatedUser($state, sessionService, d);
+                    });
+                }
 
-                    else if (APP_CONFIG.ssoLoginEnabled) {
-                        authService.ssoLogin().then(function (response) {
-                            if (authService.isAuthenticated())
-                                resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService,
-                                    APP_CONFIG, d);
-                            else rejectUnauthenticatedUser($state, sessionService, d);
-                        });
-                    }
+                else rejectUnauthenticatedUser($state, sessionService, d);
 
-                    else rejectUnauthenticatedUser($state, sessionService, d);
-
-                    return d.promise;
-                });
+                return d.promise;
             }];
         return stateData;
     });
