@@ -39,7 +39,15 @@ angular
 
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
-    .config(config);
+    .config(config)
+    .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
+                   APP_CONFIG) {
+        systemSettingsService.loadPublicSettings().then(function(response) {
+            angular.element(window.document)[0].title = APP_CONFIG.settings.appName;
+            $rootScope.appName = APP_CONFIG.settings.appName;
+            $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
+        });
+    });
 
 
 
@@ -53,20 +61,16 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
 
         state.resolve = state.resolve || {};
         state.resolve.authorize = [
-            'authService', '$q', '$rootScope', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
-            function (authService, $q, $rootScope, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
+            'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
+            function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
                 var d = $q.defer();
 
                 systemSettingsService.loadPublicSettings().then(function(response) {
 
-                    angular.element(window.document)[0].title = APP_CONFIG.settings.appName;
-                    $rootScope.appName = APP_CONFIG.settings.appName;
-                    $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
-
                     if (authService.isAuthenticated())
                         resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);
 
-                    else if (APP_CONFIG.settings.ssoLoginEnabled) {
+                    else if (APP_CONFIG.ssoLoginEnabled) {
                         authService.ssoLogin().then(function (response) {
                             if (authService.isAuthenticated())
                                 resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService,

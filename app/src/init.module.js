@@ -20,5 +20,6 @@ angular
         settings: {},
         sitesUrl: "projekter",
         landingPageState: "projects",
-        landingPageUrl: "projekter"
+        landingPageUrl: "projekter",
+        ssoLoginEnabled: true
     });
