@@ -20,8 +20,9 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
         );
     }
     else {
-        vm.nodeRef = nodeRefUtilsService.getId($stateParams.nodeRef);
-        documentService.getDocument(vm.nodeRef).then(function (document) {
+        vm.nodeRef = $stateParams.nodeRef;
+        vm.nodeId = nodeRefUtilsService.getId($stateParams.nodeRef);
+        documentService.getDocument(vm.nodeId).then(function (document) {
 
             vm.doc = document.item;
             loolService.getLoolServiceUrl().then(function (response) {
