@@ -5,8 +5,9 @@ angular
 	.controller('SitesController', SitesController);
 
 function SitesController($scope, $mdDialog, $window,  $interval, $translate, siteService, pd_siteService,
-						 sessionService, APP_CONFIG) {
+						 sessionService, APP_CONFIG, browserService) {
 
+    browserService.setTitle($translate.instant('SITES.NAME'));
 
 	var vm = this;
     vm.config = APP_CONFIG.settings;

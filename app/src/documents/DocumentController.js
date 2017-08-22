@@ -4,7 +4,7 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
-                            documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG,
+                            documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG, browserService,
                             $mdDialog, notificationsService, authService, siteService, $window) {
 
     var vm = this;
@@ -208,6 +208,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             vm.type = response.type;
             vm.title = response.title;
         });
+
+        browserService.setTitle(response.item.node.properties["cm:name"]);
 
         function buildBreadCrumbPath(response) {
             var paths = [{

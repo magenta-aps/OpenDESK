@@ -41,9 +41,9 @@ angular
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
-                   APP_CONFIG, CLIENT_CONFIG) {
+                   APP_CONFIG, CLIENT_CONFIG, browserService) {
         systemSettingsService.loadPublicSettings().then(function(response) {
-            angular.element(window.document)[0].title = APP_CONFIG.settings.appName;
+            browserService.setTitle();
             $rootScope.appName = APP_CONFIG.settings.appName;
             $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
             CLIENT_CONFIG.browser.isIE = detectIE();

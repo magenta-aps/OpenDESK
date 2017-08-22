@@ -5,7 +5,7 @@ angular
     .controller('SiteController', SiteController);
 
 function SiteController($scope, $mdDialog, $window, siteService, $stateParams, documentService, authService, $rootScope,
-                        searchService, userService) {
+                        searchService, userService, browserService) {
 
     $scope.permissions = {};
     $scope.history = [];
@@ -44,6 +44,7 @@ function SiteController($scope, $mdDialog, $window, siteService, $stateParams, d
 
                 vm.project = result;
                 $scope.site = vm.project;
+                browserService.setTitle(vm.project.title);
                 $scope.currentUser = vm.currentUser;
                 vm.project.visibilityStr = vm.project.visibility === "PUBLIC" ? "Offentlig" : "Privat";
                 $scope.hasDescription = vm.project.description.trim() !== "";

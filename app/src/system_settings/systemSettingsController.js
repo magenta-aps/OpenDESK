@@ -2,8 +2,11 @@ angular
     .module('openDeskApp.systemsettings')
     .controller('SystemSettingsController', SystemSettingsCtrl);
 
-function SystemSettingsCtrl(systemSettingsPagesService, sessionService, systemSettingsService, $scope) {
+function SystemSettingsCtrl(systemSettingsPagesService, sessionService, systemSettingsService, $scope,
+                            browserService, $translate) {
     var vm = this;
+
+    browserService.setTitle($translate.instant('ADMIN.ADMINISTRATION_PAGES'));
 
     $scope.templateSites = [];
 
