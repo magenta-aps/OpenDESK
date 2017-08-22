@@ -6,7 +6,7 @@ angular
 /**
  * Main Controller for the LibreOffice online module module
  */
-function LoolController($stateParams, loolService, documentService, $mdToast, $translate) {
+function LoolController($stateParams, loolService, documentService, $mdToast, $translate, nodeRefUtilsService) {
     var vm = this;
 
     if($stateParams.nodeRef === null)
@@ -20,7 +20,7 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
         );
     }
     else {
-        vm.nodeRef = $stateParams.nodeRef;
+        vm.nodeRef = nodeRefUtilsService.getId($stateParams.nodeRef);
         documentService.getDocument(vm.nodeRef).then(function (document) {
 
             vm.doc = document.item;
