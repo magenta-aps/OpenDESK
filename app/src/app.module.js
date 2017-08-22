@@ -50,8 +50,26 @@ angular
         });
     });
 
+/**
+ * detect IE
+ * returns version of IE or false, if browser is not Internet Explorer
+ */
+function detectIE() {
+    var ua = window.navigator.userAgent;
 
+    var msie = ua.indexOf('MSIE ');
+    if (msie > 0) { return true; }
 
+    var trident = ua.indexOf('Trident/');
+    if (trident > 0) { return true; }
+
+    // We don't accept Edge, as Edge does not support ActiveXObject
+    //var edge = ua.indexOf('Edge/');
+    //if (edge > 0) { return true; }
+
+    // other browser
+    return false;
+}
 
 function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
 
@@ -98,27 +116,6 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
         defer.reject('Please login');
         sessionService.retainCurrentLocation();
         $state.go('login');
-    }
-
-    /**
-     * detect IE
-     * returns version of IE or false, if browser is not Internet Explorer
-     */
-    function detectIE() {
-        var ua = window.navigator.userAgent;
-
-        var msie = ua.indexOf('MSIE ');
-        if (msie > 0) { return true; }
-
-        var trident = ua.indexOf('Trident/');
-        if (trident > 0) { return true; }
-
-        // We don't accept Edge, as Edge does not support ActiveXObject
-        //var edge = ua.indexOf('Edge/');
-        //if (edge > 0) { return true; }
-
-        // other browser
-        return false;
     }
 
     $stateProvider.state('site', {
