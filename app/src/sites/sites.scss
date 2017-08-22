@@ -292,6 +292,7 @@ md-tooltip {
 }
 
 .fold-out {
+  overflow-y: auto;
   max-height: 500px;
   transition: max-height .25s ease-in;
 }
