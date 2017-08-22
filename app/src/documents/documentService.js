@@ -1,7 +1,7 @@
 angular.module('openDeskApp.documents')
        .factory('documentService', documentService);
 
-function documentService($http) {
+function documentService($http, $translate, $mdToast, $q) {
 
     var service = {
         getDocument: getDocument,
@@ -17,9 +17,21 @@ function documentService($http) {
     return service;
 
     function getDocument(documentNodeRef) {
-        return $http.get('/slingshot/doclib2/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
-            return response.data;
-        });
+        return $http.get('/slingshot/doclib2/node/workspace/SpacesStore/' + documentNodeRef, {}).then(
+            function (response) {
+                return response.data;
+            },
+            function (error) {
+                $mdToast.show(
+                    $mdToast.simple()
+                        .textContent($translate.instant('ERROR.ERROR') + ": " +
+                            $translate.instant('DOCUMENT.ERROR.DOES_NOT_EXIST'))
+                        .theme('error-toast')
+                        .hideDelay(3000)
+                );
+                return $q.reject(error);
+            }
+        );
     }
 
     function getPath(documentNodeRef) {

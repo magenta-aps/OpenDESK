@@ -184,6 +184,10 @@
   "DOCUMENT": {
     "DOCUMENT_TEMPLATES": "Dokumentskabeloner",
     "STATUS_CHANGED_SUCCESS": "Status er ændret",
+    "ERROR": {
+      "MISSING_NODEREF": "Siden mangler en reference til et dokument for at kunne vise korrekt.",
+      "DOES_NOT_EXIST": "Dokumentet eksisterer ikke."
+    },
     "CATEGORY": {
       "annex": "Bilag",
       "proof": "Bevis",
@@ -694,6 +698,7 @@
     "PASSWORD_NOMATCH": "Kodeord matcher ikke",
     "EMAIL_NOT_EXISTS": "Email findes ikke",
     "EMAIL_EXISTS": "Email findes allerede",
+    "ERROR": "Fejl",
     "USERNAME_EXISTS": "Brugernavn findes allerede",
     "AUTH_FAILURE": "Forkerte loginoplysninger",
     "AUTH_ERROR": "Fejl",

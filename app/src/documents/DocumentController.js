@@ -141,15 +141,17 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
 
     // prepare to handle a preview of a document to review
     var paramValue = $location.search().dtype;
-    vm.wf_from = $location.search().from;
-    vm.wf = paramValue === "wf";
-    vm.wfr = paramValue === "wf-response";
+    if(paramValue !== undefined) {
+        vm.wf_from = $location.search().from;
+        vm.wf = paramValue === "wf";
+        vm.wfr = paramValue === "wf-response";
 
-    var NID = $location.search().NID;
-    notificationsService.getInfo(NID).then(function (response) {
-        vm.wf_comment = response.message;
-        vm.wf_subject = response.subject;
-    });
+        var NID = $location.search().NID;
+        notificationsService.getInfo(NID).then(function (response) {
+            vm.wf_comment = response.message;
+            vm.wf_subject = response.subject;
+        });
+    }
 
     vm.getNotificationFrom = function () {
         userService.getPerson(vm.wf_from).then(function (val) {
