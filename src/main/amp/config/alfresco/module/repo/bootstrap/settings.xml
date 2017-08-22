@@ -18,13 +18,11 @@
                     <cm:description>This file contains the settings for OpenDesk frontend.</cm:description>
                     <cm:author>admin</cm:author>
                     <cm:name>settings.xml</cm:name>
-                    <od:ssoLoginEnabled>true</od:ssoLoginEnabled>
                     <od:enableProjects>true</od:enableProjects>
                     <od:enableESDH>true</od:enableESDH>
                     <od:enableChat>true</od:enableChat>
                     <od:appName>OpenDesk</od:appName>
                     <od:logoSrc>./app/assets/images/logo-light.svg</od:logoSrc>
-                    <od:landingPage>projects</od:landingPage>
                 </view:properties>
                 <view:associations></view:associations>
             </od:settings>
