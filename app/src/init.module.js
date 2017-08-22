@@ -22,4 +22,7 @@ angular
         landingPageState: "projects",
         landingPageUrl: "projekter",
         ssoLoginEnabled: true
+    })
+    .constant('CLIENT_CONFIG', {
+        browser: {}
     });

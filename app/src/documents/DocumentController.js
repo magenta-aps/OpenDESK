@@ -4,7 +4,7 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
-                            documentPreviewService, alfrescoDownloadService,
+                            documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG,
                             $mdDialog, notificationsService, authService, siteService, $window) {
 
     var vm = this;
@@ -12,6 +12,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     vm.plugin = [];
     vm.paths = [];
     vm.canEdit = false;
+    vm.browser = {};
+    vm.browser.isIE = CLIENT_CONFIG.browser.isIE;
 
     vm.showArchived = false;
     vm.showTools = false;

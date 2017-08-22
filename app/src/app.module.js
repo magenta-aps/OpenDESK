@@ -41,11 +41,12 @@ angular
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
-                   APP_CONFIG) {
+                   APP_CONFIG, CLIENT_CONFIG) {
         systemSettingsService.loadPublicSettings().then(function(response) {
             angular.element(window.document)[0].title = APP_CONFIG.settings.appName;
             $rootScope.appName = APP_CONFIG.settings.appName;
             $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
+            CLIENT_CONFIG.browser.isIE = detectIE();
         });
     });
 
@@ -97,6 +98,27 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
         defer.reject('Please login');
         sessionService.retainCurrentLocation();
         $state.go('login');
+    }
+
+    /**
+     * detect IE
+     * returns version of IE or false, if browser is not Internet Explorer
+     */
+    function detectIE() {
+        var ua = window.navigator.userAgent;
+
+        var msie = ua.indexOf('MSIE ');
+        if (msie > 0) { return true; }
+
+        var trident = ua.indexOf('Trident/');
+        if (trident > 0) { return true; }
+
+        // We don't accept Edge, as Edge does not support ActiveXObject
+        //var edge = ua.indexOf('Edge/');
+        //if (edge > 0) { return true; }
+
+        // other browser
+        return false;
     }
 
     $stateProvider.state('site', {
