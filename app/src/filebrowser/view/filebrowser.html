@@ -6,7 +6,7 @@
                 <tr>
                     <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                     <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
-                    <th ng-if="config.settings.enableESDH" ng-if="isSite" colspan="2">
+                    <th ng-if="config.enableESDH" ng-if="isSite" colspan="2">
                         <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="primitives.sendToSbsys">
                         <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
                     </th>
@@ -41,7 +41,7 @@
                     <md-menu-item>
                         <md-button ng-click="uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
                     </md-menu-item>
-                    <md-menu-item ng-if="config.settings.enableESDH" ng-if="isSite">
+                    <md-menu-item ng-if="config.enableESDH" ng-if="isSite">
                         <md-button ng-click="loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
                         </md-button>
                     </md-menu-item>

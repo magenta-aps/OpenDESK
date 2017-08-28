@@ -32,7 +32,7 @@ function SitesController($scope, $mdDialog, $window,  $interval, $translate, sit
 	
 	vm.types = [];
 	vm.types.push({key: 'Project', name: $translate.instant('SITES.Project.NAME')});
-    if(vm.config.settings.enableProjects)
+    if(vm.config.enableProjects)
         vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')});
     vm.types.push({key: '', name: $translate.instant('COMMON.ALL')});
 

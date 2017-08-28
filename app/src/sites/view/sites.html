@@ -1,6 +1,6 @@
 <div class="od-projects">
 
-	<h1 class="od-title">{{vm.config.settings.enableProjects ? 'SITES.NAME' : 'SITES.Project.NAME_PLURAL' | translate}}</h1>
+	<h1 class="od-title">{{vm.config.enableProjects ? 'SITES.NAME' : 'SITES.Project.NAME_PLURAL' | translate}}</h1>
 
 	<div layout='row'>
 		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0' ng-show="vm.showFilters">
@@ -20,7 +20,7 @@
 				</md-input-container>
 
 				<md-autocomplete md-selected-item="selectedLead" md-selected-item-change="vm.search.manager.displayName = lead.displayName"
-				    md-search-text="searchlead" md-items="lead in vm.searchPeople(searchlead)" md-item-text="lead.displayName" md-floating-label="{{vm.config.settings.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}"
+				    md-search-text="searchlead" md-items="lead in vm.searchPeople(searchlead)" md-item-text="lead.displayName" md-floating-label="{{vm.config.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}"
 				    md-clear-button=true>
 					<span md-highlight-text="searchlead">{{ lead.displayName }}</span>
 				</md-autocomplete>
@@ -31,7 +31,7 @@
 					<span md-highlight-text="srchprjgrptxt">{{ pgitem.displayName }}</span>
 				</md-autocomplete>
 
-				<md-input-container ng-if="vm.config.settings.enableProjects" class="md-block">
+				<md-input-container ng-if="vm.config.enableProjects" class="md-block">
 					<label>{{'PROJECT.ORG_UNIT' | translate}}</label>
 					<md-select ng-model="vm.search.center_id">
 						<md-option ng-repeat="x in vm.organizationalCenters" value="{{ x.shortName }}">
@@ -40,14 +40,14 @@
 					</md-select>
 				</md-input-container>
 
-				<md-input-container ng-if="vm.config.settings.enableProjects" class="md-block">
+				<md-input-container ng-if="vm.config.enableProjects" class="md-block">
 					<label>{{'PROJECT.STATUS.STATUS' | translate}}</label>
 					<md-select ng-model="vm.search.state">
 						<md-option ng-repeat="x in vm.states" value="{{x.key}}">{{x.name}}</md-option>
 					</md-select>
 				</md-input-container>
 
-				<md-input-container ng-if="vm.config.settings.enableProjects" class="md-block">
+				<md-input-container ng-if="vm.config.enableProjects" class="md-block">
 					<label>Type</label>
 					<md-select ng-model="vm.search.type">
 						<md-option ng-repeat="x in vm.types" value="{{x.key}}">{{x.name}}</md-option>
@@ -68,19 +68,19 @@
 				<md-list id="table-container">
 					<table class="od-members od-members-row">
 						<col style="width:2.5%">
-						<col ng-if="!vm.config.settings.enableProjects" style="width:60%">
-						<col ng-if="vm.config.settings.enableProjects" style="width:40%">
+						<col ng-if="!vm.config.enableProjects" style="width:60%">
+						<col ng-if="vm.config.enableProjects" style="width:40%">
 						<col style="width:15%">
 						<col style="width:20%">
-						<col ng-if="vm.config.settings.enableProjects" style="width:10%">
-						<col ng-if="vm.config.settings.enableProjects" style="width:10%">
+						<col ng-if="vm.config.enableProjects" style="width:10%">
+						<col ng-if="vm.config.enableProjects" style="width:10%">
 						<col style="width:2.5%">
 						<thead fix-head>
 							<tr>
-								<th colspan="2" sort-table="title" title="Sortér kolonne">{{vm.config.settings.enableProjects ? 'SITES.NAME' : 'SITES.Project.NAME_PLURAL' | translate}}</th>
-								<th sort-table="manager.displayName" title="Sortér kolonne">{{vm.config.settings.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
-								<th ng-if="vm.config.settings.enableProjects" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
-								<th ng-if="vm.config.settings.enableProjects" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th colspan="2" sort-table="title" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.NAME' : 'SITES.Project.NAME_PLURAL' | translate}}</th>
+								<th sort-table="manager.displayName" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
+								<th ng-if="vm.config.enableProjects" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th ng-if="vm.config.enableProjects" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
 								<th colspan="2" sort-table="modified" sort-default="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
 							</tr>
 						</thead>
@@ -107,12 +107,12 @@
 										{{ project.manager.displayName }}
 									</a>
 								</td>
-								<td ng-if="vm.config.settings.enableProjects">
+								<td ng-if="vm.config.enableProjects">
 									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
 										{{ project.center_name }}
 									</a>
 								</td>
-								<td ng-if="vm.config.settings.enableProjects">
+								<td ng-if="vm.config.enableProjects">
 									<a class="od-filebrowser-link" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
 										<div ng-if="project.state != ''"> {{'PROJECT.STATUS.' + project.state | translate}}</div>
 									</a>
@@ -160,7 +160,7 @@
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'SITES.Project.NAME' | translate | lowercase}}</span>
 					</md-button>
 
-					<md-button ng-if="vm.config.settings.enableProjects" ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'SITES.PD-Project.NAME' | translate | lowercase}}">
+					<md-button ng-if="vm.config.enableProjects" ng-click="sc.openSiteCreateDialog($event,'PD-Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'SITES.PD-Project.NAME' | translate | lowercase}}">
 						<md-icon>add</md-icon>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'SITES.PD-Project.NAME' | translate | lowercase}}</span>
 					</md-button>

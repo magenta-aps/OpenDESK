@@ -6,7 +6,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
                                filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
                                userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG) {
 
-    $scope.config = APP_CONFIG;
+    $scope.config = APP_CONFIG.settings;
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;
