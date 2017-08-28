@@ -130,13 +130,18 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
 
     function imageViewer(mimeType) {
         var viewer = {
-            mimeTypes: [],
+            mimeTypes: [
+                'image/png',
+                'image/gif',
+                'image/jpeg'
+            ],
             thumbnail: 'imgpreview',
             templateUrl: 'image.html',
             maxItemSize: 20000000,
             initScope: function ($scope) {
                 $scope.itemMaxSizeExceeded = (this.itemSize && parseInt(this.itemSize) > this.maxItemSize);
                 if ($scope.itemMaxSizeExceeded === false) {
+                    $scope.previewUrl = $scope.config.thumbnailUrl;
                     $scope.imageUrl = $scope.config.contentUrl;
                 }
             }
@@ -238,6 +243,8 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
                 this.mimeType = item.node.mimetype;
                 this.contentUrl = ALFRESCO_URI.webClientServiceProxy + (this._acceptsMimeType(item) ? this._getContentUrl(item) : this._getThumbnailUrl(item));
                 this.contentUrl = sessionService.makeURL(this.contentUrl);
+                this.thumbnailUrl = ALFRESCO_URI.webClientServiceProxy + this._getThumbnailUrl(item);
+                this.thumbnailUrl = sessionService.makeURL(this.thumbnailUrl);
             },
 
             _acceptsMimeType: function (item) {
