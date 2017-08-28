@@ -130,11 +130,8 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
 
     function imageViewer(mimeType) {
         var viewer = {
-            mimeTypes: [
-                'image/png',
-                'image/gif',
-                'image/jpeg'
-            ],
+            mimeTypes: [],
+            thumbnail: 'imgpreview',
             templateUrl: 'image.html',
             maxItemSize: 20000000,
             initScope: function ($scope) {
