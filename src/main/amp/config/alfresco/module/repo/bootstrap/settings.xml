@@ -18,13 +18,16 @@
                     <cm:description>This file contains the settings for OpenDesk frontend.</cm:description>
                     <cm:author>admin</cm:author>
                     <cm:name>settings.xml</cm:name>
-                    <od:enableProjects>true</od:enableProjects>
-                    <od:enableESDH>true</od:enableESDH>
-                    <od:enableChat>true</od:enableChat>
-                    <od:appName>OpenDesk</od:appName>
-                    <od:logoSrc>./app/assets/images/logo-light.svg</od:logoSrc>
-                    <od:dashboardLinks>[ "https://intra.ballerup.dk","https://webmail.balk.dk/owa","https://webmail.balk.dk/owa","#!/projekter","#!/nogletal","https://webapp.dlf.org/de15omarbejdstid","#!","https://vdi.adm.ballerup.dk/portal/webclient/index.html#/login","https://dlfweb.dlf.org/dlf/kort_scout.htm" ]</od:dashboardLinks>
-
+                    <od:settings>{
+                        "appName": "OpenDesk",
+                        "logoSrc": "./app/assets/images/logo-light.svg",
+                        "ssoLoginEnabled": false,
+                        "enableProjects": false,
+                        "enableESDH": false,
+                        "enableChat": false,
+                        "dashboardLinks" : [ "","","","","","","","","" ]
+                        }
+                    </od:settings>
                 </view:properties>
                 <view:associations></view:associations>
             </od:settings>

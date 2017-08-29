@@ -1,16 +1,14 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
-import org.alfresco.service.cmr.dictionary.ClassDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -22,7 +20,6 @@ public class SettingsBean {
     private NodeService nodeService;
     private Repository repository;
     private FileFolderService fileFolderService;
-    private DictionaryService dictionaryService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -34,39 +31,23 @@ public class SettingsBean {
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
     }
-    public void setDictionaryService(DictionaryService dictionaryService) {
-        this.dictionaryService = dictionaryService;
+
+    public JSONObject getSettings() throws FileNotFoundException, JSONException {
+        NodeRef settingsFolder = getSettingsFolder();
+        String settings = nodeService.getProperty(settingsFolder, OpenDeskModel.PROP_SETTINGS).toString();
+        return new JSONObject(settings);
     }
 
-    public Map<QName, Serializable> getSettings() throws FileNotFoundException {
-        NodeRef settingsFolder = getSettingsFolder();
-
-        //Only return the properties that are specific to the settings type
-        ClassDefinition settingsClass = dictionaryService.getClass(OpenDeskModel.TYPE_SETTINGS);
-        Map<QName, PropertyDefinition> settingsClassProps = settingsClass.getProperties();
-
-        Map<QName, Serializable> settingsProps = nodeService.getProperties(settingsFolder);
-
-        Map<QName, Serializable> result = new HashMap<>();
-        for (Map.Entry<QName, PropertyDefinition> propDef : settingsClassProps.entrySet()) {
-            if(!propDef.getKey().equals(ContentModel.PROP_NAME))
-                result.put(propDef.getKey(), settingsProps.get(propDef.getKey()));
-        }
-
-        return result;
-    }
-
-    public Map<QName, Serializable> getPublicSettings() throws FileNotFoundException {
-        NodeRef settingsFolder = getSettingsFolder();
-
+    public JSONObject getPublicSettings() throws FileNotFoundException, JSONException {
+        JSONObject settings = getSettings();
         //Get properties that are public (Used before user is logged in)
-        Map<QName, Serializable> result = new HashMap<>();
-        for(QName settingProp : OpenDeskModel.PUBLIC_SETTINGS) {
-            Serializable settingValue = nodeService.getProperty(settingsFolder, settingProp);
-            result.put(settingProp, settingValue);
+        JSONObject publicSettings = new JSONObject();
+        for(String settingProp : OpenDeskModel.PUBLIC_SETTINGS) {
+            Object settingObject = settings.get(settingProp);
+            publicSettings.put(settingProp, settingObject);
         }
 
-        return result;
+        return publicSettings;
     }
 
     public NodeRef getSettingsFolder() throws FileNotFoundException {

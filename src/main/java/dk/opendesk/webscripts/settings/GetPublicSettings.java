@@ -3,15 +3,12 @@ package dk.opendesk.webscripts.settings;
 import dk.opendesk.repo.beans.SettingsBean;
 import dk.opendesk.repo.utils.JSONUtils;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Map;
 
 public class GetPublicSettings extends AbstractWebScript {
 
@@ -31,8 +28,7 @@ public class GetPublicSettings extends AbstractWebScript {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-            Map<QName, Serializable> settings = settingsBean.getPublicSettings();
-            result = JSONUtils.getObject(settings);
+            result = settingsBean.getPublicSettings();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -78,22 +78,7 @@
             <title>OpenDesk Settings</title>
             <parent>cm:content</parent>
             <properties>
-                <property name="od:enableProjects">
-                    <type>d:boolean</type>
-                </property>
-                <property name="od:enableESDH">
-                    <type>d:boolean</type>
-                </property>
-                <property name="od:enableChat">
-                    <type>d:boolean</type>
-                </property>
-                <property name="od:appName">
-                    <type>d:text</type>
-                </property>
-                <property name="od:logoSrc">
-                    <type>d:text</type>
-                </property>
-                <property name="od:dashboardLinks">
+                <property name="od:settings">
                     <type>d:text</type>
                 </property>
             </properties>
