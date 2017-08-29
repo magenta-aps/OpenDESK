@@ -93,6 +93,9 @@
                 <property name="od:logoSrc">
                     <type>d:text</type>
                 </property>
+                <property name="od:dashboardLinks">
+                    <type>d:text</type>
+                </property>
             </properties>
         </type>
 

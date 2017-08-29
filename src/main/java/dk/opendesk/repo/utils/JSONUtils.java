@@ -13,18 +13,16 @@ import java.util.*;
 
 public class JSONUtils {
 
-    public static JSONObject getObject(Map<QName, Serializable> map) {
+    public static JSONObject getObject(Map<QName, Serializable> map) throws JSONException {
         JSONObject result = new JSONObject();
-        try {
             for (Map.Entry<QName, Serializable> pair : map.entrySet()) {
                 String key = pair.getKey().getLocalName();
                 Object value = pair.getValue();
                 if (value != null && !"".equals(value)) {
                     String valueStr = value.toString();
-                    if(valueStr.startsWith("[") && valueStr.endsWith("]")) {
+                    if (valueStr.startsWith("[") && valueStr.endsWith("]")) {
                         value = new JSONArray(valueStr);
-                    }
-                    else if (value.getClass() == Date.class) {
+                    } else if (value.getClass() == Date.class) {
                         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                         TimeZone timeZone = TimeZone.getTimeZone("UTC");
                         date.setTimeZone(timeZone);
@@ -33,9 +31,6 @@ public class JSONUtils {
                     result.put(key, value);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return result;
     }
 

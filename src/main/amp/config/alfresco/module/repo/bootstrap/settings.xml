@@ -23,6 +23,8 @@
                     <od:enableChat>true</od:enableChat>
                     <od:appName>OpenDesk</od:appName>
                     <od:logoSrc>./app/assets/images/logo-light.svg</od:logoSrc>
+                    <od:dashboardLinks>[ "https://intra.ballerup.dk","https://webmail.balk.dk/owa","https://webmail.balk.dk/owa","#!/projekter","#!/nogletal","https://webapp.dlf.org/de15omarbejdstid","#!","https://vdi.adm.ballerup.dk/portal/webclient/index.html#/login","https://dlfweb.dlf.org/dlf/kort_scout.htm" ]</od:dashboardLinks>
+
                 </view:properties>
                 <view:associations></view:associations>
             </od:settings>
