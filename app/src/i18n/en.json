@@ -1011,5 +1011,16 @@
       "FOLLOW": "Followed by me"
     }
   },
-  "ESDH": "SBSYS"
+  "ESDH": "SBSYS",
+  "DASHBOARD": {
+    "INTRA" : "Intra",
+    "EMAIL" : "Email",
+    "CALENDAR" : "Calendar",
+    "PROJECTS" : "Projects",
+    "KEY_NUMBERS" : "Key numbers",
+    "WORK_TIME" : "15 points on work time",
+    "ESDH" : "ESDH",
+    "CITRIX" : "Citrix",
+    "MAP" : "Map"
+  }
 }

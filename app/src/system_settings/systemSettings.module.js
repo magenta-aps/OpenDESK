@@ -2,12 +2,7 @@ angular
     .module('openDeskApp.systemsettings', ['ngMaterial', 'pascalprecht.translate'])
     .config(config);
 
-function config(systemSettingsPagesServiceProvider, $stateProvider, USER_ROLES, APP_CONFIG) {
-    if(APP_CONFIG.settings.enableProjects)
-        systemSettingsPagesServiceProvider.addPage('Projektskabeloner', 'systemsettings.templateList', true);
-    systemSettingsPagesServiceProvider.addPage('Mappeskabeloner', 'systemsettings.folder_templates', true);
-    systemSettingsPagesServiceProvider.addPage('Dokumentskabeloner', 'systemsettings.document_templates', true);
-    systemSettingsPagesServiceProvider.addPage('Systemmapper', 'systemsettings.filebrowser({path: ""})', true);
+function config($stateProvider, USER_ROLES) {
 
     $stateProvider.state('systemsettings', {
         parent: 'site',

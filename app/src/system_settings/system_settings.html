@@ -9,7 +9,7 @@
             <md-card-content layout>
                 <md-list>
                     <md-list-item ng-repeat="sysSetPage in vm.pages" ng-if="!sysSetPage.isAdminOnly || vm.isAdmin" ui-sref="{{sysSetPage.sref}}" ui-sref-active="active">
-                        <md-icon class="md-default-theme" class="material-icons">{{sysSetPage.icon}}</md-icon>
+                        <md-icon class="md-default-theme material-icons">{{sysSetPage.icon}}</md-icon>
                         <p>{{ sysSetPage.labelKey | translate}}</p>
                     </md-list-item>
                 </md-list>

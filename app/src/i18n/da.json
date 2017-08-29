@@ -984,5 +984,16 @@
       "FOLLOW": "Jeg følger"
     }
   },
-  "ESDH": "SBSYS"
+  "ESDH": "SBSYS",
+  "DASHBOARD": {
+    "INTRA" : "Intra",
+    "EMAIL" : "Email",
+    "CALENDAR" : "Kalendar",
+    "PROJECTS" : "Projekter",
+    "KEY_NUMBERS" : "Nøgletal",
+    "WORK_TIME" : "15 punkter om arbejdstid",
+    "ESDH" : "ESDH",
+    "CITRIX" : "Citrix",
+    "MAP" : "Kort"
+  }
 }
