@@ -256,6 +256,7 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
 
 
     $scope.gotoPath = function (ref) {
+        $scope.searchText = '';
         var id = ref.split("/")[3];
         $state.go('document', {doc: id});
     };
