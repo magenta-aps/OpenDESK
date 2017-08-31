@@ -258,9 +258,8 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
     $scope.gotoPath = function (ref) {
         documentService.getPath(ref.split("/")[3]).then(function (val) {
             $scope.selectedDocumentPath = val.container;
-            var path = ref.replace("workspace://SpacesStore/", "");
-
-            $window.location.href = "/#!/dokument/" + path;
+            var id = ref.replace("workspace://SpacesStore/", "");
+            $state.go('document', { doc: id });
         });
     };
 
