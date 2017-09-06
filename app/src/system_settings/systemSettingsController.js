@@ -2,41 +2,28 @@ angular
     .module('openDeskApp.systemsettings')
     .controller('SystemSettingsController', SystemSettingsCtrl);
 
-function SystemSettingsCtrl(systemSettingsPagesService, sessionService, systemSettingsService, $scope) {
+function SystemSettingsCtrl(sessionService, pageService, systemSettingsService, $scope,
+                            browserService, $translate, APP_CONFIG) {
     var vm = this;
+
+    vm.pages = [];
+    pageService.addSystemPage(vm.pages, 'Konfiguration', 'systemsettings.config', true, 'settings');
+    if(APP_CONFIG.settings.enableProjects)
+        pageService.addSystemPage(vm.pages, 'Projektskabeloner', 'systemsettings.templateList', true);
+    pageService.addSystemPage(vm.pages, 'Mappeskabeloner', 'systemsettings.folder_templates', true);
+    pageService.addSystemPage(vm.pages, 'Dokumentskabeloner', 'systemsettings.document_templates', true);
+    pageService.addSystemPage(vm.pages, 'Systemmapper', 'systemsettings.filebrowser({path: ""})', true);
+
+    browserService.setTitle($translate.instant('ADMIN.ADMINISTRATION_PAGES'));
 
     $scope.templateSites = [];
 
-
     function loadTemplates() {
-
         systemSettingsService.getTemplates().then (function(response) {
-
-            console.log(response)
-
             $scope.templateSites = response;
         });
-
-
     }
     loadTemplates();
 
-
-
     vm.isAdmin = sessionService.isAdmin();
-
-
-
-
-    systemSettingsService.getDocumentTemplateSite().then(function (response) {
-        vm.shortName = response.shortName;
-    });
-
-    vm.pages = systemSettingsPagesService.getPages()
-        .filter(function (page) {
-            return true;
-        });
-
-
-
 }

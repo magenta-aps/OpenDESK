@@ -1,7 +1,7 @@
 angular.module('openDeskApp.documents')
        .factory('documentService', documentService);
 
-function documentService($http) {
+function documentService($http, $translate, $mdToast, $q) {
 
     var service = {
         getDocument: getDocument,
@@ -9,20 +9,29 @@ function documentService($http) {
         getHistory: getHistory,
         getEditPermission: getEditPermission,
         UploadNewVersion: uploadNewVersion,
-        createThumbnail: createThumbnail,
+        createVersionThumbnail: createVersionThumbnail,
         cleanupThumbnail: cleanupThumbnail,
-        revertToVersion: revertToVersion,
-        getPDFLink: getPDFLink
+        revertToVersion: revertToVersion
     };
 
     return service;
 
     function getDocument(documentNodeRef) {
-        return $http.get('/slingshot/doclib/node/workspace/SpacesStore/' + documentNodeRef, {}).then(function (response) {
-            console.log('doc user access data');
-            console.log(response.data.item.permissions.userAccess.create);
-            return response.data;
-        });
+        return $http.get('/slingshot/doclib2/node/workspace/SpacesStore/' + documentNodeRef, {}).then(
+            function (response) {
+                return response.data;
+            },
+            function (error) {
+                $mdToast.show(
+                    $mdToast.simple()
+                        .textContent($translate.instant('ERROR.ERROR') + ": " +
+                            $translate.instant('DOCUMENT.ERROR.DOES_NOT_EXIST'))
+                        .theme('error-toast')
+                        .hideDelay(3000)
+                );
+                return $q.reject(error);
+            }
+        );
     }
 
     function getPath(documentNodeRef) {
@@ -49,7 +58,7 @@ function documentService($http) {
         });
     }
 
-    function createThumbnail(node, versionNode) {
+    function createVersionThumbnail(node, versionNode) {
         var url = '/alfresco/s/previewhelper?version_node=' + versionNode + '&parent_node=' + node + "&method=createThumbnail";
 
         return $http.get(url).then(function (response) {
@@ -101,10 +110,6 @@ function documentService($http) {
 			console.log("response = " +  response);
 			return response;
         });
-    }
-
-    function getPDFLink(nodeRef) {
-        return "/alfresco/service/api/node/" + nodeRef + "/content/thumbnails/pdf"
     }
 
 }

@@ -14,7 +14,7 @@ function config($stateProvider, USER_ROLES) {
                 templateUrl: 'app/src/kalendar/view/kalendar.html'
             }
         },
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.user]
         }
     });

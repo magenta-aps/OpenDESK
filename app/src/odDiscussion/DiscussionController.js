@@ -2,8 +2,8 @@ angular
     .module('openDeskApp.discussion', ['ng.ckeditor'])
     .controller('DiscussionController', DiscussionController);
 
-function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
-    discussionService, nodeRefUtilsService, userService, sessionService, notificationsService, siteService, preferenceService) {
+function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
+    discussionService, nodeRefUtilsService, sessionService, notificationsService) {
     var dc = this;
 
     dc.discussions = [];
@@ -13,6 +13,10 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     dc.search = '';
     dc.user = '';
     dc.isLoading = true;
+
+    //sets the margin to the width of sidenav
+	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("md-tabs-wrapper").outerHeight();
+    $(".od-discussion").css("max-height", tableHeight+"px");
 
     dc.getDiscussions = function (siteShortName) {
         dc.isLoading = true;
@@ -48,9 +52,8 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
     function init() {
         dc.user = sessionService.getUserInfo().user;
         dc.getDiscussions($stateParams.projekt);
-        //getAllMembers($stateParams.projekt, 'PD-Project');
 
-        $scope.tab.selected = $state.current.data.selectedTab;
+        $scope.tab.selected = $stateParams.selectedTab;
 
         if ($stateParams.path) {
             discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path).then(function (response) {
@@ -100,7 +103,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         },
 
         dc.viewThread = function (postItem) {
-            return '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
+            return '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
         }
 
     dc.deleteDiscussion = function (postItem) {
@@ -229,7 +232,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         var nodeRef = postItem.nodeRef.split('/')[3];
         var subject = 'Ny samtale i et projekt';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
-        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
 
         // Iterating list of items.
         angular.forEach($scope.groups.list, function (group) {
@@ -255,7 +258,7 @@ function DiscussionController($scope, $log, $timeout, $mdDialog, $state, $stateP
         var nodeRef = dc.selectedDiscussion.nodeRef.split('/')[3];
         var subject = 'Ny kommentar på en samtale du følger';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-        var link = '#!/projekter/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
+        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
 
         // Iterating list of items.
         angular.forEach($scope.groups.list, function (group) {

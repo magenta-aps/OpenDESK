@@ -1,0 +1,31 @@
+<md-dialog aria-label="Create content from template dialog" ng-cloak>
+    <form name="createTemplateForm" ng-submit="createContentFromTemplate(newContentName, template.nodeRef);">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.CREATE' | translate}} {{'COMMON.NEW' | translate | lowercase}} {{'COMMON.' + contentType | translate | lowercase}}</h2>
+                <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancelDialog()">
+                <md-icon>close</md-icon>
+            </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding">
+            <div>
+                <md-input-container>
+                    <label>{{'COMMON.NAME' | translate}}</label>
+                    <input type="text" name="newContentName" required ng-model="newContentName" md-autofocus md-select-on-focus>
+
+                    <div ng-messages="createSiteForm.newSiteName.$error">
+                        <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button type="submit" class="md-primary">{{'COMMON.ADD' | translate}}</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

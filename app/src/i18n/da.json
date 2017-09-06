@@ -56,7 +56,7 @@
     "ADDED": "Tilføjet",
     "ADDED_BY": "Tilføjet af",
     "UPLOAD": "Overfør",
-    "HOME": "Min side",
+    "HOME": "Hjem",
     "CLOSE": "Luk",
     "DUE_DATE": "Forfaldsdato",
     "PRIORITY": "Prioritet",
@@ -90,8 +90,10 @@
     "WITH": "Med",
     "UPDATE": "Opdatér",
     "FOLDER": "Mappe",
+    "DOCUMENT": "Dokument",
     "CHOOSE": "Vælg",
     "EMPTY_FOLDER": "Denne mappe er tom",
+    "MISSING_FOLDER": "Denne mappe kan ikke tilgås",
     "NO_SEARCH_RESULTS" : "Søgningen matchede ikke noget",
     "FILTER": "Filtre",
     "LAST_MODIFIED": "Senest ændret",
@@ -103,7 +105,8 @@
     "CLOSEEDIT": "Luk redigering",
     "FILETYPE": "Dokumenttype",
     "LOCAL_DOCUMENT": "Lokalt dokument",
-    "REPLY": "Besvar"
+    "REPLY": "Besvar",
+    "EMPTY": "Tom"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -181,6 +184,10 @@
   "DOCUMENT": {
     "DOCUMENT_TEMPLATES": "Dokumentskabeloner",
     "STATUS_CHANGED_SUCCESS": "Status er ændret",
+    "ERROR": {
+      "MISSING_NODEREF": "Siden mangler en reference til et dokument for at kunne vise korrekt.",
+      "DOES_NOT_EXIST": "Dokumentet eksisterer ikke."
+    },
     "CATEGORY": {
       "annex": "Bilag",
       "proof": "Bevis",
@@ -691,6 +698,7 @@
     "PASSWORD_NOMATCH": "Kodeord matcher ikke",
     "EMAIL_NOT_EXISTS": "Email findes ikke",
     "EMAIL_EXISTS": "Email findes allerede",
+    "ERROR": "Fejl",
     "USERNAME_EXISTS": "Brugernavn findes allerede",
     "AUTH_FAILURE": "Forkerte loginoplysninger",
     "AUTH_ERROR": "Fejl",
@@ -893,8 +901,37 @@
   "@{http://openesdh.dk/model/openesdh/1.0}journalKeyIndexed": "Journalnøgle",
   "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journalfacet",
 
+  "SITES" : {
+    "NAME": "Projekter/Grupperum",
+    "Project": {
+      "NAME" : "Grupperum",
+      "NAME_PLURAL" : "Grupperum",
+      "GROUPS": {
+        "SiteManager": "Ansvarlig",
+        "SiteCollaborator": "Kan skrive",
+        "SiteContributor": "Kan skrive begrænset",
+        "SiteConsumer": "Kan læse"
+      }
+    },
+    "PD-Project": {
+      "NAME" : "Projekt",
+      "NAME_PLURAL" : "Projekter",
+      "GROUPS": {
+        "PD_PROJECTMANAGER": "Projektleder",
+        "PD_PROJECTOWNER": "Projektejer",
+        "PD_PROJECTGROUP": "Projektgruppe",
+        "PD_STEERING_GROUP": "Styregruppe",
+        "PD_WORKGROUP": "Arbejdsgruppe",
+        "PD_MONITORS": "Følgegruppe"
+      }
+    },
+    "Template-Project": {
+      "NAME" : "Projektskabelon",
+      "NAME_PLURAL" : "Projektskabeloner"
+    }
+  },
+
   "PROJECT": {
-    "HEADER": "Projekter/Grupperum",
     "PROJECT": "Projekt",
     "PROJECTS": "Projekter",
     "PROJECTNAME": "Projektnavn",
@@ -919,20 +956,6 @@
       "STATUS": "Status",
       "CLOSED": "Afsluttet",
       "ACTIVE": "Igang"
-    },
-
-    "GROUPS": {
-      "SiteManager": "Projektleder",
-      "SiteCollaborator": "Kan skrive",
-      "SiteContributor": "Kan skrive begrænset",
-      "SiteConsumer": "Kan læse",
-
-      "PD_PROJECTMANAGER": "Projektleder",
-      "PD_PROJECTOWNER": "Projektejer",
-      "PD_PROJECTGROUP": "Projektgruppe",
-      "PD_STEERING_GROUP": "Styregruppe",
-      "PD_WORKGROUP": "Arbejdsgruppe",
-      "PD_MONITORS": "Følgegruppe"
     }
   },
   "NOTIFICATION": {
@@ -961,5 +984,37 @@
       "FOLLOW": "Jeg følger"
     }
   },
-  "ESDH": "SBSYS"
+  "ESDH": "SBSYS",
+  "DASHBOARD": {
+    "INTRA" : "Intra",
+    "EMAIL" : "Email",
+    "CALENDAR" : "Kalendar",
+    "PROJECTS" : "Projekter",
+    "KEY_NUMBERS" : "Nøgletal",
+    "WORK_TIME" : "15 punkter om arbejdstid",
+    "ESDH" : "ESDH",
+    "CITRIX" : "Citrix",
+    "MAP" : "Kort"
+  },
+  "CONFIGURATION": {
+    "LINK_TO": "Link til ",
+    "appName": "Navn for OpenDesk instans",
+    "enableESDH": "Tilkobling af ESDH",
+    "enableProjects": "Tilkobling af projekter",
+    "enableSites": "Tilkobling af sites",
+    "enableChat": "Tilkobling af chat",
+    "logoSrc": "Sti til logo",
+    "ssoLoginEnabled": "Tilkobling af SSO",
+    "dashboardLinks": {
+      "intra" : "Intra",
+      "email" : "Email",
+      "calendar" : "Kalendar",
+      "projects" : "Projekter",
+      "keyNumbers" : "Nøgletal",
+      "workTime" : "15 punkter om arbejdstid",
+      "esdh" : "ESDH",
+      "citrix" : "Citrix",
+      "map" : "Kort"
+    }
+  }
 }

@@ -4,7 +4,7 @@ angular.module('openDeskApp.auth', ['ngMaterial'])
         .config(config);
 
 
-function config($stateProvider, USER_ROLES) {
+function config($stateProvider) {
 
     $stateProvider.state('login', {
         url: '/login',
@@ -17,7 +17,7 @@ function config($stateProvider, USER_ROLES) {
             'header@': {},
             'footer@': {}
         },
-        data: {
+        params: {
             authorizedRoles: []
         }
     });

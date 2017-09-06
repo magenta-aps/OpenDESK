@@ -1,8 +1,8 @@
-<md-dialog aria-label="{{'COMMON.EDIT' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}" class="site-dialog">
+<md-dialog aria-label="{{'COMMON.EDIT' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}" class="site-dialog">
     <form ng-submit="site.type == 'PD-Project' ? updatePdSite(): updateSite()" name="pdeditsite">
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2>{{'COMMON.EDIT' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}</h2>
+            <h2>{{'COMMON.EDIT' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="cancel()">
                 <md-icon>close</md-icon>
@@ -34,14 +34,14 @@
                         md-clear-button=true
                         placeholder="{{'PROJECT.PROJECTOWNER' | translate}}">
                         <md-item-template>
-                            <span md-highlight-text="searchTextOwner" md-highlight-flags="^i">{{ own.displayName }}</span>
+                            <span md-highlight-text="searchTextOwner" md-highlight-flags="gi">{{ own.displayName }}</span>
                         </md-item-template>
                         <md-not-found>
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextOwner }}".
                         </md-not-found>
                     </md-autocomplete>
-                    <md-checkbox ng-model="newSite.isPrivate" aria-label="Gør projektet privat">
-                        {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
+                    <md-checkbox ng-model="newSite.isPrivate" aria-label="{{'COMMON.CLOSED' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}">
+                        {{'COMMON.CLOSED' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}
                     </md-checkbox>
                 </div>
 
@@ -71,7 +71,7 @@
                             md-clear-button=true
                             placeholder="{{'PROJECT.PROJECTLEAD' | translate}}">
                         <md-item-template>
-                            <span md-highlight-text="searchTextManager" md-highlight-flags="^i">{{ man.displayName}}</span>
+                            <span md-highlight-text="searchTextManager" md-highlight-flags="gi">{{ man.displayName}}</span>
                         </md-item-template>
                         <md-not-found>
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".

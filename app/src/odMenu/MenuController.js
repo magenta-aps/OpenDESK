@@ -9,7 +9,8 @@ angular
         };
     });
 
-function MenuController($scope, $log) {
-    var vm = this;
+function MenuController(APP_CONFIG) {
+    var mc = this;
+    mc.landingPageState = APP_CONFIG.landingPageState;
 
 };

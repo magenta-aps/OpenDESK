@@ -35,7 +35,8 @@
     "material-wizard": "",
     "pdfjs-dist": "",
     "converse.js": "https://github.com/magenta-aps/converse.js.git#master",
-    "ng-ckeditor": "ng.ckeditor#^2.0.2"
+    "ng-ckeditor": "ng.ckeditor#^2.0.2",
+    "angular-material-data-table": "^0.10.10"
   },
   "devDependencies": {
     "angular-mocks": "^1.6.x"

@@ -95,14 +95,6 @@ md-card {
   max-width: 66px;
 }
 
-.od-esdh-checkbox {
-  width: 92px;
-
-  input {
-    float: right;
-  }
-}
-
 .od-members {
   width: 99%;
 
@@ -161,7 +153,6 @@ md-card {
   tr {
 
     td {
-      border-top: 1px solid $gray-85;
       padding-bottom: 2px;
       padding-top: 2px;
     }
@@ -227,7 +218,6 @@ md-card {
 }
 
 .menu-list {
-  border-top: 1px solid $gray-90;
   font-size: 90%;
   letter-spacing: .04em;
   line-height: 50px;
@@ -302,12 +292,14 @@ md-tooltip {
 }
 
 .fold-out {
+  overflow-y: auto;
   max-height: 500px;
   transition: max-height .25s ease-in;
 }
 
 //control arrow for open and closing
 .open {
+  cursor: pointer;
   .rotate-arrow {
     transform: rotate(180deg);
     transition: transform .25s ease;
@@ -315,6 +307,7 @@ md-tooltip {
 }
 
 .closed {
+  cursor: pointer;
   .rotate-arrow {
     transform: rotate(0deg);
     transition: transform .15s ease;
@@ -343,6 +336,9 @@ md-tooltip {
     color: $primary-text-color;
     cursor: pointer;
     //margin-left: -20px;
+  }
+  md-list {
+    padding: 0;
   }
 }
 
@@ -379,10 +375,6 @@ md-card-title {
 
 .site-dialog {
   width: 50vw;
-
-  md-autocomplete {
-    margin: $u * .5 0 $u;
-  }
 
   md-content {
     padding: $u;

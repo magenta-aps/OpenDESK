@@ -92,8 +92,10 @@
     "WITH": "With",
     "UPDATE": "Update",
     "FOLDER": "Folder",
+    "DOCUMENT": "Document",
     "CHOOSE": "Choose",
     "EMPTY_FOLDER": "This folder is empty",
+    "MISSING_FOLDER": "This folder can not be accessed",
     "NO_SEARCH_RESULTS" : "There are no matches to the search term",
     "FILTER": "Filters",
     "FROM": "From",
@@ -103,7 +105,8 @@
     "CLOSEEDIT": "Close editing",
     "FILETYPE": "File type",
     "LOCAL_DOCUMENT": "Local document",
-    "REPLY": "Reply"
+    "REPLY": "Reply",
+    "EMPTY": "Empty"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -179,6 +182,10 @@
   "DOCUMENT": {
      "DOCUMENT_TEMPLATES": "Document templates",
     "STATUS_CHANGED_SUCCESS": "Status has been changed successfully",
+    "ERROR": {
+      "MISSING_NODEREF": "The page is missing a document reference in order to show properly.",
+      "DOES_NOT_EXIST": "The document does not exist."
+    },
     "CATEGORY": {
       "annex": "Annex",
       "proof": "Proof",
@@ -707,6 +714,7 @@
     "PASSWORD_NOMATCH": "Password is not matching",
     "EMAIL_NOT_EXISTS": "The email does not exist",
     "EMAIL_EXISTS": "Email already exists",
+    "ERROR": "Error",
     "USERNAME_EXISTS": "Username already exists",
     "AUTH_FAILURE": "Incorrect authentication details",
     "AUTH_ERROR": "Internal login error",
@@ -919,8 +927,38 @@
   "@{http://openesdh.dk/model/openesdh/1.0}journalKeyIndexed": "Journal key",
   "@{http://openesdh.dk/model/openesdh/1.0}journalFacetIndexed": "Journal facet",
 
+
+  "SITES" : {
+    "NAME": "Projects/Group Rooms",
+    "Project": {
+      "NAME" : "Group Room",
+      "NAME_PLURAL" : "Group Rooms",
+      "GROUPS": {
+        "SiteManager": "Responsible",
+        "SiteCollaborator": "Can write",
+        "SiteContributor": "Can write limited",
+        "SiteConsumer": "Can read"
+      }
+    },
+    "PD-Project": {
+      "NAME" : "Project",
+      "NAME_PLURAL" : "Projects",
+      "GROUPS": {
+        "PD_PROJECTMANAGER": "Project Manager",
+        "PD_PROJECTOWNER": "Project Owner",
+        "PD_PROJECTGROUP": "Project Group",
+        "PD_STEERING_GROUP": "Steering Group",
+        "PD_WORKGROUP": "Work Group",
+        "PD_MONITORS": "Monitors"
+      }
+    },
+    "Template-Project": {
+      "NAME" : "Project template",
+      "NAME_PLURAL" : "Project templates"
+    }
+  },
+
   "PROJECT": {
-    "HEADER": "Projects/Group Rooms",
     "PROJECT": "Project",
     "PROJECTS": "Projects",
     "PROJECTNAME": "Project name",
@@ -945,20 +983,6 @@
       "STATUS": "Status",
       "CLOSED": "Completed",
       "ACTIVE": "In progress"
-    },
-
-    "GROUPS": {
-      "SiteManager": "Project Manager",
-      "SiteCollaborator": "Can write",
-      "SiteContributor": "Can write limited",
-      "SiteConsumer": "Can read",
-
-      "PD_PROJECTMANAGER": "Project Manager",
-      "PD_PROJECTOWNER": "Project Owner",
-      "PD_PROJECTGROUP": "Project Group",
-      "PD_STEERING_GROUP": "Steering Group",
-      "PD_WORKGROUP": "Work Group",
-      "PD_MONITORS": "Monitors"
     }
   },
   "NOTIFICATION": {
@@ -987,5 +1011,37 @@
       "FOLLOW": "Followed by me"
     }
   },
-  "ESDH": "SBSYS"
+  "ESDH": "SBSYS",
+  "DASHBOARD": {
+    "INTRA" : "Intra",
+    "EMAIL" : "Email",
+    "CALENDAR" : "Calendar",
+    "PROJECTS" : "Projects",
+    "KEY_NUMBERS" : "Key numbers",
+    "WORK_TIME" : "15 points on work time",
+    "ESDH" : "ESDH",
+    "CITRIX" : "Citrix",
+    "MAP" : "Map"
+  },
+  "CONFIGURATION": {
+    "LINK_TO": "Link to ",
+    "appName": "Name of OpenDesk instance",
+    "enableESDH": "Enabling of ESDH",
+    "enableProjects": "Enabling of  projects",
+    "enableSites": "Enabling of sites",
+    "enableChat": "Enabling of chat",
+    "logoSrc": "Path to logo",
+    "ssoLoginEnabled": "Enabling of SSO",
+    "dashboardLinks": {
+      "intra" : "Intra",
+      "email" : "Email",
+      "calendar" : "Calendar",
+      "projects" : "Projects",
+      "keyNumbers" : "Key numbers",
+      "workTime" : "15 points on work time",
+      "esdh" : "ESDH",
+      "citrix" : "Citrix",
+      "map" : "Map"
+    }
+  }
 }

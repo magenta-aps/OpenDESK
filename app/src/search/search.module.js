@@ -11,7 +11,7 @@ function config($stateProvider, USER_ROLES) {
                 controller: 'SearchController'
             }
         },
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.user]
         }
     });

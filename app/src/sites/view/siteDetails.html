@@ -1,5 +1,5 @@
 <md-card class="dropdown-card" id="details">
-	<md-card-title ng-click="showProjDetails = !showProjDetails" ng-class="showProjDetails ? 'open' : 'closed'">
+	<md-card-title ng-click="showProjDetails = !showProjDetails" class="clickable" ng-class="showProjDetails ? 'open' : 'closed'">
 		<h3 class="md-title od-title-icon "><md-icon>info_outline</md-icon> {{'COMMON.DETAILS' | translate }}</h3>
 		<span flex></span>
 		<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
@@ -43,7 +43,7 @@
 		</div>
 		<md-card-actions layout="row" layout-align="start center" class="btn-align">
 				<span flex></span>
-				<md-button ng-if="vm.isManager" class="md-primary md-icon-button" ng-click="editSiteDialog($event)" aria-label="Redigér site">
+				<md-button ng-if="permissions.isManager" class="md-primary md-icon-button" ng-click="editSiteDialog($event)" aria-label="Redigér site">
 					<md-icon>edit</md-icon>
 				</md-button>
 		</md-card-actions>

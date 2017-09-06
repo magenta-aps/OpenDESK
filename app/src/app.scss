@@ -79,7 +79,6 @@ body {
 
 img {
   height: auto;
-  width: 100%;
 }
 
 dl {
@@ -98,10 +97,27 @@ md-icon {
   color: $primary-text-color;
 }
 
+.md-chips .md-chip-input-container {
+  width: 100%;
+}
+
+md-card md-card-content {
+  padding: 16px 16px 0px 16px;
+}
+
+md-toast.md-error-toast-theme .md-toast-content {
+  color: #ff645f;
+  font-weight: bold;
+}
+
 // Muted (greyed) text
 .muted {
   font-size: .9em;
   opacity: .66;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 
@@ -198,8 +214,8 @@ main {
   background-color: $gray-90;
   border-radius: 4px;
   list-style: none;
-  margin-bottom: 20px;
-  padding: $u * .5 $u;
+  padding: 0px 0px;
+  margin: 0px 0px $u 0px;
   min-height: 1em;
 
   li {

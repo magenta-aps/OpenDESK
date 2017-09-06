@@ -14,7 +14,7 @@ function config($stateProvider, USER_ROLES) {
                 templateUrl: 'app/src/nogletal/view/nogletal.html'
             }
         },
-        data: {
+        params: {
             authorizedRoles: [USER_ROLES.user]
         }
     });

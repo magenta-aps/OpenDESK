@@ -4,11 +4,13 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window, $state, $interval, siteService, searchService, documentService,
-						 pd_siteService, sessionService,fileUtilsService, userService) {
+function SitesController($scope, $mdDialog, $window,  $interval, $translate, siteService, pd_siteService,
+						 sessionService, APP_CONFIG, browserService) {
 
+    browserService.setTitle($translate.instant('SITES.NAME'));
 
 	var vm = this;
+    vm.config = APP_CONFIG.settings;
 
 	vm.sites = [];
 	vm.sitesPerUser = [];
@@ -28,10 +30,22 @@ function SitesController($scope, $mdDialog, $window, $state, $interval, siteServ
 				{key:'CLOSED', name:'Afsluttet'},
 				{key:'', name:'Alle'}];
 	
-	vm.types = [
-		  		{key:'Project', name:'Grupperum'},
-				{key:'PD-Project', name:'Projekt'},
-				{key:'', name:'Alle'}];
+	vm.types = [];
+	vm.types.push({key: 'Project', name: $translate.instant('SITES.Project.NAME')});
+    if(vm.config.enableProjects)
+        vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')});
+    vm.types.push({key: '', name: $translate.instant('COMMON.ALL')});
+
+    if(vm.config.enableSites && vm.config.enableProjects)
+    	vm.sitesName = 'SITES.NAME';
+    else if(vm.config.enableSites)
+        vm.sitesName = 'SITES.Project.NAME_PLURAL';
+    else if(vm.config.enableProjects)
+        vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
+
+	//sets the margin to the width of sidenav
+	var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();
+    $("#table-container").css("max-height", tableHeight+"px");
 
 	vm.exactMatchFilter = function (project) { 
 		if(vm.search == undefined || vm.search.type == '') {

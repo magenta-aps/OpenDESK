@@ -5,18 +5,37 @@ angular
 
 /**
  * Main Controller for the LibreOffice online module module
- * @param $scope
- * @constructor
  */
-function LoolController($stateParams, loolService) {
+function LoolController($stateParams, loolService, documentService, $mdToast, $translate, nodeRefUtilsService) {
     var vm = this;
 
-    vm.nodeRef = $stateParams.nodeRef;
-    loolService.getLoolServiceUrl().then(function (response) {
-        if (response.charAt(response.length - 1) == '/')
-            response = response.substring(0, response.length - 1);
-        renderIframe(response);
-    });
+    if($stateParams.nodeRef === null)
+    {
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent($translate.instant('ERROR.ERROR') + ": " +
+                    $translate.instant('DOCUMENT.ERROR.MISSING_NODEREF'))
+                .theme('error-toast')
+                .hideDelay(3000)
+        );
+    }
+    else {
+        vm.nodeRef = $stateParams.nodeRef;
+        vm.nodeId = nodeRefUtilsService.getId($stateParams.nodeRef);
+        documentService.getDocument(vm.nodeId).then(function (document) {
+
+            vm.doc = document.item;
+            loolService.getLoolServiceUrl().then(function (response) {
+                if (response.charAt(response.length - 1) === '/')
+                    response = response.substring(0, response.length - 1);
+                renderIframe(response);
+            });
+        });
+    }
+
+    vm.goBack = function () {
+        window.history.go(-1);
+    };
 
     function renderIframe(serviceUrl) {
         loolService.getWopiUrl(vm.nodeRef).then(function (response) {

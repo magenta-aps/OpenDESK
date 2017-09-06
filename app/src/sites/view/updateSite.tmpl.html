@@ -25,7 +25,8 @@
                         <textarea ng-model="vm.project.description" md-maxlength="250" maxlength="250"></textarea>
                     </md-input-container>
 
-                <md-checkbox ng-model="vm.project.visibility" ng-true-value="'PRIVATE'" ng-false-value="'PUBLIC'" aria-label="Gør grupperummet privat">
+                <md-checkbox ng-model="vm.project.visibility" ng-true-value="'PRIVATE'" ng-false-value="'PUBLIC'"
+                             aria-label="{{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}">
                     {{'COMMON.CLOSED' | translate}} {{'PROJECT.PROJECT' | translate | lowercase}}
                 </md-checkbox>
             </md-content>

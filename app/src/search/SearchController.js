@@ -256,12 +256,9 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
 
 
     $scope.gotoPath = function (ref) {
-        documentService.getPath(ref.split("/")[3]).then(function (val) {
-            $scope.selectedDocumentPath = val.container;
-            var path = ref.replace("workspace://SpacesStore/", "");
-
-            $window.location.href = "/#!/dokument/" + path;
-        });
+        $scope.searchText = '';
+        var id = ref.split("/")[3];
+        $state.go('document', {doc: id});
     };
 
     $scope.searchPeople = function (query) {
