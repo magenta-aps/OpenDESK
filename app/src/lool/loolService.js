@@ -5,10 +5,13 @@ angular
 
 function loolService($http, transformRequestAsFormPost, ALFRESCO_URI) {
 
+    getValidMimeTypes();
+
     return {
         getWopiUrl: getWopiUrl,
         getIframeSrc: getIframeSrc,
-        getLoolServiceUrl: getLoolServiceUrl
+        getLoolServiceUrl: getLoolServiceUrl,
+        getValidMimeTypes: getValidMimeTypes
     };
 
     //Just in case this is set. Call the server and see if the service url is set get around proxy issues
@@ -31,6 +34,21 @@ function loolService($http, transformRequestAsFormPost, ALFRESCO_URI) {
             .then(function (response) {
                 console.log(response.data.access_token, response.data.wopi_src_url);
                 return response.data;
+            })
+    }
+
+    function getValidMimeTypes() {
+        return $http.get('discovery.xml')
+            .then(function (response) {
+                var mimeTypes = [];
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString(response.data,"text/xml");
+                var applications = xmlDoc.children[0].children[0].children;
+                for(var id in applications) {
+                    if(id > -1)
+                        mimeTypes.push(applications[id].getAttribute('name'));
+                }
+                return mimeTypes;
             })
     }
 

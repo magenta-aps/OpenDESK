@@ -82,5 +82,17 @@ function config($stateProvider, USER_ROLES) {
                 controllerAs: 'fc'
             }
         }
+    }).state('systemsettings.config', {
+        url: '/konfiguration',
+        params: {
+            authorizedRoles: [USER_ROLES.admin]
+        },
+        views: {
+            'systemsetting-view': {
+                templateUrl: 'app/src/system_settings/config/view/config.html',
+                controller: 'ConfigController',
+                controllerAs: 'vm'
+            }
+        }
     });
 }

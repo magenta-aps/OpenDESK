@@ -1,0 +1,27 @@
+<div >
+    <md-card flex="grow">
+        <md-card-content>
+            <h2 class="od-title-icon"><i class="material-icons">settings</i>Konfiguration</h2>
+
+            <md-list>
+                <md-list-item ng-repeat="(key, value) in config" ng-if="!isObject(value)">
+                    <p>{{'CONFIGURATION.' + key | translate}}</p>
+                    <md-input-container>
+                        <md-switch ng-if="isBoolean(value)" class="md-secondary" ng-model="config[key]"></md-switch>
+                        <input ng-if="isString(value)" class="md-secondary" ng-model="config[key]" title="value">
+                    </md-input-container>
+                </md-list-item>
+                <md-list-item ng-repeat="(key, value) in config.dashboardLinks">
+                    <p>{{'CONFIGURATION.LINK_TO' | translate}} {{'CONFIGURATION.dashboardLinks.' + key | translate}}</p>
+                    <md-input-container>
+                        <input ng-if="isString(value)" class="md-secondary" ng-model="config.dashboardLinks[key]" title="value">
+                    </md-input-container>
+                </md-list-item>
+            </md-list>
+
+            <md-button class="md-primary md-raised" ng-click="updateSettings()">
+                <i class="material-icons">save</i>
+                Gem</md-button>
+        </md-card-content>
+    </md-card>
+</div>

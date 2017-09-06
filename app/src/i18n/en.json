@@ -1022,5 +1022,26 @@
     "ESDH" : "ESDH",
     "CITRIX" : "Citrix",
     "MAP" : "Map"
+  },
+  "CONFIGURATION": {
+    "LINK_TO": "Link to ",
+    "appName": "Name of OpenDesk instance",
+    "enableESDH": "Enabling of ESDH",
+    "enableProjects": "Enabling of  projects",
+    "enableSites": "Enabling of sites",
+    "enableChat": "Enabling of chat",
+    "logoSrc": "Path to logo",
+    "ssoLoginEnabled": "Enabling of SSO",
+    "dashboardLinks": {
+      "intra" : "Intra",
+      "email" : "Email",
+      "calendar" : "Calendar",
+      "projects" : "Projects",
+      "keyNumbers" : "Key numbers",
+      "workTime" : "15 points on work time",
+      "esdh" : "ESDH",
+      "citrix" : "Citrix",
+      "map" : "Map"
+    }
   }
 }

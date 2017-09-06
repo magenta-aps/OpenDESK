@@ -31,6 +31,13 @@ angular.module('openDeskApp.systemsettings')
                 return $http.get("/alfresco/service/settings/public").then(function (response) {
                     APP_CONFIG.settings = response.data;
                 });
+            },
+
+            updateSettings: function (settings) {
+                var data = { "properties": { "settings": settings } }
+                return $http.put("/alfresco/service/settings", data).then(function (response) {
+                    APP_CONFIG.settings = settings;
+                });
             }
         };
     });
