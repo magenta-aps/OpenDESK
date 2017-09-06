@@ -1,6 +1,6 @@
 <div class="od-projects">
 
-	<h1 class="od-title">{{vm.config.enableProjects ? 'SITES.NAME' : 'SITES.Project.NAME_PLURAL' | translate}}</h1>
+	<h1 class="od-title">{{vm.sitesName | translate}}</h1>
 
 	<div layout='row'>
 		<md-card class="od-filter-sidebar transition" ng-class="vm.showFilters ? 'flex-15' : ''" flex='0' ng-show="vm.showFilters">
@@ -77,7 +77,7 @@
 						<col style="width:2.5%">
 						<thead fix-head>
 							<tr>
-								<th colspan="2" sort-table="title" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.NAME' : 'SITES.Project.NAME_PLURAL' | translate}}</th>
+								<th colspan="2" sort-table="title" title="Sortér kolonne">{{vm.sitesName | translate}}</th>
 								<th sort-table="manager.displayName" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
 								<th ng-if="vm.config.enableProjects" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
 								<th ng-if="vm.config.enableProjects" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
@@ -155,7 +155,7 @@
 				<md-divider></md-divider>
 
 				<md-card-actions ng-controller="SiteCreateController as sc" layout="row" layout-align="start center" class="btn-align" id="table-actions">
-					<md-button ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'SITES.Project.NAME' | translate | lowercase}}">
+					<md-button ng-if="vm.config.enableSites" ng-click="sc.openSiteCreateDialog($event,'Project')" class="md-primary" aria-label="{{'COMMON.CREATE_NEW' | translate}} {{'SITES.Project.NAME' | translate | lowercase}}">
 						<md-icon>add</md-icon>
 						<span>{{'COMMON.CREATE_NEW' | translate}} {{'SITES.Project.NAME' | translate | lowercase}}</span>
 					</md-button>
