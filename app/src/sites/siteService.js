@@ -83,19 +83,17 @@ angular.module('openDeskApp.sites').factory('siteService',
                 description: (description && description !== '') ? description : '',
                 visibility: visibility
             }).then(function (response) {
-                if(response.data.isPublic) {
-                    var nodeId = response.data.node.split("/")[7];
+                getNode(shortName, "documentLibrary", "").then(function(response) {
+                    var nodeId = response.parent.nodeRef.split("/")[3];
                     var data = {
-                        "isInherited": true,
+                        "isInherited": response.data.isPublic,
                         "permissions": []
                     };
                     return $http.post('/alfresco/s/slingshot/doclib/permissions/workspace/SpacesStore/' + nodeId, data)
                         .then(function (response) {
-                            return response.data;
+                            return response;
                         });
-                }
-                else
-                    return response.data;
+                });
             });
         },
         loadSiteData: function (shortName) {
@@ -329,11 +327,7 @@ angular.module('openDeskApp.sites').factory('siteService',
             });
         },
 
-        getNode: function (siteName, container, path) {
-            return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
-                return response.data;
-            });
-        },
+        getNode: getNode,
 
         getSiteUserPermissions: function (siteShortName) {
 
@@ -439,6 +433,12 @@ angular.module('openDeskApp.sites').factory('siteService',
             createNotification(receiver, sub, message, link, 'review-request', site.shortName);
         }
     };
+
+    function getNode (siteName, container, path) {
+        return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
+            return response.data;
+        });
+    }
 
     function createNotification (receiver, subject, message, link, wtype, project) {
         notificationsService.addNotice(receiver, subject, message, link, wtype, project);

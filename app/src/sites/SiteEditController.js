@@ -156,17 +156,15 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, pd_siteService,
             visibility
         ).then(
             function (response) {
-                if (response) {
-                    $mdDialog.cancel();
+                $mdDialog.cancel();
 
-                    $state.reload();
+                $state.reload();
 
-                    $mdToast.show(
-                        $mdToast.simple()
+                $mdToast.show(
+                    $mdToast.simple()
                         .textContent('Du har opdateret: ' + $scope.newSite.siteName)
                         .hideDelay(3000)
-                    );
-                }
+                );
             }
         );
     }
