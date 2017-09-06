@@ -83,10 +83,11 @@ angular.module('openDeskApp.sites').factory('siteService',
                 description: (description && description !== '') ? description : '',
                 visibility: visibility
             }).then(function (response) {
+                var isInherited = response.data.isPublic
                 getNode(shortName, "documentLibrary", "").then(function(response) {
                     var nodeId = response.parent.nodeRef.split("/")[3];
                     var data = {
-                        "isInherited": response.data.isPublic,
+                        "isInherited": isInherited,
                         "permissions": []
                     };
                     return $http.post('/alfresco/s/slingshot/doclib/permissions/workspace/SpacesStore/' + nodeId, data)
