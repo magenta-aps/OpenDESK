@@ -442,8 +442,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     };
 
     $scope.loadFromSbsys = function () {
-
-        filebrowserService.loadFromSbsys().then(function () {
+        filebrowserService.loadFromSbsys($scope.folderNodeRef).then(function () {
             hideDialogAndReloadContent();
         });
     };
