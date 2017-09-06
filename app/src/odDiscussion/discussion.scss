@@ -11,7 +11,7 @@
 .od-discussion {
     display: block;
     border-collapse: collapse;
-    height: 400px;
+    max-height: calc(100vh - 350px);
     overflow-y: scroll;
     .title {
         text-align: left !important;
