@@ -147,6 +147,7 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, pd_siteService,
     }
 
     function updateSite() {
+        visibility = $scope.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
         console.log('update site');
         siteService.updateSite(
             $scope.newSite.shortName,

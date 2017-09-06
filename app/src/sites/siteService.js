@@ -83,7 +83,19 @@ angular.module('openDeskApp.sites').factory('siteService',
                 description: (description && description !== '') ? description : '',
                 visibility: visibility
             }).then(function (response) {
-                return response.data;
+                if(response.data.isPublic) {
+                    var nodeId = response.data.node.split("/")[7];
+                    var data = {
+                        "isInherited": true,
+                        "permissions": []
+                    };
+                    return $http.post('/alfresco/s/slingshot/doclib/permissions/workspace/SpacesStore/' + nodeId, data)
+                        .then(function (response) {
+                            return response.data;
+                        });
+                }
+                else
+                    return response.data;
             });
         },
         loadSiteData: function (shortName) {
