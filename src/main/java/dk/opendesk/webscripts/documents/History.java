@@ -18,6 +18,7 @@ package dk.opendesk.webscripts.documents;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
+import org.alfresco.repo.search.impl.querymodel.impl.functions.Child;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
@@ -86,14 +87,20 @@ public class History extends AbstractWebScript {
                 nodeRef = new NodeRef(storeType, storeId, nodeId);
             }
 
+
+            String version = params.get("versionNode");
             String method = params.get("method");
             if (method != null) {
                 switch (method) {
                     case "getAll":
                         result = getVersions(nodeRef);
                         break;
+                    case "deleteVersion":
+                        result = deleteVersion(version);
+                        break;
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);
@@ -139,5 +146,22 @@ public class History extends AbstractWebScript {
         }
 
         return result;
+    }
+
+    private JSONArray deleteVersion(String versionNode) {
+
+        NodeRef versionNodeRef = new NodeRef(versionNode);
+
+        ChildAssociationRef parentNodeRef = nodeService.getPrimaryParent(versionNodeRef);
+
+        VersionHistory versionoHistory =  versionService.getVersionHistory(parentNodeRef.getChildRef());
+
+        String versionLabel = (String)nodeService.getProperty(versionNodeRef, ContentModel.PROP_VERSION_LABEL);
+
+        Version version = versionoHistory.getVersion(versionLabel);
+
+        versionService.deleteVersion(parentNodeRef.getChildRef(), version);
+
+        return Utils.getJSONSuccess();
     }
 }
