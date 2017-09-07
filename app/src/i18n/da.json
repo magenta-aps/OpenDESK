@@ -988,7 +988,7 @@
   "DASHBOARD": {
     "INTRA" : "Intra",
     "EMAIL" : "Email",
-    "CALENDAR" : "Kalendar",
+    "CALENDAR" : "Kalender",
     "PROJECTS" : "Projekter",
     "KEY_NUMBERS" : "Nøgletal",
     "WORK_TIME" : "15 punkter om arbejdstid",
@@ -1008,7 +1008,7 @@
     "dashboardLinks": {
       "intra" : "Intra",
       "email" : "Email",
-      "calendar" : "Kalendar",
+      "calendar" : "Kalender",
       "projects" : "Projekter",
       "keyNumbers" : "Nøgletal",
       "workTime" : "15 punkter om arbejdstid",
