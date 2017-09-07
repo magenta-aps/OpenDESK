@@ -11,7 +11,8 @@ function documentService($http, $translate, $mdToast, $q) {
         UploadNewVersion: uploadNewVersion,
         createVersionThumbnail: createVersionThumbnail,
         cleanupThumbnail: cleanupThumbnail,
-        revertToVersion: revertToVersion
+        revertToVersion: revertToVersion,
+        deleteVersion: deleteVersion
     };
 
     return service;
@@ -43,6 +44,15 @@ function documentService($http, $translate, $mdToast, $q) {
     function getHistory(documentNodeRef) {
 
         var url = '/alfresco/s/history?method=getAll&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore';
+
+        return $http.get(url).then(function (response) {
+            return response.data;
+        });
+    }
+
+    function deleteVersion(documentNodeRef, versionNode) {
+
+        var url = '/alfresco/s/history?method=deleteVersion&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore&versionNode=' + versionNode;
 
         return $http.get(url).then(function (response) {
             return response.data;

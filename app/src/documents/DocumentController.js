@@ -74,6 +74,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     };
 
     vm.goBack = function () {
+        alert(vm.newVersionNodeRef);
         window.history.go(-2);
     }
 
@@ -307,7 +308,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             console.log(vm.doc);
             documentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
                 $state.go('lool', {
-                    'nodeRef': vm.doc.node.nodeRef
+                    'nodeRef': vm.doc.node.nodeRef,
+                    'newVersionNodeRef': response.config.data.nodeRef,
                 });
             });
         });
@@ -323,7 +325,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             confirmLoolEditDocDialog();
         } else {
             $state.go('lool', {
-                'nodeRef': vm.doc.node.nodeRef
+                'nodeRef': vm.doc.node.nodeRef,
             });
         }
     };
