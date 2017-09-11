@@ -147,6 +147,7 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, pd_siteService,
     }
 
     function updateSite() {
+        visibility = $scope.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
         console.log('update site');
         siteService.updateSite(
             $scope.newSite.shortName,
@@ -155,17 +156,15 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, pd_siteService,
             visibility
         ).then(
             function (response) {
-                if (response) {
-                    $mdDialog.cancel();
+                $mdDialog.cancel();
 
-                    $state.reload();
+                $state.reload();
 
-                    $mdToast.show(
-                        $mdToast.simple()
+                $mdToast.show(
+                    $mdToast.simple()
                         .textContent('Du har opdateret: ' + $scope.newSite.siteName)
                         .hideDelay(3000)
-                    );
-                }
+                );
             }
         );
     }

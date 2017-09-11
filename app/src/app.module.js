@@ -42,6 +42,15 @@ angular
     .config(config)
     .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
                    APP_CONFIG, CLIENT_CONFIG, browserService) {
+
+        $rootScope.isBoolean = function(value) {
+            return typeof value === 'boolean';
+        };
+
+        ['isArray', 'isDate', 'isDefined', 'isFunction', 'isNumber', 'isObject', 'isString', 'isUndefined'].forEach(function(name) {
+            $rootScope[name] = angular[name];
+        });
+
         systemSettingsService.loadPublicSettings().then(function(response) {
             browserService.setTitle();
             $rootScope.appName = APP_CONFIG.settings.appName;

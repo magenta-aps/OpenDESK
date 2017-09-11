@@ -93,6 +93,11 @@ dl {
   }
 }
 
+// md-switch .md-thumb-container adds z-index: 1 per default which we don't want.
+md-switch .md-thumb-container {
+  z-index: 0;
+}
+
 md-icon {
   color: $primary-text-color;
 }

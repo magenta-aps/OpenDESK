@@ -43,21 +43,17 @@ angular.module('openDeskApp.filebrowser').factory('filebrowserService', function
             });
         },
 
-        loadFromSbsys: function () {
-            return $http.get("/alfresco/s/slingshot/doclib/doclist/type/site/sbsysfakedata/documentLibrary", {}).then(function (sbsysfakedataResponse) {
+        loadFromSbsys: function (destinationNodeRef) {
+            return $http.get("/alfresco/s/slingshot/doclib2/doclist/type/site/sbsysfakedata/documentLibrary", {}).then(function (sbsysfakedataResponse) {
                 var nodeRefs = [];
                 for (var i in sbsysfakedataResponse.data.items)
                     nodeRefs.push(sbsysfakedataResponse.data.items[i].node.nodeRef);
 
-                return $http.get("/alfresco/s/slingshot/doclib/container/SBSYS-funktionalitet/documentLibrary", {}).then(function (sbsysfunktionalitetResponse) {
-
-                    var destinationNodeRef = sbsysfunktionalitetResponse.data.container.nodeRef;
-                    return $http.post("/alfresco/service/sbsys/fakedownload", {
-                        destinationNodeRef: destinationNodeRef,
-                        nodeRefs: nodeRefs
-                    }).then(function (response) {
-                        return response.data;
-                    });
+                return $http.post("/alfresco/service/sbsys/fakedownload", {
+                    destinationNodeRef: destinationNodeRef,
+                    nodeRefs: nodeRefs
+                }).then(function (response) {
+                    return response.data;
                 });
             });
         },

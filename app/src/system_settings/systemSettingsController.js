@@ -7,6 +7,7 @@ function SystemSettingsCtrl(sessionService, pageService, systemSettingsService, 
     var vm = this;
 
     vm.pages = [];
+    pageService.addSystemPage(vm.pages, 'Konfiguration', 'systemsettings.config', true, 'settings');
     if(APP_CONFIG.settings.enableProjects)
         pageService.addSystemPage(vm.pages, 'Projektskabeloner', 'systemsettings.templateList', true);
     pageService.addSystemPage(vm.pages, 'Mappeskabeloner', 'systemsettings.folder_templates', true);

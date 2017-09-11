@@ -988,12 +988,33 @@
   "DASHBOARD": {
     "INTRA" : "Intra",
     "EMAIL" : "Email",
-    "CALENDAR" : "Kalendar",
+    "CALENDAR" : "Kalender",
     "PROJECTS" : "Projekter",
     "KEY_NUMBERS" : "Nøgletal",
     "WORK_TIME" : "15 punkter om arbejdstid",
     "ESDH" : "ESDH",
     "CITRIX" : "Citrix",
     "MAP" : "Kort"
+  },
+  "CONFIGURATION": {
+    "LINK_TO": "Link til ",
+    "appName": "Navn for OpenDesk instans",
+    "enableESDH": "Tilkobling af ESDH",
+    "enableProjects": "Tilkobling af projekter",
+    "enableSites": "Tilkobling af sites",
+    "enableChat": "Tilkobling af chat",
+    "logoSrc": "Sti til logo",
+    "ssoLoginEnabled": "Tilkobling af SSO",
+    "dashboardLinks": {
+      "intra" : "Intra",
+      "email" : "Email",
+      "calendar" : "Kalender",
+      "projects" : "Projekter",
+      "keyNumbers" : "Nøgletal",
+      "workTime" : "15 punkter om arbejdstid",
+      "esdh" : "ESDH",
+      "citrix" : "Citrix",
+      "map" : "Kort"
+    }
   }
 }

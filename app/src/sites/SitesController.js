@@ -36,6 +36,13 @@ function SitesController($scope, $mdDialog, $window,  $interval, $translate, sit
         vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')});
     vm.types.push({key: '', name: $translate.instant('COMMON.ALL')});
 
+    if(vm.config.enableSites && vm.config.enableProjects)
+    	vm.sitesName = 'SITES.NAME';
+    else if(vm.config.enableSites)
+        vm.sitesName = 'SITES.Project.NAME_PLURAL';
+    else if(vm.config.enableProjects)
+        vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
+
 	//sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();
     $("#table-container").css("max-height", tableHeight+"px");

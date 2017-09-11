@@ -241,7 +241,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     };
 
     $scope.createReviewNotification = function (userName, comment) {
-        siteService.createReviewNotification($scope.reviewNodeRef, userName, comment);
+        siteService.createReviewNotification($scope.documentNodeRef, userName, comment);
         $mdDialog.hide();
     };
 
@@ -442,8 +442,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     };
 
     $scope.loadFromSbsys = function () {
-
-        filebrowserService.loadFromSbsys().then(function () {
+        filebrowserService.loadFromSbsys($scope.folderNodeRef).then(function () {
             hideDialogAndReloadContent();
         });
     };
