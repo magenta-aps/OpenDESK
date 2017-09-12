@@ -47,10 +47,10 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
             var newVersion = sp[0] + "." + bump;
 
 
-            documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
-                window.history.go(-1);
-            })
-
+            //documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
+            //
+            //})
+            window.history.go(-1);
 
 
 
