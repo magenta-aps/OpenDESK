@@ -317,7 +317,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
                 console.log("the new nodeRef:" + response.config.data.nodeRef)
                 $state.go('lool', {
                     'nodeRef': vm.doc.node.nodeRef,
-                    'versionLabel': response.config.data.version,
+                    'versionLabel': vm.doc.version,
                     'parent': response.config.data.nodeRef
                 });
             });

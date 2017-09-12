@@ -41,13 +41,18 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
         if ($stateParams.versionLabel != null && $stateParams.parent != null) {
             console.log($stateParams.parent);
             console.log($stateParams.versionLabel);
-            //
-            //documentService.deleteVersion($stateParams.parent, $stateParams.versionLabel).then(function (response) {
-            //
-            //})
+
+            var sp = $stateParams.versionLabel.split(".");
+            var bump = (parseInt(sp[1]) + 1);
+            var newVersion = sp[0] + "." + bump;
 
 
-            window.history.go(-1);
+            documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
+                window.history.go(-1);
+            })
+
+
+
 
 
 
