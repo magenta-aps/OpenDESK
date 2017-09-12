@@ -307,10 +307,14 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             var selectedVersion = $location.search().version;
             console.log(vm.doc);
             documentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
+                console.log("response");
+                console.log(response.config.data.version);
+
                 console.log("the new nodeRef:" + response.config.data.nodeRef)
                 $state.go('lool', {
                     'nodeRef': vm.doc.node.nodeRef,
-                    'newVersionNodeRef': response.config.data.nodeRef
+                    'versionLabel': response.config.data.version,
+                    'parent': response.config.data.nodeRef
                 });
             });
         });

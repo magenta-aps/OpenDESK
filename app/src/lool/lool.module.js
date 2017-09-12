@@ -12,8 +12,8 @@ function config($stateProvider, USER_ROLES) {
         params: {
             authorizedRoles: [USER_ROLES.user],
 			nodeRef: null,
-            newVersionNodeRef: null,
-            parentNodeRef: null,
+            versionLabel: null,
+            parent: null,
 			showArchived: null,
 			backToDocPreview: null
 		},

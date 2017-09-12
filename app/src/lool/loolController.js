@@ -38,15 +38,15 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
 
 
 
-        if ($stateParams.nodeRef != null && $stateParams.newVersionNodeRef != null) {
-            console.log($stateParams.parentNodeRef);
-            console.log($stateParams.newVersionNodeRef);
+        if ($stateParams.versionLabel != null && $stateParams.parent != null) {
+            console.log($stateParams.parent);
+            console.log($stateParams.versionLabel);
 
-            //documentService.deleteVersion($stateParams.parentNodeRef, $stateParams.newVersionNodeRef).then(function (response) {
-            //
-            //})
+            documentService.deleteVersion($stateParams.parent, $stateParams.versionLabel).then(function (response) {
+                window.history.go(-1);
+            })
 
-            window.history.go(-1);
+
 
 
 
