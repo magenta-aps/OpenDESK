@@ -3,9 +3,9 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, $timeout, documentService, userService, $stateParams, $location, $state,
+function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state,
                             documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG, browserService,
-                            $mdDialog, notificationsService, authService, siteService, $window) {
+                            $mdDialog, notificationsService, authService, siteService, headerService, $window) {
 
     var vm = this;
     vm.doc = [];
@@ -210,6 +210,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
         {
             vm.type = response.type;
             vm.title = response.title;
+
+            headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title);
         });
 
         browserService.setTitle(response.item.node.properties["cm:name"]);

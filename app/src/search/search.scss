@@ -8,10 +8,7 @@ od-searchbar {
   }
 
   .od-search {
-    left: calc(50vw - 175px);
-    padding-top: 10px;
-    position: absolute;
-    top: 0;
+    padding-top: $u;
     z-index: 2;
 
     form {

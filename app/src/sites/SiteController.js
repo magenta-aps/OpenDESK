@@ -4,8 +4,8 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteController', SiteController);
 
-function SiteController($scope, $mdDialog, $window, siteService, $stateParams, documentService, authService, $rootScope,
-                        searchService, userService, browserService) {
+function SiteController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
+                        searchService, userService, browserService, headerService) {
 
     $scope.permissions = {};
     $scope.history = [];
@@ -52,6 +52,10 @@ function SiteController($scope, $mdDialog, $window, siteService, $stateParams, d
                 siteService.setUserManagedProjects();
                 loadMembers();
                 getSiteUserPermissions();
+
+                headerService.setTitle($translate.instant('SITES.' + vm.project.type + '.NAME') + ' : ' + vm.project.title);
+
+                //{{'SITES.' + vm.project.type + '.NAME' | translate}} : {{ vm.project.title }}
             }
         );
     }

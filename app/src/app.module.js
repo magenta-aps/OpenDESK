@@ -132,7 +132,9 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
         url: '',
         views: {
             'header@': {
-                templateUrl: 'app/src/header/view/header.html'
+                templateUrl: 'app/src/header/view/header.html',
+                controller: 'HeaderController'
+                
             }
         },
         params: {

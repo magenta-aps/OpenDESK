@@ -131,7 +131,7 @@ md-toast.md-error-toast-theme .md-toast-content {
 //
 
 main {
-  margin: $u * 3 0 auto;
+  margin: $u * 4 0 auto;
 }
 
 // Sliding sidebar
@@ -191,37 +191,15 @@ main {
       transition: transform .5s;
     }
   }
-
-  .od-flyout--title {
-    background-color: $primary-color;
-    box-sizing: border-box;
-    color: $headline-color;
-    //font-size: $u * 1.5;
-    height: $u * 3;
-    margin: 0;
-    padding: $u * .625 $u;
-  }
-
-  .od-flyout--close {
-    background-color: transparent;
-    position: absolute;
-    right: 0;
-    top: 0;
-
-    &:hover,
-    &:active {
-      background-color: $overlay;
-    }
-  }
 }
 
 .od-breadcrumb {
   background-color: $gray-90;
   border-radius: 4px;
   list-style: none;
-  padding: 0px 0px;
-  margin: 0px 0px $u 0px;
-  min-height: 1em;
+  margin: $u 0;
+  min-height: 40px;
+  padding: 0;
 
   li {
     display: inline-block;

@@ -5,8 +5,8 @@
             <thead ng-show="contentListLength > 0" fix-head>
                 <tr>
                     <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
-                    <th sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
-                    <th ng-if="config.enableESDH" ng-if="isSite" colspan="2">
+                    <th hide show-gt-sm sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
+                    <th hide show-gt-md ng-if="config.enableESDH" ng-if="isSite" colspan="2">
                         <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="primitives.sendToSbsys">
                         <img ng-src="app/assets/images/sbsys.png" class="od-sbsys-logo">
                     </th>

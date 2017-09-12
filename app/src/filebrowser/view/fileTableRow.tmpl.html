@@ -11,7 +11,7 @@
                                     <span class='content-name'>{{content.name}}</span>
     </a>
 </td>
-<td style="width:40%">
+<td style="width:40%" hide show-gt-sm>
     <table style="width:100%">
         <tr>
             <td style="border: none; margin: 0; padding: 0">
@@ -41,7 +41,7 @@
         </tr>
     </table>
 </td>
-<td ng-if="config.enableESDH" style="width:10%" ng-if="isSite">
+<td hide show-gt-md ng-if="config.enableESDH" style="width:10%" ng-if="isSite">
     <input type="checkbox" name="to-esdh" ng-model="primitives.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg">
 </td>
 <td style="width:5%">

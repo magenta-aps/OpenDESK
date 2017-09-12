@@ -9,6 +9,12 @@ header {
   z-index: 1;
 }
 
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 // Title that is placed in the header
 .od-title {
   color: $headline-color;
@@ -28,33 +34,33 @@ header {
   z-index: 1;
 }
 
-.od-btn {
-  outline: none;
+// .od-btn {
+//   outline: none;
 
-  &,
-  &:link,
-  &:visited {
-    background-color: $primary-color-dark;
-    border: 0;
-    box-sizing: border-box;
-    color: $secondary-text-color;
-    display: inline-block;
-    height: $u * 3;
-    min-width: $u * 3;
-    padding: $u * .5;
-    text-align: center;
-  }
+//   &,
+//   &:link,
+//   &:visited {
+//     background-color: $primary-color-dark;
+//     border: 0;
+//     box-sizing: border-box;
+//     color: $secondary-text-color;
+//     display: inline-block;
+//     height: $u * 3;
+//     min-width: $u * 3;
+//     padding: $u * .5;
+//     text-align: center;
+//   }
 
-  &:hover,
-  &:active {
-    background-color: darken($primary-color-dark, 20%);
-    text-decoration: none;
-  }
+//   &:hover,
+//   &:active {
+//     background-color: darken($primary-color-dark, 20%);
+//     text-decoration: none;
+//   }
 
-  md-icon {
-    color: $secondary-text-color;
-    font-size: $u * 2;
-    height: $u * 2;
-    width: $u * 2;
-  }
-}
+//   md-icon {
+//     color: $secondary-text-color;
+//     font-size: $u * 2;
+//     height: $u * 2;
+//     width: $u * 2;
+//   }
+// }

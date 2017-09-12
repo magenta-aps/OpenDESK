@@ -3,7 +3,12 @@ angular
     .factory('userService', userService);
 
 function userService($http, sessionService) {
+
+    var showUserPanel = false;
+
     return {
+        toggleUserPanel: toggleUserPanel,
+        getUserPanelState: getUserPanelState,
         getPerson: getPerson,
         getUsers: getUsers,
         getAuthorities: getAuthorities,
@@ -13,6 +18,13 @@ function userService($http, sessionService) {
         getAvatarFromUser : getAvatarFromUser
     };
 
+    function toggleUserPanel() {
+        showUserPanel = !showUserPanel;
+    }
+
+    function getUserPanelState() {
+        return showUserPanel;
+    }
 
     function getPerson(username) {
         return $http.get('/api/people/' + username).then(function (response) {

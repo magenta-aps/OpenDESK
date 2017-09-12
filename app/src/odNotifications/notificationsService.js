@@ -6,8 +6,11 @@
     var restBaseUrl = '/alfresco/service';
     var update;
 
+    var unseenNotifications = 0;
+
     function notificationsService($http, $interval) {
         var service = {
+            getUnseenCount: getUnseenCount,
             getNotices: getNotices,
             addNotice: addNotice,
             delNotice: delNotice,
@@ -21,12 +24,17 @@
 
         return service;
 
+        function getUnseenCount() {
+            return unseenNotifications;
+        }
+
         function getNotices(userId) {
             return $http.post(restBaseUrl + "/notifications", {
                 PARAM_METHOD : "getAll",
                 PARAM_USERNAME: userId
             }).then(function(response) {
-                //console.log(response)
+                // console.log(response.data);
+                unseenNotifications = response.data[0].unseen;
                 return response.data;
             })
         };

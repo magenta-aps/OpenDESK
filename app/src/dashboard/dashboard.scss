@@ -5,41 +5,4 @@
   justify-content: center;
   margin: $u * 2;
 
-  .tile {
-    background: $gray-90;
-    color: $primary-text-color;
-    display: inline-block;
-    flex: 1 0 auto;
-    height: $u * 5;
-    margin: $u * .25;
-    overflow: hidden;
-    padding: $u;
-    text-align: center;
-    width: $u * 5;
-
-    &:hover,
-    &:active {
-      background-color: $gray-85;
-      text-decoration: none;
-    }
-
-    md-icon {
-      display: block;
-      font-size: $u * 3;
-      margin: 0 0 $u * .5;
-    }
-  }
-  @media screen and (min-width: $br-sm-md) {
-    .tile {
-      height: $u * 10;
-      text-align: left;
-      width: $u * 10;
-
-      md-icon {
-        display: inline-block;
-        font-size: $u * 1.5;
-        margin: 0;
-      }
-    }
-  }
 }

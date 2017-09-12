@@ -5,22 +5,25 @@ angular
         return {
             restrict: 'E',
             scope: false,
-            templateUrl: 'app/src/odNotifications/view/notifications.html'
+            templateUrl: 'app/src/odNotifications/view/notifications.html',
+            controller: 'NotificationsController',
+            controllerAs: 'nc'
         };
     });
 
 
-function NotificationsController($scope, $mdToast, notificationsService, sessionService) {
+function NotificationsController($scope, $mdToast, $mdSidenav, notificationsService, sessionService) {
     var vm = this;
+
+    $scope.notificationsService = notificationsService;
 
     var userInfo = sessionService.getUserInfo();
     var currentUser = userInfo.user.userName;
 
-
     vm.notifications = [];
-    vm.on = false;
-    vm.toggleNotices = function () {
-        vm.on = !vm.on;
+
+    vm.close = function () {
+        $mdSidenav('notifications').close();
     }
 
     // Popup a notice
@@ -65,5 +68,6 @@ function NotificationsController($scope, $mdToast, notificationsService, session
     }
 
     notificationsService.startUpdate(updateNotifications);
+
 
 };

@@ -5,25 +5,38 @@ angular
         return {
             restrict: 'E',
             scope: {},
-            templateUrl: 'app/src/odUser/view/user.html'
+            templateUrl: 'app/src/odUser/view/user.html',
+            controller: 'UserController',
+            controllerAs: 'vm'
         };
     });
 
-function UserController($scope, $log, authService, userService, sessionService) {
+function UserController($scope, $log, $mdSidenav, authService, userService, sessionService) {
     var vm = this;
     vm.receiveNotifications = "true";
-    vm.currentUser = authService.getUserInfo().user;
+    vm.user = authService.getUserInfo().user;
     getAvatar();
 
-    vm.on = false;
-    vm.toggleUser = function () {
-        vm.on = !vm.on;
+    // vm.on = false;
+    // vm.toggleUser = function () {
+    //     // vm.on = !vm.on;
+    //     userService.toggleUserPanel();
+    // }
+
+    // $scope.userService = userService;
+
+    // $scope.$watch('userService.getUserPanelState()', function (newVal) {
+    //     vm.on = newVal;
+    // });
+
+    vm.close = function () {
+        $mdSidenav('userpanel').close();
     }
 
     function setNotificationPreferences() {
         var preferences = { "dk.magenta.sites.receiveNotifications" : vm.receiveNotifications };
 
-        preferenceService.setPreferences(vm.currentUser, preferences).then(function(data) {
+        preferenceService.setPreferences(vm.user, preferences).then(function(data) {
             return data;
         });
     }
@@ -33,14 +46,14 @@ function UserController($scope, $log, authService, userService, sessionService) 
         var file = element.files[0];
         console.log('upload avatar');
         console.log(file);
-        userService.uploadAvatar(file, vm.currentUser.userName).then(function(data) {
+        userService.uploadAvatar(file, vm.user.userName).then(function(data) {
             getAvatar();
             return data;
         });
     }
 
     function getAvatar() {
-        return userService.getAvatar(vm.currentUser.userName).then(function (data) {
+        return userService.getAvatar(vm.user.userName).then(function (data) {
             vm.avatar = data;
         });
     }

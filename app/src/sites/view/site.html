@@ -1,7 +1,3 @@
-<h1 class="od-title">
-    <span ng-if="vm.project.type">{{'SITES.' + vm.project.type + '.NAME' | translate}} : {{ vm.project.title }}</span>
-</h1>
-
 <div layout="column" layout-gt-md="row" class="od-projects" ng-show="permissions.isMember || vm.project.visibility == 'PUBLIC'">
     <div layout="column" flex-gt-md="75">
         <md-card>
@@ -9,7 +5,7 @@
                 <md-tabs md-selected="tab.selected" md-dynamic-height md-border-bottom flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
                     <md-tab ui-sref="project.filebrowser({ path: '' })">
                         <md-tab-label>
-                            <md-icon class="icon-small">library_books</md-icon> {{'DOCUMENT.DOCUMENTS' | translate}}
+                            <md-icon>library_books</md-icon> {{'DOCUMENT.DOCUMENTS' | translate}}
                         </md-tab-label>
                         <md-tab-body>
                             <div ui-view='filebrowser'></div>
@@ -17,7 +13,7 @@
                     </md-tab>
                     <md-tab ui-sref="project.discussions">
                         <md-tab-label>
-                            <md-icon class="icon-small">chat_bubble_outline</md-icon> {{'DISCUSSIONS.DISCUSSIONS' | translate}}
+                            <md-icon>chat_bubble_outline</md-icon> {{'DISCUSSIONS.DISCUSSIONS' | translate}}
                         </md-tab-label>
                         <md-tab-body>
                             <div ui-view='discussions'></div>

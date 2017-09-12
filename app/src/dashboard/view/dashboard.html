@@ -1,6 +1,21 @@
-<div class="dashboard-grid">
-    <a ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" class="tile">
+<div class="dashboard-grid" layout="row">
+    <!-- <a ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" class="tile">
         <md-icon>{{sysSetPage.icon}}</md-icon>
         {{sysSetPage.labelKey | translate}}
-    </a>
+    </a> -->
+    <md-card ng-repeat="sysSetPage in vm.pages" flex="30">
+        <a href="{{sysSetPage.url}}">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{sysSetPage.labelKey | translate}}</span>
+            <span class="md-subhead"></span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-md">
+                    <md-icon style="font-size:72px;width:72px;height:72px;float:right">{{sysSetPage.icon}}</md-icon>
+            </div>
+          </md-card-title-media>
+        </md-card-title>
+        </a>
+      </md-card>
 </div>

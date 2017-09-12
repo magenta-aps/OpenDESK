@@ -1,29 +1,25 @@
-
-.od-notifications--toggle {
-  height: $u * 3;
-  padding: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: $u * 3;
-  z-index: 1;
-}
-
 .od-notifications--counter {
   background-color: adjust-hue($primary-color, 120deg);
   border-radius: $u * .25;
   color: $white;
   display: block;
   font-size: $u * .75;
+  line-height: $u * .75;
   padding: $u * .25;
   position: absolute;
   right: $u * .25;
   top: $u * .25;
 }
 
+.od-sidenav-scroll-wrapper {
+  overflow-y: hidden;
+  height: 100%;
+  overflow: scroll;
+  padding: 0;
+}
+
 .od-notifylist {
   list-style: none;
-  overflow: scroll;
 }
 
 .od-notifylist,
@@ -42,14 +38,10 @@
   margin-top: 1px;
 }
 
-.od-notifylist--item--link,
-.od-notifylist--item--nolink {
-  padding: $u;
-  width: 100%;
-}
-
 .od-notifylist--item--link {
   cursor: pointer;
+  padding: $u;
+  width: 100%;
 
   &:hover,
   &:active {

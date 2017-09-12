@@ -5,7 +5,7 @@ angular
 	.controller('SitesController', SitesController);
 
 function SitesController($scope, $mdDialog, $window,  $interval, $translate, siteService, pd_siteService,
-						 sessionService, APP_CONFIG, browserService) {
+						 sessionService, APP_CONFIG, browserService,headerService) {
 
     browserService.setTitle($translate.instant('SITES.NAME'));
 
@@ -41,7 +41,9 @@ function SitesController($scope, $mdDialog, $window,  $interval, $translate, sit
     else if(vm.config.enableSites)
         vm.sitesName = 'SITES.Project.NAME_PLURAL';
     else if(vm.config.enableProjects)
-        vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
+		vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
+	
+	headerService.setTitle($translate.instant(vm.sitesName));
 
 	//sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();

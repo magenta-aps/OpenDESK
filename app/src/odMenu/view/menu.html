@@ -1,5 +1,8 @@
-<section class="od-menu" ng-controller="MenuController as mc">
-    <button class="od-btn" title="{{ 'COMMON.HOME' | translate }}" ui-sref="{{mc.landingPageState}}">
+<section layout="row" ng-controller="MenuController as mc">
+    <!-- <button class="od-btn" title="{{ 'COMMON.HOME' | translate }}" ui-sref="{{mc.landingPageState}}">
         <md-icon>home</md-icon>
-    </button>
+    </button> -->
+
+    <h2 ui-sref="{{mc.landingPageState}}">OpenDesk</h2>
+
 </section>

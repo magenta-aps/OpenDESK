@@ -1,22 +1,20 @@
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="notifications">
 
-<section  class="od-notifications" ng-controller="NotificationsController as nc">
+    <md-toolbar>
+        <span class="md-toolbar-tools" layout="row">
+            <h1>{{'NOTIFICATION.NOTIFICATIONS' | translate}}</h1>
+            <span flex></span>
+        <md-button class="md-icon-button" ng-click="nc.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
+            <md-icon>keyboard_arrow_right</md-icon>
+        </md-button>
+        </span>
+    </md-toolbar>
 
-    <button ng-click="nc.toggleNotices();nc.setAllSeen()" title="{{ 'NOTIFICATION.NOTIFICATIONS' | translate }}" class="od-btn od-notifications--toggle">
-        <md-icon>notifications</md-icon>
-        <span ng-if="notifications[0].unseen > 0" class="od-notifications--counter">{{ notifications[0].unseen }}</span>
-    </button>
-
-    <div class="od-flyout right" ng-class="{ open: nc.on, closed: !nc.on }" ng-click="nc.toggleNotices()">
-        <div class="od-flyout--body" ng-click="$event.stopPropagation()">
-            <h2 class="od-flyout--title md-headline">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</h2>
-            <button ng-click="nc.toggleNotices()" class="od-btn od-flyout--close">
-                <md-icon>keyboard_arrow_right</md-icon>
-            </button>
-
-            <ul class="od-notifylist">
-                <li ng-repeat="notice in notifications[1] | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
-                    <span class="od-notifylist--item--link">
-                        <a href="{{ notice.link }}" ng-click="nc.toggleNotices();nc.setRead(notice.nodeRef)">
+    <md-content class="od-sidenav-scroll-wrapper" layout-padding="">
+        <ul class="od-notifylist">
+            <li ng-repeat="notice in notifications[1] | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
+                <span class="od-notifylist--item--link">
+                    <a href="{{ notice.link }}" ng-click="nc.close();nc.setRead(notice.nodeRef)">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p ng-if="notice.type == 'review-request'" class="od-notifylist--item--desc">{{notice.from}} har bedt dig om at reviewe <i>{{notice.filename}}</i> i projektet {{notice.project}}</p>
                         <p ng-if="notice.type == 'review-approved'"  class="od-notifylist--item--desc">{{notice.from}} har godkendt <i>{{notice.filename}}</i> i projektet {{notice.project}} med en kommentar</p>
@@ -26,12 +24,9 @@
                         <p ng-if="notice.type == 'new-reply'" class="od-notifylist--item--desc">{{notice.message}}</p>
                         <p ng-if="notice.type == 'new-discussion'" class="od-notifylist--item--desc">{{notice.message}}</p>
                         <p class="od-notifylist--item--desc od-notifylist--item--date">{{notice.created | customDate}}</p> 
-                        </a>
-                    </span>
-                </li>
-            </ul>
-
-        </div>
-    </div>
-    
-</section>
+                    </a>
+                </span>
+            </li>
+        </ul>
+    </md-content>
+</md-sidenav>
