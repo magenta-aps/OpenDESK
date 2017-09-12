@@ -26,7 +26,6 @@ angular
         'openDeskApp.search',
         'openDeskApp.calendar',
         'openDeskApp.nogletal',
-
         'openDeskApp.common.directives',
         'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
@@ -35,7 +34,6 @@ angular
         'openDeskApp.discussion',
         'openDeskApp.chat',
         'openDeskApp.user',
-        'openDeskApp.menu',
 
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!

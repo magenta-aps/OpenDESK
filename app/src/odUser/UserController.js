@@ -17,18 +17,6 @@ function UserController($scope, $log, $mdSidenav, authService, userService, sess
     vm.user = authService.getUserInfo().user;
     getAvatar();
 
-    // vm.on = false;
-    // vm.toggleUser = function () {
-    //     // vm.on = !vm.on;
-    //     userService.toggleUserPanel();
-    // }
-
-    // $scope.userService = userService;
-
-    // $scope.$watch('userService.getUserPanelState()', function (newVal) {
-    //     vm.on = newVal;
-    // });
-
     vm.close = function () {
         $mdSidenav('userpanel').close();
     }

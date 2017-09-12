@@ -134,65 +134,6 @@ main {
   margin: $u * 4 0 auto;
 }
 
-// Sliding sidebar
-.od-flyout {
-  background-color: $overlay;
-  bottom: 0;
-  display: block;
-  height: 100%;
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: fixed;
-  right: 0;
-  top: 0;
-  transition: all .3s ease-in-out;
-  width: 100%;
-  z-index: 5;
-
-  .od-flyout--body {
-    background-color: $white;
-    bottom: 0;
-    color: $primary-text-color;
-    display: flex;
-    flex-flow: column nowrap;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transform: translateX(100%);
-    width: $u * 20;
-  }
-
-  &.right {
-    right: 0;
-  }
-
-  &.left {
-    left: 0;
-  }
-
-  &.open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
-
-    .od-flyout--body {
-      transform: translateX(0);
-      transition: transform .5s;
-    }
-  }
-
-  &.closed {
-    opacity: 0;
-
-    .od-flyout--body {
-      transform: translateX(1);
-      transition: transform .5s;
-    }
-  }
-}
-
 .od-breadcrumb {
   background-color: $gray-90;
   border-radius: 4px;
