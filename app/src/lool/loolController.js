@@ -42,10 +42,11 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
             console.log($stateParams.parentNodeRef);
             console.log($stateParams.newVersionNodeRef);
 
-            documentService.deleteVersion($stateParams.parentNodeRef, $stateParams.newVersionNodeRef).then(function (response) {
-                window.history.go(-1);
-            })
+            //documentService.deleteVersion($stateParams.parentNodeRef, $stateParams.newVersionNodeRef).then(function (response) {
+            //
+            //})
 
+            window.history.go(-1);
 
 
 
