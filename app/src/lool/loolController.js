@@ -45,7 +45,7 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
             var sp = $stateParams.versionLabel.split(".");
             var bump = (parseInt(sp[1]) + 1);
             var newVersion = sp[0] + "." + bump;
-            Alert("deleting version " + newVersion);
+            alert("deleting version " + newVersion);
 
 
             //documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
