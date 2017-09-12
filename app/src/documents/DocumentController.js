@@ -305,6 +305,7 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             .cancel('Fortryd');
         $mdDialog.show(confirm).then(function () {
             var selectedVersion = $location.search().version;
+            console.log("nuværende doc");
             console.log(vm.doc);
             documentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
                 console.log("response");
