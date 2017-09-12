@@ -307,6 +307,8 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
             var selectedVersion = $location.search().version;
             console.log("nuværende doc");
             console.log(vm.doc);
+            console.log(vm.doc.version);
+            console.log(vm.doc.node.version);
             documentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
                 console.log("response");
                 console.log(response);
