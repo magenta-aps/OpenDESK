@@ -39,6 +39,7 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
 
 
         if ($stateParams.versionLabel != null && $stateParams.parent != null) {
+            alert("del");
             console.log($stateParams.parent);
             console.log($stateParams.versionLabel);
 
@@ -51,13 +52,6 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
             documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
                 window.history.go(-1);
             })
-
-
-
-
-
-
-
 
         }
         else {
