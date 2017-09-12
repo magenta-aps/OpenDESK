@@ -48,10 +48,10 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
             alert("deleting version " + newVersion);
 
 
-            //documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
-            //
-            //})
-            window.history.go(-1);
+            documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
+                window.history.go(-1);
+            })
+
 
 
 
