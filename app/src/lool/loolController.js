@@ -35,9 +35,6 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
 
     vm.goBack = function () {
 
-
-
-
         if ($stateParams.versionLabel != null && $stateParams.parent != null) {
             alert("del");
             console.log($stateParams.parent);
@@ -47,7 +44,6 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
             var bump = (parseInt(sp[1]) + 1);
             var newVersion = sp[0] + "." + bump;
             alert("deleting version " + newVersion);
-
 
             documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
                 window.history.go(-1);
