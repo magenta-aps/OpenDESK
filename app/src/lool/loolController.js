@@ -34,7 +34,26 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
     }
 
     vm.goBack = function () {
-        window.history.go(-1);
+
+        if ($stateParams.versionLabel != null && $stateParams.parent != null) {
+            console.log($stateParams.parent);
+            console.log($stateParams.versionLabel);
+
+            var sp = $stateParams.versionLabel.split(".");
+            var bump = (parseInt(sp[1]) + 1);
+            var newVersion = sp[0] + "." + bump;
+
+            documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
+                window.history.go(-1);
+            })
+
+        }
+        else {
+            window.history.go(-1);
+        }
+
+
+
     };
 
     function renderIframe(serviceUrl) {
