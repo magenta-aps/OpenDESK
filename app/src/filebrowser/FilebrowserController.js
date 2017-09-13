@@ -25,6 +25,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
 
     $scope.primitives = {};
     $scope.primitives.sendToSbsys = false;
+    $scope.primitives.sendAllToSbsys = false;
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
 
@@ -467,6 +468,24 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     $scope.uploadSbsys = function () {
         $scope.showProgress = true;
         $timeout(setSbsysShowAttr, 2500);
+    };
+
+    $scope.loadCheckboxes = function() {
+        $scope.primitives.sendToSbsys = false;
+        $scope.contentList.forEach(function (contentTypeList) {
+            contentTypeList.forEach(function (content) {
+                $scope.primitives.sendToSbsys = $scope.primitives.sendToSbsys | content.sendToSbsys;
+            });
+        });
+    };
+
+    $scope.setAllCheckboxes = function() {
+        $scope.contentList.forEach(function (contentTypeList) {
+            contentTypeList.forEach(function (content) {
+                 content.sendToSbsys = $scope.primitives.sendAllToSbsys;
+            });
+        });
+        $scope.primitives.sendToSbsys = $scope.primitives.sendAllToSbsys;
     };
 
     function setSbsysShowAttr() {
