@@ -992,14 +992,14 @@
     "PROJECTS" : "Projekter",
     "KEY_NUMBERS" : "Nøgletal",
     "WORK_TIME" : "15 punkter om arbejdstid",
-    "ESDH" : "ESDH",
+    "ESDH" : "SBSYS",
     "CITRIX" : "Citrix",
     "MAP" : "Kort"
   },
   "CONFIGURATION": {
     "LINK_TO": "Link til ",
     "appName": "Navn for OpenDesk instans",
-    "enableESDH": "Tilkobling af ESDH",
+    "enableESDH": "Tilkobling af SBSYS",
     "enableProjects": "Tilkobling af projekter",
     "enableSites": "Tilkobling af sites",
     "enableChat": "Tilkobling af chat",
@@ -1012,7 +1012,7 @@
       "projects" : "Projekter",
       "keyNumbers" : "Nøgletal",
       "workTime" : "15 punkter om arbejdstid",
-      "esdh" : "ESDH",
+      "esdh" : "SBSYS",
       "citrix" : "Citrix",
       "map" : "Kort"
     }
