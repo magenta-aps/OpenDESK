@@ -74,7 +74,6 @@ function DocumentController($scope, $timeout, documentService, userService, $sta
     };
 
     vm.goBack = function () {
-        alert(vm.newVersionNodeRef);
         window.history.go(-2);
     }
 
