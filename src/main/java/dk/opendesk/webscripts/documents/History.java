@@ -89,6 +89,7 @@ public class History extends AbstractWebScript {
 
 
             String version = params.get("versionNode");
+            String parentNode = params.get("parentNode");
             String method = params.get("method");
             if (method != null) {
                 switch (method) {
@@ -96,7 +97,7 @@ public class History extends AbstractWebScript {
                         result = getVersions(nodeRef);
                         break;
                     case "deleteVersion":
-                        result = deleteVersion(version);
+                        result = deleteVersion(parentNode, version);
                         break;
                 }
             }
@@ -148,19 +149,15 @@ public class History extends AbstractWebScript {
         return result;
     }
 
-    private JSONArray deleteVersion(String versionNode) {
+    private JSONArray deleteVersion(String parentNode, String versionNode) {
 
-        NodeRef versionNodeRef = new NodeRef(versionNode);
+        NodeRef parentNodeRef = new NodeRef(parentNode);
 
-        ChildAssociationRef parentNodeRef = nodeService.getPrimaryParent(versionNodeRef);
+        VersionHistory versionoHistory =  versionService.getVersionHistory(parentNodeRef);
 
-        VersionHistory versionoHistory =  versionService.getVersionHistory(parentNodeRef.getChildRef());
+        Version version = versionoHistory.getVersion(versionNode);
 
-        String versionLabel = (String)nodeService.getProperty(versionNodeRef, ContentModel.PROP_VERSION_LABEL);
-
-        Version version = versionoHistory.getVersion(versionLabel);
-
-        versionService.deleteVersion(parentNodeRef.getChildRef(), version);
+        versionService.deleteVersion(parentNodeRef, version);
 
         return Utils.getJSONSuccess();
     }
