@@ -111,8 +111,7 @@ public interface OpenDeskModel {
 
     List<String> PUBLIC_SETTINGS = new ArrayList<>(Arrays.asList(
             "appName",
-            "logoSrc",
-            "ssoLoginEnabled"
+            "logoSrc"
     ));
 
     /**
