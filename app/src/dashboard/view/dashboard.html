@@ -1,5 +1,5 @@
 <div class="dashboard-grid">
-    <a ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" class="tile">
+    <a ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" target="_blank" class="tile">
         <md-icon>{{sysSetPage.icon}}</md-icon>
         {{sysSetPage.labelKey | translate}}
     </a>

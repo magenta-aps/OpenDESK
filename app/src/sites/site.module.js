@@ -1,12 +1,7 @@
 'use strict';
 
 angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
-        .config(config)
-        .run(function ($rootScope, $transitions, $state) {
-            $transitions.onSuccess({to:'project'}, function (transition) {
-                $state.go('project.filebrowser', { path: '' });
-            });
-        });
+        .config(config);
 
 function config($stateProvider, APP_CONFIG, USER_ROLES) {
 
@@ -21,9 +16,10 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
             }
         },
         params: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-
+            authorizedRoles: [USER_ROLES.user],
+            path: ""
+        },
+        redirectTo: 'project.filebrowser'
     })
     .state('project.filebrowser', {
         url: '/dokumenter{path:any}',
