@@ -50,9 +50,9 @@ function documentService($http, $translate, $mdToast, $q) {
         });
     }
 
-    function deleteVersion(documentNodeRef, versionNode) {
+    function deleteVersion(parent, versionNode) {
 
-        var url = '/alfresco/s/history?method=deleteVersion&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore&versionNode=' + versionNode;
+        var url = '/alfresco/s/history?method=deleteVersion&parentNode=' + parent + "&versionNode=" + versionNode;
 
         return $http.get(url).then(function (response) {
             return response.data;

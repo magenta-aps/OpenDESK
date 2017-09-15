@@ -42,7 +42,7 @@
     </table>
 </td>
 <td hide show-gt-md ng-if="config.enableESDH" style="width:10%" ng-if="isSite">
-    <input type="checkbox" name="to-esdh" ng-model="primitives.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg">
+    <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg" ng-click="loadCheckboxes()">
 </td>
 <td style="width:5%">
     <div ng-include=" 'app/src/filebrowser/view/actions/actionMenu.html' "></div>

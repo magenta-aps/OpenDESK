@@ -6,7 +6,7 @@ angular
 /**
  * Main Controller for the LibreOffice online module module
  */
-function LoolController($stateParams, loolService, documentService, $mdToast, $translate, nodeRefUtilsService, headerService) {
+function LoolController($state, $stateParams, loolService, documentService, $mdToast, $translate, nodeRefUtilsService, headerService) {
     var vm = this;
 
     if($stateParams.nodeRef === null)
@@ -36,16 +36,24 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
     }
 
     vm.goBack = function () {
-        if ($stateParams.nodeRef != null && $stateParams.newVersionNodeRef != null) {
-            console.log($stateParams.parentNodeRef);
-            console.log($stateParams.newVersionNodeRef);
 
-            documentService.deleteVersion($stateParams.parentNodeRef, $stateParams.newVersionNodeRef).then(function (response) {
-                window.history.go(-1);
+        var parentNodeId = $stateParams.nodeRef.split('/')[3];
+
+        if ($stateParams.versionLabel != null && $stateParams.parent != null) {
+            console.log($stateParams.parent);
+            console.log($stateParams.versionLabel);
+
+            var sp = $stateParams.versionLabel.split(".");
+            var bump = (parseInt(sp[1]) + 1);
+            var newVersion = sp[0] + "." + bump;
+
+            documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
+                $state.go('document', {'doc': parentNodeId });
             })
+
         }
         else {
-            window.history.go(-1);
+            $state.go('document', {'doc': parentNodeId });
         }
     };
 

@@ -19,8 +19,8 @@ angular
     .constant('APP_CONFIG', {
         settings: {},
         sitesUrl: "projekter",
-        landingPageState: "projects",
-        landingPageUrl: "projekter",
+        landingPageState: "dashboard",
+        landingPageUrl: "",
         ssoLoginEnabled: true
     })
     .constant('CLIENT_CONFIG', {
