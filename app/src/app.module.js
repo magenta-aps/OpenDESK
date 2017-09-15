@@ -34,6 +34,7 @@ angular
         'openDeskApp.discussion',
         'openDeskApp.chat',
         'openDeskApp.user',
+        'openDeskApp.appDrawer',
 
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!

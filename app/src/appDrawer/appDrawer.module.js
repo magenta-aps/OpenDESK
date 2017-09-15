@@ -1,0 +1,1 @@
+angular.module('openDeskApp.appDrawer', ['ngMaterial']);

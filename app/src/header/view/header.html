@@ -21,15 +21,20 @@
                 <md-tooltip md-direction="bottom" md-delay="500">{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}</md-tooltip>
             </md-button>
 
-            <md-button class="md-icon-button" ng-click="toggleUserPanel()" aria-label="{{ 'USER' | translate }}">
-                <md-icon>person</md-icon>
-                <md-tooltip md-direction="bottom" md-delay="500">{{'USER' | translate}}</md-tooltip>
-            </md-button>
+            <!-- <md-button class="md-icon-button" ng-click="toggleAppDrawer()" aria-label="{{ 'APP' | translate }}">
+                <md-icon>apps</md-icon>
+                <md-tooltip md-direction="bottom" md-delay="500">{{'APP' | translate}}</md-tooltip>
+            </md-button> -->
 
             <md-button class="md-icon-button" ng-click="toggleNotifications()" aria-label="{{ 'NOTIFICATION.NOTIFICATIONS' | translate }}">
                 <md-icon>notifications</md-icon>
                 <span ng-if="unseenNotifications > 0" class="od-notifications--counter">{{unseenNotifications}}</span>
                 <md-tooltip md-direction="bottom" md-delay="500">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-tooltip>
+            </md-button>
+
+            <md-button class="md-icon-button" ng-click="toggleUserPanel()" aria-label="{{ 'USER' | translate }}">
+                <md-icon>person</md-icon>
+                <md-tooltip md-direction="bottom" md-delay="500">{{'USER' | translate}}</md-tooltip>
             </md-button>
         </span>
     </span>

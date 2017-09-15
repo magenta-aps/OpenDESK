@@ -2,9 +2,8 @@ angular
     .module('openDeskApp.dashboard')
     .controller('DashboardController', DashboardController);
 
-function DashboardController(dashboardService, pageService, APP_CONFIG) {
+function DashboardController(pageService, APP_CONFIG) {
     var vm = this;
-    vm.dashlets = dashboardService.getDashlets();
     vm.links = APP_CONFIG.settings.dashboardLinks;
 
     vm.pages = [];

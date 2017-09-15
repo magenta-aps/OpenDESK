@@ -32,12 +32,12 @@ function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService,
 
     $scope.toggleNotifications = buildToggler('notifications');
     $scope.toggleUserPanel = buildToggler('userpanel');
+    $scope.toggleAppDrawer = buildToggler('appDrawer');
 
     function buildToggler(navID) {
         return function () {
             // Component lookup should always be available since we are not using `ng-if`
-            $mdSidenav(navID)
-                .toggle();
+            $mdSidenav(navID).toggle();
         };
     }
 }

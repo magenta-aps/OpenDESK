@@ -6,7 +6,7 @@ function headerService() {
 
     var vm = this;
 
-    var currentTitle = 'hello world';
+    var currentTitle = '';
     
     vm.setTitle = function (title) {
         currentTitle = title;

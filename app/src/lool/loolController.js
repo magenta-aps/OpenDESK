@@ -6,7 +6,7 @@ angular
 /**
  * Main Controller for the LibreOffice online module module
  */
-function LoolController($stateParams, loolService, documentService, $mdToast, $translate, nodeRefUtilsService) {
+function LoolController($stateParams, loolService, documentService, $mdToast, $translate, nodeRefUtilsService, headerService) {
     var vm = this;
 
     if($stateParams.nodeRef === null)
@@ -30,14 +30,12 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
                     response = response.substring(0, response.length - 1);
                 renderIframe(response);
             });
+
+            headerService.setTitle('Dokument: ' + vm.doc.location.file);
         });
     }
 
     vm.goBack = function () {
-
-
-
-
         if ($stateParams.nodeRef != null && $stateParams.newVersionNodeRef != null) {
             console.log($stateParams.parentNodeRef);
             console.log($stateParams.newVersionNodeRef);
@@ -45,20 +43,10 @@ function LoolController($stateParams, loolService, documentService, $mdToast, $t
             documentService.deleteVersion($stateParams.parentNodeRef, $stateParams.newVersionNodeRef).then(function (response) {
                 window.history.go(-1);
             })
-
-
-
-
-
-
-
         }
         else {
             window.history.go(-1);
         }
-
-
-
     };
 
     function renderIframe(serviceUrl) {
