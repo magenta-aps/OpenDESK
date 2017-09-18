@@ -1,34 +1,22 @@
 <div class="od-search" layout="row" layout-align='center center'>
-		
-		<form name="doSearch" ng-submit="getSearchresults(searchText);">
-			<md-icon>search</md-icon>
-			<md-autocomplete 
-				md-input-name="autocomplete" 
-				md-selected-item="searchQuery"
-				md-selected-item-change="gotoPath(result.nodeRef)"
-				md-search-text="searchText" 
-				md-items="result in getAutoSuggestions(searchText)"
-			    md-item-text="result.name" 
-				md-floating-label="{{'SEARCH.DOCUMENTS' | translate }}"
-				md-menu-class="search-documents">
-				<md-item-template>
-					<div>
-						<md-icon>
-							<img class="md-avatar" 
-                                ng-src="app/assets/images/filetypes/{{result.thumbNailURL}}"
-                                onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
-						</md-icon>
-						<span class="item-title">
-							 <span><strong>{{result.name}}</strong></span>
-							<span class="item-metadata">
-								<span style="font-variant:small-caps"> {{result.site.title}}</span>
-							</span>
-						 </span>
-					</div>
-        		</md-item-template>
-				<div ng-messages="autocompleteForm.autocomplete.$error">
-					<div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
+	<md-icon>search</md-icon>
+	<form name="doSearch" ng-submit="getSearchresults(searchText);">
+		<md-autocomplete md-selected-item="searchQuery" md-selected-item-change="gotoPath(result.nodeRef)" md-search-text="searchText"
+		    md-items="result in getAutoSuggestions(searchText)" md-item-text="result.name" md-min-length="1" placeholder="{{'SEARCH.DOCUMENTS' | translate }}"
+		    flex>
+			<md-item-template>
+				<div>
+					<md-icon>
+						<img class="md-avatar" ng-src="app/assets/images/filetypes/{{result.thumbNailURL}}" onerror="this.src='app/assets/images/filetypes/generic-file-24.png'">
+					</md-icon>
+					<span class="item-title">
+					 <span><strong>{{result.name}}</strong></span>
+					<span class="item-metadata">
+						<span style="font-variant:small-caps"> {{result.site.title}}</span>
+					</span>
+					</span>
 				</div>
-			</md-autocomplete>
-		</form>
-	</div>
+			</md-item-template>
+		</md-autocomplete>
+	</form>
+</div>

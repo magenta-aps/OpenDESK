@@ -3,39 +3,23 @@
  */
 
 od-searchbar {
-  md-input-focused {
-    border: 0 !important;
-  }
 
   .od-search {
-    padding-top: $u;
-    z-index: 2;
 
     form {
-      background: $white;
-      border-radius: .25em;
-      height: 30px;
-      margin-bottom: $u;
-      margin-right: $u * .5;
-      position: relative;
-      width: 350px;
+      min-width: 350px;
+      width: 35%;
     }
 
     md-icon {
       color: $gray-60;
-      left: 5px;
-      position: absolute;
-      top: 3px;
+      left: $u * 2;
+      position: relative;
+      z-index: 1;
     }
 
-    input {
-      border-radius: .25em;
-      padding: .5rem .5rem .5rem 2rem;
-    }
-
-    label {
-      padding-bottom: 3px;
-      padding-left: $u * 2 !important;
+    input { 
+      padding-left: $u * 2;
     }
   }
 }
