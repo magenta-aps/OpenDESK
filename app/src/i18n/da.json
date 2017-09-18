@@ -122,6 +122,11 @@
       "archived": "Arkiveret",
       "in-progress": "Igangværende"
     },
+    "VISIBILITY": {
+      "VISIBILITY": "Synlighed",
+      "PUBLIC": "Offentlig",
+      "PRIVATE": "Lukket"
+    },
     "FILTER": {
       "MY_CASES": "Mine sager",
       "ALL_CASES": "Alle Sager",

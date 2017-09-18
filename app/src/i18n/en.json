@@ -122,6 +122,11 @@
       "archived": "Archived",
       "in-progress": "In progress"
     },
+    "VISIBILITY": {
+      "VISIBILITY": "Visibility",
+      "PUBLIC": "Public",
+      "PRIVATE": "Closed"
+    },
     "FILTER": {
       "MY_CASES": "My cases",
       "ALL_CASES": "All cases",

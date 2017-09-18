@@ -27,8 +27,8 @@
 				</span>
 			</dl>
 			<dl flex="30">
-				<dt>{{'COMMON.VISIBILITY' | translate }}</dt>
-				<dd>{{ vm.project.visibilityStr }}<br><span class="muted">&nbsp;</span></dd>
+				<dt>{{'CASE.VISIBILITY' | translate }}</dt>
+				<dd>{{ 'CASE.VISIBILITY.'+vm.project.visibility | translate }}<br></dd>
 				<dt ng-if="vm.project.type === 'PD-Project'">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
 				<dd ng-if="vm.project.type === 'PD-Project'">{{ site.sbsys }}</dd>
 
