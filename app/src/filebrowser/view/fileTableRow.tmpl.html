@@ -1,5 +1,6 @@
 <td style="width:45%">
     <a class="od-filebrowser-link" ui-sref="{{getLink(content)}}" ui-sref-active="active">
+        <!-- <a class="od-filebrowser-link" ng-dblclick="previewDocument(content.nodeRef)"> -->
         <i class="material-icons">
                                     {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
                                     {{content.contentType == 'cmis:link' ? 'link' : ''}}

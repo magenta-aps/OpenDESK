@@ -2,7 +2,7 @@
 
     <md-toolbar>
         <span class="md-toolbar-tools" layout="row">
-                    <h1>{{'USER' | translate}}</h1>
+                    <h1>{{ vm.user.firstName }} {{ vm.user.lastName }}</h1>
                     <span flex></span>
         <md-button class="md-icon-button" ng-click="vm.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
             <md-icon>keyboard_arrow_right</md-icon>
@@ -23,9 +23,6 @@
 
             <input type="file" id="uploadBtn" class="upload" file-model="file" ng-model="avatar" onchange="angular.element(this).scope().uploadAvatar(this)"
             />
-            <div layout="column" layout-align="center center">
-                <h2 class="md-headline">{{ vm.user.firstName }} {{ vm.user.lastName }}</h2>
-            </div>
             <md-subheader>{{'USER.USERINFO' | translate}}</md-subheader>
             <md-list>
                 <md-list-item>

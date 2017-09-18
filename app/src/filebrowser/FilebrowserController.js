@@ -221,6 +221,10 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
         documentPreviewService.previewDocument(nodeRef);
     };
 
+    $scope.doubleClick = function doubleClick() {
+        console.log('det virker!');
+    }
+
     $scope.goToLOEditPage = function (nodeRef, fileName) {
         $state.go('lool', {
             'nodeRef': nodeRef,

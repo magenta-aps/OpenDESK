@@ -16,19 +16,28 @@
 				</h4>
 				<md-list ng-class="group[0].open ? 'fold-out' : 'fold-in'" aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}} List">
 					<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
-						<a class="member" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
+							<img class="od-avatar od-avatar-small" src="alfresco/s/{{member.avatar}}">
+						<a class="member" style="margin-left:8px" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a>
 					</md-list-item>
 				</md-list>
 			</div>
 
 			<md-list ng-if="!group[0].collapsed">
 				<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
-					<div flex="50">
-						<a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
+					<div layout="row" flex>
+						<div>
+							<img class="od-avatar od-avatar-small" src="alfresco/s/{{member.avatar}}">
+						</div>
+						<div layout="column" style="margin-left:8px" flex>
+							<a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
+							<p class="od-secondary od-secondary-small">
+								{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}
+							</p>
+						</div>
 					</div>
-					<div flex="50" class="od-secondary">
+					<!-- <div flex="30" class="od-secondary">
 						{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}
-					</div>
+					</div> -->
 				</md-list-item>
 			</md-list>
 
