@@ -7,15 +7,15 @@
 
 		<div ng-repeat="group in groups.list">
 
-			<!-- <div ng-if="group[0].collapsed" flex="100"> -->
-				<!-- <h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'" layout="row"
+			<div ng-if="group[0].collapsed" flex="100">
+				<h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'" layout="row"
 				    aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}">
 					<span>{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</span>
 					<span flex></span>
 					<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
-				</h4> -->
+				</h4>
 				<!-- ng-class="group[0].open ? 'fold-out' : 'fold-in'" -->
-				<md-list aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}} List">
+				<md-list ng-class="group[0].open ? 'fold-out' : 'fold-in'" aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}} List">
 					<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
 							<img class="od-avatar od-avatar-small" src="alfresco/s/{{member.avatar}}">
 						<!-- <a class="member" style="margin-left:8px" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a> -->
@@ -27,9 +27,9 @@
 							</div>
 					</md-list-item>
 				</md-list>
-			<!-- </div> -->
+			</div>
 
-			<!-- <md-list ng-if="!group[0].collapsed">
+			<md-list ng-if="!group[0].collapsed">
 				<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
 					<div layout="row" flex>
 						<img class="od-avatar od-avatar-small" src="alfresco/s/{{member.avatar}}">
@@ -43,9 +43,9 @@
 					</div>
 					<!-- <div flex="30" class="od-secondary">
 						{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}
-					</div>
+					</div> -->
 				</md-list-item>
-			</md-list> -->
+			</md-list>
 
 		</div>
 
