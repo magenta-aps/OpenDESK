@@ -3,7 +3,7 @@
         <md-icon>{{sysSetPage.icon}}</md-icon>
         {{sysSetPage.labelKey | translate}}
     </a> -->
-    <md-card ng-repeat="sysSetPage in vm.pages" flex="30">
+    <md-card ng-repeat="sysSetPage in vm.pages" flex="100" flex-gt-md="30" flex-md="40" flex-sm="40">
         <a href="{{sysSetPage.url}}">
         <md-card-title>
           <md-card-title-text>

@@ -2,7 +2,7 @@ angular
     .module('openDeskApp')
     .controller('HeaderController', HeaderController);
 
-function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService, authService, notificationsService, userService) {
+function HeaderController($scope, $state, $mdSidenav, $mdComponentRegistry, APP_CONFIG, headerService, authService, notificationsService, userService) {
     var vm = this;
 
     $scope.headerService = headerService;
@@ -37,7 +37,12 @@ function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService,
     function buildToggler(navID) {
         return function () {
             // Component lookup should always be available since we are not using `ng-if`
-            $mdSidenav(navID).toggle();
+            $mdSidenav(navID,true).toggle();
+
+            // $mdComponentRegistry.when(navID).then(function() {
+            //     // Now you can use $mdSidenav('left') or $mdSidenav('left', true) without getting an error.
+            //     $mdSidenav(navID).toggle();
+            //   })
         };
     }
 }

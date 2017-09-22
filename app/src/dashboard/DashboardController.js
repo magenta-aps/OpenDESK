@@ -2,9 +2,11 @@ angular
     .module('openDeskApp.dashboard')
     .controller('DashboardController', DashboardController);
 
-function DashboardController(pageService, APP_CONFIG) {
+function DashboardController(pageService, headerService, APP_CONFIG) {
     var vm = this;
     vm.links = APP_CONFIG.settings.dashboardLinks;
+
+    headerService.setTitle('');
 
     vm.pages = [];
     pageService.addPage(vm.pages, 'DASHBOARD.INTRA', vm.links['intra'], "home");
