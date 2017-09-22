@@ -4,5 +4,50 @@
   flex-flow: row wrap;
   justify-content: center;
   margin: $u * 2;
+}
 
+.test-grid {
+  justify-content: center;
+  margin: $u * 2;
+  // width: 50%;
+
+  md-icon {
+    width: 72pt;
+    height: 72pt;
+    font-size: 72pt;
+    text-align: center;
+  }
+  
+  .tile-test {
+    background: #fff;
+  }
+
+  md-grid-tile {
+    transition: all 300ms ease-out 50ms;
+
+    a {
+      min-width: 100%; 
+      max-width: 100%; 
+      width: 100%; 
+      min-height: 100%; 
+      max-height: 100%; 
+      height: 100%;
+      display: flex;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  md-grid-tile-footer figcaption {
+    width: 100%;
+
+    h3 {
+      margin: 0;
+      font-weight: 700;
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
