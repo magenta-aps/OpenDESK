@@ -5,8 +5,6 @@ angular
 
 function loolService($http, transformRequestAsFormPost, ALFRESCO_URI) {
 
-    getValidMimeTypes();
-
     return {
         getWopiUrl: getWopiUrl,
         getIframeSrc: getIframeSrc,

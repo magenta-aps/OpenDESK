@@ -4,7 +4,7 @@ angular
 
 function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteService, fileUtilsService,
                                filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
-                               userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG) {
+                               userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG, EDITOR_CONFIG) {
 
     $scope.config = APP_CONFIG.settings;
     $scope.isSite = $stateParams.isSite;
@@ -56,7 +56,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
         $scope.documentTemplates = response;
 
         if($scope.documentTemplates != undefined)
-            addThumbnailUrl($scope.documentTemplates);
+            processContent($scope.documentTemplates);
     });
 
     filebrowserService.getTemplates("Folder").then(function (response) {
@@ -96,7 +96,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
                 $scope.contentList = response;
                 $scope.contentList.forEach(function (contentTypeList) {
                     $scope.contentListLength += contentTypeList.length;
-                    addThumbnailUrl(contentTypeList);
+                    processContent(contentTypeList);
                 });
 
                 // Compile paths for breadcrumb directive
@@ -111,9 +111,11 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
         );
     }
 
-    function addThumbnailUrl(files) {
-        files.forEach(function (item) {
+    function processContent(content) {
+        content.forEach(function (item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
+            item.loolEditable = EDITOR_CONFIG.lool.mimeTypes.indexOf(item.mimeType) !== -1;
+            item.msOfficeEditable = EDITOR_CONFIG.msOffice.mimeTypes.indexOf(item.mimeType) !== -1;
         });
     }
 

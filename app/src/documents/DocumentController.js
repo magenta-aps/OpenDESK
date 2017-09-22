@@ -5,7 +5,8 @@ angular.module('openDeskApp.documents')
 
 function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state,
                             documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG, browserService,
-                            $mdDialog, notificationsService, authService, siteService, headerService, $window) {
+                            $mdDialog, notificationsService, authService, siteService, headerService, $window,
+                            EDITOR_CONFIG) {
 
     var vm = this;
     vm.doc = [];
@@ -198,6 +199,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     documentService.getDocument(parentDocumentNode).then(function (response) {
 
         vm.doc = response.item;
+        vm.loolEditable = EDITOR_CONFIG.lool.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
+        vm.msOfficeEditable = EDITOR_CONFIG.msOffice.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
+
         vm.docMetadata = response.metadata;
 
         // Compile paths for breadcrumb directive

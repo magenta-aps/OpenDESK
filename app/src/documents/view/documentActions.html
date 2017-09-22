@@ -8,14 +8,14 @@
     <md-card-content ng-class="vm.showTools ? 'fold-out' : 'fold-in'">
 
         <div>
-            <md-button ng-show="vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
+            <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_DOCUMENT' | translate }}
             </md-button>
         </div>
 
         <div>
-            <md-button ng-show="vm.canEdit && vm.browser.isIE" ng-click="vm.editInMSOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="vm.msOfficeEditable && vm.canEdit && vm.browser.isIE" ng-click="vm.editInMSOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_DOCUMENT_SHAREPOINT' | translate }}
             </md-button>

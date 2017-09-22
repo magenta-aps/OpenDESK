@@ -40,7 +40,7 @@ angular
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
-                   APP_CONFIG, CLIENT_CONFIG, browserService) {
+                   APP_CONFIG, CLIENT_CONFIG, EDITOR_CONFIG, browserService, loolService) {
 
         $rootScope.isBoolean = function(value) {
             return typeof value === 'boolean';
@@ -48,6 +48,10 @@ angular
 
         ['isArray', 'isDate', 'isDefined', 'isFunction', 'isNumber', 'isObject', 'isString', 'isUndefined'].forEach(function(name) {
             $rootScope[name] = angular[name];
+        });
+
+        loolService.getValidMimeTypes().then(function(response) {
+            EDITOR_CONFIG.lool.mimeTypes = response;
         });
 
         systemSettingsService.loadPublicSettings().then(function(response) {

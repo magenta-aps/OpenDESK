@@ -18,7 +18,7 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="content.loolEditable && permissions.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="goToLOEditPage(content.nodeRef)">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'COMMON.EDIT' | translate }}
