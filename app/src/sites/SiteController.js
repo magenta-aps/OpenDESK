@@ -17,6 +17,7 @@ function SiteController($scope, $mdDialog, $window, siteService, $stateParams, $
     $scope.groups = {};
     $scope.groups.list = [];
     $scope.hasDescription = false;
+    $scope.userService = userService;
 
     var vm = this;
 
