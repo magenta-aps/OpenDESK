@@ -9,17 +9,13 @@
 .test-grid {
   justify-content: center;
   margin: $u * 2;
-  // width: 50%;
 
   md-icon {
-    width: 72pt;
-    height: 72pt;
     font-size: 72pt;
+    height: 72pt;
     text-align: center;
-  }
-  
-  .tile-test {
-    background: #fff;
+    width: 72pt;
+    color: darken(white, 5%);
   }
 
   md-grid-tile {
@@ -40,14 +36,40 @@
     }
   }
 
-  md-grid-tile-footer figcaption {
-    width: 100%;
+  md-grid-tile-footer {
+    background: transparent;
 
-    h3 {
-      margin: 0;
-      font-weight: 700;
+    figcaption {
       width: 100%;
-      text-align: center;
+
+      h3 {
+        font-weight: 700;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+      }
     }
   }
+
+  // .dash-1 {
+  //   background-color: $primary-color;
+  // }
+
+  // .dash-4 {
+  //   background-color: $primary-color;
+  // }
+
+  $dash-size: 9;
+
+  @for $i from 0 through floor($dash-size/2) {
+      .dash-#{floor($dash-size/2) + $i} {
+        background: darken($primary-color, 6 * $i);
+      }
+  }
+
+  @for $i from 0 through floor($dash-size/2) {
+    .dash-#{floor($dash-size/2) - $i} {
+      background: lighten($primary-color, 6 * $i);
+    }
+}
 }
