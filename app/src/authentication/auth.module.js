@@ -14,8 +14,6 @@ function config($stateProvider) {
                 controller: 'AuthController',
                 controllerAs: 'vm'
             },
-            'header@': {},
-            'footer@': {}
         },
         params: {
             authorizedRoles: []
