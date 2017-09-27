@@ -9,6 +9,8 @@ function HeaderController($scope, $state, $mdSidenav, $mdComponentRegistry, APP_
     $scope.notificationsService = notificationsService;
     $scope.user = authService.getUserInfo().user;
 
+    $scope.avatar = userService.getAvatarFromUser($scope.user);
+
     $scope.title = 'titel';
     $scope.unseenNotifications = 0;
 
