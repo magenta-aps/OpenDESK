@@ -36,7 +36,7 @@ function loolService($http, transformRequestAsFormPost, ALFRESCO_URI) {
     }
 
     function getValidMimeTypes() {
-        return $http.get('discovery.xml')
+        return $http.get('discovery')
             .then(function (response) {
                 var mimeTypes = [];
                 var parser = new DOMParser();
