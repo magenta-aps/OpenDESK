@@ -9,14 +9,14 @@ function DashboardController(pageService, headerService, APP_CONFIG) {
     headerService.setTitle('');
 
     vm.pages = [];
-    pageService.addPage(vm.pages, 'DASHBOARD.INTRA', vm.links['intra'], "home");
-    pageService.addPage(vm.pages, 'DASHBOARD.EMAIL', vm.links['email'], "mail_outline");
-    pageService.addPage(vm.pages, 'DASHBOARD.CALENDAR', vm.links['calendar'], "event");
-    pageService.addPage(vm.pages, 'DASHBOARD.PROJECTS',  vm.links['projects'], "content_paste");
-    pageService.addPage(vm.pages, 'DASHBOARD.KEY_NUMBERS', vm.links['keyNumbers'], "timeline");
-    pageService.addPage(vm.pages, 'DASHBOARD.WORK_TIME', vm.links['workTime'], "attach_money");
-    pageService.addPage(vm.pages, 'DASHBOARD.ESDH', vm.links['esdh'], "library_books");
-    pageService.addPage(vm.pages, 'DASHBOARD.CITRIX', vm.links['citrix'], "business_center");
-    pageService.addPage(vm.pages, 'DASHBOARD.MAP', vm.links['map'], "videogame_asset");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.INTRA', vm.links['intra'], "intra","#9c27b0");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.EMAIL', vm.links['email'], "mail", "#673ab7");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.CALENDAR', vm.links['calendar'], "calendar","#3f51b5");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.PROJECTS',  vm.links['projects'], "project","#2196f3");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.KEY_NUMBERS', vm.links['keyNumbers'], "timeline","#03a9f4");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.WORK_TIME', vm.links['workTime'], "money","#00bcd4");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.ESDH', vm.links['esdh'], "library","#009688");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.CITRIX', vm.links['citrix'], "business","#4caf50");
+    pageService.addDashboard(vm.pages, 'DASHBOARD.MAP', vm.links['map'], "map","#8bc34a");
 
 }

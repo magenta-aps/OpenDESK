@@ -1,14 +1,13 @@
 <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="userpanel">
-
-    <md-toolbar>
-        <span class="md-toolbar-tools" layout="row">
-                    <h1>{{ vm.user.firstName }} {{ vm.user.lastName }}</h1>
-                    <span flex></span>
-        <md-button class="md-icon-button" ng-click="vm.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
-            <md-icon>keyboard_arrow_right</md-icon>
-        </md-button>
-        </span>
-    </md-toolbar>
+        <md-toolbar>
+            <span class="md-toolbar-tools" layout="row">
+                <h1>{{ vm.user.firstName }} {{ vm.user.lastName }}</h1>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
+                    <md-icon>keyboard_arrow_right</md-icon>
+                </md-button>
+            </span>
+        </md-toolbar>
 
     <md-content layout-padding="">
         <div class="od-me od-sidenav-scroll-wrapper">

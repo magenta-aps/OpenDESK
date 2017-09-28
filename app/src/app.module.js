@@ -138,6 +138,9 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
                 templateUrl: 'app/src/header/view/header.html',
                 controller: 'HeaderController'
                 
+            },
+            'sideNavs@': {
+                template: '<od-chat></od-chat><od-notifications></od-notifications><od-user></od-user>'
             }
         },
         params: {

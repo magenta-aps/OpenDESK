@@ -3,7 +3,6 @@ angular
     .controller('UserController', UserController)
     .directive('odUser', function () {
         return {
-            restrict: 'E',
             scope: {},
             templateUrl: 'app/src/odUser/view/user.html',
             controller: 'UserController',

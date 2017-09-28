@@ -36,13 +36,7 @@ function HeaderController($scope, $state, $mdSidenav, $mdComponentRegistry, APP_
 
     function buildToggler(navID) {
         return function () {
-            // Component lookup should always be available since we are not using `ng-if`
-            $mdSidenav(navID,true).toggle();
-
-            // $mdComponentRegistry.when(navID).then(function() {
-            //     // Now you can use $mdSidenav('left') or $mdSidenav('left', true) without getting an error.
-            //     $mdSidenav(navID).toggle();
-            //   })
+            $mdSidenav(navID).toggle();
         };
     }
 }
