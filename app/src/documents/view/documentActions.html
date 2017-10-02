@@ -1,11 +1,9 @@
 <md-card class="dropdown-card">
-    <md-card-title ng-click="vm.showTools = !vm.showTools" ng-class="vm.showTools ? 'open' : 'closed'">
+    <md-card-title>
         <h3 class="md-title od-title-icon"><md-icon>tune</md-icon> {{'COMMON.ACTIONS' | translate }}</h3>
-        <span flex></span>
-        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
     </md-card-title>
 
-    <md-card-content ng-class="vm.showTools ? 'fold-out' : 'fold-in'">
+    <md-card-content>
 
         <div>
             <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">

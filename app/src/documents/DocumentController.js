@@ -17,7 +17,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.browser.isIE = CLIENT_CONFIG.browser.isIE;
 
     vm.showArchived = false;
-    vm.showTools = false;
 
     vm.documentTab = '/dokumenter';
 
