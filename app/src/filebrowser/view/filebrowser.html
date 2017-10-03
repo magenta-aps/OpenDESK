@@ -78,9 +78,7 @@
                 <md-menu-content>
                     <md-menu-item ng-repeat="template in folderTemplates">
                         <md-button ng-click="createContentFromTemplateDialog($event, template, 'FOLDER')">
-                            <i class="material-icons">
-                                <img class="md-avatar" ng-src="app/assets/images/filetypes/generic-folder-24.png">
-                            </i> {{template.name}}
+                            {{template.name}}
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
