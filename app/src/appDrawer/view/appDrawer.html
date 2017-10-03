@@ -12,10 +12,10 @@
 
     <md-content class="od-sidenav-scroll-wrapper" layout="column">
             <!-- <div ng-repeat="sysSetPage in vm.pages">  -->
-              <md-button ng-repeat="sysSetPage in vm.pages" ng-click="{{sysSetPage.url}}" style="text-align:left">
+              <a class="md-button" ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" ng-click="vm.close()" style="text-align:left">
                 <md-icon md-svg-src="app/assets/images/icons/{{sysSetPage.icon}}.svg"></md-icon>
                   <span>{{sysSetPage.labelKey | translate}}</span>
-              </md-button>
+              </a>
             <!-- </div> -->
     </md-content>
 </md-sidenav>
