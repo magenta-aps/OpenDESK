@@ -1,5 +1,6 @@
 ﻿{
   "COMMON": {
+    "APPS": "Apps",
     "CASE_ID": "Case Id",
     "CONFIRM": "Confirm",
     "WARNING": "Warning!",
@@ -1018,6 +1019,7 @@
   },
   "ESDH": "SBSYS",
   "DASHBOARD": {
+    "DASHBOARD": "Dashboard",
     "INTRA" : "Intra",
     "EMAIL" : "Email",
     "CALENDAR" : "Calendar",
@@ -1038,6 +1040,7 @@
     "logoSrc": "Path to logo",
     "ssoLoginEnabled": "Enabling of SSO",
     "dashboardLinks": {
+      "dashboard": "Dashboard",
       "intra" : "Intra",
       "email" : "Email",
       "calendar" : "Calendar",

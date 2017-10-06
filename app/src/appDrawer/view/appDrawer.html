@@ -5,17 +5,15 @@
                 <md-button class="md-icon-button" ng-click="vm.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
                         <md-icon>keyboard_arrow_left</md-icon>
                     </md-button>
-                    <h1>{{'APPS' | translate}}</h1>
+                    <h1>{{'COMMON.APPS' | translate}}</h1>
                     <span flex></span>
         </span>
     </md-toolbar>
 
     <md-content class="od-sidenav-scroll-wrapper" layout="column">
-            <!-- <div ng-repeat="sysSetPage in vm.pages">  -->
               <a class="md-button" ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" ng-click="vm.close()" style="text-align:left">
                 <md-icon md-svg-src="app/assets/images/icons/{{sysSetPage.icon}}.svg"></md-icon>
-                  <span>{{sysSetPage.labelKey | translate}}</span>
+                  <span style="color:black">{{sysSetPage.labelKey | translate}}</span>
               </a>
-            <!-- </div> -->
     </md-content>
 </md-sidenav>
