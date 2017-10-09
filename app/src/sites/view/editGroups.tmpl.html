@@ -17,13 +17,13 @@
 						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" 
 							class="group-toggle" 
 							layout="row" 
-							ng-class="showGroupList[groupIndex] ? 'open' : 'closed'"
+							ng-class="showGroupList[groupIndex] ? 'closed' : 'open'"
 							aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}">
 							<span>{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 						</h4>
-						<div ng-show="showGroupList[groupIndex]">
+						<div ng-show="!showGroupList[groupIndex]">
 							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
 									  md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
 							    md-on-add="addMemberToSite($chip, group[0].shortName)">
@@ -34,6 +34,7 @@
 									<span md-highlight-text="searchTextList[groupIndex]" md-highlight-flags="gi">
 										{{ pgitem.displayName }}
 									</span>
+									<span class="od-secondary">({{ pgitem.userName }})</span>
 								</md-autocomplete>
 								<md-chip-template>
 									<span>{{ $chip.displayName }}</span>
