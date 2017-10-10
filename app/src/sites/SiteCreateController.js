@@ -53,6 +53,8 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
         $scope.createPdSite = createPdSite;
         $scope.createSite = createSite;
 
+        $scope.creating = false;
+
         loadTemplateNames();
         getOwners();
         getAvailOrgs();
@@ -138,6 +140,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
         }
 
         function createPdSite() {
+            $scope.creating = true;
             if ($scope.newSite.template == undefined || $scope.newSite.template == "no-template") {
                 $scope.newSite.template = {
                     "name": ""
@@ -187,7 +190,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
         }
 
         function createSite() {
-
+            $scope.creating = true;
             var visibility = "PUBLIC"; // Visibility is set to public
             if ($scope.newSite.isPrivate) {
                 visibility = "PRIVATE";
@@ -213,7 +216,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
                     .hideDelay(3000)
                 );
 
-                $mdDialog.hide();
+                $mdDialog.cancel();
             });
         }
 
