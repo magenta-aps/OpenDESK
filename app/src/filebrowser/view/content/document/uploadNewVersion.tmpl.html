@@ -15,7 +15,10 @@
     </md-dialog-content>
 
     <md-dialog-actions>
-        <button class="md-button md-primary" ng-click="uploadNewVersion(file)">
+        <div layout="row" layout-sm="column" layout-align="space-around">
+            <md-progress-circular md-mode="indeterminate" ng-show="uploading"></md-progress-circular>
+        </div>
+        <button class="md-button md-primary" ng-click="uploadNewVersion(file)" ng-disabled="uploading">
             <md-icon>file_upload</md-icon> {{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENT' | translate | lowercase}}
         </button>
     </md-dialog-actions>

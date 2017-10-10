@@ -271,7 +271,9 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     };
 
     $scope.uploadNewVersion = function (file) {
+        $scope.uploading = true;
         siteService.uploadNewVersion(file, $scope.folderNodeRef, $scope.documentNodeRef).then(function (val) {
+            $scope.uploading = false;
             hideDialogAndReloadContent();
         });
     };

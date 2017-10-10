@@ -201,4 +201,8 @@ main {
 
 .hide-scrollbar {
   overflow: hidden;
+
+  ::-webkit-scrollbar { 
+    display: none;
+  }
 }
