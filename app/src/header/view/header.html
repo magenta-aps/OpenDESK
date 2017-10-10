@@ -1,7 +1,12 @@
 <md-toolbar>
     <span class="md-toolbar-tools" flex layout="row">
-        <md-button class="md-icon-button" ng-click="gotoLandingPage()" aria-label="Home">
+        <!-- <md-button class="md-icon-button" ng-click="gotoLandingPage()" aria-label="Home">
             <md-icon>home</md-icon>
+        </md-button> -->
+
+        <md-button class="md-icon-button" ng-click="toggleAppDrawer()" aria-label="{{ 'APP' | translate }}">
+            <md-icon>apps</md-icon>
+            <md-tooltip md-direction="bottom" md-delay="500">{{'APP' | translate}}</md-tooltip>
         </md-button>
 
         <span class="truncate">{{title}}</span>
@@ -17,11 +22,6 @@
                 <md-icon>settings</md-icon>
                 <md-tooltip md-direction="bottom" md-delay="500">{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}</md-tooltip>
             </md-button>
-
-            <!-- <md-button class="md-icon-button" ng-click="toggleAppDrawer()" aria-label="{{ 'APP' | translate }}">
-                <md-icon>apps</md-icon>
-                <md-tooltip md-direction="bottom" md-delay="500">{{'APP' | translate}}</md-tooltip>
-            </md-button> -->
 
             <md-button class="md-icon-button" ng-click="toggleNotifications()" aria-label="{{ 'NOTIFICATION.NOTIFICATIONS' | translate }}">
                 <md-icon>notifications</md-icon>

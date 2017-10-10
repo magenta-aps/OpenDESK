@@ -1,16 +1,19 @@
-<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="appDrawer">
+<md-sidenav class="md-sidenav-left md-whiteframe-4dp hide-scrollbar" md-component-id="appDrawer">
 
     <md-toolbar>
         <span class="md-toolbar-tools" layout="row">
-                    <h1>{{'APPS' | translate}}</h1>
+                <md-button class="md-icon-button" ng-click="vm.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
+                        <md-icon>keyboard_arrow_left</md-icon>
+                    </md-button>
+                    <h1>{{'COMMON.APPS' | translate}}</h1>
                     <span flex></span>
-        <md-button class="md-icon-button" ng-click="nc.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
-            <md-icon>keyboard_arrow_right</md-icon>
-        </md-button>
         </span>
     </md-toolbar>
 
-    <md-content class="od-sidenav-scroll-wrapper" layout-padding="">
-        test
+    <md-content class="od-sidenav-scroll-wrapper" layout="column">
+              <a class="md-button" ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" ng-click="vm.close()" style="text-align:left">
+                <md-icon md-svg-src="app/assets/images/icons/{{sysSetPage.icon}}.svg"></md-icon>
+                  <span style="color:black">{{sysSetPage.labelKey | translate}}</span>
+              </a>
     </md-content>
 </md-sidenav>

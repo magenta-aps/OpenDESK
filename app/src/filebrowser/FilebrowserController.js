@@ -31,6 +31,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
 
     $scope.permissions = {};
     $scope.documentNodeRef = "";
+    $scope.uploading = false;
 
     $scope.error = false;
 
@@ -54,6 +55,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
 
     filebrowserService.getTemplates("Document").then(function (response) {
         $scope.documentTemplates = response;
+
+        console.log(response);
 
         if($scope.documentTemplates != undefined)
             processContent($scope.documentTemplates);
@@ -205,12 +208,14 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     };
 
     $scope.uploadFiles = function (files) {
+        $scope.uploading = true;
         for (var i = 0; i < files.length; i++) {
             siteService.uploadFiles(files[i], $scope.folderNodeRef).then(function (response) {
                 if($scope.isSite) {
                     siteService.createDocumentNotification(response.data.nodeRef, response.data.fileName);
                 }
                 hideDialogAndReloadContent();
+                $scope.uploading = false;
             });
         }
     };

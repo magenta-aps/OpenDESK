@@ -4,9 +4,9 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state,
-                            documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG, browserService,
-                            $mdDialog, notificationsService, authService, siteService, headerService, $window,
-                            EDITOR_CONFIG) {
+    documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG, browserService,
+    $mdDialog, notificationsService, authService, siteService, headerService, $window,
+    EDITOR_CONFIG) {
 
     var vm = this;
     vm.doc = [];
@@ -17,13 +17,12 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.browser.isIE = CLIENT_CONFIG.browser.isIE;
 
     vm.showArchived = false;
-    vm.showTools = false;
 
     vm.documentTab = '/dokumenter';
 
     vm.notificationFrom = '';
 
-    function setPDFViewerHeight () {
+    function setPDFViewerHeight() {
         var height = $(window).height() - 150 - $("header").outerHeight();
 
         $scope.iframeStyle = {
@@ -33,7 +32,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
     setPDFViewerHeight();
 
-    angular.element($window).bind('resize', function(){
+    angular.element($window).bind('resize', function () {
 
         setPDFViewerHeight();
         // manuall $digest required as resize event
@@ -142,7 +141,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     // prepare to handle a preview of a document to review
     var paramValue = $location.search().dtype;
-    if(paramValue !== undefined) {
+    if (paramValue !== undefined) {
         vm.wf_from = $location.search().from;
         vm.wf = paramValue === "wf";
         vm.wfr = paramValue === "wf-response";
@@ -209,8 +208,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
         vm.site = vm.doc.location.site.name;
 
-        siteService.loadSiteData(vm.site).then(function(response)
-        {
+        siteService.loadSiteData(vm.site).then(function (response) {
             vm.type = response.type;
             vm.title = response.title;
 
@@ -229,10 +227,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             for (var a in pathArr) {
                 if (pathArr[a] !== '') {
                     var link;
-                    if(response.item.location.site === "") {
+                    if (response.item.location.site === "") {
                         link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
-                    }
-                    else {
+                    } else {
                         link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
                             '", path: "' + pathLink + pathArr[a] + '"})';
                     }
@@ -252,22 +249,45 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     });
 
+    function loadPreview() {
+        console.log('load preview');
+        // todo check if not ok type like pdf, jpg and png - then skip this step
+        if (docHasParent) {
+            vm.store = 'versionStore://version2Store/';
 
-    // todo check if not ok type like pdf, jpg and png - then skip this step
-    if (docHasParent) {
-        vm.store = 'versionStore://version2Store/';
+            documentService.createVersionThumbnail(parentDocumentNode, selectedDocumentNode).then(function (response) {
 
-        documentService.createVersionThumbnail(parentDocumentNode, selectedDocumentNode).then(function (response) {
+                documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function (plugin) {
 
-            documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function (plugin) {
+                    vm.plugin = plugin;
+                    $scope.config = plugin;
+                    $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
+
+                    $scope.download = function () {
+
+                        // todo fix the download url to download from version/version2store
+                        alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
+                    };
+
+                    if (plugin.initScope) {
+                        plugin.initScope($scope);
+                    }
+
+
+                    // delete the temporary node
+                    documentService.cleanupThumbnail(response.data[0].nodeRef)
+
+                });
+            })
+
+        } else {
+            vm.store = 'workspace://SpacesStore/';
+            documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function (plugin) {
 
                 vm.plugin = plugin;
                 $scope.config = plugin;
                 $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
-
                 $scope.download = function () {
-
-                    // todo fix the download url to download from version/version2store
                     alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
                 };
 
@@ -275,30 +295,11 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                     plugin.initScope($scope);
                 }
 
-
-                // delete the temporary node
-                documentService.cleanupThumbnail(response.data[0].nodeRef)
-
             });
-        })
-
-    } else {
-        vm.store = 'workspace://SpacesStore/';
-        documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc).then(function (plugin) {
-
-            vm.plugin = plugin;
-            $scope.config = plugin;
-            $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
-            $scope.download = function () {
-                alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
-            };
-
-            if (plugin.initScope) {
-                plugin.initScope($scope);
-            }
-
-        });
+        }
     }
+
+    loadPreview();
 
     function confirmLoolEditDocDialog(event) {
         var confirm = $mdDialog.confirm()
@@ -329,6 +330,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         });
     }
 
+    vm.updatePreview = function () {
+        loadPreview();
+    }
 
     //Goes to the libreOffice online edit page
     vm.goToLOEditPage = function () {
@@ -395,11 +399,13 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     $scope.uploadNewVersion = function (file) {
         siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
             hideDialog();
-            $state.go('document', { doc: parentDocumentNode });
+            $state.go('document', {
+                doc: parentDocumentNode
+            });
         });
     };
 
-    function hideDialog () {
+    function hideDialog() {
         $mdDialog.hide();
     }
 

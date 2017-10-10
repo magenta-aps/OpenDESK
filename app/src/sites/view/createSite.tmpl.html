@@ -148,7 +148,10 @@
 
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button type="submit" aria-label="{{'COMMON.CREATE' | translate}}" ng-disabled="pdcreatesite.$invalid" class="md-raised md-primary">
+            <div layout="row" layout-sm="column" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate" ng-show="creating"></md-progress-circular>
+                  </div>
+            <md-button type="submit" aria-label="{{'COMMON.CREATE' | translate}}" ng-disabled="pdcreatesite.$invalid || creating" class="md-raised md-primary">
                 {{'COMMON.CREATE' | translate}}
             </md-button>
         </md-dialog-actions>

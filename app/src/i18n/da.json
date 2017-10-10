@@ -1,5 +1,6 @@
 ﻿{
   "COMMON": {
+    "APPS": "Applikationer",
     "CASE_ID": "Sag Id",
     "CONFIRM": "Bekræft",
     "WARNING": "Advarsel!",
@@ -840,7 +841,7 @@
     "FIND_GROUPS": "Find grupper",
     "FIND_PERSON": "Find personer",
     "FIND_ORGANISATION": "Find organisationer",
-    "DOCUMENTS": "Søg dokumenter"
+    "DOCUMENTS": "Søg dokumenter i Projekter"
   },
   "ACTIVITIES": {
     "NOTIFICATIONS": "Notifikationer",
@@ -991,6 +992,7 @@
   },
   "ESDH": "SBSYS",
   "DASHBOARD": {
+    "DASHBOARD": "Instrumentbræt",
     "INTRA" : "Intra",
     "EMAIL" : "Email",
     "CALENDAR" : "Kalender",
@@ -1011,6 +1013,7 @@
     "logoSrc": "Sti til logo",
     "ssoLoginEnabled": "Tilkobling af SSO",
     "dashboardLinks": {
+      "dashboard": "Instrumentbræt",
       "intra" : "Intra",
       "email" : "Email",
       "calendar" : "Kalender",
