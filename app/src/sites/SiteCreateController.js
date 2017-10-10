@@ -182,9 +182,11 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
                         .textContent('Du har oprettet projekt: ' + $translate.instant('SITES.' + $scope.type + '.NAME').toLowerCase() + ' med navnet ' + $scope.newSite.siteName)
                         .hideDelay(3000)
                     );
+                    $scope.creating = false;
                 },
                 function (err) {
                     console.log(err);
+                    $scope.creating = false;
                 }
             );
         }
@@ -215,6 +217,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
                     .textContent('Du har oprettet et nyt ' + $translate.instant('SITES.' + $scope.type + '.NAME').toLowerCase() + ' med navnet ' + $scope.newSite.siteName)
                     .hideDelay(3000)
                 );
+                $scope.creating = false;
 
                 $mdDialog.cancel();
             });

@@ -56,6 +56,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
     filebrowserService.getTemplates("Document").then(function (response) {
         $scope.documentTemplates = response;
 
+        console.log(response);
+
         if($scope.documentTemplates != undefined)
             processContent($scope.documentTemplates);
     });
@@ -213,6 +215,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteServ
                     siteService.createDocumentNotification(response.data.nodeRef, response.data.fileName);
                 }
                 hideDialogAndReloadContent();
+                $scope.uploading = false;
             });
         }
     };
