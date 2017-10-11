@@ -86,12 +86,12 @@
                     <md-content id="groups" layout="column" style="width:100%">
 
                         <div ng-repeat="(groupIndex, group) in newSite.groups" ng-if="group.multipleMembers" flex="100">
-                            <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'open' : 'closed'">
+                            <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" class="group-toggle" layout="row" ng-class="showGroupList[groupIndex] ? 'closed' : 'open'">
                                 <span>{{'SITES.' + type + '.GROUPS.' + group.shortName | translate}}</span>
                                 <span flex></span>
                                 <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
                             </h4>
-                            <div ng-class="showGroupList[groupIndex] ? 'fold-out' : 'fold-in'">
+                            <div ng-class="showGroupList[groupIndex] ? 'fold-in' : 'fold-out'">
                                 <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"
                                     md-on-add="addMemberToSite($chip, group.shortName)">
                                     <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
