@@ -10,8 +10,18 @@
         </md-toolbar>
 
         <md-dialog-content class="md-padding">
-                <input id="upload" file-model="files" multiple="" type="file">
+                <!-- <input id="upload" file-model="files" multiple="" type="file"> -->
+
+                <div ngf-drop ngf-select ng-model="files" class="drop-box" 
+                ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
+                Træk dine filer her, eller tryk for at vælge</div>
+
+                <ul>
+                    <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
+                </ul>
         </md-dialog-content>
+
+        
 
         <md-dialog-actions>
             <div layout="row" layout-sm="column" layout-align="space-around">

@@ -171,8 +171,7 @@ angular.module('openDeskApp.sites').factory('siteService',
             });
         },
         uploadFiles: function (file, destination, extras) {
-
-
+            
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD: "returnFileName",
                 PARAM_FILENAME: file.name,

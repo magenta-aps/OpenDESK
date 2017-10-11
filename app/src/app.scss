@@ -207,3 +207,15 @@ main {
     display: none;
   }
 }
+
+
+.drop-box {
+  border: 5px dashed #DDD;
+  height: 65px;
+  margin: 10px;
+  padding-top: 25px;
+  text-align: center;
+}
+.dragover {
+  border: 5px dashed blue;
+}
