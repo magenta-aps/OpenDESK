@@ -17,7 +17,6 @@
 				<md-list ng-class="group[0].open ? 'fold-out' : 'fold-in'" aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}} List">
 					<md-list-item ng-repeat="member in group[1] | orderBy: 'displayName'">
 							<img class="od-avatar od-avatar-small" ng-src="{{userService.getAvatarFromUser(member)}}">
-						<!-- <a class="member" style="margin-left:8px" ng-click="vm.openMemberInfo(member, $event)">{{ member.displayName }}</a> -->
 						<div layout="column" style="margin-left:8px" flex>
 								<a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
 								<p class="od-secondary od-secondary-small">
@@ -40,9 +39,6 @@
 							</p>
 						</div>
 					</div>
-					<!-- <div flex="30" class="od-secondary">
-						{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}
-					</div> -->
 				</md-list-item>
 			</md-list>
 

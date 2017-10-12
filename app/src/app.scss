@@ -114,24 +114,6 @@ main {
   margin: $u * 4 0 auto;
 }
 
-.od-breadcrumb {
-  background-color: $gray-90;
-  border-radius: 4px;
-  list-style: none;
-  margin: $u 0;
-  min-height: 40px;
-  padding: 0;
-
-  li {
-    display: inline-block;
-
-    &:not(:last-child)::after {
-      content: '/';
-      padding: 0 4px;
-    }
-  }
-}
-
 // Icons in buttons
 .md-button {
   .material-icons {
@@ -147,35 +129,6 @@ main {
 //make the chat window appear behind notifcation slide out
 #conversejs {
   z-index: 0;
-}
-
-//Search results
-.search-documents {
-  width: 400px;
-
-  li {
-    border-bottom: 1px solid $gray-80;
-    height: auto;
-    min-width: 200px;
-    padding-bottom: $u * .5;
-    padding-top: $u * .5;
-    white-space: normal;
-
-    &:last-child {
-      border-bottom-width: 0;
-    }
-  }
-
-  .item-title,
-  .item-metadata {
-    display: block;
-    line-height: 2;
-
-    md-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
 }
 
 .hide-scrollbar {

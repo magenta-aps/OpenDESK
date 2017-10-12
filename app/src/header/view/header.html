@@ -1,9 +1,5 @@
 <md-toolbar>
     <span class="md-toolbar-tools" flex layout="row">
-        <!-- <md-button class="md-icon-button" ng-click="gotoLandingPage()" aria-label="Home">
-            <md-icon>home</md-icon>
-        </md-button> -->
-
         <md-button class="md-icon-button" ng-click="toggleAppDrawer()" aria-label="{{ 'APP' | translate }}">
             <md-icon>apps</md-icon>
             <md-tooltip md-direction="bottom" md-delay="500">{{'APP' | translate}}</md-tooltip>
@@ -30,11 +26,6 @@
             </md-button>
 
             <span class="clickable" ng-click="toggleUserPanel()" hide show-gt-md>{{user.firstName}} {{user.lastName}}</span>
-
-            <!-- <md-button class="md-icon-button" ng-click="toggleUserPanel()" aria-label="{{ 'USER' | translate }}">
-                <md-icon>person</md-icon>
-                <md-tooltip md-direction="bottom" md-delay="500">{{'USER' | translate}}</md-tooltip>
-            </md-button> -->
         </span>
       
             <img src="{{ avatar }}" class="od-avatar clickable" style="width:50px;margin-left:16px" ng-click="toggleUserPanel()" alt="{{user.firstName }} {{ user.lastName }}">

@@ -9,6 +9,6 @@ function breadcrumb() {
         scope: {
             bcPath: '=paths'
         },
-        templateUrl: 'app/src/shared/directives/breadcrumb.html'
+        templateUrl: 'app/src/shared/directives/breadcrumb/breadcrumb.html'
     }
 }
