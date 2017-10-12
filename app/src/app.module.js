@@ -25,8 +25,6 @@ angular
         'openDeskApp.search',
         'openDeskApp.calendar',
         'openDeskApp.nogletal',
-        'openDeskApp.common.directives',
-        'openDeskApp.common.directives.filter',
         'm43nu.auto-height',
         'dcbImgFallback',
         'openDeskApp.notifications',
