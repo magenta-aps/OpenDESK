@@ -1,5 +1,5 @@
 angular
-    .module('openDeskApp.users')
+    .module('openDeskApp.user')
     .directive("openeEquals", equals);
 
 /**

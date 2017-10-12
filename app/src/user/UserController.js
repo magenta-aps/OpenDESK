@@ -4,7 +4,7 @@ angular
     .directive('odUser', function () {
         return {
             scope: {},
-            templateUrl: 'app/src/odUser/view/user.html',
+            templateUrl: 'app/src/user/view/user.html',
             controller: 'UserController',
             controllerAs: 'vm'
         };
