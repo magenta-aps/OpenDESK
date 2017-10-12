@@ -1,5 +1,5 @@
 angular
-    .module('openDeskApp')
+    .module('openDeskApp.header')
     .factory('headerService', headerService);
 
 function headerService() {

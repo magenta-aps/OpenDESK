@@ -1,9 +1,8 @@
 angular
-    .module('openDeskApp')
+    .module('openDeskApp.header')
     .controller('HeaderController', HeaderController);
 
-function HeaderController($scope, $state, $mdSidenav, $mdComponentRegistry, APP_CONFIG, headerService, authService, notificationsService, userService) {
-    var vm = this;
+function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService, authService, notificationsService, userService) {
 
     $scope.headerService = headerService;
     $scope.notificationsService = notificationsService;

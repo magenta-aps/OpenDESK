@@ -97,7 +97,7 @@ function userService($http, sessionService) {
 
     function getAvatarFromUser(user) {
         if(user.avatar == undefined)
-            return "app/assets/images/avatars/blank-profile-picture.png";
+            return "app/assets/img/avatars/blank-profile-picture.png";
         var avatar = user.avatar.replace("/thumbnails/avatar", "");
         return sessionService.makeURL("/alfresco/s/" + avatar);
     }
