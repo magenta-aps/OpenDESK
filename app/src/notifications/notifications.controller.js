@@ -5,7 +5,7 @@ angular
         return {
             restrict: 'E',
             scope: false,
-            templateUrl: 'app/src/odNotifications/view/notifications.html',
+            templateUrl: 'app/src/notifications/view/notifications.html',
             controller: 'NotificationsController',
             controllerAs: 'nc'
         };

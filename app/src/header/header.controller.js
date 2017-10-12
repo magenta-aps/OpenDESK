@@ -1,6 +1,13 @@
 angular
     .module('openDeskApp.header')
-    .controller('HeaderController', HeaderController);
+    .controller('HeaderController', HeaderController)
+    .directive('appHeader', function () {
+        return {
+            restrict: 'E',
+            scope: {},
+            templateUrl: 'app/src/header/view/header.html'
+        };
+    });
 
 function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService, authService, notificationsService, userService) {
 

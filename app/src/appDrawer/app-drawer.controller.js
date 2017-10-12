@@ -4,7 +4,7 @@ angular
     .directive('odAppDrawer', function () {
         return {
             scope: false,
-            templateUrl: 'app/src/appDrawer/view/appDrawer.html',
+            templateUrl: 'app/src/appDrawer/view/app-drawer.html',
             controller: 'AppDrawerController',
             controllerAs: 'vm'
         };
