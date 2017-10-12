@@ -10,7 +10,7 @@ angular
         };
     });
 
-function UserController($scope, $log, $mdSidenav, authService, userService, sessionService) {
+function UserController($scope, $mdSidenav, authService, userService) {
     var vm = this;
     vm.receiveNotifications = "true";
     vm.user = authService.getUserInfo().user;

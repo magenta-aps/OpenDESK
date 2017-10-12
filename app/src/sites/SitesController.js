@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.sites')
 	.controller('SitesController', SitesController);
 
-function SitesController($scope, $mdDialog, $window,  $interval, $translate, siteService, pd_siteService,
+function SitesController($scope, $mdDialog, $window,  $interval, $translate, siteService,
 						 sessionService, APP_CONFIG, browserService,headerService) {
 
     browserService.setTitle($translate.instant('SITES.NAME'));
@@ -76,7 +76,7 @@ function SitesController($scope, $mdDialog, $window,  $interval, $translate, sit
 
 
 	function getAllOrganizationalCenters() {
-		pd_siteService.getAllOrganizationalCenters().then(function (response) {
+		siteService.getAllOrganizationalCenters().then(function (response) {
 			vm.organizationalCenters = response.data;
 			vm.organizationalCenters.push({
 				"shortName": "",

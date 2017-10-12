@@ -20,10 +20,13 @@ $secondary-color: rgb(255, 215, 89);
 $secondary-color-light: lighten($secondary-color, 15%);
 $secondary-color-dark: darken($secondary-color, 15%);
 
+
 $primary-text-color: rgba($black, .87);
 $secondary-text-color: $white;
 $gray-text-color: rgba($black, .38);
 $dark-gray-text-color: rgba($black, .54);
+
+$error: #ff645f;
 
 $headline-color: $white;
 
@@ -34,20 +37,6 @@ $u: 16px;
 // Unit of measurement - usually default font size
 $br-sm-md: $u * 40;
 // Breakpoint between small and medium screens
-
-//
-// Mixins
-//
-
-@mixin fade-in {
-  opacity: 1;
-  transition: opacity .25s ease-in;
-}
-
-@mixin fade-out {
-  opacity: 0;
-  transition: opacity .15s ease-out;
-}
 
 
 //
@@ -81,38 +70,28 @@ img {
   height: auto;
 }
 
-dl {
-  dt {
-    color: $primary-color-light, 20%;
-    font-size: $u * .9;
-  }
-
-  dd {
-    margin: 0;
-    padding: 0 0 $u;
-  }
-}
-
 // md-switch .md-thumb-container adds z-index: 1 per default which we don't want.
-md-switch .md-thumb-container {
-  z-index: 0;
+md-switch {
+  .md-thumb-container {
+    z-index: 0;
+  }
 }
 
 md-icon {
   color: $primary-text-color;
 }
 
-.md-chips .md-chip-input-container {
+.md-chip-input-container {
   width: 100%;
 }
 
-md-card md-card-content {
-  padding: 16px 16px 0px 16px;
-}
-
-md-toast.md-error-toast-theme .md-toast-content {
-  color: #ff645f;
-  font-weight: bold;
+md-toast {
+  .md-error-toast-theme {
+    .md-toast-content {
+      color: $error;
+      font-weight: bold;
+    }
+  }
 }
 
 // Muted (greyed) text
@@ -200,22 +179,31 @@ main {
 }
 
 .hide-scrollbar {
-  overflow: hidden;
   -ms-overflow-style: none;
+  overflow: hidden;
 
-  ::-webkit-scrollbar { 
+  ::-webkit-scrollbar {
     display: none;
   }
 }
 
 
 .drop-box {
-  border: 5px dashed #DDD;
+  border: 5px dashed $gray-85;
   height: 65px;
   margin: 10px;
   padding-top: 25px;
   text-align: center;
 }
+
 .dragover {
-  border: 5px dashed blue;
+  border: 5px dashed $primary-color;
+}
+
+
+.md-icon--large {
+  font-size: 96px !important;
+  height: 96px;
+  margin-top: 34px;
+  width: 96px;
 }

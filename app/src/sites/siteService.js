@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openDeskApp.sites').factory('siteService',
-    function ($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, groupService) {
+    function ($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, groupService, systemSettingsService) {
 
     var restBaseUrl = '/alfresco/s/api/';
 
@@ -31,6 +31,35 @@ angular.module('openDeskApp.sites').factory('siteService',
                 return response.data;
             });
         },
+
+        getAllOwners: function() {
+            return groupService.getGroupMembers("OPENDESK_ProjectOwners").then(
+                function (response) {
+                    return response;
+                },
+                function (error) {
+                    console.log("Error retrieving list of all managers.");
+                    console.log(error);
+                }
+            );
+        },
+
+        getTemplateNames: function() {
+            
+            return systemSettingsService.getTemplates().then (function(response) {
+                return response;
+            });
+        },
+
+        getAllOrganizationalCenters: function() {
+            return groupService.getSubGroups("OPENDESK_OrganizationalCenters").then(function (response) {
+                return response;
+            }, function (error) {
+                console.log("Error retrieving list of all organizational centers.");
+                console.log(error);
+            });
+        },
+
         getSites: function () {
             return $http.post("/alfresco/service/sites", {PARAM_METHOD: "getAll"}).then(
                 function (response) {
@@ -106,6 +135,40 @@ angular.module('openDeskApp.sites').factory('siteService',
                 return site;
             });
         },
+
+        createPDSite: function(siteName, description, sbsys, center_id, owner, manager, visibility, template) {
+            return $http.post('/alfresco/service/projectdepartment', {
+                PARAM_NAME: siteName,
+                PARAM_DESCRIPTION: description,
+                PARAM_SBSYS: sbsys,
+                PARAM_OWNER: owner,
+                PARAM_MANAGER: manager,
+                PARAM_VISIBILITY: visibility,
+                PARAM_CENTERID: center_id,
+                PARAM_METHOD: "createPDSITE",
+                PARAM_TEMPLATE: template
+            }).then(function (response) {
+                return response;
+            });
+        },
+
+        updatePDSite: function(shortName, siteName, description, sbsys, center_id, owner, manager, visibility, state) {
+            return $http.post('/alfresco/service/projectdepartment', {
+                PARAM_NAME: siteName,
+                PARAM_SITE_SHORT_NAME: shortName,
+                PARAM_DESCRIPTION: description,
+                PARAM_SBSYS: sbsys,
+                PARAM_OWNER: owner,
+                PARAM_MANAGER: manager,
+                PARAM_CENTERID: center_id,
+                PARAM_VISIBILITY: visibility,
+                PARAM_STATE: state,
+                PARAM_METHOD: "updatePDSITE"
+            }).then(function (response) {
+                return response;
+            });
+        },
+
         addMemberToSite: function (siteShortName, user, group) {
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD: "addUser",

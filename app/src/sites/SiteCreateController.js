@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.sites')
     .controller('SiteCreateController', SiteCreateController);
 
-function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, filterService, siteService,
+function SiteCreateController($q, $mdDialog, APP_CONFIG, $state, filterService, siteService,
                               userService, $mdToast, $translate) {
 
     var pdc = this;
@@ -68,7 +68,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
 
         function loadTemplateNames() {
 
-            pd_siteService.getTemplateNames().then(function (response) {
+            siteService.getTemplateNames().then(function (response) {
 
                 var result = [];
 
@@ -94,7 +94,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
 
 
         function getOwners() {
-            pd_siteService.getAllOwners().then(
+            siteService.getAllOwners().then(
                 function (response) {
                     console.log(response);
                     availOwners = response;
@@ -121,7 +121,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
 
 
         function getAvailOrgs() {
-            pd_siteService.getAllOrganizationalCenters().then(
+            siteService.getAllOrganizationalCenters().then(
                 function (response) {
                     $scope.availOrgs = response.data;
                 }
@@ -149,7 +149,7 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG,pd_siteService, $state, 
 
             var visibility = $scope.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
 
-            pd_siteService.createPDSite(
+            siteService.createPDSite(
                 $scope.newSite.siteName,
                 $scope.newSite.desc,
                 $scope.newSite.sbsys,
