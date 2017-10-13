@@ -1,26 +1,19 @@
 angular
     .module('openDeskApp.header')
-    .controller('HeaderController', HeaderController)
-    .directive('appHeader', function () {
-        return {
-            restrict: 'E',
-            scope: {},
-            templateUrl: 'app/src/header/view/header.html'
-        };
-    });
+    .controller('HeaderController', HeaderController);
 
 function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService, authService, notificationsService, userService) {
 
+    var vm = this;
+    vm.user = authService.getUserInfo().user;
+    vm.avatar = userService.getAvatarFromUser(vm.user);
+    vm.title = '';
+    vm.unseenNotifications = 0;
+
     $scope.headerService = headerService;
     $scope.notificationsService = notificationsService;
-    $scope.user = authService.getUserInfo().user;
 
-    $scope.avatar = userService.getAvatarFromUser($scope.user);
-
-    $scope.title = 'titel';
-    $scope.unseenNotifications = 0;
-
-    $scope.landingPageState = APP_CONFIG.landingPageState;
+    var landingPageState = APP_CONFIG.landingPageState;
 
     $scope.$watch('headerService.getTitle()', function (newVal) {
         $scope.title = newVal;
@@ -30,17 +23,17 @@ function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService,
         $scope.unseenNotifications = newVal;
     });
 
-    $scope.toggleSystemSettings = function () {
+    vm.toggleSystemSettings = function () {
         $state.go('systemsettings');
     }
 
-    $scope.gotoLandingPage = function () {
-        $state.go($scope.landingPageState);
+    vm.gotoLandingPage = function () {
+        $state.go(landingPageState);
     }
 
-    $scope.toggleNotifications = buildToggler('notifications');
-    $scope.toggleUserPanel = buildToggler('userpanel');
-    $scope.toggleAppDrawer = buildToggler('appDrawer');
+    vm.toggleNotifications = buildToggler('notifications');
+    vm.toggleUserPanel = buildToggler('userpanel');
+    vm.toggleAppDrawer = buildToggler('appDrawer');
 
     function buildToggler(navID) {
         return function () {

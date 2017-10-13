@@ -1,14 +1,6 @@
 angular
     .module('openDeskApp.appDrawer')
-    .controller('AppDrawerController', AppDrawerController)
-    .directive('odAppDrawer', function () {
-        return {
-            scope: false,
-            templateUrl: 'app/src/appDrawer/view/app-drawer.html',
-            controller: 'AppDrawerController',
-            controllerAs: 'vm'
-        };
-    });
+    .controller('AppDrawerController', AppDrawerController);
 
 function AppDrawerController($mdSidenav, pageService, APP_CONFIG) {
     var vm = this;

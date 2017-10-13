@@ -1,0 +1,34 @@
+<md-toolbar>
+    <span class="md-toolbar-tools" flex layout="row">
+        <md-button class="md-icon-button" ng-click="vm.toggleAppDrawer()" aria-label="{{ 'APP' | translate }}">
+            <md-icon>apps</md-icon>
+            <md-tooltip md-direction="bottom" md-delay="500">{{'APP' | translate}}</md-tooltip>
+        </md-button>
+
+        <span class="truncate">{{vm.title}}</span>
+
+        <span flex></span>
+
+        <od-searchbar hide show-gt-sm></od-searchbar>
+
+        <span flex></span>
+
+        <span>
+            <md-button class="md-icon-button" ng-click="vm.toggleSystemSettings()" aria-label="{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}" ng-if="user.capabilities.isAdmin">
+                <md-icon>settings</md-icon>
+                <md-tooltip md-direction="bottom" md-delay="500">{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}</md-tooltip>
+            </md-button>
+
+            <md-button class="md-icon-button" ng-click="vm.toggleNotifications()" aria-label="{{ 'NOTIFICATION.NOTIFICATIONS' | translate }}">
+                <md-icon>notifications</md-icon>
+                <span ng-if="vm.unseenNotifications > 0" class="od-notifications--counter">{{unseenNotifications}}</span>
+                <md-tooltip md-direction="bottom" md-delay="500">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-tooltip>
+            </md-button>
+
+            <span class="clickable" ng-click="vm.toggleUserPanel()" hide show-gt-md>{{vm.user.firstName}} {{vm.user.lastName}}</span>
+        </span>
+      
+            <img src="{{vm.avatar}}" class="od-avatar clickable" style="width:50px;margin-left:16px" ng-click="vm.toggleUserPanel()" alt="{{vm.user.firstName}} {{vm.user.lastName}}">
+ 
+    </span>
+</md-toolbar>

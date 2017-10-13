@@ -3,12 +3,12 @@
 
 exports.config = {
     capabilities: {
-        'browserName': 'chrome',
-        'chromeOptions': {
-            binary: '/usr/bin/google-chrome',
-            args: ['--enable-logging','--v=1'],
-            extensions: []
-        }
+        'browserName': 'chrome'
+        // 'chromeOptions': {
+        //     binary: '/usr/bin/google-chrome',
+        //     args: ['--enable-logging','--v=1'],
+        //     extensions: []
+        // }
     },
 
     /*multiCapabilities: [
