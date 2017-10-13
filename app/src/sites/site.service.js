@@ -396,6 +396,15 @@ angular.module('openDeskApp.sites').factory('siteService',
             });
         },
 
+        checkIfEmailExists: function (email) {
+            return $http.post('/alfresco/service/users', {
+                PARAM_METHOD: "checkEmailIfExists",
+                PARAM_EMAIL: email
+            }).then(function (response) {
+                return response;
+            });
+        },
+
         getNode: getNode,
 
         getSiteUserPermissions: function (siteShortName) {
