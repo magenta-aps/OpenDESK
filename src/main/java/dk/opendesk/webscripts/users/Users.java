@@ -28,6 +28,8 @@ import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.security.PersonService.PersonInfo;
@@ -122,6 +124,10 @@ public class Users extends AbstractWebScript {
                     case "getUsers": // no test needed
                         result = getUsers(filter);
                         break;
+
+                    case "checkEmailIfExists": // no test needed
+                        result = checkEmail(email);
+                        break;
                 }
             }
         } catch (Exception e) {
@@ -131,6 +137,17 @@ public class Users extends AbstractWebScript {
         }
         Utils.writeJSONArray(webScriptWriter, result);
     }
+
+
+    private JSONArray checkEmail (String email) {
+
+        String query = "TYPE:\"cm:person\" AND @cm\\:email:\"" + email + "\"";
+        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+
+        return Utils.getJSONReturnPair("result",(String.valueOf(siteSearchResult.getNumberFound() == 0)));
+    };
+
 
     /**
      * Creates an external user.
@@ -190,6 +207,9 @@ public class Users extends AbstractWebScript {
         }
         return Utils.getJSONReturnPair("userName", userName);
     }
+
+
+
 
     /**
      * Gets a list of filtered users.
