@@ -20,22 +20,6 @@ angular
             /**
              * @param pages
              * @param labelKey - key for translation
-             * @param url - of page
-             * @param icon - material icon name; default: 'content_copy'
-             * @param color - of tile
-             */
-            addDashboard: function (pages, labelKey, url, icon, color) {
-                pages.push({
-                    labelKey: labelKey,
-                    url: url,
-                    icon: icon || 'content_copy',
-                    color: color
-                });
-            },
-
-            /**
-             * @param pages
-             * @param labelKey - key for translation
              * @param sref - of page
              * @param icon - material icon name; default: 'content_copy'
              * @param isAdminOnly - if true this page can only be viewed by admins

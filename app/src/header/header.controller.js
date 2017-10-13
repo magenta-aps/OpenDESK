@@ -3,17 +3,20 @@ angular
     .controller('HeaderController', HeaderController);
 
 function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService, authService, notificationsService, userService) {
-
     var vm = this;
-    vm.user = authService.getUserInfo().user;
-    vm.avatar = userService.getAvatarFromUser(vm.user);
+
+    vm.avatar = userService.getAvatarFromUser(authService.getUserInfo().user);
+    vm.gotoLandingPage = $state.go(APP_CONFIG.landingPageState);
     vm.title = '';
+    vm.toggleAppDrawer = buildToggler('appDrawer');
+    vm.toggleNotifications = buildToggler('notifications');
+    vm.toggleSystemSettings = $state.go('systemsettings');
+    vm.toggleUserPanel = buildToggler('userpanel');
     vm.unseenNotifications = 0;
+    vm.user = authService.getUserInfo().user;
 
     $scope.headerService = headerService;
     $scope.notificationsService = notificationsService;
-
-    var landingPageState = APP_CONFIG.landingPageState;
 
     $scope.$watch('headerService.getTitle()', function (newVal) {
         $scope.title = newVal;
@@ -22,18 +25,6 @@ function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService,
     $scope.$watch('notificationsService.getUnseenCount()', function (newVal) {
         $scope.unseenNotifications = newVal;
     });
-
-    vm.toggleSystemSettings = function () {
-        $state.go('systemsettings');
-    }
-
-    vm.gotoLandingPage = function () {
-        $state.go(landingPageState);
-    }
-
-    vm.toggleNotifications = buildToggler('notifications');
-    vm.toggleUserPanel = buildToggler('userpanel');
-    vm.toggleAppDrawer = buildToggler('appDrawer');
 
     function buildToggler(navID) {
         return function () {

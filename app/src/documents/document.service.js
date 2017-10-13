@@ -51,7 +51,6 @@ function documentService($http, $translate, $mdToast, $q) {
     }
 
     function deleteVersion(parent, versionNode) {
-
         var url = '/alfresco/s/history?method=deleteVersion&parentNode=' + parent + "&versionNode=" + versionNode;
 
         return $http.get(url).then(function (response) {
@@ -60,7 +59,6 @@ function documentService($http, $translate, $mdToast, $q) {
     }
 
     function getEditPermission(documentNodeRef) {
-
         var url = '/alfresco/s/permissions?method=getEditPermission&NODE_ID=' + documentNodeRef + '&STORE_TYPE=workspace&STORE_ID=SpacesStore';
 
         return $http.get(url).then(function (response) {
@@ -77,7 +75,6 @@ function documentService($http, $translate, $mdToast, $q) {
     }
 
     function cleanupThumbnail(node) {
-
         var url = '/alfresco/s/previewhelper?version_node=' + node.split("/")[3] + '&method=cleanup';
 
         return $http.get(url).then(function (response) {
@@ -87,7 +84,6 @@ function documentService($http, $translate, $mdToast, $q) {
     }
 
     function uploadNewVersion(file, destination, nodeRef, major) {
-
         var formData = new FormData();
         formData.append("filedata", file);
         formData.append("filename", file.name);

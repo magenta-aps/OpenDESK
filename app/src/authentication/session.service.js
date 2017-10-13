@@ -13,10 +13,10 @@ function sessionService($window) {
         isExternalUser: isExternalUser,
         makeURL: makeURL
     };
+    
+    return service;
 
     init();
-
-    return service;
 
     var userInfo;
 

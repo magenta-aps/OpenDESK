@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.discussion').factory('discussionService', function ($http, $q, nodeRefUtilsService, authService, sessionService, preferenceService) {
+angular.module('openDeskApp.discussion').factory('discussionService', function ($http, nodeRefUtilsService, authService, sessionService, preferenceService) {
 
     var restBaseUrl = '/alfresco/s/api';
     var currentUser = authService.getUserInfo().user.userName;
@@ -8,20 +8,22 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     var selectedDiscussion = [];
     var replies = [];
 
-    return {
-        getSelectedDiscussion: getSelectedDiscussion,
-        getDiscussions: getDiscussions,
-        getReplies: getReplies,
+    var service = {
         addDiscussion: addDiscussion,
         addReply: addReply,
-        updatePost: updatePost,
         deletePost: deletePost,
+        getDiscussionFromNodeRef: getDiscussionFromNodeRef,
+        getDiscussions: getDiscussions,
+        getReplies: getReplies,
+        getSelectedDiscussion: getSelectedDiscussion,
+        getSubscribePreferenceFilter: getSubscribePreferenceFilter,
+        isSubscribedToDiscussion: isSubscribedToDiscussion,
         subscribeToDiscussion: subscribeToDiscussion,
         unSubscribeToDiscussion: unSubscribeToDiscussion,
-        isSubscribedToDiscussion: isSubscribedToDiscussion,
-        getSubscribePreferenceFilter: getSubscribePreferenceFilter,
-        getDiscussionFromNodeRef: getDiscussionFromNodeRef
+        updatePost: updatePost
     };
+
+    return service;
 
     function getSelectedDiscussion() {
         return selectedDiscussion;
@@ -102,7 +104,6 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     }
 
     function isSubscribedToDiscussion(siteShortName, postItem) {
-
         var id = nodeRefUtilsService.getId(postItem.nodeRef);
         var subscriptionsPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id);
 
@@ -121,9 +122,7 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
         var preferences = {};
         preferences[preferenceFilter] = value;
 
-        preferenceService.setPreferences(currentUser, preferences).then(function (data) {
-            return data;
-        });
+        preferenceService.setPreferences(currentUser, preferences);
     }
 
     function getSubscribePreferenceFilter(siteShortName, id) {

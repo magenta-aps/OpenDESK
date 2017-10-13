@@ -69,13 +69,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         document.getElementById("uploadFile").innerHTML = fileName;
     };
 
-    vm.cancel = function () {
-        $mdDialog.cancel();
-    };
+    vm.cancel = $mdDialog.cancel();
 
-    vm.goBack = function () {
-        window.history.go(-2);
-    }
+    vm.goBack = window.history.go(-2);
 
     vm.godkendDialog = function (event) {
         $mdDialog.show({
@@ -175,12 +171,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 $mdDialog.hide();
                 vm.goBack();
             });
-
-
         });
-
-
-
     }
 
 
@@ -309,6 +300,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             .targetEvent(event)
             .ok('OK')
             .cancel('Fortryd');
+
         $mdDialog.show(confirm).then(function () {
             var selectedVersion = $location.search().version;
             console.log("nuværende doc");
@@ -330,9 +322,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         });
     }
 
-    vm.updatePreview = function () {
-        loadPreview();
-    }
+    vm.updatePreview = loadPreview();
 
     //Goes to the libreOffice online edit page
     vm.goToLOEditPage = function () {
@@ -382,7 +372,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     $scope.createReviewNotification = function (userName, comment) {
         siteService.createReviewNotification(vm.doc.node.nodeRef, userName, comment);
-        hideDialog();
+        $mdDialog.cancel()
     };
 
     vm.uploadNewVersionDialog = function (event) {
@@ -398,20 +388,14 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     $scope.uploadNewVersion = function (file) {
         siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
-            hideDialog();
+            $mdDialog.cancel()
             $state.go('document', {
                 doc: parentDocumentNode
             });
         });
     };
 
-    function hideDialog() {
-        $mdDialog.hide();
-    }
-
-    $scope.cancelDialog = function () {
-        $mdDialog.cancel();
-    };
+    $scope.cancelDialog = $mdDialog.cancel();
 
     $scope.searchUsers = function (filter) {
         return userService.getUsers(filter);

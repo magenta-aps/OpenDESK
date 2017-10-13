@@ -1,35 +1,12 @@
 angular
     .module('openDeskApp')
     .controller('TemplatesController', TemplatesController);
-/*    
- function TemplatesController($mdDialog, $translate, $state, caseTemplateDialogService, caseTemplatesService, startCaseWorkflowService, alfrescoNodeUtils){
- var vm = this;
- vm.init = init;
- vm.loadTemplates = loadTemplates;
- vm.createTemplate = createTemplate;
- vm.getWorkflowDisplayName = getWorkflowDisplayName;
- vm.getPrefilledPropName = getPrefilledPropName;
- vm.getPrefilledProps = getPrefilledProps;
- vm.tplNodeRefObj = tplNodeRefObj;
- vm.isPropSet = isPropSet;
- vm.workflowDefs = [];
 
- vm.availableProps = ["cm:title",
- "oe:owners",
- "cm:description",
- "base:endDate",
- "base:startDate",
- "oe:journalFacet",
- "oe:journalKey"];
-
- vm.propNameKeyPrefixes = ["CASE_TEMPLATES.PREFILLED."];
-
- */
-function TemplatesController($window, siteService, $mdDialog, $scope, systemSettingsService) {
+function TemplatesController(siteService, $mdDialog, $scope, systemSettingsService) {
     var vm = this;
 
     function init() {
-        var vm = this;
+        
         vm.templateUisref = "administration.systemsettings." + vm.caseType.replace(':', '_') + '_template';
 
         vm.loadTemplates();
@@ -39,7 +16,7 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
     }
 
     function loadTemplates() {
-        var vm = this;
+     
         caseTemplatesService.getTemplates(vm.caseType).then(function (templates) {
             vm.templates = templates.map(function (template) {
                 template.prefilledProps = vm.getPrefilledProps(template);
@@ -49,7 +26,6 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
     }
 
     function getPrefilledPropName(prop) {
-        var vm = this;
         for (var i = 0; i < vm.propNameKeyPrefixes.length; i++) {
             var prefix = vm.propNameKeyPrefixes[i];
             var propName = $translate.instant(prefix + prop);
@@ -61,7 +37,6 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
     }
 
     function getWorkflowDisplayName(workflowDefId) {
-        var vm = this;
         for (var i = 0; i < vm.workflowDefs.length; i++) {
             if (workflowDefId == vm.workflowDefs[i].id) {
                 return vm.workflowDefs[i].title;
@@ -71,7 +46,6 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
     }
 
     function getPrefilledProps(template) {
-        var vm = this;
         var props = [];
         for (var i = 0; i < vm.availableProps.length; i++) {
             var prop = vm.availableProps[i];
@@ -93,17 +67,7 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
         return true;
     }
 
-    //vm.newTemplate = function () {
-    //    $window.location.href = "/#!/indstillinger/systemopsætning/skabelon";
-    //    /*return {
-    //     restrict: 'E',
-    //     scope: {},
-    //     templateUrl: '/app/src/odSettings/view/settings.html'
-    //     };*/
-    //}
-
     vm.createTemplate = function(name, description) {
-
            siteService.createTemplate(name, description).then (function (response) {
                $scope.templateSites.push(response[0]);
                $mdDialog.hide();
@@ -123,8 +87,6 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
 
     vm.deleteSite = function (shortName) {
         return siteService.deleteSite(shortName);
-
-
     }
 
     vm.deleteSiteDialog = function(siteName) {
@@ -133,6 +95,7 @@ function TemplatesController($window, siteService, $mdDialog, $scope, systemSett
             .textContent('Skabelonen og alle dets filer vil blive slettet')
             .ok('Ja')
             .cancel('Annullér');
+            
         $mdDialog.show(confirm).then(
             function() {
                 vm.deleteSite(siteName).then (function(response){

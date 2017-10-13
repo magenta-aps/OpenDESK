@@ -1,1 +1,1 @@
-angular.module('openDeskApp.discussion', ['ngMaterial']);
+angular.module('openDeskApp.discussion', ['ngMaterial','ng.ckeditor']);

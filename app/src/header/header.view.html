@@ -14,7 +14,7 @@
         <span flex></span>
 
         <span>
-            <md-button class="md-icon-button" ng-click="vm.toggleSystemSettings()" aria-label="{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}" ng-if="user.capabilities.isAdmin">
+            <md-button class="md-icon-button" ng-click="vm.toggleSystemSettings()" aria-label="{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}" ng-if="vm.user.capabilities.isAdmin">
                 <md-icon>settings</md-icon>
                 <md-tooltip md-direction="bottom" md-delay="500">{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}</md-tooltip>
             </md-button>
@@ -28,7 +28,7 @@
             <span class="clickable" ng-click="vm.toggleUserPanel()" hide show-gt-md>{{vm.user.firstName}} {{vm.user.lastName}}</span>
         </span>
       
-            <img src="{{vm.avatar}}" class="od-avatar clickable" style="width:50px;margin-left:16px" ng-click="vm.toggleUserPanel()" alt="{{vm.user.firstName}} {{vm.user.lastName}}">
+        <img src="{{vm.avatar}}" class="od-avatar clickable" style="width:50px;margin-left:16px" ng-click="vm.toggleUserPanel()" alt="{{vm.user.firstName}} {{vm.user.lastName}}">
  
     </span>
 </md-toolbar>

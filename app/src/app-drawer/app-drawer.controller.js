@@ -4,11 +4,10 @@ angular
 
 function AppDrawerController($mdSidenav, pageService, APP_CONFIG) {
     var vm = this;
+    vm.close = $mdSidenav('appDrawer').close();
     vm.links = APP_CONFIG.settings.dashboardLinks;
-
     vm.pages = [];
 
-    // console.log(APP_CONFIG);
     pageService.addPage(vm.pages, 'DASHBOARD', vm.links['dashboard'], "dashboard");
     pageService.addPage(vm.pages, 'DASHBOARD.INTRA', vm.links['intra'], "intra");
     pageService.addPage(vm.pages, 'DASHBOARD.EMAIL', vm.links['email'], "mail");
@@ -19,10 +18,4 @@ function AppDrawerController($mdSidenav, pageService, APP_CONFIG) {
     pageService.addPage(vm.pages, 'DASHBOARD.ESDH', vm.links['esdh'], "library");
     pageService.addPage(vm.pages, 'DASHBOARD.CITRIX', vm.links['citrix'], "business");
     pageService.addPage(vm.pages, 'DASHBOARD.MAP', vm.links['map'], "map");
-
-    vm.close = function () {
-        $mdSidenav('appDrawer').close();
-    }
-
-
 }
