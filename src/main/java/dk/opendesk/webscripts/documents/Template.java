@@ -21,6 +21,7 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.SearcherException;
+import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
@@ -127,8 +128,11 @@ public class Template extends AbstractWebScript {
             Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
             String name = (String) props.get(ContentModel.PROP_NAME);
 
+            QName childNodeType = nodeService.getType(child.getChildRef());
+
             json.put("nodeRef", child.getChildRef().getId());
             json.put("name", name);
+            json.put("isFolder", childNodeType.equals(ContentModel.TYPE_FOLDER));
 
             ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
             if(contentData != null) {
