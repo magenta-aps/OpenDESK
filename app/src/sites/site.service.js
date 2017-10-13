@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('openDeskApp.sites').factory('siteService',
-    function ($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, groupService, systemSettingsService) {
+    function ($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
 
     var restBaseUrl = '/alfresco/s/api/';
 
@@ -33,15 +33,17 @@ angular.module('openDeskApp.sites').factory('siteService',
         },
 
         getAllOwners: function() {
-            return groupService.getGroupMembers("OPENDESK_ProjectOwners").then(
-                function (response) {
-                    return response;
-                },
-                function (error) {
-                    console.log("Error retrieving list of all managers.");
-                    console.log(error);
-                }
-            );
+
+            return $http.post("/alfresco/service/groups", {
+                PARAM_METHOD : "getGroupMembers",
+                PARAM_GROUP_NAME: 'OPENDESK_ProjectOwners'
+            }).then(function(response) {
+                return response.data;
+            },
+            function (error) {
+                console.log("Error retrieving list of all managers.");
+                console.log(error);
+            });
         },
 
         getTemplateNames: function() {
@@ -52,8 +54,12 @@ angular.module('openDeskApp.sites').factory('siteService',
         },
 
         getAllOrganizationalCenters: function() {
-            return groupService.getSubGroups("OPENDESK_OrganizationalCenters").then(function (response) {
-                return response;
+            return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
+            .then(function(response) {
+                if (response.status && response.status !== 200) {
+                    return $q.reject(response);
+                }
+                return response.data || response;
             }, function (error) {
                 console.log("Error retrieving list of all organizational centers.");
                 console.log(error);
@@ -453,9 +459,12 @@ angular.module('openDeskApp.sites').factory('siteService',
         //Groups
 
         getGroupsAndMembers: function () {
-            return groupService.getGroupsAndMembers(site.shortName).then(function (val) {
-                groups.list = val;
-                return val;
+            return $http.post("/alfresco/service/groups", {
+                PARAM_METHOD : "getGroupsAndMembers",
+                PARAM_SITE_SHORT_NAME: site.shortName
+            }).then(function(response) {
+                groups.list = response.data;
+                return response.data;
             });
         },
 

@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('openDeskApp.sites', ['ngMaterial', 'fixed.table.header'])
         .config(config);
 

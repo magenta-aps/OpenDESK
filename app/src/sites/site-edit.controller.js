@@ -1,5 +1,3 @@
-'use strict';
-
 angular
     .module('openDeskApp.sites')
     .controller('SiteEditController', SiteEditController);
