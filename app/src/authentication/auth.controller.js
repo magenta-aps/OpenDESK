@@ -6,11 +6,9 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     var vm = this;
     var loginErrorMessage = angular.fromJson($stateParams.error);
 
+    vm.errorMsg = loginErrorMessage ? loginErrorMessage : "";
     vm.login = login;
     vm.logout = logout;
-    vm.loggedin = loggedin;
-    vm.getUserInfo = getUserInfo;
-    vm.errorMsg = loginErrorMessage ? loginErrorMessage : "";
     vm.showForgotDialog = showForgotDialog;
     vm.updateValidator = updateValidator;
 
@@ -32,8 +30,29 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
             } else if (response.status == 500) {
                 vm.form.password.$setValidity("loginError", false);
             }
-
         });
+    }
+
+    function logout() {
+        chatService.logout();
+        delete vm.user;
+        authService.logout();
+    }
+
+    function showForgotDialog(ev) {
+        $mdDialog.show({
+            controller: forgotPasswordCtrl,
+            controllerAs: 'dlg',
+            templateUrl: 'app/src/authentication/view/forgotPasswordDialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
+    }
+
+    function updateValidator() {
+        if (vm.form.password.$error.loginFailure)
+            vm.form.password.$setValidity("loginFailure", true);
     }
 
     function restoreLocation() {
@@ -43,21 +62,6 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
         } else {
             $window.location = retainedLocation;
         }
-    }
-
-    function logout() {
-        chatService.logout();
-        delete vm.user;
-        authService.logout();
-    }
-
-    function loggedin() {
-        return authService.loggedin();
-    }
-
-    function updateValidator() {
-        if (vm.form.password.$error.loginFailure)
-            vm.form.password.$setValidity("loginFailure", true);
     }
 
     function forgotPasswordCtrl($scope, $mdDialog) {
@@ -89,20 +93,4 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
             );
         };
     };
-
-    function showForgotDialog(ev) {
-        $mdDialog.show({
-            controller: forgotPasswordCtrl,
-            controllerAs: 'dlg',
-            templateUrl: 'app/src/authentication/view/forgotPasswordDialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true
-        });
-    }
-
-    function getUserInfo() {
-        var userInfo = authService.getUserInfo();
-        return userInfo;
-    }
 }
