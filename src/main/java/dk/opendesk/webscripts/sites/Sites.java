@@ -681,6 +681,15 @@ public class Sites extends AbstractWebScript {
      */
     private JSONArray createMembersPDF(String siteShortName) throws JSONException {
 
+        Map<String, String> shortNames = new HashMap<String, String>();
+        shortNames.put("PD_PROJECTOWNER" , "Projektejer");
+        shortNames.put("PD_PROJECTMANAGER" , "Projektleder");
+        shortNames.put("PD_WORKGROUP" , "Arbejdsgruppe");
+        shortNames.put("PD_MONITORS" , "Følgegruppe");
+        shortNames.put("PD_STEERING_GROUP" , "Styrregruppe");
+
+
+
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
@@ -696,6 +705,9 @@ public class Sites extends AbstractWebScript {
             for (Object groupObject :  Utils.siteGroups.get(type)) {
                 JSONObject groupJSON = (JSONObject) groupObject;
                 String shortName = groupJSON.getString("shortName");
+
+                String translated_shortName = shortNames.get(shortName);
+
                 output += getAuthorityMembersToString(siteShortName, shortName) + "\n\n";
             }
 
