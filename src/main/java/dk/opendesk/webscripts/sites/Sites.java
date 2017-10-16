@@ -708,7 +708,7 @@ public class Sites extends AbstractWebScript {
 
                 String translated_shortName = shortNames.get(shortName);
 
-                output += getAuthorityMembersToString(siteShortName, shortName) + "\n\n";
+                output += getAuthorityMembersToString(siteShortName, shortName, translated_shortName) + "\n\n";
             }
 
             // delete the pdf if it is already present
@@ -761,9 +761,9 @@ public class Sites extends AbstractWebScript {
      * @param groupName group name.
      * @return group members.
      */
-    private String getAuthorityMembersToString(String siteShortName, String groupName) {
+    private String getAuthorityMembersToString(String siteShortName, String groupName, String translated_groupname) {
         String group = Utils.getAuthorityName(siteShortName, groupName);
-        String groupMembers = groupName + ": \n\n";
+        String groupMembers = translated_groupname + ": \n\n";
         Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
         for (String authority : authorities) {
             NodeRef person = personService.getPerson(authority);
