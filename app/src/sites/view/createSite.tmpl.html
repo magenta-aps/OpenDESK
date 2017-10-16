@@ -134,7 +134,7 @@
                                     <md-option ng-repeat="group in newSite.groups | filter: groupFilter" ng-value="group">{{'SITES.' + type + '.GROUPS.' + group.shortName | translate}}</md-option>
                                 </md-select>
                             </md-input-container>
-                            <div style="position: relative; top: -25px;" class="btn-align">
+                            <div style="position: relative; top: -25px;">
                                 <md-button class="md-primary" ng-click="addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
                                     <md-icon>add</md-icon> {{'COMMON.ADD' | translate}}
                                 </md-button>

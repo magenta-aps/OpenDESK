@@ -155,10 +155,6 @@ md-card {
   }
 }
 
-.btn-align {
-  margin-top: 20px;
-}
-
 .file-upload {
   margin: 10px;
   overflow: hidden;
@@ -210,42 +206,6 @@ md-card {
 
 .md-select-value {
   z-index: 0 !important;
-}
-
-.od-filter-sidebar {
-  overflow: hidden;
-
-  button {
-    top: 0 !important;
-  }
-
-  md-card-title {
-    max-height: 40px;
-  }
-
-  md-card-content,
-  md-autocomplete {
-    min-width: 150px;
-  }
-
-  md-input-container {
-    height: $u * 3.5;
-
-    label {
-      color: $gray-text-color;
-    }
-  }
-
-  .show-all {
-    color: $gray-text-color;
-    height: auto;
-    padding-left: $u * .2;
-    text-overflow: ellipsis;
-
-    md-checkbox {
-      margin-bottom: $u * 2;
-    }
-  }
 }
 
 md-tooltip {
