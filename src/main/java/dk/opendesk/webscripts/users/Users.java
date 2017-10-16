@@ -145,7 +145,7 @@ public class Users extends AbstractWebScript {
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
         ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
 
-        return Utils.getJSONReturnPair("result",(String.valueOf(siteSearchResult.getNumberFound() == 1)));
+        return Utils.getJSONReturnPair("result",(String.valueOf(siteSearchResult.getNumberFound() >= 1)));
     };
 
 
