@@ -6,7 +6,7 @@ angular
 
 
 function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
-                             notificationsService, alfrescoDownloadService) {
+    notificationsService, alfrescoDownloadService) {
 
     $scope.externalUser = {};
     $scope.searchPeople = searchPeople;
@@ -30,28 +30,41 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG
     }
 
     function addExternalUserToGroup(firstName, lastName, email, group) {
-        siteService.createExternalUser($scope.site.shortName, firstName, lastName, email, group[0].shortName).then(
-            function (response) {
+        siteService.checkIfEmailExists(email).then(function (response) {
+            console.log(response.data[0].result);
+
+            if (response.data[0].result == 'false') {
+                siteService.createExternalUser($scope.site.shortName, firstName, lastName, email, group[0].shortName).then(
+                    function (response) {
+                        $mdToast.show(
+                            $mdToast.simple()
+                            .textContent('Den eksterne bruger, ' + firstName + " " + lastName + ', er blevet oprettet.')
+                            .hideDelay(3000)
+                        );
+                        $scope.externalUser = {};
+                        group[1].push({
+                            firstName: firstName,
+                            lastName: lastName,
+                            displayName: firstName + " " + lastName,
+                            email: email,
+                        });
+                    },
+                    function (err) {
+                        $mdToast.show(
+                            $mdToast.simple()
+                            .textContent('Brugeren kunne ikke oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
+                            .hideDelay(3000)
+                        );
+                    }
+                );
+            } else {
                 $mdToast.show(
                     $mdToast.simple()
-                    .textContent('Den eksterne bruger, ' + firstName + " " + lastName + ', er blevet oprettet.')
+                    .textContent('Brugeren findes allerede')
                     .hideDelay(3000)
                 );
-                $scope.externalUser = {};
-                group[1].push({
-                    firstName: firstName,
-                    lastName: lastName,
-                    displayName: firstName + " " + lastName,
-                    email: email,
-                });
-            },
-            function (err) {
-                $mdToast.show(
-                    $mdToast.simple()
-                    .textContent('Brugeren kunne ikke oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
-                    .hideDelay(3000)
-                );
-            });
+            }
+        });
     }
 
     function cancel() {
@@ -92,16 +105,14 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG
         });
     };
 
-    function removeMemberFromSite(user,groupName) {
+    function removeMemberFromSite(user, groupName) {
         var userName = user.userName;
-        siteService.removeMemberFromSite($scope.site.shortName, userName,groupName).then(function (response) {
-        });
+        siteService.removeMemberFromSite($scope.site.shortName, userName, groupName).then(function (response) {});
     };
 
     function createNotification(userName, subject, message, link, wtype, project) {
         console.log('creating notification...');
-        notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
-        });
+        notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {});
     }
 
     function createSiteNotification(userName, site) {
@@ -109,7 +120,7 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG
         var author = $scope.currentUser.firstName + ' ' + $scope.currentUser.lastName;
 
         var message = author + " har tilføjet dig til projektet " + $scope.site.title + ".";
-        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + site;
+        var link = '#!/' + APP_CONFIG.sitesUrl + '/' + site;
         createNotification(userName, subject, message, link, 'project', site);
     }
 }
