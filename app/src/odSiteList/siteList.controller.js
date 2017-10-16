@@ -1,10 +1,8 @@
-'use strict';
-
 angular
-	.module('openDeskApp.sites')
-	.controller('SitesController', SitesController);
+	.module('site.list')
+	.controller('SiteListController', SiteListController);
 
-function SitesController($scope, $mdDialog, $window,  $interval, $translate, siteService,
+function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService,
 						 sessionService, APP_CONFIG, browserService,headerService) {
 
     browserService.setTitle($translate.instant('SITES.NAME'));
@@ -31,23 +29,28 @@ function SitesController($scope, $mdDialog, $window,  $interval, $translate, sit
 				{key:'', name:'Alle'}];
 	
 	vm.types = [];
-	vm.types.push({key: 'Project', name: $translate.instant('SITES.Project.NAME')});
-    if(vm.config.enableProjects)
-        vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')});
-    vm.types.push({key: '', name: $translate.instant('COMMON.ALL')});
 
-    if(vm.config.enableSites && vm.config.enableProjects)
-    	vm.sitesName = 'SITES.NAME';
-    else if(vm.config.enableSites)
-        vm.sitesName = 'SITES.Project.NAME_PLURAL';
-    else if(vm.config.enableProjects)
-		vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
+	activate();
 	
-	headerService.setTitle($translate.instant(vm.sitesName));
-
-	//sets the margin to the width of sidenav
-	var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();
-    $("#table-container").css("max-height", tableHeight+"px");
+	function activate() {
+		vm.types.push({key: 'Project', name: $translate.instant('SITES.Project.NAME')});
+		if(vm.config.enableProjects)
+			vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')});
+		vm.types.push({key: '', name: $translate.instant('COMMON.ALL')});
+	
+		if(vm.config.enableSites && vm.config.enableProjects)
+			vm.sitesName = 'SITES.NAME';
+		else if(vm.config.enableSites)
+			vm.sitesName = 'SITES.Project.NAME_PLURAL';
+		else if(vm.config.enableProjects)
+			vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
+		
+		headerService.setTitle($translate.instant(vm.sitesName));
+	
+		//sets the margin to the width of sidenav
+		var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();
+		$("#table-container").css("max-height", tableHeight+"px");
+	}
 
 	vm.exactMatchFilter = function (project) { 
 		if(vm.search == undefined || vm.search.type == '') {
@@ -106,12 +109,9 @@ function SitesController($scope, $mdDialog, $window,  $interval, $translate, sit
 
 	vm.deleteSite = function (siteName) {
 		siteService.deleteSite(siteName).then(function (result) {
-
 			getSites();
-
 			getSitesPerUser();
-
-			$mdDialog.hide();
+			$mdDialog.cancel();
 		});
 	};
 

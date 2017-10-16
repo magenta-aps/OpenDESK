@@ -1,10 +1,8 @@
-'use strict';
-
 angular
-    .module('openDeskApp.sites')
-    .controller('SiteController', SiteController);
+    .module('site.detail')
+    .controller('SiteDetailController', SiteDetailController);
 
-function SiteController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
+function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
                         searchService, userService, browserService, headerService) {
 
     $scope.permissions = {};
@@ -166,8 +164,9 @@ function SiteController($scope, $mdDialog, $window, siteService, $stateParams, $
         $scope.project.shortName = vm.project.shortName;
 
         $mdDialog.show({
-            controller: 'SiteGroupController',
-            templateUrl: 'app/src/sites/view/editGroups.tmpl.html',
+            templateUrl: 'app/src/sites/view/editMembers.tmpl.html',
+            controller: 'SiteMemberController',
+            controllerAs: 'vm',
             parent: angular.element(document.body),
             scope: $scope,
             preserveScope: true,

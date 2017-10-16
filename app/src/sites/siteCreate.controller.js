@@ -55,10 +55,14 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG, $state, filterService, 
 
         $scope.creating = false;
 
-        loadTemplateNames();
-        getOwners();
-        getAvailOrgs();
-        loadSiteGroups();
+        activate();
+
+        function activate() {
+            loadTemplateNames();
+            getOwners();
+            getAvailOrgs();
+            loadSiteGroups();
+        }
 
         $scope.groupFilter = function (group) {
             if (group.multipleMembers) {

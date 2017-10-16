@@ -2,10 +2,10 @@
 
 angular
     .module('openDeskApp.sites')
-    .controller('SiteGroupController', SiteGroupController);
+    .controller('SiteMemberController', SiteMemberController);
 
 
-function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
+function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
                              notificationsService, alfrescoDownloadService) {
 
     $scope.externalUser = {};
@@ -72,7 +72,6 @@ function SiteGroupController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG
     function doPDF() {
         siteService.createMembersPDF($scope.site.shortName).then(function (response) {
             alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
-
         });
     }
 

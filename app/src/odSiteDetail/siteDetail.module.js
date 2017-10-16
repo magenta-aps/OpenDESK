@@ -1,4 +1,4 @@
-angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
+angular.module('site.detail', ['ngMaterial', 'fixed.table.header'])
         .config(config);
 
 function config($stateProvider, APP_CONFIG, USER_ROLES) {
@@ -8,8 +8,8 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
         url: '/' + APP_CONFIG.sitesUrl + '/:projekt',
         views: {
             'content@': {
-                templateUrl: 'app/src/sites/view/site.html',
-                controller: 'SiteController',
+                templateUrl: 'app/src/odSiteDetail/siteDetail.view.html',
+                controller: 'SiteDetailController',
                 controllerAs: 'vm'
             }
         },

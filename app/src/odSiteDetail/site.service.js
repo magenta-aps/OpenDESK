@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.sites').factory('siteService',
+angular.module('site.detail').factory('siteService', 
     function ($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
 
     var restBaseUrl = '/alfresco/s/api/';
@@ -26,6 +26,7 @@ angular.module('openDeskApp.sites').factory('siteService',
         getSite: function () {
             return site;
         },
+
         getSiteMembers: function (siteShortName) {
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
