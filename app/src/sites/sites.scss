@@ -155,24 +155,6 @@ md-card {
   }
 }
 
-.file-upload {
-  margin: 10px;
-  overflow: hidden;
-  position: relative;
-
-  .upload {
-    cursor: pointer;
-    filter: alpha(opacity=0);
-    font-size: 20px;
-    margin: 0;
-    opacity: 0;
-    padding: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-}
-
 .menu-list-head {
   color: $gray-40;
   font-size: 90%;
@@ -204,10 +186,6 @@ md-card {
   transition: all .4s ease-in-out;
 }
 
-.md-select-value {
-  z-index: 0 !important;
-}
-
 md-tooltip {
   font-size: $u * .75 !important;
 }
@@ -226,21 +204,25 @@ md-tooltip {
 }
 
 //control arrow for open and closing
-.open {
-  cursor: pointer;
+.rotate-arrow {
+  margin: 0;
+  transition: transform .25s ease;
+}
 
+.open,
+.closed {
+  cursor: pointer;
+}
+
+.open {
   .rotate-arrow {
     transform: rotate(180deg);
-    transition: transform .25s ease;
   }
 }
 
 .closed {
-  cursor: pointer;
-
   .rotate-arrow {
     transform: rotate(0deg);
-    transition: transform .15s ease;
   }
 }
 
@@ -275,12 +257,6 @@ md-tooltip {
 .dropdown-card {
   md-card-title {
     outline: none;
-  }
-}
-
-md-card-title {
-  h3 {
-    margin: 0;
   }
 }
 

@@ -6,14 +6,17 @@ function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService,
     var vm = this;
 
     vm.avatar = userService.getAvatarFromUser(authService.getUserInfo().user);
-    vm.gotoLandingPage = $state.go(APP_CONFIG.landingPageState);
     vm.title = '';
     vm.toggleAppDrawer = buildToggler('appDrawer');
     vm.toggleNotifications = buildToggler('notifications');
-    vm.toggleSystemSettings = $state.go('systemsettings');
+    vm.toggleSystemSettings = toggleSystemSettings;
     vm.toggleUserPanel = buildToggler('userpanel');
     vm.unseenNotifications = 0;
     vm.user = authService.getUserInfo().user;
+
+    function toggleSystemSettings() {
+        $state.go('systemsettings');
+    }
 
     $scope.headerService = headerService;
     $scope.notificationsService = notificationsService;

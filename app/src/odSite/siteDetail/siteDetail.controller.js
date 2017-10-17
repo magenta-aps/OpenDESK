@@ -1,5 +1,5 @@
 angular
-    .module('site.detail')
+    .module('openDeskApp.site')
     .controller('SiteDetailController', SiteDetailController);
 
 function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,

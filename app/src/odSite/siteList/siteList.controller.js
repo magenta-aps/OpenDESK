@@ -1,5 +1,5 @@
 angular
-	.module('site.list')
+	.module('openDeskApp.site')
 	.controller('SiteListController', SiteListController);
 
 function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService,

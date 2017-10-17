@@ -9,7 +9,7 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
         url: '/' + APP_CONFIG.sitesUrl,
         views: {
             'content@': {
-                templateUrl: 'app/src/odSiteList/siteList.view.html',
+                templateUrl: 'app/src/odSite/siteList/siteList.view.html',
                 controller: 'SiteListController',
                 controllerAs: 'vm'
             }

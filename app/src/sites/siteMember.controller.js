@@ -1,7 +1,5 @@
-'use strict';
-
 angular
-    .module('openDeskApp.sites')
+    .module('openDeskApp.site')
     .controller('SiteMemberController', SiteMemberController);
 
 

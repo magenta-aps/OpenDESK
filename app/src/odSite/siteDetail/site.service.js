@@ -1,7 +1,7 @@
-'use strict';
+angular.module('openDeskApp.site').factory('siteService', SiteService);
 
-angular.module('site.detail').factory('siteService', 
-    function ($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
+
+function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
 
     var restBaseUrl = '/alfresco/s/api/';
 
@@ -33,52 +33,57 @@ angular.module('site.detail').factory('siteService',
             });
         },
 
-        getAllOwners: function() {
+        getAllOwners: function () {
 
             return $http.post("/alfresco/service/groups", {
-                PARAM_METHOD : "getGroupMembers",
+                PARAM_METHOD: "getGroupMembers",
                 PARAM_GROUP_NAME: 'OPENDESK_ProjectOwners'
-            }).then(function(response) {
-                return response.data;
-            },
-            function (error) {
-                console.log("Error retrieving list of all managers.");
-                console.log(error);
-            });
+            }).then(function (response) {
+                    return response.data;
+                },
+                function (error) {
+                    console.log("Error retrieving list of all managers.");
+                    console.log(error);
+                });
         },
 
-        getTemplateNames: function() {
-            
-            return systemSettingsService.getTemplates().then (function(response) {
+        getTemplateNames: function () {
+
+            return systemSettingsService.getTemplates().then(function (response) {
                 return response;
             });
         },
 
-        getAllOrganizationalCenters: function() {
+        getAllOrganizationalCenters: function () {
             return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
-            .then(function(response) {
-                if (response.status && response.status !== 200) {
-                    return $q.reject(response);
-                }
-                return response.data || response;
-            }, function (error) {
-                console.log("Error retrieving list of all organizational centers.");
-                console.log(error);
-            });
+                .then(function (response) {
+                    if (response.status && response.status !== 200) {
+                        return $q.reject(response);
+                    }
+                    return response.data || response;
+                }, function (error) {
+                    console.log("Error retrieving list of all organizational centers.");
+                    console.log(error);
+                });
         },
 
         getSites: function () {
-            return $http.post("/alfresco/service/sites", {PARAM_METHOD: "getAll"}).then(
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD: "getAll"
+            }).then(
                 function (response) {
                     return response.data;
-                }, function (error) {
+                },
+                function (error) {
                     console.log("Error retrieving list of all sites.");
                     console.log(error);
                 }
             )
         },
         getSitesPerUser: function () {
-            return $http.post("/alfresco/service/sites", {PARAM_METHOD: "getSitesPerUser"}).then(
+            return $http.post("/alfresco/service/sites", {
+                PARAM_METHOD: "getSitesPerUser"
+            }).then(
                 function (response) {
                     return response.data;
                 },
@@ -120,7 +125,7 @@ angular.module('site.detail').factory('siteService',
                 visibility: visibility
             }).then(function (response) {
                 var isInherited = response.data.isPublic
-                getNode(shortName, "documentLibrary", "").then(function(response) {
+                getNode(shortName, "documentLibrary", "").then(function (response) {
                     var nodeId = response.parent.nodeRef.split("/")[3];
                     var data = {
                         "isInherited": isInherited,
@@ -143,7 +148,7 @@ angular.module('site.detail').factory('siteService',
             });
         },
 
-        createPDSite: function(siteName, description, sbsys, center_id, owner, manager, visibility, template) {
+        createPDSite: function (siteName, description, sbsys, center_id, owner, manager, visibility, template) {
             return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
                 PARAM_DESCRIPTION: description,
@@ -159,7 +164,7 @@ angular.module('site.detail').factory('siteService',
             });
         },
 
-        updatePDSite: function(shortName, siteName, description, sbsys, center_id, owner, manager, visibility, state) {
+        updatePDSite: function (shortName, siteName, description, sbsys, center_id, owner, manager, visibility, state) {
             return $http.post('/alfresco/service/projectdepartment', {
                 PARAM_NAME: siteName,
                 PARAM_SITE_SHORT_NAME: shortName,
@@ -208,7 +213,9 @@ angular.module('site.detail').factory('siteService',
 
             return $http.put('/api/sites/' + siteName + '/memberships', {
                 role: newRole,
-                person: {userName: member}
+                person: {
+                    userName: member
+                }
             }).then(function (response) {
                 return response.data;
             });
@@ -241,7 +248,7 @@ angular.module('site.detail').factory('siteService',
             });
         },
         uploadFiles: function (file, destination, extras) {
-            
+
             return $http.post("/alfresco/service/sites", {
                 PARAM_METHOD: "returnFileName",
                 PARAM_FILENAME: file.name,
@@ -256,7 +263,9 @@ angular.module('site.detail').factory('siteService',
 
                 return $http.post("/api/upload", formData, {
                     transformRequest: angular.identity,
-                    headers: {'Content-Type': undefined}
+                    headers: {
+                        'Content-Type': undefined
+                    }
                 }).then(function (response) {
                     return response;
                 });
@@ -274,7 +283,9 @@ angular.module('site.detail').factory('siteService',
 
             return $http.post("/api/upload", formData, {
                 transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
+                headers: {
+                    'Content-Type': undefined
+                }
             }).then(function (response) {
                 return response;
             });
@@ -451,7 +462,7 @@ angular.module('site.detail').factory('siteService',
         },
 
 
-        setUserManagedProjects: function() {
+        setUserManagedProjects: function () {
             this.getSitesPerUser().then(function (response) {
                 var projects = [];
                 for (var i in response) {
@@ -462,7 +473,7 @@ angular.module('site.detail').factory('siteService',
             });
         },
 
-        getUserManagedProjects: function() {
+        getUserManagedProjects: function () {
             return userManagedProjects;
         },
 
@@ -470,9 +481,9 @@ angular.module('site.detail').factory('siteService',
 
         getGroupsAndMembers: function () {
             return $http.post("/alfresco/service/groups", {
-                PARAM_METHOD : "getGroupsAndMembers",
+                PARAM_METHOD: "getGroupsAndMembers",
                 PARAM_SITE_SHORT_NAME: site.shortName
-            }).then(function(response) {
+            }).then(function (response) {
                 groups.list = response.data;
                 return response.data;
             });
@@ -516,14 +527,14 @@ angular.module('site.detail').factory('siteService',
         }
     };
 
-    function getNode (siteName, container, path) {
+    function getNode(siteName, container, path) {
         return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
             return response.data;
         });
     }
 
-    function createNotification (receiver, subject, message, link, wtype, project) {
+    function createNotification(receiver, subject, message, link, wtype, project) {
         notificationsService.addNotice(receiver, subject, message, link, wtype, project);
     }
 
-});
+}

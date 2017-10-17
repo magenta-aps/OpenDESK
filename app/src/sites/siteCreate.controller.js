@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('openDeskApp.sites')
+    .module('openDeskApp.site')
     .controller('SiteCreateController', SiteCreateController);
 
 function SiteCreateController($q, $mdDialog, APP_CONFIG, $state, filterService, siteService,

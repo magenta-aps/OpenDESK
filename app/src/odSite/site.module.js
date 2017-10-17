@@ -1,14 +1,29 @@
-angular.module('site.detail', ['ngMaterial', 'fixed.table.header'])
-        .config(config);
+angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
+.config(config);
+
 
 function config($stateProvider, APP_CONFIG, USER_ROLES) {
 
-    $stateProvider.state('project', {
+    $stateProvider.state('projects', {
+        parent: 'site',
+        url: '/' + APP_CONFIG.sitesUrl,
+        views: {
+            'content@': {
+                templateUrl: 'app/src/odSite/siteList/siteList.view.html',
+                controller: 'SiteListController',
+                controllerAs: 'vm'
+            }
+        },
+        params: {
+            authorizedRoles: [USER_ROLES.user]
+        }
+    })
+    .state('project', {
         parent: 'site',
         url: '/' + APP_CONFIG.sitesUrl + '/:projekt',
         views: {
             'content@': {
-                templateUrl: 'app/src/odSiteDetail/siteDetail.view.html',
+                templateUrl: 'app/src/odSite/siteDetail/siteDetail.view.html',
                 controller: 'SiteDetailController',
                 controllerAs: 'vm'
             }
@@ -60,4 +75,5 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
             }
         }
     });
+
 }

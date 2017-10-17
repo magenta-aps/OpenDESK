@@ -22,6 +22,27 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     vm.notificationFrom = '';
 
+    vm.updatePreview = loadPreview;
+
+    setPDFViewerHeight();
+    loadPreview();
+
+    $scope.cancelDialog = function() {
+        $mdDialog.cancel();
+    }
+
+    $scope.searchUsers = function (filter) {
+        return userService.getUsers(filter);
+    };
+
+    vm.cancel = function() {
+        $mdDialog.cancel();
+    }
+
+    vm.goBack = function() {
+        window.history.go(-2);
+    }
+
     function setPDFViewerHeight() {
         var height = $(window).height() - 150 - $("header").outerHeight();
 
@@ -30,7 +51,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             "width": "100%"
         };
     }
-    setPDFViewerHeight();
 
     angular.element($window).bind('resize', function () {
 
@@ -68,10 +88,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         var fileName = file.replace(/^C:\\fakepath\\/, "");
         document.getElementById("uploadFile").innerHTML = fileName;
     };
-
-    vm.cancel = $mdDialog.cancel();
-
-    vm.goBack = window.history.go(-2);
 
     vm.godkendDialog = function (event) {
         $mdDialog.show({
@@ -154,7 +170,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             vm.notificationFrom = val;
         });
     };
-    vm.getNotificationFrom();
+    //vm.getNotificationFrom();
 
     vm.createWFNotification = function (comment, wtype) {
 
@@ -290,8 +306,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         }
     }
 
-    loadPreview();
-
     function confirmLoolEditDocDialog(event) {
         var confirm = $mdDialog.confirm()
             .title('Vil du redigere dette dokument?')
@@ -321,8 +335,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             });
         });
     }
-
-    vm.updatePreview = loadPreview();
 
     //Goes to the libreOffice online edit page
     vm.goToLOEditPage = function () {
@@ -393,12 +405,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 doc: parentDocumentNode
             });
         });
-    };
-
-    $scope.cancelDialog = $mdDialog.cancel();
-
-    $scope.searchUsers = function (filter) {
-        return userService.getUsers(filter);
     };
 
     angular.element(document).ready(function () {
