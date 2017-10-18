@@ -7,7 +7,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 
 	var vm = this;
 
-	vm.cancel = cancel;
+	vm.cancelDialog = cancelDialog;
 	vm.config = APP_CONFIG.settings;
 	vm.currentDialogDescription = '';
 	vm.currentDialogShortName = '';
@@ -121,7 +121,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 		});
 	};
 	
-	function cancel() {
+	function cancelDialog() {
 		$mdDialog.cancel();
 	};
 

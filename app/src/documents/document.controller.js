@@ -26,7 +26,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.uploadNewVersionDialog = uploadNewVersionDialog;
     vm.uploadNewVersion = uploadNewVersion;
     vm.searchUsers = searchUsers;
-    vm.cancel = cancel;
+    vm.cancelDialog = cancelDialog;
     vm.goBack = goBack;
     vm.createWFNotification = createWFNotification;
     vm.highlightVersion = highlightVersion;
@@ -78,7 +78,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         return userService.getUsers(filter);
     };
 
-    function cancel() {
+    function cancelDialog() {
         $mdDialog.cancel();
     }
 

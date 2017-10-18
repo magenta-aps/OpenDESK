@@ -14,7 +14,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
     vm.user = '';
     vm.isLoading = true;
 
-    vm.cancel = cancel;
+    vm.cancelDialog = cancelDialog;
     vm.changeSubscription = changeSubscription;
     vm.deleteDiscussion = deleteDiscussion;
     vm.editFirstPost = editFirstPost;
@@ -54,7 +54,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         }
     }
 
-    function cancel() {
+    function cancelDialog() {
         $mdDialog.cancel();
     }
 

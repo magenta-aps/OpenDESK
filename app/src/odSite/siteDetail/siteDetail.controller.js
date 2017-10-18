@@ -13,7 +13,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
 
     var vm = this;
 
-    vm.cancel = cancel;
+    vm.cancelDialog = cancelDialog;
     vm.currentUser = authService.getUserInfo().user;
     vm.editSiteDialog = editSiteDialog;
     vm.editSiteGroups = editSiteGroups;
@@ -69,7 +69,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
         );
     }
     
-    function cancel() {
+    function cancelDialog() {
         $mdDialog.cancel();
     };
 

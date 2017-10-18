@@ -10,7 +10,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
     var vm = this;
 
-    vm.cancel = cancel;
+    vm.cancelDialog = cancelDialog;
     $scope.config = APP_CONFIG.settings;
     $scope.isSite = $stateParams.isSite;
 
@@ -200,7 +200,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
     // Dialogs
     
-    function cancel() {
+    function cancelDialog() {
         $mdDialog.cancel();
         $scope.files = [];
     }
@@ -208,7 +208,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     function hideDialogAndReloadContent() {
         $scope.uploading = false;
         loadContentList();
-        cancel();
+        cancelDialog();
     }
 
     // Documents
@@ -273,7 +273,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
     $scope.createReviewNotification = function (userName, comment) {
         siteService.createReviewNotification($scope.documentNodeRef, userName, comment);
-        $mdDialog.hide();
+        $mdDialog.cancel();
     };
 
     vm.uploadNewVersionDialog = function (event, nodeRef) {
