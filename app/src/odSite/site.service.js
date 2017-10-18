@@ -1,5 +1,6 @@
-angular.module('openDeskApp.site').factory('siteService', SiteService);
+'use strict';
 
+angular.module('openDeskApp.site').factory('siteService', SiteService);
 
 function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
 
@@ -55,6 +56,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         },
 
         getAllOrganizationalCenters: function () {
+            console.log('it works');
             return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
                 .then(function (response) {
                     if (response.status && response.status !== 200) {
@@ -78,7 +80,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                     console.log("Error retrieving list of all sites.");
                     console.log(error);
                 }
-            )
+            );
         },
         getSitesPerUser: function () {
             return $http.post("/alfresco/service/sites", {
@@ -90,7 +92,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                 function (err) {
                     //console.log(err);
                 }
-            )
+            );
         },
         getSitesByQuery: function (query) {
             return $http.post("/alfresco/service/sites", {
@@ -98,7 +100,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                 PARAM_USERNAME: "query"
             }).then(function (response) {
                 return response.data;
-            })
+            });
         },
         createSite: function (siteName, siteDescription, siteVisibility) {
             return $http.post('/alfresco/service/sites', {
@@ -124,7 +126,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                 description: (description && description !== '') ? description : '',
                 visibility: visibility
             }).then(function (response) {
-                var isInherited = response.data.isPublic
+                var isInherited = response.data.isPublic;
                 getNode(shortName, "documentLibrary", "").then(function (response) {
                     var nodeId = response.parent.nodeRef.split("/")[3];
                     var data = {
@@ -433,7 +435,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
             }).then(
                 function (response) {
                     var userRole;
-                    if (response.data[0].role == undefined)
+                    if (response.data[0].role === undefined)
                         userRole = outsiderRole;
                     else
                         userRole = response.data[0].role;
@@ -505,15 +507,15 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                         var preferenceFilter = "dk.magenta.sites.receiveNotifications";
                         var receiveNotifications = "true";
 
-                        if (member.preferences[preferenceFilter] != null)
+                        if (member.preferences[preferenceFilter] !== null)
                             receiveNotifications = member.preferences[preferenceFilter];
 
-                        if (receiveNotifications != null && receiveNotifications == "true") {
+                        if (receiveNotifications !== null && receiveNotifications == "true") {
                             createNotification(member.userName, subject, message, link, 'new-doc', site.shortName);
                         }
                     }
-                })
-            })
+                });
+            });
         },
 
         createReviewNotification: function (documentNodeRef, receiver, message) {

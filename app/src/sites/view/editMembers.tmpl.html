@@ -1,10 +1,10 @@
 <md-dialog aria-label="{{'MEMBER.ADD_REMOVE_MEMBERS' | translate}}" class="site-dialog">
-	<form name="membersForm" ng-submit="updatePDSiteGroups()">
+	<form name="membersForm" ng-submit="vm.updatePDSiteGroups()">
 		<md-toolbar>
 			<div class="md-toolbar-tools">
 				<h2>{{'MEMBER.ADD_REMOVE_MEMBERS' | translate}}</h2>
 				<span flex></span>
-				<md-button class="md-icon-button" ng-click="cancel()">
+				<md-button class="md-icon-button" ng-click="vm.cancelDialog()">
 					<md-icon>close</md-icon>
 				</md-button>
 			</div>
@@ -25,11 +25,11 @@
 						</h4>
 						<div ng-show="!showGroupList[groupIndex]">
 							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
-									  md-on-remove="removeMemberFromSite($chip, group[0].shortName)"
-							    md-on-add="addMemberToSite($chip, group[0].shortName)">
+									  md-on-remove="vm.removeMemberFromSite($chip, group[0].shortName)"
+							    md-on-add="vm.addMemberToSite($chip, group[0].shortName)">
 								<md-autocomplete md-selected-item="selectedProjGrpItem"
 												 md-search-text="vm.searchTextList[groupIndex]"
-												 md-items="pgitem in searchPeople(vm.searchTextList[groupIndex])"
+												 md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
 								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
 									<span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
 										{{ pgitem.displayName }}
@@ -70,11 +70,11 @@
 					<md-input-container>
 						<label>Rolle</label>
 						<md-select ng-model="externalUser.group">
-							<md-option ng-repeat="group in groups.list | filter: groupFilter" ng-value="group">{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</md-option>
+							<md-option ng-repeat="group in groups.list | filter: vm.groupFilter" ng-value="group">{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</md-option>
 						</md-select>
 					</md-input-container>
 					<div style="position: relative; top: -25px;">
-						<md-button class="md-primary" ng-click="addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
+						<md-button class="md-primary" ng-click="vm.addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
 							<md-icon>add</md-icon> {{'COMMON.ADD' | translate}}
 						</md-button>
 					</div>

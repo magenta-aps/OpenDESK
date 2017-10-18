@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('openDeskApp.filebrowser')
     .factory('filebrowserService', fileBrowserService);
 
@@ -11,7 +13,7 @@ function fileBrowserService($http, alfrescoNodeUtils) {
         getNode: getNode,
         getTemplates: getTemplates,
         loadFromSbsys: loadFromSbsys
-    }
+    };
     
     return service;
 

@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp.site')
     .controller('SiteDetailController', SiteDetailController);
@@ -25,7 +27,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     vm.newTemplateName = '';
     vm.openMemberInfo = openMemberInfo;
     vm.openMenu = openMenu;
-    vm.path = $stateParams.path == undefined ? '' : $stateParams.path;
+    vm.path = $stateParams.path === undefined ? '' : $stateParams.path;
     vm.permissions = {};
     vm.project = {};
     vm.reload = reload;
@@ -71,17 +73,17 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     
     function cancelDialog() {
         $mdDialog.cancel();
-    };
+    }
 
 
     function reload() {
         $window.location.reload();
-    };
+    }
 
 
     function openMenu($mdOpenMenu, event) {
         $mdOpenMenu(event);
-    };
+    }
     
     function openMemberInfo(member, event) {
         var avatar = userService.getAvatarFromUser(member);
@@ -90,7 +92,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
                 $scope.member = member;
                 $scope.avatar = avatar;
             }],
-            templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
+            templateUrl: 'app/src/odSite/siteDetail/memberInfo.view.html',
             locals: {
                 member: member
             },
@@ -119,18 +121,18 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             if (val !== undefined) {
                 $rootScope.searchResults = [];
                 $rootScope.searchResults = val.data.items;
-                window.location.href = "#!/search";
+                $window.location.href = "#!/search";
             } else {
                 return [];
             }
         });
-    };
+    }
     
     function getAutoSuggestions(term) {
         return searchService.getSearchSuggestions(term).then(function (val) {
             return val !== undefined ? val : [];
         });
-    };
+    }
 
     function gotoPath(ref) {
         documentService.getPath(ref.split("/")[3]).then(function (val) {
@@ -139,7 +141,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
 
             $window.location.href = "/#!/dokument/" + path;
         });
-    };
+    }
 
     function editSiteDialog(ev) {
         $mdDialog.show({

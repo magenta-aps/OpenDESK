@@ -1,20 +1,27 @@
+'use strict';
+
 angular
     .module('openDeskApp.header')
     .factory('headerService', headerService);
 
 function headerService() {
 
-    var vm = this;
-
     var currentTitle = '';
-    
-    vm.setTitle = function (title) {
-        currentTitle = title;
-    };
 
-    vm.getTitle = function() {
+    var service = {
+        setTitle: setTitle,
+        getTitle: getTitle
+    };
+    
+    return service;
+
+    function setTitle(title) {
+        currentTitle = title;
+    }
+
+    
+    function getTitle() {
         return currentTitle;
     }
 
-    return vm;
 }

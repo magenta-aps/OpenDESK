@@ -1,23 +1,30 @@
+'use strict';
+
 angular
     .module('openDeskApp.user')
-    .controller('UserController', UserController)
-    .directive('odUser', function () {
-        return {
-            scope: {},
-            templateUrl: 'app/src/user/view/user.html',
-            controller: 'UserController',
-            controllerAs: 'vm'
-        };
-    });
+    .controller('UserController', UserController);
 
-function UserController($scope, $mdSidenav, authService, userService) {
+function UserController($scope, $mdSidenav, userService, authService, preferenceService) {
     var vm = this;
+    
+    vm.close = close;
+    vm.getAvatar = getAvatar;
     vm.receiveNotifications = "true";
+    vm.setNotificationPreferences = setNotificationPreferences;
     vm.user = authService.getUserInfo().user;
-    getAvatar();
+    
+    $scope.uploadAvatar = uploadAvatar;
 
-    vm.close = function () {
+    getAvatar();
+    
+    function close() {
         $mdSidenav('userpanel').close();
+    }
+    
+    function getAvatar() {
+        return userService.getAvatar(vm.user.userName).then(function (data) {
+            vm.avatar = data;
+        });
     }
 
     function setNotificationPreferences() {
@@ -27,22 +34,13 @@ function UserController($scope, $mdSidenav, authService, userService) {
             return data;
         });
     }
-    vm.setNotificationPreferences = setNotificationPreferences;
 
-    $scope.uploadAvatar = function(element) {
+    function uploadAvatar(element) {
         var file = element.files[0];
-        console.log('upload avatar');
-        console.log(file);
         userService.uploadAvatar(file, vm.user.userName).then(function(data) {
             getAvatar();
             return data;
         });
     }
 
-    function getAvatar() {
-        return userService.getAvatar(vm.user.userName).then(function (data) {
-            vm.avatar = data;
-        });
-    }
-    vm.getAvatar = getAvatar;
-};
+}

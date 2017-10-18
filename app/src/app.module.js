@@ -139,7 +139,7 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
                 template: '<od-header></od-header>'
             },
             'sideNavs@': {
-                template: '<od-chat></od-chat><od-notifications></od-notifications><od-user></od-user><od-app-drawer></od-app-drawer>'
+                template: '<od-chat></od-chat><od-notifications></od-notifications><od-user-panel></od-user-panel><od-app-drawer></od-app-drawer>'
             }
         },
         params: {

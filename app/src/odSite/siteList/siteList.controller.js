@@ -1,3 +1,5 @@
+'use strict';
+
 angular
 	.module('openDeskApp.site')
 	.controller('SiteListController', SiteListController);
@@ -9,6 +11,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 
 	vm.cancelDialog = cancelDialog;
 	vm.config = APP_CONFIG.settings;
+	vm.createSiteDialog = createSiteDialog;
 	vm.currentDialogDescription = '';
 	vm.currentDialogShortName = '';
 	vm.currentDialogSite = '';
@@ -64,7 +67,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 	}
 	
 	function exactMatchFilter(project) { 
-		if(vm.search == undefined || vm.search.type == '') {
+		if(vm.search === undefined || vm.search.type === '') {
 			return true;
 		}
 
@@ -111,7 +114,21 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
             preserveScope: true,
             clickOutsideToClose: true,
         });
-	};
+	}
+
+	function createSiteDialog(ev, type) {
+        $mdDialog.show({
+            templateUrl: 'app/src/odSite/siteCreate/siteCreate.view.html',
+            controller: 'SiteCreateController',
+            controllerAs: 'vm',
+            locals: {
+                sitetype: type
+            },
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
+    }
 	
 	function deleteSite(siteName) {
 		siteService.deleteSite(siteName).then(function (result) {
@@ -119,19 +136,19 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 			getSitesPerUser();
 			$mdDialog.cancel();
 		});
-	};
+	}
 	
 	function cancelDialog() {
 		$mdDialog.cancel();
-	};
+	}
 
 	function reload() {
 		$window.location.reload();
-	};
+	}
 	
 	function openMenu($mdOpenMenu, event) {
 		$mdOpenMenu(event);
-	};
+	}
 	
 	function toggleFilters() {
 		vm.showFilters = !vm.showFilters;
@@ -151,12 +168,12 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 			preserveScope: true, // do not forget this if use parent scope
 			clickOutsideToClose: true
 		});
-	};
+	}
 
 	function infoSiteDialog(site) {
 		vm.currentDialogSite = site;
 		$mdDialog.show({
-			templateUrl: 'app/src/sites/view/infoSite.tmpl.html',
+			templateUrl: 'app/src/odSite/siteList/siteInfo.view.html',
 			parent: angular.element(document.body),
 			//targetEvent: event,
 			scope: $scope, // use parent scope in template

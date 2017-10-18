@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp.site')
     .controller('SiteMemberController', SiteMemberController);
@@ -5,21 +7,23 @@ angular
 
 function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
                              notificationsService, alfrescoDownloadService) {
+    var vm = this;
 
     $scope.externalUser = {};
-    $scope.searchPeople = searchPeople;
-    $scope.addExternalUserToGroup = addExternalUserToGroup;
-    $scope.cancel = cancel;
-    $scope.updatePDSiteGroups = updatePDSiteGroups;
-    $scope.doPDF = doPDF;
-    $scope.addMemberToSite = addMemberToSite;
-    $scope.removeMemberFromSite = removeMemberFromSite;
+    vm.addExternalUserToGroup = addExternalUserToGroup;
+    vm.addMemberToSite = addMemberToSite;
+    vm.cancelDialog = cancelDialog;
+    vm.doPDF = doPDF;
+    vm.groupFilter = groupFilter;
+    vm.removeMemberFromSite = removeMemberFromSite;
+    vm.searchPeople = searchPeople;
+    vm.updatePDSiteGroups = updatePDSiteGroups;
 
-    $scope.groupFilter = function (group) {
+    function groupFilter(group) {
         if (group[0].multipleMembers) {
             return group;
         }
-    };
+    }
 
     function searchPeople(query) {
         if (query) {
@@ -65,7 +69,7 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
         });
     }
 
-    function cancel() {
+    function cancelDialog() {
         $mdDialog.cancel();
     }
 
@@ -100,12 +104,12 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
                 }
             }
         });
-    };
+    }
 
     function removeMemberFromSite(user, groupName) {
         var userName = user.userName;
         siteService.removeMemberFromSite($scope.site.shortName, userName, groupName).then(function (response) {});
-    };
+    }
 
     function createNotification(userName, subject, message, link, wtype, project) {
         console.log('creating notification...');
