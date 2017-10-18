@@ -1,11 +1,16 @@
+'use strict';
+
 angular
     .module('openDeskApp.filebrowser', ['ngFileUpload'])
     .controller('FilebrowserController', FilebrowserController);
 
-function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast, Upload, siteService, fileUtilsService,
+function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast, $timeout, Upload, siteService, fileUtilsService,
     filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
     userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG, EDITOR_CONFIG) {
 
+    var vm = this;
+
+    vm.cancel = cancel;
     $scope.config = APP_CONFIG.settings;
     $scope.isSite = $stateParams.isSite;
 
@@ -17,7 +22,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     $scope.isLoading = true;
 
     $scope.history = [];
-    $scope.documentTab = '/dokumenter';
 
     $scope.folderTemplates = {};
     $scope.documentTemplates = {};
@@ -29,30 +33,29 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
 
-    $scope.permissions = {};
+    vm.permissions = {};
     $scope.documentNodeRef = "";
     $scope.uploading = false;
 
     $scope.error = false;
 
     $scope.$watch('filesToFilebrowser', function () {
-        if ($scope.filesToFilebrowser != null) {
+        if ($scope.filesToFilebrowser !== null) {
             $scope.files = $scope.filesToFilebrowser;
-
-            console.log('go!');
-
             $scope.uploadFiles($scope.files);
         }
     });
 
-    function init() {
+    activate();
+
+    function activate() {
         if ($scope.isSite) {
             $scope.tab.selected = $stateParams.selectedTab;
             $scope.$watch('siteService.getSite()', function (newVal) {
                 $scope.site = newVal;
             });
             $scope.$watch('siteService.getPermissions()', function (newVal) {
-                $scope.permissions = newVal;
+                vm.permissions = newVal;
             });
             $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
                 $scope.userManagedProjects = newVal;
@@ -69,7 +72,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
             console.log(response);
 
-            if ($scope.documentTemplates != undefined)
+            if ($scope.documentTemplates !== undefined)
                 processContent($scope.documentTemplates);
         });
 
@@ -82,8 +85,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
     }
 
-    init();
-
     function setFolderAndPermissions(path) {
 
         filebrowserService.getCompanyHome().then(function (val) {
@@ -91,7 +92,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             filebrowserService.getNode(companyHomeUri, path).then(
                 function (response) {
                     setFolder(response.metadata.parent.nodeRef);
-                    $scope.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit;
+                    vm.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit;
                 },
                 function (error) {
                     $scope.isLoading = false;
@@ -175,7 +176,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             link: homeLink
         }];
 
-        if ($stateParams.path != undefined) {
+        if ($stateParams.path !== undefined) {
             var pathArr = $stateParams.path.split('/');
             var pathLink = '/';
             for (var a in pathArr) {
@@ -198,16 +199,16 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
 
     // Dialogs
-
-    $scope.cancelDialog = function () {
+    
+    function cancel() {
         $mdDialog.cancel();
         $scope.files = [];
-    };
+    }
 
     function hideDialogAndReloadContent() {
         $scope.uploading = false;
         loadContentList();
-        $scope.cancelDialog();
+        cancel();
     }
 
     // Documents
@@ -248,7 +249,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
     $scope.doubleClick = function doubleClick() {
         console.log('det virker!');
-    }
+    };
 
     $scope.goToLOEditPage = function (nodeRef, fileName) {
         $state.go('lool', {
@@ -275,7 +276,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         $mdDialog.hide();
     };
 
-    $scope.uploadNewVersionDialog = function (event, nodeRef) {
+    vm.uploadNewVersionDialog = function (event, nodeRef) {
         $scope.documentNodeRef = nodeRef;
 
         $mdDialog.show({
@@ -288,7 +289,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
     };
 
-    $scope.uploadNewVersion = function (file) {
+    vm.uploadNewVersion = function (file) {
         $scope.uploading = true;
         siteService.uploadNewVersion(file, $scope.folderNodeRef, $scope.documentNodeRef).then(function (val) {
             $scope.uploading = false;
@@ -392,7 +393,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         $scope.template = template;
         $scope.newContentName = template.name;
 
-        if (template.nodeRef == null) {
+        if (template.nodeRef === null) {
             $mdDialog.show({
                 templateUrl: 'app/src/filebrowser/view/content/folder/newFolder.tmpl.html',
                 parent: angular.element(document.body),

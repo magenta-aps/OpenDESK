@@ -4,7 +4,6 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
 
     var restBaseUrl = '/alfresco/s/api';
     var currentUser = authService.getUserInfo().user.userName;
-
     var selectedDiscussion = [];
     var replies = [];
 

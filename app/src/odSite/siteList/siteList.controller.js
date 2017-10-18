@@ -5,30 +5,36 @@ angular
 function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService,
 						 sessionService, APP_CONFIG, browserService,headerService) {
 
-    browserService.setTitle($translate.instant('SITES.NAME'));
-
 	var vm = this;
-    vm.config = APP_CONFIG.settings;
 
+	vm.cancel = cancel;
+	vm.config = APP_CONFIG.settings;
+	vm.currentDialogDescription = '';
+	vm.currentDialogShortName = '';
+	vm.currentDialogSite = '';
+	vm.currentDialogTitle = '';
+	vm.deleteSite = deleteSite;
+	vm.deleteSiteDialog = deleteSiteDialog;
+	vm.exactMatchFilter = exactMatchFilter;
+	vm.infoSiteDialog = infoSiteDialog;
+	vm.isAdmin = sessionService.isAdmin();
+	vm.isLoading = true;
+	vm.managerRole = 'Manager';
+	vm.openMenu = openMenu;
+	vm.organizationalCenters = [];
+	vm.reload = reload;
+	vm.renameSiteDialog = renameSiteDialog;
+	vm.searchMembers = [];
+	vm.showall = false;
+	vm.showFilters = false;
 	vm.sites = [];
 	vm.sitesPerUser = [];
-	vm.organizationalCenters = [];
-	vm.managerRole = 'Manager';
-	vm.showall = false;
-	vm.isAdmin = sessionService.isAdmin();
-	vm.searchMembers = [];
-
-	vm.showFilters = false;
-
-	vm.infoSiteDialog = infoSiteDialog;
-	vm.isLoading = true;
-
 	vm.states = [
 		  		{key:'ACTIVE', name:'Igang'},
 				{key:'CLOSED', name:'Afsluttet'},
 				{key:'', name:'Alle'}];
-	
 	vm.types = [];
+	vm.toggleFilters = toggleFilters;
 
 	activate();
 	
@@ -45,21 +51,25 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 		else if(vm.config.enableProjects)
 			vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
 		
+		browserService.setTitle($translate.instant('SITES.NAME'));
 		headerService.setTitle($translate.instant(vm.sitesName));
 	
 		//sets the margin to the width of sidenav
 		var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();
 		$("#table-container").css("max-height", tableHeight+"px");
-	}
 
-	vm.exactMatchFilter = function (project) { 
+		getSites();
+		getSitesPerUser();
+		getAllOrganizationalCenters();
+	}
+	
+	function exactMatchFilter(project) { 
 		if(vm.search == undefined || vm.search.type == '') {
 			return true;
 		}
 
 		return vm.search.type == project.type;
 	}
-
 
 	function getSites() {
 		vm.isLoading = true;
@@ -68,14 +78,12 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 			vm.isLoading = false;
 		});
 	}
-	getSites();
 
 	function getSitesPerUser() {
 		return siteService.getSitesPerUser().then(function (response) {
 			vm.sitesPerUser = response;
 		});
 	}
-	getSitesPerUser();
 
 
 	function getAllOrganizationalCenters() {
@@ -87,10 +95,8 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 			});
 		});
 	}
-	getAllOrganizationalCenters();
-
-
-	vm.deleteSiteDialog = function (project, event) {
+	
+	function deleteSiteDialog(project, event) {
 		$mdDialog.show({
             controller: ['$scope', 'project', function ($scope, project) {
                 $scope.project = project;
@@ -106,40 +112,34 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
             clickOutsideToClose: true,
         });
 	};
-
-	vm.deleteSite = function (siteName) {
+	
+	function deleteSite(siteName) {
 		siteService.deleteSite(siteName).then(function (result) {
 			getSites();
 			getSitesPerUser();
 			$mdDialog.cancel();
 		});
 	};
-
-
-	vm.cancel = function () {
+	
+	function cancel() {
 		$mdDialog.cancel();
 	};
 
-
-	vm.reload = function () {
+	function reload() {
 		$window.location.reload();
 	};
-
-
-	vm.openMenu = function ($mdOpenMenu, event) {
+	
+	function openMenu($mdOpenMenu, event) {
 		$mdOpenMenu(event);
 	};
-
-	vm.toggleFilters = function () {
+	
+	function toggleFilters() {
 		vm.showFilters = !vm.showFilters;
-
 		$interval(function(){}, 1,1000);
 	}
 
-	vm.currentDialogTitle = '';
-	vm.currentDialogDescription = '';
-	vm.currentDialogShortName = '';
-	vm.renameSiteDialog = function (event, shortName, title, description) {
+	
+	function renameSiteDialog(event, shortName, title, description) {
 		vm.currentDialogTitle = title;
 		vm.currentDialogDescription = description;
 		vm.currentDialogShortName = shortName;
@@ -152,8 +152,6 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 			clickOutsideToClose: true
 		});
 	};
-
-	vm.currentDialogSite = '';
 
 	function infoSiteDialog(site) {
 		vm.currentDialogSite = site;

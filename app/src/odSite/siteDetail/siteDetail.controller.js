@@ -5,37 +5,41 @@ angular
 function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
                         searchService, userService, browserService, headerService) {
 
-    $scope.permissions = {};
     $scope.history = [];
     $scope.roles = [];
-    $scope.roles_translated = [];
-    $scope.showDetails = false;
     $scope.showGroupList = [];
-    $scope.searchTextList = [];
     $scope.groups = {};
     $scope.groups.list = [];
-    $scope.hasDescription = false;
-    $scope.userService = userService;
 
     var vm = this;
 
-    vm.project = {};
-    vm.path = $stateParams.path == undefined ? '' : $stateParams.path;
-    vm.newTemplateName = '';
-    vm.newFileName = '';
-
-    vm.strings = {};
-    vm.strings.templateProject = "Template-Project";
-    vm.strings.project = "Project";
-
+    vm.cancel = cancel;
     vm.currentUser = authService.getUserInfo().user;
-
-    $scope.editSiteDialog = editSiteDialog;
-    $scope.editSiteGroups = editSiteGroups;
+    vm.editSiteDialog = editSiteDialog;
+    vm.editSiteGroups = editSiteGroups;
+    vm.getAutoSuggestions = getAutoSuggestions;
+    vm.getSearchResults = getSearchResults;
+    vm.gotoPath = gotoPath;
+    vm.hasDescription = false;
+    vm.newFileName = '';
+    vm.newTemplateName = '';
+    vm.openMemberInfo = openMemberInfo;
+    vm.openMenu = openMenu;
+    vm.path = $stateParams.path == undefined ? '' : $stateParams.path;
+    vm.permissions = {};
+    vm.project = {};
+    vm.reload = reload;
+    vm.searchTextList = [];
+    vm.strings = {
+        templateProject: "Template-Project",
+        project: "Project"
+    };
 
     //sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("#filebrowser-breadcrumb").outerHeight() - $("md-tabs-wrapper").outerHeight() - $("#table-actions").outerHeight();
     $("#table-container").css("max-height", tableHeight+"px");
+
+    loadSiteData();
 
     function loadSiteData() {
         siteService.loadSiteData($stateParams.projekt).then(
@@ -46,19 +50,16 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
                 browserService.setTitle(vm.project.title);
                 $scope.currentUser = vm.currentUser;
                 vm.project.visibilityStr = vm.project.visibility === "PUBLIC" ? "Offentlig" : "Privat";
-                $scope.hasDescription = vm.project.description.trim() !== "";
+                vm.hasDescription = vm.project.description.trim() !== "";
 
                 siteService.setUserManagedProjects();
                 loadMembers();
                 getSiteUserPermissions();
 
                 headerService.setTitle($translate.instant('SITES.' + vm.project.type + '.NAME') + ' : ' + vm.project.title);
-
-                //{{'SITES.' + vm.project.type + '.NAME' | translate}} : {{ vm.project.title }}
             }
         );
     }
-    loadSiteData();
 
     function getSiteUserPermissions() {
         siteService.getSiteUserPermissions($stateParams.projekt).then(
@@ -67,20 +68,22 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             }
         );
     }
-
-    vm.cancel = function () {
+    
+    function cancel() {
         $mdDialog.cancel();
     };
 
-    vm.reload = function () {
+
+    function reload() {
         $window.location.reload();
     };
 
-    vm.openMenu = function ($mdOpenMenu, event) {
+
+    function openMenu($mdOpenMenu, event) {
         $mdOpenMenu(event);
     };
-
-    vm.openMemberInfo = function (member, event) {
+    
+    function openMemberInfo(member, event) {
         var avatar = userService.getAvatarFromUser(member);
         $mdDialog.show({
             controller: ['$scope', 'member', function ($scope, member) {
@@ -97,7 +100,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             preserveScope: true,
             clickOutsideToClose: true
         });
-    };
+    }
 
     function loadMembers() {
         siteService.getGroupsAndMembers().then(function (val) {
@@ -105,37 +108,31 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             $scope.groups.list.forEach(function (group) {
                     $scope.roles.push(group[0].shortName);
                     $scope.showGroupList.push(false);
-                    $scope.searchTextList.push(null);
+                    vm.searchTextList.push(null);
             });
 
         });
     }
-
-    vm.getSearchresults = function getSearchReslts(term) {
+    
+    function getSearchResults(term) {
         return searchService.getSearchResults(term).then(function (val) {
-
             if (val !== undefined) {
-
                 $rootScope.searchResults = [];
                 $rootScope.searchResults = val.data.items;
-
                 window.location.href = "#!/search";
-
             } else {
                 return [];
             }
         });
     };
-
-
-    vm.getAutoSuggestions = function getAutoSuggestions(term) {
+    
+    function getAutoSuggestions(term) {
         return searchService.getSearchSuggestions(term).then(function (val) {
             return val !== undefined ? val : [];
         });
     };
 
-
-    vm.gotoPath = function (ref) {
+    function gotoPath(ref) {
         documentService.getPath(ref.split("/")[3]).then(function (val) {
             $scope.selectedDocumentPath = val.container;
             var path = ref.replace("workspace://SpacesStore/", "");
@@ -160,8 +157,8 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     }
 
     function editSiteGroups(ev) {
-        $scope.project = {};
-        $scope.project.shortName = vm.project.shortName;
+        vm.project = {};
+        vm.project.shortName = vm.project.shortName;
 
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/editMembers.tmpl.html',

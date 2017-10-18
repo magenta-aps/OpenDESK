@@ -14,11 +14,51 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
     vm.user = '';
     vm.isLoading = true;
 
-    //sets the margin to the width of sidenav
-	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("md-tabs-wrapper").outerHeight();
-    $(".od-discussion").css("max-height", tableHeight+"px");
+    vm.cancel = cancel;
+    vm.changeSubscription = changeSubscription;
+    vm.deleteDiscussion = deleteDiscussion;
+    vm.editFirstPost = editFirstPost;
+    vm.editFirstPostDialog = editFirstPostDialog;
+    vm.editReply = editReply;
+    vm.editReplyDialog = editReplyDialog;
+    vm.editTitleDialog = editTitleDialog;
+    vm.evaluateFilter = evaluateFilter;
+    vm.getAvatarUrl = getAvatarUrl;
+    vm.getDiscussions = getDiscussions;
+    vm.getReplies = getReplies;
+    vm.newDiscussion = newDiscussion;
+    vm.newDiscussionDialog = newDiscussionDialog;
+    vm.reply = reply;
+    vm.replyDialog = replyDialog;
+    vm.subscriptionIcon = subscriptionIcon;
+    vm.viewDiscussions = viewDiscussions;
+    vm.viewThread = viewThread;
 
-    vm.getDiscussions = function (siteShortName) {
+    //sets the margin to the width of sidenav
+    var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("md-tabs-wrapper").outerHeight();
+    $(".od-discussion").css("max-height", tableHeight + "px");
+
+    activate();
+
+    function activate() {
+        vm.user = sessionService.getUserInfo().user;
+        vm.getDiscussions($stateParams.projekt);
+
+        $scope.tab.selected = $stateParams.selectedTab;
+
+        if ($stateParams.path) {
+            discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path).then(function (response) {
+                vm.selectedDiscussion = discussionService.getSelectedDiscussion();
+                vm.getReplies(vm.selectedDiscussion);
+            });
+        }
+    }
+
+    function cancel() {
+        $mdDialog.cancel();
+    }
+
+    function getDiscussions(siteShortName) {
         vm.isLoading = true;
         discussionService.getDiscussions(siteShortName).then(function (response) {
             response.items.forEach(function (item) {
@@ -31,7 +71,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         });
     }
 
-    vm.getReplies = function (postItem) {
+    function getReplies(postItem) {
         vm.replies = '';
         discussionService.getReplies(postItem).then(function (response) {
             vm.replies = response;
@@ -49,22 +89,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         });
     }
 
-    function init() {
-        vm.user = sessionService.getUserInfo().user;
-        vm.getDiscussions($stateParams.projekt);
-
-        $scope.tab.selected = $stateParams.selectedTab;
-
-        if ($stateParams.path) {
-            discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path).then(function (response) {
-                vm.selectedDiscussion = discussionService.getSelectedDiscussion();
-                vm.getReplies(vm.selectedDiscussion);
-            });
-        }
-    }
-    init();
-
-    vm.replyDialog = function () {
+    function replyDialog() {
         $mdDialog.show({
             templateUrl: 'app/src/odDiscussion/view/reply.tmpl.html',
             parent: angular.element(document.body),
@@ -74,53 +99,57 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         });
     }
 
-    vm.reply = function (content) {
-            discussionService.addReply(vm.selectedDiscussion, content).then(function (response) {
-                discussionService.subscribeToDiscussion($stateParams.projekt, vm.selectedDiscussion);
-                createReplyNotification(response.item);
-                vm.getReplies(vm.selectedDiscussion);
-                $mdDialog.cancel();
-            })
-        },
+    function reply(content) {
+        discussionService.addReply(vm.selectedDiscussion, content).then(function (response) {
+            discussionService.subscribeToDiscussion($stateParams.projekt, vm.selectedDiscussion);
+            createReplyNotification(response.item);
+            vm.getReplies(vm.selectedDiscussion);
+            $mdDialog.cancel();
+        })
+    }
 
-        vm.newDiscussionDialog = function () {
-            $mdDialog.show({
-                templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
-                parent: angular.element(document.body),
-                scope: $scope,
-                preserveScope: true,
-                clickOutsideToClose: true
-            });
-        }
+    function newDiscussionDialog() {
+        $mdDialog.show({
+            templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
+            parent: angular.element(document.body),
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    }
 
-    vm.newDiscussion = function (title, content) {
-            discussionService.addDiscussion($stateParams.projekt, title, content).then(function (response) {
-                discussionService.subscribeToDiscussion($stateParams.projekt, response.item);
-                createNewDiscussionNotification(response.item);
-                vm.getDiscussions($stateParams.projekt);
-                $mdDialog.cancel();
-            });
-        },
+    function newDiscussion(title, content) {
+        discussionService.addDiscussion($stateParams.projekt, title, content).then(function (response) {
+            discussionService.subscribeToDiscussion($stateParams.projekt, response.item);
+            createNewDiscussionNotification(response.item);
+            vm.getDiscussions($stateParams.projekt);
+            $mdDialog.cancel();
+        });
+    }
 
-        vm.viewThread = function (postItem) {
-            return '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
-        }
 
-    vm.deleteDiscussion = function (postItem) {
+    function viewThread(postItem) {
+        return '#!/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
+    }
+
+
+    function deleteDiscussion(postItem) {
         discussionService.deletePost(postItem).then(function (response) {
             vm.getDiscussions($stateParams.projekt);
             vm.getReplies(vm.selectedDiscussion);
         });
     }
 
-    vm.editReply = function (postItem, content) {
+
+    function editReply(postItem, content) {
         discussionService.updatePost(postItem, '', content).then(function (response) {
             $mdDialog.cancel();
             vm.getReplies(vm.selectedDiscussion);
         });
     }
 
-    vm.editReplyDialog = function (postItem) {
+
+    function editReplyDialog(postItem) {
         $mdDialog.show({
             controller: ['$scope', 'postItem', function ($scope, postItem) {
                 $scope.postItem = postItem;
@@ -136,13 +165,15 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         });
     }
 
-    vm.editFirstPost = function (postItem, title, content) {
+
+    function editFirstPost(postItem, title, content) {
         discussionService.updatePost(postItem, title, content).then(function (response) {
             $mdDialog.cancel();
         });
     }
 
-    vm.editFirstPostDialog = function (postItem) {
+
+    function editFirstPostDialog(postItem) {
         $mdDialog.show({
             controller: ['$scope', 'postItem', function ($scope, postItem) {
                 $scope.postItem = postItem;
@@ -158,7 +189,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         });
     }
 
-    vm.editTitleDialog = function (postItem) {
+    function editTitleDialog(postItem) {
         $mdDialog.show({
             controller: ['$scope', 'postItem', function ($scope, postItem) {
                 $scope.postItem = postItem;
@@ -174,11 +205,11 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         });
     }
 
-    vm.viewDiscussions = $state.go('project.discussions');
+    function viewDiscussions() {
+        $state.go('project.discussions');
+    }
 
-    vm.cancel = $mdDialog.cancel();
-    
-    vm.evaluateFilter = function () {
+    function evaluateFilter() {
         if (vm.search == 'all') {
             vm.searchSubscribed = undefined;
             vm.searchUser = undefined;
@@ -196,7 +227,8 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         $interval(function () {}, 1, 1000);
     }
 
-    vm.changeSubscription = function (postItem) {
+
+    function changeSubscription(postItem) {
         postItem.isSubscribed = !postItem.isSubscribed;
 
         if (postItem.isSubscribed) {
@@ -206,11 +238,13 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         }
     }
 
-    vm.subscriptionIcon = function (value) {
+
+    function subscriptionIcon(value) {
         return String(value) == "true" ? 'notifications_active' : 'notifications_none';
     }
 
-    vm.getAvatarUrl = function (avatarRef) {
+
+    function getAvatarUrl(avatarRef) {
         if (avatarRef == undefined)
             return;
         var avatarId = avatarRef.split('/')[3];
@@ -228,7 +262,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         var nodeRef = postItem.nodeRef.split('/')[3];
         var subject = 'Ny samtale i et projekt';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
-        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+        var link = '#!/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
 
         // Iterating list of items.
         angular.forEach($scope.groups.list, function (group) {
@@ -254,7 +288,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         var nodeRef = vm.selectedDiscussion.nodeRef.split('/')[3];
         var subject = 'Ny kommentar på en samtale du følger';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-        var link = '#!/' + APP_CONFIG.sitesUrl +'/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
+        var link = '#!/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
 
         // Iterating list of items.
         angular.forEach($scope.groups.list, function (group) {

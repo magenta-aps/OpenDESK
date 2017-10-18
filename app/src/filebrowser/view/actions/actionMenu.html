@@ -18,28 +18,28 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="content.loolEditable && permissions.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="content.loolEditable && vm.permissions.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="goToLOEditPage(content.nodeRef)">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'COMMON.EDIT' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="vm.permissions.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="reviewDocumentsDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="vm.permissions.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="uploadNewVersionDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="permissions.canEdit && content.contentType != 'cmis:link'">
+        <md-menu-item ng-if="vm.permissions.canEdit && content.contentType != 'cmis:link'">
             <md-button ng-click="renameContentDialog($event, content)">
                 <md-icon md-menu-align-target>title</md-icon>
                 {{'COMMON.RENAME' | translate }}
@@ -53,7 +53,7 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="permissions.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="vm.permissions.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="copyContentDialog($event, content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>content_copy</md-icon>
                 {{'COMMON.COPY' | translate }}

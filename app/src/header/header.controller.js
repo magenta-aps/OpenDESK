@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp.header')
     .controller('HeaderController', HeaderController);

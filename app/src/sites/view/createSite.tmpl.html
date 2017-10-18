@@ -94,9 +94,9 @@
                             <div ng-class="showGroupList[groupIndex] ? 'fold-in' : 'fold-out'">
                                 <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"
                                     md-on-add="addMemberToSite($chip, group.shortName)">
-                                    <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="searchTextList[groupIndex]" md-items="pgitem in searchPeople(searchTextList[groupIndex])"
+                                    <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="vm.searchTextList[groupIndex]" md-items="pgitem in searchPeople(vm.searchTextList[groupIndex])"
                                         md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
-                                        <span md-highlight-text="searchTextList[groupIndex]" md-highlight-flags="gi">{{ pgitem.displayName }}</span>
+                                        <span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">{{ pgitem.displayName }}</span>
                                     </md-autocomplete>
                                     <md-chip-template>
                                         <span>{{ $chip.displayName }}</span>

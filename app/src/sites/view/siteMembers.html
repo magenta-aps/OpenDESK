@@ -55,7 +55,7 @@
 
 			<span flex></span>
 
-			<md-button ng-if="permissions.isManager" class="md-primary md-icon-button" ng-click="editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">
+			<md-button ng-if="permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">
 				<md-tooltip md-direction="top">{{vm.project.type == 'PD-Project' ? 'MEMBER.ADD_REMOVE_MEMBERS' : 'MEMBER.ADD_MEMBER'| translate}}</md-tooltip>
 				<md-icon>person_add</md-icon>
 			</md-button>

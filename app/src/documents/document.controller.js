@@ -9,6 +9,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     EDITOR_CONFIG) {
 
     var vm = this;
+
     vm.doc = [];
     vm.plugin = [];
     vm.paths = [];
@@ -18,28 +19,71 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     vm.showArchived = false;
 
-    vm.documentTab = '/dokumenter';
-
-    vm.notificationFrom = '';
-
     vm.updatePreview = loadPreview;
+    vm.selectFile = selectFile;
+    vm.approveCommentDialog = approveCommentDialog;
+    vm.rejectCommentDialog = rejectCommentDialog;
+    vm.uploadNewVersionDialog = uploadNewVersionDialog;
+    vm.uploadNewVersion = uploadNewVersion;
+    vm.searchUsers = searchUsers;
+    vm.cancel = cancel;
+    vm.goBack = goBack;
+    vm.createWFNotification = createWFNotification;
+    vm.highlightVersion = highlightVersion;
+    vm.goToLOEditPage = goToLOEditPage;
+    vm.editInMSOffice = editInMSOffice;
+    vm.downloadDocument = downloadDocument;
+    vm.reviewDocumentsDialog = reviewDocumentsDialog;
+    $scope.createReviewNotification = createReviewNotification;
 
-    setPDFViewerHeight();
-    loadPreview();
+    var selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3];
+    var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : selectedDocumentNode;
+    var docHasParent = $location.search().parent !== undefined;
+    var firstDocumentNode = "";
 
-    $scope.cancelDialog = function() {
-        $mdDialog.cancel();
+    angular.element($window).bind('resize', function () {
+
+        setPDFViewerHeight();
+        // manuall $digest required as resize event
+        // is outside of angular
+        $scope.$digest();
+    });
+
+    activate();
+
+    function activate() {
+        if ($location.search().archived !== undefined && $location.search().archived === "true") {
+            vm.showArchived = true;
+        }
+        
+        documentService.getHistory(parentDocumentNode).then(function (val) {
+            $scope.history = val;
+            var currentNoOfHistory = $scope.history.length;
+            var orgNoOfHistory = $location.search().noOfHist;
+            if (currentNoOfHistory > 0) {
+                firstDocumentNode = $scope.history[0].nodeRef;
+            }
+        });
+
+        documentService.getEditPermission(parentDocumentNode).then(function (val) {
+            vm.canEdit = val;
+        });
+
+        setPDFViewerHeight();
+        loadPreview();
+        getDocument();
     }
 
-    $scope.searchUsers = function (filter) {
+    function searchUsers(filter) {
         return userService.getUsers(filter);
     };
 
-    vm.cancel = function() {
+    function cancel() {
         $mdDialog.cancel();
     }
 
-    vm.goBack = function() {
+
+    function goBack() {
         window.history.go(-2);
     }
 
@@ -52,44 +96,13 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         };
     }
 
-    angular.element($window).bind('resize', function () {
-
-        setPDFViewerHeight();
-        // manuall $digest required as resize event
-        // is outside of angular
-        $scope.$digest();
-    });
-
-    if ($location.search().archived !== undefined && $location.search().archived === "true") {
-        vm.showArchived = true;
-    }
-
-    var selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3];
-    var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : selectedDocumentNode;
-    var docHasParent = $location.search().parent !== undefined;
-    var firstDocumentNode = "";
-
-    documentService.getHistory(parentDocumentNode).then(function (val) {
-        $scope.history = val;
-        var currentNoOfHistory = $scope.history.length;
-        var orgNoOfHistory = $location.search().noOfHist;
-        if (currentNoOfHistory > 0) {
-            firstDocumentNode = $scope.history[0].nodeRef;
-        }
-    });
-
-    documentService.getEditPermission(parentDocumentNode).then(function (val) {
-        vm.canEdit = val;
-    });
-
-
-    vm.selectFile = function (event) {
+    function selectFile(event) {
         var file = event.target.value;
         var fileName = file.replace(/^C:\\fakepath\\/, "");
         document.getElementById("uploadFile").innerHTML = fileName;
     };
 
-    vm.godkendDialog = function (event) {
+    function approveCommentDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/documents/view/aproveComment.tmpl.html',
             parent: angular.element(document.body),
@@ -100,7 +113,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         });
     };
 
-    vm.afvisDialog = function (event) {
+    function rejectCommentDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/documents/view/rejectComment.tmpl.html',
             parent: angular.element(document.body),
@@ -111,9 +124,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         });
     };
 
-    vm.uploadNewVersionDialog = function (event) {
+    function uploadNewVersionDialog(event) {
         $mdDialog.show({
-            templateUrl: 'app/src/documents/view/uploadNewVersion.tmpl.html',
+            templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
             parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
@@ -122,37 +135,19 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         });
     };
 
-
-    // TODO: Check if this method is used. There is another method with same name and logic in SiteController
-    vm.uploadNewVersion = function (file) {
-
-        if (vm.paths[vm.paths.length - 1].title != file.name) {
-            document.getElementById("uploadFile").innerHTML = "<i class='material-icons'>warning</i>&nbsp;Du skal vælge et dokument, der hedder<br>det samme som det eksisterende dokument. ";
-        } else {
-            documentService.getDocument(docHasParent ? parentDocumentNode : selectedDocumentNode).then(function (response) {
-
-                siteService.getNode(response.item.location.site, "documentLibrary", response.item.location.path).then(function (val) {
-
-                    var currentFolderNodeRef = val.parent.nodeRef;
-
-                    siteService.uploadNewVersion(file, currentFolderNodeRef, response.item.nodeRef).then(function (response) {
-                        var param = docHasParent ? parentDocumentNode : selectedDocumentNode;
-                        if (window.location.hash == "#!/dokument/" + param) {
-                            window.location.reload();
-                        } else {
-                            window.location.replace("/#!/dokument/" + param);
-                        }
-                    });
-
-                    $mdDialog.cancel();
-
-                });
+    function uploadNewVersion(file) {
+        console.log('upload small');
+        siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
+            $mdDialog.cancel()
+            $state.go('document', {
+                doc: parentDocumentNode
             });
-        }
+        });
     };
 
     // prepare to handle a preview of a document to review
     var paramValue = $location.search().dtype;
+
     if (paramValue !== undefined) {
         vm.wf_from = $location.search().from;
         vm.wf = paramValue === "wf";
@@ -165,14 +160,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         });
     }
 
-    vm.getNotificationFrom = function () {
-        userService.getPerson(vm.wf_from).then(function (val) {
-            vm.notificationFrom = val;
-        });
-    };
-    //vm.getNotificationFrom();
-
-    vm.createWFNotification = function (comment, wtype) {
+    function createWFNotification(comment, wtype) {
 
         var creator = authService.getUserInfo().user.userName;
         var link = "#!/dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
@@ -184,14 +172,13 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             var project = response.project;
 
             notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then(function (val) {
-                $mdDialog.hide();
+                $mdDialog.cancel();
                 vm.goBack();
             });
         });
     }
 
-
-    vm.highlightVersion = function () {
+    function highlightVersion() {
         var elm = document.getElementById(selectedDocumentNode) != undefined ? selectedDocumentNode : firstDocumentNode;
 
         if (elm == "") {
@@ -202,59 +189,60 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         }
     }
 
-    documentService.getDocument(parentDocumentNode).then(function (response) {
+    function getDocument() {
+        documentService.getDocument(parentDocumentNode).then(function (response) {
 
-        vm.doc = response.item;
-        vm.loolEditable = EDITOR_CONFIG.lool.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
-        vm.msOfficeEditable = EDITOR_CONFIG.msOffice.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
+            vm.doc = response.item;
+            vm.loolEditable = EDITOR_CONFIG.lool.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
+            vm.msOfficeEditable = EDITOR_CONFIG.msOffice.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
 
-        vm.docMetadata = response.metadata;
+            vm.docMetadata = response.metadata;
 
-        // Compile paths for breadcrumb directive
-        vm.paths = buildBreadCrumbPath(response);
+            // Compile paths for breadcrumb directive
+            vm.paths = buildBreadCrumbPath(response);
 
-        vm.site = vm.doc.location.site.name;
+            vm.site = vm.doc.location.site.name;
 
-        siteService.loadSiteData(vm.site).then(function (response) {
-            vm.type = response.type;
-            vm.title = response.title;
+            siteService.loadSiteData(vm.site).then(function (response) {
+                vm.type = response.type;
+                vm.title = response.title;
 
-            headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title);
-        });
-
-        browserService.setTitle(response.item.node.properties["cm:name"]);
-
-        function buildBreadCrumbPath(response) {
-            var paths = [{
-                title: response.item.location.siteTitle,
-                link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
-            }];
-            var pathArr = response.item.location.path.split('/');
-            var pathLink = '/';
-            for (var a in pathArr) {
-                if (pathArr[a] !== '') {
-                    var link;
-                    if (response.item.location.site === "") {
-                        link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
-                    } else {
-                        link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
-                            '", path: "' + pathLink + pathArr[a] + '"})';
-                    }
-                    paths.push({
-                        title: pathArr[a],
-                        link: link
-                    });
-                    pathLink = pathLink + pathArr[a] + '/';
-                }
-            }
-            paths.push({
-                title: response.item.location.file,
-                link: response.item.location.path
+                headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title);
             });
-            return paths;
-        }
 
-    });
+            browserService.setTitle(response.item.node.properties["cm:name"]);
+
+            function buildBreadCrumbPath(response) {
+                var paths = [{
+                    title: response.item.location.siteTitle,
+                    link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
+                }];
+                var pathArr = response.item.location.path.split('/');
+                var pathLink = '/';
+                for (var a in pathArr) {
+                    if (pathArr[a] !== '') {
+                        var link;
+                        if (response.item.location.site === "") {
+                            link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
+                        } else {
+                            link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
+                                '", path: "' + pathLink + pathArr[a] + '"})';
+                        }
+                        paths.push({
+                            title: pathArr[a],
+                            link: link
+                        });
+                        pathLink = pathLink + pathArr[a] + '/';
+                    }
+                }
+                paths.push({
+                    title: response.item.location.file,
+                    link: response.item.location.path
+                });
+                return paths;
+            }
+        });
+    }
 
     function loadPreview() {
         console.log('load preview');
@@ -263,15 +251,11 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             vm.store = 'versionStore://version2Store/';
 
             documentService.createVersionThumbnail(parentDocumentNode, selectedDocumentNode).then(function (response) {
-
                 documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function (plugin) {
-
                     vm.plugin = plugin;
                     $scope.config = plugin;
                     $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
-
                     $scope.download = function () {
-
                         // todo fix the download url to download from version/version2store
                         alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);
                     };
@@ -279,7 +263,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                     if (plugin.initScope) {
                         plugin.initScope($scope);
                     }
-
 
                     // delete the temporary node
                     documentService.cleanupThumbnail(response.data[0].nodeRef)
@@ -310,23 +293,13 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         var confirm = $mdDialog.confirm()
             .title('Vil du redigere dette dokument?')
             .htmlContent('<i class="material-icons">info_outline</i><p>Du er nu i gang med at redigere et dokument fra historikken.</p><p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
-            .ariaLabel('Fjern medlem')
             .targetEvent(event)
             .ok('OK')
             .cancel('Fortryd');
 
         $mdDialog.show(confirm).then(function () {
             var selectedVersion = $location.search().version;
-            console.log("nuværende doc");
-            console.log(vm.doc);
-            console.log(vm.doc.version);
-            console.log(vm.doc.node.version);
             documentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
-                console.log("response");
-                console.log(response);
-                console.log(response.config.data.version);
-
-                console.log("the new nodeRef:" + response.config.data.nodeRef)
                 $state.go('lool', {
                     'nodeRef': vm.doc.node.nodeRef,
                     'versionLabel': vm.doc.version,
@@ -337,7 +310,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     //Goes to the libreOffice online edit page
-    vm.goToLOEditPage = function () {
+    function goToLOEditPage() {
         var ref = $stateParams.doc;
         var isFirstInHistory = ref == firstDocumentNode;
         if (docHasParent && !isFirstInHistory) {
@@ -350,7 +323,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         }
     };
 
-    vm.editInMSOffice = function () {
+    function editInMSOffice() {
         var pathStart = vm.docMetadata.serverURL;
         var pathEnd = vm.doc.webdavUrl.replace("webdav", "aos");
         var file = pathStart + "/alfresco" + pathEnd;
@@ -366,12 +339,14 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         }
     };
 
-    vm.downloadDocument = function downloadDocument() {
+    
+    function downloadDocument() {
         var versionRef = vm.store + $stateParams.doc;
         alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file);
     };
 
-    vm.reviewDocumentsDialog = function (event) {
+
+    function reviewDocumentsDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
             parent: angular.element(document.body),
@@ -381,32 +356,13 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             clickOutsideToClose: true
         });
     };
-
-    $scope.createReviewNotification = function (userName, comment) {
+    
+    function createReviewNotification(userName, comment) {
         siteService.createReviewNotification(vm.doc.node.nodeRef, userName, comment);
         $mdDialog.cancel()
     };
 
-    vm.uploadNewVersionDialog = function (event) {
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
-            clickOutsideToClose: true
-        });
-    };
-
-    $scope.uploadNewVersion = function (file) {
-        siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
-            $mdDialog.cancel()
-            $state.go('document', {
-                doc: parentDocumentNode
-            });
-        });
-    };
-
+    //this should be removed, do not edit dom in controller!
     angular.element(document).ready(function () {
         if ($window.location.href.split('/')[4] != "lool") {
             vm.highlightVersion();

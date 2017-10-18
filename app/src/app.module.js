@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp', [
         'ngSanitize',
@@ -92,6 +94,8 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
             'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
             function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
                 var d = $q.defer();
+
+                sessionService.loadUserInfo();
 
                 if (authService.isAuthenticated())
                     resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);

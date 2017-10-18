@@ -9,10 +9,10 @@
 		<div layout="row" layout-align="space-between">
 			<dl style="margin-bottom: 0;">
 				<dt >{{'PROJECT.DESCRIPTION' | translate }}</dt>
-				<dd ng-if="hasDescription">
+				<dd ng-if="vm.hasDescription">
 					{{ site.description }}
 				</dd>
-				<dd ng-if="!hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
+				<dd ng-if="!vm.hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
 			</dl>
 		</div>
 		<div layout="row">
@@ -43,7 +43,7 @@
 		</div>
 		<md-card-actions layout="row" layout-align="start center">
 				<span flex></span>
-				<md-button ng-if="permissions.isManager" class="md-primary md-icon-button" ng-click="editSiteDialog($event)" aria-label="Redigér site">
+				<md-button ng-if="permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteDialog($event)" aria-label="Redigér site">
 					<md-icon>edit</md-icon>
 				</md-button>
 		</md-card-actions>

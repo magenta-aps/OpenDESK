@@ -1,4 +1,4 @@
-<div layout="column" layout-gt-md="row" class="od-projects" ng-show="permissions.isMember || vm.project.visibility == 'PUBLIC'">
+<div layout="column" layout-gt-md="row" class="od-projects" ng-show="vm.permissions.isMember || vm.project.visibility == 'PUBLIC'">
     <div layout="column" flex-gt-md="75">
         <md-card>
             <md-card-content>
@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="od-projects" ng-if="permissions.isMember != null && !permissions.isMember && vm.project.visibility == 'PRIVATE'">
+<div class="od-projects" ng-if="vm.permissions.isMember != null && !vm.permissions.isMember && vm.project.visibility == 'PRIVATE'">
     <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.NO_ACCESS_PROJECT' | translate}}</span>
     <span ng-if="vm.project.type == 'Project'">{{'PROJECT.NO_ACCESS_GROUPROOM' | translate}}</span>
 </div>
