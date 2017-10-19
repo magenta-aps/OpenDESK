@@ -2,9 +2,9 @@ angular
     .module('openDeskApp.filebrowser', ['ngFileUpload'])
     .controller('FilebrowserController', FilebrowserController);
 
-function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast, Upload, siteService, fileUtilsService,
+function FilebrowserController($state, $stateParams, $scope, $mdDialog, siteService, fileUtilsService,
     filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
-    userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG, EDITOR_CONFIG) {
+    userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG) {
 
     $scope.config = APP_CONFIG.settings;
     $scope.isSite = $stateParams.isSite;
@@ -131,8 +131,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     function processContent(content) {
         content.forEach(function (item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
-            item.loolEditable = EDITOR_CONFIG.lool.mimeTypes.indexOf(item.mimeType) !== -1;
-            item.msOfficeEditable = EDITOR_CONFIG.msOffice.mimeTypes.indexOf(item.mimeType) !== -1;
+            item.loolEditable = documentService.isLoolEditable(item.mimeType);
+            item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
         });
     }
 

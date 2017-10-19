@@ -2,7 +2,7 @@ angular
     .module('openDeskApp.header')
     .controller('HeaderController', HeaderController);
 
-function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService, authService, notificationsService, userService) {
+function HeaderController($scope, $state, $mdSidenav, headerService, authService, notificationsService, userService) {
     var vm = this;
 
     vm.avatar = userService.getAvatarFromUser(authService.getUserInfo().user);

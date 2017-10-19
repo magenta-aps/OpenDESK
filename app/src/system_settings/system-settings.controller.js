@@ -3,12 +3,12 @@ angular
     .controller('SystemSettingsController', SystemSettingsCtrl);
 
 function SystemSettingsCtrl(sessionService, pageService, systemSettingsService, $scope,
-                            browserService, $translate, APP_CONFIG) {
+                            browserService, $translate, APP_BACKEND_CONFIG) {
     var vm = this;
 
     vm.pages = [];
     pageService.addSystemPage(vm.pages, 'Konfiguration', 'systemsettings.config', true, 'settings');
-    if(APP_CONFIG.settings.enableProjects)
+    if(APP_BACKEND_CONFIG.enableProjects)
         pageService.addSystemPage(vm.pages, 'Projektskabeloner', 'systemsettings.templateList', true);
     pageService.addSystemPage(vm.pages, 'Mappeskabeloner', 'systemsettings.folder_templates', true);
     pageService.addSystemPage(vm.pages, 'Dokumentskabeloner', 'systemsettings.document_templates', true);

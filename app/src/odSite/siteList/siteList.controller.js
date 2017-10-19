@@ -3,12 +3,12 @@ angular
 	.controller('SiteListController', SiteListController);
 
 function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService,
-						 sessionService, APP_CONFIG, browserService,headerService) {
+						 sessionService, APP_BACKEND_CONFIG, browserService,headerService) {
 
     browserService.setTitle($translate.instant('SITES.NAME'));
 
 	var vm = this;
-    vm.config = APP_CONFIG.settings;
+    vm.config = APP_BACKEND_CONFIG;
 
 	vm.sites = [];
 	vm.sitesPerUser = [];

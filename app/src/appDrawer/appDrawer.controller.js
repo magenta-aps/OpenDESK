@@ -2,10 +2,10 @@ angular
     .module('openDeskApp.appDrawer')
     .controller('AppDrawerController', AppDrawerController);
 
-function AppDrawerController($mdSidenav, pageService, APP_CONFIG) {
+function AppDrawerController($mdSidenav, pageService, APP_BACKEND_CONFIG) {
     var vm = this;
     vm.close = $mdSidenav('appDrawer').close();
-    vm.links = APP_CONFIG.settings.dashboardLinks;
+    vm.links = APP_BACKEND_CONFIG.dashboardLinks;
     vm.pages = [];
 
     pageService.addPage(vm.pages, 'DASHBOARD', vm.links['dashboard'], "dashboard");
