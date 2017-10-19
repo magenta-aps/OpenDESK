@@ -7,7 +7,6 @@ function fileBrowserService($http, alfrescoNodeUtils) {
 
     var service = {
         createContentFromTemplate: createContentFromTemplate,
-        genericContentAction: genericContentAction,
         getCompanyHome: getCompanyHome,
         getContentList: getContentList,
         getNode: getNode,
@@ -24,16 +23,6 @@ function fileBrowserService($http, alfrescoNodeUtils) {
             PARAM_DESTINATION_NODEREF: currentFolderNodeRef,
             PARAM_NODE_NAME: newName
         }).then(function (response) {
-            return response;
-        });
-    }
-    
-    function genericContentAction(action, sourceNodeRefs, destinationNodeRef, parentNodeRef) {
-        return $http.post('/slingshot/doclib/action/' + action + '-to/node/' +
-            alfrescoNodeUtils.processNodeRef(destinationNodeRef).uri, {
-                nodeRefs: sourceNodeRefs,
-                parentId: parentNodeRef
-            }).then(function (response) {
             return response;
         });
     }

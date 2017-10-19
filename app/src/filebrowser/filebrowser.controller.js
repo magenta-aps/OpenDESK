@@ -318,49 +318,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
     };
 
-    // We tried to have genericContentDialog inside the scope, but after having shown the dialog once the method was
-    // missing from the scope.
-    $scope.moveContentDialog = function (event, sourceNodeRef, parentNodeRef) {
-        genericContentDialog("MOVE", event, sourceNodeRef, parentNodeRef);
-    };
-
-    $scope.copyContentDialog = function (event, sourceNodeRef, parentNodeRef) {
-        genericContentDialog("COPY", event, sourceNodeRef, parentNodeRef);
-    };
-
-    function genericContentDialog(action, event, sourceNodeRef, parentNodeRef) {
-        $scope.sourceNodeRefs = [];
-        $scope.sourceNodeRefs.push(sourceNodeRef);
-        $scope.parentNodeRef = parentNodeRef;
-        $scope.contentAction = action;
-
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/genericContentDialog.tmpl.html',
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-    $scope.dialogResponse = function (destinationNodeRef) {
-        filebrowserService.genericContentAction($scope.contentAction.toLowerCase(), $scope.sourceNodeRefs, destinationNodeRef,
-            $scope.parentNodeRef).then(function (response) {
-            if (response.data.results[0].fileExist) {
-                $mdDialog.show(
-                    $mdDialog.alert()
-                    .parent(angular.element(document.body))
-                    .clickOutsideToClose(true)
-                    .title('Der er allerede en fil med samme navn i mappen du valgte.')
-                    .ariaLabel('Eksisterer allerede')
-                    .ok('Ok')
-                );
-            }
-            hideDialogAndReloadContent();
-        });
-    };
-
     $scope.deleteContentDialog = function (event, content) {
         $scope.content = content;
         $mdDialog.show({

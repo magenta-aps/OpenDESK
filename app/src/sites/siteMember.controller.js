@@ -19,7 +19,7 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
     vm.removeMemberFromSite = removeMemberFromSite;
     vm.searchPeople = searchPeople;
     vm.updatePDSiteGroups = updatePDSiteGroups;
-    vm.project = sitedata;
+    vm.site = sitedata;
 
 
     function groupFilter(group) {
@@ -39,7 +39,7 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
             console.log(response.data[0].result);
 
             if (response.data[0].result == 'false') {
-                siteService.createExternalUser(vm.project.shortName, firstName, lastName, email, group[0].shortName).then(
+                siteService.createExternalUser(vm.site.shortName, firstName, lastName, email, group[0].shortName).then(
                     function (response) {
                         $mdToast.show(
                             $mdToast.simple()
@@ -88,14 +88,14 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
     }
 
     function doPDF() {
-        siteService.createMembersPDF(vm.project.shortName).then(function (response) {
+        siteService.createMembersPDF(vm.site.shortName).then(function (response) {
             alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
         });
     }
 
     function addMemberToSite(user, groupName) {
         var userName = user.userName;
-        var siteShortName = vm.project.shortName;
+        var siteShortName = vm.site.shortName;
 
         siteService.addMemberToSite(siteShortName, userName, groupName).then(function (response) {
             createSiteNotification(userName, siteShortName);
@@ -111,7 +111,7 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
 
     function removeMemberFromSite(user, groupName) {
         var userName = user.userName;
-        siteService.removeMemberFromSite(vm.project.shortName, userName, groupName).then(function (response) {});
+        siteService.removeMemberFromSite(vm.site.shortName, userName, groupName).then(function (response) {});
     }
 
     function createNotification(userName, subject, message, link, wtype, project) {
@@ -120,10 +120,10 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
     }
 
     function createSiteNotification(userName, site) {
-        var subject = "Du er blevet tilføjet til " + vm.project.title;
+        var subject = "Du er blevet tilføjet til " + vm.site.title;
         var author = $scope.currentUser.firstName + ' ' + $scope.currentUser.lastName;
 
-        var message = author + " har tilføjet dig til projektet " + vm.project.title + ".";
+        var message = author + " har tilføjet dig til projektet " + vm.site.title + ".";
         var link = '#!/' + APP_CONFIG.sitesUrl + '/' + site;
         createNotification(userName, subject, message, link, 'project', site);
     }
