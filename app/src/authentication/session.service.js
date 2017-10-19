@@ -3,7 +3,9 @@ angular
     .factory('sessionService', sessionService);
 
 function sessionService($window) {
+    var userInfo;
     var service = {
+        loadUserInfo: loadUserInfo,
         getUserInfo: getUserInfo,
         setUserInfo: setUserInfo,
         isAdmin: isAdmin,
@@ -16,11 +18,7 @@ function sessionService($window) {
     
     return service;
 
-    init();
-
-    var userInfo;
-
-    function init() {
+    function loadUserInfo() {
         if ($window.sessionStorage.getItem('userInfo')) {
             userInfo = angular.fromJson($window.sessionStorage.getItem('userInfo'));
         }
