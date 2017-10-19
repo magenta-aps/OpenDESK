@@ -48,9 +48,10 @@ angular
             $rootScope[name] = angular[name];
         });
 
-        loolService.getValidMimeTypes().then(function(response) {
-            EDITOR_CONFIG.lool.mimeTypes = response;
-        });
+        // If the LooL discovery file changes we can use this method to retrieve the updated list of mimetypes.
+        // loolService.getValidMimeTypes().then(function(response) {
+        //     EDITOR_CONFIG.lool.mimeTypes = response;
+        // });
 
         systemSettingsService.loadPublicSettings().then(function(response) {
             browserService.setTitle();
