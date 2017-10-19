@@ -66,7 +66,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     function getSiteUserPermissions() {
         siteService.getSiteUserPermissions($stateParams.projekt).then(
             function (permissions) {
-                $scope.permissions = permissions;
+                vm.permissions = permissions;
             }
         );
     }
@@ -159,13 +159,13 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     }
 
     function editSiteGroups(ev) {
-        vm.project = {};
-        vm.project.shortName = vm.project.shortName;
-
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/editMembers.tmpl.html',
             controller: 'SiteMemberController',
             controllerAs: 'vm',
+            locals: {
+                sitedata: $scope.site
+            },
             parent: angular.element(document.body),
             scope: $scope,
             preserveScope: true,

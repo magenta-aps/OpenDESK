@@ -4,7 +4,7 @@ angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
 
 function config($stateProvider, APP_CONFIG, USER_ROLES) {
 
-    $stateProvider.state('projects', {
+    $stateProvider.state('siteList', {
         parent: 'site',
         url: '/' + APP_CONFIG.sitesUrl,
         views: {

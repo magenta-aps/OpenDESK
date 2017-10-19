@@ -5,7 +5,7 @@ angular
     .controller('SiteMemberController', SiteMemberController);
 
 
-function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
+function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
                              notificationsService, alfrescoDownloadService) {
     var vm = this;
 
@@ -15,9 +15,12 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
     vm.cancelDialog = cancelDialog;
     vm.doPDF = doPDF;
     vm.groupFilter = groupFilter;
+    // vm.groups = {};
     vm.removeMemberFromSite = removeMemberFromSite;
     vm.searchPeople = searchPeople;
     vm.updatePDSiteGroups = updatePDSiteGroups;
+    vm.project = sitedata;
+
 
     function groupFilter(group) {
         if (group[0].multipleMembers) {
@@ -36,7 +39,7 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
             console.log(response.data[0].result);
 
             if (response.data[0].result == 'false') {
-                siteService.createExternalUser($scope.site.shortName, firstName, lastName, email, group[0].shortName).then(
+                siteService.createExternalUser(vm.project.shortName, firstName, lastName, email, group[0].shortName).then(
                     function (response) {
                         $mdToast.show(
                             $mdToast.simple()
@@ -85,14 +88,14 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
     }
 
     function doPDF() {
-        siteService.createMembersPDF($scope.site.shortName).then(function (response) {
+        siteService.createMembersPDF(vm.project.shortName).then(function (response) {
             alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
         });
     }
 
     function addMemberToSite(user, groupName) {
         var userName = user.userName;
-        var siteShortName = $scope.project.shortName;
+        var siteShortName = vm.project.shortName;
 
         siteService.addMemberToSite(siteShortName, userName, groupName).then(function (response) {
             createSiteNotification(userName, siteShortName);
@@ -108,7 +111,7 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
 
     function removeMemberFromSite(user, groupName) {
         var userName = user.userName;
-        siteService.removeMemberFromSite($scope.site.shortName, userName, groupName).then(function (response) {});
+        siteService.removeMemberFromSite(vm.project.shortName, userName, groupName).then(function (response) {});
     }
 
     function createNotification(userName, subject, message, link, wtype, project) {
@@ -117,10 +120,10 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
     }
 
     function createSiteNotification(userName, site) {
-        var subject = "Du er blevet tilføjet til " + $scope.site.title;
+        var subject = "Du er blevet tilføjet til " + vm.project.title;
         var author = $scope.currentUser.firstName + ' ' + $scope.currentUser.lastName;
 
-        var message = author + " har tilføjet dig til projektet " + $scope.site.title + ".";
+        var message = author + " har tilføjet dig til projektet " + vm.project.title + ".";
         var link = '#!/' + APP_CONFIG.sitesUrl + '/' + site;
         createNotification(userName, subject, message, link, 'project', site);
     }

@@ -33,7 +33,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
 
-    vm.permissions = {};
+    vm.permissions = siteService.getPermissions();
     $scope.documentNodeRef = "";
     $scope.uploading = false;
 
@@ -46,26 +46,24 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         }
     });
 
+    if ($scope.isSite) {
+        $scope.tab.selected = $stateParams.selectedTab;
+        $scope.$watch('siteService.getSite()', function (newVal) {
+            $scope.site = newVal;
+        });
+        $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
+            $scope.userManagedProjects = newVal;
+        });
+        siteService.getNode($stateParams.projekt, "documentLibrary", $stateParams.path).then(function (val) {
+            setFolder(val.parent.nodeRef);
+        });
+    } else {
+        setFolderAndPermissions($stateParams.path);
+    }
+
     activate();
 
     function activate() {
-        if ($scope.isSite) {
-            $scope.tab.selected = $stateParams.selectedTab;
-            $scope.$watch('siteService.getSite()', function (newVal) {
-                $scope.site = newVal;
-            });
-            $scope.$watch('siteService.getPermissions()', function (newVal) {
-                vm.permissions = newVal;
-            });
-            $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
-                $scope.userManagedProjects = newVal;
-            });
-            siteService.getNode($stateParams.projekt, "documentLibrary", $stateParams.path).then(function (val) {
-                setFolder(val.parent.nodeRef);
-            });
-        } else {
-            setFolderAndPermissions($stateParams.path);
-        }
 
         filebrowserService.getTemplates("Document").then(function (response) {
             $scope.documentTemplates = response;

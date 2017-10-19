@@ -47,7 +47,7 @@
 		</div>
 
 		<md-card-actions layout="row" layout-align="start center">
-			<md-button ng-if="vm.project.type == 'PD-Project'" class="md-primary md-icon-button" ng-style="permissions.isManager ? 'margin-left: 30px;' : ''"
+			<md-button ng-if="vm.project.type == 'PD-Project'" class="md-primary md-icon-button" ng-style="vm.permissions.isManager ? 'margin-left: 30px;' : ''"
 			    ng-click="vm.doPDF()" aria-label="Download PDF med grupper">
 				<md-tooltip md-direction="top">{{'MEMBER.DOWNLOAD_PDF' | translate}}</md-tooltip>
 				<md-icon>picture_as_pdf</md-icon>
@@ -55,7 +55,7 @@
 
 			<span flex></span>
 
-			<md-button ng-if="permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">
+			<md-button ng-if="vm.permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">
 				<md-tooltip md-direction="top">{{vm.project.type == 'PD-Project' ? 'MEMBER.ADD_REMOVE_MEMBERS' : 'MEMBER.ADD_MEMBER'| translate}}</md-tooltip>
 				<md-icon>person_add</md-icon>
 			</md-button>

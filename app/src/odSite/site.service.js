@@ -56,7 +56,6 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         },
 
         getAllOrganizationalCenters: function () {
-            console.log('it works');
             return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
                 .then(function (response) {
                     if (response.status && response.status !== 200) {
