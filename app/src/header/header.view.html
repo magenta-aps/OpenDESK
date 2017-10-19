@@ -28,7 +28,7 @@
             <span class="clickable" ng-click="vm.toggleUserPanel()" hide show-gt-md>{{vm.user.firstName}} {{vm.user.lastName}}</span>
         </span>
       
-        <img src="{{vm.avatar}}" class="od-avatar clickable" style="width:50px;margin-left:16px" ng-click="vm.toggleUserPanel()" alt="{{vm.user.firstName}} {{vm.user.lastName}}">
+        <img ng-src="{{vm.avatar}}" class="od-avatar clickable" style="width:50px;margin-left:16px" ng-click="vm.toggleUserPanel()" alt="{{vm.user.firstName}} {{vm.user.lastName}}">
  
     </span>
 </md-toolbar>
