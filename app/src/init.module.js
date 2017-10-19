@@ -58,7 +58,7 @@ angular
         sitesUrl: "projekter",
         landingPageState: "dashboard",
         landingPageUrl: "",
-        ssoLoginEnabled: true
+        ssoLoginEnabled: false
     })
     .constant('CLIENT_CONFIG', {
         browser: {}
