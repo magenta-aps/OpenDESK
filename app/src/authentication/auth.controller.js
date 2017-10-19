@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp')
     .controller('AuthController', AuthController);
@@ -92,5 +94,5 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
                 }
             );
         };
-    };
+    }
 }

@@ -5,7 +5,7 @@ angular
 	.controller('SiteListController', SiteListController);
 
 function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService,
-						 sessionService, APP_CONFIG, browserService,headerService) {
+						 sessionService, APP_CONFIG, browserService, headerService) {
 
 	var vm = this;
 

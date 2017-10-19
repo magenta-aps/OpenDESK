@@ -16,20 +16,20 @@ function HeaderController($scope, $state, $mdSidenav, APP_CONFIG, headerService,
     vm.unseenNotifications = 0;
     vm.user = authService.getUserInfo().user;
 
-    function toggleSystemSettings() {
-        $state.go('systemsettings');
-    }
-
     $scope.headerService = headerService;
     $scope.notificationsService = notificationsService;
 
     $scope.$watch('headerService.getTitle()', function (newVal) {
-        $scope.title = newVal;
+        vm.title = newVal;
     });
 
     $scope.$watch('notificationsService.getUnseenCount()', function (newVal) {
-        $scope.unseenNotifications = newVal;
+        vm.unseenNotifications = newVal;
     });
+
+    function toggleSystemSettings() {
+        $state.go('systemsettings');
+    }
 
     function buildToggler(navID) {
         return function () {
