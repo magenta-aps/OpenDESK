@@ -3,6 +3,8 @@
 
     <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
 
+    {{uploading}}
+
     <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
     <md-list class="sort-head" ng-show="contentListLength > 0" id="table-container">
         <table class="od-members od-members-row">

@@ -38,6 +38,38 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     $scope.uploading = false;
 
     $scope.error = false;
+    $scope.uploadDocumentsDialog = uploadDocumentsDialog;
+    $scope.uploadFiles = uploadFiles;
+    $scope.downloadDocument = downloadDocument;
+    $scope.previewDocument = previewDocument;
+    $scope.goToLOEditPage = goToLOEditPage;
+
+    $scope.newLinkDialog = newLinkDialog;
+    $scope.createProjectLink = createProjectLink;
+    $scope.searchProjects = searchProjects;
+    $scope.loadSbsysDialog = loadSbsysDialog;
+    $scope.loadFromSbsys = loadFromSbsys;
+    $scope.uploadSbsysDialog = uploadSbsysDialog;
+    $scope.cancelSbsysDialog = cancelSbsysDialog;
+    $scope.uploadSbsys = uploadSbsys;
+    $scope.loadCheckboxes = loadCheckboxes;
+    $scope.setAllCheckboxes = setAllCheckboxes;
+    $scope.reviewDocumentsDialog = reviewDocumentsDialog;
+    $scope.createReviewNotification = uploadNewVersionDialog;
+    vm.uploadNewVersionDialog = uploadNewVersionDialog;
+    vm.uploadNewVersion = uploadNewVersion;
+    $scope.renameContentDialog = renameContentDialog;
+    $scope.renameContent = renameContent;
+    $scope.deleteContentDialog = deleteContentDialog;
+    $scope.deleteFile = deleteFile;
+    $scope.deleteLink = deleteLink;
+    $scope.createContentFromTemplateDialog = createContentFromTemplateDialog;
+    $scope.createFolder = createFolder;
+    $scope.createContentFromTemplate = createContentFromTemplate;
+    $scope.searchUsers = searchUsers;
+    $scope.getLink = getLink;
+    $scope.loadHistory = loadHistory;
+    $scope.filesToFilebrowser = null;
 
     $scope.$watch('filesToFilebrowser', function () {
         if ($scope.filesToFilebrowser !== null) {
@@ -67,9 +99,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
         filebrowserService.getTemplates("Document").then(function (response) {
             $scope.documentTemplates = response;
-
-            console.log(response);
-
             if ($scope.documentTemplates !== undefined)
                 processContent($scope.documentTemplates);
         });
@@ -135,11 +164,12 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
     }
 
-    $scope.searchUsers = function (filter) {
+    function searchUsers(filter) {
         return userService.getUsers(filter);
-    };
+    }
 
-    $scope.getLink = function (content) {
+    
+    function getLink(content) {
         if (content.contentType === 'cmis:document') {
             return 'document({doc: "' + content.shortRef + '"})';
         }
@@ -153,16 +183,15 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         if (content.contentType === 'cmis:link') {
             return 'project({projekt: "' + content.destination_link + '"})';
         }
-    };
-
-    $scope.loadHistory = function (doc) {
+    }
+    
+    function loadHistory(doc) {
         documentService.getHistory(doc).then(function (val) {
             $scope.history = val;
         });
-    };
+    }
 
     function buildBreadCrumbPath() {
-
         var homeLink;
         if ($scope.isSite)
             homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})';
@@ -210,8 +239,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
 
     // Documents
-
-    $scope.uploadDocumentsDialog = function (event) {
+    
+    function uploadDocumentsDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/document/uploadDocuments.tmpl.html',
             parent: angular.element(document.body),
@@ -220,9 +249,10 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    };
+    }
 
-    $scope.uploadFiles = function (files) {
+
+    function uploadFiles(files) {
         $scope.uploading = true;
 
         angular.forEach(files, function (file) {
@@ -235,28 +265,27 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
 
         $scope.files = [];
-    };
+    }
 
-    $scope.downloadDocument = function downloadDocument(nodeRef, name) {
+    
+    function downloadDocument(nodeRef, name) {
         alfrescoDownloadService.downloadFile(nodeRef, name);
-    };
+    }
 
-    $scope.previewDocument = function previewDocument(nodeRef) {
+    
+    function previewDocument(nodeRef) {
         documentPreviewService.previewDocument(nodeRef);
-    };
+    }
 
-    $scope.doubleClick = function doubleClick() {
-        console.log('det virker!');
-    };
-
-    $scope.goToLOEditPage = function (nodeRef, fileName) {
+    
+    function goToLOEditPage(nodeRef, fileName) {
         $state.go('lool', {
             'nodeRef': nodeRef,
             'fileName': fileName
         });
-    };
-
-    $scope.reviewDocumentsDialog = function (event, nodeRef) {
+    }
+    
+    function reviewDocumentsDialog(event, nodeRef) {
         $scope.documentNodeRef = nodeRef;
 
         $mdDialog.show({
@@ -267,14 +296,16 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    };
+    }
 
-    $scope.createReviewNotification = function (userName, comment) {
+    
+    function createReviewNotification(userName, comment) {
         siteService.createReviewNotification($scope.documentNodeRef, userName, comment);
         $mdDialog.cancel();
-    };
+    }
 
-    vm.uploadNewVersionDialog = function (event, nodeRef) {
+    
+    function uploadNewVersionDialog(event, nodeRef) {
         $scope.documentNodeRef = nodeRef;
 
         $mdDialog.show({
@@ -285,17 +316,18 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    };
+    }
 
-    vm.uploadNewVersion = function (file) {
+    
+    function uploadNewVersion(file) {
         $scope.uploading = true;
         siteService.uploadNewVersion(file, $scope.folderNodeRef, $scope.documentNodeRef).then(function (val) {
             $scope.uploading = false;
             hideDialogAndReloadContent();
         });
-    };
+    }
 
-    $scope.renameContentDialog = function (event, content) {
+    function renameContentDialog(event, content) {
         $scope.documentNodeRef = content.nodeRef;
         $scope.newContentName = content.name;
 
@@ -307,18 +339,18 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    };
-
-    $scope.renameContent = function (newName) {
+    }
+    
+    function renameContent(newName) {
         var props = {
             prop_cm_name: newName
         };
         siteService.updateNode($scope.documentNodeRef, props).then(function (val) {
             hideDialogAndReloadContent();
         });
-    };
-
-    $scope.deleteContentDialog = function (event, content) {
+    }
+    
+    function deleteContentDialog(event, content) {
         $scope.content = content;
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/deleteContent.tmpl.html',
@@ -328,23 +360,23 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    };
-
-    $scope.deleteFile = function (nodeRef) {
+    }
+    
+    function deleteFile(nodeRef) {
         siteService.deleteFile(nodeRef).then(function (response) {
             hideDialogAndReloadContent();
         });
-    };
+    }
 
-    $scope.deleteLink = function (source, destination) {
+    function deleteLink(source, destination) {
         siteService.deleteLink(source, destination).then(function () {
             hideDialogAndReloadContent();
         });
-    };
+    }
 
     // Templates
 
-    $scope.createContentFromTemplateDialog = function (event, template, contentType) {
+    function createContentFromTemplateDialog(event, template, contentType) {
         $scope.template = template;
         $scope.newContentName = template.name;
 
@@ -368,9 +400,9 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
                 clickOutsideToClose: true
             });
         }
-    };
-
-    $scope.createFolder = function (folderName) {
+    }
+    
+    function createFolder(folderName) {
         var props = {
             prop_cm_name: folderName,
             prop_cm_title: folderName,
@@ -379,20 +411,20 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         siteService.createFolder("cm:folder", props).then(function (response) {
             hideDialogAndReloadContent();
         });
-    };
-
-    $scope.createContentFromTemplate = function (template_name, template_id) {
+    }
+    
+    function createContentFromTemplate(template_name, template_id) {
         filebrowserService.createContentFromTemplate(template_id, $scope.folderNodeRef, template_name).then(function (response) {
             if ($scope.isSite) {
                 siteService.createDocumentNotification(response.data[0].nodeRef, response.data[0].fileName);
             }
             hideDialogAndReloadContent();
         });
-    };
+    }
 
     // Link
 
-    $scope.newLinkDialog = function (event) {
+    function newLinkDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/link/newProjectLink.tmpl.html',
             parent: angular.element(document.body),
@@ -401,23 +433,25 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true,
             clickOutsideToClose: true
         });
-    };
+    }
 
-    $scope.createProjectLink = function (project) {
+    
+    function createProjectLink(project) {
         siteService.createProjectLink(project.shortName).then(function () {
             hideDialogAndReloadContent();
         });
-    };
-
-    $scope.searchProjects = function (query) {
+    }
+    
+    function searchProjects(query) {
         return filterService.search($scope.userManagedProjects, {
             title: query
         });
-    };
+    }
 
     // SBSYS
 
-    $scope.loadSbsysDialog = function (event) {
+    
+    function loadSbsysDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
             parent: angular.element(document.body),
@@ -426,15 +460,15 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true,
             clickOutsideToClose: true
         });
-    };
+    }
 
-    $scope.loadFromSbsys = function () {
+    function loadFromSbsys() {
         filebrowserService.loadFromSbsys($scope.folderNodeRef).then(function () {
             hideDialogAndReloadContent();
         });
-    };
-
-    $scope.uploadSbsysDialog = function (event) {
+    }
+    
+    function uploadSbsysDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/sbsys/uploadSbsys.tmpl.html',
             parent: angular.element(document.body),
@@ -443,36 +477,36 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             preserveScope: true,
             clickOutsideToClose: true
         });
-    };
-
-    $scope.cancelSbsysDialog = function () {
+    }
+    
+    function cancelSbsysDialog() {
         $scope.showProgress = false;
         $scope.uploadedToSbsys = false;
         $mdDialog.cancel();
-    };
-
-    $scope.uploadSbsys = function () {
+    }
+    
+    function uploadSbsys() {
         $scope.showProgress = true;
         $timeout(setSbsysShowAttr, 2500);
-    };
-
-    $scope.loadCheckboxes = function () {
+    }
+    
+    function loadCheckboxes() {
         $scope.primitives.sendToSbsys = false;
         $scope.contentList.forEach(function (contentTypeList) {
             contentTypeList.forEach(function (content) {
                 $scope.primitives.sendToSbsys = $scope.primitives.sendToSbsys | content.sendToSbsys;
             });
         });
-    };
-
-    $scope.setAllCheckboxes = function () {
+    }
+    
+    function setAllCheckboxes() {
         $scope.contentList.forEach(function (contentTypeList) {
             contentTypeList.forEach(function (content) {
                 content.sendToSbsys = $scope.primitives.sendAllToSbsys;
             });
         });
         $scope.primitives.sendToSbsys = $scope.primitives.sendAllToSbsys;
-    };
+    }
 
     function setSbsysShowAttr() {
         $scope.showProgress = false;

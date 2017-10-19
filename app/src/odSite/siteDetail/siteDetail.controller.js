@@ -38,6 +38,8 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
         project: "Project"
     };
 
+    vm.userService = userService;
+
     //sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("#filebrowser-breadcrumb").outerHeight() - $("md-tabs-wrapper").outerHeight() - $("#table-actions").outerHeight();
     $("#table-container").css("max-height", tableHeight+"px");
