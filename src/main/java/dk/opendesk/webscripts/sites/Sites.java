@@ -681,14 +681,13 @@ public class Sites extends AbstractWebScript {
      */
     private JSONArray createMembersPDF(String siteShortName) throws JSONException {
 
-        Map<String, String> shortNames = new HashMap<String, String>();
-        shortNames.put("PD_PROJECTOWNER" , "Projektejer");
-        shortNames.put("PD_PROJECTMANAGER" , "Projektleder");
-        shortNames.put("PD_WORKGROUP" , "Arbejdsgruppe");
-        shortNames.put("PD_MONITORS" , "Følgegruppe");
-        shortNames.put("PD_STEERING_GROUP" , "Styrregruppe");
-
-
+        Map<String, String> groupNameMap = new HashMap<String, String>();
+        groupNameMap.put("PD_PROJECTOWNER" , "Projektejer");
+        groupNameMap.put("PD_PROJECTMANAGER" , "Projektleder");
+        groupNameMap.put("PD_PROJECTGROUP" , "Projektgruppe");
+        groupNameMap.put("PD_WORKGROUP" , "Arbejdsgruppe");
+        groupNameMap.put("PD_MONITORS" , "Følgegruppe");
+        groupNameMap.put("PD_STEERING_GROUP" , "Styregruppe");
 
         AuthenticationUtil.pushAuthentication();
         try {
@@ -696,7 +695,8 @@ public class Sites extends AbstractWebScript {
             // ...code to be run as Admin...
 
             SiteInfo site = siteService.getSite(siteShortName);
-            String output = "Medlemsliste for projektet: " + site.getTitle() + "\n\n\n\n\n";
+            StringJoiner output = new StringJoiner("\n\n");
+            output.add("Medlemsliste for projektet: " + site.getTitle() + "\n\n\n");
 
             // Print members
             NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
@@ -705,44 +705,51 @@ public class Sites extends AbstractWebScript {
             for (Object groupObject :  Utils.siteGroups.get(type)) {
                 JSONObject groupJSON = (JSONObject) groupObject;
                 String shortName = groupJSON.getString("shortName");
-
-                String translated_shortName = shortNames.get(shortName);
-
-                output += getAuthorityMembersToString(siteShortName, shortName, translated_shortName) + "\n\n";
+                String displayName = groupNameMap.get(shortName);
+                String members = getAuthorityMembersToString(siteShortName, shortName, displayName);
+                output.add(members);
             }
 
             // delete the pdf if it is already present
             NodeRef documentLib = siteService.getContainer(site.getShortName(), OpenDeskModel.DOC_LIBRARY);
-            NodeRef pdfNode = nodeService.getChildByName(documentLib, ContentModel.ASSOC_CONTAINS, ISO9075.encode("Medlemsoversigt.pdf"));
+            NodeRef pdfNode = nodeService.getChildByName(documentLib, ContentModel.ASSOC_CONTAINS,
+                    ISO9075.encode("Medlemsoversigt.pdf"));
 
             if (pdfNode != null) {
                 nodeService.deleteNode(pdfNode);
             }
 
             // Create new PDF
-            Map<QName, Serializable> documentLibaryProps = new HashMap<QName, Serializable>();
+            Map<QName, Serializable> documentLibaryProps = new HashMap<>();
             documentLibaryProps.put(ContentModel.PROP_NAME, "Medlemsoversigt.pdf");
 
-            ChildAssociationRef child = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "tempfile1"), ContentModel.TYPE_CONTENT);
-            ChildAssociationRef pdf = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS, QName.createQName(ContentModel.USER_MODEL_URI, "thePDF"), ContentModel.TYPE_CONTENT, documentLibaryProps);
+            ChildAssociationRef child = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS,
+                    QName.createQName(ContentModel.USER_MODEL_URI, "tempfile1"),
+                    ContentModel.TYPE_CONTENT);
+
+            ChildAssociationRef pdf = nodeService.createNode(documentLib, ContentModel.ASSOC_CONTAINS,
+                    QName.createQName(ContentModel.USER_MODEL_URI, "thePDF"),
+                    ContentModel.TYPE_CONTENT, documentLibaryProps);
 
             // hide the pdf from the users
-            Map<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+            Map<QName, Serializable> aspectProps = new HashMap<>();
             nodeService.addAspect(pdf.getChildRef(), ContentModel.ASPECT_HIDDEN, aspectProps);
 
             // Write to the new PDF
-            ContentWriter writer = this.contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
+            String outputString = output.toString();
+            ContentWriter writer = contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
             writer.setMimetype(MimetypeMap.MIMETYPE_TEXT_PLAIN);
             writer.setEncoding("UTF-8");
-            writer.putContent(output);
+            writer.putContent(outputString);
 
-            writer = this.contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
+            writer = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
             writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
-            writer.putContent(output);
+            writer.putContent(outputString);
 
             ContentReader pptReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
             ContentWriter pdfWriter = contentService.getWriter(pdf.getChildRef(), ContentModel.PROP_CONTENT, true);
-            ContentTransformer pptToPdfTransformer = contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN, MimetypeMap.MIMETYPE_PDF);
+            ContentTransformer pptToPdfTransformer = contentService.getTransformer(MimetypeMap.MIMETYPE_TEXT_PLAIN,
+                    MimetypeMap.MIMETYPE_PDF);
 
             pptToPdfTransformer.transform(pptReader, pdfWriter);
 
@@ -758,18 +765,24 @@ public class Sites extends AbstractWebScript {
      * Gets authority members as a double line break separated string.
      * Used by createMembersPDF
      * @param siteShortName short name of a site.
-     * @param groupName group name.
+     * @param groupShortName group name.
      * @return group members.
      */
-    private String getAuthorityMembersToString(String siteShortName, String groupName, String translated_groupname) {
-        String group = Utils.getAuthorityName(siteShortName, groupName);
-        String groupMembers = translated_groupname + ": \n\n";
+    private String getAuthorityMembersToString(String siteShortName, String groupShortName, String groupDisplayName) {
+        String group = Utils.getAuthorityName(siteShortName, groupShortName);
+        StringJoiner groupMembers = new StringJoiner("\n");
+        groupMembers.add(groupDisplayName + ": \n");
         Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
         for (String authority : authorities) {
             NodeRef person = personService.getPerson(authority);
-            groupMembers += nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME) + "\n";
+            StringJoiner name = new StringJoiner(" ");
+            String firstName = nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME).toString();
+            String lastName = nodeService.getProperty(person, ContentModel.PROP_LASTNAME).toString();
+            name.add(firstName);
+            name.add(lastName);
+            groupMembers.add(name.toString());
         }
-        return groupMembers;
+        return groupMembers.toString();
     }
 
     /**

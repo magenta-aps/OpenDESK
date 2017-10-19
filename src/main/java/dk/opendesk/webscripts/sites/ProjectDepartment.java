@@ -298,7 +298,8 @@ public class ProjectDepartment extends AbstractWebScript {
      * @param manager project manager.
      * @param creator project creator.
      */
-    private void createGroupAddMembers(NodeRef nodeRef, String owner, String manager, String creator) throws JSONException {
+    private void createGroupAddMembers(NodeRef nodeRef, String owner, String manager, String creator)
+            throws JSONException {
 
         String siteShortName = siteService.getSiteShortName(nodeRef);
         String groupPrefix = "site_" + siteShortName + "_";
@@ -315,8 +316,9 @@ public class ProjectDepartment extends AbstractWebScript {
             authorityService.addAuthority(authorityPrefix + authority,  groupAuthority);
         }
 
-        // allow all other projectmanagers to access this project
-        permissionService.setPermission(nodeRef, OpenDeskModel.GLOBAL_PROJECTMANAGERS, OpenDeskModel.SITE_COLLABORATOR, true);
+        // allow all other project owners to access this project
+        permissionService.setPermission(nodeRef, OpenDeskModel.PROJECT_OWNERS, OpenDeskModel.SITE_COLLABORATOR,
+                true);
 
         // Add Owner and Manager to their groups
         authorityService.addAuthority(authorityPrefix + OpenDeskModel.PD_GROUP_PROJECTOWNER, owner);

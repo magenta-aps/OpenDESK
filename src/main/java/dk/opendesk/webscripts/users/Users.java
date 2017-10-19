@@ -125,7 +125,7 @@ public class Users extends AbstractWebScript {
                         result = getUsers(filter);
                         break;
 
-                    case "checkEmailIfExists": // no test needed
+                    case "checkEmailIfExists":
                         result = checkEmail(email);
                         break;
                 }
@@ -207,9 +207,6 @@ public class Users extends AbstractWebScript {
         }
         return Utils.getJSONReturnPair("userName", userName);
     }
-
-
-
 
     /**
      * Gets a list of filtered users.
