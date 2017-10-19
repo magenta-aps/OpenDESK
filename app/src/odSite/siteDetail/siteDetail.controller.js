@@ -5,7 +5,7 @@ angular
     .controller('SiteDetailController', SiteDetailController);
 
 function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
-                        searchService, userService, browserService, headerService) {
+                        searchService, userService, browserService, headerService, alfrescoDownloadService) {
 
     $scope.history = [];
     $scope.roles = [];
@@ -17,6 +17,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
 
     vm.cancelDialog = cancelDialog;
     vm.currentUser = authService.getUserInfo().user;
+    vm.doPDF = doPDF;
     vm.editSiteDialog = editSiteDialog;
     vm.editSiteGroups = editSiteGroups;
     vm.getAutoSuggestions = getAutoSuggestions;
@@ -140,6 +141,12 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             var path = ref.replace("workspace://SpacesStore/", "");
 
             $window.location.href = "/#!/dokument/" + path;
+        });
+    }
+
+    function doPDF() {
+        siteService.createMembersPDF(vm.project.shortName).then(function (response) {
+            alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
         });
     }
 
