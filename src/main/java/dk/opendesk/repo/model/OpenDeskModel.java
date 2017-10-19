@@ -109,11 +109,8 @@ public interface OpenDeskModel {
      * settings properties
      */
     QName PROP_SETTINGS = QName.createQName(OD_URI, "settings");
+    String PUBLIC_SETTINGS = "public";
 
-    List<String> PUBLIC_SETTINGS = new ArrayList<>(Arrays.asList(
-            "appName",
-            "logoSrc"
-    ));
 
     /**
      * Association Names

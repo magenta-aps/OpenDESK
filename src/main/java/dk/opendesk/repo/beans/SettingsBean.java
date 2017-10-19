@@ -39,13 +39,12 @@ public class SettingsBean {
     }
 
     public JSONObject getPublicSettings() throws FileNotFoundException, JSONException {
+        String key = OpenDeskModel.PUBLIC_SETTINGS;
         JSONObject settings = getSettings();
         //Get properties that are public (Used before user is logged in)
         JSONObject publicSettings = new JSONObject();
-        for(String settingProp : OpenDeskModel.PUBLIC_SETTINGS) {
-            Object settingObject = settings.get(settingProp);
-            publicSettings.put(settingProp, settingObject);
-        }
+        if(settings.has(key))
+            publicSettings.put(key, settings.getJSONObject(key));
 
         return publicSettings;
     }
