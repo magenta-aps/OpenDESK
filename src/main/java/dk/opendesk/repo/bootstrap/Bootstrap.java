@@ -36,7 +36,8 @@ public class Bootstrap extends AbstractLifecycleBean {
         for (String group : requiredGroups) {
             if(!authorityService.authorityExists("GROUP_" + group))
             {
-                authorityService.createAuthority(AuthorityType.GROUP, group);
+                String authority = authorityService.createAuthority(AuthorityType.GROUP, group);
+                authorityService.addAuthority(authority, "admin");
             }
         }
     }
