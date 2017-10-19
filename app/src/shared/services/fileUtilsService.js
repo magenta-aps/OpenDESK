@@ -216,10 +216,10 @@ function fileUtilsService() {
                 prefix = extns[extn];
             }
         }
-        else if (typeof type == "undefined") {
+        else if (typeof type === "undefined") {
             if (fileParentType !== null) {
                 type = Alfresco.util.getFileIcon.types[fileParentType];
-                if (typeof type == "undefined") {
+                if (typeof type === "undefined") {
                     type = "file";
                 }
             }
