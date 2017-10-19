@@ -6,7 +6,7 @@ angular
 
 function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast, $timeout, Upload, siteService, fileUtilsService,
     filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
-    userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG, EDITOR_CONFIG) {
+    userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG) {
 
     var vm = this;
 
@@ -130,8 +130,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     function processContent(content) {
         content.forEach(function (item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
-            item.loolEditable = EDITOR_CONFIG.lool.mimeTypes.indexOf(item.mimeType) !== -1;
-            item.msOfficeEditable = EDITOR_CONFIG.msOffice.mimeTypes.indexOf(item.mimeType) !== -1;
+            item.loolEditable = documentService.isLoolEditable(item.mimeType);
+            item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
         });
     }
 

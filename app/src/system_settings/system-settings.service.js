@@ -2,9 +2,13 @@
 
 angular.module('openDeskApp.systemsettings')
 
-    .factory('systemSettingsService', function ($http, APP_CONFIG) {
+    .factory('systemSettingsService', function ($http, APP_BACKEND_CONFIG) {
 
-        var restBaseUrl = '/alfresco/s/api/';
+        function updateSettings(newSettings) {
+            for(var key in newSettings) {
+                APP_BACKEND_CONFIG[key] = newSettings[key];
+            }
+        }
 
         return {
             getSiteMembers: function (siteShortName) {
@@ -23,21 +27,23 @@ angular.module('openDeskApp.systemsettings')
 
             loadSettings: function () {
                 return $http.get("/alfresco/service/settings").then(function (response) {
-                    APP_CONFIG.settings = response.data;
+                    updateSettings(response.data);
                 });
             },
 
             loadPublicSettings: function () {
                 return $http.get("/alfresco/service/settings/public").then(function (response) {
-                    APP_CONFIG.settings = response.data;
+                    updateSettings(response.data);
                 });
             },
 
             updateSettings: function (settings) {
-                var data = { "properties": { "settings": settings } }
-                return $http.put("/alfresco/service/settings", data).then(function (response) {
-                    APP_CONFIG.settings = settings;
-                });
+                return $http.put("/alfresco/service/settings",
+                    {
+                        "properties": {
+                            "settings": settings
+                        }
+                    });
             }
         };
     });

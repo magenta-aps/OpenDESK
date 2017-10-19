@@ -125,9 +125,6 @@ function includeAppConfigParams(content) {
     if (argv.title) {
         content = content.replace("appName: 'OpenDesk'", "appName: '" + argv.title + "'");
     }
-    if (argv.logo) {
-        content = content.replace("logoSrc: './app/assets/images/logo-light.svg'", "logoSrc: '" + argv.logo + "'");
-    }
     return content;
 }
 

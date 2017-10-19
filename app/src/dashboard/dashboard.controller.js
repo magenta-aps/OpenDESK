@@ -4,10 +4,10 @@ angular
     .module('openDeskApp.dashboard')
     .controller('DashboardController', DashboardController);
 
-function DashboardController(pageService, headerService, APP_CONFIG) {
+function DashboardController(pageService, headerService, APP_BACKEND_CONFIG) {
     var vm = this;
-
-    vm.links = APP_CONFIG.settings.dashboardLinks;
+    
+    vm.links = APP_BACKEND_CONFIG.dashboardLinks;
     vm.pages = [];
 
     activate();

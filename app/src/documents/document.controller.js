@@ -4,9 +4,8 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state,
-    documentPreviewService, alfrescoDownloadService, CLIENT_CONFIG, browserService,
-    $mdDialog, notificationsService, authService, siteService, headerService, $window,
-    EDITOR_CONFIG) {
+    documentPreviewService, alfrescoDownloadService, BROWSER_CONFIG, browserService, fileUtilsService,
+    $mdDialog, notificationsService, authService, siteService, headerService, $window) {
 
     var vm = this;
 
@@ -15,7 +14,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.paths = [];
     vm.canEdit = false;
     vm.browser = {};
-    vm.browser.isIE = CLIENT_CONFIG.browser.isIE;
+    vm.browser.isIE = BROWSER_CONFIG.isIE;
 
     vm.showArchived = false;
 
@@ -192,9 +191,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     function getDocument() {
         documentService.getDocument(parentDocumentNode).then(function (response) {
 
-            vm.doc = response.item;
-            vm.loolEditable = EDITOR_CONFIG.lool.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
-            vm.msOfficeEditable = EDITOR_CONFIG.msOffice.mimeTypes.indexOf(vm.doc.node.mimetype) !== -1;
+        vm.doc = response.item;
+        vm.loolEditable = documentService.isLoolEditable(vm.doc.node.mimetype);
+        vm.msOfficeEditable = documentService.isMsOfficeEditable(vm.doc.node.mimetype);
 
             vm.docMetadata = response.metadata;
 
@@ -312,13 +311,13 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     //Goes to the libreOffice online edit page
     function goToLOEditPage() {
         var ref = $stateParams.doc;
-        var isFirstInHistory = ref == firstDocumentNode;
+        var isFirstInHistory = ref === firstDocumentNode;
         if (docHasParent && !isFirstInHistory) {
             //first promote doc to latest version
             confirmLoolEditDocDialog();
         } else {
             $state.go('lool', {
-                'nodeRef': vm.doc.node.nodeRef,
+                'nodeRef': vm.doc.node.nodeRef
             });
         }
     };
@@ -326,13 +325,14 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     function editInMSOffice() {
         var pathStart = vm.docMetadata.serverURL;
         var pathEnd = vm.doc.webdavUrl.replace("webdav", "aos");
-        var file = pathStart + "/alfresco" + pathEnd;
-        console.log(file);
+        var protocol = fileUtilsService.getMsProtocolForFile(pathEnd);
+        var fileLik = pathStart + "/alfresco" + pathEnd;
+        // aosLink will be used for MS Office 2013 and above
+        var aosLink = protocol + ":ofe|u|" + pathStart + "/alfresco" + pathEnd;
         try {
             var objword = new ActiveXObject("SharePoint.OpenDocuments");
-            if (objword != null) {
-                objword.EditDocument(file);
-                // f.i. https://alfresco.ballerup.dk/alfresco/aos/Sites/swsdp/documentLibrary/Meeting%20Notes/Meeting%20Notes%202011-01-27.doc
+            if (objword !== null) {
+                objword.EditDocument(fileLik);
             }
         } catch (e) {
             console.log(e);

@@ -5,12 +5,12 @@ angular
 	.controller('SiteListController', SiteListController);
 
 function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService,
-						 sessionService, APP_CONFIG, browserService, headerService) {
+						 sessionService, APP_BACKEND_CONFIG, browserService, headerService) {
 
 	var vm = this;
 
 	vm.cancelDialog = cancelDialog;
-	vm.config = APP_CONFIG.settings;
+	vm.config = APP_BACKEND_CONFIG;
 	vm.createSiteDialog = createSiteDialog;
 	vm.currentDialogDescription = '';
 	vm.currentDialogShortName = '';

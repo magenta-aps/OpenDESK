@@ -1032,13 +1032,10 @@
   },
   "CONFIGURATION": {
     "LINK_TO": "Link to ",
-    "appName": "Name of OpenDesk instance",
     "enableESDH": "Enabling of SBSYS",
     "enableProjects": "Enabling of  projects",
     "enableSites": "Enabling of sites",
     "enableChat": "Enabling of chat",
-    "logoSrc": "Path to logo",
-    "ssoLoginEnabled": "Enabling of SSO",
     "dashboardLinks": {
       "dashboard": "Dashboard",
       "intra" : "Intra",
@@ -1050,6 +1047,9 @@
       "esdh" : "SBSYS",
       "citrix" : "Citrix",
       "map" : "Map"
+    },
+    "public" : {
+      "appName": "Name of OpenDesk instance"
     }
   }
 }

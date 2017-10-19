@@ -9,7 +9,7 @@ angular
         };
     });
 
-function ChatController(chatService, APP_CONFIG) {
-    if(APP_CONFIG.settings.enableChat)
+function ChatController(chatService, APP_BACKEND_CONFIG) {
+    if(APP_BACKEND_CONFIG.enableChat)
         chatService.initialize();
 };

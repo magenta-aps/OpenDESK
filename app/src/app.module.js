@@ -13,6 +13,7 @@ angular
         'pdf',
         'swfobject',
         'isteven-multi-select',
+        'openDeskApp.backendConfig',
         'openDeskApp.init',
         'openDeskApp.systemsettings',
         'openDeskApp.auth',
@@ -39,7 +40,7 @@ angular
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
     .config(config)
     .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
-                   APP_CONFIG, CLIENT_CONFIG, EDITOR_CONFIG, browserService, loolService) {
+                   APP_CONFIG, APP_BACKEND_CONFIG, BROWSER_CONFIG, EDITOR_CONFIG, browserService, loolService) {
 
         $rootScope.isBoolean = function(value) {
             return typeof value === 'boolean';
@@ -49,38 +50,16 @@ angular
             $rootScope[name] = angular[name];
         });
 
-        loolService.getValidMimeTypes().then(function(response) {
-            EDITOR_CONFIG.lool.mimeTypes = response;
-        });
+        // If the LooL discovery file changes we can use this method to retrieve the updated list of mimetypes.
+        // loolService.getValidMimeTypes().then(function(response) {
+        //     EDITOR_CONFIG.lool.mimeTypes = response;
+        // });
 
         systemSettingsService.loadPublicSettings().then(function(response) {
             browserService.setTitle();
-            $rootScope.appName = APP_CONFIG.settings.appName;
-            $rootScope.logoSrc = APP_CONFIG.settings.logoSrc;
-            CLIENT_CONFIG.browser.isIE = detectIE();
+            BROWSER_CONFIG.isIE = browserService.isIE();
         });
     });
-
-/**
- * detect IE
- * returns version of IE or false, if browser is not Internet Explorer
- */
-function detectIE() {
-    var ua = window.navigator.userAgent;
-
-    var msie = ua.indexOf('MSIE ');
-    if (msie > 0) { return true; }
-
-    var trident = ua.indexOf('Trident/');
-    if (trident > 0) { return true; }
-
-    // We don't accept Edge, as Edge does not support ActiveXObject
-    //var edge = ua.indexOf('Edge/');
-    //if (edge > 0) { return true; }
-
-    // other browser
-    return false;
-}
 
 function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
 
@@ -96,7 +75,6 @@ function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
                 var d = $q.defer();
 
                 sessionService.loadUserInfo();
-
                 if (authService.isAuthenticated())
                     resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);
 

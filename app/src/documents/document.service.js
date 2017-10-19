@@ -1,7 +1,7 @@
 angular.module('openDeskApp.documents')
        .factory('documentService', documentService);
 
-function documentService($http, $translate, $mdToast, $q) {
+function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG) {
 
     var service = {
         getDocument: getDocument,
@@ -12,7 +12,9 @@ function documentService($http, $translate, $mdToast, $q) {
         createVersionThumbnail: createVersionThumbnail,
         cleanupThumbnail: cleanupThumbnail,
         revertToVersion: revertToVersion,
-        deleteVersion: deleteVersion
+        deleteVersion: deleteVersion,
+        isLoolEditable: isLoolEditable,
+        isMsOfficeEditable: isMsOfficeEditable
     };
 
     return service;
@@ -118,4 +120,11 @@ function documentService($http, $translate, $mdToast, $q) {
         });
     }
 
+    function isLoolEditable(mimeType){
+        return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
+    }
+
+    function isMsOfficeEditable(mimeType){
+        return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1;
+    }
 }

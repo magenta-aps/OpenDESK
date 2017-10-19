@@ -4,6 +4,12 @@
             <h2 class="od-title-icon"><i class="material-icons">settings</i>Konfiguration</h2>
 
             <md-list>
+                <md-list-item ng-repeat="(key, value) in config.public">
+                    <p>{{'CONFIGURATION.public.' + key | translate}}</p>
+                    <md-input-container>
+                        <input ng-if="isString(value)" class="md-secondary" ng-model="config.public[key]" title="value">
+                    </md-input-container>
+                </md-list-item>
                 <md-list-item ng-repeat="(key, value) in config" ng-if="!isObject(value)">
                     <p>{{'CONFIGURATION.' + key | translate}}</p>
                     <md-input-container>
