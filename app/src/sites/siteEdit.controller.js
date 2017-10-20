@@ -12,7 +12,7 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
     vm.availStates = ['ACTIVE','CLOSED'];
     vm.availOrgs = [];
     vm.cancelDialog = cancelDialog;
-    vm.newSite = vm.site;
+    vm.newSite = sitedata;
     vm.site = sitedata;
     vm.searchPeople = searchPeople;
     vm.searchProjectOwners = searchProjectOwners;
@@ -39,8 +39,6 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
         });
 
         vm.newSite.isPrivate = (vm.site.visibility === 'PRIVATE' ? true : false);
-
-        getOwners();
     }
 
     function cancelDialog() {
