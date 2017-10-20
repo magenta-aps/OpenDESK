@@ -10,7 +10,7 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
     $scope.searchPeople = searchPeople;
     $scope.addExternalUserToGroup = addExternalUserToGroup;
     $scope.cancel = cancel;
-    $scope.updatePDSiteGroups = updatePDSiteGroups;
+    $scope.updateSiteGroups = updateSiteGroups;
     $scope.doPDF = doPDF;
     $scope.addMemberToSite = addMemberToSite;
     $scope.removeMemberFromSite = removeMemberFromSite;
@@ -69,7 +69,7 @@ function SiteMemberController($scope, $mdDialog, $mdToast, $translate, APP_CONFI
         $mdDialog.cancel();
     }
 
-    function updatePDSiteGroups() {
+    function updateSiteGroups() {
         $mdDialog.cancel();
         $translate('GROUP.UPDATED').then(function (msg) {
             $mdToast.show(
