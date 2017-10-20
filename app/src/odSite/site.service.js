@@ -547,7 +547,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                             link: link,
                             wtype: "new-doc",
                             shortName: site.shortName
-                        }
+                        };
                         createNotification(notification);
                     }
                 }
@@ -566,7 +566,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
             link: link,
             wtype: "review-request",
             shortName: site.shortName
-        }
+        };
         createNotification(notification);
     }
     function createNotification(notification) {

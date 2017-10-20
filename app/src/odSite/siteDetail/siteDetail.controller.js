@@ -8,13 +8,10 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
                         searchService, userService, browserService, headerService, alfrescoDownloadService) {
 
     $scope.history = [];
-    $scope.roles = [];
     $scope.showGroupList = [];
-    $scope.groups = {};
-    $scope.groups.list = [];
-
+    
     var vm = this;
-
+    
     vm.cancelDialog = cancelDialog;
     vm.currentUser = authService.getUserInfo().user;
     vm.doPDF = doPDF;
@@ -23,6 +20,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     vm.getAutoSuggestions = getAutoSuggestions;
     vm.getSearchResults = getSearchResults;
     vm.gotoPath = gotoPath;
+    vm.groups = {};
     vm.hasDescription = false;
     vm.newFileName = '';
     vm.newTemplateName = '';
@@ -109,10 +107,9 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
 
     function loadMembers() {
         siteService.getGroupsAndMembers().then(function (groups) {
-            $scope.groups.list = groups;
+            vm.groups = groups;
 
-            angular.forEach($scope.groups.list, function(group) {
-                $scope.roles.push(group[0].shortName);
+            angular.forEach(vm.groups, function(group) {
                 $scope.showGroupList.push(false);
                 vm.searchTextList.push(null);
             });
@@ -161,8 +158,6 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
                 sitedata: $scope.site
             },
             targetEvent: ev,
-            // scope: $scope, // use parent scope in template
-            // preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
     }
@@ -175,9 +170,8 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             locals: {
                 sitedata: $scope.site
             },
-            parent: angular.element(document.body),
-            scope: $scope,
-            preserveScope: true,
+            // scope: $scope,
+            // preserveScope: true,
             targetEvent: ev,
             clickOutsideToClose: true
         });

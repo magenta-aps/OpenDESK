@@ -7,7 +7,7 @@
 	</md-card-title>
 	<md-card-content>
 
-		<div ng-repeat="group in groups.list">
+		<div ng-repeat="group in vm.groups">
 
 			<div ng-if="group[0].collapsed" flex="100">
 				<h4 ng-click="group[0].open = !group[0].open" class="group-toggle" ng-class="group[0].open ? 'open' : 'closed'" layout="row"

@@ -9,22 +9,14 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
     var vm = this;
     var availProjectOwners = [];
 
-    vm.site = sitedata;
-    vm.newSite = vm.site;
-    vm.cancelDialog = cancelDialog;
-    vm.searchProjectOwners = searchProjectOwners;
-    vm.searchPeople = searchPeople;
-    vm.updateSite = updateSite;
-
-    // vm.availStates = [{
-    //     stateId: 'ACTIVE',
-    // },
-    // {
-    //     stateId: 'CLOSED',
-    // }
-    // ];
-
     vm.availStates = ['ACTIVE','CLOSED'];
+    vm.availOrgs = [];
+    vm.cancelDialog = cancelDialog;
+    vm.newSite = vm.site;
+    vm.site = sitedata;
+    vm.searchPeople = searchPeople;
+    vm.searchProjectOwners = searchProjectOwners;
+    vm.updateSite = updateSite;
 
     activate();
 
@@ -38,22 +30,21 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
             vm.newSite.manager = manager;
         });
 
+        siteService.getAllOrganizationalCenters().then(function (response) {
+            vm.availOrgs = response.data;
+        });
+
+        siteService.getAllOwners().then(function (response) {
+            availProjectOwners = response;
+        });
+
         vm.newSite.isPrivate = (vm.site.visibility === 'PRIVATE' ? true : false);
 
         getOwners();
-        getAvailOrgs();
     }
 
     function cancelDialog() {
         $mdDialog.cancel();
-    }
-
-    function getOwners() {
-        siteService.getAllOwners().then(function (response) {
-            availProjectOwners = response;
-        },function (err) {
-            console.log(err);
-        });
     }
 
     function searchProjectOwners(query) {
@@ -66,12 +57,6 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
         if (query) {
             return userService.getUsers(query);
         }
-    }
-
-    function getAvailOrgs() {
-        siteService.getAllOrganizationalCenters().then(function (response) {
-            $scope.availOrgs = response.data;
-        });
     }
 
     function updatePdSite() {

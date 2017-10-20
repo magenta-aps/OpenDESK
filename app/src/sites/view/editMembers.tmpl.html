@@ -12,14 +12,14 @@
 
 		<md-dialog-content>
 			<md-content class="md-padding" layout="column">
-				<div ng-repeat="(groupIndex, group) in groups.list">
+				<div ng-repeat="(groupIndex, group) in vm.groups">
 					<div ng-if="group[0].multipleMembers">
 						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" 
 							class="group-toggle" 
 							layout="row" 
 							ng-class="showGroupList[groupIndex] ? 'closed' : 'open'"
-							aria-label="{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}">
-							<span>{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</span>
+							aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}">
+							<span>{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}</span>
 							<span flex></span>
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 						</h4>
@@ -67,7 +67,7 @@
 					<md-input-container>
 						<label>Rolle</label>
 						<md-select ng-model="externalUser.group">
-							<md-option ng-repeat="group in groups.list | filter: vm.groupFilter" ng-value="group">{{'SITES.' + vm.project.type + '.GROUPS.' + group[0].shortName | translate}}</md-option>
+							<md-option ng-repeat="group in vm.groups | filter: vm.groupFilter" ng-value="group">{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}</md-option>
 						</md-select>
 					</md-input-container>
 					<div style="position: relative; top: -25px;">
