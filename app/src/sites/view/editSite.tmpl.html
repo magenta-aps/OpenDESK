@@ -1,10 +1,10 @@
-<md-dialog aria-label="{{'COMMON.EDIT' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}" class="site-dialog">
-    <form ng-submit="site.type == 'PD-Project' ? updatePdSite(): updateSite()" name="pdeditsite">
+<md-dialog aria-label="{{'COMMON.EDIT' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}" class="site-dialog">
+    <form ng-submit="vm.updateSite()" name="pdeditsite">
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2>{{'COMMON.EDIT' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}</h2>
+            <h2>{{'COMMON.EDIT' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}</h2>
             <span flex></span>
-            <md-button class="md-icon-button" ng-click="cancel()">
+            <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
                 <md-icon>close</md-icon>
             </md-button>
           </div>
@@ -12,48 +12,49 @@
        
         <md-dialog-content>
             <md-content class="md-padding" layout="row" layout-padding>
-                <div flex="site.type == 'PD-Project' ? 50 : 100">
+                <div flex="vm.site.type == 'PD-Project' ? 50 : 100">
                     <md-input-container style="width: 100%;">
                         <label>{{'COMMON.NAME' | translate}}</label>
-                        <input type="text" ng-model="newSite.siteName" required>
+                        <input type="text" ng-model="vm.newSite.title" required>
                     </md-input-container>
 
                     <md-input-container style="width: 100%;">
                         <label>{{'COMMON.DESCRIPTION' | translate}}</label>
-                        <textarea ng-model="newSite.desc" md-maxlength='250' maxlength="250"></textarea>
+                        <textarea ng-model="vm.newSite.description" md-maxlength='250' maxlength="250"></textarea>
                     </md-input-container>
 
                     <md-autocomplete
-                        ng-if="site.type == 'PD-Project'"
-                        md-selected-item="newSite.owner"
+                        ng-if="vm.site.type == 'PD-Project'"
+                        md-selected-item="vm.newSite.owner"
                         md-search-text="searchTextOwner"
-                        md-items="own in searchProjectOwners(searchTextOwner)"
-                        md-item-text="own.displayName"
+                        md-items="owner in vm.searchProjectOwners(searchTextOwner)"
+                        md-item-text="owner.displayName"
                         md-min-length="1"
                         md-floating-label="{{'PROJECT.PROJECTOWNER' | translate}}"
                         md-clear-button=true
                         placeholder="{{'PROJECT.PROJECTOWNER' | translate}}">
                         <md-item-template>
-                            <span md-highlight-text="searchTextOwner" md-highlight-flags="gi">{{ own.displayName }}</span>
+                            <span md-highlight-text="searchTextOwner" md-highlight-flags="gi">{{ owner.displayName }}</span>
                         </md-item-template>
                         <md-not-found>
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextOwner }}".
                         </md-not-found>
                     </md-autocomplete>
-                    <md-checkbox ng-model="newSite.isPrivate" aria-label="{{'COMMON.CLOSED' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}">
-                        {{'COMMON.CLOSED' | translate}} {{'SITES.' + site.type + '.NAME' | translate | lowercase}}
+
+                    <md-checkbox ng-model="vm.newSite.isPrivate" aria-label="{{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}">
+                        {{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}
                     </md-checkbox>
                 </div>
 
-                <div ng-if="site.type == 'PD-Project'" flex="50">
-                    <md-input-container ng-if="site.type == 'PD-Project'" style="width: 100%;">
+                <div ng-if="vm.site.type == 'PD-Project'" flex="50">
+                    <md-input-container style="width: 100%;">
                         <label>{{'ESDH' | translate}} {{'CASE.CASE_NUMBER' | translate}}</label>
-                        <input type="text" ng-model="newSite.sbsys" required>
+                        <input type="text" ng-model="vm.newSite.sbsys" required>
                     </md-input-container>
 
-                    <md-input-container ng-if="site.type == 'PD-Project'" class="org-input">
+                    <md-input-container class="org-input">
                         <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
-                        <md-select ng-model="newSite.center_id" required>
+                        <md-select ng-model="vm.newSite.center_id" required>
                             <md-option ng-repeat="org in availOrgs" value="{{ org.shortName }}">
                                 {{ org.displayName }}
                             </md-option>
@@ -61,10 +62,9 @@
                     </md-input-container>
 
                     <md-autocomplete
-                            ng-if="site.type == 'PD-Project'"
-                            md-selected-item="newSite.manager"
+                            md-selected-item="vm.newSite.manager"
                             md-search-text="searchTextManager"
-                            md-items="man in searchPeople(searchTextManager)"
+                            md-items="man in vm.searchPeople(searchTextManager)"
                             md-item-text="man.displayName"
                             md-min-length="1"
                             md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
@@ -78,17 +78,16 @@
                         </md-not-found>
                     </md-autocomplete>
 
-                    <md-input-container ng-if="site.type == 'PD-Project'">
+                    <md-input-container>
                         <label>{{'PROJECT.STATUS' | translate}}</label>
-                        <md-select ng-model="newSite.state">
-                            <md-option ng-repeat="state in newSite.availStates" ng-value="state">
-                                {{ state.stateStr }}
+                        <md-select ng-model="vm.newSite.state">
+                            <md-option ng-repeat="state in vm.availStates" ng-value="state">
+                                {{'PROJECT.STATUS.' + state | translate}}
                             </md-option>
                         </md-select>
                     </md-input-container>
                 </div>
             </md-content>
-        
         </md-dialog-content>
         
         <md-dialog-actions layout="row">
@@ -97,6 +96,5 @@
                 {{'COMMON.SAVE' | translate}}
             </md-button>
         </md-dialog-actions>
-        
     </form>
 </md-dialog>

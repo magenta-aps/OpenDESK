@@ -6,79 +6,54 @@ angular
 
 function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, userService, $mdToast, filterService) {
 
-    var pde = this;
+    var vm = this;
     var availProjectOwners = [];
-    var visibility = 'PUBLIC';
 
-    pde.site = sitedata;
+    vm.site = sitedata;
+    vm.newSite = vm.site;
+    vm.cancelDialog = cancelDialog;
+    vm.searchProjectOwners = searchProjectOwners;
+    vm.searchPeople = searchPeople;
+    vm.updateSite = updateSite;
 
-    $scope.cancel = cancel;
-    $scope.searchProjectOwners = searchProjectOwners;
-    $scope.searchPeople = searchPeople;
-    $scope.updatePdSite = updatePdSite;
-    $scope.updateSite = updateSite;
+    // vm.availStates = [{
+    //     stateId: 'ACTIVE',
+    // },
+    // {
+    //     stateId: 'CLOSED',
+    // }
+    // ];
+
+    vm.availStates = ['ACTIVE','CLOSED'];
 
     activate();
 
     function activate() {
-        $scope.groups.list.forEach(function (group) {
-            switch (group[0].shortName) {
-                case 'PD_PROJECTOWNER':
-                    $scope.owner = group[1][0];
-                    break;
-                case 'PD_PROJECTMANAGER':
-                    $scope.manager = group[1][0];
-                    break;
-            }
+        console.log(vm.newSite);
+        siteService.getSiteOwner().then(function (owner) {
+            vm.newSite.owner = owner;
         });
-    
-        $scope.newSite = {
-            shortName: pde.site.shortName,
-            siteName: pde.site.title,
-            desc: pde.site.description,
-            owner: $scope.owner,
-            sbsys: pde.site.sbsys,
-            center_id: pde.site.center_id,
-            manager: $scope.manager
-        };
 
-        if (pde.site.visibility === 'PRIVATE') {
-            $scope.newSite.isPrivate = true;
-        }
-        $scope.newSite.availStates = [{
-                stateId: 'ACTIVE',
-                stateStr: 'Igang'
-            },
-            {
-                stateId: 'CLOSED',
-                stateStr: 'Afsluttet'
-            }
-        ];
-        for (var s in $scope.newSite.availStates) {
-            if (pde.site.state === $scope.newSite.availStates[s].stateId) {
-                $scope.newSite.state = $scope.newSite.availStates[s];
-            }
-        }
+        siteService.getSiteManager().then(function (manager) {
+            vm.newSite.manager = manager;
+        });
+
+        vm.newSite.isPrivate = (vm.site.visibility === 'PRIVATE' ? true : false);
 
         getOwners();
         getAvailOrgs();
     }
 
-
-    function cancel() {
+    function cancelDialog() {
         $mdDialog.cancel();
     }
 
-
     function getOwners() {
-        siteService.getAllOwners().then(
-            function (response) {
-                availProjectOwners = response;
-            },
-            function (err) {
-                console.log(err);
-            }
-        );
+        siteService.getAllOwners().then(function (response) {
+            availProjectOwners = response;
+        },function (err) {
+            console.log(err);
+        });
     }
 
     function searchProjectOwners(query) {
@@ -94,80 +69,42 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
     }
 
     function getAvailOrgs() {
-        siteService.getAllOrganizationalCenters().then(
-            function (response) {
-                $scope.availOrgs = response.data;
-            }
-        );
+        siteService.getAllOrganizationalCenters().then(function (response) {
+            $scope.availOrgs = response.data;
+        });
     }
 
     function updatePdSite() {
-        var manager = $scope.manager.userName;
-        if ($scope.newSite.manager.userName !== undefined) {
-            manager = $scope.newSite.manager.userName;
-        }
-
-        visibility = $scope.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
-
-        console.log('Updating site to sitename: ' + $scope.newSite.siteName +
-            '; sbsys: ' + $scope.newSite.sbsys +
-            '; center id: ' + $scope.newSite.center_id +
-            '; owner: ' + $scope.newSite.owner.userName +
-            '; manager: ' + manager +
-            '; visibility: ' + visibility +
-            '; state: ' + $scope.newSite.state.stateId
-        );
-        siteService.updatePDSite(
-            $scope.newSite.shortName,
-            $scope.newSite.siteName,
-            $scope.newSite.desc,
-            $scope.newSite.sbsys,
-            $scope.newSite.center_id,
-            $scope.newSite.owner.userName,
-            manager,
-            visibility,
-            $scope.newSite.state.stateId
-        ).then(
-            function (response) {
-                if (response) {
-                    $mdDialog.cancel();
-
-                    $state.reload();
-
-                    $mdToast.show(
-                        $mdToast.simple()
-                        .textContent('Du har opdateret: ' + $scope.newSite.siteName)
-                        .hideDelay(3000)
-                    );
-                }
-            },
-            function (err) {
-                console.log(err);
-            }
-        );
+        siteService.updatePDSite(vm.newSite).then(function (response) {
+            $mdDialog.cancel();
+            $state.reload();
+            $mdToast.show(
+                $mdToast.simple()
+                .textContent('Du har opdateret: ' + vm.newSite.title)
+                .hideDelay(3000)
+            );
+        },function (err) {
+            console.log(err);
+        });
     }
 
     function updateSite() {
-        visibility = $scope.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
-        console.log('update site');
-        siteService.updateSite(
-            $scope.newSite.shortName,
-            $scope.newSite.siteName,
-            $scope.newSite.desc,
-            visibility
-        ).then(
-            function (response) {
-                $mdDialog.cancel();
+        vm.newSite.visibility = vm.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
 
-                $state.reload();
+        if(vm.site.type == 'PD-Project') {
+            updatePdSite();
+            return;
+        }
 
-                $mdToast.show(
-                    $mdToast.simple()
-                        .textContent('Du har opdateret: ' + $scope.newSite.siteName)
-                        .hideDelay(3000)
-                );
-            }
-        );
+        siteService.updateSite(vm.newSite).then(function (response) {
+            $mdDialog.cancel();
+            $state.reload();
+            $mdToast.show(
+                $mdToast.simple()
+                .textContent('Du har opdateret: ' + vm.newSite.siteName)
+                .hideDelay(3000)
+            );
+        });
     }
 
 }

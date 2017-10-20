@@ -19,7 +19,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
         manager: currentUser,
         presetManager: currentUser
     };
-    $scope.availOrgs = [];
+    vm.availOrgs = [];
     $scope.selectedProjGrpItem = null;
     $scope.srchprjgrptxt = null;
     $scope.selectedStyreGrpItem = null;
@@ -52,37 +52,18 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
     };
 
     function loadTemplateNames() {
-
-        siteService.getTemplateNames().then(function (response) {
-
-            var result = [];
-
-            for (var i in response) {
-
-                var shortName = response[i].shortName;
-                var displayName = response[i].title;
-                result.push({
-                    "shortName": shortName,
-                    "displayName": displayName
-                });
-            }
-
-            $scope.templates = result;
+        siteService.getTemplateNames().then(function (templates) {
+            $scope.templates = templates;
         });
-
     }
-
 
     function cancelDialog() {
         $mdDialog.cancel();
     }
 
-
     function getOwners() {
-        siteService.getAllOwners().then(
-            function (response) {
-                console.log(response);
-                availOwners = response;
+        siteService.getAllOwners().then(function (owners) {
+                availOwners = owners;
             },
             function (err) {
                 console.log(err);
@@ -90,13 +71,11 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
         );
     }
 
-
     function searchOwners(query) {
         return filterService.search(availOwners, {
             displayName: query
         });
     }
-
 
     function searchPeople(query) {
         if (query) {
@@ -105,21 +84,14 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
     }
 
     function getAvailOrgs() {
-        siteService.getAllOrganizationalCenters().then(
-            function (response) {
-                $scope.availOrgs = response.data;
-            }
-        );
+        siteService.getAllOrganizationalCenters().then(function (response) {
+            vm.availOrgs = response.data;
+        });
     }
 
     function loadSiteGroups() {
         siteService.getSiteGroups(vm.type).then(function (response) {
             $scope.newSite.groups = response;
-            angular.forEach($scope.newSite.groups, function (group) {
-                group.members = [];
-                if (group.collapsed)
-                    group.open = false;
-            });
         });
     }
 

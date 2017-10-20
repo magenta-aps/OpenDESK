@@ -24,21 +24,19 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
     };
 
     var service = {
-        getSite: getSite,
-        getSiteMembers: getSiteMembers,
-        getAllOwners: getAllOwners,
-        getTemplateNames: getTemplateNames,
-        getAllOrganizationalCenters: getAllOrganizationalCenters,
-        getSites: getSites,
-        getSitesPerUser: getSitesPerUser,
-        getSitesByQuery: getSitesByQuery,
-        createSite: createSite,
-        updateSite: updateSite,
-        loadSiteData: loadSiteData,
-        createPDSite: createPDSite,
-        updatePDSite: updatePDSite,
         addMemberToSite: addMemberToSite,
-        getMemberFromSite: getMemberFromSite,
+        createPDSite: createPDSite,
+        createSite: createSite,
+        getAllOrganizationalCenters: getAllOrganizationalCenters,
+        getAllOwners: getAllOwners,
+        getSite: getSite,
+        getTemplateNames: getTemplateNames,
+        getSites: getSites,
+        getSitesByQuery: getSitesByQuery,
+        getSitesPerUser: getSitesPerUser,
+        loadSiteData: loadSiteData,
+        updatePDSite: updatePDSite,
+        updateSite: updateSite,
         removeMemberFromSite: removeMemberFromSite,
         updateRoleOnSiteMember: updateRoleOnSiteMember,
         deleteSite: deleteSite,
@@ -61,6 +59,8 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         setUserManagedProjects: setUserManagedProjects,
         getUserManagedProjects: getUserManagedProjects,
         getGroupsAndMembers: getGroupsAndMembers,
+        getSiteOwner: getSiteOwner,
+        getSiteManager: getSiteManager,
         createDocumentNotification: createDocumentNotification,
         createReviewNotification: createReviewNotification,
 
@@ -70,12 +70,6 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
 
     function getSite() {
         return site;
-    }
-    
-    function getSiteMembers(siteShortName) {
-        return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
-            return response.data;
-        });
     }
     
     function getAllOwners() {
@@ -93,7 +87,16 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
 
     function getTemplateNames() {
         return systemSettingsService.getTemplates().then(function (response) {
-            return response;
+            var templates = [];
+
+            angular.forEach(response, function(template) {
+                templates.push({
+                    "shortName": template.shortName,
+                    "displayName": template.title
+                });
+            });
+
+            return templates;
         });
     }
     
@@ -132,7 +135,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                 return response.data;
             },
             function (err) {
-                //console.log(err);
+                console.log(err);
             }
         );
     }
@@ -163,16 +166,17 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         );
     }
 
-    function updateSite(shortName, newName, description, visibility) {
-        return $http.put('/api/sites/' + shortName, {
-            shortName: shortName,
+    // function updateSite(shortName, newName, description, visibility) {  
+    function updateSite(site) {
+        return $http.put('/api/sites/' + site.shortName, {
+            shortName: site.shortName,
             sitePreset: "default",
-            title: newName,
-            description: (description && description !== '') ? description : '',
-            visibility: visibility
+            title: site.siteName,
+            description: site.description,
+            visibility: site.visibility
         }).then(function (response) {
             var isInherited = response.data.isPublic;
-            getNode(shortName, "documentLibrary", "").then(function (response) {
+            getNode(site.shortName, "documentLibrary", "").then(function (response) {
                 var nodeId = response.parent.nodeRef.split("/")[3];
                 var data = {
                     "isInherited": isInherited,
@@ -212,17 +216,17 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         });
     }
 
-    function updatePDSite(shortName, siteName, description, sbsys, center_id, owner, manager, visibility, state) {
+    function updatePDSite(site) {
         return $http.post('/alfresco/service/projectdepartment', {
-            PARAM_NAME: siteName,
-            PARAM_SITE_SHORT_NAME: shortName,
-            PARAM_DESCRIPTION: description,
-            PARAM_SBSYS: sbsys,
-            PARAM_OWNER: owner,
-            PARAM_MANAGER: manager,
-            PARAM_CENTERID: center_id,
-            PARAM_VISIBILITY: visibility,
-            PARAM_STATE: state,
+            PARAM_NAME: site.title,
+            PARAM_SITE_SHORT_NAME: site.shortName,
+            PARAM_DESCRIPTION: site.description,
+            PARAM_SBSYS: site.sbsys,
+            PARAM_OWNER: site.owner.userName,
+            PARAM_MANAGER: site.manager.userName,
+            PARAM_CENTERID: site.center_id,
+            PARAM_VISIBILITY: site.visibility,
+            PARAM_STATE: site.state,
             PARAM_METHOD: "updatePDSITE"
         }).then(function (response) {
             return response;
@@ -236,12 +240,6 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
             PARAM_USER: user,
             PARAM_GROUP: group
         }).then(function (response) {
-            return response.data;
-        });
-    }
-
-    function getMemberFromSite(siteName, member) {
-        return $http.get('/api/sites/' + siteName + '/memberships/' + member).then(function (response) {
             return response.data;
         });
     }
@@ -260,7 +258,6 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
     }
 
     function updateRoleOnSiteMember(siteName, member, newRole) {
-
         return $http.put('/api/sites/' + siteName + '/memberships', {
             role: newRole,
             person: {
@@ -387,6 +384,13 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
             PARAM_METHOD: "getSiteGroups",
             PARAM_SITE_TYPE: siteType
         }).then(function (response) {
+
+            angular.forEach(response.data, function (group) {
+                group.members = [];
+                if (group.collapsed)
+                    group.open = false;
+            });
+
             return response.data;
         });
     }
@@ -496,6 +500,28 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         });
     }
 
+    function getSiteOwner() {
+        return getSiteGroup('PD_PROJECTOWNER');
+    }
+
+    function getSiteManager() {
+        return getSiteGroup('PD_PROJECTMANAGER');
+    }
+
+    function getSiteGroup(shortName) {
+        return getGroupsAndMembers().then(function(groups) {
+            var members = {};
+
+            angular.forEach(groups,function(group) {
+                if(group[0].shortName == shortName) {
+                    members = group[1][0];
+                }
+            });
+
+            return members;
+        });
+    }
+
     function createDocumentNotification(nodeRef, fileName) {
 
         var id = alfrescoNodeUtils.processNodeRef(nodeRef).id;
@@ -514,7 +540,15 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
                         receiveNotifications = member.preferences[preferenceFilter];
 
                     if (receiveNotifications !== null && receiveNotifications == "true") {
-                        createNotification(member.userName, subject, message, link, 'new-doc', site.shortName);
+                        var notification = {
+                            receiver: member.userName,
+                            subject: "Reivew forespørgsel",
+                            message: message,
+                            link: link,
+                            wtype: "new-doc",
+                            shortName: site.shortName
+                        }
+                        createNotification(notification);
                     }
                 }
             });
@@ -522,17 +556,21 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
     }
 
     function createReviewNotification(documentNodeRef, receiver, message) {
-        var sender = currentUser.userName;
-        var s = documentNodeRef.split("/");
-        var ref = (s[3]);
-        var link = "#!/dokument/" + ref + "?dtype=wf" + "&from=" + sender;
+        var ref = documentNodeRef.split("/")[3];
+        var link = "#!/dokument/" + ref + "?dtype=wf" + "&from=" + currentUser.userName;
 
-        var sub = "Review forespørgsel";
-        createNotification(receiver, sub, message, link, 'review-request', site.shortName);
+        var notification = {
+            receiver: receiver,
+            subject: "Reivew forespørgsel",
+            message: message,
+            link: link,
+            wtype: "review-request",
+            shortName: site.shortName
+        }
+        createNotification(notification);
     }
-
-    function createNotification(receiver, subject, message, link, wtype, project) {
-        notificationsService.addNotice(receiver, subject, message, link, wtype, project);
+    function createNotification(notification) {
+        notificationsService.addNotice(notification.receiver, notification.subject, notification.message, notification.link, notification.wtype, notification.shortName);
     }
 
 }

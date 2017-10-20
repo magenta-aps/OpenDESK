@@ -22,6 +22,7 @@ angular
         vm.createProjectLink = createProjectLink;
         vm.deleteFile = deleteFile;
         vm.deleteLink = deleteLink;
+        vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
         vm.folderTemplates = {};
         vm.getLink = getLink;
         vm.loadCheckboxes = loadCheckboxes;
@@ -42,7 +43,6 @@ angular
         vm.uploadSbsys = uploadSbsys;
         vm.uploadSbsysDialog = uploadSbsysDialog;
         
-        vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;
@@ -65,7 +65,7 @@ angular
     $scope.previewDocument = previewDocument;
     $scope.goToLOEditPage = goToLOEditPage;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
-    $scope.createReviewNotification = uploadNewVersionDialog;
+    vm.createReviewNotification = uploadNewVersionDialog;
 
     $scope.filesToFilebrowser = null;
 

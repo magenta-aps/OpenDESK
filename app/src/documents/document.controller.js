@@ -33,7 +33,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.editInMSOffice = editInMSOffice;
     vm.downloadDocument = downloadDocument;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
-    $scope.createReviewNotification = createReviewNotification;
+    vm.createReviewNotification = createReviewNotification;
 
     var selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3];
     var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : selectedDocumentNode;
@@ -71,6 +71,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         setPDFViewerHeight();
         loadPreview();
         getDocument();
+        prepDocumentToReview();
     }
 
     function searchUsers(filter) {
@@ -104,7 +105,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     function approveCommentDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/documents/view/aproveComment.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
             preserveScope: true,
@@ -115,7 +115,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     function rejectCommentDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/documents/view/rejectComment.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
             preserveScope: true,
@@ -126,7 +125,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     function uploadNewVersionDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope
@@ -135,7 +133,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function uploadNewVersion(file) {
-        console.log('upload small');
         siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
             $mdDialog.cancel();
             $state.go('document', {
@@ -145,18 +142,21 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     // prepare to handle a preview of a document to review
-    var paramValue = $location.search().dtype;
 
-    if (paramValue !== undefined) {
-        vm.wf_from = $location.search().from;
-        vm.wf = paramValue === "wf";
-        vm.wfr = paramValue === "wf-response";
+    function prepDocumentToReview() {
+        var paramValue = $location.search().dtype;
 
-        var NID = $location.search().NID;
-        notificationsService.getInfo(NID).then(function (response) {
-            vm.wf_comment = response.message;
-            vm.wf_subject = response.subject;
-        });
+        if (paramValue !== undefined) {
+            vm.wf_from = $location.search().from;
+            vm.wf = paramValue === "wf";
+            vm.wfr = paramValue === "wf-response";
+    
+            var NID = $location.search().NID;
+            notificationsService.getInfo(NID).then(function (response) {
+                vm.wf_comment = response.message;
+                vm.wf_subject = response.subject;
+            });
+        }
     }
 
     function createWFNotification(comment, wtype) {

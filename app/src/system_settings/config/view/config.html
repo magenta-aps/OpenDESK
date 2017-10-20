@@ -4,28 +4,28 @@
             <h2 class="od-title-icon"><i class="material-icons">settings</i>Konfiguration</h2>
 
             <md-list>
-                <md-list-item ng-repeat="(key, value) in config.public">
+                <md-list-item ng-repeat="(key, value) in vm.config.public">
                     <p>{{'CONFIGURATION.public.' + key | translate}}</p>
                     <md-input-container>
-                        <input ng-if="isString(value)" class="md-secondary" ng-model="config.public[key]" title="value">
+                        <input ng-if="isString(value)" class="md-secondary" ng-model="vm.config.public[key]" title="value">
                     </md-input-container>
                 </md-list-item>
-                <md-list-item ng-repeat="(key, value) in config" ng-if="!isObject(value)">
+                <md-list-item ng-repeat="(key, value) in vm.config" ng-if="!isObject(value)">
                     <p>{{'CONFIGURATION.' + key | translate}}</p>
                     <md-input-container>
                         <md-switch ng-if="isBoolean(value)" class="md-secondary" ng-model="config[key]"></md-switch>
-                        <input ng-if="isString(value)" class="md-secondary" ng-model="config[key]" title="value">
+                        <input ng-if="isString(value)" class="md-secondary" ng-model="vm.config[key]" title="value">
                     </md-input-container>
                 </md-list-item>
-                <md-list-item ng-repeat="(key, value) in config.dashboardLinks">
+                <md-list-item ng-repeat="(key, value) in vm.config.dashboardLinks">
                     <p>{{'CONFIGURATION.LINK_TO' | translate}} {{'CONFIGURATION.dashboardLinks.' + key | translate}}</p>
                     <md-input-container>
-                        <input ng-if="isString(value)" class="md-secondary" ng-model="config.dashboardLinks[key]" title="value">
+                        <input ng-if="isString(value)" class="md-secondary" ng-model="vm.config.dashboardLinks[key]" title="value">
                     </md-input-container>
                 </md-list-item>
             </md-list>
 
-            <md-button class="md-primary md-raised" ng-click="updateSettings()">
+            <md-button class="md-primary md-raised" ng-click="vm.updateSettings()">
                 <i class="material-icons">save</i>
                 Gem</md-button>
         </md-card-content>

@@ -52,7 +52,7 @@
                             <md-input-container ng-if="vm.type == 'PD-Project'" class="org-input">
                                 <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
                                 <md-select ng-model="newSite.center_id" required>
-                                    <md-option ng-repeat="org in availOrgs | orderBy:'+displayName'" value="{{ org.shortName }}">
+                                    <md-option ng-repeat="org in vm.availOrgs | orderBy:'+displayName'" value="{{ org.shortName }}">
                                         {{ org.displayName }}
                                     </md-option>
                                 </md-select>

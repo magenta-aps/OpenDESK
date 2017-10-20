@@ -28,7 +28,7 @@
 			</dl>
 			<dl flex="30">
 				<dt>{{'CASE.VISIBILITY' | translate }}</dt>
-				<dd>{{ 'CASE.VISIBILITY.'+vm.project.visibility | translate }}<br></dd>
+				<dd>{{ 'CASE.VISIBILITY.'+ vm.project.visibility | translate }}<br></dd>
 				<dt ng-if="vm.project.type === 'PD-Project'">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
 				<dd ng-if="vm.project.type === 'PD-Project'">{{ site.sbsys }}</dd>
 
@@ -43,7 +43,7 @@
 		</div>
 		<md-card-actions layout="row" layout-align="start center">
 				<span flex></span>
-				<md-button ng-if="permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteDialog($event)" aria-label="Redigér site">
+				<md-button ng-if="vm.permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteDialog($event)" aria-label="Redigér site">
 					<md-icon>edit</md-icon>
 				</md-button>
 		</md-card-actions>

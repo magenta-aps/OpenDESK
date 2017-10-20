@@ -1,11 +1,16 @@
+'use strict';
+
 angular
     .module('openDeskApp')
     .controller('ConfigController', ConfigController);
 
 function ConfigController($scope, APP_BACKEND_CONFIG, systemSettingsService) {
-    $scope.config = APP_BACKEND_CONFIG;
-    $scope.updateSettings = function()
-    {
-        systemSettingsService.updateSettings($scope.config);
+    var vm = this;
+
+    vm.config = APP_BACKEND_CONFIG;
+    vm.updateSettings = updateSettings;
+    
+    function updateSettings() {
+        systemSettingsService.updateSettings(vm.config);
     }
 }

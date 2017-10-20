@@ -108,14 +108,14 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     }
 
     function loadMembers() {
-        siteService.getGroupsAndMembers().then(function (val) {
-            $scope.groups.list = val;
-            $scope.groups.list.forEach(function (group) {
-                    $scope.roles.push(group[0].shortName);
-                    $scope.showGroupList.push(false);
-                    vm.searchTextList.push(null);
-            });
+        siteService.getGroupsAndMembers().then(function (groups) {
+            $scope.groups.list = groups;
 
+            angular.forEach($scope.groups.list, function(group) {
+                $scope.roles.push(group[0].shortName);
+                $scope.showGroupList.push(false);
+                vm.searchTextList.push(null);
+            });
         });
     }
     
@@ -154,15 +154,15 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
 
     function editSiteDialog(ev) {
         $mdDialog.show({
-            controller: 'SiteEditController',
             templateUrl: 'app/src/sites/view/editSite.tmpl.html',
+            controller: 'SiteEditController',
+            controllerAs: 'vm',
             locals: {
                 sitedata: $scope.site
             },
-            parent: angular.element(document.body),
             targetEvent: ev,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
+            // scope: $scope, // use parent scope in template
+            // preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
     }
