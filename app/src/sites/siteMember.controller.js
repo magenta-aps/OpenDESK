@@ -18,10 +18,9 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
     vm.removeMemberFromSite = removeMemberFromSite;
     vm.searchPeople = searchPeople;
     vm.site = sitedata;
-    vm.updatePDSiteGroups = updatePDSiteGroups;
     vm.user = authService.getUserInfo().user;
 
-    activate()
+    activate();
 
     function activate() {
         siteService.getGroupsAndMembers().then(function (groups) {
@@ -83,7 +82,7 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
         $mdDialog.cancel();
     }
 
-    function updatePDSiteGroups() {
+    function updateSiteGroups() {
         $mdDialog.cancel();
         $translate('GROUP.UPDATED').then(function (msg) {
             $mdToast.show(

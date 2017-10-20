@@ -28,7 +28,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     vm.openMenu = openMenu;
     vm.path = $stateParams.path === undefined ? '' : $stateParams.path;
     vm.permissions = {};
-    vm.project = {};
+    vm.site = {};
     vm.reload = reload;
     vm.searchTextList = [];
     vm.strings = {
@@ -45,12 +45,12 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
 
     function activate() {
         siteService.loadSiteData($stateParams.projekt).then(function (result) {
-            vm.project = result;
+            vm.site = result;
             
-            browserService.setTitle(vm.project.title);
-            headerService.setTitle($translate.instant('SITES.' + vm.project.type + '.NAME') + ' : ' + vm.project.title);
+            browserService.setTitle(vm.site.title);
+            headerService.setTitle($translate.instant('SITES.' + vm.site.type + '.NAME') + ' : ' + vm.site.title);
             
-            vm.hasDescription = vm.project.description.trim() !== "";
+            vm.hasDescription = vm.site.description.trim() !== "";
 
             siteService.setUserManagedProjects();
             loadMembers();
@@ -140,7 +140,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     }
 
     function doPDF() {
-        siteService.createMembersPDF(vm.project.shortName).then(function (response) {
+        siteService.createMembersPDF(vm.site.shortName).then(function (response) {
             alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
         });
     }
@@ -151,7 +151,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             controller: 'SiteEditController',
             controllerAs: 'vm',
             locals: {
-                sitedata: vm.project
+                sitedata: vm.site
             },
             targetEvent: ev,
             clickOutsideToClose: true
@@ -164,7 +164,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             controller: 'SiteMemberController',
             controllerAs: 'vm',
             locals: {
-                sitedata: vm.project
+                sitedata: vm.site
             },
             // scope: $scope,
             // preserveScope: true,

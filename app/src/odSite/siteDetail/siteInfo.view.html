@@ -10,7 +10,7 @@
 			<dl style="margin-bottom: 0;">
 				<dt >{{'PROJECT.DESCRIPTION' | translate }}</dt>
 				<dd ng-if="vm.hasDescription">
-					{{ site.description }}
+					{{ vm.site.description }}
 				</dd>
 				<dd ng-if="!vm.hasDescription"><i>{{'COMMON.NODESCRIPTION' | translate}}</i></dd>
 			</dl>
@@ -18,22 +18,22 @@
 		<div layout="row">
 			<dl flex="55">
 				<dt>{{'COMMON.CREATEDBY' | translate }}</dt>
-				<dd>{{ site.creator.displayName }} <br>
-					<span class="muted">{{ site.created | date }}</span>
+				<dd>{{ vm.site.creator.displayName }} <br>
+					<span class="muted">{{ vm.site.created | date }}</span>
 				</dd>
-				<span ng-if="vm.project.type === 'PD-Project'">
+				<span ng-if="vm.site.type === 'PD-Project'">
 					<dt >{{'PROJECT.ORG_UNIT' | translate }}</dt>
-					<dd>{{ site.center_name }}</dd>
+					<dd>{{ vm.site.center_name }}</dd>
 				</span>
 			</dl>
 			<dl flex="30">
 				<dt>{{'CASE.VISIBILITY' | translate }}</dt>
-				<dd>{{ 'CASE.VISIBILITY.'+ vm.project.visibility | translate }}<br></dd>
-				<dt ng-if="vm.project.type === 'PD-Project'">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
-				<dd ng-if="vm.project.type === 'PD-Project'">{{ site.sbsys }}</dd>
+				<dd>{{ 'CASE.VISIBILITY.'+ vm.site.visibility | translate }}<br></dd>
+				<dt ng-if="vm.site.type === 'PD-Project'">{{'ESDH' | translate }} {{'CASE.CASE_NUMBER' | translate }}</dt>
+				<dd ng-if="vm.site.type === 'PD-Project'">{{ vm.site.sbsys }}</dd>
 
 			</dl>
-			<dl flex="15" ng-if="vm.project.type === 'PD-Project'">
+			<dl flex="15" ng-if="vm.site.type === 'PD-Project'">
 				<dt>{{'COMMON.STATUS' | translate }}</dt>
 				<dd>
 					{{'PROJECT.STATUS.' + site.state | translate}}
