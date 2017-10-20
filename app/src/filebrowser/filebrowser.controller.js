@@ -59,7 +59,6 @@ angular
     $scope.showProgress = false;
     $scope.error = false;
 
-    
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
     $scope.previewDocument = previewDocument;
@@ -94,6 +93,12 @@ angular
     activate();
 
     function activate() {
+
+        if(vm.permissions === undefined) {
+            siteService.getSiteUserPermissions($stateParams.projekt).then(function(permissions) {
+                vm.permissions = permissions;
+            });
+        }
 
         filebrowserService.getTemplates("Document").then(function (response) {
             $scope.documentTemplates = response;

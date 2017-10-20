@@ -21,7 +21,6 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
     activate();
 
     function activate() {
-        console.log(vm.newSite);
         siteService.getSiteOwner().then(function (owner) {
             vm.newSite.owner = owner;
         });

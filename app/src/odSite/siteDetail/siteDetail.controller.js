@@ -35,31 +35,27 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
         templateProject: "Template-Project",
         project: "Project"
     };
-
     vm.userService = userService;
 
     //sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("#filebrowser-breadcrumb").outerHeight() - $("md-tabs-wrapper").outerHeight() - $("#table-actions").outerHeight();
     $("#table-container").css("max-height", tableHeight+"px");
 
-    loadSiteData();
+    activate();
 
-    function loadSiteData() {
-        siteService.loadSiteData($stateParams.projekt).then(
-            function (result) {
+    function activate() {
+        siteService.loadSiteData($stateParams.projekt).then(function (result) {
+            vm.project = result;
+            
+            browserService.setTitle(vm.project.title);
+            headerService.setTitle($translate.instant('SITES.' + vm.project.type + '.NAME') + ' : ' + vm.project.title);
+            
+            vm.hasDescription = vm.project.description.trim() !== "";
 
-                vm.project = result;
-                $scope.site = vm.project;
-                browserService.setTitle(vm.project.title);
-                $scope.currentUser = vm.currentUser;
-                vm.project.visibilityStr = vm.project.visibility === "PUBLIC" ? "Offentlig" : "Privat";
-                vm.hasDescription = vm.project.description.trim() !== "";
+            siteService.setUserManagedProjects();
+            loadMembers();
+            getSiteUserPermissions();
 
-                siteService.setUserManagedProjects();
-                loadMembers();
-                getSiteUserPermissions();
-
-                headerService.setTitle($translate.instant('SITES.' + vm.project.type + '.NAME') + ' : ' + vm.project.title);
             }
         );
     }
@@ -155,7 +151,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             controller: 'SiteEditController',
             controllerAs: 'vm',
             locals: {
-                sitedata: $scope.site
+                sitedata: vm.project
             },
             targetEvent: ev,
             clickOutsideToClose: true
@@ -168,7 +164,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             controller: 'SiteMemberController',
             controllerAs: 'vm',
             locals: {
-                sitedata: $scope.site
+                sitedata: vm.project
             },
             // scope: $scope,
             // preserveScope: true,
