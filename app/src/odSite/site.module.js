@@ -42,7 +42,7 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
             'filebrowser': {
                 templateUrl: 'app/src/filebrowser/view/filebrowser.html',
                 controller: 'FilebrowserController',
-                controllerAs: 'fc'
+                controllerAs: 'vm'
             }
         },
         params: {

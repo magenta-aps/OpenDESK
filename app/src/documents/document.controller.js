@@ -75,7 +75,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     function searchUsers(filter) {
         return userService.getUsers(filter);
-    };
+    }
 
     function cancelDialog() {
         $mdDialog.cancel();
@@ -99,7 +99,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         var file = event.target.value;
         var fileName = file.replace(/^C:\\fakepath\\/, "");
         document.getElementById("uploadFile").innerHTML = fileName;
-    };
+    }
 
     function approveCommentDialog(event) {
         $mdDialog.show({
@@ -110,7 +110,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             preserveScope: true,
             clickOutsideToClose: true
         });
-    };
+    }
 
     function rejectCommentDialog(event) {
         $mdDialog.show({
@@ -121,7 +121,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             preserveScope: true,
             clickOutsideToClose: true
         });
-    };
+    }
 
     function uploadNewVersionDialog(event) {
         $mdDialog.show({
@@ -132,17 +132,17 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    };
+    }
 
     function uploadNewVersion(file) {
         console.log('upload small');
         siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
-            $mdDialog.cancel()
+            $mdDialog.cancel();
             $state.go('document', {
                 doc: parentDocumentNode
             });
         });
-    };
+    }
 
     // prepare to handle a preview of a document to review
     var paramValue = $location.search().dtype;
@@ -178,9 +178,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function highlightVersion() {
-        var elm = document.getElementById(selectedDocumentNode) != undefined ? selectedDocumentNode : firstDocumentNode;
+        var elm = document.getElementById(selectedDocumentNode) !== undefined ? selectedDocumentNode : firstDocumentNode;
 
-        if (elm == "") {
+        if (elm === "") {
             $timeout(vm.highlightVersion, 100);
         } else {
             document.getElementById(elm).style.backgroundColor = "#e1e1e1";
@@ -264,10 +264,10 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                     }
 
                     // delete the temporary node
-                    documentService.cleanupThumbnail(response.data[0].nodeRef)
+                    documentService.cleanupThumbnail(response.data[0].nodeRef);
 
                 });
-            })
+            });
 
         } else {
             vm.store = 'workspace://SpacesStore/';
@@ -320,7 +320,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 'nodeRef': vm.doc.node.nodeRef
             });
         }
-    };
+    }
 
     function editInMSOffice() {
         var pathStart = vm.docMetadata.serverURL;
@@ -337,13 +337,13 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         } catch (e) {
             console.log(e);
         }
-    };
+    }
 
     
     function downloadDocument() {
         var versionRef = vm.store + $stateParams.doc;
         alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file);
-    };
+    }
 
 
     function reviewDocumentsDialog(event) {
@@ -355,12 +355,12 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
-    };
+    }
     
     function createReviewNotification(userName, comment) {
         siteService.createReviewNotification(vm.doc.node.nodeRef, userName, comment);
-        $mdDialog.cancel()
-    };
+        $mdDialog.cancel();
+    }
 
     //this should be removed, do not edit dom in controller!
     angular.element(document).ready(function () {
@@ -368,4 +368,4 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             vm.highlightVersion();
         }
     });
-};
+}

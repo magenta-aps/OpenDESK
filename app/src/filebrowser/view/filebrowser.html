@@ -3,8 +3,6 @@
 
     <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
 
-    {{uploading}}
-
     <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
     <md-list class="sort-head" ng-show="contentListLength > 0" id="table-container">
         <table class="od-members od-members-row">
@@ -12,8 +10,8 @@
                 <tr>
                     <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                     <th hide show-gt-sm sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
-                    <th hide show-gt-md ng-if="config.enableESDH" ng-if="isSite" colspan="2">
-                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="primitives.sendToSbsys" ng-click="setAllCheckboxes()">
+                    <th hide show-gt-md ng-if="vm.enableESDH" ng-if="isSite" colspan="2">
+                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="primitives.sendToSbsys" ng-click="vm.setAllCheckboxes()">
                         <img ng-src="app/assets/img/sbsys.png" class="od-sbsys-logo">
                     </th>
                 </tr>
@@ -48,9 +46,9 @@
                 </md-button>
                 <md-menu-content>
                     <md-menu-item>
-                        <md-button ng-click="uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
+                        <md-button ng-click="vm.uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
                     </md-menu-item>
-                    <md-menu-item ng-if="config.enableESDH" ng-if="isSite">
+                    <md-menu-item ng-if="vm.enableESDH" ng-if="isSite">
                         <md-button ng-click="loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
                         </md-button>
                     </md-menu-item>
@@ -66,7 +64,7 @@
                 </md-button>
                 <md-menu-content>
                     <md-menu-item ng-repeat="template in documentTemplates">
-                        <md-button ng-click="createContentFromTemplateDialog($event, template, 'DOCUMENT')">
+                        <md-button ng-click="vm.createContentFromTemplateDialog($event, template, 'DOCUMENT')">
                             <i class="material-icons">
                                             <img class="md-avatar"
                                              ng-src="app/assets/img/filetypes/{{template.thumbNailURL}}"
@@ -85,8 +83,8 @@
                     <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
                 </md-button>
                 <md-menu-content>
-                    <md-menu-item ng-repeat="template in folderTemplates">
-                        <md-button ng-click="createContentFromTemplateDialog($event, template, 'FOLDER')">
+                    <md-menu-item ng-repeat="template in vm.folderTemplates">
+                        <md-button ng-click="vm.createContentFromTemplateDialog($event, template, 'FOLDER')">
                             {{template.name}}
                         </md-button>
                     </md-menu-item>
@@ -95,13 +93,13 @@
         </div>
 
         <md-button ng-if="isSite && vm.permissions.isManager" class="md-icon-button md-primary "
-            ng-click="newLinkDialog($event)">
+            ng-click="vm.newLinkDialog($event)">
             <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
             <md-icon>link</md-icon>
         </md-button>
 
         <span flex></span>
-        <md-button ng-show="primitives.sendToSbsys" ng-if="isSite" ng-click="uploadSbsysDialog($event)"
+        <md-button ng-show="primitives.sendToSbsys" ng-if="isSite" ng-click="vm.uploadSbsysDialog($event)"
             class="md-primary" aria-label="SBSYS">
             <md-tooltip md-direction="top">
                 {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}

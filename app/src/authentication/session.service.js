@@ -24,7 +24,7 @@ function sessionService($window) {
     /////////
 
     function isAdmin() {
-        if (userInfo == null || userInfo == undefined) {
+        if (userInfo === null || userInfo === undefined) {
             return false;
         }
         return userInfo.user.capabilities.isAdmin;
@@ -43,10 +43,10 @@ function sessionService($window) {
     }
 
     function isExternalUser() {
-        if (userInfo == null || userInfo == undefined) {
+        if (userInfo === null || userInfo === undefined) {
             return false;
         }
-        var externalUserNameRe = /.+_.+(@.+)?$/
+        var externalUserNameRe = /.+_.+(@.+)?$/;
         return externalUserNameRe.test(userInfo.user.userName);
     }
 
@@ -76,9 +76,9 @@ function sessionService($window) {
 
     function setUserInfo(info) {
         userInfo = info;
-        if (userInfo.user != undefined) {
+        if (userInfo.user !== undefined) {
             userInfo.user.displayName = userInfo.user.firstName;
-            if (userInfo.user.lastName != "")
+            if (userInfo.user.lastName !== "")
                 userInfo.user.displayName += " " + userInfo.user.lastName;
         }
         $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));

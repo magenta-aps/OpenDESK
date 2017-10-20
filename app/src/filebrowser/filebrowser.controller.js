@@ -3,78 +3,76 @@
 angular
     .module('openDeskApp.filebrowser', ['ngFileUpload'])
     .controller('FilebrowserController', FilebrowserController);
-
-function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast, $timeout, Upload, siteService, fileUtilsService,
-    filebrowserService, filterService, alfrescoDownloadService, documentPreviewService,
-    userService, documentService, alfrescoNodeUtils, $translate, APP_CONFIG) {
-
-    var vm = this;
-
-    vm.cancelDialog = cancelDialog;
-    $scope.config = APP_CONFIG.settings;
+    
+    function FilebrowserController($state, $stateParams, $scope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
+        filebrowserService, filterService, alfrescoDownloadService, documentPreviewService, documentService, 
+        alfrescoNodeUtils, $translate, APP_BACKEND_CONFIG) {
+            
+        var vm = this;
+        var documentNodeRef = "";
+        var folderNodeRef = "";
+        var folderUUID = "";
+        
+        vm.cancelDialog = cancelDialog;
+        vm.createFolder = createFolder;
+        vm.cancelSbsysDialog = cancelSbsysDialog;
+        vm.createContentFromTemplateDialog = createContentFromTemplateDialog;
+        vm.createContentFromTemplate = createContentFromTemplate;
+        vm.deleteContentDialog = deleteContentDialog;
+        vm.createProjectLink = createProjectLink;
+        vm.deleteFile = deleteFile;
+        vm.deleteLink = deleteLink;
+        vm.folderTemplates = {};
+        vm.getLink = getLink;
+        vm.loadCheckboxes = loadCheckboxes;
+        vm.loadFromSbsys = loadFromSbsys;
+        vm.loadHistory = loadHistory;
+        vm.loadSbsysDialog = loadSbsysDialog;
+        vm.newLinkDialog = newLinkDialog;
+        vm.permissions = siteService.getPermissions();
+        vm.renameContent = renameContent;
+        vm.renameContentDialog = renameContentDialog;
+        vm.searchProjects = searchProjects;
+        vm.setAllCheckboxes = setAllCheckboxes;
+        vm.uploading = false;
+        vm.uploadDocumentsDialog = uploadDocumentsDialog;
+        vm.uploadFiles = uploadFiles;
+        vm.uploadNewVersion = uploadNewVersion;
+        vm.uploadNewVersionDialog = uploadNewVersionDialog;
+        vm.uploadSbsys = uploadSbsys;
+        vm.uploadSbsysDialog = uploadSbsysDialog;
+        
+        vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;
-    $scope.folderNodeRef = "";
-    $scope.folderUUID = "";
     $scope.contentList = [];
     $scope.contentListLength = 0;
     $scope.isLoading = true;
-
     $scope.history = [];
-
-    $scope.folderTemplates = {};
     $scope.documentTemplates = {};
-    $scope.newContentName = "";
-
+    // $scope.newContentName = "";
     $scope.primitives = {};
     $scope.primitives.sendToSbsys = false;
     $scope.primitives.sendAllToSbsys = false;
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
-
-    vm.permissions = siteService.getPermissions();
-    $scope.documentNodeRef = "";
-    $scope.uploading = false;
-
     $scope.error = false;
-    $scope.uploadDocumentsDialog = uploadDocumentsDialog;
-    $scope.uploadFiles = uploadFiles;
+
+    
+    //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
     $scope.previewDocument = previewDocument;
     $scope.goToLOEditPage = goToLOEditPage;
-
-    $scope.newLinkDialog = newLinkDialog;
-    $scope.createProjectLink = createProjectLink;
-    $scope.searchProjects = searchProjects;
-    $scope.loadSbsysDialog = loadSbsysDialog;
-    $scope.loadFromSbsys = loadFromSbsys;
-    $scope.uploadSbsysDialog = uploadSbsysDialog;
-    $scope.cancelSbsysDialog = cancelSbsysDialog;
-    $scope.uploadSbsys = uploadSbsys;
-    $scope.loadCheckboxes = loadCheckboxes;
-    $scope.setAllCheckboxes = setAllCheckboxes;
-    $scope.reviewDocumentsDialog = reviewDocumentsDialog;
+    vm.reviewDocumentsDialog = reviewDocumentsDialog;
     $scope.createReviewNotification = uploadNewVersionDialog;
-    vm.uploadNewVersionDialog = uploadNewVersionDialog;
-    vm.uploadNewVersion = uploadNewVersion;
-    $scope.renameContentDialog = renameContentDialog;
-    $scope.renameContent = renameContent;
-    $scope.deleteContentDialog = deleteContentDialog;
-    $scope.deleteFile = deleteFile;
-    $scope.deleteLink = deleteLink;
-    $scope.createContentFromTemplateDialog = createContentFromTemplateDialog;
-    $scope.createFolder = createFolder;
-    $scope.createContentFromTemplate = createContentFromTemplate;
-    $scope.searchUsers = searchUsers;
-    $scope.getLink = getLink;
-    $scope.loadHistory = loadHistory;
+
     $scope.filesToFilebrowser = null;
 
     $scope.$watch('filesToFilebrowser', function () {
         if ($scope.filesToFilebrowser !== null) {
             $scope.files = $scope.filesToFilebrowser;
-            $scope.uploadFiles($scope.files);
+            vm.uploadFiles($scope.files);
         }
     });
 
@@ -104,8 +102,8 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
 
         filebrowserService.getTemplates("Folder").then(function (response) {
-            $scope.folderTemplates = response;
-            $scope.folderTemplates.unshift({
+            vm.folderTemplates = response;
+            vm.folderTemplates.unshift({
                 nodeRef: null,
                 name: $translate.instant('COMMON.EMPTY') + " " + $translate.instant('COMMON.FOLDER')
             });
@@ -113,7 +111,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
 
     function setFolderAndPermissions(path) {
-
         filebrowserService.getCompanyHome().then(function (val) {
             var companyHomeUri = alfrescoNodeUtils.processNodeRef(val).uri;
             filebrowserService.getNode(companyHomeUri, path).then(
@@ -129,14 +126,14 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
     }
 
-    function setFolder(folderNodeRef) {
-        $scope.folderNodeRef = folderNodeRef;
-        $scope.folderUUID = alfrescoNodeUtils.processNodeRef(folderNodeRef).id;
+    function setFolder(fNodeRef) {
+        folderNodeRef = fNodeRef;
+        folderUUID = alfrescoNodeUtils.processNodeRef(folderNodeRef).id;
         loadContentList();
     }
 
     function loadContentList() {
-        filebrowserService.getContentList($scope.folderUUID).then(
+        filebrowserService.getContentList(folderUUID).then(
             function (response) {
                 $scope.contentList = response;
                 $scope.contentList.forEach(function (contentTypeList) {
@@ -163,11 +160,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
         });
     }
-
-    function searchUsers(filter) {
-        return userService.getUsers(filter);
-    }
-
     
     function getLink(content) {
         if (content.contentType === 'cmis:document') {
@@ -233,7 +225,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
 
     function hideDialogAndReloadContent() {
-        $scope.uploading = false;
+        vm.uploading = false;
         loadContentList();
         cancelDialog();
     }
@@ -243,7 +235,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     function uploadDocumentsDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/document/uploadDocuments.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope
@@ -253,10 +244,10 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
 
     function uploadFiles(files) {
-        $scope.uploading = true;
+        vm.uploading = true;
 
         angular.forEach(files, function (file) {
-            siteService.uploadFiles(file, $scope.folderNodeRef).then(function (response) {
+            siteService.uploadFiles(file, folderNodeRef).then(function (response) {
                 if ($scope.isSite) {
                     siteService.createDocumentNotification(response.data.nodeRef, response.data.fileName);
                 }
@@ -286,11 +277,10 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
     
     function reviewDocumentsDialog(event, nodeRef) {
-        $scope.documentNodeRef = nodeRef;
+        documentNodeRef = nodeRef;
 
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope
@@ -300,17 +290,16 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
     
     function createReviewNotification(userName, comment) {
-        siteService.createReviewNotification($scope.documentNodeRef, userName, comment);
+        siteService.createReviewNotification(documentNodeRef, userName, comment);
         $mdDialog.cancel();
     }
 
     
     function uploadNewVersionDialog(event, nodeRef) {
-        $scope.documentNodeRef = nodeRef;
+        documentNodeRef = nodeRef;
 
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope
@@ -320,20 +309,19 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
     
     function uploadNewVersion(file) {
-        $scope.uploading = true;
-        siteService.uploadNewVersion(file, $scope.folderNodeRef, $scope.documentNodeRef).then(function (val) {
-            $scope.uploading = false;
+        vm.uploading = true;
+        siteService.uploadNewVersion(file, folderNodeRef, documentNodeRef).then(function (val) {
+            vm.uploading = false;
             hideDialogAndReloadContent();
         });
     }
 
     function renameContentDialog(event, content) {
-        $scope.documentNodeRef = content.nodeRef;
-        $scope.newContentName = content.name;
+        documentNodeRef = content.nodeRef;
+        // $scope.newContentName = content.name;
 
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/renameContent.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope
@@ -345,7 +333,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         var props = {
             prop_cm_name: newName
         };
-        siteService.updateNode($scope.documentNodeRef, props).then(function (val) {
+        siteService.updateNode(documentNodeRef, props).then(function (val) {
             hideDialogAndReloadContent();
         });
     }
@@ -354,7 +342,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         $scope.content = content;
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/deleteContent.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope
@@ -378,12 +365,11 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
 
     function createContentFromTemplateDialog(event, template, contentType) {
         $scope.template = template;
-        $scope.newContentName = template.name;
+        // $scope.newContentName = template.name;
 
         if (template.nodeRef === null) {
             $mdDialog.show({
                 templateUrl: 'app/src/filebrowser/view/content/folder/newFolder.tmpl.html',
-                parent: angular.element(document.body),
                 targetEvent: event,
                 scope: $scope,
                 preserveScope: true,
@@ -393,7 +379,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
             $scope.contentType = contentType;
             $mdDialog.show({
                 templateUrl: 'app/src/filebrowser/view/content/createContentFromTemplateDialog.tmpl.html',
-                parent: angular.element(document.body),
                 targetEvent: event,
                 scope: $scope,
                 preserveScope: true,
@@ -406,7 +391,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         var props = {
             prop_cm_name: folderName,
             prop_cm_title: folderName,
-            alf_destination: $scope.folderNodeRef
+            alf_destination: folderNodeRef
         };
         siteService.createFolder("cm:folder", props).then(function (response) {
             hideDialogAndReloadContent();
@@ -414,7 +399,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
     
     function createContentFromTemplate(template_name, template_id) {
-        filebrowserService.createContentFromTemplate(template_id, $scope.folderNodeRef, template_name).then(function (response) {
+        filebrowserService.createContentFromTemplate(template_id, folderNodeRef, template_name).then(function (response) {
             if ($scope.isSite) {
                 siteService.createDocumentNotification(response.data[0].nodeRef, response.data[0].fileName);
             }
@@ -427,7 +412,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     function newLinkDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/content/link/newProjectLink.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
             preserveScope: true,
@@ -435,7 +419,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
         });
     }
 
-    
     function createProjectLink(project) {
         siteService.createProjectLink(project.shortName).then(function () {
             hideDialogAndReloadContent();
@@ -449,12 +432,10 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
 
     // SBSYS
-
     
     function loadSbsysDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
             preserveScope: true,
@@ -463,7 +444,7 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     }
 
     function loadFromSbsys() {
-        filebrowserService.loadFromSbsys($scope.folderNodeRef).then(function () {
+        filebrowserService.loadFromSbsys(folderNodeRef).then(function () {
             hideDialogAndReloadContent();
         });
     }
@@ -471,7 +452,6 @@ function FilebrowserController($state, $stateParams, $scope, $mdDialog, $mdToast
     function uploadSbsysDialog(event) {
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/view/sbsys/uploadSbsys.tmpl.html',
-            parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope,
             preserveScope: true,

@@ -26,21 +26,21 @@
         </md-menu-item>
 
         <md-menu-item ng-if="vm.permissions.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="reviewDocumentsDialog($event, content.nodeRef)">
+            <md-button ng-click="vm.reviewDocumentsDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="vm.permissions.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="uploadNewVersionDialog($event, content.nodeRef)">
+            <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef)">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="vm.permissions.canEdit && content.contentType != 'cmis:link'">
-            <md-button ng-click="renameContentDialog($event, content)">
+            <md-button ng-click="vm.renameContentDialog($event, content)">
                 <md-icon md-menu-align-target>title</md-icon>
                 {{'COMMON.RENAME' | translate }}
             </md-button>
@@ -61,7 +61,7 @@
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="deleteContentDialog($event, content)">
+            <md-button ng-click="vm.deleteContentDialog($event, content)">
                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                 {{'COMMON.REMOVE' | translate }}
             </md-button>

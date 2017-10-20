@@ -1,5 +1,5 @@
 <md-dialog aria-label="{{'COMMON.CREATE' | translate }} {{'PROJECT.PROJECTLINK' | translate | lowercase }}" ng-cloak>
-    <form name="createLink" ng-submit="createProjectLink(project)">
+    <form name="createLink" ng-submit="vm.createProjectLink(project)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -19,7 +19,7 @@
                 md-input-name="addProjectAutocomplete"
                 md-selected-item="project"
                 md-search-text="searchProjectText"
-                md-items="site in searchProjects(searchProjectText)"
+                md-items="site in vm.searchProjects(searchProjectText)"
                 md-item-text="site.title"
                 md-min-length="1"
                 md-floating-label="{{'COMMON.CHOOSE' | translate }} {{'PROJECT.PROJECT' | translate | lowercase}}">
