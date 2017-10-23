@@ -732,6 +732,28 @@ public class Utils {
 
         return json;
     }
+
+    /**
+     * Converts a group into a standard structured JSONObject.
+     * @param authorityService alfresco standard service.
+     * @param fullName the group to be converted.
+     * @return a JSONObject representing the group.
+     */
+    public static JSONObject convertGroupToJSON (AuthorityService authorityService, String fullName)
+            throws JSONException {
+        JSONObject json = new JSONObject();
+
+        String shortName = fullName.substring(6);
+        json.put("shortName", shortName);
+
+        json.put("fullName", fullName);
+
+        String displayName = authorityService.getAuthorityDisplayName(fullName);
+        json.put("displayName", displayName);
+
+        return json;
+    }
+
     /**
      * Converts a notification into a standard structured JSONObject.
      * @param nodeService alfresco standard service.

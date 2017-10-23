@@ -63,16 +63,30 @@ public class Groups extends AbstractWebScript {
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
             String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
             String groupName = Utils.getJSONObject(json, "PARAM_GROUP_NAME");
+            String groupType = Utils.getJSONObject(json, "PARAM_GROUP_TYPE");
+            AuthorityType memberType;
+
+            switch (groupType) {
+                case "USER":
+                    memberType = AuthorityType.USER;
+                    break;
+                case "GROUP":
+                    memberType = AuthorityType.GROUP;
+                    break;
+                default:
+                    memberType = null; // Returns both users and groups
+                    break;
+            }
 
             if(method != null) {
                 switch (method) {
 
                     case "getGroupsAndMembers":
-                        result = this.getGroupsAndMembers(siteShortName);
+                        result = this.getGroupsAndMembers(siteShortName, memberType);
                         break;
 
                     case "getGroupMembers":
-                        result = getGroupMembers("GROUP_" + groupName);
+                        result = getGroupMembers("GROUP_" + groupName, memberType);
                         break;
                 }
             }
@@ -90,7 +104,7 @@ public class Groups extends AbstractWebScript {
      * @param siteShortName short name of a site.
      * @return a JSONArray containing JSONObjects for each group and each of their members.
      */
-    private JSONArray getGroupsAndMembers(String siteShortName)
+    private JSONArray getGroupsAndMembers(String siteShortName, AuthorityType memberType)
             throws JSONException {
 
         NodeRef siteNodeRef = siteService.getSite(siteShortName).getNodeRef();
@@ -107,7 +121,7 @@ public class Groups extends AbstractWebScript {
             json.add(groupJSON);
 
             String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
-            JSONArray members = getGroupMembers(groupAuthorityName);
+            JSONArray members = getGroupMembers(groupAuthorityName, memberType);
             json.add(members);
             result.add(json);
         }
@@ -121,17 +135,23 @@ public class Groups extends AbstractWebScript {
      * @param group name of a group.
      * @return a JSONArray containing JSONObjects for each group member.
      */
-    private JSONArray getGroupMembers(String group) throws JSONException {
+    private JSONArray getGroupMembers(String group, AuthorityType memberType) throws JSONException {
 
-        Set<String> users = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
+        Set<String> members = authorityService.getContainedAuthorities(memberType, group, true);
 
-        JSONArray members = new JSONArray();
-        for (String userName : users) {
-            NodeRef user = personService.getPerson(userName);
-            JSONObject json = Utils.convertUserToJSON(nodeService, preferenceService, user);
-            members.add(json);
+        JSONArray result = new JSONArray();
+        for (String shortName : members) {
+            JSONObject json;
+            if(shortName.startsWith("GROUP_")) {
+                json = Utils.convertGroupToJSON(authorityService, shortName);
+            }
+            else {
+                NodeRef user = personService.getPerson(shortName);
+                json = Utils.convertUserToJSON(nodeService, preferenceService, user);
+            }
+            result.add(json);
         }
 
-        return members;
+        return result;
     }
 }
