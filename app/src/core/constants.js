@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp.core')
     .constant('USER_ROLES', {

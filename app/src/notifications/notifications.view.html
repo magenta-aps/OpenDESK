@@ -4,7 +4,7 @@
         <span class="md-toolbar-tools" layout="row">
             <h1>{{'NOTIFICATION.NOTIFICATIONS' | translate}}</h1>
             <span flex></span>
-        <md-button class="md-icon-button" ng-click="nc.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
+        <md-button class="md-icon-button" ng-click="vm.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
             <md-icon>keyboard_arrow_right</md-icon>
         </md-button>
         </span>
@@ -12,9 +12,9 @@
 
     <md-content class="od-sidenav-scroll-wrapper" layout-padding="">
         <ul class="od-notifylist">
-            <li ng-repeat="notice in notifications[1] | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
+            <li ng-repeat="notice in vm.notifications | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                 <span class="od-notifylist--item--link">
-                    <a href="{{ notice.link }}" ng-click="nc.close();nc.setRead(notice.nodeRef)">
+                    <a href="{{ notice.link }}" ng-click="vm.close();vm.setRead(notice.nodeRef)">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p ng-if="notice.type == 'review-request'" class="od-notifylist--item--desc">{{notice.from}} har bedt dig om at reviewe <i>{{notice.filename}}</i> i projektet {{notice.project}}</p>
                         <p ng-if="notice.type == 'review-approved'"  class="od-notifylist--item--desc">{{notice.from}} har godkendt <i>{{notice.filename}}</i> i projektet {{notice.project}} med en kommentar</p>

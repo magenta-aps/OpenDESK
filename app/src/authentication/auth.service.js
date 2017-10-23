@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp')
     .config(config)
@@ -31,12 +33,10 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
 
     function prefixAlfrescoServiceUrl(url) {
-        if (url.indexOf("/api/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
-            || url.indexOf("/lool") == 0 || url.indexOf("/wopi") == 0 || url == "/touch") {
+        if (url.indexOf("/api/") === 0 || url.indexOf("/opendesk/") === 0 || url.indexOf("/slingshot/") === 0 || url.indexOf("/lool") === 0 || url.indexOf("/wopi") === 0 || url == "/touch") {
             return ALFRESCO_URI.webClientServiceProxy + url;
         }
-        else if (url.indexOf("/share/") == 0 || url.indexOf("/opendesk/") == 0 || url.indexOf("/slingshot/") == 0
-            || url == "/touch") {
+        else if (url.indexOf("/share/") === 0 || url.indexOf("/opendesk/") === 0 || url.indexOf("/slingshot/") === 0 || url == "/touch") {
             return ALFRESCO_URI.webClientServiceProxy + url;
         }
         return url;
@@ -195,7 +195,7 @@ function authService($http, $window, $state, sessionService, userService, notifi
         return userService.getPerson(username).then(function (user) {
             delete $window._openDeskSessionExpired;
             var userInfo = sessionService.getUserInfo();
-            userInfo['user'] = user;
+            userInfo.user = user;
             sessionService.setUserInfo(userInfo);
             return user;
         });

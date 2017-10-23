@@ -57,15 +57,15 @@ function sessionService($window) {
     }
 
     function makeURL(url) {
-        if (this.getUserInfo().ticket) {
-            return url + (url.indexOf("?") === -1 ? "?" : "&") + "alf_ticket=" + this.getUserInfo().ticket;
+        if (getUserInfo().ticket) {
+            return url + (url.indexOf("?") === -1 ? "?" : "&") + "alf_ticket=" + getUserInfo().ticket;
         } else {
             return url;
         }
     }
 
     function retainCurrentLocation() {
-        this.clearRetainedLocation();
+        clearRetainedLocation();
         var location = $window.location.hash;
         location = location.replace("#!#!%2F", "#!/");
         if (location === '#!/login') {

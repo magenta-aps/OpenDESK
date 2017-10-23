@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('openDeskApp.documents')
        .factory('documentService', documentService);
 
@@ -114,7 +116,6 @@ function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG) {
             nodeRef: nodeRef,
             version: version
         }).then(function (response) {
-            response.data.success ? console.log("Doc was successfully reverted") : console.log("Unable to revert document");
 			console.log("response = " +  response);
 			return response;
         });

@@ -1,17 +1,23 @@
 
+    'use strict';
+
     angular
         .module('openDeskApp.notifications')
         .factory('notificationsService', notificationsService);
 
-    var restBaseUrl = '/alfresco/service';
-    var update;
+        
+        function notificationsService($http, $interval, sessionService) {
+        
+        var restBaseUrl = '/alfresco/service';
+        var update;
+        
+        var unseenNotifications = 0;
 
-    var unseenNotifications = 0;
+        var userInfo = sessionService.getUserInfo();
 
-    function notificationsService($http, $interval) {
         var service = {
             getUnseenCount: getUnseenCount,
-            getNotices: getNotices,
+            getNotifications: getNotifications,
             addNotice: addNotice,
             delNotice: delNotice,
             setReadNotice: setRead,
@@ -28,17 +34,16 @@
             return unseenNotifications;
         }
 
-        function getNotices(userId) {
+        function getNotifications(userId) {
             return $http.post(restBaseUrl + "/notifications", {
                 PARAM_METHOD : "getAll",
                 PARAM_USERNAME: userId
             }).then(function(response) {
                 // console.log(response.data);
                 unseenNotifications = response.data[0].unseen;
-                return response.data;
-            })
-        };
-
+                return response.data[1];
+            });
+        }
 
         function setRead(userId, noticeObj) {
             return $http.post(restBaseUrl + "/notifications", {
@@ -47,19 +52,17 @@
                 PARAM_NODE_REF : noticeObj
             }).then(function(response) {
                 return response;
-            })
-        };
+            });
+        }
 
         function getInfo(nodeRef) {
             return $http.post(restBaseUrl + "/notifications", {
                 PARAM_METHOD : "getInfo",
                 PARAM_NODE_REF : nodeRef
             }).then(function(response) {
-
-                return response.data[0];;
-            })
-        };
-
+                return response.data[0];
+            });
+        }
 
         function setSeen(userId, noticeObj) {
             return $http.post(restBaseUrl + "/notifications", {
@@ -68,8 +71,8 @@
                 PARAM_NODE_REF : noticeObj
             }).then(function(response) {
                 return response;
-            })
-        };
+            });
+        }
 
         function setAllSeen(userId) {
             return $http.post(restBaseUrl + "/notifications", {
@@ -77,8 +80,8 @@
                 PARAM_USERNAME: userId
             }).then(function(response) {
                 return response;
-            })
-        };
+            });
+        }
 
         function addNotice(userId, subject, message, link, wtype, project) {
             return $http.post(restBaseUrl + "/notifications", {
@@ -91,8 +94,8 @@
                 PARAM_PROJECT: project
             }).then(function (response) {
                 return response;
-            })
-        };
+            });
+        }
         
         function delNotice(userId, noticeObj) {
             return $http.post(restBaseUrl + "/notifications", {
@@ -101,8 +104,8 @@
                 PARAM_NODE_REF : noticeObj
             }).then(function(response) {
                 return response;
-            })
-        };
+            });
+        }
 
         function startUpdate(updateNotifications) {
             update = $interval(updateNotifications, 10000);
