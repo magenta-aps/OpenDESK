@@ -2,7 +2,7 @@ angular
     .module('openDeskApp.user')
     .factory('userService', userService);
 
-function userService($http, sessionService) {
+function userService($http) {
 
     var showUserPanel = false;
 
@@ -13,9 +13,7 @@ function userService($http, sessionService) {
         getUsers: getUsers,
         getAuthorities: getAuthorities,
         getPersons: getPersons,
-        uploadAvatar : uploadAvatar,
-        getAvatar : getAvatar,
-        getAvatarFromUser : getAvatarFromUser
+        uploadAvatar: uploadAvatar
     };
 
     function toggleUserPanel() {
@@ -94,18 +92,4 @@ function userService($http, sessionService) {
             return response;
         });
     }
-
-    function getAvatarFromUser(user) {
-        if(user.avatar == undefined)
-            return "app/assets/img/avatars/blank-profile-picture.png";
-        var avatar = user.avatar.replace("/thumbnails/avatar", "");
-        return sessionService.makeURL("/alfresco/s/" + avatar);
-    }
-
-    function getAvatar(username) {
-        return getPerson(username).then(function (data) {
-            return getAvatarFromUser(data);
-        });
-    }
-
 }

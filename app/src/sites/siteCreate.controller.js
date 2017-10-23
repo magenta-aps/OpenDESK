@@ -5,7 +5,7 @@ angular
     .controller('SiteCreateController', SiteCreateController);
 
 function SiteCreateController($q, $mdDialog, APP_CONFIG, $state, filterService, siteService,
-                              userService, $mdToast, $translate) {
+                              userService, $mdToast, $translate, groupService) {
 
     var pdc = this;
 
@@ -98,15 +98,9 @@ function SiteCreateController($q, $mdDialog, APP_CONFIG, $state, filterService, 
 
 
         function getOwners() {
-            siteService.getAllOwners().then(
-                function (response) {
-                    console.log(response);
-                    availOwners = response;
-                },
-                function (err) {
-                    console.log(err);
-                }
-            );
+            availOwners = groupService.getProjectOwners();
+            console.log("siteCreateController");
+            console.log(availOwners);
         }
 
 

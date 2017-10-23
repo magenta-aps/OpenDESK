@@ -1,9 +1,8 @@
 angular.module('openDeskApp.site').factory('siteService', SiteService);
 
 
-function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
-
-    var restBaseUrl = '/alfresco/s/api/';
+function SiteService($q, $http, alfrescoNodeUtils, sessionService, notificationsService, authService,
+                     systemSettingsService, avatarUtilsService) {
 
     var currentUser = authService.getUserInfo().user;
     var site = {};
@@ -31,20 +30,6 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
             return $http.get('/api/sites/' + siteShortName + '/memberships?authorityType=USER').then(function (response) {
                 return response.data;
             });
-        },
-
-        getAllOwners: function () {
-
-            return $http.post("/alfresco/service/groups", {
-                PARAM_METHOD: "getGroupMembers",
-                PARAM_GROUP_NAME: 'OPENDESK_ProjectOwners'
-            }).then(function (response) {
-                    return response.data;
-                },
-                function (error) {
-                    console.log("Error retrieving list of all managers.");
-                    console.log(error);
-                });
         },
 
         getTemplateNames: function () {
@@ -482,10 +467,17 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         getGroupsAndMembers: function () {
             return $http.post("/alfresco/service/groups", {
                 PARAM_METHOD: "getGroupsAndMembers",
-                PARAM_SITE_SHORT_NAME: site.shortName
+                PARAM_SITE_SHORT_NAME: site.shortName,
+                PARAM_GROUP_TYPE: "USER"
             }).then(function (response) {
                 groups.list = response.data;
-                return response.data;
+                groups.list.forEach(function (group) {
+                    group[1].forEach(function (member) {
+                        var avatar = avatarUtilsService.getAvatarFromUser(member);
+                        member.avatar = sessionService.makeURL("/alfresco/s/" + avatar);
+                    });
+                });
+                return groups.list;
             });
         },
 

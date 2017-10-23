@@ -10,15 +10,14 @@ angular
         };
     });
 
-function UserController($scope, $mdSidenav, authService, userService) {
+function UserController($scope, $mdSidenav, authService, userService, sessionService, avatarUtilsService) {
     var vm = this;
     vm.receiveNotifications = "true";
     vm.user = authService.getUserInfo().user;
-    getAvatar();
 
     vm.close = function () {
         $mdSidenav('userpanel').close();
-    }
+    };
 
     function setNotificationPreferences() {
         var preferences = { "dk.magenta.sites.receiveNotifications" : vm.receiveNotifications };
@@ -31,18 +30,17 @@ function UserController($scope, $mdSidenav, authService, userService) {
 
     $scope.uploadAvatar = function(element) {
         var file = element.files[0];
-        console.log('upload avatar');
-        console.log(file);
         userService.uploadAvatar(file, vm.user.userName).then(function(data) {
-            getAvatar();
+            loadAvatar();
             return data;
         });
-    }
+    };
 
-    function getAvatar() {
-        return userService.getAvatar(vm.user.userName).then(function (data) {
-            vm.avatar = data;
+    function loadAvatar() {
+        userService.getPerson(vm.user.userName).then(function(user) {
+            var avatar = avatarUtilsService.getAvatarFromUser(user);
+            sessionService.setAvatar(avatar);
+            vm.user.avatar = authService.getUserInfo().user.avatar;
         });
     }
-    vm.getAvatar = getAvatar;
-};
+}

@@ -2,18 +2,21 @@ angular
     .module('openDeskApp')
     .factory('sessionService', sessionService);
 
-function sessionService($window) {
+function sessionService($window, avatarUtilsService) {
     var userInfo;
     var service = {
         loadUserInfo: loadUserInfo,
         getUserInfo: getUserInfo,
+        saveUserInfoToSession: saveUserInfoToSession,
         setUserInfo: setUserInfo,
         isAdmin: isAdmin,
         retainCurrentLocation: retainCurrentLocation,
         getRetainedLocation: getRetainedLocation,
         clearRetainedLocation: clearRetainedLocation,
         isExternalUser: isExternalUser,
-        makeURL: makeURL
+        makeURL: makeURL,
+        makeAvatarUrl: makeAvatarUrl,
+        setAvatar: setAvatar
     };
     
     return service;
@@ -30,11 +33,17 @@ function sessionService($window) {
 
     function setUserInfo(info) {
         userInfo = info;
-        if(userInfo.user != undefined) {
+        if(userInfo.user !== undefined) {
+            var avatar = avatarUtilsService.getAvatarFromUser(userInfo.user);
+            this.makeAvatarUrl(avatar);
             userInfo.user.displayName = userInfo.user.firstName;
             if (userInfo.user.lastName != "")
                 userInfo.user.displayName += " " + userInfo.user.lastName;
+            this.saveUserInfoToSession(userInfo);
         }
+    }
+
+    function saveUserInfoToSession(userInfo){
         $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));
     }
 
@@ -77,5 +86,15 @@ function sessionService($window) {
         } else {
             return url;
         }
+    }
+
+    function makeAvatarUrl(avatar) {
+        if(userInfo.user !== undefined)
+            userInfo.user.avatar = this.makeURL("/alfresco/s/" + avatar);
+    }
+
+    function setAvatar(avatar) {
+        this.makeAvatarUrl(avatar);
+        this.saveUserInfoToSession(userInfo);
     }
 }

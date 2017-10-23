@@ -94,5 +94,17 @@ function config($stateProvider, USER_ROLES) {
                 controllerAs: 'vm'
             }
         }
+    }).state('systemsettings.groups', {
+        url: '/grupper',
+        params: {
+            authorizedRoles: [USER_ROLES.admin]
+        },
+        views: {
+            'systemsetting-view': {
+                templateUrl: 'app/src/system_settings/groups/view/groups.html',
+                controller: 'SettingsGroupsController',
+                controllerAs: 'vm'
+            }
+        }
     });
 }

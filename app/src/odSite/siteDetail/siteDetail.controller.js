@@ -3,7 +3,7 @@ angular
     .controller('SiteDetailController', SiteDetailController);
 
 function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
-                        searchService, userService, browserService, headerService) {
+                        searchService, userService, browserService, headerService, groupService) {
 
     $scope.permissions = {};
     $scope.history = [];
@@ -80,32 +80,15 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
         $mdOpenMenu(event);
     };
 
-    vm.openMemberInfo = function (member, event) {
-        var avatar = userService.getAvatarFromUser(member);
-        $mdDialog.show({
-            controller: ['$scope', 'member', function ($scope, member) {
-                $scope.member = member;
-                $scope.avatar = avatar;
-            }],
-            templateUrl: 'app/src/sites/view/infoMember.tmpl.html',
-            locals: {
-                member: member
-            },
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    };
+    vm.openMemberInfo = groupService.openMemberInfo;
 
     function loadMembers() {
         siteService.getGroupsAndMembers().then(function (val) {
             $scope.groups.list = val;
             $scope.groups.list.forEach(function (group) {
-                    $scope.roles.push(group[0].shortName);
-                    $scope.showGroupList.push(false);
-                    $scope.searchTextList.push(null);
+                $scope.roles.push(group[0].shortName);
+                $scope.showGroupList.push(false);
+                $scope.searchTextList.push(null);
             });
 
         });
