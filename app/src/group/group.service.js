@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('openDeskApp.group')
     .factory('groupService', groupService);
 
@@ -69,14 +71,15 @@ function groupService($http, $mdDialog, $translate, sessionService, avatarUtilsS
         return groups[0].members;
     }
 
-    function getOpenDeskGroups(){
+    function getOpenDeskGroups() {
         return openDeskGroups;
     }
 
     function openMemberInfo(member) {
         $mdDialog.show({
-            controller: 'GroupMemberController as vm',
-            templateUrl: 'app/src/group/groupMember/view/infoMember.tmpl.html',
+            templateUrl: 'app/src/group/groupMember/infoMember.tmpl.html',
+            controller: 'GroupMemberController',
+            controllerAs: 'vm',
             locals: {
                 member: member
             },
