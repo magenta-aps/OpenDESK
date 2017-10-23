@@ -4,24 +4,51 @@ angular
     .module('openDeskApp')
     .factory('sessionService', sessionService);
 
-function sessionService($window) {
+function sessionService($window, avatarUtilsService) {
     var userInfo;
 
     var service = {
         clearRetainedLocation: clearRetainedLocation,
         getRetainedLocation: getRetainedLocation,
         getUserInfo: getUserInfo,
+        saveUserInfoToSession: saveUserInfoToSession,
+        setUserInfo: setUserInfo,
         isAdmin: isAdmin,
         isExternalUser: isExternalUser,
         loadUserInfo: loadUserInfo,
         makeURL: makeURL,
         retainCurrentLocation: retainCurrentLocation,
-        setUserInfo: setUserInfo
+        makeAvatarUrl: makeAvatarUrl,
+        setAvatar: setAvatar
     };
 
     return service;
 
-    /////////
+    function setUserInfo(info) {
+        userInfo = info;
+        if(userInfo.user !== undefined) {
+            var avatar = avatarUtilsService.getAvatarFromUser(userInfo.user);
+            makeAvatarUrl(avatar);
+            userInfo.user.displayName = userInfo.user.firstName;
+            if (userInfo.user.lastName !== "")
+                userInfo.user.displayName += " " + userInfo.user.lastName;
+            saveUserInfoToSession(userInfo);
+        }
+    }
+
+    // function setUserInfo(info) {
+    //     userInfo = info;
+    //     if (userInfo.user !== undefined) {
+    //         userInfo.user.displayName = userInfo.user.firstName;
+    //         if (userInfo.user.lastName !== "")
+    //             userInfo.user.displayName += " " + userInfo.user.lastName;
+    //     }
+    //     $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));
+    // }
+
+    function saveUserInfoToSession(userInfo){
+        $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));
+    }
 
     function isAdmin() {
         if (userInfo === null || userInfo === undefined) {
@@ -74,13 +101,13 @@ function sessionService($window) {
         $window.sessionStorage.setItem('retainedLocation', location);
     }
 
-    function setUserInfo(info) {
-        userInfo = info;
-        if (userInfo.user !== undefined) {
-            userInfo.user.displayName = userInfo.user.firstName;
-            if (userInfo.user.lastName !== "")
-                userInfo.user.displayName += " " + userInfo.user.lastName;
-        }
-        $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));
+    function makeAvatarUrl(avatar) {
+        if(userInfo.user !== undefined)
+            userInfo.user.avatar = makeURL("/alfresco/s/" + avatar);
+    }
+
+    function setAvatar(avatar) {
+        makeAvatarUrl(avatar);
+        saveUserInfoToSession(userInfo);
     }
 }

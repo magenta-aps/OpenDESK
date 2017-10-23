@@ -4,10 +4,9 @@ angular
     .module('openDeskApp.header')
     .controller('HeaderController', HeaderController);
 
-function HeaderController($scope, $state, $mdSidenav, headerService, authService, notificationsService, userService) {
+function HeaderController($scope, $state, $mdSidenav, headerService, authService, notificationsService) {
     var vm = this;
 
-    vm.avatar = userService.getAvatarFromUser(authService.getUserInfo().user);
     vm.title = '';
     vm.toggleAppDrawer = buildToggler('appDrawer');
     vm.toggleNotifications = buildToggler('notifications');

@@ -4,7 +4,8 @@ angular
     .module('openDeskApp.site')
     .controller('SiteEditController', SiteEditController);
 
-function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, userService, $mdToast, filterService) {
+function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, userService, $mdToast, filterService,
+                            groupService) {
 
     var vm = this;
     var availProjectOwners = [];
@@ -42,6 +43,10 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
 
     function cancelDialog() {
         $mdDialog.cancel();
+    }
+    
+    function getOwners() {
+        availProjectOwners = groupService.getProjectOwners();
     }
 
     function searchProjectOwners(query) {

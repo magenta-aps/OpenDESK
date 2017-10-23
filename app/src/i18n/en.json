@@ -740,6 +740,7 @@
   "MEMBER": {
     "MEMBER": "Member",
     "MEMBERS": "Members",
+    "MEMBERS_UPDATED": "Members have been updated",
     "NAME": "Name",
     "TYPE": "Type",
     "ROLE": "Role",
@@ -1051,5 +1052,9 @@
     "public" : {
       "appName": "Name of OpenDesk instance"
     }
+  },
+  "GROUPS": {
+    "OPENDESK_OrganizationalCenters": "Org. Units",
+    "OPENDESK_ProjectOwners": "Project Owners"
   }
 }

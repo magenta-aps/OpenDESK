@@ -5,7 +5,7 @@ angular
     .controller('SiteDetailController', SiteDetailController);
 
 function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
-                        searchService, userService, browserService, headerService, alfrescoDownloadService) {
+                        searchService, userService, browserService, headerService, alfrescoDownloadService, groupService) {
 
     $scope.history = [];
     $scope.showGroupList = [];
@@ -24,7 +24,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     vm.hasDescription = false;
     vm.newFileName = '';
     vm.newTemplateName = '';
-    vm.openMemberInfo = openMemberInfo;
+    vm.openMemberInfo = groupService.openMemberInfo;
     vm.openMenu = openMenu;
     vm.path = $stateParams.path === undefined ? '' : $stateParams.path;
     vm.permissions = {};
@@ -104,13 +104,25 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     function loadMembers() {
         siteService.getGroupsAndMembers().then(function (groups) {
             vm.groups = groups;
-
-            angular.forEach(vm.groups, function(group) {
-                $scope.showGroupList.push(false);
-                vm.searchTextList.push(null);
-            });
         });
     }
+
+    // function loadMembers() {
+    //     siteService.getGroupsAndMembers().then(function (groups) {
+    //         vm.groups = groups;
+
+    //         $scope.groups.list.forEach(function (group) {
+    //             $scope.roles.push(group[0].shortName);
+    //             $scope.showGroupList.push(false);
+    //             $scope.searchTextList.push(null);
+    //         });
+
+    //         angular.forEach(vm.groups, function(group) {
+    //             $scope.showGroupList.push(false);
+    //             vm.searchTextList.push(null);
+    //         });
+    //     });
+    // }
     
     function getSearchResults(term) {
         return searchService.getSearchResults(term).then(function (val) {

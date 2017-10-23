@@ -724,6 +724,7 @@
   "MEMBER": {
     "MEMBER": "Medlem",
     "MEMBERS": "Medlemmer",
+    "MEMBERS_UPDATED": "Medlemmer er opdateret",
     "NAME": "Navn",
     "TYPE": "Type",
     "ROLE": "Rolle",
@@ -1024,5 +1025,9 @@
     "public" : {
       "appName": "Navn for OpenDesk instans"
     }
+  },
+  "GROUPS": {
+    "OPENDESK_OrganizationalCenters": "Org. enheder",
+    "OPENDESK_ProjectOwners": "Projektejere"
   }
 }
