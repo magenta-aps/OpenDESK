@@ -3,7 +3,7 @@
 angular.module('openDeskApp.group')
     .factory('groupService', groupService);
 
-function groupService($http, $mdDialog, $translate, sessionService, avatarUtilsService) {
+function groupService($http, $mdDialog, $translate, sessionService) {
 
     var openDeskGroups = [];
     var groupShortNames = [
@@ -56,9 +56,7 @@ function groupService($http, $mdDialog, $translate, sessionService, avatarUtilsS
         }).then(function (response) {
             var group = response.data;
             group.forEach(function (member) {
-                member.avatar = avatarUtilsService.getAvatarFromUser(member);
-                if (member.avatar.indexOf("app/assets") === -1)
-                    member.avatar = sessionService.makeURL("/alfresco/s/" + member.avatar);
+                member.avatar = sessionService.makeAvatarUrl(member);
             });
             return group;
         });

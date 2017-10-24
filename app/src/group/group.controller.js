@@ -2,8 +2,7 @@ angular
     .module('openDeskApp.group')
     .controller('GroupController', GroupController);
 
-function GroupController($mdDialog, $mdToast, $translate, group, groupService, userService, avatarUtilsService,
-                         sessionService) {
+function GroupController($mdDialog, $mdToast, $translate, group, groupService, userService, sessionService) {
 
     var vm = this;
     vm.group = group;
@@ -44,9 +43,7 @@ function GroupController($mdDialog, $mdToast, $translate, group, groupService, u
     function addMember(member, groupName) {
         var shortName = this.getMemberShortName(member);
         groupService.addMember(shortName, groupName).then(function () {
-            member.avatar = avatarUtilsService.getAvatarFromUser(member);
-            if (member.avatar.indexOf("app/assets") === -1)
-                member.avatar = sessionService.makeURL("/alfresco/s/" + member.avatar);
+            member.avatar = sessionService.makeAvatarUrl(member);
             vm.groups.push(member);
         });
     }
