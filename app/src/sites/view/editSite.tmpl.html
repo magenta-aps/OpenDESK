@@ -30,6 +30,7 @@
                         md-items="owner in vm.searchProjectOwners(searchTextOwner)"
                         md-item-text="owner.displayName"
                         md-min-length="1"
+                        md-require-match="true"
                         md-floating-label="{{'PROJECT.PROJECTOWNER' | translate}}"
                         md-clear-button=true
                         placeholder="{{'PROJECT.PROJECTOWNER' | translate}}">
@@ -67,6 +68,7 @@
                             md-items="man in vm.searchPeople(searchTextManager)"
                             md-item-text="man.displayName"
                             md-min-length="1"
+                            md-require-match="true"
                             md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
                             md-clear-button=true
                             placeholder="{{'PROJECT.PROJECTLEAD' | translate}}">

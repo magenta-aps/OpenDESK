@@ -30,6 +30,7 @@
 								<md-autocomplete md-selected-item="selectedProjGrpItem"
 												 md-search-text="vm.searchTextList[groupIndex]"
 												 md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
+												 md-require-match="true"
 								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
 									<span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
 										{{ pgitem.displayName }}

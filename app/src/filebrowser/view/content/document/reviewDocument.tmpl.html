@@ -13,7 +13,7 @@
 
         <md-dialog-content class="md-padding">
             <div>
-                <md-autocomplete required md-input-name="autocomplete" md-selected-item="newMemberName" md-search-text="searchTextUser" md-items="user in vm.searchUsers(searchTextUser)"
+                <md-autocomplete required md-require-match="true" md-input-name="autocomplete" md-selected-item="newMemberName" md-search-text="searchTextUser" md-items="user in vm.searchUsers(searchTextUser)"
                     md-item-text="user.displayName" md-floating-label="{{'MEMBER.MEMBER' | translate}}">
                     <md-item-template>
                         <span md-highlight-text="searchTextUser" md-highlight-flags="gi">{{ user.displayName }}</span>

@@ -32,8 +32,14 @@
                                 <input type="text" ng-model="newSite.siteName" required>
                             </md-input-container>
 
-                            <md-autocomplete ng-if="vm.type == 'PD-Project'" required md-selected-item="newSite.owner" md-search-text="prjownsrchtxt" md-items="own in vm.searchOwners(prjownsrchtxt)"
-                                md-item-text="own.displayName" md-min-length="1" md-floating-label="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTOWNER' | translate}}"
+                            <md-autocomplete ng-if="vm.type == 'PD-Project'" required 
+                                md-selected-item="newSite.owner" 
+                                md-search-text="prjownsrchtxt" 
+                                md-items="own in vm.searchOwners(prjownsrchtxt)"
+                                md-item-text="own.displayName" 
+                                md-min-length="1" 
+                                md-require-match="true"
+                                md-floating-label="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTOWNER' | translate}}"
                                 placeholder="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTOWNER' | translate}}">
                                 <md-item-template>
                                     <span md-highlight-text="prjownsrchtxt" md-highlight-flags="gi">{{ own.displayName }}</span>
@@ -65,7 +71,10 @@
 
                             <!--searchTextManager-->
                             <md-autocomplete ng-if="vm.type == 'PD-Project'" required md-selected-item="newSite.manager" md-search-text="newSite.presetManager" md-items="man in vm.searchPeople(newSite.presetManager)"
-                                md-item-text="man.displayName" md-min-length="1" md-floating-label="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTMANAGER' | translate}}"
+                                md-item-text="man.displayName" 
+                                md-min-length="1" 
+                                md-require-match="true"
+                                md-floating-label="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTMANAGER' | translate}}"
                                 placeholder="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTMANAGER' | translate}}">
                                 <md-item-template>
                                     <span md-highlight-text="newSite.presetManager" md-highlight-flags="gi">{{ man.displayName }}</span>
@@ -95,7 +104,7 @@
                                 <md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true" md-on-remove="removeMemberFromSite($chip, group.shortName)"
                                     md-on-add="addMemberToSite($chip, group.shortName)">
                                     <md-autocomplete md-selected-item="selectedProjGrpItem" md-search-text="vm.searchTextList[groupIndex]" md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
-                                        md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
+                                        md-item-text="pgitem.displayName" md-require-match="true" placeholder="{{'PROJECT.MEMBER' | translate}}">
                                         <span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">{{ pgitem.displayName }}</span>
                                     </md-autocomplete>
                                     <md-chip-template>
