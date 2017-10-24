@@ -38,11 +38,9 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     };
     vm.userService = userService;
 
-    $scope.siteService = siteService;
-
-    $scope.$watch('siteService.updateMemberList()', function (updatedMemberList) {
-        vm.groups = updatedMemberList;
-    });
+    $scope.$on('updateMemberList', function() {
+        loadMembers();
+    });   
 
     //sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("#filebrowser-breadcrumb").outerHeight() - $("md-tabs-wrapper").outerHeight() - $("#table-actions").outerHeight();
@@ -162,14 +160,12 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
 
     function editSiteGroups(ev) {
         $mdDialog.show({
-            templateUrl: 'app/src/sites/view/editMembers.tmpl.html',
+            templateUrl: 'app/src/odSite/editMembers/editMembers.tmpl.html',
             controller: 'SiteMemberController',
             controllerAs: 'vm',
             locals: {
                 sitedata: vm.site
             },
-            // scope: $scope,
-            // preserveScope: true,
             targetEvent: ev,
             clickOutsideToClose: true
         });

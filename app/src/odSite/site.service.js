@@ -2,7 +2,7 @@
 
 angular.module('openDeskApp.site').factory('siteService', SiteService);
 
-function SiteService($q, $http, alfrescoNodeUtils, sessionService, notificationsService, authService,
+function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, notificationsService, authService,
                      systemSettingsService) {
 
     var currentUser = authService.getUserInfo().user;
@@ -72,7 +72,7 @@ function SiteService($q, $http, alfrescoNodeUtils, sessionService, notifications
     }
 
     function updateMemberList() {
-        return groups;
+        $rootScope.$broadcast('updateMemberList');
     }
     
     function getAllOwners() {
