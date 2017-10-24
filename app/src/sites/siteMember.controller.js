@@ -16,6 +16,7 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
     vm.groupFilter = groupFilter;
     vm.groups = [];
     vm.removeMemberFromSite = removeMemberFromSite;
+    vm.saveChanges = saveChanges;
     vm.searchPeople = searchPeople;
     vm.site = sitedata;
     vm.user = authService.getUserInfo().user;
@@ -26,6 +27,11 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
         siteService.getGroupsAndMembers().then(function (groups) {
             vm.groups = groups;
         });
+    }
+
+    function saveChanges() {
+        siteService.updateMemberList();
+        cancelDialog();
     }
 
     function groupFilter(group) {

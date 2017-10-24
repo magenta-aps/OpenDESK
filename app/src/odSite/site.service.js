@@ -63,13 +63,17 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         getSiteManager: getSiteManager,
         createDocumentNotification: createDocumentNotification,
         createReviewNotification: createReviewNotification,
-
+        updateMemberList: updateMemberList
     };
     
     return service;
 
     function getSite() {
         return site;
+    }
+
+    function updateMemberList() {
+        return groups;
     }
     
     function getAllOwners() {

@@ -37,6 +37,12 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     };
     vm.userService = userService;
 
+    $scope.siteService = siteService;
+
+    $scope.$watch('siteService.updateMemberList()', function (updatedMemberList) {
+        vm.groups = updatedMemberList;
+    });
+
     //sets the margin to the width of sidenav
 	var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("#filebrowser-breadcrumb").outerHeight() - $("md-tabs-wrapper").outerHeight() - $("#table-actions").outerHeight();
     $("#table-container").css("max-height", tableHeight+"px");
@@ -106,23 +112,6 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
             vm.groups = groups;
         });
     }
-
-    // function loadMembers() {
-    //     siteService.getGroupsAndMembers().then(function (groups) {
-    //         vm.groups = groups;
-
-    //         $scope.groups.list.forEach(function (group) {
-    //             $scope.roles.push(group[0].shortName);
-    //             $scope.showGroupList.push(false);
-    //             $scope.searchTextList.push(null);
-    //         });
-
-    //         angular.forEach(vm.groups, function(group) {
-    //             $scope.showGroupList.push(false);
-    //             vm.searchTextList.push(null);
-    //         });
-    //     });
-    // }
     
     function getSearchResults(term) {
         return searchService.getSearchResults(term).then(function (val) {

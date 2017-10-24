@@ -22,7 +22,7 @@
     "angular-swfobject": "",
     "angular-translate": "",
     "angular-translate-loader-static-files": "",
-    "angular-ui-router": "1.0.3",
+    "angular-ui-router": "1.0.10",
     "@uirouter/angularjs": "",
     "angular-cookies": "^1.6.x",
     "angular-fixed-table-header": "",

@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp.discussion')
     .controller('DiscussionController', DiscussionController);
@@ -62,7 +64,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         vm.isLoading = true;
         discussionService.getDiscussions(siteShortName).then(function (response) {
             response.items.forEach(function (item) {
-                if (item.lastReplyOn == undefined) {
+                if (item.lastReplyOn === undefined) {
                     item.lastReplyOn = item.modifiedOn;
                 }
             });
@@ -82,7 +84,6 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
 
             $timeout(function () {
                 if ($location.hash()) {
-                    console.log('scroll til ' + $location.hash());
                     $anchorScroll();
                 }
             });
@@ -105,7 +106,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
             createReplyNotification(response.item);
             vm.getReplies(vm.selectedDiscussion);
             $mdDialog.cancel();
-        })
+        });
     }
 
     function newDiscussionDialog() {
@@ -245,14 +246,13 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
 
 
     function getAvatarUrl(avatarRef) {
-        if (avatarRef == undefined)
+        if (avatarRef === undefined)
             return;
         var avatarId = avatarRef.split('/')[3];
         return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
     }
 
     function createNotification(userName, subject, message, link, wtype, project) {
-        console.log('creating notification...');
         notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
             $mdDialog.hide();
         });
@@ -272,16 +272,15 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
                     var preferenceFilter = "dk.magenta.sites.receiveNotifications";
                     var receiveNotifications = "true";
 
-                    if (member.preferences[preferenceFilter] != null)
+                    if (member.preferences[preferenceFilter] !== null)
                         receiveNotifications = member.preferences[preferenceFilter];
 
-                    if (receiveNotifications != null && receiveNotifications == "true") {
-                        console.log("Sending notification to : " + member.userName);
+                    if (receiveNotifications !== null && receiveNotifications == "true") {
                         createNotification(member.userName, subject, message, link, 'new-discussion', $stateParams.projekt);
                     }
                 }
-            })
-        })
+            });
+        });
     }
 
     function createReplyNotification(postItem) {
@@ -297,15 +296,14 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
                     var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt, nodeRef);
                     var receiveNotifications = "false";
 
-                    if (member.preferences[preferenceFilter] != null)
+                    if (member.preferences[preferenceFilter] !== null)
                         receiveNotifications = member.preferences[preferenceFilter];
 
-                    if (receiveNotifications != null && receiveNotifications == "true") {
-                        console.log("Sending notification to : " + member.userName);
+                    if (receiveNotifications !== null && receiveNotifications == "true") {
                         createNotification(member.userName, subject, message, link, 'new-reply', $stateParams.projekt);
                     }
                 }
-            })
-        })
+            });
+        });
     }
-};
+}
