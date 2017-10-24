@@ -11,25 +11,31 @@ angular
         var vm = this;
         var documentNodeRef = "";
         var folderNodeRef = "";
-        var folderUUID = "";
+        var sendAllToSbsys = false;
         
         vm.cancelDialog = cancelDialog;
         vm.createFolder = createFolder;
         vm.cancelSbsysDialog = cancelSbsysDialog;
+        vm.contentList = [];
+        vm.contentListLength = 0;
         vm.createContentFromTemplateDialog = createContentFromTemplateDialog;
         vm.createContentFromTemplate = createContentFromTemplate;
         vm.deleteContentDialog = deleteContentDialog;
         vm.createProjectLink = createProjectLink;
         vm.deleteFile = deleteFile;
         vm.deleteLink = deleteLink;
+        vm.documentTemplates = {};
         vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
+        vm.error = false;
         vm.folderTemplates = {};
         vm.getLink = getLink;
+        vm.isLoading = true;
         vm.loadCheckboxes = loadCheckboxes;
         vm.loadFromSbsys = loadFromSbsys;
         vm.loadHistory = loadHistory;
         vm.loadSbsysDialog = loadSbsysDialog;
         vm.newLinkDialog = newLinkDialog;
+        vm.openTemplateFolder = openTemplateFolder;
         vm.permissions = siteService.getPermissions();
         vm.renameContent = renameContent;
         vm.renameContentDialog = renameContentDialog;
@@ -42,22 +48,15 @@ angular
         vm.uploadNewVersionDialog = uploadNewVersionDialog;
         vm.uploadSbsys = uploadSbsys;
         vm.uploadSbsysDialog = uploadSbsysDialog;
+        vm.sendToSbsys = false;
+
         
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;
-    $scope.contentList = [];
-    $scope.contentListLength = 0;
-    $scope.isLoading = true;
     $scope.history = [];
-    $scope.documentTemplates = {};
-    // $scope.newContentName = "";
-    $scope.primitives = {};
-    $scope.primitives.sendToSbsys = false;
-    $scope.primitives.sendAllToSbsys = false;
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
-    $scope.error = false;
 
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
@@ -93,26 +92,29 @@ angular
     activate();
 
     function activate() {
-
         if(vm.permissions === undefined) {
             siteService.getSiteUserPermissions($stateParams.projekt).then(function(permissions) {
                 vm.permissions = permissions;
             });
         }
 
-        filebrowserService.getTemplates("Document").then(function (response) {
-            $scope.documentTemplates = response;
-            if ($scope.documentTemplates !== undefined)
-                processContent($scope.documentTemplates);
+        filebrowserService.getTemplates("Document").then(function (documentTemplates) {
+            vm.documentTemplates = documentTemplates;
+            if (vm.documentTemplates !== undefined)
+                processContent(vm.documentTemplates);
         });
 
-        filebrowserService.getTemplates("Folder").then(function (response) {
-            vm.folderTemplates = response;
+        filebrowserService.getTemplates("Folder").then(function (folderTemplates) {
+            vm.folderTemplates = folderTemplates;
             vm.folderTemplates.unshift({
                 nodeRef: null,
                 name: $translate.instant('COMMON.EMPTY') + " " + $translate.instant('COMMON.FOLDER')
             });
         });
+    }
+
+    function openTemplateFolder(template) {
+        console.log(template);
     }
 
     function setFolderAndPermissions(path) {
@@ -124,8 +126,8 @@ angular
                     vm.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit;
                 },
                 function (error) {
-                    $scope.isLoading = false;
-                    $scope.error = true;
+                    vm.isLoading = false;
+                    vm.error = true;
                 }
             );
         });
@@ -133,33 +135,33 @@ angular
 
     function setFolder(fNodeRef) {
         folderNodeRef = fNodeRef;
-        folderUUID = alfrescoNodeUtils.processNodeRef(folderNodeRef).id;
-        loadContentList();
+        var folder = alfrescoNodeUtils.processNodeRef(folderNodeRef).id;
+        loadContentList(folder);
     }
 
-    function loadContentList() {
-        filebrowserService.getContentList(folderUUID).then(
-            function (response) {
-                $scope.contentList = response;
-                $scope.contentList.forEach(function (contentTypeList) {
-                    $scope.contentListLength += contentTypeList.length;
+    function loadContentList(folderUUID) {
+        filebrowserService.getContentList(folderUUID).then(function (contentList) {
+                vm.contentList = contentList;
+
+                angular.forEach(vm.contentList, function(contentTypeList) {
+                    vm.contentListLength += contentTypeList.length;
                     processContent(contentTypeList);
                 });
 
                 // Compile paths for breadcrumb directive
-                $scope.paths = buildBreadCrumbPath();
+                vm.paths = buildBreadCrumbPath();
 
-                $scope.isLoading = false;
+                vm.isLoading = false;
             },
             function (error) {
-                $scope.isLoading = false;
-                $scope.error = true;
+                vm.isLoading = false;
+                vm.error = true;
             }
         );
     }
 
     function processContent(content) {
-        content.forEach(function (item) {
+        angular.forEach(content, function(item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
             item.loolEditable = documentService.isLoolEditable(item.mimeType);
             item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
@@ -190,6 +192,7 @@ angular
 
     function buildBreadCrumbPath() {
         var homeLink;
+
         if ($scope.isSite)
             homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})';
         else
@@ -231,7 +234,7 @@ angular
 
     function hideDialogAndReloadContent() {
         vm.uploading = false;
-        loadContentList();
+        //loadContentList();
         cancelDialog();
     }
 
@@ -383,7 +386,7 @@ angular
         } else {
             $scope.contentType = contentType;
             $mdDialog.show({
-                templateUrl: 'app/src/filebrowser/view/content/createContentFromTemplateDialog.tmpl.html',
+                templateUrl: 'app/src/filebrowser/template/create/createFromTemplate.view.html',
                 targetEvent: event,
                 scope: $scope,
                 preserveScope: true,
@@ -476,21 +479,21 @@ angular
     }
     
     function loadCheckboxes() {
-        $scope.primitives.sendToSbsys = false;
-        $scope.contentList.forEach(function (contentTypeList) {
+        vm.sendToSbsys = false;
+        vm.contentList.forEach(function (contentTypeList) {
             contentTypeList.forEach(function (content) {
-                $scope.primitives.sendToSbsys = $scope.primitives.sendToSbsys | content.sendToSbsys;
+                vm.sendToSbsys = vm.sendToSbsys | content.sendToSbsys;
             });
         });
     }
     
     function setAllCheckboxes() {
-        $scope.contentList.forEach(function (contentTypeList) {
+        vm.contentList.forEach(function (contentTypeList) {
             contentTypeList.forEach(function (content) {
-                content.sendToSbsys = $scope.primitives.sendAllToSbsys;
+                content.sendToSbsys = sendAllToSbsys;
             });
         });
-        $scope.primitives.sendToSbsys = $scope.primitives.sendAllToSbsys;
+        vm.sendToSbsys = sendAllToSbsys;
     }
 
     function setSbsysShowAttr() {

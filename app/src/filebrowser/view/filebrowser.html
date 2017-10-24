@@ -1,22 +1,22 @@
 <div class="filebrowser">
-    <breadcrumb paths="paths" id="filebrowser-breadcrumb"></breadcrumb>
+    <breadcrumb paths="vm.paths" id="filebrowser-breadcrumb"></breadcrumb>
 
     <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
 
     <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
-    <md-list class="sort-head" ng-show="contentListLength > 0" id="table-container">
+    <md-list class="sort-head" ng-show="vm.contentListLength > 0" id="table-container">
         <table class="od-members od-members-row">
-            <thead ng-show="contentListLength > 0" fix-head>
+            <thead ng-show="vm.contentListLength > 0" fix-head>
                 <tr>
                     <th sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
                     <th hide show-gt-sm sort-table="lastChanged" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
                     <th hide show-gt-md ng-if="vm.enableESDH" ng-if="isSite" colspan="2">
-                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="primitives.sendToSbsys" ng-click="vm.setAllCheckboxes()">
+                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToSbsys" ng-click="vm.setAllCheckboxes()">
                         <img ng-src="app/assets/img/sbsys.png" class="od-sbsys-logo">
                     </th>
                 </tr>
             </thead>
-            <tbody ng-repeat="contentTypeList in contentList">
+            <tbody ng-repeat="contentTypeList in vm.contentList">
                 <tr ng-repeat="content in contentTypeList | orderObjectBy:orderByAttribute:reverseOrder" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
                 </tr>
             </tbody>
@@ -24,14 +24,14 @@
     </md-list>
     </div>
 
-    <div ng-if="isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
+    <div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
         <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
     </div>
 
     <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
-    <div layout="column" ng-show="contentListLength == 0 && !isLoading">
+    <div layout="column" ng-show="vm.contentListLength == 0 && !vm.isLoading">
             <md-icon class="md-icon--large">library_books</md-icon>
-            <p class="md-display-1" style="text-align:center">{{'COMMON.' + (error ? 'MISSING_FOLDER' : 'EMPTY_FOLDER') | translate}}</p>
+            <p class="md-display-1" style="text-align:center">{{'COMMON.' + (vm.error ? 'MISSING_FOLDER' : 'EMPTY_FOLDER') | translate}}</p>
         </div>
     </div>
 
@@ -56,6 +56,20 @@
             </md-menu>
         </div>
 
+        <!-- <od-template-list
+            od-permission="vm.permissions.canEdit" 
+            od-templates="vm.documentTemplates"
+            od-icon="note_add"
+            od-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
+        </od-template-list>
+        <od-template-list
+            od-permission="vm.permssions.canEdit"
+            od-templates="vm.folderTemplates"
+            od-icon="create_new_folder"
+            od-label="{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}">
+        </od-template-list>
+        « -->
+
         <div layout="column" id="create-document">
             <md-menu ng-if="vm.permissions.canEdit">
                 <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
@@ -63,7 +77,7 @@
                     <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
                 </md-button>
                 <md-menu-content>
-                    <md-menu-item ng-repeat="template in documentTemplates">
+                    <md-menu-item ng-repeat="template in vm.documentTemplates">
                         <md-button ng-click="vm.createContentFromTemplateDialog($event, template, 'DOCUMENT')">
                             <i class="material-icons">
                                             <img class="md-avatar"
@@ -99,7 +113,7 @@
         </md-button>
 
         <span flex></span>
-        <md-button ng-show="primitives.sendToSbsys" ng-if="isSite" ng-click="vm.uploadSbsysDialog($event)"
+        <md-button ng-show="vm.sendToSbsys" ng-if="isSite" ng-click="vm.uploadSbsysDialog($event)"
             class="md-primary" aria-label="SBSYS">
             <md-tooltip md-direction="top">
                 {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
