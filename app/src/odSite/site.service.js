@@ -2,7 +2,7 @@
 
 angular.module('openDeskApp.site').factory('siteService', SiteService);
 
-function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
+function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, avatarUtilsService, systemSettingsService) {
 
     var restBaseUrl = '/alfresco/s/api/';
 
@@ -490,13 +490,30 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         return userManagedProjects;
     }
 
-    function getGroupsAndMembers() {
+    // function getGroupsAndMembers() {
+    //     return $http.post("/alfresco/service/groups", {
+    //         PARAM_METHOD: "getGroupsAndMembers",
+    //         PARAM_SITE_SHORT_NAME: site.shortName
+    //     }).then(function (response) {
+    //         groups = response.data;
+    //         return response.data;
+    //     });
+    // }
+
+    function getGroupsAndMembers () {
         return $http.post("/alfresco/service/groups", {
             PARAM_METHOD: "getGroupsAndMembers",
-            PARAM_SITE_SHORT_NAME: site.shortName
+            PARAM_SITE_SHORT_NAME: site.shortName,
+            PARAM_GROUP_TYPE: "USER"
         }).then(function (response) {
-            groups.list = response.data;
-            return response.data;
+            groups = response.data;
+            groups.forEach(function (group) {
+                group[1].forEach(function (member) {
+                    var avatar = avatarUtilsService.getAvatarFromUser(member);
+                    member.avatar = sessionService.makeURL("/alfresco/s/" + avatar);
+                });
+            });
+            return groups;
         });
     }
 
@@ -530,7 +547,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
         var link = "#!/dokument/" + id;
 
         // Iterating list of items.
-        angular.forEach(groups.list, function (group) {
+        angular.forEach(groups, function (group) {
             angular.forEach(group[1], function (member) {
                 if (member.userName != currentUser.userName) {
                     var preferenceFilter = "dk.magenta.sites.receiveNotifications";

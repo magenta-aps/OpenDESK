@@ -1,5 +1,5 @@
 <md-dialog aria-label="{{'MEMBER.ADD_REMOVE_MEMBERS' | translate}}" class="site-dialog">
-	<form name="membersForm" ng-submit="vm.updatePDSiteGroups()">
+	<form name="membersForm">
 		<md-toolbar>
 			<div class="md-toolbar-tools">
 				<h2>{{'MEMBER.ADD_REMOVE_MEMBERS' | translate}}</h2>
@@ -81,7 +81,7 @@
 		</md-dialog-content>
 		<md-dialog-actions layout="row">
 			<span flex></span>
-			<md-button type="submit" class="md-primary">{{'COMMON.SAVE' | translate}}</md-button>
+			<md-button class="md-primary" ng-click="vm.cancelDialog()">{{'COMMON.SAVE' | translate}}</md-button>
 		</md-dialog-actions>
 	</form>
 </md-dialog>

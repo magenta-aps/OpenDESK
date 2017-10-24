@@ -20,6 +20,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
         presetManager: currentUser
     };
     vm.availOrgs = [];
+    
     $scope.selectedProjGrpItem = null;
     $scope.srchprjgrptxt = null;
     $scope.selectedStyreGrpItem = null;

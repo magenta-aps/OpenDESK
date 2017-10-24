@@ -100,9 +100,9 @@ function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate,
         siteService.addMemberToSite(siteShortName, userName, groupName).then(function (response) {
             createSiteNotification(userName, siteShortName);
 
-            for (var i = 0; i < $scope.groups.list.length; i++) {
-                if ($scope.groups.list[i][0].role == groupName) {
-                    $scope.groups.list[i][1].push(user);
+            for (var i = 0; i < vm.groups.length; i++) {
+                if (vm.groups[i][0].role == groupName) {
+                    vm.groups[i][1].push(user);
                     break;
                 }
             }

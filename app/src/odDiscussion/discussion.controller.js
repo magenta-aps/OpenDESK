@@ -265,7 +265,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         var link = '#!/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
 
         // Iterating list of items.
-        angular.forEach($scope.groups.list, function (group) {
+        angular.forEach(vm.groups, function (group) {
             angular.forEach(group[1], function (member) {
                 if (member.userName != postItem.author.username) {
 
@@ -291,7 +291,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         var link = '#!/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
 
         // Iterating list of items.
-        angular.forEach($scope.groups.list, function (group) {
+        angular.forEach(vm.groups, function (group) {
             angular.forEach(group[1], function (member) {
                 if (member.userName != postItem.author.username) {
                     var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt, nodeRef);
