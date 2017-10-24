@@ -1,28 +1,21 @@
+'use strict';
+
 angular
     .module('openDeskApp')
     .controller('TemplatesController', TemplatesController);
 
-function TemplatesController(siteService, $mdDialog, $scope, systemSettingsService) {
+function TemplatesController(siteService, $mdDialog, $scope, $translate, systemSettingsService) {
     var vm = this;
 
-    function init() {
+    vm.createTemplate = createTemplate;
+    vm.newTemplate = newTemplate;
+    vm.deleteSite = deleteSite;
+    vm.deleteSiteDialog = deleteSiteDialog;
+
+    function activate() {
         
         vm.templateUisref = "administration.systemsettings." + vm.caseType.replace(':', '_') + '_template';
 
-        vm.loadTemplates();
-        startCaseWorkflowService.getWorkflowDefinitions().then(function (result) {
-            vm.workflowDefs = result;
-        });
-    }
-
-    function loadTemplates() {
-     
-        caseTemplatesService.getTemplates(vm.caseType).then(function (templates) {
-            vm.templates = templates.map(function (template) {
-                template.prefilledProps = vm.getPrefilledProps(template);
-                return template;
-            });
-        });
     }
 
     function getPrefilledPropName(prop) {
@@ -66,15 +59,16 @@ function TemplatesController(siteService, $mdDialog, $scope, systemSettingsServi
         }
         return true;
     }
-
-    vm.createTemplate = function(name, description) {
+    
+    function createTemplate(name, description) {
            siteService.createTemplate(name, description).then (function (response) {
                $scope.templateSites.push(response[0]);
                $mdDialog.hide();
            });
-    };
+    }
 
-    vm.newTemplate = function(event) {
+    
+    function newTemplate(event) {
         $mdDialog.show({
             templateUrl: 'app/src/system_settings/templates/view/newTemplate.tmpl.html',
             parent: angular.element(document.body),
@@ -83,13 +77,15 @@ function TemplatesController(siteService, $mdDialog, $scope, systemSettingsServi
             targetEvent: event,
             clickOutsideToClose:true
         });
-    };
+    }
 
-    vm.deleteSite = function (shortName) {
+
+    function deleteSite(shortName) {
         return siteService.deleteSite(shortName);
     }
 
-    vm.deleteSiteDialog = function(siteName) {
+    
+    function deleteSiteDialog(siteName) {
         var confirm = $mdDialog.confirm()
             .title('Vil du slette denne skabelon?')
             .textContent('Skabelonen og alle dets filer vil blive slettet')
@@ -100,25 +96,23 @@ function TemplatesController(siteService, $mdDialog, $scope, systemSettingsServi
             function() {
                 vm.deleteSite(siteName).then (function(response){
 
-                    console.log("hvad er $scope.templateSites")
+                    console.log("hvad er $scope.templateSites");
                     console.log($scope.templateSites.length);
 
                     systemSettingsService.getTemplates().then (function(response) {
-
-                        console.log(response)
+                        console.log(response);
 
                         $scope.templateSites = response;
                         $mdDialog.hide();
 
-                        console.log("hvad er $scope.templateSites")
+                        console.log("hvad er $scope.templateSites");
                         console.log($scope.templateSites.length);
                     });
-
-                })
+                });
             },
             function() {
                 console.log('cancelled delete');
             }
         );
-    };
+    }
 }

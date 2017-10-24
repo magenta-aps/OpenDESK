@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp.systemsettings', ['ngMaterial', 'pascalprecht.translate'])
     .config(config);
@@ -40,7 +42,7 @@ function config($stateProvider, USER_ROLES) {
             'systemsetting-view': {
                 templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
                 controller: 'FilebrowserController',
-                controllerAs: 'fc'
+                controllerAs: 'vm'
             }
         }
     }).state('systemsettings.document_templates', {
@@ -52,9 +54,9 @@ function config($stateProvider, USER_ROLES) {
         },
         views: {
             'systemsetting-view': {
-                templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+                templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
                 controller: 'FilebrowserController',
-                controllerAs: 'fc'
+                controllerAs: 'vm'
             }
         }
     }).state('systemsettings.templateList', {
@@ -79,7 +81,7 @@ function config($stateProvider, USER_ROLES) {
             'systemsetting-view': {
                 templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
                 controller: 'FilebrowserController',
-                controllerAs: 'fc'
+                controllerAs: 'vm'
             }
         }
     }).state('systemsettings.config', {
