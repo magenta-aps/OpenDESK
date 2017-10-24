@@ -2,9 +2,8 @@
 
 angular.module('openDeskApp.site').factory('siteService', SiteService);
 
-function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, notificationsService, authService, avatarUtilsService, systemSettingsService) {
-
-    var restBaseUrl = '/alfresco/s/api/';
+function SiteService($q, $http, alfrescoNodeUtils, sessionService, notificationsService, authService,
+                     systemSettingsService) {
 
     var currentUser = authService.getUserInfo().user;
     var site = {};
@@ -509,8 +508,7 @@ function SiteService($q, $http, $window, alfrescoNodeUtils, sessionService, noti
             groups = response.data;
             groups.forEach(function (group) {
                 group[1].forEach(function (member) {
-                    var avatar = avatarUtilsService.getAvatarFromUser(member);
-                    member.avatar = sessionService.makeURL("/alfresco/s/" + avatar);
+                    member.avatar = sessionService.makeAvatarUrl(member);
                 });
             });
             return groups;

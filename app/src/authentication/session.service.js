@@ -4,7 +4,7 @@ angular
     .module('openDeskApp')
     .factory('sessionService', sessionService);
 
-function sessionService($window, avatarUtilsService) {
+function sessionService($window) {
     var userInfo;
 
     var service = {
@@ -19,7 +19,7 @@ function sessionService($window, avatarUtilsService) {
         makeURL: makeURL,
         retainCurrentLocation: retainCurrentLocation,
         makeAvatarUrl: makeAvatarUrl,
-        setAvatar: setAvatar
+        setAndSaveAvatarToUserInfo: setAndSaveAvatarToUserInfo
     };
 
     return service;
@@ -27,8 +27,8 @@ function sessionService($window, avatarUtilsService) {
     function setUserInfo(info) {
         userInfo = info;
         if(userInfo.user !== undefined) {
-            var avatar = avatarUtilsService.getAvatarFromUser(userInfo.user);
-            makeAvatarUrl(avatar);
+            var avatar = makeAvatarUrl(userInfo.user);
+            setAvatarToUserInfo(avatar);
             userInfo.user.displayName = userInfo.user.firstName;
             if (userInfo.user.lastName !== "")
                 userInfo.user.displayName += " " + userInfo.user.lastName;
@@ -91,13 +91,25 @@ function sessionService($window, avatarUtilsService) {
         $window.sessionStorage.setItem('retainedLocation', location);
     }
 
-    function makeAvatarUrl(avatar) {
-        if(userInfo.user !== undefined)
-            userInfo.user.avatar = makeURL("/alfresco/s/" + avatar);
+    function makeAvatarUrl(user) {
+        var avatar;
+        if(user.avatar === undefined)
+            avatar = "app/assets/img/avatars/blank-profile-picture.png";
+        else {
+            avatar = user.avatar.replace("/thumbnails/avatar", "");
+            avatar = makeURL("/alfresco/s/" + avatar);
+        }
+        return avatar;
     }
 
-    function setAvatar(avatar) {
-        makeAvatarUrl(avatar);
+    function setAvatarToUserInfo(avatar) {
+        if(userInfo.user !== undefined)
+            userInfo.user.avatar = avatar;
+    }
+
+    function setAndSaveAvatarToUserInfo(user) {
+        var avatar = makeAvatarUrl(user);
+        setAvatarToUserInfo(avatar);
         saveUserInfoToSession(userInfo);
     }
 }

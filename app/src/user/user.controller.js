@@ -4,14 +4,14 @@ angular
     .module('openDeskApp.user')
     .controller('UserController', UserController);
 
-function UserController($scope, $mdSidenav, authService, userService, sessionService, preferenceService, avatarUtilsService) {
+function UserController($scope, $mdSidenav, userService, sessionService, preferenceService) {
     var vm = this;
     
     vm.close = close;
     vm.loadAvatar = loadAvatar;
     vm.receiveNotifications = "true";
     vm.setNotificationPreferences = setNotificationPreferences;
-    vm.user = authService.getUserInfo().user;
+    vm.user = sessionService.getUserInfo().user;
     
     $scope.uploadAvatar = uploadAvatar;
 
@@ -39,9 +39,8 @@ function UserController($scope, $mdSidenav, authService, userService, sessionSer
 
     function loadAvatar() {
         userService.getPerson(vm.user.userName).then(function(user) {
-            var avatar = avatarUtilsService.getAvatarFromUser(user);
-            sessionService.setAvatar(avatar);
-            vm.user.avatar = authService.getUserInfo().user.avatar;
+            sessionService.setAndSaveAvatarToUserInfo(user);
+            vm.user.avatar = sessionService.getUserInfo().user.avatar;
         });
     }
 }

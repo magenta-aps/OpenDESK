@@ -4,8 +4,9 @@ angular
     .module('openDeskApp.site')
     .controller('SiteDetailController', SiteDetailController);
 
-function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService, authService, $rootScope,
-                        searchService, userService, browserService, headerService, alfrescoDownloadService, groupService) {
+function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService,
+                              authService, $rootScope, searchService, userService, browserService, headerService,
+                              alfrescoDownloadService, groupService, sessionService) {
 
     $scope.history = [];
     $scope.showGroupList = [];
@@ -83,7 +84,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     }
     
     function openMemberInfo(member, event) {
-        var avatar = userService.getAvatarFromUser(member);
+        var avatar = sessionService.makeAvatarUrl(member);
         $mdDialog.show({
             controller: ['$scope', 'member', function ($scope, member) {
                 $scope.member = member;
