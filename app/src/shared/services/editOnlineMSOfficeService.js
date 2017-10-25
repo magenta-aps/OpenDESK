@@ -4,6 +4,7 @@ angular
 
 function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionService, $window, $mdToast, $translate) {
 
+    var toastDelay = 5000;
     var msProtocolNames = {
         'doc': 'ms-word',
         'docx': 'ms-word',
@@ -174,7 +175,7 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
             $mdToast.show(
                 $mdToast.simple()
                     .textContent($translate.instant('EDIT_MS_OFFICE.PATH.FAILURE', { url: doc.onlineEditUrl }))
-                    .hideDelay(3000)
+                    .hideDelay(toastDelay)
             );
         }
         else if (doc.node.isLocked) {
@@ -189,7 +190,7 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
                     $mdToast.show(
                         $mdToast.simple()
                             .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
-                            .hideDelay(3000)
+                            .hideDelay(toastDelay)
                     );
                 });
             }
@@ -314,7 +315,7 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
             $mdToast.show(
                 $mdToast.simple()
                     .textContent($translate.instant('EDIT_MS_OFFICE.AOS.NO_SUPPORTED_ENVIRONMENT'))
-                    .hideDelay(3000)
+                    .hideDelay(toastDelay)
             );
         }
         else
@@ -354,7 +355,7 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
                 $mdToast.show(
                     $mdToast.simple()
                         .textContent($translate.instant('EDIT_MS_OFFICE.AOS.SUPPORTED_OFFICE_VERSION_REQUIRED'))
-                        .hideDelay(3000)
+                        .hideDelay(toastDelay)
                 );
             }
         }, 500);
