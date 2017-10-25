@@ -181,7 +181,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         if ( elm === undefined)
             elm = document.getElementById(firstDocumentNode);
 
-        if (elm === undefined) {
+        if (elm === null) {
             $timeout(vm.highlightVersion, 100);
         } else {
             elm.style.backgroundColor = "#e1e1e1";
