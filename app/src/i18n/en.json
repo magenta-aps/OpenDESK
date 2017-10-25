@@ -1056,5 +1056,15 @@
   "GROUPS": {
     "OPENDESK_OrganizationalCenters": "Org. Units",
     "OPENDESK_ProjectOwners": "Project Owners"
+  },
+  "EDIT_MS_OFFICE": {
+    "ALREADY_LOCKED": "The document could not be edited because it is already being edited in MS Office by {{userName}}.",
+    "AOS": {
+      "NO_SUPPORTED_ENVIRONMENT": "Edit in MS Office with AOS is not possible because the OS is not Windows or Mac OS X",
+      "SUPPORTED_OFFICE_VERSION_REQUIRED": "Edit in MS Office with AOS is not possible because the MS Office version is too old. MS Office 2013 or higher is required."
+    },
+    "PATH": {
+      "FAILURE": "Edit in MS Office with AOS is not possible because the URL is longere than 256 signs. Use a shorter path to reduce the length. The URL: {{url}}."
+    }
   }
 }

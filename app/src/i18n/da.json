@@ -1029,5 +1029,15 @@
   "GROUPS": {
     "OPENDESK_OrganizationalCenters": "Org. enheder",
     "OPENDESK_ProjectOwners": "Projektejere"
+  },
+  "EDIT_MS_OFFICE": {
+    "ALREADY_LOCKED": "Dokumentet kunne ikke redigeres, da den allerede bliver redigeret i MS Office af {{userName}}.",
+    "AOS": {
+      "NO_SUPPORTED_ENVIRONMENT": "Rediger i MS Office via AOS er ikke muligt, da styresystemet ikke er Windows eller Mac OS X.",
+      "SUPPORTED_OFFICE_VERSION_REQUIRED": "Rediger i MS Office via AOS er ikke muligt, da MS Office versionen er for gammel. MS Office 2013 eller højere er påkrævet."
+    },
+    "PATH": {
+      "FAILURE": "Rediger i MS Office er ikke muligt, da URL'en er længere end 256 tegn. Brug en kortere sti for at reducere længden. URL'en: {{url}}."
+    }
   }
 }
