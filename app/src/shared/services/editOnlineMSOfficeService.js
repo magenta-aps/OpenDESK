@@ -2,7 +2,7 @@ angular
     .module('openDeskApp')
     .factory('editOnlineMSOfficeService', editOnlineMSOfficeService);
 
-function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionService, $window, $mdToast) {
+function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionService, $window, $mdToast, $translate) {
 
     var msProtocolNames = {
         'doc': 'ms-word',
@@ -173,9 +173,31 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
         if (doc.onlineEditUrl.length > 256 || encodeURI(doc.onlineEditUrl).length > 256) {
             $mdToast.show(
                 $mdToast.simple()
-                    .textContent("message.edit-online.office.path.failure")
+                    .textContent($translate.instant('EDIT_MS_OFFICE.PATH.FAILURE', { url: doc.onlineEditUrl }))
                     .hideDelay(3000)
             );
+        }
+        else if (doc.node.isLocked) {
+            var checkedOut = doc.node.aspects.indexOf("cm:checkedOut") > -1;
+            var lockOwner = doc.node.properties["cm:lockOwner"];
+            var currentUser = sessionService.getUserInfo().user.userName;
+            var differentLockOwner = lockOwner.userName !== currentUser;
+
+            // If locked for editing then display error message about who locked
+            if (checkedOut && differentLockOwner) {
+                userService.getPerson(lockOwner).then(function (user) {
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
+                            .hideDelay(3000)
+                    );
+                });
+            }
+            else {
+                // First try ActiveX plugin then AOS
+                if (!launchOnlineEditorActiveX(doc, metadata))
+                    launchOnlineEditorAos(doc, metadata);
+            }
         }
         else {
             // First try ActiveX plugin then AOS
@@ -277,30 +299,6 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
      */
     function launchOnlineEditorAos(doc, metadata)
     {
-        if (doc.node.isLocked)
-        {
-            var checkedOut = doc.node.aspects.indexOf("cm:checkedOut") > -1;
-            var lockOwner = doc.node.properties["cm:lockOwner"];
-            var currentUser = sessionService.getUserInfo().user.userName;
-            var differentLockOwner = lockOwner.userName !== currentUser;
-
-            // If locked for offline editing, ask for user's confirmation to continue with online editing
-            if (checkedOut && differentLockOwner) {
-                $mdToast.show(
-                    $mdToast.simple()
-                        .textContent("DOCUMENT.ALREADY_LOCKED" + lockOwner)
-                        .hideDelay(3000)
-                );
-            }
-            else
-                triggerOnlineEditorAos(doc, metadata);
-        }
-        else
-            triggerOnlineEditorAos(doc, metadata);
-    }
-
-    function triggerOnlineEditorAos(doc, metadata)
-    {
         // Ensure we have the doc's onlineEditUrlAos populated
         if (doc.onlineEditUrlAos === undefined)
             doc.onlineEditUrlAos = createOnlineEditUrlAos(doc, metadata);
@@ -315,7 +313,7 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
         {
             $mdToast.show(
                 $mdToast.simple()
-                    .textContent('message.edit-online-aos.no_supported_environment')
+                    .textContent($translate.instant('EDIT_MS_OFFICE.AOS.NO_SUPPORTED_ENVIRONMENT'))
                     .hideDelay(3000)
             );
         }
@@ -355,7 +353,7 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
             {
                 $mdToast.show(
                     $mdToast.simple()
-                        .textContent('message.edit-online-aos.supported_office_version_required')
+                        .textContent($translate.instant('EDIT_MS_OFFICE.AOS.SUPPORTED_OFFICE_VERSION_REQUIRED'))
                         .hideDelay(3000)
                 );
             }
