@@ -8,6 +8,10 @@ header {
   z-index: 1;
 }
 
+header md-toolbar {
+  height: 64px; // Added because of IE11 error with min-height and flex
+}
+
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
