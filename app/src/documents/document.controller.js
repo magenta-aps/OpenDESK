@@ -4,8 +4,8 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state,
-    documentPreviewService, alfrescoDownloadService, BROWSER_CONFIG, browserService, fileUtilsService,
-    $mdDialog, notificationsService, authService, siteService, headerService, $window) {
+    documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, notificationsService, authService,
+                            siteService, headerService, $window, editOnlineMSOfficeService) {
 
     var vm = this;
 
@@ -14,7 +14,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.paths = [];
     vm.canEdit = false;
     vm.browser = {};
-    vm.browser.isIE = BROWSER_CONFIG.isIE;
 
     vm.showArchived = false;
 
@@ -205,6 +204,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             siteService.loadSiteData(vm.site).then(function (response) {
                 vm.type = response.type;
                 vm.title = response.title;
+                vm.siteNodeRef = response.nodeRef;
 
                 headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title);
             });
@@ -323,22 +323,8 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function editInMSOffice() {
-        var pathStart = vm.docMetadata.serverURL;
-        var pathEnd = vm.doc.webdavUrl.replace("webdav", "aos");
-        var protocol = fileUtilsService.getMsProtocolForFile(pathEnd);
-        var fileLik = pathStart + "/alfresco" + pathEnd;
-        // aosLink will be used for MS Office 2013 and above
-        var aosLink = protocol + ":ofe|u|" + pathStart + "/alfresco" + pathEnd;
-        try {
-            var objword = new ActiveXObject("SharePoint.OpenDocuments");
-            if (objword !== null) {
-                objword.EditDocument(fileLik);
-            }
-        } catch (e) {
-            console.log(e);
-        }
+        editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
     }
-
     
     function downloadDocument() {
         var versionRef = vm.store + $stateParams.doc;

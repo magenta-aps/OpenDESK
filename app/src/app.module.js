@@ -59,6 +59,13 @@ angular
         systemSettingsService.loadPublicSettings().then(function(response) {
             browserService.setTitle();
             BROWSER_CONFIG.isIE = browserService.isIE();
+            BROWSER_CONFIG.isEdge = browserService.isEdge();
+            BROWSER_CONFIG.isChrome = browserService.isChrome();
+            BROWSER_CONFIG.isFirefox = browserService.isFirefox();
+            BROWSER_CONFIG.isSafari = browserService.isSafari();
+            BROWSER_CONFIG.isMac = browserService.isMac();
+            BROWSER_CONFIG.isWin = browserService.isWin();
+            BROWSER_CONFIG.isIOS = browserService.isIOS();
         });
     });
 
