@@ -4,7 +4,7 @@ angular
 
 function BrowserService(APP_BACKEND_CONFIG) {
 
-    var ua = window.navigator.userAgent;
+    var ua = window.navigator.userAgent.toLowerCase();
     var _isIE = (ua.indexOf('msie') !== -1) || (ua.indexOf('trident') !== -1);
     var _isEdge = (ua.indexOf('edge') !== -1);
     var _isOpera = (ua.indexOf('opr') !== -1);
