@@ -177,9 +177,11 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function highlightVersion() {
-        var elm = document.getElementById(selectedDocumentNode) !== undefined ? selectedDocumentNode : firstDocumentNode;
+        var elm = document.getElementById(selectedDocumentNode);
+        if ( elm === undefined)
+            elm = document.getElementById(firstDocumentNode);
 
-        if (elm === "") {
+        if (elm === undefined) {
             $timeout(vm.highlightVersion, 100);
         } else {
             elm.style.backgroundColor = "#e1e1e1";
