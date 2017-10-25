@@ -139,6 +139,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
         });
     }
 
+    //marked
     function doPDF() {
         siteService.createMembersPDF(vm.site.shortName).then(function (response) {
             alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
@@ -158,10 +159,11 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
         });
     }
 
+    //marked
     function editSiteGroups(ev) {
         $mdDialog.show({
             templateUrl: 'app/src/odSite/editMembers/editMembers.tmpl.html',
-            controller: 'SiteMemberController',
+            controller: 'EditSiteMemberController',
             controllerAs: 'vm',
             locals: {
                 sitedata: vm.site

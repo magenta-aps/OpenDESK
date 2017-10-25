@@ -12,8 +12,7 @@
         </md-toolbar>
 
         <md-dialog-content class="md-padding">
-            <div>
-                <md-input-container>
+                <md-input-container class="md-block">
                     <label>{{'COMMON.NAME' | translate}}</label>
                     <input type="text" name="newContentName" required ng-model="vm.newContentName" md-autofocus md-select-on-focus>
 
@@ -21,7 +20,6 @@
                         <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>
                     </div>
                 </md-input-container>
-            </div>
         </md-dialog-content>
 
         <md-dialog-actions>

@@ -7,9 +7,10 @@ angular
         restrict: 'E',
         scope: {
             templates: "=odTemplates",
-            hasPermission: "@odPermission",
+            hasPermission: "=odPermission",
             icon: "@odIcon",
-            label: "@odLabel"
+            label: "@odLabel",
+            nested: "=odNested"
         },
         templateUrl: 'app/src/filebrowser/template/list/templateList.view.html',
         controller: 'TemplateListController',

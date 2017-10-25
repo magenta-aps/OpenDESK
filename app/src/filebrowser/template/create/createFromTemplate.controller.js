@@ -18,7 +18,6 @@ function CreateFromTemplateController($scope, $mdDialog, templateService) {
 
     function activate() {
         vm.newContentName = template.name;
-        console.log('createFromTemplateController');
     }
 
     function cancelDialog() {
@@ -29,15 +28,4 @@ function CreateFromTemplateController($scope, $mdDialog, templateService) {
         templateService.createContentFromTemplate(vm.newContentName);
         $mdDialog.cancel();
     }
-
-    // function createFolder(folderName) {
-    //     var props = {
-    //         prop_cm_name: folderName,
-    //         prop_cm_title: folderName,
-    //         alf_destination: folderNodeRef
-    //     };
-    //     templateService.createFolder("cm:folder", props).then(function (response) {
-    //         hideDialogAndReloadContent();
-    //     });
-    // }
 }

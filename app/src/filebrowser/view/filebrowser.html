@@ -60,51 +60,16 @@
             od-permission="vm.permissions.canEdit" 
             od-templates="vm.documentTemplates"
             od-icon="note_add"
+            od-nested="true"
             od-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
         </od-template-list>
+
         <od-template-list
-            od-permission="vm.permssions.canEdit"
+            od-permission="vm.permissions.canEdit"
             od-templates="vm.folderTemplates"
             od-icon="create_new_folder"
             od-label="{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}">
         </od-template-list>
-        
-
-        <!-- <div layout="column" id="create-document">
-            <md-menu ng-if="vm.permissions.canEdit">
-                <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
-                    <md-icon>note_add</md-icon>
-                    <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}</md-tooltip>
-                </md-button>
-                <md-menu-content>
-                    <md-menu-item ng-repeat="template in vm.documentTemplates">
-                        <md-button ng-click="vm.createContentFromTemplateDialog($event, template, 'DOCUMENT')">
-                            <i class="material-icons">
-                                            <img class="md-avatar"
-                                             ng-src="app/assets/img/filetypes/{{template.thumbNailURL}}"
-                                             onerror="this.src='app/assets/img/filetypes/generic-file-24.png'">
-                                        </i> {{template.name}}
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-        </div>
-
-        <div layout="column" id="create-folder">
-            <md-menu ng-if="vm.permissions.canEdit">
-                <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}">
-                    <md-icon>create_new_folder</md-icon>
-                    <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}</md-tooltip>
-                </md-button>
-                <md-menu-content>
-                    <md-menu-item ng-repeat="template in vm.folderTemplates">
-                        <md-button ng-click="vm.createContentFromTemplateDialog($event, template, 'FOLDER')">
-                            {{template.name}}
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-        </div> -->
 
         <md-button ng-if="isSite && vm.permissions.isManager" class="md-icon-button md-primary "
             ng-click="vm.newLinkDialog($event)">

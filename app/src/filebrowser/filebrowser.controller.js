@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.filebrowser', ['ngFileUpload'])
     .controller('FilebrowserController', FilebrowserController);
     
-    function FilebrowserController($state, $stateParams, $scope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
+    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
         filebrowserService, filterService, alfrescoDownloadService, documentPreviewService, documentService, 
         alfrescoNodeUtils, $translate, APP_BACKEND_CONFIG) {
             
@@ -64,7 +64,6 @@ angular
     $scope.filesToFilebrowser = null;
 
     $scope.$on('updateFilebrowser', function() {
-        console.log('recieved broadcast');
         activate();
     });   
 
@@ -146,10 +145,8 @@ angular
                     vm.contentListLength += contentTypeList.length;
                     processContent(contentTypeList);
                 });
-
                 // Compile paths for breadcrumb directive
                 vm.paths = buildBreadCrumbPath();
-
                 vm.isLoading = false;
             },
             function (error) {
@@ -233,7 +230,7 @@ angular
 
     function hideDialogAndReloadContent() {
         vm.uploading = false;
-        //loadContentList();
+        $rootScope.$broadcast('updateFilebrowser');
         cancelDialog();
     }
 
@@ -318,7 +315,6 @@ angular
     function uploadNewVersion(file) {
         vm.uploading = true;
         siteService.uploadNewVersion(file, folderNodeRef, documentNodeRef).then(function (val) {
-            vm.uploading = false;
             hideDialogAndReloadContent();
         });
     }
