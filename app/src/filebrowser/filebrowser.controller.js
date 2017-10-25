@@ -14,12 +14,9 @@ angular
         var sendAllToSbsys = false;
         
         vm.cancelDialog = cancelDialog;
-        vm.createFolder = createFolder;
         vm.cancelSbsysDialog = cancelSbsysDialog;
         vm.contentList = [];
         vm.contentListLength = 0;
-        vm.createContentFromTemplateDialog = createContentFromTemplateDialog;
-        vm.createContentFromTemplate = createContentFromTemplate;
         vm.deleteContentDialog = deleteContentDialog;
         vm.createProjectLink = createProjectLink;
         vm.deleteFile = deleteFile;
@@ -35,7 +32,6 @@ angular
         vm.loadHistory = loadHistory;
         vm.loadSbsysDialog = loadSbsysDialog;
         vm.newLinkDialog = newLinkDialog;
-        vm.openTemplateFolder = openTemplateFolder;
         vm.permissions = siteService.getPermissions();
         vm.renameContent = renameContent;
         vm.renameContentDialog = renameContentDialog;
@@ -67,6 +63,11 @@ angular
 
     $scope.filesToFilebrowser = null;
 
+    $scope.$on('updateFilebrowser', function() {
+        console.log('recieved broadcast');
+        activate();
+    });   
+
     $scope.$watch('filesToFilebrowser', function () {
         if ($scope.filesToFilebrowser !== null) {
             $scope.files = $scope.filesToFilebrowser;
@@ -74,24 +75,24 @@ angular
         }
     });
 
-    if ($scope.isSite) {
-        $scope.tab.selected = $stateParams.selectedTab;
-        $scope.$watch('siteService.getSite()', function (newVal) {
-            $scope.site = newVal;
-        });
-        $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
-            $scope.userManagedProjects = newVal;
-        });
-        siteService.getNode($stateParams.projekt, "documentLibrary", $stateParams.path).then(function (val) {
-            setFolder(val.parent.nodeRef);
-        });
-    } else {
-        setFolderAndPermissions($stateParams.path);
-    }
-
     activate();
 
     function activate() {
+        if ($scope.isSite) {
+            $scope.tab.selected = $stateParams.selectedTab;
+            $scope.$watch('siteService.getSite()', function (newVal) {
+                $scope.site = newVal;
+            });
+            $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
+                $scope.userManagedProjects = newVal;
+            });
+            siteService.getNode($stateParams.projekt, "documentLibrary", $stateParams.path).then(function (val) {
+                setFolder(val.parent.nodeRef);
+            });
+        } else {
+            setFolderAndPermissions($stateParams.path);
+        }
+
         if(vm.permissions === undefined) {
             siteService.getSiteUserPermissions($stateParams.projekt).then(function(permissions) {
                 vm.permissions = permissions;
@@ -108,13 +109,10 @@ angular
             vm.folderTemplates = folderTemplates;
             vm.folderTemplates.unshift({
                 nodeRef: null,
-                name: $translate.instant('COMMON.EMPTY') + " " + $translate.instant('COMMON.FOLDER')
+                name: $translate.instant('COMMON.EMPTY') + " " + $translate.instant('COMMON.FOLDER'),
+                isFolder: true
             });
         });
-    }
-
-    function openTemplateFolder(template) {
-        console.log(template);
     }
 
     function setFolderAndPermissions(path) {
@@ -134,6 +132,7 @@ angular
     }
 
     function setFolder(fNodeRef) {
+        filebrowserService.setCurrentFolder(fNodeRef);
         folderNodeRef = fNodeRef;
         var folder = alfrescoNodeUtils.processNodeRef(folderNodeRef).id;
         loadContentList(folder);
@@ -365,52 +364,6 @@ angular
 
     function deleteLink(source, destination) {
         siteService.deleteLink(source, destination).then(function () {
-            hideDialogAndReloadContent();
-        });
-    }
-
-    // Templates
-
-    function createContentFromTemplateDialog(event, template, contentType) {
-        $scope.template = template;
-        // $scope.newContentName = template.name;
-
-        if (template.nodeRef === null) {
-            $mdDialog.show({
-                templateUrl: 'app/src/filebrowser/view/content/folder/newFolder.tmpl.html',
-                targetEvent: event,
-                scope: $scope,
-                preserveScope: true,
-                clickOutsideToClose: true
-            });
-        } else {
-            $scope.contentType = contentType;
-            $mdDialog.show({
-                templateUrl: 'app/src/filebrowser/template/create/createFromTemplate.view.html',
-                targetEvent: event,
-                scope: $scope,
-                preserveScope: true,
-                clickOutsideToClose: true
-            });
-        }
-    }
-    
-    function createFolder(folderName) {
-        var props = {
-            prop_cm_name: folderName,
-            prop_cm_title: folderName,
-            alf_destination: folderNodeRef
-        };
-        siteService.createFolder("cm:folder", props).then(function (response) {
-            hideDialogAndReloadContent();
-        });
-    }
-    
-    function createContentFromTemplate(template_name, template_id) {
-        filebrowserService.createContentFromTemplate(template_id, folderNodeRef, template_name).then(function (response) {
-            if ($scope.isSite) {
-                siteService.createDocumentNotification(response.data[0].nodeRef, response.data[0].fileName);
-            }
             hideDialogAndReloadContent();
         });
     }

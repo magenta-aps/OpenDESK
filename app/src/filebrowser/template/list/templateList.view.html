@@ -11,7 +11,7 @@
                 </i> {{template.name}}
             </md-button>
 
-            <md-button ng-if="template.isFolder" ng-click="vm.openTemplateFolder(template)">
+            <md-button ng-if="template.isFolder" ng-click="vm.createContentFromTemplateDialog(template, 'FOLDER')">
                 <md-icon>folder</md-icon>
                 {{template.name}}
             </md-button>

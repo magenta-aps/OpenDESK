@@ -5,26 +5,26 @@ angular.module('openDeskApp.filebrowser')
 
 function fileBrowserService($http, alfrescoNodeUtils) {
 
+    var currentFolderNodeRef;
+
     var service = {
-        createContentFromTemplate: createContentFromTemplate,
         getCompanyHome: getCompanyHome,
         getContentList: getContentList,
+        getCurrentFolderNodeRef: getCurrentFolderNodeRef,
         getNode: getNode,
         getTemplates: getTemplates,
-        loadFromSbsys: loadFromSbsys
+        loadFromSbsys: loadFromSbsys,
+        setCurrentFolder: setCurrentFolder
     };
     
     return service;
 
-    function createContentFromTemplate(nodeid, currentFolderNodeRef, newName) {
-        return $http.post("/alfresco/service/template", {
-            PARAM_METHOD: "createContentFromTemplate",
-            PARAM_TEMPLATE_NODE_ID: nodeid,
-            PARAM_DESTINATION_NODEREF: currentFolderNodeRef,
-            PARAM_NODE_NAME: newName
-        }).then(function (response) {
-            return response;
-        });
+    function getCurrentFolderNodeRef() {
+        return currentFolderNodeRef;
+    }
+
+    function setCurrentFolder(folderNodeRef) {
+        currentFolderNodeRef = folderNodeRef;
     }
 
     function getCompanyHome() {

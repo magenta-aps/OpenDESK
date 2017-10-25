@@ -39,7 +39,6 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         removeMemberFromSite: removeMemberFromSite,
         updateRoleOnSiteMember: updateRoleOnSiteMember,
         deleteSite: deleteSite,
-        createFolder: createFolder,
         deleteFile: deleteFile,
         uploadFiles: uploadFiles,
         uploadNewVersion: uploadNewVersion,
@@ -277,13 +276,6 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
             PARAM_SITE_SHORT_NAME: siteName
         }).then(function (response) {
             return response.data;
-        });
-    }
-
-    function createFolder(type, props) {
-        return $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
-            var nodeRef = response.data.persistedObject;
-            return nodeRef;
         });
     }
 
