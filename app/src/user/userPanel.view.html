@@ -14,10 +14,7 @@
             <label for="uploadBtn">
                 <div class="container" layout="column" layout-align="center center">
                     <img ng-src="{{vm.user.avatar}}" class="od-avatar middle" alt="{{vm.user.firstName }} {{ vm.user.lastName }}">
-                        <!--div class="middle">
-                            <i class="material-icons text">edit</i>
-                        </div-->
-                    </div>
+                </div>
             </label>
 
             <input type="file" id="uploadBtn" class="upload" file-model="file" ng-model="avatar" onchange="angular.element(this).scope().uploadAvatar(this)"
