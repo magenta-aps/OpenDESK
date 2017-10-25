@@ -182,8 +182,8 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         if (elm === "") {
             $timeout(vm.highlightVersion, 100);
         } else {
-            document.getElementById(elm).style.backgroundColor = "#e1e1e1";
-            document.getElementById(elm).style.lineHeight = "2";
+            elm.style.backgroundColor = "#e1e1e1";
+            elm.style.lineHeight = "2";
         }
     }
 
