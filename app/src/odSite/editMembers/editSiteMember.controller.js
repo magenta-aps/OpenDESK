@@ -2,10 +2,10 @@
 
 angular
     .module('openDeskApp.site')
-    .controller('EditSiteMemberController', SiteMemberController);
+    .controller('EditSiteMemberController', EditSiteMemberController);
 
 
-function SiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
+function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
                              notificationsService, authService) {
     var vm = this;
 

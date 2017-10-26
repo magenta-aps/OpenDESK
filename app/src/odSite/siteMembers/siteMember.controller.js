@@ -4,37 +4,33 @@ angular
     .module('openDeskApp.site')
     .controller('SiteMemberController', SiteMemberController);
 
-function SiteMemberController($scope, $mdDialog, siteService, alfrescoDownloadService, sessionService) {
+function SiteMemberController($scope, $stateParams, $mdDialog, siteService, groupService, alfrescoDownloadService, sessionService) {
     var vm = this;
     
     vm.doPDF = doPDF;
-    vm.openMemberInfo = openMemberInfo;
+    vm.openMemberInfo = groupService.openMemberInfo;
     vm.loadMembers = loadMembers;
     vm.editSiteGroups = editSiteGroups;
-    
+    vm.site = $scope.site;
+    vm.permissions = {};
+
+    activate();
+
+    function activate() {
+        getSiteUserPermissions();
+    }
+
+    function getSiteUserPermissions() {
+        siteService.getSiteUserPermissions($stateParams.projekt).then(
+            function (permissions) {
+                vm.permissions = permissions;
+            }
+        );
+    }
 
     function doPDF() {
         siteService.createMembersPDF(vm.site.shortName).then(function (response) {
             alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
-        });
-    }
-
-    function openMemberInfo(member, event) {
-        var avatar = sessionService.makeAvatarUrl(member);
-        $mdDialog.show({
-            controller: ['$scope', 'member', function ($scope, member) {
-                $scope.member = member;
-                $scope.avatar = avatar;
-            }],
-            templateUrl: 'app/src/odSite/siteDetail/memberInfo.view.html',
-            locals: {
-                member: member
-            },
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
         });
     }
 

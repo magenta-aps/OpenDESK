@@ -8,7 +8,6 @@ angular
         scope: {
             groups: '=odGroups',
             site: '=odSite',
-            siteType: "=odSiteType"
         },
         templateUrl: 'app/src/odSite/siteMembers/siteMembers.view.html',
         controller: 'SiteMemberController',

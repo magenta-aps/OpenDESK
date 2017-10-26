@@ -26,8 +26,7 @@
     <div layout="column" flex-gt-md="25">
         <div ng-if="vm.project.type != vm.strings.templateProject">
             <div ng-include="'app/src/odSite/siteDetail/siteInfo.view.html'"></div>
-            <div ng-include="'app/src/odSite/siteDetail/siteMembers.view.html'"></div>
-            <!-- <od-site-members od-groups="vm.groups" od-site-type="vm.site.type"></od-site-members> -->
+            <od-site-members od-groups="vm.groups" od-site="vm.site"></od-site-members>
         </div>
     </div>
 </div>

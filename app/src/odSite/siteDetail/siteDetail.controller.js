@@ -15,9 +15,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     
     vm.cancelDialog = cancelDialog;
     vm.currentUser = authService.getUserInfo().user;
-    vm.doPDF = doPDF;
     vm.editSiteDialog = editSiteDialog;
-    vm.editSiteGroups = editSiteGroups;
     vm.getAutoSuggestions = getAutoSuggestions;
     vm.getSearchResults = getSearchResults;
     vm.gotoPath = gotoPath;
@@ -25,7 +23,6 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     vm.hasDescription = false;
     vm.newFileName = '';
     vm.newTemplateName = '';
-    vm.openMemberInfo = groupService.openMemberInfo;
     vm.openMenu = openMenu;
     vm.path = $stateParams.path === undefined ? '' : $stateParams.path;
     vm.permissions = {};
@@ -86,25 +83,6 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     function openMenu($mdOpenMenu, event) {
         $mdOpenMenu(event);
     }
-    
-    function openMemberInfo(member, event) {
-        var avatar = sessionService.makeAvatarUrl(member);
-        $mdDialog.show({
-            controller: ['$scope', 'member', function ($scope, member) {
-                $scope.member = member;
-                $scope.avatar = avatar;
-            }],
-            templateUrl: 'app/src/odSite/siteDetail/memberInfo.view.html',
-            locals: {
-                member: member
-            },
-            parent: angular.element(document.body),
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
 
     function loadMembers() {
         siteService.getGroupsAndMembers().then(function (groups) {
@@ -139,31 +117,10 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
         });
     }
 
-    //marked
-    function doPDF() {
-        siteService.createMembersPDF(vm.site.shortName).then(function (response) {
-            alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
-        });
-    }
-
     function editSiteDialog(ev) {
         $mdDialog.show({
             templateUrl: 'app/src/sites/view/editSite.tmpl.html',
             controller: 'SiteEditController',
-            controllerAs: 'vm',
-            locals: {
-                sitedata: vm.site
-            },
-            targetEvent: ev,
-            clickOutsideToClose: true
-        });
-    }
-
-    //marked
-    function editSiteGroups(ev) {
-        $mdDialog.show({
-            templateUrl: 'app/src/odSite/editMembers/editMembers.tmpl.html',
-            controller: 'EditSiteMemberController',
             controllerAs: 'vm',
             locals: {
                 sitedata: vm.site
