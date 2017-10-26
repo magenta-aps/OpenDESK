@@ -1,8 +1,8 @@
-<div layout="column" layout-gt-md="row" class="od-projects" ng-show="vm.permissions.isMember || vm.project.visibility == 'PUBLIC'">
+<div layout="column" layout-gt-md="row" class="od-projects" ng-show="vm.permissions.isMember || vm.site.visibility == 'PUBLIC'">
     <div layout="column" flex-gt-md="75">
         <md-card>
             <md-card-content>
-                <md-tabs md-selected="tab.selected" md-dynamic-height md-border-bottom flex-gt-sm="vm.project.type != vm.strings.templateProject ? 75 : 100">
+                <md-tabs md-selected="tab.selected" md-dynamic-height md-border-bottom flex-gt-sm="vm.site.type != vm.strings.templateProject ? 75 : 100">
                     <md-tab ui-sref="project.filebrowser({ path: '' })">
                         <md-tab-label>
                             <md-icon>library_books</md-icon> {{'DOCUMENT.DOCUMENTS' | translate}}
@@ -24,13 +24,13 @@
         </md-card>
     </div>
     <div layout="column" flex-gt-md="25">
-        <div ng-if="vm.project.type != vm.strings.templateProject">
+        <div ng-if="vm.site.type != vm.strings.templateProject">
             <div ng-include="'app/src/odSite/siteDetail/siteInfo.view.html'"></div>
             <od-site-members od-groups="vm.groups" od-site="vm.site"></od-site-members>
         </div>
     </div>
 </div>
-<div class="od-projects" ng-if="vm.permissions.isMember != null && !vm.permissions.isMember && vm.project.visibility == 'PRIVATE'">
-    <span ng-if="vm.project.type == 'PD-Project'">{{'PROJECT.NO_ACCESS_PROJECT' | translate}}</span>
-    <span ng-if="vm.project.type == 'Project'">{{'PROJECT.NO_ACCESS_GROUPROOM' | translate}}</span>
+<div class="od-projects" ng-if="vm.permissions.isMember != null && !vm.permissions.isMember && vm.site.visibility == 'PRIVATE'">
+    <span ng-if="vm.site.type == 'PD-Project'">{{'PROJECT.NO_ACCESS_PROJECT' | translate}}</span>
+    <span ng-if="vm.site.type == 'Project'">{{'PROJECT.NO_ACCESS_GROUPROOM' | translate}}</span>
 </div>
