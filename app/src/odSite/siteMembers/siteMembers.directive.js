@@ -7,7 +7,6 @@ angular
         restrict: 'E',
         scope: {
             groups: '=odGroups',
-            site: '=odSite',
         },
         templateUrl: 'app/src/odSite/siteMembers/siteMembers.view.html',
         controller: 'SiteMemberController',

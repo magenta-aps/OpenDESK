@@ -11,12 +11,13 @@ function SiteMemberController($scope, $stateParams, $mdDialog, siteService, grou
     vm.openMemberInfo = groupService.openMemberInfo;
     vm.loadMembers = loadMembers;
     vm.editSiteGroups = editSiteGroups;
-    vm.site = $scope.site;
+    vm.site = {};
     vm.permissions = {};
 
     activate();
 
     function activate() {
+        vm.site = siteService.getSite();
         getSiteUserPermissions();
     }
 
