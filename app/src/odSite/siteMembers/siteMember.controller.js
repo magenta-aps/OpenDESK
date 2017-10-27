@@ -20,7 +20,12 @@ function SiteMemberController($scope, $stateParams, $mdDialog, siteService, grou
 
     $scope.$watch('siteService.getSite()', function (site) {
         vm.site = site;
+        loadMembers();
     });
+
+    $scope.$on('updateMemberList', function() {
+        loadMembers();
+    });   
 
     function activate() {
         getSiteUserPermissions();
@@ -41,7 +46,7 @@ function SiteMemberController($scope, $stateParams, $mdDialog, siteService, grou
     }
 
     function loadMembers() {
-        siteService.getGroupsAndMembers().then(function (groups) {
+        siteService.getGroupsAndMembers(vm.site.shortName).then(function (groups) {
             vm.groups = groups;
         });
     }

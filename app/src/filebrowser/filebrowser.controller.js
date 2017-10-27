@@ -78,10 +78,8 @@ angular
 
     function activate() {
         if ($scope.isSite) {
-            $scope.tab.selected = $stateParams.selectedTab;
-            $scope.$watch('siteService.getSite()', function (newVal) {
-                $scope.site = newVal;
-            });
+            // vm.tab.selected = $stateParams.selectedTab;
+            
             $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
                 $scope.userManagedProjects = newVal;
             });

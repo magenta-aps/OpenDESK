@@ -81,8 +81,7 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
             return response.data;
         },
         function (error) {
-            console.log("Error retrieving list of all managers.");
-            console.log(error);
+            return error;
         });
     }
 
@@ -465,10 +464,10 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         return userManagedProjects;
     }
 
-    function getGroupsAndMembers () {
+    function getGroupsAndMembers (siteShortName) {
         return $http.post("/alfresco/service/groups", {
             PARAM_METHOD: "getGroupsAndMembers",
-            PARAM_SITE_SHORT_NAME: site.shortName,
+            PARAM_SITE_SHORT_NAME: siteShortName,
             PARAM_GROUP_TYPE: "USER"
         }).then(function (response) {
             groups = response.data;

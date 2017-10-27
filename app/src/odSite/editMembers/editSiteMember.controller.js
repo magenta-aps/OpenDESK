@@ -24,7 +24,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
     activate();
 
     function activate() {
-        siteService.getGroupsAndMembers().then(function (groups) {
+        siteService.getGroupsAndMembers(vm.site.shortName).then(function (groups) {
             vm.groups = groups;
         });
     }
