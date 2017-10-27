@@ -14,10 +14,15 @@ function SiteMemberController($scope, $stateParams, $mdDialog, siteService, grou
     vm.site = {};
     vm.permissions = {};
 
+    $scope.siteService = siteService;
+
     activate();
 
+    $scope.$watch('siteService.getSite()', function (site) {
+        vm.site = site;
+    });
+
     function activate() {
-        vm.site = siteService.getSite();
         getSiteUserPermissions();
     }
 

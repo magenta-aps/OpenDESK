@@ -14,7 +14,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
     vm.cancelDialog = cancelDialog;
 
-    $scope.newSite = {
+    vm.newSite = {
         isPrivate: false,
         manager: currentUser,
         presetManager: currentUser
@@ -92,40 +92,31 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
     function loadSiteGroups() {
         siteService.getSiteGroups(vm.type).then(function (response) {
-            $scope.newSite.groups = response;
+            vm.newSite.groups = response;
         });
     }
 
     function createPdSite() {
         $scope.creating = true;
-        if ($scope.newSite.template === undefined || $scope.newSite.template == "no-template") {
-            $scope.newSite.template = {
+        if (vm.newSite.template === undefined || vm.newSite.template == "no-template") {
+            vm.newSite.template = {
                 "name": ""
             };
         }
 
-        var visibility = $scope.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
+        vm.newSite.visibility = vm.newSite.isPrivate ? 'PRIVATE' : 'PUBLIC';
 
-        siteService.createPDSite(
-            $scope.newSite.siteName,
-            $scope.newSite.desc,
-            $scope.newSite.sbsys,
-            $scope.newSite.center_id,
-            $scope.newSite.owner.userName,
-            $scope.newSite.manager.userName,
-            visibility,
-            $scope.newSite.template.name
-        ).then(
+        siteService.createPDSite(vm.newSite).then(
             function (response) {
 
                 var siteShortName = response.data[0].shortName;
-                var siteName = $scope.newSite.siteName;
+                var siteName = vm.newSite.siteName;
                 var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
 
-                createSiteNotification(siteName, $scope.newSite.owner.userName, link);
-                createSiteNotification(siteName, $scope.newSite.manager.userName, link);
+                createSiteNotification(siteName, vm.newSite.owner.userName, link);
+                createSiteNotification(siteName, vm.newSite.manager.userName, link);
 
-                angular.forEach($scope.newSite.groups, function (group) {
+                angular.forEach(vm.newSite.groups, function (group) {
                     if (group.multipleMembers)
                         addUserToGroup(siteShortName, siteName, group.members, group.shortName, link);
                 });
@@ -136,7 +127,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
                 });
                 $mdToast.show(
                     $mdToast.simple()
-                    .textContent('Du har oprettet projekt: ' + $translate.instant('SITES.' + vm.type + '.NAME').toLowerCase() + ' med navnet ' + $scope.newSite.siteName)
+                    .textContent('Du har oprettet projekt: ' + $translate.instant('SITES.' + vm.type + '.NAME').toLowerCase() + ' med navnet ' + vm.newSite.siteName)
                     .hideDelay(3000)
                 );
                 $scope.creating = false;
@@ -151,17 +142,17 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
     function createSite() {
         $scope.creating = true;
         var visibility = "PUBLIC"; // Visibility is set to public
-        if ($scope.newSite.isPrivate) {
+        if (vm.newSite.isPrivate) {
             visibility = "PRIVATE";
         }
 
-        siteService.createSite($scope.newSite.siteName, $scope.newSite.desc, visibility).then(function (response) {
+        siteService.createSite(vm.newSite.siteName, vm.newSite.desc, visibility).then(function (response) {
 
             var siteShortName = response[0].shortName;
-            var siteName = $scope.newSite.siteName;
+            var siteName = vm.newSite.siteName;
             var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
 
-            angular.forEach($scope.newSite.groups, function (group) {
+            angular.forEach(vm.newSite.groups, function (group) {
                 if (group.multipleMembers)
                     addUserToGroup(siteShortName, siteName, group.members, group.shortName, link);
             });
@@ -171,7 +162,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
             });
             $mdToast.show(
                 $mdToast.simple()
-                .textContent('Du har oprettet et nyt ' + $translate.instant('SITES.' + vm.type + '.NAME').toLowerCase() + ' med navnet ' + $scope.newSite.siteName)
+                .textContent('Du har oprettet et nyt ' + $translate.instant('SITES.' + vm.type + '.NAME').toLowerCase() + ' med navnet ' + vm.newSite.siteName)
                 .hideDelay(3000)
             );
             $scope.creating = false;
