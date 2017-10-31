@@ -4,27 +4,29 @@ angular
     .module('openDeskApp.filebrowser', ['ngFileUpload'])
     .controller('FilebrowserController', FilebrowserController);
     
-    function FilebrowserController($state, $stateParams, $scope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
+    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
         filebrowserService, filterService, alfrescoDownloadService, documentPreviewService, documentService, 
         alfrescoNodeUtils, $translate, APP_BACKEND_CONFIG) {
             
         var vm = this;
         var documentNodeRef = "";
         var folderNodeRef = "";
-        var folderUUID = "";
+        var sendAllToSbsys = false;
         
         vm.cancelDialog = cancelDialog;
-        vm.createFolder = createFolder;
         vm.cancelSbsysDialog = cancelSbsysDialog;
-        vm.createContentFromTemplateDialog = createContentFromTemplateDialog;
-        vm.createContentFromTemplate = createContentFromTemplate;
+        vm.contentList = [];
+        vm.contentListLength = 0;
         vm.deleteContentDialog = deleteContentDialog;
         vm.createProjectLink = createProjectLink;
         vm.deleteFile = deleteFile;
         vm.deleteLink = deleteLink;
+        vm.documentTemplates = {};
         vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
+        vm.error = false;
         vm.folderTemplates = {};
         vm.getLink = getLink;
+        vm.isLoading = true;
         vm.loadCheckboxes = loadCheckboxes;
         vm.loadFromSbsys = loadFromSbsys;
         vm.loadHistory = loadHistory;
@@ -42,22 +44,15 @@ angular
         vm.uploadNewVersionDialog = uploadNewVersionDialog;
         vm.uploadSbsys = uploadSbsys;
         vm.uploadSbsysDialog = uploadSbsysDialog;
+        vm.sendToSbsys = false;
+
         
     $scope.isSite = $stateParams.isSite;
 
     $scope.siteService = siteService;
-    $scope.contentList = [];
-    $scope.contentListLength = 0;
-    $scope.isLoading = true;
     $scope.history = [];
-    $scope.documentTemplates = {};
-    // $scope.newContentName = "";
-    $scope.primitives = {};
-    $scope.primitives.sendToSbsys = false;
-    $scope.primitives.sendAllToSbsys = false;
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
-    $scope.error = false;
 
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
@@ -68,6 +63,10 @@ angular
 
     $scope.filesToFilebrowser = null;
 
+    $scope.$on('updateFilebrowser', function() {
+        activate();
+    });   
+
     $scope.$watch('filesToFilebrowser', function () {
         if ($scope.filesToFilebrowser !== null) {
             $scope.files = $scope.filesToFilebrowser;
@@ -75,24 +74,21 @@ angular
         }
     });
 
-    if ($scope.isSite) {
-        $scope.tab.selected = $stateParams.selectedTab;
-        $scope.$watch('siteService.getSite()', function (newVal) {
-            $scope.site = newVal;
-        });
-        $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
-            $scope.userManagedProjects = newVal;
-        });
-        siteService.getNode($stateParams.projekt, "documentLibrary", $stateParams.path).then(function (val) {
-            setFolder(val.parent.nodeRef);
-        });
-    } else {
-        setFolderAndPermissions($stateParams.path);
-    }
-
     activate();
 
     function activate() {
+        if ($scope.isSite) {
+            // vm.tab.selected = $stateParams.selectedTab;
+            
+            $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
+                $scope.userManagedProjects = newVal;
+            });
+            siteService.getNode($stateParams.projekt, "documentLibrary", $stateParams.path).then(function (val) {
+                setFolder(val.parent.nodeRef);
+            });
+        } else {
+            setFolderAndPermissions($stateParams.path);
+        }
 
         if(vm.permissions === undefined) {
             siteService.getSiteUserPermissions($stateParams.projekt).then(function(permissions) {
@@ -100,17 +96,18 @@ angular
             });
         }
 
-        filebrowserService.getTemplates("Document").then(function (response) {
-            $scope.documentTemplates = response;
-            if ($scope.documentTemplates !== undefined)
-                processContent($scope.documentTemplates);
+        filebrowserService.getTemplates("Document").then(function (documentTemplates) {
+            vm.documentTemplates = documentTemplates;
+            if (vm.documentTemplates !== undefined)
+                processContent(vm.documentTemplates);
         });
 
-        filebrowserService.getTemplates("Folder").then(function (response) {
-            vm.folderTemplates = response;
+        filebrowserService.getTemplates("Folder").then(function (folderTemplates) {
+            vm.folderTemplates = folderTemplates;
             vm.folderTemplates.unshift({
                 nodeRef: null,
-                name: $translate.instant('COMMON.EMPTY') + " " + $translate.instant('COMMON.FOLDER')
+                name: $translate.instant('COMMON.EMPTY') + " " + $translate.instant('COMMON.FOLDER'),
+                isFolder: true
             });
         });
     }
@@ -124,42 +121,41 @@ angular
                     vm.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit;
                 },
                 function (error) {
-                    $scope.isLoading = false;
-                    $scope.error = true;
+                    vm.isLoading = false;
+                    vm.error = true;
                 }
             );
         });
     }
 
     function setFolder(fNodeRef) {
+        filebrowserService.setCurrentFolder(fNodeRef);
         folderNodeRef = fNodeRef;
-        folderUUID = alfrescoNodeUtils.processNodeRef(folderNodeRef).id;
-        loadContentList();
+        var folder = alfrescoNodeUtils.processNodeRef(folderNodeRef).id;
+        loadContentList(folder);
     }
 
-    function loadContentList() {
-        filebrowserService.getContentList(folderUUID).then(
-            function (response) {
-                $scope.contentList = response;
-                $scope.contentList.forEach(function (contentTypeList) {
-                    $scope.contentListLength += contentTypeList.length;
+    function loadContentList(folderUUID) {
+        filebrowserService.getContentList(folderUUID).then(function (contentList) {
+                vm.contentList = contentList;
+
+                angular.forEach(vm.contentList, function(contentTypeList) {
+                    vm.contentListLength += contentTypeList.length;
                     processContent(contentTypeList);
                 });
-
                 // Compile paths for breadcrumb directive
-                $scope.paths = buildBreadCrumbPath();
-
-                $scope.isLoading = false;
+                vm.paths = buildBreadCrumbPath();
+                vm.isLoading = false;
             },
             function (error) {
-                $scope.isLoading = false;
-                $scope.error = true;
+                vm.isLoading = false;
+                vm.error = true;
             }
         );
     }
 
     function processContent(content) {
-        content.forEach(function (item) {
+        angular.forEach(content, function(item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
             item.loolEditable = documentService.isLoolEditable(item.mimeType);
             item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
@@ -190,6 +186,7 @@ angular
 
     function buildBreadCrumbPath() {
         var homeLink;
+
         if ($scope.isSite)
             homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})';
         else
@@ -231,7 +228,7 @@ angular
 
     function hideDialogAndReloadContent() {
         vm.uploading = false;
-        loadContentList();
+        $rootScope.$broadcast('updateFilebrowser');
         cancelDialog();
     }
 
@@ -316,7 +313,6 @@ angular
     function uploadNewVersion(file) {
         vm.uploading = true;
         siteService.uploadNewVersion(file, folderNodeRef, documentNodeRef).then(function (val) {
-            vm.uploading = false;
             hideDialogAndReloadContent();
         });
     }
@@ -362,52 +358,6 @@ angular
 
     function deleteLink(source, destination) {
         siteService.deleteLink(source, destination).then(function () {
-            hideDialogAndReloadContent();
-        });
-    }
-
-    // Templates
-
-    function createContentFromTemplateDialog(event, template, contentType) {
-        $scope.template = template;
-        // $scope.newContentName = template.name;
-
-        if (template.nodeRef === null) {
-            $mdDialog.show({
-                templateUrl: 'app/src/filebrowser/view/content/folder/newFolder.tmpl.html',
-                targetEvent: event,
-                scope: $scope,
-                preserveScope: true,
-                clickOutsideToClose: true
-            });
-        } else {
-            $scope.contentType = contentType;
-            $mdDialog.show({
-                templateUrl: 'app/src/filebrowser/view/content/createContentFromTemplateDialog.tmpl.html',
-                targetEvent: event,
-                scope: $scope,
-                preserveScope: true,
-                clickOutsideToClose: true
-            });
-        }
-    }
-    
-    function createFolder(folderName) {
-        var props = {
-            prop_cm_name: folderName,
-            prop_cm_title: folderName,
-            alf_destination: folderNodeRef
-        };
-        siteService.createFolder("cm:folder", props).then(function (response) {
-            hideDialogAndReloadContent();
-        });
-    }
-    
-    function createContentFromTemplate(template_name, template_id) {
-        filebrowserService.createContentFromTemplate(template_id, folderNodeRef, template_name).then(function (response) {
-            if ($scope.isSite) {
-                siteService.createDocumentNotification(response.data[0].nodeRef, response.data[0].fileName);
-            }
             hideDialogAndReloadContent();
         });
     }
@@ -476,21 +426,21 @@ angular
     }
     
     function loadCheckboxes() {
-        $scope.primitives.sendToSbsys = false;
-        $scope.contentList.forEach(function (contentTypeList) {
+        vm.sendToSbsys = false;
+        vm.contentList.forEach(function (contentTypeList) {
             contentTypeList.forEach(function (content) {
-                $scope.primitives.sendToSbsys = $scope.primitives.sendToSbsys | content.sendToSbsys;
+                vm.sendToSbsys = vm.sendToSbsys | content.sendToSbsys;
             });
         });
     }
     
     function setAllCheckboxes() {
-        $scope.contentList.forEach(function (contentTypeList) {
+        vm.contentList.forEach(function (contentTypeList) {
             contentTypeList.forEach(function (content) {
-                content.sendToSbsys = $scope.primitives.sendAllToSbsys;
+                content.sendToSbsys = sendAllToSbsys;
             });
         });
-        $scope.primitives.sendToSbsys = $scope.primitives.sendAllToSbsys;
+        vm.sendToSbsys = sendAllToSbsys;
     }
 
     function setSbsysShowAttr() {

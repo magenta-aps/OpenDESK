@@ -1,0 +1,41 @@
+<md-menu ng-if="hasPermission">
+    <md-button ng-click="$mdMenu.open($event)" class="md-icon-button md-primary" aria-label="{{'COMMON.CREATE' | translate}} {{'DOCUMENT' | translate | lowercase}}">
+        <md-icon>{{icon}}</md-icon>
+        <md-tooltip md-direction="top">{{label}}</md-tooltip>
+    </md-button>
+    <md-menu-content>
+        <md-menu-item ng-repeat="template in templates">
+            <md-button ng-if="!template.isFolder" ng-click="vm.createContentFromTemplateDialog(template, 'DOCUMENT')">
+                <i class="material-icons">
+                    <img class="md-avatar" ng-src="app/assets/img/filetypes/{{template.thumbNailURL}}" onerror="this.src='app/assets/img/filetypes/generic-file-24.png'">
+                </i> {{template.name}}
+            </md-button>
+
+            <md-button ng-if="template.isFolder && !nested" ng-click="vm.createContentFromTemplateDialog(template, 'FOLDER')">
+                <md-icon>folder</md-icon>
+                {{template.name}}
+            </md-button>
+
+            <md-button ng-if="template.isFolder && nested" ng-click="vm.showNestedTemplates(template)">
+                <md-icon>folder</md-icon>
+                {{template.name}}
+                <md-icon>arrow_right</md-icon>
+            </md-button>
+
+            <!-- <md-menu ng-if="template.isFolder">
+                    <md-button ng-click="vm.openTemplateFolder(template)">
+                        <md-icon>folder</md-icon>
+                        {{template.name}}
+                    </md-button>
+                    
+                    <md-menu-content>
+                        <md-menu-item><md-button ng-click="ctrl.sampleAction('New Document', $event)">Document</md-button></md-menu-item>
+                        <md-menu-item><md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">Spreadsheet</md-button></md-menu-item>
+                        <md-menu-item><md-button ng-click="ctrl.sampleAction('New Presentation', $event)">Presentation</md-button></md-menu-item>
+                        <md-menu-item><md-button ng-click="ctrl.sampleAction('New Form', $event)">Form</md-button></md-menu-item>
+                        <md-menu-item><md-button ng-click="ctrl.sampleAction('New Drawing', $event)">Drawing</md-button></md-menu-item>
+                    </md-menu-content>
+                </md-menu> -->
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>

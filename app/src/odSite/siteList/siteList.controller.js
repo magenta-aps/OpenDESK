@@ -25,7 +25,6 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 	vm.managerRole = 'Manager';
 	vm.openMenu = openMenu;
 	vm.organizationalCenters = [];
-	vm.reload = reload;
 	vm.renameSiteDialog = renameSiteDialog;
 	vm.searchMembers = [];
 	vm.showall = false;
@@ -142,10 +141,6 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 		$mdDialog.cancel();
 	}
 
-	function reload() {
-		$window.location.reload();
-	}
-	
 	function openMenu($mdOpenMenu, event) {
 		$mdOpenMenu(event);
 	}

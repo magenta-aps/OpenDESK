@@ -5,6 +5,7 @@ angular.module('openDeskApp.site').factory('siteService', SiteService);
 function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, notificationsService, authService,
                      systemSettingsService) {
 
+    var endpoint = '/alfresco/service/sites';
     var currentUser = authService.getUserInfo().user;
     var site = {};
     var groups = {};
@@ -31,15 +32,12 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         getSite: getSite,
         getTemplateNames: getTemplateNames,
         getSites: getSites,
-        getSitesByQuery: getSitesByQuery,
         getSitesPerUser: getSitesPerUser,
         loadSiteData: loadSiteData,
         updatePDSite: updatePDSite,
         updateSite: updateSite,
         removeMemberFromSite: removeMemberFromSite,
-        updateRoleOnSiteMember: updateRoleOnSiteMember,
         deleteSite: deleteSite,
-        createFolder: createFolder,
         deleteFile: deleteFile,
         uploadFiles: uploadFiles,
         uploadNewVersion: uploadNewVersion,
@@ -83,8 +81,7 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
             return response.data;
         },
         function (error) {
-            console.log("Error retrieving list of all managers.");
-            console.log(error);
+            return error;
         });
     }
 
@@ -143,15 +140,6 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         );
     }
 
-    function getSitesByQuery(query) {
-        return $http.post("/alfresco/service/sites", {
-            PARAM_METHOD: "getSitesPerUser",
-            PARAM_USERNAME: "query"
-        }).then(function (response) {
-            return response.data;
-        });
-    }
-
     function createSite(siteName, siteDescription, siteVisibility) {
         return $http.post('/alfresco/service/sites', {
             PARAM_METHOD: "createSite",
@@ -203,17 +191,18 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         });
     }
 
-    function createPDSite(siteName, description, sbsys, center_id, owner, manager, visibility, template) {
+    // function createPDSite(siteName, description, sbsys, center_id, owner, manager, visibility, template) {
+    function createPDSite(newSite) {
         return $http.post('/alfresco/service/projectdepartment', {
-            PARAM_NAME: siteName,
-            PARAM_DESCRIPTION: description,
-            PARAM_SBSYS: sbsys,
-            PARAM_OWNER: owner,
-            PARAM_MANAGER: manager,
-            PARAM_VISIBILITY: visibility,
-            PARAM_CENTERID: center_id,
+            PARAM_NAME: newSite.siteName,
+            PARAM_DESCRIPTION: newSite.description,
+            PARAM_SBSYS: newSite.sbsys,
+            PARAM_OWNER: newSite.owner.userName,
+            PARAM_MANAGER: newSite.manager.userName,
+            PARAM_VISIBILITY: newSite.visibility,
+            PARAM_CENTERID: newSite.center_id,
             PARAM_METHOD: "createPDSITE",
-            PARAM_TEMPLATE: template
+            PARAM_TEMPLATE: newSite.template.name
         }).then(function (response) {
             return response;
         });
@@ -260,30 +249,12 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
 
     }
 
-    function updateRoleOnSiteMember(siteName, member, newRole) {
-        return $http.put('/api/sites/' + siteName + '/memberships', {
-            role: newRole,
-            person: {
-                userName: member
-            }
-        }).then(function (response) {
-            return response.data;
-        });
-    }
-
     function deleteSite(siteName) {
         return $http.post("/alfresco/service/sites", {
             PARAM_METHOD: "deleteSite",
             PARAM_SITE_SHORT_NAME: siteName
         }).then(function (response) {
             return response.data;
-        });
-    }
-
-    function createFolder(type, props) {
-        return $http.post('/api/type/' + type + '/formprocessor', props).then(function (response) {
-            var nodeRef = response.data.persistedObject;
-            return nodeRef;
         });
     }
 
@@ -493,20 +464,10 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         return userManagedProjects;
     }
 
-    // function getGroupsAndMembers() {
-    //     return $http.post("/alfresco/service/groups", {
-    //         PARAM_METHOD: "getGroupsAndMembers",
-    //         PARAM_SITE_SHORT_NAME: site.shortName
-    //     }).then(function (response) {
-    //         groups = response.data;
-    //         return response.data;
-    //     });
-    // }
-
-    function getGroupsAndMembers () {
+    function getGroupsAndMembers (siteShortName) {
         return $http.post("/alfresco/service/groups", {
             PARAM_METHOD: "getGroupsAndMembers",
-            PARAM_SITE_SHORT_NAME: site.shortName,
+            PARAM_SITE_SHORT_NAME: siteShortName,
             PARAM_GROUP_TYPE: "USER"
         }).then(function (response) {
             groups = response.data;
