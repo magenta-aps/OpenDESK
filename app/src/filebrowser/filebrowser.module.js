@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('openDeskApp.filebrowser', ['ngMaterial']);
+angular.module('openDeskApp.filebrowser', ['ngMaterial','ngFileUpload']);

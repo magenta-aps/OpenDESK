@@ -6,7 +6,7 @@ angular
     return {
         restrict: 'E',
         scope: {},
-        templateUrl: 'app/src/filebrowser//view/filebrowser.html',
+        templateUrl: 'app/src/filebrowser/view/filebrowser.html',
         controller: 'FilebrowserController',
         controllerAs: 'vm'
     };

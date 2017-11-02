@@ -20,7 +20,7 @@ var environment = {
     },
     local: {
         chat: 'http://demo.opendesk.dk:5280/http-bind',
-        repo: 'http://localhost:8080',
+        repo: 'http://localgost:8080',
         share: 'http://localhost:8081'
     },
     staging: {

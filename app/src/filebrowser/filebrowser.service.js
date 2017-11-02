@@ -8,6 +8,7 @@ function fileBrowserService($http) {
     var currentFolderNodeRef;
 
     var service = {
+        genericContentAction: genericContentAction,
         getCompanyHome: getCompanyHome,
         getContentList: getContentList,
         getCurrentFolderNodeRef: getCurrentFolderNodeRef,
@@ -101,6 +102,16 @@ function fileBrowserService($http) {
             }).then(function (response) {
                 return response.data;
             });
+        });
+    }
+
+    function genericContentAction(action, sourceNodeRefs, destinationNodeRef, parentNodeRef) {
+        return $http.post('/slingshot/doclib/action/' + action + '-to/node/' +
+            alfrescoNodeUtils.processNodeRef(destinationNodeRef).uri, {
+            nodeRefs: sourceNodeRefs,
+            parentId: parentNodeRef
+        }).then(function (response) {
+            return response;
         });
     }
 

@@ -1,0 +1,25 @@
+<md-dialog aria-label="Content Picker" ng-cloak>
+    <form name="genericContentDialog" ng-submit="vm.dialogResponse()">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.' + vm.data.contentAction | translate}}</h2>
+                <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                <md-icon>close</md-icon>
+            </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding">
+            <node-picker root="vm.data.parentNodeRef" model="vm.destinationNodeRef"></node-picker>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button ng-disabled="!vm.destinationNodeRef" type="submit" class="md-primary">
+                {{'COMMON.' + vm.data.contentAction | translate}}
+            </md-button>
+        </md-dialog-actions>
+
+    </form>
+</md-dialog>

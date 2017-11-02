@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('openDeskApp.filebrowser', ['ngFileUpload'])
+    .module('openDeskApp.filebrowser')
     .controller('FilebrowserController', FilebrowserController);
     
     function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
@@ -336,6 +336,43 @@ angular
         };
         siteService.updateNode(documentNodeRef, props).then(function (val) {
             hideDialogAndReloadContent();
+        });
+    }
+
+    // We tried to have genericContentDialog inside the scope, but after having shown the dialog once the method was
+    // missing from the scope.
+    $scope.moveContentDialog = moveContentDialog;
+    $scope.copyContentDialog = copyContentDialog;
+    
+    function moveContentDialog(event, sourceNodeRef, parentNodeRef) {
+        genericContentDialog("MOVE", sourceNodeRef, parentNodeRef);
+    }
+
+    function copyContentDialog(event, sourceNodeRef, parentNodeRef) {
+        genericContentDialog("COPY", sourceNodeRef, parentNodeRef);
+    }
+
+    function genericContentDialog (action, sourceNodeRef, parentNodeRef) {
+        var sourceNodeRefs = [];
+        sourceNodeRefs.push(sourceNodeRef);
+
+        var data = {
+            parentNodeRef: parentNodeRef,
+            contentAction: action,
+            sourceNodeRefs: sourceNodeRefs
+        };
+
+        $mdDialog.show({
+            templateUrl: 'app/src/filebrowser/genericDialog/genericContentDialog.view.html',
+            controller: 'GenericContentDialogController',
+            controllerAs: 'vm',
+            locals: {
+                data: data
+            },
+            // targetEvent: event,
+            // scope: $scope,
+            // preserveScope: true,
+            clickOutsideToClose: true
         });
     }
     
