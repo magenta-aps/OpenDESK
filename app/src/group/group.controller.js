@@ -1,3 +1,5 @@
+'use strict';
+
 angular
     .module('openDeskApp.group')
     .controller('GroupController', GroupController);
@@ -19,7 +21,7 @@ function GroupController($mdDialog, $mdToast, $translate, group, groupService, u
     }
 
     function updateMembers() {
-        this.cancelDialog();
+        cancelDialog();
         $translate('MEMBER.MEMBERS_UPDATED').then(function (msg) {
             $mdToast.show(
                 $mdToast.simple()
@@ -41,7 +43,7 @@ function GroupController($mdDialog, $mdToast, $translate, group, groupService, u
     }
 
     function addMember(member, groupName) {
-        var shortName = this.getMemberShortName(member);
+        var shortName = getMemberShortName(member);
         groupService.addMember(shortName, groupName).then(function () {
             member.avatar = sessionService.makeAvatarUrl(member);
             vm.groups.push(member);
@@ -49,7 +51,7 @@ function GroupController($mdDialog, $mdToast, $translate, group, groupService, u
     }
 
     function removeMember(member, groupName) {
-        var shortName = this.getMemberShortName(member);
+        var shortName = getMemberShortName(member);
         groupService.removeMember(shortName, groupName);
     }
 
