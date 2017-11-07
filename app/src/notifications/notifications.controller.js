@@ -27,6 +27,7 @@ function activate() {
 
 function close() {
     $mdSidenav('notifications').close();
+    setAllSeen();
 }
 
 function setRead(noticeObj) {
