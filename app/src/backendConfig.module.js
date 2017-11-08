@@ -2,6 +2,7 @@ angular
     .module('openDeskApp.backendConfig', [])
     .constant('APP_BACKEND_CONFIG', {
         enableProjects: false,
+        enableSites: true,
         enableESDH: false,
         enableChat: false,
         dashboardLinks: {
