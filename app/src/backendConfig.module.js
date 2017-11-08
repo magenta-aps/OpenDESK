@@ -8,7 +8,7 @@ angular
         dashboardLinks: {
             calendar:"",
             keyNumbers:"",
-            projects:"#!/projekter",
+            projects:"/projekter",
             intra:"",
             workTime:"",
             esdh:"",

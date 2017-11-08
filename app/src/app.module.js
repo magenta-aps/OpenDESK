@@ -69,7 +69,10 @@ angular
         });
     });
 
-function config($stateProvider, $urlRouterProvider, APP_CONFIG, USER_ROLES) {
+function config($stateProvider, $urlRouterProvider, $locationProvider, APP_CONFIG, USER_ROLES) {
+
+    // use the HTML5 History API
+    $locationProvider.html5Mode(true).hashPrefix('!');
 
     $urlRouterProvider.when('', '/' + APP_CONFIG.landingPageUrl);
 
