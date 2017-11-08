@@ -23,11 +23,11 @@ activate();
 function activate() {
     updateNotifications();
     notificationsService.startUpdate(updateNotifications);
+    setAllSeen();
 }
 
 function close() {
     $mdSidenav('notifications').close();
-    setAllSeen();
 }
 
 function setRead(noticeObj) {
