@@ -5,7 +5,7 @@ angular
     .controller('NotificationsController', NotificationsController);
 
 
-function NotificationsController($scope, $mdToast, $mdSidenav, notificationsService, sessionService) {
+function NotificationsController($mdSidenav, notificationsService, sessionService) {
 
 var vm = this;
 
@@ -16,14 +16,12 @@ vm.notifications = [];
 vm.close = close;
 vm.setRead = setRead;
 vm.setSeen = setSeen;
-vm.setAllSeen = setAllSeen;
 
 activate();
 
 function activate() {
     updateNotifications();
     notificationsService.startUpdate(updateNotifications);
-    setAllSeen();
 }
 
 function close() {
@@ -38,12 +36,6 @@ function setRead(noticeObj) {
 
 function setSeen(noticeObj) {
     notificationsService.setSeenNotice(currentUser, noticeObj).then(function (val) {
-        updateNotifications();
-    });
-}
-
-function setAllSeen() {
-    notificationsService.setAllSeen(currentUser).then(function (val) {
         updateNotifications();
     });
 }
