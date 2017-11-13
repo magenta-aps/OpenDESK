@@ -2,7 +2,6 @@
     <md-card flex="grow">
         <md-card-content>
             <h2 class="od-title-icon"><i class="material-icons">settings</i>Konfiguration</h2>
-
             <md-list>
                 <md-list-item ng-repeat="(key, value) in vm.config.public">
                     <p>{{'CONFIGURATION.public.' + key | translate}}</p>
@@ -13,8 +12,7 @@
                 <md-list-item ng-repeat="(key, value) in vm.config" ng-if="!isObject(value)">
                     <p>{{'CONFIGURATION.' + key | translate}}</p>
                     <md-input-container>
-                        <md-switch ng-if="isBoolean(value)" class="md-secondary" ng-model="config[key]"></md-switch>
-                        <input ng-if="isString(value)" class="md-secondary" ng-model="vm.config[key]" title="value">
+                        <md-switch ng-if="isBoolean(value)" class="md-secondary" ng-model="vm.config[key]"></md-switch>
                     </md-input-container>
                 </md-list-item>
                 <md-list-item ng-repeat="(key, value) in vm.config.dashboardLinks">

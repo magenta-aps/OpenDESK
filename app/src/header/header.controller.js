@@ -9,7 +9,10 @@ function HeaderController($scope, $state, $mdSidenav, headerService, authService
 
     vm.title = '';
     vm.toggleAppDrawer = buildToggler('appDrawer');
-    vm.toggleNotifications = buildToggler('notifications');
+    vm.toggleNotifications = function() {
+        setAllSeen();
+        $mdSidenav('notifications').toggle();
+    };
     vm.toggleSystemSettings = toggleSystemSettings;
     vm.toggleUserPanel = buildToggler('userpanel');
     vm.unseenNotifications = 0;
@@ -34,5 +37,16 @@ function HeaderController($scope, $state, $mdSidenav, headerService, authService
         return function () {
             $mdSidenav(navID).toggle();
         };
+    }
+
+    function setAllSeen() {
+        notificationsService.setAllSeen(vm.user.userName).then(function (val) {
+            updateNotifications();
+        });
+    }
+
+    function updateNotifications() {
+        notificationsService.getNotifications(vm.user.userName).then(function (notifications) {
+        });
     }
 }
