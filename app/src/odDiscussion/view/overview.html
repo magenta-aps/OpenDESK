@@ -1,10 +1,10 @@
 <breadcrumb paths=""></breadcrumb>
 
-<div ng-if="dc.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
+<div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
     <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
 
-<md-list class="sort-head" ng-show="dc.discussions.length > 0">
+<md-list class="sort-head" ng-show="vm.discussions.length > 0">
     <table class="od-members od-members-row">
         <col style="width:32px">
         <col style="width:40%">
@@ -13,7 +13,7 @@
 		<col style="width:5%">
         <col style="width:32px">
         <col style="width:32px">
-        <thead ng-show="dc.discussions.length > 0" fix-head>
+        <thead ng-show="vm.discussions.length > 0" fix-head>
             <tr>
                 <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'DISCUSSIONS.TITLE' | translate}}</th>
                 <th class="od-secondary" sort-table="created" title="Sortér kolonne">{{'DISCUSSIONS.CREATED_AT' | translate}}</th>
@@ -22,22 +22,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="discussion in dc.discussions | orderBy: '-lastReplyOn' 
-                        | filter:{isSubscribed: dc.searchSubscribed, author: {username: dc.searchUser}}">
+            <tr ng-repeat="discussion in vm.discussions | orderBy: '-lastReplyOn' 
+                        | filter:{isSubscribed: vm.searchSubscribed, author: {username: vm.searchUser}}">
                 <td class="icon">
                     <i class="material-icons">chat_bubble_outline</i>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary overflow" ng-href="{{dc.viewThread(discussion)}}" ng-click="dc.getReplies(discussion)">
+                    <a class="od-filebrowser-link od-secondary overflow" ng-href="{{vm.viewThread(discussion)}}" ng-click="vm.getReplies(discussion)">
                         <h3>{{discussion.title}}</h3>
                         <span>{{discussion.author.firstName}} {{discussion.author.lastName}}</span>
                     </a>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary" ng-href="{{dc.viewThread(discussion)}}">{{discussion.createdOn | customDate}}</a>
+                    <a class="od-filebrowser-link od-secondary" ng-href="{{vm.viewThread(discussion)}}">{{discussion.createdOn | customDate}}</a>
                 </td>
                 <td>
-                    <a ng-if="discussion.lastReplyBy" class="od-filebrowser-link od-secondary" ng-href="{{dc.viewThread(discussion)}}">
+                    <a ng-if="discussion.lastReplyBy" class="od-filebrowser-link od-secondary" ng-href="{{vm.viewThread(discussion)}}">
                                 {{discussion.lastReplyOn | customDate}} af {{discussion.lastReplyBy.firstName}} {{discussion.lastReplyBy.lastName}}
                             </a>
                 </td>
@@ -45,7 +45,7 @@
                     <a class="od-filebrowser-link od-secondary" ng-href="">{{discussion.totalReplyCount}}</a>
                 </td>
                 <td>
-                    <i ng-click='dc.changeSubscription(discussion)' class="clickable material-icons od-secondary" style="outline:0;">{{dc.subscriptionIcon(discussion.isSubscribed)}}</i>
+                    <i ng-click='vm.changeSubscription(discussion)' class="clickable material-icons od-secondary" style="outline:0;">{{vm.subscriptionIcon(discussion.isSubscribed)}}</i>
                 </td>
                 <td>
                     <md-menu ng-if="discussion.permissions.delete">
@@ -55,13 +55,13 @@
 
                         <md-menu-content width="3">
                             <md-menu-item>
-                                <md-button ng-click="dc.deleteDiscussion(discussion)">
+                                <md-button ng-click="vm.deleteDiscussion(discussion)">
                                     <md-icon md-menu-align-target>delete</md-icon>
                                     {{'COMMON.DELETE' | translate }}
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="dc.editTitleDialog(discussion)">
+                                <md-button ng-click="vm.editTitleDialog(discussion)">
                                     <md-icon md-menu-align-target>edit</md-icon>
                                     {{'COMMON.EDIT' | translate}} {{'DISCUSSIONS.TITLE' | translate | lowercase}}
                                 </md-button>
@@ -74,7 +74,7 @@
     </table>
 </md-list>
 
-<div layout="column" ng-show="dc.discussions.length === 0">
+<div layout="column" ng-show="vm.discussions.length === 0">
     <md-icon class="md-icon--large">chat_bubble_outline</md-icon>
     <p class="md-display-1" style="text-align:center">{{'DISCUSSIONS.NO_DISCUSSIONS' | translate}}</p>
 </div>
@@ -84,7 +84,7 @@
 <md-card-actions layout="row" layout-align="start center">
 
     <md-input-container>
-        <md-select name="type" ng-model="dc.search" md-on-close='dc.evaluateFilter()'>
+        <md-select name="type" ng-model="vm.search" md-on-close='vm.evaluateFilter()'>
             <md-option ng-selected="true" value="all">{{'DISCUSSIONS.SORT.ALL' | translate}}</md-option>
             <md-option value="mine">{{'DISCUSSIONS.SORT.MINE' | translate}}</md-option>
             <md-option value="follow">{{'DISCUSSIONS.SORT.FOLLOW' | translate}}</md-option>
@@ -93,7 +93,7 @@
 
     <span flex></span>
 
-    <md-button ng-click="dc.newDiscussionDialog()" class="md-primary" aria-label="ny diskussion">
+    <md-button ng-click="vm.newDiscussionDialog()" class="md-primary" aria-label="ny diskussion">
         <span>{{'DISCUSSIONS.NEW' | translate}}</span>
     </md-button>
 </md-card-actions>

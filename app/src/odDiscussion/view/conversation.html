@@ -1,36 +1,36 @@
 
-<span class="discussion-back" ng-click="dc.viewDiscussions()">
+<span class="discussion-back" ng-click="vm.viewDiscussions()">
             <md-icon>arrow_back</md-icon> {{'DISCUSSIONS.DISCUSSIONS' | translate }}
         </span>
-<h1 class="discussion-title md-display-1">{{dc.selectedDiscussion.title}}</h1>
+<h1 class="discussion-title md-display-1">{{vm.selectedDiscussion.title}}</h1>
 
-<table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)" ng-init="dc.getReplies(dc.selectedDiscussion)">
+<table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)" ng-init="vm.getReplies(vm.selectedDiscussion)">
     <tbody>
         <tr class="seperator">
             <td class="avatar-container">
-                <img src="{{dc.selectedDiscussion.author.avatarUrl}}" class="avatar">
-                <h3 class="md-title">{{dc.selectedDiscussion.author.firstName}} {{dc.selectedDiscussion.author.lastName}}</h3>
+                <img src="{{vm.selectedDiscussion.author.avatarUrl}}" class="avatar">
+                <h3 class="md-title">{{vm.selectedDiscussion.author.firstName}} {{vm.selectedDiscussion.author.lastName}}</h3>
             </td>
             <td class="comment">
-                <span ng-bind-html='dc.selectedDiscussion.content'></span>
-                <p class="od-secondary">{{dc.selectedDiscussion.createdOn | customDate}}</p>
+                <span ng-bind-html='vm.selectedDiscussion.content'></span>
+                <p class="od-secondary">{{vm.selectedDiscussion.createdOn | customDate}}</p>
             </td>
             <td class="comment-actions">
-                <md-menu ng-if="dc.selectedDiscussion.permissions.delete || dc.selectedDiscussion.permissions.edit">
+                <md-menu ng-if="vm.selectedDiscussion.permissions.delete || vm.selectedDiscussion.permissions.edit">
                     <md-button class="md-icon-button" ng-click="$mdMenu.open()">
                         <md-icon md-menu-origin>more_vert</md-icon>
                     </md-button>
 
                     <md-menu-content width="3">
-                        <md-menu-item ng-if="dc.selectedDiscussion.permissions.edit">
-                            <md-button ng-click="dc.editFirstPostDialog(dc.selectedDiscussion)">
+                        <md-menu-item ng-if="vm.selectedDiscussion.permissions.edit">
+                            <md-button ng-click="vm.editFirstPostDialog(vm.selectedDiscussion)">
                                 <md-icon md-menu-align-target>edit</md-icon>
                                 {{'COMMON.EDIT' | translate }}
                             </md-button>
                         </md-menu-item>
 
-                        <md-menu-item ng-if="dc.selectedDiscussion.permissions.delete">
-                            <md-button ng-click="dc.deleteDiscussion(dc.selectedDiscussion)">
+                        <md-menu-item ng-if="vm.selectedDiscussion.permissions.delete">
+                            <md-button ng-click="vm.deleteDiscussion(vm.selectedDiscussion)">
                                 <md-icon md-menu-align-target>delete</md-icon>
                                 {{'COMMON.DELETE' | translate }}
                             </md-button>
@@ -40,7 +40,7 @@
             </td>
         </tr>
 
-         <tr class="seperator" ng-repeat="reply in dc.replies" id="{{reply.name}}">
+         <tr class="seperator" ng-repeat="reply in vm.replies" id="{{reply.name}}">
             <td class="avatar-container">
                 <img src="{{reply.author.avatarUrl}}" class="avatar">
                 <h3 class="md-title">{{reply.author.firstName}} {{reply.author.lastName}}</h3>
@@ -58,14 +58,14 @@
 
                     <md-menu-content width="3">
                         <md-menu-item ng-if="reply.permissions.edit">
-                            <md-button ng-click="dc.editReplyDialog(reply)">
+                            <md-button ng-click="vm.editReplyDialog(reply)">
                                 <md-icon md-menu-align-target>edit</md-icon>
                                 {{'COMMON.EDIT' | translate }}
                             </md-button>
                         </md-menu-item>
 
                         <md-menu-item ng-if="reply.permissions.delete">
-                            <md-button ng-click="dc.deleteDiscussion(reply)">
+                            <md-button ng-click="vm.deleteDiscussion(reply)">
                                 <md-icon md-menu-align-target>delete</md-icon>
                                 {{'COMMON.DELETE' | translate }}
                             </md-button>
@@ -80,7 +80,7 @@
 <md-card-actions layout="row" layout-align="start center">
     <span flex></span>
 
-    <md-button ng-click="dc.replyDialog()" class="md-primary" aria-label="{{'COMMON.REPLY' | translate }}">
+    <md-button ng-click="vm.replyDialog()" class="md-primary" aria-label="{{'COMMON.REPLY' | translate }}">
         <span>{{'COMMON.REPLY' | translate }}</span>
     </md-button>
 </md-card-actions>

@@ -1,13 +1,13 @@
 
 <md-dialog aria-label="{{'DISCUSSIONS.NEW' | translate }}" ng-cloak>
-    <form name="newDiscussionForm" ng-submit="dc.newDiscussion(newDiscussionTitle,newDiscussionContent)">
+    <form name="newDiscussionForm" ng-submit="vm.newDiscussion(newDiscussionTitle,newDiscussionContent)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>{{'DISCUSSIONS.NEW' | translate }}
                 </h2>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="dc.cancelDialog()">
+                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
                     <md-icon>close</md-icon>
                 </md-button>
             </div>

@@ -51,31 +51,5 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
             folderNodeRef: null,
             isSite: true
         }
-    }).state('project.discussions', {
-        url: '/diskussioner',
-        params: {
-            selectedTab: 1
-        },
-        views: {
-            'discussions': {
-                templateUrl: 'app/src/odDiscussion/view/overview.html',
-                controller: 'DiscussionController',
-                controllerAs: 'dc'
-            }
-        }
-    })
-    .state('project.viewthread', {
-        url: '/diskussioner/{path:any}',
-        params: {
-            selectedTab: 1
-        },
-        views: {
-            'discussions': {
-                templateUrl: 'app/src/odDiscussion/view/conversation.html',
-                controller: 'DiscussionController',
-                controllerAs: 'dc'
-            }
-        }
     });
-
 }

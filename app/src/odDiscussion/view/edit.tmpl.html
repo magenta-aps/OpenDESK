@@ -1,13 +1,13 @@
 
 <md-dialog aria-label="Rediger" ng-cloak>
-    <form name="newReplyForm" ng-submit="dc.editReply(postItem,postItem.content)">
+    <form name="newReplyForm" ng-submit="vm.editReply(postItem,postItem.content)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>{{'COMMON.EDIT' | translate }} 
                 </h2>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="dc.cancelDialog()">
+                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
                     <md-icon>close</md-icon>
                 </md-button>
             </div>

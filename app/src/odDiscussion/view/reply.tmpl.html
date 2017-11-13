@@ -1,12 +1,12 @@
 
 <md-dialog aria-label="{{'COMMON.REPLY' | translate }}" ng-cloak>
-    <form name="newReplyForm" ng-submit="dc.reply(replyContent)">
+    <form name="newReplyForm" ng-submit="vm.reply(replyContent)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>{{'COMMON.REPLY' | translate }}</h2>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="dc.cancelDialog()">
+                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
                     <md-icon>close</md-icon>
                 </md-button>
             </div>
