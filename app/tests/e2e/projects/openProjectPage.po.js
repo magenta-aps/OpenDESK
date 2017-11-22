@@ -5,7 +5,7 @@ var OpenProjectPage = function () {
 
     return {
         openProjects: function () {
-            var goToProjectBtn = element(by.css('a[href^="#!/projekter"]'));
+            var goToProjectBtn = element(by.css('a[href^="projekter"]'));
             return goToProjectBtn.click();
         },
 

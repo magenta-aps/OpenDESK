@@ -25,7 +25,7 @@ var LoginPage = function () {
      * @param password
      */
     public.loginAs = function (userName, password) {
-        browser.get('http://localhost:8000/#!/projekter').then(function (response) {
+        browser.get('http://localhost:8000/projekter').then(function (response) {
             //The fields
             var userNameInput = element(by.model('vm.credentials.username'));
             var passwordInput = element(by.model('vm.credentials.password'));

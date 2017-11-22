@@ -23,7 +23,7 @@ describe('new group room', function () {
 describe('back to project list', function () {
     it('should go back to project list', function () {
         projectHelper.backToProjects();
-        expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+        expect(browser.getCurrentUrl()).toContain('/projekter');
     });
 
     it('should delete group room', function () {

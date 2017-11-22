@@ -129,7 +129,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
         var author = vm.user.firstName + ' ' + vm.user.lastName;
 
         var message = author + " har tilføjet dig til projektet " + vm.site.title + ".";
-        var link = '#!/' + APP_CONFIG.sitesUrl + '/' + site;
+        var link = APP_CONFIG.sitesUrl + '/' + site;
         createNotification(userName, subject, message, link, 'project', site);
     }
 }

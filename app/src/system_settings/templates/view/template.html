@@ -27,14 +27,14 @@
 
                             <tr ng-show="content.contentType === 'cmis:document'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
-                                <td><a class="od-filebrowser-link" ng-href="#!/dokument/{{content.shortRef}}">
+                                <td><a class="od-filebrowser-link" ng-href="dokument/{{content.shortRef}}">
                             <i class="material-icons" ng-show="content.contentType === 'cmis:document'">insert_drive_file</i>
                             {{content.name}}</a></td>
                                 <td>
                                     <table>
                                         <tr>
                                             <td style="border: none; margin: 0; padding: 0">
-                                                <a class="od-filebrowser-link" ng-href="#!/dokument/{{content.shortRef}}">{{content.lastChanged
+                                                <a class="od-filebrowser-link" ng-href="dokument/{{content.shortRef}}">{{content.lastChanged
                                             | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                                             </td>
                                             <td ng-show="content.hasHistory" style="border: none; margin: 0; padding: 0">
@@ -49,7 +49,7 @@
                                                             <span style="width: 70px;"></span> Ændret af
                                                         </md-menu-item>
                                                         <md-menu-item ng-repeat="h in history" class="menu-list">
-                                                            <a href="/#!/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">
+                                                            <a href="/dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}">
                                                         {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{
                                                         h.modifier }}</a>
                                                             </md-button>
@@ -135,12 +135,12 @@
                             </tr>
                             <tr ng-show="content.contentType === 'cmis:folder'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
-                                <td><a class="od-filebrowser-link" ng-href="#!/projekter/{{vm.project.shortName}}{{vm.path}}/{{content.name}}">
+                                <td><a class="od-filebrowser-link" ng-href="projekter/{{vm.project.shortName}}{{vm.path}}/{{content.name}}">
                             <i class="material-icons" ng-show="content.contentType === 'cmis:folder'">folder</i>
                             {{content.name}}
                         </a></td>
                                 <td>
-                                    <a class="od-filebrowser-link" ng-href="#!/projekter/{{vm.project.shortName}}{{vm.path}}/{{content.name}}">{{content.lastChanged
+                                    <a class="od-filebrowser-link" ng-href="projekter/{{vm.project.shortName}}{{vm.path}}/{{content.name}}">{{content.lastChanged
                                 | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                                 </td>
                                 <td>
@@ -162,7 +162,7 @@
                             </tr>
                             <tr ng-show="content.contentType === 'cmis:link'" ng-repeat="content in contents | orderObjectBy:orderByAttribute:reverseOrder">
 
-                                <td><a class="od-filebrowser-link" ng-href="#!/projekter/{{ content.destination_link }}">
+                                <td><a class="od-filebrowser-link" ng-href="projekter/{{ content.destination_link }}">
                             <i class="material-icons"
                                ng-show="content.contentType === 'cmis:link'">content_paste</i>
                             {{content.name}}

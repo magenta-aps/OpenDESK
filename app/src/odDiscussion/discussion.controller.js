@@ -262,7 +262,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         var nodeRef = postItem.nodeRef.split('/')[3];
         var subject = 'Ny samtale i et projekt';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
-        var link = '#!/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+        var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
 
         // Iterating list of items.
         angular.forEach(vm.groups, function (group) {
@@ -287,7 +287,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         var nodeRef = vm.selectedDiscussion.nodeRef.split('/')[3];
         var subject = 'Ny kommentar på en samtale du følger';
         var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-        var link = '#!/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
+        var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
 
         // Iterating list of items.
         angular.forEach(vm.groups, function (group) {

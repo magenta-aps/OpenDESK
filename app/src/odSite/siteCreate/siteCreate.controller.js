@@ -111,7 +111,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
                 var siteShortName = response.data[0].shortName;
                 var siteName = vm.newSite.siteName;
-                var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
+                var link = APP_CONFIG.sitesUrl +'/' + siteShortName;
 
                 createSiteNotification(siteName, vm.newSite.owner.userName, link);
                 createSiteNotification(siteName, vm.newSite.manager.userName, link);
@@ -150,7 +150,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
             var siteShortName = response[0].shortName;
             var siteName = vm.newSite.siteName;
-            var link = '#!/' + APP_CONFIG.sitesUrl +'/' + siteShortName;
+            var link = APP_CONFIG.sitesUrl +'/' + siteShortName;
 
             angular.forEach(vm.newSite.groups, function (group) {
                 if (group.multipleMembers)

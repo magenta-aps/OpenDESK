@@ -59,7 +59,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     //         if (val !== undefined) {
     //             $rootScope.searchResults = [];
     //             $rootScope.searchResults = val.data.items;
-    //             $window.location.href = "#!/search";
+    //             $window.location.href = "search";
     //         } else {
     //             return [];
     //         }
@@ -77,7 +77,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     //         $scope.selectedDocumentPath = val.container;
     //         var path = ref.replace("workspace://SpacesStore/", "");
 
-    //         $window.location.href = "/#!/dokument/" + path;
+    //         $window.location.href = "/dokument/" + path;
     //     });
     // }
 }

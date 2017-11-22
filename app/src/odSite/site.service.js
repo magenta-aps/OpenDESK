@@ -507,7 +507,7 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         var id = alfrescoNodeUtils.processNodeRef(nodeRef).id;
         var subject = "Nyt dokument i " + site.title;
         var message = "Et nyt dokument \"" + fileName + "\" er blevet uploadet af " + currentUser.displayName;
-        var link = "#!/dokument/" + id;
+        var link = "dokument/" + id;
 
         // Iterating list of items.
         angular.forEach(groups, function (group) {
@@ -537,7 +537,7 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
 
     function createReviewNotification(documentNodeRef, receiver, message) {
         var ref = documentNodeRef.split("/")[3];
-        var link = "#!/dokument/" + ref + "?dtype=wf" + "&from=" + currentUser.userName;
+        var link = "dokument/" + ref + "?dtype=wf" + "&from=" + currentUser.userName;
 
         var notification = {
             receiver: receiver,

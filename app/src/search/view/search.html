@@ -49,7 +49,7 @@
                         <tbody>
                             <tr ng-repeat="item in fullSearchResults.results | filter: search">
                                 <td class="icon">
-                                    <a class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                    <a class="od-filebrowser-link" ng-href="dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
                                         <i class="material-icons">
                                             <img class="md-avatar" 
                                                 ng-src="app/assets/img/filetypes/{{item.thumbNailURL}}"
@@ -59,19 +59,19 @@
                                 </td>
                                 <td>
                                     <div ng-if="item.type == 'document'">
-                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
                                             {{ item.displayName }}
                                         </a>
                                     </div>
                                 </td>
                                 <td>
-                                    <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                    <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
                                     {{ item.site }}
                                     </a>
                                 </td>
                                 <td>
                                     <div>
-                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="#!/dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
+                                        <a title="{{ 'DOCUMENT.VIEW_DOCUMENT_DETAILS' | translate }}" class="od-filebrowser-link" ng-href="dokument/{{item.nodeRef.replace('workspace://SpacesStore/', '')}}">
                                         {{ "COMMON.MODIFIED_BY" | translate }} {{ item.modifiedBy }} {{ item.modifiedOn | date}}
                                         </a>
                                     </div>

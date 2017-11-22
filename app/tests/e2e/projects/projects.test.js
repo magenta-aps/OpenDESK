@@ -27,7 +27,7 @@ describe('back to project list', function () {
 
     it('should go back to project list', function () {
         projectHelper.backToProjects();
-        expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+        expect(browser.getCurrentUrl()).toContain('/projekter');
     });
 
     it('should see project info', function () {

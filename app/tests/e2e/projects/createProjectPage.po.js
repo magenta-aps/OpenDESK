@@ -11,7 +11,7 @@ var CreateProjectPage = function () {
     }
 
     public.getCreatedProjectUrl = function () {
-        return 'http://localhost:8000/#!/projekter/'+projectName+'/dokumenter';
+        return 'http://localhost:8000/projekter/'+projectName+'/dokumenter';
     }
 
     public.openCreateProjectDialog = function() {

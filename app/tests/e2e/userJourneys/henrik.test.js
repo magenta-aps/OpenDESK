@@ -28,7 +28,7 @@ describe('User Henrik', function () {
 
     it('should login as admin', function () {
         loginPage.loginAsAdmin();
-        expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+        expect(browser.getCurrentUrl()).toContain('/projekter');
     });
 
     xdescribe('should create a new project', function () {
@@ -120,7 +120,7 @@ describe('User Henrik', function () {
         });
 
         xit('should be able to be deleted', function () {
-            return browser.get("http://localhost:8000/#!/projekter").then(function (response) {
+            return browser.get("http://localhost:8000/projekter").then(function (response) {
                 deleteProjectPage.deleteProject(constants.PROJECT_NAME_2);
             });
         });

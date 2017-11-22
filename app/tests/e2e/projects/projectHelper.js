@@ -34,7 +34,7 @@ var ProjectHelper = function () {
 
         backToProjects: function () {
             element(by.css(".od-back-btn")).click();
-            expect(browser.getCurrentUrl()).toContain('/#!/projekter');
+            expect(browser.getCurrentUrl()).toContain('/projekter');
             browser.driver.sleep(1000);
         }
     }
