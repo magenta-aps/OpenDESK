@@ -11,7 +11,7 @@
     </md-toolbar>
 
     <md-content class="od-sidenav-scroll-wrapper" layout="column">
-              <a class="md-button" ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}" target="_blank"
+              <a class="md-button" ng-repeat="sysSetPage in vm.pages" href="{{sysSetPage.url}}"
                  ng-click="vm.close()" style="text-align:left">
                 <md-icon md-svg-src="app/assets/img/icons/{{sysSetPage.icon}}.svg"></md-icon>
                   <span style="color:black">{{sysSetPage.labelKey | translate}}</span>
