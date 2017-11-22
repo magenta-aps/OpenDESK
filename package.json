@@ -47,6 +47,7 @@
     "test-loaddata": "protractor app/tests/e2e/loaddata_conf.js"
   },
   "dependencies": {
+    "angular-pdfjs-viewer": "^2.0.1",
     "gulp-install": "^0.6.0",
     "gulp-nsp": "~2.4.0"
   }
