@@ -25,9 +25,9 @@
 
         <md-dialog-actions>
             <div layout="row" layout-sm="column" layout-align="space-around">
-                <md-progress-circular md-mode="indeterminate" ng-show="uploading"></md-progress-circular>
+                <md-progress-circular md-mode="indeterminate" ng-show="vm.uploading"></md-progress-circular>
             </div>
-            <md-button class="md-primary" type="submit" ng-click="vm.uploadFiles(files)" ng-disabled="uploading">
+            <md-button class="md-primary" type="submit" ng-click="vm.uploadFiles(files)" ng-disabled="files == undefined || vm.uploading">
                 <md-icon>file_upload</md-icon>
                 {{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}
             </md-button>

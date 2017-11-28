@@ -72,7 +72,7 @@ function config($stateProvider, USER_ROLES) {
             }
         }
     }).state('systemsettings.filebrowser', {
-        url: '/systemmapper{path:any}',
+        url: '/systemmapper{path:SlashFix}',
         params: {
             authorizedRoles: [USER_ROLES.admin],
             isSite: false,

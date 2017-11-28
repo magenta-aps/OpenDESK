@@ -53,6 +53,8 @@ angular
     $scope.history = [];
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
+    $scope.reverse = false;
+    $scope.order = 'lastChanged';
 
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;

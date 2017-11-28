@@ -4,7 +4,23 @@
     <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
 
     <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
-    <md-list class="sort-head" ng-show="vm.contentListLength > 0" id="table-container">
+            <table class="od-members od-members-row">
+                    <thead ng-show="vm.contentListLength > 0" fix-head>
+                        <tr>
+                            <th sort order="'name'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.NAME' | translate }}</th>
+                            <th hide show-gt-sm sort order="'lastChanged'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.HISTORY' | translate }}</th>
+                            <th hide show-gt-md ng-if="vm.enableESDH" ng-if="isSite" colspan="2">
+                                <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToSbsys" ng-click="vm.setAllCheckboxes()">
+                                <img ng-src="app/assets/img/sbsys.png" class="od-sbsys-logo">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="contentTypeList in vm.contentList">
+                        <tr ng-repeat="content in contentTypeList | orderObjectBy:order:reverse" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
+                        </tr>
+                    </tbody>
+                </table>
+    <!-- <md-list class="sort-head" ng-show="vm.contentListLength > 0" id="table-container">
         <table class="od-members od-members-row">
             <thead ng-show="vm.contentListLength > 0" fix-head>
                 <tr>
@@ -21,7 +37,7 @@
                 </tr>
             </tbody>
         </table>
-    </md-list>
+    </md-list> -->
     </div>
 
     <div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>

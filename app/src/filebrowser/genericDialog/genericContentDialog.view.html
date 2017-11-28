@@ -16,7 +16,8 @@
         </md-dialog-content>
 
         <md-dialog-actions>
-            <md-button ng-disabled="!vm.destinationNodeRef" type="submit" class="md-primary">
+            <md-progress-circular ng-show="vm.uploading" md-mode="indeterminate"></md-progress-circular>
+            <md-button ng-disabled="!vm.destinationNodeRef || vm.uploading" type="submit" class="md-primary">
                 {{'COMMON.' + vm.data.contentAction | translate}}
             </md-button>
         </md-dialog-actions>

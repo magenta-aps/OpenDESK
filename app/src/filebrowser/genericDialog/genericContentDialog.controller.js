@@ -13,12 +13,14 @@ function GenericContentDialogController(data, $rootScope, $mdDialog, filebrowser
     vm.cancelDialog = cancelDialog;
     vm.destinationNodeRef = '';
     vm.dialogResponse = dialogResponse;
+    vm.uploading = false;
 
     function cancelDialog() {
         $mdDialog.cancel();
     }
 
     function dialogResponse() {
+        vm.uploading = true;
         filebrowserService.genericContentAction(vm.data.contentAction.toLowerCase(), vm.data.sourceNodeRefs, vm.destinationNodeRef,
             vm.data.parentNodeRef).then(function(response) {
             if (response.data.results[0].fileExist) {
@@ -30,6 +32,7 @@ function GenericContentDialogController(data, $rootScope, $mdDialog, filebrowser
                         .ok('Ok')
                 );
             }
+            vm.uploading = false;
             cancelDialog();
             $rootScope.$broadcast('updateFilebrowser');
             //hideDialogAndReloadContent();

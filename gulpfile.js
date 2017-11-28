@@ -52,6 +52,7 @@ function createWebserver(config) {
         .pipe($.webserver({
             open: false, // Open up a browser automatically
             host: '0.0.0.0', // hostname needed if you want to access the server from anywhere on your local network
+            port: '9000',
             fallback: 'index.html',
             middleware: function (req, res, next) {
                 res.setHeader('Access-Control-Allow-Origin', '*');

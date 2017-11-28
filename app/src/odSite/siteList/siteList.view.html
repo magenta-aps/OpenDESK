@@ -74,16 +74,16 @@
 						<col style="width:2.5%">
 						<thead fix-head>
 							<tr>
-								<th colspan="2" sort-table="title" title="Sortér kolonne">{{vm.sitesName | translate}}</th>
-								<th hide show-gt-xs sort-table="manager.displayName" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
-								<th hide show-gt-md ng-if="vm.config.enableProjects" sort-table="center_name" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
-								<th hide show-gt-xs  ng-if="vm.config.enableProjects" sort-table="state" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
-								<th hide show-gt-sm colspan="2" sort-table="modified" sort-default="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
+								<th colspan="2" sort order="'title'" by="order" reverse="reverse" title="Sortér kolonne">{{vm.sitesName | translate}}</th>
+								<th hide show-gt-xs sort order="'manager.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
+								<th hide show-gt-md ng-show="vm.config.enableProjects" sort order="'center_name'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th hide show-gt-xs ng-show="vm.config.enableProjects" sort order="'state'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th hide show-gt-sm colspan="2" sort order="'modified'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser |
-							orderObjectBy:orderByAttribute:reverseOrder |
+							orderObjectBy:order:reverse |
 							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
 							isContained:vm.searchMembers |
 							filter: vm.search" id="{{project.shortName}}">
