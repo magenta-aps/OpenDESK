@@ -35,6 +35,7 @@ angular
         'openDeskApp.chat',
         'openDeskApp.user',
         'openDeskApp.appDrawer',
+        'dndLists',
 
         /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
         /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!

@@ -9,6 +9,7 @@ function DashboardController(pageService, headerService, APP_BACKEND_CONFIG) {
     
     vm.links = APP_BACKEND_CONFIG.dashboardLinks;
     vm.pages = [];
+    vm.test = APP_BACKEND_CONFIG.dash;
 
     activate();
 
