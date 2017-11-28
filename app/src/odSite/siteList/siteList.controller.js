@@ -38,6 +38,9 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 	vm.types = [];
 	vm.toggleFilters = toggleFilters;
 
+	$scope.reverse = true;
+    $scope.order = 'modified';
+
 	activate();
 	
 	function activate() {

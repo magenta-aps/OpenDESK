@@ -17,7 +17,6 @@ angular
         'openDeskApp.init',
         'openDeskApp.systemsettings',
         'openDeskApp.auth',
-        // 'site.list',
         'openDeskApp.group',
         'openDeskApp.site',
         'openDeskApp.filebrowser',
