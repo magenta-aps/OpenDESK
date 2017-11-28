@@ -1,4 +1,10 @@
-<div style="height:600px">
+<link rel="stylesheet" href="bower_components/pdf.js-viewer/viewer.css">
+<style>
+    .pdfjs .toolbar {
+        z-index: 1;
+    }
+</style>
 
+<div style="height:600px">
     <pdfjs-viewer src="{{ config.contentUrl }}"></pdfjs-viewer>
-   </div>
+</div>
