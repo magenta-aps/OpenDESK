@@ -15,7 +15,7 @@ function DashboardController(pageService, headerService, APP_BACKEND_CONFIG) {
     function activate() {
         headerService.setTitle('');
 
-        pageService.addPage(vm.pages, 'DASHBOARD.INTRA', vm.linksintra, "intra");
+        pageService.addPage(vm.pages, 'DASHBOARD.INTRA', vm.links.intra, "intra");
         pageService.addPage(vm.pages, 'DASHBOARD.EMAIL', vm.links.email, "mail");
         pageService.addPage(vm.pages, 'DASHBOARD.CALENDAR', vm.links.calendar, "calendar");
         pageService.addPage(vm.pages, 'DASHBOARD.PROJECTS', vm.links.projects, "project");
