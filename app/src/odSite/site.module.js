@@ -37,7 +37,7 @@ function config($stateProvider, APP_CONFIG, USER_ROLES) {
         redirectTo: 'project.filebrowser'
     })
     .state('project.filebrowser', {
-        url: '/dokumenter{path:any}',
+        url: '/dokumenter{path:SlashFix}',
         views: {
             'filebrowser': {
                 templateUrl: 'app/src/filebrowser/view/filebrowser.html',

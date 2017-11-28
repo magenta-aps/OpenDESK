@@ -68,7 +68,12 @@ angular
         });
     });
 
-function config($stateProvider, $urlRouterProvider, $locationProvider, APP_CONFIG, USER_ROLES) {
+function config($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider, APP_CONFIG,
+                USER_ROLES) {
+
+    $urlMatcherFactoryProvider.type('SlashFix', {
+        raw: true
+    });
 
     // use the HTML5 History API
     $locationProvider.html5Mode(true).hashPrefix('!');
