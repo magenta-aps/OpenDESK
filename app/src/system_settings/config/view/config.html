@@ -5,17 +5,36 @@
                 <md-icon>settings</md-icon>Konfiguration</h2>
         </md-card-title>
         <md-card-content>
-            <ul dnd-list="vm.config.dash">
-                <li ng-repeat="item in vm.config.dash" dnd-draggable="item" dnd-moved="vm.config.dash.splice($index, 1)" dnd-effect-allowed="move"
-                    dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
-                    <dnd-nodrag>
-                        <div dnd-handle class="handle">:::</div>
-                        <div class="name">
-                            <input type="text" ng-model="item.label" form-control input-sm">
-                        </div>
-                    </dnd-nodrag>
-                </li>
-            </ul>
+            <div class="types-demo">
+                <ul dnd-list="vm.config.dash">
+                    <li ng-repeat="item in vm.config.dash" dnd-draggable="item" dnd-moved="vm.config.dash.splice($index, 1)" dnd-effect-allowed="move"
+                        dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
+                        <dnd-nodrag>
+                            <div dnd-handle class="handle"><md-icon>reorder</md-icon></div>
+                            <div class="name">
+
+                                <input type="text" ng-model="item.icon">
+
+                                <input type="text" ng-model="item.label">
+
+                                <input type="text" ng-model="item.url">
+
+                                <md-input-container>
+                                    <md-switch ng-model="item.newWindow"></md-switch>
+                                </md-input-container>
+                                <md-button class="md-icon-button" ng-click="vm.removeDashboardLink($index)">
+                                    <md-icon>remove</md-icon>
+                                </md-button>
+                            </div>
+                        </dnd-nodrag>
+                    </li>
+                </ul>
+
+                <md-button class="md-icon-button" ng-click="vm.addNewDashboardLink()">
+                    <md-icon>add</md-icon>
+                </md-button>
+            </div>
+
             <md-list>
                 <md-list-item ng-repeat="(key, value) in vm.config.public">
                     <p>{{'CONFIGURATION.public.' + key | translate}}</p>
@@ -36,23 +55,6 @@
                         <input ng-if="isString(value)" class="md-secondary" ng-model="vm.config.dashboardLinks[key]" title="value">
                     </md-input-container>
                 </md-list-item> -->
-            </md-list>
-
-            <md-list>
-                <md-list-item ng-repeat="(key, value) in vm.config.dash">
-                    <md-input-container>
-                        <input class="md-secondary" ng-model="value.icon" title="value">
-                    </md-input-container>
-                    <md-input-container>
-                        <input class="md-secondary" ng-model="value.label" title="value">
-                    </md-input-container>
-                    <md-input-container>
-                        <input class="md-secondary" ng-model="value.url" title="value">
-                    </md-input-container>
-                    <md-input-container>
-                        <md-switch class="md-secondary" ng-model="value.newWindow"></md-switch>
-                    </md-input-container>
-                </md-list-item>
             </md-list>
 
             <md-button class="md-primary md-raised" ng-click="vm.updateSettings()">
