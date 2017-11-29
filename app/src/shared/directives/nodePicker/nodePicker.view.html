@@ -6,7 +6,7 @@
 </div>
 <md-list class="picker-list">
     <md-list-item ng-class="model === dir.nodeRef ? 'picked' : ''" ng-repeat="dir in vm.currentNode[1]"
-                  ng-click="vm.pickNode(dir.nodeRef)">
+                  ng-click="vm.pickNode(dir.nodeRef)" ng-if="dir.nodeRef !== undefined">
         <p>{{ dir.name }}</p>
         <md-button class="md-icon-button"
                    ng-click="vm.browseChild(dir.nodeRef); $event.stopPropagation();" class="md-raised">
