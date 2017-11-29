@@ -28,6 +28,7 @@
 	<bean id="webscript.filebrowser.get"
 		  class="dk.opendesk.webscripts.FileBrowser"
 		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
 		<property name="repository" ref="repositoryHelper"/>
 	</bean>
 

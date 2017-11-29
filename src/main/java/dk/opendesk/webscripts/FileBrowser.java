@@ -17,22 +17,35 @@ limitations under the License.
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.utils.Utils;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.site.SiteModel;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
+import java.util.List;
 import java.util.Map;
 
 public class FileBrowser extends AbstractWebScript {
 
+    private NodeService nodeService;
     private Repository repository;
 
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
     public void setRepository(Repository repository)
     {
         this.repository = repository;
