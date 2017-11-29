@@ -12,6 +12,7 @@ angular
         'ngResource',
         'pdf',
         'swfobject',
+        'pdfjsViewer',
         'isteven-multi-select',
         'openDeskApp.backendConfig',
         'openDeskApp.init',
