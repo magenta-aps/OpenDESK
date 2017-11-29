@@ -58,13 +58,9 @@
     <script src="./app/assets/libs/ckeditor/ckeditor.js"></script>
 
     <!-- style sheet -->
-<link href="bower_components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
-<!-- module -->
-<script type="text/javascript" src="bower_components/angular-material-data-table/dist/md-data-table.min.js"></script>
-
-    <script src="bower_components/angular-pdfjs-viewer/dist/angular-pdfjs-viewer.js"></script>
-    <!-- OpenDesk App -->
-    <script src="./dist/opendesk-app.js"></script>
+    <link href="bower_components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
+    <!-- module -->
+    <script type="text/javascript" src="bower_components/angular-material-data-table/dist/md-data-table.min.js"></script>
 </head>
 
 <body ng-app="openDeskApp">
@@ -72,6 +68,13 @@
     <main ui-view="content"></main>
     <div id="loader"></div>
     <div ui-view="sideNavs"></div>
+    <script src="bower_components/angular-pdfjs-viewer/dist/angular-pdfjs-viewer.js"></script>
+    <script src="./dist/opendesk-app.js"></script>
+    <script>
+        angular.element(document).ready(function () {
+            angular.bootstrap(document, ['openDeskApp']);
+        });
+    </script>
 </body>
 
 </html>
