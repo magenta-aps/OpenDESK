@@ -22,3 +22,4 @@ web.config
 ._*
 app/src/app.iml
 *.log
+.nsprc

@@ -1,10 +1,15 @@
 <link rel="stylesheet" href="bower_components/pdf.js-viewer/viewer.css">
 <style>
+    body {
+        background: #ddd !important;
+        font-family: Roboto, "Helvetica Neue", sans-serif !important;
+        font-size: 16px;
+    }
     .pdfjs .toolbar {
         z-index: 1;
     }
 </style>
 
-<div style="height:600px">
+<div style="height:80vh">
     <pdfjs-viewer src="{{ config.contentUrl }}"></pdfjs-viewer>
 </div>
