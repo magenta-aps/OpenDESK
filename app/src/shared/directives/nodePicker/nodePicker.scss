@@ -32,6 +32,11 @@
     border-radius: 0;
   }
 
+  .back {
+    border-left: none;
+    border-right: solid 1px #ddd;
+  }
+
   .md-icon-button:hover,
   .md-icon-button:active {
       border: solid 1px #ccc;
