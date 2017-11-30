@@ -2,7 +2,7 @@
     <md-button ng-show="vm.currentNode[0].primaryParent_nodeRef != undefined" class="md-icon-button" ng-click="vm.browseParent();">
         <md-icon>navigate_before</md-icon>
     </md-button>
-    <strong>{{ vm.currentNode[0].currentNodeRef_name }}</strong>
+    <strong ng-click="vm.pickNode(vm.currentNode[0].currentNodeRef_nodeRef)">{{ vm.currentNode[0].currentNodeRef_name }}</strong>
 </div>
 <md-list class="picker-list">
     <md-list-item ng-class="model === dir.nodeRef ? 'picked' : ''" ng-repeat="dir in vm.currentNode[1]"
