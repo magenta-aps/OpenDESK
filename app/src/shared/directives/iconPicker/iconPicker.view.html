@@ -1,0 +1,12 @@
+<md-menu>
+    <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+        <md-icon md-menu-origin md-svg-icon="/app/assets/img/icons/{{selectedIcon}}.svg"></md-icon>
+    </md-button>
+    <md-menu-content width="1">
+        <md-menu-item ng-repeat="icon in vm.icons">
+            <md-button ng-click="vm.selectIcon($index)">
+                    <md-icon md-svg-src="/app/assets/img/icons/{{icon.name}}.svg"></md-icon>
+                </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>

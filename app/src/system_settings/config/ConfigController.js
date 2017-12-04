@@ -18,7 +18,7 @@ function ConfigController(APP_BACKEND_CONFIG, systemSettingsService) {
     }
 
     function addNewDashboardLink() {
-        vm.config.dash.push({
+        vm.config.dashboardLink.push({
             icon: '',
             label: '',
             url: '',
@@ -27,6 +27,6 @@ function ConfigController(APP_BACKEND_CONFIG, systemSettingsService) {
     }
 
     function removeDashboardLink(index) {
-        vm.config.dash.splice(index,1);
+        vm.config.dashboardLink.splice(index,1);
     }
 }

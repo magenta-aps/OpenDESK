@@ -7,7 +7,7 @@ angular
         enableSites: true,
         enableESDH: false,
         enableChat: false,
-        dash: [
+        dashboardLink: [
             {
                 icon: 'intra',
                 label: 'Intra',
@@ -27,17 +27,6 @@ angular
             newWindow: false
         },
         ],
-        dashboardLinks: {
-            calendar:"",
-            keyNumbers:"",
-            projects:"/projekter",
-            intra:"",
-            workTime:"",
-            esdh:"",
-            map:"",
-            email:"",
-            citrix:""
-        },
         public: {
             appName: "OpenDesk"
         }

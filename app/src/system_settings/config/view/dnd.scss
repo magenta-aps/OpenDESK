@@ -1,5 +1,9 @@
 
 .types-demo {
+  .margin-fix {
+    margin: 16px 0 0 0;
+  }
+
   ul[dnd-list],
   ul[dnd-list]>li {
     position: relative;
@@ -21,10 +25,6 @@
     }
 
     li {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-top-right-radius: 4px;
-      border-top-left-radius: 4px;
       display: block;
       margin-bottom: -1px;
       // Disable text selection if item is not draggable
@@ -35,9 +35,13 @@
       -ms-user-select: none;
       user-select: none;
 
+      &:nth-child(even) {
+        background-color: #eee;
+      }
+
       dnd-nodrag {
         display: block;
-        padding: 10px 15px;
+        // padding: 10px 15px;
       }
     }
   }
@@ -45,10 +49,14 @@
   .handle {
     cursor: move;
     position: absolute;
-    top: 14px;
+    top: 22px;
   }
 
-  .name {
-    margin-left: 20px;
-  }
+  md-input-container {
+    margin: 16px 0 0 0 !important;
+
+    md-switch {
+      margin: 0;
+    }
+   }
 }
