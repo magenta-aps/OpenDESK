@@ -77,7 +77,7 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     //         $scope.selectedDocumentPath = val.container;
     //         var path = ref.replace("workspace://SpacesStore/", "");
 
-    //         $window.location.href = "/dokument/" + path;
+    //         $window.location.href = "dokument/" + path;
     //     });
     // }
 }

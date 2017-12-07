@@ -17,7 +17,7 @@ angular
             {
             icon: 'project',
             label: 'Projekter',
-            url: '/projekter',
+            url: 'projekter',
             newWindow: true
         },
         {

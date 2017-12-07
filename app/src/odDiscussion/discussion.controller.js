@@ -130,7 +130,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
 
 
     function viewThread(postItem) {
-        return '/' + APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
+        return APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
     }
 
 
