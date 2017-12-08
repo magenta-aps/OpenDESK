@@ -7,7 +7,7 @@
         <md-card-content>
             <div class="types-demo">
                 <ul dnd-list="vm.config.dashboardLink">
-                    <li ng-repeat="item in vm.config.dashboardLink" dnd-draggable="item" dnd-moved="vm.config.dash.splice($index, 1)" dnd-effect-allowed="move"
+                    <li ng-repeat="item in vm.config.dashboardLink" dnd-draggable="item" dnd-moved="vm.config.dashboardLink.splice($index, 1)" dnd-effect-allowed="move"
                         dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
                         <dnd-nodrag>
                             <div dnd-handle class="handle">
@@ -76,13 +76,6 @@
                         <md-switch ng-if="isBoolean(value)" class="md-secondary" ng-model="vm.config[key]"></md-switch>
                     </md-input-container>
                 </md-list-item>
-
-                <!-- <md-list-item ng-repeat="(key, value) in vm.config.dashboardLinks">
-                    <p>{{'CONFIGURATION.LINK_TO' | translate}} {{'CONFIGURATION.dashboardLinks.' + key | translate}}</p>
-                    <md-input-container>
-                        <input ng-if="isString(value)" class="md-secondary" ng-model="vm.config.dashboardLinks[key]" title="value">
-                    </md-input-container>
-                </md-list-item> -->
             </md-list>
         </md-card-content>
         <md-card-actions>
