@@ -7,7 +7,7 @@ angular
 function ConfigController(APP_BACKEND_CONFIG, systemSettingsService) {
     var vm = this;
 
-    vm.config = APP_BACKEND_CONFIG;
+    vm.config = angular.copy(APP_BACKEND_CONFIG);
     vm.updateSettings = updateSettings;
 
     vm.addNewDashboardLink = addNewDashboardLink;
