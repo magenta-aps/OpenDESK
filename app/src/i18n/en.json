@@ -999,7 +999,8 @@
     "LABEL": {
       "REVIEW_REQUEST": "Review request",
       "REVIEW_RESPONSE": "Review response",
-      "NEW_FILE_IN": "New file in"
+      "NEW_FILE_IN": "New file in",
+      "NEW_DOCUMENT": "New document"
     }
   },
   "DISCUSSIONS": {
