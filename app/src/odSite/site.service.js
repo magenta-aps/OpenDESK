@@ -2,7 +2,7 @@
 
 angular.module('openDeskApp.site').factory('siteService', SiteService);
 
-function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, notificationsService, authService,
+function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessionService, notificationsService, authService,
                      systemSettingsService) {
 
     var endpoint = '/alfresco/service/sites';
@@ -512,17 +512,17 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
         // Iterating list of items.
         angular.forEach(groups, function (group) {
             angular.forEach(group[1], function (member) {
-                if (member.userName != currentUser.userName) {
+                if (member.userName !== currentUser.userName) {
                     var preferenceFilter = "dk.magenta.sites.receiveNotifications";
                     var receiveNotifications = "true";
 
-                    if (member.preferences[preferenceFilter] !== null)
+                    if (member.preferences[preferenceFilter] !== undefined)
                         receiveNotifications = member.preferences[preferenceFilter];
 
-                    if (receiveNotifications !== null && receiveNotifications == "true") {
+                    if (receiveNotifications == "true") {
                         var notification = {
                             receiver: member.userName,
-                            subject: "Reivew forespørgsel",
+                            subject: $translate.instant('NOTIFICATION.LABEL.NEW_DOCUMENT'),
                             message: message,
                             link: link,
                             wtype: "new-doc",
@@ -541,7 +541,7 @@ function SiteService($q, $http, $rootScope, alfrescoNodeUtils, sessionService, n
 
         var notification = {
             receiver: receiver,
-            subject: "Reivew forespørgsel",
+            subject: $translate.instant('NOTIFICATION.LABEL.REVIEW_REQUEST'),
             message: message,
             link: link,
             wtype: "review-request",

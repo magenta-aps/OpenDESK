@@ -6,7 +6,7 @@ angular
     
     function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
         filebrowserService, filterService, alfrescoDownloadService, documentPreviewService, documentService, 
-        alfrescoNodeUtils, $translate, APP_BACKEND_CONFIG) {
+        alfrescoNodeUtils, userService, $translate, APP_BACKEND_CONFIG) {
             
         var vm = this;
         var documentNodeRef = "";
@@ -44,6 +44,7 @@ angular
         vm.uploadNewVersionDialog = uploadNewVersionDialog;
         vm.uploadSbsys = uploadSbsys;
         vm.uploadSbsysDialog = uploadSbsysDialog;
+        vm.searchUsers = searchUsers;
         vm.sendToSbsys = false;
 
         
@@ -290,6 +291,10 @@ angular
             preserveScope: true, // do not forget this if use parent scope
             clickOutsideToClose: true
         });
+    }
+
+    function searchUsers(filter) {
+        return userService.getUsers(filter);
     }
 
     

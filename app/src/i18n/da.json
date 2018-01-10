@@ -972,7 +972,8 @@
     "LABEL": {
       "REVIEW_REQUEST": "Review forespørgsel",
       "REVIEW_RESPONSE": "Review svar",
-      "NEW_FILE_IN": "Ny fil i"
+      "NEW_FILE_IN": "Ny fil i",
+      "NEW_DOCUMENT": "Nyt dokument"
     }
   },
   "DISCUSSIONS": {
