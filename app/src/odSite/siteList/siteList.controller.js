@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.site')
 	.controller('SiteListController', SiteListController);
 
-function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService,
+function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService, userService,
 						 sessionService, APP_BACKEND_CONFIG, browserService, headerService) {
 
 	var vm = this;
@@ -27,6 +27,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 	vm.organizationalCenters = [];
 	vm.renameSiteDialog = renameSiteDialog;
 	vm.searchMembers = [];
+    vm.searchPeople = searchPeople;
 	vm.showall = false;
 	vm.showFilters = false;
 	vm.sites = [];
@@ -167,6 +168,12 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 			clickOutsideToClose: true
 		});
 	}
+
+    function searchPeople(query) {
+        if (query) {
+            return userService.getUsers(query);
+        }
+    }
 
 	function infoSiteDialog(site) {
 		vm.currentDialogSite = site;
