@@ -23,7 +23,7 @@
 				</md-autocomplete>
 
 				<md-autocomplete md-selected-item="selectedProjGrpItem" md-selected-item-change="vm.searchMembers = [pgitem]" md-search-text="srchprjgrptxt"
-				    md-items="pgitem in vm.searchPeople(srchprjgrptxt)" md-item-text="lead.displayName" md-floating-label="{{'PROJECT.MEMBER' | translate}}"
+				    md-items="pgitem in vm.searchPeople(srchprjgrptxt)" md-item-text="pgitem.displayName" md-floating-label="{{'PROJECT.MEMBER' | translate}}"
 				    md-clear-button=true>
 					<span md-highlight-text="srchprjgrptxt">{{ pgitem.displayName }}</span>
 				</md-autocomplete>
