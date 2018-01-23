@@ -1,14 +1,6 @@
 angular
     .module('openDeskApp')
     .controller('SearchController', SearchController)
-    .directive('odSearchbar', function () {
-        return {
-            restrict: 'E',
-            scope: {},
-            templateUrl: 'app/src/search/view/searchbar.html',
-            controller: 'SearchController'
-        };
-    })
     .filter('count', function() {
         return function (collection, key) {
             return out;
@@ -232,34 +224,6 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
         $scope.filtersQueryString = filterQueryStringArr.toString();
         executeSearch();
     }
-
-
-    $scope.getSearchresults = function getSearchReslts(term) {
-        if(term != "")
-            $state.go('search', {'searchTerm': term});
-    };
-
-
-    $scope.getAutoSuggestions = function getAutoSuggestions(term) {
-        return searchService.getSearchSuggestions(term).then(function (val) {
-
-            if (val != undefined) {
-                val.forEach(function(item) {
-                    item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24);
-                });
-                return val;
-            } else {
-                return [];
-            }
-        });
-    };
-
-
-    $scope.gotoPath = function (ref) {
-        $scope.searchText = '';
-        var id = ref.split("/")[3];
-        $state.go('document', {doc: id});
-    };
 
     $scope.searchPeople = function (query) {
         if (query) {
