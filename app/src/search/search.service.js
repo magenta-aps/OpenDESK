@@ -9,13 +9,13 @@ function searchService($http) {
     var service = {};
 
     service.getSearchSuggestions = function (term) {
-        return $http.get('/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=50").then(function (response) {
+        return $http.get('/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=5").then(function (response) {
             return response.data.items;
         })
     };
 
     service.getSearchResults = function (term) {
-        return $http.get('/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=50").then(function (response) {
+        return $http.get('/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=5").then(function (response) {
             return response;
         })
     };
