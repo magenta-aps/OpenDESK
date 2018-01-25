@@ -79,7 +79,7 @@ function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG) {
     }
 
     function cleanupThumbnail(node) {
-        var url = '/alfresco/s/previewhelper?version_node=' + node.split("/")[3] + '&method=cleanup';
+        var url = '/alfresco/s/previewhelper?version_node=' + node.split("/")[3] + '&method=cleanUp';
 
         return $http.get(url).then(function (response) {
 
