@@ -5,7 +5,6 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
     var restBaseUrl = '/alfresco/s/api';
     var currentUser = authService.getUserInfo().user.userName;
     var selectedDiscussion = [];
-    var replies = [];
 
     var service = {
         addDiscussion: addDiscussion,
@@ -33,7 +32,7 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
             var discussions = response;
 
             discussions.items.forEach(function(discussion) {
-                if(discussion.nodeRef.split('/')[3] == nodeRef) {
+                if(discussion.nodeRef.split('/')[3] === nodeRef) {
                     selectedDiscussion = discussion;
                 }
             });

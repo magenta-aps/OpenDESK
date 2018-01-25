@@ -20,7 +20,7 @@ function config($stateProvider) {
             }
         })
         .state('project.viewthread', {
-            url: '/{path:SlashFix}',
+            url: '/diskussioner/{path:SlashFix}',
             params: {
                 selectedTab: 1
             },
