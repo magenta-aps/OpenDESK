@@ -9,9 +9,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
     var vm = this;
 
     vm.discussions = [];
-    vm.selectedDiscussion = discussionService.getSelectedDiscussion();
     vm.replies = [];
-    vm.allMembers = [];
     vm.search = '';
     vm.user = '';
     vm.isLoading = true;
