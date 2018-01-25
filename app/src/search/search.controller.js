@@ -46,33 +46,17 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
      * Executes the main search function to search for cases and case documents in the repository
      * @param term
      */
-    function executeSearch() {
+    function executeSearch(){
 
         $scope.isLoading = true;
 
-        var queryObj = {
+        var query = {
             facetFields: parseFacetsForQueryFilter(),
-            filters: $scope.filtersQueryString, //"{http://www.alfresco.org/model/content/1.0}creator|abeecher"
-            maxResults: 0,
-            noCache: new Date().getTime(),
-            pageSize: 25,
-            query: "",
-            repo: true,
-            rootNode: "", // openesdh://cases/home
-            site: "",
-            sort: "",
-            spellcheck: true,
-            startIndex: 0,
-            tag: "",
-            term: $scope.searchTerm+'*'
+            filters: $scope.filtersQueryString,
+            term: $scope.searchTerm
         };
-        var objQuerified = objectToQueryString(queryObj);
-        getSearchQuery(objQuerified);
-    }
 
-    function getSearchQuery(query){
-
-        searchService.search(query).then(function(response){
+        searchService.documentSearch(query).then(function(response){
             $scope.queryResult = response;
             $scope.search = {};
 
@@ -143,43 +127,6 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
                 if(facetObject.value === value) facetObject.selected = true;
             })
         })
-    }
-
-    /**
-     * summary:
-     *		takes a name/value mapping object and returns a string representing
-     *		a URL-encoded version of that object.
-     * example:
-     *		this object:
-     *	{
-         *		blah: "blah",
-         *		multi: [
-         *			"thud",
-         *			"thonk"
-         *	    ]
-         *	};
-     *
-     *	yields the following query string: "blah=blah&multi=thud&multi=thonk"
-     *
-     * credit to alfresco Aikau developers.
-     * @param map
-     * @returns {string}
-     */
-    function objectToQueryString(map) {
-        // FIXME: need to implement encodeAscii!!
-        var enc = encodeURIComponent, pairs = [];
-        for (var name in map) {
-            var value = map[name];
-            var assign = enc(name) + "=";
-            if (Array.isArray(value)) {
-                for (var i = 0, l = value.length; i < l; ++i) {
-                    pairs.push(assign + enc(value[i]));
-                }
-            } else {
-                pairs.push(assign + enc(value));
-            }
-        }
-        return pairs.join("&"); // String
     }
 
     /**

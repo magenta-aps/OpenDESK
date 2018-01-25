@@ -6,37 +6,83 @@ angular
 
 function searchService($http) {
 
-    var service = {};
+    var repoQuery = {
+        maxResults: 0,
+        pageSize: 25,
+        spellcheck: true
+    };
+    var termQuery = 'PATH:"/app:company_home/st:sites/*/cm:documentLibrary//*" TYPE:"cm:content"';
 
-    service.getSearchSuggestions = function (term) {
-        return $http.get('/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=5").then(function (response) {
-            return response.data.items;
-        })
+    return {
+        documentSearch: documentSearch,
+        documentLiveSearch: documentLiveSearch,
+        getConfiguredFacets: getConfiguredFacets
     };
 
-    service.getSearchResults = function (term) {
-        return $http.get('/alfresco/s/slingshot/live-search-docs?t=' + term + "*&maxResults=5").then(function (response) {
-            return response;
-        })
-    };
+    function documentSearch(customQuery) {
+        var query = repoQuery;
+        for (var attrName in customQuery) { query[attrName] = customQuery[attrName]; }
+        return searchByQuery(query);
+    }
 
-    /**
-     * Could we just use the live search results and return a concatenation of the results??
-     * Thoughts: What about faceting?
-     *
-     * @param term
-     * @returns {*}
-     */
-    service.search = function (term) {
-        return $http.get('/slingshot/search?'+ term).then(function(response) {
+    function documentLiveSearch(term) {
+        var query = repoQuery;
+        query.maxResults = 5;
+        query.term = term;
+        return searchByQuery(query);
+    }
+
+    function searchByQuery(query) {
+        query.term = termQuery + '*' + query.term + '*';
+        var queryString = objectToQueryString(query);
+
+        return $http.get('/slingshot/search?'+ queryString).then(function(response) {
             return response.data;
         });
-    };
+
+    }
+
+    /**
+     * summary:
+     *		takes a name/value mapping object and returns a string representing
+     *		a URL-encoded version of that object.
+     * example:
+     *		this object:
+     *	{
+         *		blah: "blah",
+         *		multi: [
+         *			"thud",
+         *			"thonk"
+         *	    ]
+         *	};
+     *
+     *	yields the following query string: "blah=blah&multi=thud&multi=thonk"
+     *
+     * credit to alfresco Aikau developers.
+     * @param map
+     * @returns {string}
+     */
+    function objectToQueryString(map) {
+        // FIXME: need to implement encodeAscii!!
+        var enc = encodeURIComponent, pairs = [];
+        for (var name in map) {
+            var value = map[name];
+            var assign = enc(name) + "=";
+            if (Array.isArray(value)) {
+                for (var i = 0, l = value.length; i < l; ++i) {
+                    pairs.push(assign + enc(value[i]));
+                }
+            } else {
+                pairs.push(assign + enc(value));
+            }
+        }
+        return pairs.join("&"); // String
+    }
 
     /**
      * This returns the list of facets configured in the repository for use with the returned results
      */
-    service.getConfiguredFacets = function () {
+    function getConfiguredFacets () {
         return $http.get("/api/facet/facet-config").then(function(response){
             var rawFacets = response.data.facets;
             var facets=[];
@@ -48,7 +94,5 @@ function searchService($http) {
 
             return facets;
         });
-    };
-
-    return service;
+    }
 }

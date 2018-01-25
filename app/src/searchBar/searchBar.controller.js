@@ -5,32 +5,34 @@ angular
 function SearchBarController($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService) {
 
     var vm = this;
-    vm.getSearchresults = getSearchResults;
-    vm.getAutoSuggestions = getAutoSuggestions;
-    vm.gotoPath = goToPath;
+    vm.getLiveSearch = getLiveSearch;
+    vm.goToDocument = goToDocument;
+    vm.goToSearchPage = goToSearchPage;
 
-    function getSearchResults(term) {
-        if (term !== "")
-            $state.go('search', {'searchTerm': term});
-    }
+    function getLiveSearch(term) {
+        return searchService.documentLiveSearch(term).then(function (response) {
 
-    function getAutoSuggestions(term) {
-        return searchService.getSearchSuggestions(term).then(function (val) {
+            var results = response.items;
 
-            if (val !== undefined) {
-                val.forEach(function (item) {
+            if (results !== undefined) {
+                results.forEach(function (item) {
                     item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24);
                 });
-                return val;
+                return results;
             } else {
                 return [];
             }
         });
     }
 
-    function goToPath(ref) {
+    function goToDocument(ref) {
         $scope.searchText = '';
         var id = ref.split("/")[3];
         $state.go('document', {doc: id});
+    }
+
+    function goToSearchPage(term) {
+        if (term !== "")
+            $state.go('search', {'searchTerm': term});
     }
 }
