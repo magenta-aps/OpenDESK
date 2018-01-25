@@ -4,8 +4,9 @@ angular
     .module('openDeskApp.discussion')
     .controller('DiscussionController', DiscussionController);
 
-function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll, $location,
-    discussionService, nodeRefUtilsService, sessionService, notificationsService) {
+function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
+                              $location, discussionService, nodeRefUtilsService, sessionService, notificationsService,
+                              siteService) {
     var vm = this;
 
     vm.discussions = [];
@@ -52,6 +53,9 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
                 vm.getReplies(vm.selectedDiscussion);
             });
         }
+        siteService.getGroupsAndMembers($stateParams.projekt).then(function (groups) {
+            vm.groups = groups;
+        });
     }
 
     function cancelDialog() {
