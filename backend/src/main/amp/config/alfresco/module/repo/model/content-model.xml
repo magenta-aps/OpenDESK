@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="myc:contentModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <!-- Optional meta-data about the model -->
+    <description>Document Model for Repo Extension X</description>
+    <author>My Name</author>
+    <version>1.0</version>
+
+    <imports>
+        <!-- Import Alfresco Dictionary Definitions -->
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <!-- Import Alfresco Content Domain Model Definitions -->
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <!-- Import Alfresco System Model Definitions -->
+        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+    </imports>
+
+    <!-- Custom namespace for your domain -->
+    <namespaces>
+        <namespace uri="http://www.mycompany.com/model/content/1.0" prefix="myc"/>
+        <namespace uri="http://www.magenta-aps.dk/model/content/1.0" prefix="od"/>
+
+    </namespaces>
+
+
+
+    <!-- ===============================================================================================================
+        Constraints, Types, and Aspects go here...
+        -->
+    <types>
+        <type name="od:notification">
+            <title>Notification</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="od:subject">
+                    <type>d:text</type>
+                </property>
+                <property name="od:message">
+                    <type>d:text</type>
+                </property>
+                <property name="od:type">
+                    <type>d:text</type>
+                </property>
+                <property name="od:read">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="od:seen">
+                <type>d:boolean</type>
+                <default>false</default>
+               </property>
+                <property name="od:document">
+                    <type>d:noderef</type>
+                </property>
+                <property name="od:creator">
+                    <type>d:text</type>
+                </property>
+                <property name="od:project">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </type>
+
+        <type name="od:link">
+            <title>Link</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="od:targetproject">
+                    <type>d:text</type>
+                </property>
+                <property name="od:targetproject_noderef">
+                    <type>d:noderef</type>
+                </property>
+            </properties>
+        </type>
+
+        <type name="od:settings">
+            <title>OpenDesk Settings</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="od:settings">
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </type>
+
+    </types>
+
+    <aspects>
+        <aspect name="od:notifications">
+            <title>Notifications related to a specific user</title>
+                <properties>
+                    <property name="od:test">
+                        <title>test</title>
+                        <type>d:text</type>
+                    </property>
+                </properties>
+
+            <associations>
+                <child-association name="od:ids">
+                    <target>
+                        <class>od:notification</class>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </aspect>
+
+        <!-- projecttypes -->
+
+        <aspect name="od:projecttype_projectdepartment">
+            <title>Attributes related to the projecttype: project-department</title>
+            <properties>
+                <property name="od:name">
+                    <title>name</title>
+                    <type>d:text</type>
+                </property>
+
+                <property name="od:description">
+                    <title>description</title>
+                    <type>d:text</type>
+                </property>
+
+                <property name="od:sbsys">
+                    <title>sbsys</title>
+                    <type>d:text</type>
+                </property>
+
+                <property name="od:state">
+                    <title>state</title>
+                    <type>d:text</type>
+                </property>
+
+                <property name="od:center_id">
+                    <title>center_id</title>
+                    <type>d:text</type>
+                </property>
+
+            </properties>
+        </aspect>
+
+        <aspect name="od:projecttype_templates">
+            <title>Attributes related to a template</title>
+            <properties>
+                <property name="od:template_name">
+                    <title>template_name</title>
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+
+        <aspect name="od:document_template">
+            <title>Marks a project a placeholder for document templates</title>
+            <properties>
+                <property name="od:document_template">
+                    <title>template_name</title>
+                    <type>d:text</type>
+                </property>
+            </properties>
+        </aspect>
+
+    </aspects>
+
+
+
+
+
+</model>

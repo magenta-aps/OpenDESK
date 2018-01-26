@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get settings for OpenDesk frontend</shortname>
+    <description>Gets the settings for OpenDesk frontend</description>
+    <url>/settings</url>
+    <authentication>user</authentication>
+</webscript>

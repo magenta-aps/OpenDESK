@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>openDESK</groupId>
+    <artifactId>repo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>alfresco Repository AMP project</name>
+    <packaging>amp</packaging>
+    <description>Manages the lifecycle of the alfresco Repository AMP (Alfresco Module Package)</description>
+
+    <parent>
+        <groupId>org.alfresco.maven</groupId>
+        <artifactId>alfresco-sdk-parent</artifactId>
+        <version>2.1.1</version>
+    </parent>
+
+    <!-- 
+        SDK properties have sensible defaults in the SDK parent,
+        but you can override the properties below to use another version.
+        For more available properties see the repo-sdk-parent POM.
+       -->
+    <properties>
+
+
+        <jdk>1.8</jdk>
+        <alfresco.version>5.1.e</alfresco.version>
+        <!--<repo.client.war>repo</repo.client.war>-->
+        <!--<repo.client.contextPath>/repo</repo.client.contextPath>-->
+        <alfresco.client.war.folder>${project.build.directory}/${project.build.finalName}-war</alfresco.client.war.folder>
+
+        <!-- The following are default values for data location and Alfresco Community version.
+             Uncomment if you need to change (Note. current default version for Enterprise edition is 5.1)
+          <repo.version>5.1.e</repo.version>
+          <repo.data.location>/absolute/path/to/alf_data_dev</repo.data.location> -->
+
+        <!-- This control the root logging level for all apps uncomment and change, defaults to WARN
+            <app.log.root.level>WARN</app.log.root.level>
+        -->
+
+        <!-- Set the enviroment to use, this controls which properties will be picked in src/test/properties
+             for embedded run, defaults to the 'local' environment. See SDK Parent POM for more info.
+        <env>local</env>
+        -->
+    </properties>
+
+    <!-- Here we realize the connection with the Alfresco selected platform 
+        (e.g.version and edition) -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Setup what versions of the different Alfresco artifacts that will be used (depends on repo.version),
+                 so we don't have to specify version in any of the dependency definitions in our POM.
+                 For more info see:
+                    http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies
+            -->
+            <dependency>
+                <groupId>${alfresco.groupId}</groupId>
+                <artifactId>alfresco-platform-distribution</artifactId>
+                <version>${alfresco.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Following dependencies are needed for compiling Java code in src/main/java;
+             <scope>provided</scope> is inherited for each of the following;
+             for more info, please refer to repo-platform-distribution POM -->
+        <dependency>
+            <groupId>${alfresco.groupId}</groupId>
+            <artifactId>alfresco-repository</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${alfresco.groupId}</groupId>
+            <artifactId>alfresco-repository</artifactId>
+            <version>${alfresco.version}</version>
+            <classifier>h2scripts</classifier>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.5.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.fmaul</groupId>
+            <artifactId>javascript-console-repo</artifactId>
+            <version>0.6</version>
+            <type>amp</type>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Webscripts testing dependencies -->
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-repository</artifactId>
+            <version>${alfresco.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-remote-api</artifactId>
+            <version>${alfresco.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-remote-api</artifactId>
+            <version>${alfresco.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.extensions.surf</groupId>
+            <artifactId>spring-webscripts</artifactId>
+            <version>5.1</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <!-- <version>${maven.tomcat.version}</version> -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.alfresco</groupId>
+                        <artifactId>alfresco-repository</artifactId>
+                        <version>${alfresco.version}</version>
+                        <classifier>h2scripts</classifier>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>*</groupId>
+                                <artifactId>*</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <!--  Here is can control the order of overlay of your (WAR, AMP, etc.) dependencies
+                        | NOTE: At least one WAR dependency must be uncompressed first
+                        | NOTE: In order to have a dependency effectively added to the WAR you need to
+                        | explicitly mention it in the overlay section.
+                        | NOTE: First-win resource strategy is used by the WAR plugin
+                         -->
+                    <overlays>
+                        <!-- Current project customizations -->
+
+
+                        <overlay/>
+
+                        <!-- The Alfresco WAR -->
+                        <overlay>
+                            <groupId>\${alfresco.groupId}</groupId>
+                            <artifactId>alfresco</artifactId>
+                            <type>war</type>
+                            <!-- To allow inclusion of META-INF, needed for MMT WAR file validation-->
+                            <excludes/>
+                        </overlay>
+
+
+                        <!-- Add / order your AMPs here -->
+
+
+
+
+                        <overlay>
+                            <groupId>org.codehaus.plexus</groupId>
+                            <artifactId>plexus-utils</artifactId>
+                            <type>amp</type>
+                        </overlay>
+
+                        <overlay>
+                            <groupId>de.fmaul</groupId>
+                            <artifactId>javascript-console-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
+
+
+                    </overlays>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>unpack-deps</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+
+                        <executions>
+                            <execution>
+                                <id>unpack-amps</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeTypes>amp</includeTypes>
+                                    <outputDirectory>${alfresco.client.war.folder}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.alfresco.maven.plugin</groupId>
+                                <artifactId>maven-amp-plugin</artifactId>
+                                <version>3.0.2</version>
+                            </dependency>
+
+                        </dependencies>
+                    </plugin>
+
+
+
+                </plugins>
+            </build>
+        </profile>
+
+
+
+
+    </profiles>
+
+
+
+</project>

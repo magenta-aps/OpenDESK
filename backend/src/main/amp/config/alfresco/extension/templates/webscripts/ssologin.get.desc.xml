@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>SSO Login Webscript</shortname>
+    <description>Returns current username</description>
+    <url>/ssologin</url>
+    <authentication>user</authentication>
+    <format default="html"></format>
+</webscript>

@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<beans>
+	<bean id="webscript.notifications.post"
+		  class="dk.opendesk.webscripts.Notifications"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="personService" ref="PersonService"/>
+		<property name="siteService" ref="SiteService"/>
+	</bean>
+
+	<bean id="webscript.filebrowser.get"
+		  class="dk.opendesk.webscripts.FileBrowser"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="repository" ref="repositoryHelper"/>
+	</bean>
+
+	<bean id="webscript.groups.post"
+		  class="dk.opendesk.webscripts.Groups"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="authorityService" ref="AuthorityService"/>
+		<property name="personService" ref="PersonService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="preferenceService" ref="PreferenceService"/>
+	</bean>
+
+    <bean id="webscript.preferences.get"
+          class="dk.opendesk.webscripts.Preferences"
+          parent="webscript">
+        <property name="preferenceService" ref="PreferenceService"/>
+    </bean>
+
+	<bean id="webscript.documents.history.get"
+		  class="dk.opendesk.webscripts.documents.History"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="versionService" ref="VersionService"/>
+		<property name="personService" ref="PersonService"/>
+	</bean>
+
+	<bean id="webscript.documents.permissions.get"
+		  class="dk.opendesk.webscripts.documents.Permissions"
+		  parent="webscript">
+		<property name="permissionService" ref="PermissionService"/>
+	</bean>
+
+	<bean id="webscript.documents.previewhelper.get"
+		  class="dk.opendesk.webscripts.documents.PreviewHelper"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+	</bean>
+
+	<bean id="webscript.documents.template.post"
+		  class="dk.opendesk.webscripts.documents.Template"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="fileFolderService" ref="fileFolderService"/>
+		<property name="repository" ref="repositoryHelper"/>
+	</bean>
+
+	<bean id="webscript.sites.projectdepartment.post"
+		  class="dk.opendesk.webscripts.sites.ProjectDepartment"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="authorityService" ref="AuthorityService"/>
+		<property name="permissionService" ref="PermissionService"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="copyService" ref="CopyService"/>
+		<property name="authenticationService" ref="authenticationService"/>
+		<property name="contentService" ref="ContentService"/>
+	</bean>
+
+
+	<bean id="webscript.sites.contents.get"
+		  class="dk.opendesk.webscripts.sites.Contents"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="personService" ref="PersonService"/>
+		<property name="permissionService" ref="PermissionService"/>
+		<property name="siteService" ref="SiteService"/>
+	</bean>
+
+	<bean id="webscript.sites.post"
+		  class="dk.opendesk.webscripts.sites.Sites"
+		  parent="webscript">
+		<property name="nodeService" ref="NodeService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="personService" ref="PersonService"/>
+		<property name="authenticationService" ref="authenticationService"/>
+		<property name="authorityService" ref="authorityService"/>
+		<property name="permissionService" ref="PermissionService"/>
+		<property name="contentService" ref="ContentService"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="preferenceService" ref="PreferenceService"/>
+	</bean>
+
+	<bean id="webscript.users.post"
+		  class="dk.opendesk.webscripts.users.Users"
+		  parent="webscript">
+		<property name="personService" ref="PersonService"/>
+		<property name="nodeService" ref="NodeService"/>
+		<property name="authorityService" ref="AuthorityService"/>
+		<property name="mutableAuthenticationService" ref="authenticationService"/>
+		<property name="actionService" ref="ActionService"/>
+		<property name="searchService" ref="SearchService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="messageService" ref="messageService"/>
+		<property name="properties"> <ref bean="global-properties"/> </property>
+		<property name="serviceRegistry"> <ref bean="ServiceRegistry"/> </property>
+		<property name="preferenceService" ref="PreferenceService"/>
+	</bean>
+
+	<bean id="webscript.cleanupandpurge.get"
+		  class="dk.opendesk.webscripts.CleanupAndPurge" parent="webscript">
+		<property name="nodeArchiveService" ref="nodeArchiveService"/>
+		<property name="siteService" ref="SiteService"/>
+		<property name="nodeService" ref="NodeService"/>
+		<property name="contentService" ref="ContentService"/>
+	</bean>
+
+	<bean id="webscript.sbsys.fakesbsys.post" class="dk.opendesk.webscripts.sbsys.FakeSbsysDownload" parent="webscript">
+		<property name="fileFolderService" ref="FileFolderService"/>
+	</bean>
+
+	<bean id="webscript.settings.settings.get"
+		  class="dk.opendesk.webscripts.settings.GetSettings"
+		  parent="webscript">
+		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
+	<bean id="webscript.settings.publicsettings.get"
+		  class="dk.opendesk.webscripts.settings.GetPublicSettings"
+		  parent="webscript">
+		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
+	<bean id="webscript.settings.settings.put"
+		  class="dk.opendesk.webscripts.settings.UpdateSettings"
+		  parent="webscript">
+		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
+</beans>
