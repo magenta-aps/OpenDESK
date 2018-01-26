@@ -48,7 +48,12 @@
                         </md-select>
                     </md-input-container>
 
-                    <md-autocomplete
+                    <project-manager-picker
+                        type="vm.site.type"
+                        selected="vm.newSite.manager"
+                    ></project-manager-picker>
+
+                    <!-- <md-autocomplete
                             md-selected-item="vm.newSite.manager"
                             md-search-text="searchTextManager"
                             md-items="man in vm.searchPeople(searchTextManager)"
@@ -64,7 +69,7 @@
                         <md-not-found>
                             {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".
                         </md-not-found>
-                    </md-autocomplete>
+                    </md-autocomplete> -->
 
                     <md-input-container>
                         <label>{{'PROJECT.STATUS' | translate}}</label>

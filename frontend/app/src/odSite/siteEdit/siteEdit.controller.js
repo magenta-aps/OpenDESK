@@ -14,7 +14,6 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
     vm.cancelDialog = cancelDialog;
     vm.newSite = sitedata;
     vm.site = sitedata;
-    vm.searchPeople = searchPeople;
     vm.updateSite = updateSite;
 
     activate();
@@ -37,12 +36,6 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
 
     function cancelDialog() {
         $mdDialog.cancel();
-    }
-
-    function searchPeople(query) {
-        if (query) {
-            return userService.getUsers(query);
-        }
     }
 
     function updatePdSite() {
