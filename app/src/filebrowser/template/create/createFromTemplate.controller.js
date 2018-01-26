@@ -12,7 +12,7 @@ function CreateFromTemplateController($scope, $mdDialog, templateService) {
     vm.cancelDialog = cancelDialog;
     vm.contentType = templateService.getSelectedContentType();
     vm.newContentName = '';
-    vm.createContentFromTemplate = createContentFromTemplate;
+    vm.createContent = createContent;
 
     activate();
 
@@ -24,8 +24,8 @@ function CreateFromTemplateController($scope, $mdDialog, templateService) {
         $mdDialog.cancel();
     }
 
-    function createContentFromTemplate() {
-        templateService.createContentFromTemplate(vm.newContentName);
+    function createContent() {
+        templateService.createContent(vm.newContentName);
         $mdDialog.cancel();
     }
 }

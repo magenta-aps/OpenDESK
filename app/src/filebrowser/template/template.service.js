@@ -9,7 +9,7 @@ function templateService($rootScope, $http, alfrescoNodeUtils, filebrowserServic
     var selectedContentType;
 
     var service = {
-        createContentFromTemplate: createContentFromTemplate,
+        createContent: createContent,
         getSelectedContentType: getSelectedContentType,
         getSelectedTemplate: getSelectedTemplate,
         setTemplate: setTemplate
@@ -17,22 +17,18 @@ function templateService($rootScope, $http, alfrescoNodeUtils, filebrowserServic
 
     return service;
 
-    function createContentFromTemplate(contentName) {
+    function createContent(contentName) {
         var folderNodeRef = filebrowserService.getCurrentFolderNodeRef();
 
-        switch(selectedContentType) {
-            case 'DOCUMENT':
-                createDocument(contentName, folderNodeRef);
-                break;
-            case 'FOLDER':
-                createFolder(contentName, folderNodeRef);
-                break;
-            default:
-                console.log('no matches');
+
+        if(selectedContentType === 'FOLDER' && selectedTemplate.nodeRef === null) {
+            createFolder(contentName, folderNodeRef);
         }
+        else
+            createContentFromTemplate(contentName, folderNodeRef);
     }
 
-    function createDocument(contentName, folderNodeRef) {
+    function createContentFromTemplate(contentName, folderNodeRef) {
         return $http.post("/alfresco/service/template", {
             PARAM_METHOD: "createContentFromTemplate",
             PARAM_TEMPLATE_NODE_ID: selectedTemplate.nodeRef,
