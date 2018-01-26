@@ -6,6 +6,7 @@ function config($stateProvider, USER_ROLES) {
     $stateProvider
     .state('search', {
         url: '/søg/:searchTerm',
+        parent: 'site',
         views: {
             'content@': {
                 templateUrl: 'app/src/search/view/search.html',
