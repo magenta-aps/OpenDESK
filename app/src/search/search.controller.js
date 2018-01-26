@@ -13,7 +13,6 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
     $scope.searchTerm = $stateParams.searchTerm;
     $scope.selectedFilters = {}; //Keep track of the selected filters
     $scope.filtersQueryString=""; // the selected filters as query string
-    $scope.definedFacets = searchService.getConfiguredFacets();
     $scope.layout = 'grid';
     $scope.showFilters = false;
 
