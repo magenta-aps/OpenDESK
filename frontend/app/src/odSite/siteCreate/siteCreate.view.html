@@ -59,7 +59,17 @@
                             </md-input-container>
 
                             <!--searchTextManager-->
-                            <md-autocomplete ng-if="vm.type == 'PD-Project'" required md-selected-item="vm.newSite.manager" md-search-text="vm.newSite.presetManager" md-items="man in vm.searchPeople(vm.newSite.presetManager)"
+                            <project-manager-picker
+                                type="vm.type" 
+                                selected="vm.newSite.manager"
+                            ></project-manager-picker>
+
+                            <!-- <md-autocomplete 
+                            ng-if="vm.type == 'PD-Project'" 
+                            required 
+                            md-selected-item="vm.newSite.manager" 
+                            md-search-text="vm.newSite.presetManager" 
+                            md-items="man in vm.searchPeople(vm.newSite.presetManager)"
                                 md-item-text="man.displayName" 
                                 md-min-length="1" 
                                 md-require-match="true"
@@ -71,7 +81,7 @@
                                 <md-not-found>
                                     {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ vm.newSite.presetManager }}".
                                 </md-not-found>
-                            </md-autocomplete>
+                            </md-autocomplete> -->
 
                             <md-checkbox ng-model="vm.newSite.isPrivate" aria-label="Gør projektet privat">
                                 {{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.type + '.NAME' | translate | lowercase}}
