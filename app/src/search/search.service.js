@@ -20,13 +20,13 @@ function searchService($http) {
     };
 
     function documentSearch(customQuery) {
-        var query = repoQuery;
+        var query = angular.copy(repoQuery);
         for (var attrName in customQuery) { query[attrName] = customQuery[attrName]; }
         return searchByQuery(query);
     }
 
     function documentLiveSearch(term) {
-        var query = repoQuery;
+        var query = angular.copy(repoQuery);
         query.maxResults = 5;
         query.term = term;
         return searchByQuery(query);
