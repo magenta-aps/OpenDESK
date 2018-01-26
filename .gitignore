@@ -1,16 +1,27 @@
+### Frontend ###
+
+.idea/
+alf_data_dev/
+alfresco.iml
+out/
+target/
+*.iml
+.project
+.settings/
+.classpath
+alfresco.log
+
+### Backend ###
+
 build/
 junitresults.xml
 logs/*
 !.gitkeep
 node_modules/
 bower_components/
-target/
 tmp
 .DS_Store
-.idea
 app/jspm_packages
-.project
-.settings
 .tern-project
 nbproject/*
 dist
