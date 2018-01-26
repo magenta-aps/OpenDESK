@@ -1,0 +1,28 @@
+<md-card class="dropdown-card">
+    <md-card-title ng-click="vm.showArchived = !vm.showArchived" ng-class="vm.showArchived ? 'open' : 'closed'">
+        <h3 class="md-title od-title-icon"><md-icon>history</md-icon> {{'COMMON.HISTORY' | translate }}</h3>
+        <span flex></span>
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+    </md-card-title>
+
+    <md-card-content ng-class="vm.showArchived ? 'fold-out' : 'fold-in'">
+        <div layout="row">
+            <div flex="50">
+                <span class="od-secondary">{{'COMMON.LAST_MODIFIED' | translate}}</span>
+            </div>
+            <div flex="50">
+                <span class="od-secondary">{{'COMMON.LAST_MODIFIED_BY' | translate}}</span>
+            </div>
+        </div>
+
+        <div id="{{h.nodeRef}}" ng-repeat="h in history" layout="row" style="line-height:2">
+            <div flex="50">
+                <a href="dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">{{ h.created | openeDate }}</a>
+            </div>
+
+            <div flex="50">
+                <a href="dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">{{ h.modifier }}</a>
+            </div>
+        </div>
+    </md-card-content>
+</md-card>

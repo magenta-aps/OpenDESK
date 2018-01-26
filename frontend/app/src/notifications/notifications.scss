@@ -1,0 +1,77 @@
+.od-notifications--counter {
+  background-color: adjust-hue($primary-color, 120deg);
+  border-radius: $u * .25;
+  color: $white;
+  display: block;
+  font-size: $u * .75;
+  line-height: $u * .75;
+  padding: $u * .25;
+  position: absolute;
+  right: $u * .25;
+  top: $u * .25;
+}
+
+.od-sidenav-scroll-wrapper {
+  overflow-y: hidden;
+  height: 100%;
+  overflow: scroll;
+  padding: 0;
+}
+
+.od-notifylist {
+  list-style: none;
+}
+
+.od-notifylist,
+.od-notifylist--item--notice,
+.od-notifylist--item--desc {
+  margin: 0;
+  padding: 0;
+}
+
+.od-notifylist--item {
+  align-items: start;
+  background-color: $gray-85;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  margin-top: 1px;
+}
+
+.od-notifylist--item--link {
+  cursor: pointer;
+  padding: $u;
+  width: 100%;
+
+  &:hover,
+  &:active {
+    background-color: $gray-80;
+    text-decoration: none;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.od-notifylist--item--notice {
+  color: $primary-text-color;
+  font-size: $u;
+  font-weight: bold;
+}
+
+.od-notifylist--item--desc {
+  color: $gray-40;
+  font-size: $u * .9;
+  padding-bottom: $u * .25;
+  padding-top: $u * .25;
+}
+
+.od-notifylist--item--date {
+  color: $gray-60;
+  padding-top: 0;
+}
+
+.od-notifylist--item--read {
+  background: $gray-90;
+}

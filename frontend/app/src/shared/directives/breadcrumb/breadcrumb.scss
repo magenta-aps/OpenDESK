@@ -1,0 +1,17 @@
+.od-breadcrumb {
+  background-color: $gray-90;
+  border-radius: 4px;
+  list-style: none;
+  margin: $u 0;
+  min-height: 40px;
+  padding: 0;
+
+  li {
+    display: inline-block;
+
+    &:not(:last-child)::after {
+      content: '/';
+      padding: 0 4px;
+    }
+  }
+}

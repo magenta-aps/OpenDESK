@@ -1,0 +1,30 @@
+
+<md-dialog aria-label="{{'DISCUSSIONS.NEW' | translate }}" ng-cloak>
+    <form name="newDiscussionForm" ng-submit="vm.newDiscussion(newDiscussionTitle,newDiscussionContent)">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'DISCUSSIONS.NEW' | translate }}
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                    <md-icon>close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding" layout='column'>
+                <md-input-container>
+                    <label>{{'DISCUSSIONS.TITLE' | translate}}</label>
+                    <input type="text" name="newDiscussionTitle" required ng-model="newDiscussionTitle" md-autofocus>
+                </md-input-container>
+
+                <ng-ckeditor ng-model="newDiscussionContent" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash" required></ng-ckeditor>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button ng-disabled="newDiscussionForm.$invalid" type="submit" class="md-primary">{{'COMMON.CREATE' | translate}}</md-button>
+        </md-dialog-actions>
+        
+    </form>
+</md-dialog>

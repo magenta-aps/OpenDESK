@@ -1,0 +1,31 @@
+<md-dialog aria-label="upload-files" ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                    <md-icon>close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding">
+                <div ngf-drop ngf-select ng-model="files" class="drop-box clickable" 
+                ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
+                Træk dine filer her, eller tryk for at vælge</div>
+
+                <ul>
+                    <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
+                </ul>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <div layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular md-mode="indeterminate" ng-show="vm.uploading"></md-progress-circular>
+            </div>
+            <md-button class="md-primary" type="submit" ng-click="vm.uploadFiles(files)" ng-disabled="files == undefined || vm.uploading">
+                <md-icon>file_upload</md-icon>
+                {{'COMMON.UPLOAD' | translate}} {{'DOCUMENT.DOCUMENTS' | translate | lowercase}}
+            </md-button>
+        </md-dialog-actions>
+</md-dialog>

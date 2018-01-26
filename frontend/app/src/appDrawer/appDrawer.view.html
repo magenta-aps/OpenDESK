@@ -1,0 +1,26 @@
+<md-sidenav class="md-sidenav-left md-whiteframe-4dp hide-scrollbar" md-component-id="appDrawer">
+
+    <md-toolbar>
+        <span class="md-toolbar-tools" layout="row">
+                <md-button class="md-icon-button" ng-click="vm.close()" aria-label="{{ 'COMMON.CLOSE' | translate }}">
+                        <md-icon>keyboard_arrow_left</md-icon>
+                    </md-button>
+                    <h1>{{'COMMON.APPS' | translate}}</h1>
+                    <span flex></span>
+        </span>
+    </md-toolbar>
+
+    <md-content class="od-sidenav-scroll-wrapper" layout="column">
+        <a class="md-button" ui-sref="dashboard"
+            ng-click="vm.close()" style="text-align:left">
+           <md-icon md-svg-src="app/assets/img/icons/dashboard.svg"></md-icon>
+             <span style="color:black">Dashboard</span>
+         </a>
+
+              <a class="md-button" ng-repeat="link in vm.links" href="{{link.url}}"
+                 ng-click="vm.close()" style="text-align:left">
+                <md-icon md-svg-src="app/assets/img/icons/{{link.icon}}.svg"></md-icon>
+                  <span style="color:black">{{link.label}}</span>
+              </a>
+    </md-content>
+</md-sidenav>

@@ -1,0 +1,19 @@
+<div>
+	<div layout="row">
+		<md-card flex="75">
+			<md-card-content>
+				<breadcrumb paths="vm.paths"></breadcrumb>
+
+				<div>
+					<ng-include src="viewerTemplateUrl"></ng-include>
+				</div>
+			</md-card-content>
+		</md-card>
+
+		<div flex="25">
+			<div ng-include="'app/src/documents/view/documentHistory.html'"></div>
+			<div ng-include="'app/src/documents/view/documentActions.html'"></div>
+			<div ng-include="'app/src/documents/view/documentReview.html'"></div>
+		</div>
+	</div>
+</div>

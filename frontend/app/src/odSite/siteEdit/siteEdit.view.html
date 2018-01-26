@@ -1,0 +1,102 @@
+<md-dialog aria-label="{{'COMMON.EDIT' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}" class="site-dialog">
+    <form ng-submit="vm.updateSite()" name="pdeditsite">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>{{'COMMON.EDIT' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                <md-icon>close</md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+       
+        <md-dialog-content>
+            <md-content class="md-padding" layout="row" layout-padding>
+                <div flex="vm.site.type == 'PD-Project' ? 50 : 100">
+                    <md-input-container style="width: 100%;">
+                        <label>{{'COMMON.NAME' | translate}}</label>
+                        <input type="text" ng-model="vm.newSite.title" required>
+                    </md-input-container>
+
+                    <md-input-container style="width: 100%;">
+                        <label>{{'COMMON.DESCRIPTION' | translate}}</label>
+                        <textarea ng-model="vm.newSite.description" md-maxlength='250' maxlength="250"></textarea>
+                    </md-input-container>
+
+                    <md-autocomplete
+                        ng-if="vm.site.type == 'PD-Project'"
+                        md-selected-item="vm.newSite.owner"
+                        md-search-text="searchTextOwner"
+                        md-items="owner in vm.searchProjectOwners(searchTextOwner)"
+                        md-item-text="owner.displayName"
+                        md-min-length="1"
+                        md-require-match="true"
+                        md-floating-label="{{'PROJECT.PROJECTOWNER' | translate}}"
+                        md-clear-button=true
+                        placeholder="{{'PROJECT.PROJECTOWNER' | translate}}">
+                        <md-item-template>
+                            <span md-highlight-text="searchTextOwner" md-highlight-flags="gi">{{ owner.displayName }}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextOwner }}".
+                        </md-not-found>
+                    </md-autocomplete>
+
+                    <md-checkbox ng-model="vm.newSite.isPrivate" aria-label="{{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}">
+                        {{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}
+                    </md-checkbox>
+                </div>
+
+                <div ng-if="vm.site.type == 'PD-Project'" flex="50">
+                    <md-input-container style="width: 100%;">
+                        <label>{{'ESDH' | translate}} {{'CASE.CASE_NUMBER' | translate}}</label>
+                        <input type="text" ng-model="vm.newSite.sbsys" required>
+                    </md-input-container>
+
+                    <md-input-container class="org-input">
+                        <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
+                        <md-select ng-model="vm.newSite.center_id" required>
+                            <md-option ng-repeat="org in vm.availOrgs" value="{{ org.shortName }}">
+                                {{ org.displayName }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-autocomplete
+                            md-selected-item="vm.newSite.manager"
+                            md-search-text="searchTextManager"
+                            md-items="man in vm.searchPeople(searchTextManager)"
+                            md-item-text="man.displayName"
+                            md-min-length="1"
+                            md-require-match="true"
+                            md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
+                            md-clear-button=true
+                            placeholder="{{'PROJECT.PROJECTLEAD' | translate}}">
+                        <md-item-template>
+                            <span md-highlight-text="searchTextManager" md-highlight-flags="gi">{{ man.displayName}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextManager }}".
+                        </md-not-found>
+                    </md-autocomplete>
+
+                    <md-input-container>
+                        <label>{{'PROJECT.STATUS' | translate}}</label>
+                        <md-select ng-model="vm.newSite.state">
+                            <md-option ng-repeat="state in vm.availStates" ng-value="state">
+                                {{'PROJECT.STATUS.' + state | translate}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </md-content>
+        </md-dialog-content>
+        
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button type="submit" class="md-button md-raised md-primary" ng-disabled="pdeditsite.$invalid">
+                {{'COMMON.SAVE' | translate}}
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

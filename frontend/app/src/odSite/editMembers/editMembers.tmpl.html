@@ -1,0 +1,87 @@
+<md-dialog aria-label="{{'MEMBER.ADD_REMOVE_MEMBERS' | translate}}" class="site-dialog">
+	<form name="membersForm">
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>{{'MEMBER.ADD_REMOVE_MEMBERS' | translate}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+					<md-icon>close</md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+			<md-content class="md-padding" layout="column">
+				<div ng-repeat="(groupIndex, group) in vm.groups">
+					<div ng-if="group[0].multipleMembers">
+						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" 
+							class="group-toggle" 
+							layout="row" 
+							ng-class="showGroupList[groupIndex] ? 'closed' : 'open'"
+							aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}">
+							<span>{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}</span>
+							<span flex></span>
+							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+						</h4>
+						<div ng-show="!showGroupList[groupIndex]">
+							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
+									  md-on-remove="vm.removeMemberFromSite($chip, group[0].shortName)"
+							    md-on-add="vm.addMemberToSite($chip, group[0].shortName)">
+								<md-autocomplete md-selected-item="selectedProjGrpItem"
+												 md-search-text="vm.searchTextList[groupIndex]"
+												 md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
+												 md-require-match="true"
+								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
+									<span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
+										{{ pgitem.displayName }}
+									</span>
+									<span class="od-secondary">({{ pgitem.userName }})</span>
+								</md-autocomplete>
+								<md-chip-template>
+									<span>{{ $chip.displayName }}</span>
+								</md-chip-template>
+							</md-chips>
+						</div>
+					</div>
+				</div>
+
+				<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>{{'USER.FIRST_NAME' | translate}}</label>
+						<input type="text" name="externalUser.firstName" ng-model="externalUser.firstName">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm>
+					</div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>{{'USER.LAST_NAME' | translate}}</label>
+						<input type="text" name="externalUser.lastName" ng-model="externalUser.lastName">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm>
+					</div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>{{'COMMON.EMAIL' | translate}}</label>
+						<input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/">
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm>
+					</div>
+					<md-input-container>
+						<label>Rolle</label>
+						<md-select ng-model="externalUser.group">
+							<md-option ng-repeat="group in vm.groups | filter: vm.groupFilter" ng-value="group">{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}</md-option>
+						</md-select>
+					</md-input-container>
+					<div style="position: relative; top: -25px;">
+						<md-button class="md-primary" ng-click="vm.addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
+							<md-icon>add</md-icon> {{'COMMON.ADD' | translate}}
+						</md-button>
+					</div>
+				</div>
+			</md-content>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<md-button class="md-primary" ng-click="vm.saveChanges()">{{'COMMON.SAVE' | translate}}</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

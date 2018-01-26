@@ -1,0 +1,25 @@
+
+<md-dialog aria-label="{{'COMMON.REPLY' | translate }}" ng-cloak>
+    <form name="newReplyForm" ng-submit="vm.reply(replyContent)">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{'COMMON.REPLY' | translate }}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                    <md-icon>close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-padding" layout='column'>
+                <ng-ckeditor ng-model="replyContent" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash" required></ng-ckeditor>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button ng-disabled="newReplyForm.$invalid" type="submit" class="md-primary">{{'COMMON.REPLY' | translate}}</md-button>
+        </md-dialog-actions>
+
+        
+    </form>
+</md-dialog>

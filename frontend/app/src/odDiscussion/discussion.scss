@@ -1,0 +1,54 @@
+.discussion-back {
+  cursor: pointer;
+  display: inline-block;
+  padding-right: $u * 4;
+  width: $u * 8;
+}
+
+.discussion-title {
+  display: inline-block;
+}
+
+.od-discussion {
+  border-collapse: collapse;
+  display: block;
+  max-height: calc(100vh - 350px);
+  overflow-y: scroll;
+
+  .title {
+    text-align: left !important;
+  }
+
+  .avatar-container {
+    padding-right: $u * 4;
+    vertical-align: top;
+
+    .avatar {
+      border-radius: 50%;
+      width: $u * 8;
+    }
+
+    h3 {
+      margin-top: 0;
+      text-align: center;
+    }
+  }
+
+  .comment {
+    border-bottom: 1px solid $card-shadow;
+    padding: $u * 1.5 $u * 12 0 0;
+    vertical-align: top;
+    width: 100%;
+  }
+
+  .comment-actions {
+    vertical-align: top;
+    width: $u * 2;
+  }
+
+  .seperator {
+    td {
+      padding-top: $u * 1.5;
+    }
+  }
+}

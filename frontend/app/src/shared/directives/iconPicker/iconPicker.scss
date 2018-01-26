@@ -1,0 +1,14 @@
+.icon-picker {
+  display: inline-block;
+
+  .dropdown-toggle {
+    height: 34px;
+    line-height: 24px;
+    padding: 4px;
+  }
+
+  .dropdown-menu {
+    border: solid 1px black;
+    width: 100px;
+  }
+}

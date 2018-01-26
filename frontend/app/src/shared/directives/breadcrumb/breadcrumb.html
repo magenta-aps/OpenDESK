@@ -1,0 +1,9 @@
+<ol class="od-breadcrumb">
+    <li ng-repeat="path in bcPath">
+        <a ng-hide="$last || $first" ui-sref="{{path.link}}" ui-sref-active="active">{{ path.title }}</a>
+        <md-button ng-show="$first" class="md-primary md-icon-button" ui-sref="{{path.link}}" ui-sref-active="active">
+            <md-icon>folder</md-icon>
+        </md-button>
+        <span ng-show="$last && !$first">{{ path.title }}</span>
+    </li>
+</ol>

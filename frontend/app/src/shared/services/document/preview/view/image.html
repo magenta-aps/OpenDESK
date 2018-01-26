@@ -1,0 +1,9 @@
+<div>
+    <a href="{{imageUrl}}" target="_blank">
+        <img ng-show="!itemMaxSizeExceeded" src="{{previewUrl}}"/>
+    </a>
+
+    <p ng-show="itemMaxSizeExceeded">
+        <span translate="DOCUMENT.IMAGE_MAX_SIZE_EXCEEDED" translate-values="{image: '{{config.fileName}}'}"></span>
+    </p>
+</div>

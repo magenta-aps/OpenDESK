@@ -1,0 +1,36 @@
+### Frontend ###
+
+.idea/
+alf_data_dev/
+alfresco.iml
+out/
+target/
+*.iml
+.project
+.settings/
+.classpath
+alfresco.log
+
+### Backend ###
+
+build/
+junitresults.xml
+logs/*
+!.gitkeep
+node_modules/
+bower_components/
+tmp
+.DS_Store
+app/jspm_packages
+.tern-project
+nbproject/*
+dist
+app/src/.sass-cache
+app/src/**/.sass-cache
+app/src/modules/*
+web.config
+/bin/
+._*
+app/src/app.iml
+*.log
+.nsprc

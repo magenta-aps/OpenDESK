@@ -1,0 +1,45 @@
+<md-card class="dropdown-card">
+    <md-card-title>
+        <h3 class="md-title od-title-icon">
+            <md-icon>tune</md-icon> {{'COMMON.ACTIONS' | translate }}</h3>
+    </md-card-title>
+
+    <md-card-content>
+        <div>
+            <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>edit</md-icon>
+                {{'DOCUMENT.EDIT_DOCUMENT' | translate }}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-show="vm.msOfficeEditable && vm.canEdit" ng-click="vm.editInMSOffice()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>edit</md-icon>
+                {{'DOCUMENT.EDIT_DOCUMENT_SHAREPOINT' | translate }}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-click="vm.downloadDocument()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>get_app</md-icon>
+                {{'COMMON.DOWNLOAD' | translate }}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-show="vm.canEdit" ng-click="vm.uploadNewVersionDialog($event)" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>file_upload</md-icon>
+                {{'COMMON.NEWVERSION' | translate }}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-show="vm.canEdit" ng-click="vm.reviewDocumentsDialog($event)" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>playlist_add_check</md-icon>
+                {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-click="vm.updatePreview()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>cached</md-icon>
+                {{'COMMON.UPDATE' | translate }} {{'COMMON.PREVIEW' | translate}}
+            </md-button>
+        </div>
+    </md-card-content>
+</md-card>
