@@ -8,7 +8,6 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
     var vm = this;
 
     var currentUser = authService.getUserInfo().user;
-    var availOwners = [];
 
     vm.type = sitetype;
 
@@ -30,7 +29,6 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
     $scope.selectedFolgeGrpItem = null;
     $scope.srchflggrptxt = null;
 
-    vm.searchOwners = searchOwners;
     vm.searchPeople = searchPeople;
     vm.createPdSite = createPdSite;
     vm.createSite = createSite;
@@ -41,7 +39,6 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
     function activate() {
         loadTemplateNames();
-        getOwners();
         getAvailOrgs();
         loadSiteGroups();
     }
@@ -60,22 +57,6 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
     function cancelDialog() {
         $mdDialog.cancel();
-    }
-
-    function getOwners() {
-        siteService.getAllOwners().then(function (owners) {
-                availOwners = owners;
-            },
-            function (err) {
-                console.log(err);
-            }
-        );
-    }
-
-    function searchOwners(query) {
-        return filterService.search(availOwners, {
-            displayName: query
-        });
     }
 
     function searchPeople(query) {
