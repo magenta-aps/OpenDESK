@@ -23,24 +23,10 @@
                         <textarea ng-model="vm.newSite.description" md-maxlength='250' maxlength="250"></textarea>
                     </md-input-container>
 
-                    <md-autocomplete
-                        ng-if="vm.site.type == 'PD-Project'"
-                        md-selected-item="vm.newSite.owner"
-                        md-search-text="searchTextOwner"
-                        md-items="owner in vm.searchProjectOwners(searchTextOwner)"
-                        md-item-text="owner.displayName"
-                        md-min-length="1"
-                        md-require-match="true"
-                        md-floating-label="{{'PROJECT.PROJECTOWNER' | translate}}"
-                        md-clear-button=true
-                        placeholder="{{'PROJECT.PROJECTOWNER' | translate}}">
-                        <md-item-template>
-                            <span md-highlight-text="searchTextOwner" md-highlight-flags="gi">{{ owner.displayName }}</span>
-                        </md-item-template>
-                        <md-not-found>
-                            {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ searchTextOwner }}".
-                        </md-not-found>
-                    </md-autocomplete>
+                    <project-owner-picker 
+                        type="vm.site.type" 
+                        selected="vm.newSite.owner"
+                    ></project-owner-picker>
 
                     <md-checkbox ng-model="vm.newSite.isPrivate" aria-label="{{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}">
                         {{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.site.type + '.NAME' | translate | lowercase}}
@@ -70,7 +56,7 @@
                             md-min-length="1"
                             md-require-match="true"
                             md-floating-label="{{'PROJECT.PROJECTLEAD' | translate}}"
-                            md-clear-button=true
+                            md-clear-button="true"
                             placeholder="{{'PROJECT.PROJECTLEAD' | translate}}">
                         <md-item-template>
                             <span md-highlight-text="searchTextManager" md-highlight-flags="gi">{{ man.displayName}}</span>

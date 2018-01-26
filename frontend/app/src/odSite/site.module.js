@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header'])
+angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header', 'members'])
 .config(config);
 
 

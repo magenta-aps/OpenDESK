@@ -32,22 +32,11 @@
                                 <input type="text" ng-model="vm.newSite.siteName" required>
                             </md-input-container>
 
-                            <md-autocomplete ng-if="vm.type == 'PD-Project'" required 
-                                md-selected-item="vm.newSite.owner" 
-                                md-search-text="prjownsrchtxt" 
-                                md-items="own in vm.searchOwners(prjownsrchtxt)"
-                                md-item-text="own.displayName" 
-                                md-min-length="1" 
-                                md-require-match="true"
-                                md-floating-label="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTOWNER' | translate}}"
-                                placeholder="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTOWNER' | translate}}">
-                                <md-item-template>
-                                    <span md-highlight-text="prjownsrchtxt" md-highlight-flags="gi">{{ own.displayName }}</span>
-                                </md-item-template>
-                                <md-not-found>
-                                    {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ prjownsrchtxt }}".
-                                </md-not-found>
-                            </md-autocomplete>
+                            <project-owner-picker 
+                                type="vm.type" 
+                                selected="vm.newSite.owner">
+                            </project-owner-picker>
+
 
                             <md-input-container style="width: 100%;">
                                 <label>{{'PROJECT.DESCRIPTION' | translate}}</label>

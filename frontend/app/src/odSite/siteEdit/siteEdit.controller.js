@@ -8,7 +8,6 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
                             groupService) {
 
     var vm = this;
-    var availProjectOwners = [];
 
     vm.availStates = ['ACTIVE','CLOSED'];
     vm.availOrgs = [];
@@ -16,7 +15,6 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
     vm.newSite = sitedata;
     vm.site = sitedata;
     vm.searchPeople = searchPeople;
-    vm.searchProjectOwners = searchProjectOwners;
     vm.updateSite = updateSite;
 
     activate();
@@ -34,25 +32,11 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
             vm.availOrgs = response.data;
         });
 
-        siteService.getAllOwners().then(function (response) {
-            availProjectOwners = response;
-        });
-
         vm.newSite.isPrivate = (vm.site.visibility === 'PRIVATE' ? true : false);
     }
 
     function cancelDialog() {
         $mdDialog.cancel();
-    }
-    
-    function getOwners() {
-        availProjectOwners = groupService.getProjectOwners();
-    }
-
-    function searchProjectOwners(query) {
-        return filterService.search(availProjectOwners, {
-            displayName: query
-        });
     }
 
     function searchPeople(query) {
