@@ -2,7 +2,8 @@ angular
     .module('openDeskApp')
     .factory('documentPreviewService', DocumentPreviewService);
 
-function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService, sessionService, $http, $sce, ALFRESCO_URI) {
+function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService, sessionService,
+                                $http, $sce, ALFRESCO_URI, EDITOR_CONFIG) {
 
     var templatesUrl = 'app/src/shared/services/document/preview/view/';
 
@@ -152,6 +153,7 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
 
     function pdfViewer() {
         var viewer = {
+            transformableMimeTypes: EDITOR_CONFIG.lool.mimeTypes,
             mimeTypes: ['application/pdf'],
             thumbnail: 'pdf',
             templateUrl: 'pdf.html',
@@ -233,7 +235,9 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
     function generalPreviewPlugin() {
         return {
             acceptsItem: function (item) {
-                return this._acceptsMimeType(item) || this._acceptsThumbnail(item);
+                return this._acceptsMimeType(item) ||
+                    this._acceptsThumbnail(item) ||
+                    this._acceptsTransformableMimeTypes(item);
             },
 
             initPlugin: function (item) {
@@ -241,10 +245,15 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
                 this.fileName = item.location.file;
                 this.itemSize = item.node.size;
                 this.mimeType = item.node.mimetype;
-                this.contentUrl = ALFRESCO_URI.webClientServiceProxy + (this._acceptsMimeType(item) ? this._getContentUrl(item) : this._getThumbnailUrl(item));
-                this.contentUrl = sessionService.makeURL(this.contentUrl);
                 this.thumbnailUrl = ALFRESCO_URI.webClientServiceProxy + this._getThumbnailUrl(item);
                 this.thumbnailUrl = sessionService.makeURL(this.thumbnailUrl);
+                if(this._acceptsMimeType(item))
+                {
+                    this.contentUrl = ALFRESCO_URI.webClientServiceProxy + this._getContentUrl(item);
+                    this.contentUrl = sessionService.makeURL(this.contentUrl);
+                }
+                else
+                    this.contentUrl = this.thumbnailUrl;
             },
 
             _acceptsMimeType: function (item) {
@@ -252,6 +261,13 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
                     return false;
                 }
                 return this.mimeTypes.indexOf(item.node.mimetype) !== -1;
+            },
+
+            _acceptsTransformableMimeTypes: function (item) {
+                if (this.transformableMimeTypes === null || this.transformableMimeTypes === undefined) {
+                    return false;
+                }
+                return this.transformableMimeTypes.indexOf(item.node.mimetype) !== -1;
             },
 
             _acceptsThumbnail: function (item) {
