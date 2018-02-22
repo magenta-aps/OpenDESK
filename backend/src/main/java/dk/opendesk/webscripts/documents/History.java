@@ -140,9 +140,9 @@ public class History extends AbstractWebScript {
 
         NodeRef parentNodeRef = new NodeRef(parentNode);
 
-        VersionHistory versionoHistory =  versionService.getVersionHistory(parentNodeRef);
+        VersionHistory versionHistory = versionService.getVersionHistory(parentNodeRef);
 
-        Version version = versionoHistory.getVersion(versionNode);
+        Version version = versionHistory.getVersion(versionNode);
 
         versionService.deleteVersion(parentNodeRef, version);
 

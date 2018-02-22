@@ -9,22 +9,19 @@ import org.alfresco.repo.web.scripts.BaseWebScriptTest;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.junit.Test;
+import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,8 +60,8 @@ public class TemplateTest extends BaseWebScriptTest {
         templateDocLib = TestUtils.getDocumentTemplateRef(repository, fileFolderService);
     }
 
-    public void testGetAll4TemplateDocuments() throws IOException, JSONException {
-        log.debug("TemplateTest.testGetAll4TemplateDocuments");
+    public void testGetDocumentTemplates() throws IOException, JSONException {
+        log.debug("TemplateTest.GetDocumentTemplates");
 
         TestUtils.uploadFile(transactionService, contentService, fileFolderService,
                 templateDocLib, TestUtils.FILE_TEST_TEMPLATE1);
@@ -75,42 +72,42 @@ public class TemplateTest extends BaseWebScriptTest {
         TestUtils.uploadFile(transactionService, contentService, fileFolderService,
                 templateDocLib, TestUtils.FILE_TEST_TEMPLATE3);
 
+        assertWebScriptGetDocumentTemplates(3);
+
         TestUtils.uploadFile(transactionService, contentService, fileFolderService,
                 templateDocLib, TestUtils.FILE_TEST_TEMPLATE4);
 
-        assertWebScriptGetAllTemplateDocuments(4);
+        assertWebScriptGetDocumentTemplates(4);
     }
 
-    private JSONArray assertWebScriptGetAllTemplateDocuments(int templateCount) throws IOException, JSONException {
-        JSONArray returnJSON = executeWebScriptGetAllTemplateDocuments();
+    private JSONArray assertWebScriptGetDocumentTemplates(int templateCount) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScriptGetDocumentTemplates();
         assertEquals(templateCount, returnJSON.getJSONArray(0).length());
         return returnJSON;
     }
 
-    private JSONArray executeWebScriptGetAllTemplateDocuments () throws IOException, JSONException {
-        Map<String, String> args = new HashMap<String, String>() {
-            {
-                put("method", "getAllTemplateDocuments");
-            }
-        };
-        return executeWebScript(args);
+    private JSONArray executeWebScriptGetDocumentTemplates () throws IOException, JSONException {
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "getDocumentTemplates");
+
+        return executeWebScript(data);
     }
 
-    public void testMakeNewDocumentFromTemplate() throws IOException, JSONException {
-        log.debug("TemplateTest.testMakeNewDocumentFromTemplate");
+    public void testCreateContentFromTemplate() throws IOException, JSONException {
+        log.debug("TemplateTest.testCreateContentFromTemplate");
 
         NodeRef docTemplate = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
-                templateDocLib, TestUtils.FILE_TEST_TEMPLATE1);
+                templateDocLib, TestUtils.FILE_TEST_FROM_TEMPLATE1);
         String templateNodeId = docTemplate.getId();
 
         NodeRef docLib = siteService.getContainer(TestUtils.SITE_ONE, OpenDeskModel.DOC_LIBRARY);
         String destinationNodeId = docLib.toString();
 
-        assertWebScriptMakeNewDocumentFromTemplate(TestUtils.FILE_TEST_FROM_TEMPLATE1, templateNodeId, destinationNodeId);
+        assertWebScriptCreateContentFromTemplate(TestUtils.FILE_TEST_FROM_TEMPLATE1, templateNodeId, destinationNodeId);
     }
 
-    public void testMakeNewDocumentFromTemplateWithoutExtension() throws IOException, JSONException {
-        log.debug("TemplateTest.testMakeNewDocumentFromTemplateWithoutExtension");
+    public void testCreateContentFromTemplateWithoutExtension() throws IOException, JSONException {
+        log.debug("TemplateTest.testCreateContentFromTemplateWithoutExtension");
 
         NodeRef docTemplate = TestUtils.uploadFile(transactionService, contentService, fileFolderService,
                 templateDocLib, TestUtils.FILE_TEST_TEMPLATE1_WITHOUT_EXT);
@@ -119,34 +116,32 @@ public class TemplateTest extends BaseWebScriptTest {
         NodeRef docLib = siteService.getContainer(TestUtils.SITE_ONE, OpenDeskModel.DOC_LIBRARY);
         String destinationNodeId = docLib.toString();
 
-        assertWebScriptMakeNewDocumentFromTemplate(TestUtils.FILE_TEST_TEMPLATE1_WITHOUT_EXT, templateNodeId, destinationNodeId);
+        assertWebScriptCreateContentFromTemplate(TestUtils.FILE_TEST_TEMPLATE1_WITHOUT_EXT, templateNodeId, destinationNodeId);
     }
 
-    private JSONArray assertWebScriptMakeNewDocumentFromTemplate(String nodeName, String templateNodeId,
-                                                                 String destinationNodeRefStr)
+    private JSONArray assertWebScriptCreateContentFromTemplate(String nodeName, String templateNodeId,
+                                                               String destinationNodeRefStr)
             throws IOException, JSONException {
-        JSONArray returnJSON = executeWebScriptMakeNewDocumentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
+        JSONArray returnJSON = executeWebScriptCreateContentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
         assertTrue(returnJSON.getJSONObject(0).has(TestUtils.NODE_REF));
         assertTrue(returnJSON.getJSONObject(0).has(TestUtils.FILENAME));
         return returnJSON;
     }
 
-    private JSONArray executeWebScriptMakeNewDocumentFromTemplate (String nodeName, String templateNodeId,
-                                                               String destinationNodeRefStr)
+    private JSONArray executeWebScriptCreateContentFromTemplate(String nodeName, String templateNodeId,
+                                                                String destinationNodeRefStr)
             throws IOException, JSONException {
-        Map<String, String> args = new HashMap<String, String>() {
-            {
-                put("method", "makeNewDocumentFromTemplate");
-                put("fileName", nodeName);
-                put("template_nodeid", templateNodeId);
-                put("destination_nodeRefid", destinationNodeRefStr);
-            }
-        };
-        return executeWebScript(args);
+        JSONObject data = new JSONObject();
+        data.put("PARAM_METHOD", "createContentFromTemplate");
+        data.put("PARAM_NODE_NAME", nodeName);
+        data.put("PARAM_TEMPLATE_NODE_ID", templateNodeId);
+        data.put("PARAM_DESTINATION_NODEREF", destinationNodeRefStr);
+
+        return executeWebScript(data);
     }
 
-    private JSONArray executeWebScript (Map<String, String> args) throws IOException, JSONException {
-        TestWebScriptServer.Request request = new TestWebScriptServer.GetRequest("template").setArgs(args);
+    private JSONArray executeWebScript (JSONObject data) throws IOException, JSONException {
+        TestWebScriptServer.Request request = new TestWebScriptServer.PostRequest("/template", data.toString(), "application/json");
         TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, TestUtils.ADMIN);
         return new JSONArray(response.getContentAsString());
     }
