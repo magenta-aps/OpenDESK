@@ -36,6 +36,7 @@ import org.alfresco.service.cmr.security.PersonService.PersonInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
@@ -107,9 +108,11 @@ public class Users extends AbstractWebScript {
             JSONObject json = new JSONObject(c.getContent());
 
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
+            String userName = Utils.getJSONObject(json, "PARAM_USERNAME");
             String firstName = Utils.getJSONObject(json, "PARAM_FIRSTNAME");
             String lastName = Utils.getJSONObject(json, "PARAM_LASTNAME");
             String email = Utils.getJSONObject(json, "PARAM_EMAIL");
+            String telephone = Utils.getJSONObject(json, "PARAM_TELEPHONE");
             String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
             String groupName = Utils.getJSONObject(json, "PARAM_GROUP_NAME");
             String filter = Utils.getJSONObject(json, "PARAM_FILTER");
@@ -118,15 +121,20 @@ public class Users extends AbstractWebScript {
                 switch (method) {
 
                     case "createExternalUser":
-                        result = createExternalUser(firstName, lastName, email, siteShortName, groupName);
+                        if(userName.isEmpty())
+                            result = createExternalUserWithoutUserName(firstName, lastName, email, telephone,
+                                    siteShortName,  groupName);
+                        else
+                            result = createExternalUser(userName, firstName, lastName, email, telephone, siteShortName,
+                                    groupName);
                         break;
 
                     case "getUsers": // no test needed
                         result = getUsers(filter);
                         break;
 
-                    case "checkEmailIfExists":
-                        result = checkEmail(email);
+                    case "validateNewUser":
+                        result = validateNewUser(userName, email);
                         break;
                 }
             }
@@ -138,31 +146,46 @@ public class Users extends AbstractWebScript {
         Utils.writeJSONArray(webScriptWriter, result);
     }
 
+    private JSONArray validateNewUser (String userName, String email) throws JSONException {
+        boolean userNameExists = userNameExists(userName);
+        boolean emailExists = emailExists(email);
+        boolean isValid = !emailExists && !userNameExists;
+        JSONArray result = new JSONArray();
+        JSONObject obj = new JSONObject();
+        obj.put("isValid", isValid);
+        obj.put("userNameExists", userNameExists);
+        obj.put("emailExists", emailExists);
+        result.add(obj);
+        return result;
+    }
 
-    private JSONArray checkEmail (String email) {
+    private boolean userNameExists (String userName) {
+        return !userName.isEmpty() && personService.personExists(userName);
+    }
+
+    private boolean emailExists (String email) {
 
         String query = "TYPE:\"cm:person\" AND @cm\\:email:\"" + email + "\"";
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
         ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
 
-        return Utils.getJSONReturnPair("result",(String.valueOf(siteSearchResult.getNumberFound() >= 1)));
-    };
-
+        return siteSearchResult.getNumberFound() >= 1;
+    }
 
     /**
-     * Creates an external user.
-     * The new user is sent an invitation email to its email address containing user name and password.
+     * Creates an external user without user name.
+     * The new user is sent an invitation email to its email address.
      * (method = createExternalUser)
      * @param firstName of the external user.
      * @param lastName of the external user.
      * @param email of the external user.
+     * @param telephone of the external user.
      * @param siteShortName short name of the site that the external user is added.
      * @param groupName name of the site group that the external user is added to.
      * @return a JSONArray containing userName.
      */
-    private JSONArray createExternalUser(String firstName, String lastName, String email, String siteShortName,
-                                         String groupName) throws Exception {
-
+    private JSONArray createExternalUserWithoutUserName(String firstName, String lastName, String email,
+                                                        String telephone, String siteShortName, String groupName) {
         String origUserName = (firstName + "_" + lastName).replace(" ", "_");
         String userName = origUserName;
 
@@ -170,6 +193,26 @@ public class Users extends AbstractWebScript {
         while (personService.personExists(userName)) {
             userName = origUserName + "_" + i++;
         }
+        return createExternalUser(userName, firstName, lastName, email, telephone, siteShortName, groupName);
+    }
+
+
+    /**
+     * Creates an external user.
+     * The new user is sent an invitation email to its email address.
+     * (method = createExternalUser)
+     * @param userName of the external user.
+     * @param firstName of the external user.
+     * @param lastName of the external user.
+     * @param email of the external user.
+     * @param telephone of the external user.
+     * @param siteShortName short name of the site that the external user is added.
+     * @param groupName name of the site group that the external user is added to.
+     * @return a JSONArray containing userName.
+     */
+    private JSONArray createExternalUser(String userName, String firstName, String lastName, String email,
+                                         String telephone, String siteShortName, String groupName) {
+
         String inviterUsername = mutableAuthenticationService.getCurrentUserName();
 
         // ...code to be run as Admin...
@@ -177,7 +220,8 @@ public class Users extends AbstractWebScript {
         try {
             AuthenticationUtil.setRunAsUserSystem();
             // Create new external user and set password
-            Map<QName, Serializable> props = Utils.createPersonProperties(userName, firstName, lastName, email);
+            Map<QName, Serializable> props = Utils.createPersonProperties(userName, firstName, lastName, email,
+                    telephone);
             NodeRef inviteePersonRef = personService.createPerson(props);
             String password = Utils.generateNewPassword();
 

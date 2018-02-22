@@ -396,7 +396,7 @@ public class Utils {
 
         // Create components folder
         NodeRef componentsRef = createChildNode(nodeService, surfConfigRef, "components", ContentModel.TYPE_FOLDER);
-        
+
         Map<String, String> components = new HashMap<>();
         components.put("title", "title/collaboration-title");
         components.put("navigation", "navigation/collaboration-navigation");
@@ -537,12 +537,13 @@ public class Utils {
      * @return a map of properties.
      */
     public static Map<QName, Serializable> createPersonProperties(String userName, String firstName, String lastName,
-                                                                  String email) {
+                                                                  String email, String telephone) {
         Map<QName, Serializable> properties = new HashMap<>();
         properties.put(ContentModel.PROP_USERNAME, userName);
         properties.put(ContentModel.PROP_FIRSTNAME, firstName);
         properties.put(ContentModel.PROP_LASTNAME, lastName);
         properties.put(ContentModel.PROP_EMAIL, email);
+        properties.put(ContentModel.PROP_TELEPHONE, telephone);
         return properties;
     }
 

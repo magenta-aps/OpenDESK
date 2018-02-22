@@ -9,7 +9,15 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                              notificationsService, authService) {
     var vm = this;
 
-    $scope.externalUser = {};
+    $scope.externalUser = {
+        userName : "",
+        firstName : "",
+        lastName : "",
+        email : "",
+        telephone : "",
+        group : ""
+    };
+    vm.ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled;
     vm.addExternalUserToGroup = addExternalUserToGroup;
     vm.addMemberToSite = addMemberToSite;
     vm.cancelDialog = cancelDialog;
@@ -46,12 +54,11 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
         }
     }
 
-    function addExternalUserToGroup(firstName, lastName, email, group) {
-        siteService.checkIfEmailExists(email).then(function (response) {
-            console.log(response.data[0].result);
-
-            if (response.data[0].result == 'false') {
-                siteService.createExternalUser(vm.site.shortName, firstName, lastName, email, group[0].shortName).then(
+    function addExternalUserToGroup(userName, firstName, lastName, email, telephone, group) {
+        siteService.validateNewUser(userName, email).then(function (response) {
+            if (response.isValid) {
+                siteService.createExternalUser(vm.site.shortName, userName, firstName, lastName, email, telephone,
+                    group[0].shortName).then(
                     function (response) {
                         $mdToast.show(
                             $mdToast.simple()
@@ -75,9 +82,14 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                     }
                 );
             } else {
+                var msg = 'Brugeren blev ikke valideret.';
+                if(response.emailExists)
+                    msg = 'Emailen er allerede i brug.';
+                if(response.userNameExists)
+                    msg = 'Brugernavnet er allerede i brug.';
                 $mdToast.show(
                     $mdToast.simple()
-                    .textContent('Brugeren findes allerede')
+                    .textContent(msg)
                     .hideDelay(3000)
                 );
             }
