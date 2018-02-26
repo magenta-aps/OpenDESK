@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>openDESK</groupId>
-    <artifactId>repo</artifactId>
+    <artifactId>opendesk-repo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>alfresco Repository AMP project</name>
     <packaging>amp</packaging>
@@ -24,7 +24,7 @@
 
 
         <jdk>1.8</jdk>
-        <alfresco.version>5.1.e</alfresco.version>
+        <alfresco.version>5.1.g</alfresco.version>
         <!--<repo.client.war>repo</repo.client.war>-->
         <!--<repo.client.contextPath>/repo</repo.client.contextPath>-->
         <alfresco.client.war.folder>${project.build.directory}/${project.build.finalName}-war</alfresco.client.war.folder>
