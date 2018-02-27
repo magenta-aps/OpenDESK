@@ -28,6 +28,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
     vm.searchPeople = searchPeople;
     vm.site = sitedata;
     vm.user = authService.getUserInfo().user;
+    vm.showSendEmailDialog = showSendEmailDialog;
 
     activate();
 
@@ -72,6 +73,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                             displayName: firstName + " " + lastName,
                             email: email,
                         });
+                        showSendEmailDialog(userName, response.subject, response.body);
                     },
                     function (err) {
                         $mdToast.show(
@@ -143,5 +145,22 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
         var message = author + " har tilføjet dig til projektet " + vm.site.title + ".";
         var link = APP_CONFIG.sitesUrl + '/' + site;
         createNotification(userName, subject, message, link, 'project', site);
+    }
+
+    function showSendEmailDialog(userName, subject, body) {
+        var email = {
+            userName: userName,
+            subject: subject,
+            body: body
+        };
+
+        $mdDialog.show({
+            locals:{ email: email },
+            controller: function ($scope, email) {
+                $scope.email = email
+            },
+            template: '<od-email-send email="email"></od-email-send>',
+            clickOutsideToClose: true
+        });
     }
 }

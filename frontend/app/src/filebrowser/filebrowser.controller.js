@@ -167,7 +167,10 @@ angular
     
     function getLink(content) {
         if (content.contentType === 'cmis:document') {
-            return 'document({doc: "' + content.shortRef + '"})';
+            if ($scope.isSite)
+                return 'document({doc: "' + content.shortRef + '"})';
+            else
+                return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})';
         }
         if (content.contentType === 'cmis:folder') {
             if ($scope.isSite)

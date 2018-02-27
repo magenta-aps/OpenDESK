@@ -390,7 +390,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             PARAM_TELEPHONE: telephone,
             PARAM_GROUP_NAME: groupName
         }).then(function (response) {
-            return response;
+            return response.data[0];
         });
     }
 

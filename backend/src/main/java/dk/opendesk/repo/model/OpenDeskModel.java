@@ -117,7 +117,7 @@ public interface OpenDeskModel {
      */
     QName PROP_NOTIFICATION_ASSOC = QName.createQName(OD_URI, "ids");
 
-    
+
     /**
      * Projecttypes
      */
@@ -125,5 +125,9 @@ public interface OpenDeskModel {
     String project = "Project";
     String pd_project = "PD-Project";
     String template_project = "Template-Project";
+
+    String TEMPLATE_OD_FOLDER = "/app:company_home/app:dictionary/cm:extensionwebscripts/cm:OpenDesk/cm:Templates/cm:Emails/";
+    String TEMPLATE_EMAIL_BASE = "email.html.ftl";
+    String TEMPLATE_EMAIL_INVITE_EXTERNAL_USER = "ekstern-bruger.html.ftl";
 
 }

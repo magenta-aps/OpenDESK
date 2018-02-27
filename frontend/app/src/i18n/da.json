@@ -11,6 +11,7 @@
     "ERROR": "Fejl",
     "BACK": "Tilbage",
     "NEXT": "Næste",
+    "SKIP": "Spring over",
     "DONE": "Færdig",
     "ACTIONS": "Handlinger",
     "REMOVE": "Fjern",
@@ -45,7 +46,8 @@
     "NO_MATCHES": "Ingen resultater",
     "EMAIL": "Email",
     "SAVE": "Gem",
-    "SAVE_EMAIL": "Arkiver e-mail",
+    "SAVE_EMAIL": "Arkiver email",
+    "SEND_EMAIL": "Send email",
     "VIEW_DETAILS": "Vis detaljer",
     "DETAILS": "Detaljer",
     "SHOW": "Vis",
@@ -84,6 +86,7 @@
     "TEMPLATEPROJECT": "Skabelonprojekt",
     "TEMPLATES": "Skabeloner",
     "NO_TEMPLATE": "Ingen skabelon",
+    "EDIT_TEMPLATE": "Redigér skabelon",
     "PRIVATE": "Privat",
     "CLOSED": "Lukket",
     "AND": "Og",
@@ -107,7 +110,8 @@
     "FILETYPE": "Dokumenttype",
     "LOCAL_DOCUMENT": "Lokalt dokument",
     "REPLY": "Besvar",
-    "EMPTY": "Tom"
+    "EMPTY": "Tom",
+    "PLACEHOLDERS": "Pladsholdere"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standardsag"
@@ -1040,5 +1044,18 @@
     "PATH": {
       "FAILURE": "Rediger i MS Office er ikke muligt, da URL'en er længere end 256 tegn. Brug en kortere sti for at reducere længden. URL'en: {{url}}."
     }
+  },
+  "PLACEHOLDERS": {
+    "FIRSTNAME" : "Fornavn",
+    "LASTNAME" : "Efternavn",
+    "USERNAME" : "Brugernavn",
+    "PASSWORD" : "Kodeord",
+    "LOGIN" : "Login URL",
+    "GROUP" : "Sitegruppe",
+    "SITENAME" : "Sitenavn",
+    "SITETYPE" : "Sitetype",
+    "SENDERFIRSTNAME" : "Afsenders fornavn",
+    "SENDERLASTNAME" : "Afsenders efternavn",
+    "SENDERUSERNAME" : "Afsenders brugernavn"
   }
 }
