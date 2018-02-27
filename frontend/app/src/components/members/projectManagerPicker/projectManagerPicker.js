@@ -1,6 +1,6 @@
 angular.module('members')
 .component('projectManagerPicker', {
-  templateUrl: '/app/src/components/members/projectManagerPicker/projectManagerPicker.html',
+  templateUrl: 'app/src/components/members/projectManagerPicker/projectManagerPicker.html',
   controller: projectManagerPicker,
   bindings: {
     selected: '=',
