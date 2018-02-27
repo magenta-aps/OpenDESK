@@ -18,7 +18,6 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
         manager: currentUser,
         presetManager: currentUser
     };
-    vm.availOrgs = [];
     
     $scope.selectedProjGrpItem = null;
     $scope.srchprjgrptxt = null;
@@ -39,7 +38,6 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
     function activate() {
         loadTemplateNames();
-        getAvailOrgs();
         loadSiteGroups();
     }
 
@@ -63,12 +61,6 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
         if (query) {
             return userService.getUsers(query);
         }
-    }
-
-    function getAvailOrgs() {
-        siteService.getAllOrganizationalCenters().then(function (response) {
-            vm.availOrgs = response.data;
-        });
     }
 
     function loadSiteGroups() {
