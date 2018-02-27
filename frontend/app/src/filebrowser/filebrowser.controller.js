@@ -55,7 +55,7 @@ angular
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
     $scope.reverse = false;
-    $scope.order = 'lastChanged';
+    $scope.order = 'name';
 
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
