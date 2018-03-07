@@ -9,7 +9,15 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                              notificationsService, authService) {
     var vm = this;
 
-    $scope.externalUser = {};
+    $scope.externalUser = {
+        userName : "",
+        firstName : "",
+        lastName : "",
+        email : "",
+        telephone : "",
+        group : ""
+    };
+    vm.ssoLoginEnabled = APP_CONFIG.ssoLoginEnabled;
     vm.addExternalUserToGroup = addExternalUserToGroup;
     vm.addMemberToSite = addMemberToSite;
     vm.cancelDialog = cancelDialog;
@@ -20,6 +28,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
     vm.searchPeople = searchPeople;
     vm.site = sitedata;
     vm.user = authService.getUserInfo().user;
+    vm.showSendEmailDialog = showSendEmailDialog;
 
     activate();
 
@@ -46,12 +55,11 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
         }
     }
 
-    function addExternalUserToGroup(firstName, lastName, email, group) {
-        siteService.checkIfEmailExists(email).then(function (response) {
-            console.log(response.data[0].result);
-
-            if (response.data[0].result == 'false') {
-                siteService.createExternalUser(vm.site.shortName, firstName, lastName, email, group[0].shortName).then(
+    function addExternalUserToGroup(userName, firstName, lastName, email, telephone, group) {
+        siteService.validateNewUser(userName, email).then(function (response) {
+            if (response.isValid) {
+                siteService.createExternalUser(vm.site.shortName, userName, firstName, lastName, email, telephone,
+                    group[0].shortName).then(
                     function (response) {
                         $mdToast.show(
                             $mdToast.simple()
@@ -65,6 +73,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                             displayName: firstName + " " + lastName,
                             email: email,
                         });
+                        showSendEmailDialog(userName, response.subject, response.body);
                     },
                     function (err) {
                         $mdToast.show(
@@ -75,9 +84,14 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                     }
                 );
             } else {
+                var msg = 'Brugeren blev ikke valideret.';
+                if(response.emailExists)
+                    msg = 'Emailen er allerede i brug.';
+                if(response.userNameExists)
+                    msg = 'Brugernavnet er allerede i brug.';
                 $mdToast.show(
                     $mdToast.simple()
-                    .textContent('Brugeren findes allerede')
+                    .textContent(msg)
                     .hideDelay(3000)
                 );
             }
@@ -131,5 +145,22 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
         var message = author + " har tilføjet dig til projektet " + vm.site.title + ".";
         var link = APP_CONFIG.sitesUrl + '/' + site;
         createNotification(userName, subject, message, link, 'project', site);
+    }
+
+    function showSendEmailDialog(userName, subject, body) {
+        var email = {
+            userName: userName,
+            subject: subject,
+            body: body
+        };
+
+        $mdDialog.show({
+            locals:{ email: email },
+            controller: function ($scope, email) {
+                $scope.email = email
+            },
+            template: '<od-email-send email="email"></od-email-send>',
+            clickOutsideToClose: true
+        });
     }
 }

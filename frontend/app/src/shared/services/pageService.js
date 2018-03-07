@@ -28,7 +28,7 @@ angular
                 pages.push({
                     labelKey: labelKey,
                     sref: sref,
-                    icon: icon || 'content_copy',
+                    icon: icon || 'description',
                     isAdminOnly: isAdminOnly
                 });
             }

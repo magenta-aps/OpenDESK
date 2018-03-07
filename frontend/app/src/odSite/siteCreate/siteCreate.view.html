@@ -32,22 +32,11 @@
                                 <input type="text" ng-model="vm.newSite.siteName" required>
                             </md-input-container>
 
-                            <md-autocomplete ng-if="vm.type == 'PD-Project'" required 
-                                md-selected-item="vm.newSite.owner" 
-                                md-search-text="prjownsrchtxt" 
-                                md-items="own in vm.searchOwners(prjownsrchtxt)"
-                                md-item-text="own.displayName" 
-                                md-min-length="1" 
-                                md-require-match="true"
-                                md-floating-label="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTOWNER' | translate}}"
-                                placeholder="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTOWNER' | translate}}">
-                                <md-item-template>
-                                    <span md-highlight-text="prjownsrchtxt" md-highlight-flags="gi">{{ own.displayName }}</span>
-                                </md-item-template>
-                                <md-not-found>
-                                    {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ prjownsrchtxt }}".
-                                </md-not-found>
-                            </md-autocomplete>
+                            <project-owner-picker 
+                                type="vm.type" 
+                                selected="vm.newSite.owner">
+                            </project-owner-picker>
+
 
                             <md-input-container style="width: 100%;">
                                 <label>{{'PROJECT.DESCRIPTION' | translate}}</label>
@@ -55,34 +44,20 @@
                             </md-input-container>
                         </div>
                         <div flex="50">
-                            <md-input-container ng-if="vm.type == 'PD-Project'" class="org-input">
-                                <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
-                                <md-select ng-model="vm.newSite.center_id" required>
-                                    <md-option ng-repeat="org in vm.availOrgs | orderBy:'+displayName'" value="{{ org.shortName }}">
-                                        {{ org.displayName }}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
+                            <organisation-unit-picker
+                                type="vm.type"
+                                selected="vm.newSite.center_id"
+                            ></organisation-unit-picker>
 
                             <md-input-container ng-if="vm.type == 'PD-Project'" style="width: 100%;">
                                 <label>{{'ESDH' | translate}} {{'CASE.CASE_NUMBER' | translate | lowercase}}</label>
                                 <input type="text" ng-model="vm.newSite.sbsys" required>
                             </md-input-container>
 
-                            <!--searchTextManager-->
-                            <md-autocomplete ng-if="vm.type == 'PD-Project'" required md-selected-item="vm.newSite.manager" md-search-text="vm.newSite.presetManager" md-items="man in vm.searchPeople(vm.newSite.presetManager)"
-                                md-item-text="man.displayName" 
-                                md-min-length="1" 
-                                md-require-match="true"
-                                md-floating-label="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTMANAGER' | translate}}"
-                                placeholder="{{'SITES.' + vm.type + '.GROUPS.PD_PROJECTMANAGER' | translate}}">
-                                <md-item-template>
-                                    <span md-highlight-text="vm.newSite.presetManager" md-highlight-flags="gi">{{ man.displayName }}</span>
-                                </md-item-template>
-                                <md-not-found>
-                                    {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ vm.newSite.presetManager }}".
-                                </md-not-found>
-                            </md-autocomplete>
+                            <project-manager-picker
+                                type="vm.type" 
+                                selected="vm.newSite.manager"
+                            ></project-manager-picker>
 
                             <md-checkbox ng-model="vm.newSite.isPrivate" aria-label="Gør projektet privat">
                                 {{'COMMON.CLOSED' | translate}} {{'SITES.' + vm.type + '.NAME' | translate | lowercase}}

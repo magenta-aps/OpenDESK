@@ -8,61 +8,26 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
                             groupService) {
 
     var vm = this;
-    var availProjectOwners = [];
 
     vm.availStates = ['ACTIVE','CLOSED'];
-    vm.availOrgs = [];
     vm.cancelDialog = cancelDialog;
     vm.newSite = sitedata;
     vm.site = sitedata;
-    vm.searchPeople = searchPeople;
-    vm.searchProjectOwners = searchProjectOwners;
     vm.updateSite = updateSite;
 
     activate();
 
     function activate() {
-        siteService.getSiteOwner().then(function (owner) {
-            vm.newSite.owner = owner;
-        });
-
-        siteService.getSiteManager().then(function (manager) {
-            vm.newSite.manager = manager;
-        });
-
-        siteService.getAllOrganizationalCenters().then(function (response) {
-            vm.availOrgs = response.data;
-        });
-
-        siteService.getAllOwners().then(function (response) {
-            availProjectOwners = response;
-        });
-
         vm.newSite.isPrivate = (vm.site.visibility === 'PRIVATE' ? true : false);
     }
 
     function cancelDialog() {
         $mdDialog.cancel();
     }
-    
-    function getOwners() {
-        availProjectOwners = groupService.getProjectOwners();
-    }
-
-    function searchProjectOwners(query) {
-        return filterService.search(availProjectOwners, {
-            displayName: query
-        });
-    }
-
-    function searchPeople(query) {
-        if (query) {
-            return userService.getUsers(query);
-        }
-    }
 
     function updatePdSite() {
-        siteService.updatePDSite(vm.newSite).then(function (response) {
+        siteService.updatePDSite(vm.newSite)
+        .then(response => {
             $mdDialog.cancel();
             $state.reload();
             $mdToast.show(
@@ -70,7 +35,7 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
                 .textContent('Du har opdateret: ' + vm.newSite.title)
                 .hideDelay(3000)
             );
-        },function (err) {
+        }, err => {
             console.log(err);
         });
     }

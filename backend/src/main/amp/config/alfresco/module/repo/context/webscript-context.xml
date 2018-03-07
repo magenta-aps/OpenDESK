@@ -123,9 +123,7 @@
 		<property name="actionService" ref="ActionService"/>
 		<property name="searchService" ref="SearchService"/>
 		<property name="siteService" ref="SiteService"/>
-		<property name="messageService" ref="messageService"/>
 		<property name="properties"> <ref bean="global-properties"/> </property>
-		<property name="serviceRegistry"> <ref bean="ServiceRegistry"/> </property>
 		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 

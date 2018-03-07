@@ -11,6 +11,7 @@
     "SUCCESS": "Success",
     "BACK": "Back",
     "NEXT": "Next",
+    "SKIP": "Skip",
     "DONE": "Done",
     "ACTIONS": "Actions",
     "REMOVE": "Remove",
@@ -45,7 +46,8 @@
     "NO_MATCHES": "No results",
     "EMAIL": "Email",
     "SAVE": "Save",
-    "SAVE_EMAIL": "Save e-mail",
+    "SAVE_EMAIL": "Save email",
+    "SEND_EMAIL": "Send email",
     "VIEW_DETAILS": "View details",
     "DETAILS": "Details",
     "SHOW": "Show",
@@ -85,6 +87,7 @@
     "TEMPLATE": "Template",
     "TEMPLATES": "Templates",
     "NO_TEMPLATE": "No template",
+    "EDIT_TEMPLATE": "Edit template",
     "TEMPLATEPROJECT": "Template project",
     "PRIVATE": "Private",
     "CLOSED": "Closed",
@@ -107,7 +110,8 @@
     "FILETYPE": "File type",
     "LOCAL_DOCUMENT": "Local document",
     "REPLY": "Reply",
-    "EMPTY": "Empty"
+    "EMPTY": "Empty",
+    "PLACEHOLDERS": "Placeholders"
   },
   "SIMPLE_CASE": {
     "TYPE": "Standard case"
@@ -1067,5 +1071,18 @@
     "PATH": {
       "FAILURE": "Edit in MS Office with AOS is not possible because the URL is longere than 256 signs. Use a shorter path to reduce the length. The URL: {{url}}."
     }
+  },
+  "PLACEHOLDERS": {
+    "FIRSTNAME" : "First Name",
+    "LASTNAME" : "Last Name",
+    "USERNAME" : "Username",
+    "PASSWORD" : "Password",
+    "LOGIN" : "Login URL",
+    "GROUP" : "Site Group",
+    "SITENAME" : "Site Name",
+    "SITETYPE" : "Site Type",
+    "SENDERFIRSTNAME" : "First Name of the Sender",
+    "SENDERLASTNAME" : "Last Name of the Sender",
+    "SENDERUSERNAME" : "Username of the Sender"
   }
 }

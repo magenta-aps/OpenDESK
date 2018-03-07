@@ -55,7 +55,7 @@ angular
     $scope.uploadedToSbsys = false;
     $scope.showProgress = false;
     $scope.reverse = false;
-    $scope.order = 'lastChanged';
+    $scope.order = 'name';
 
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
@@ -167,7 +167,10 @@ angular
     
     function getLink(content) {
         if (content.contentType === 'cmis:document') {
-            return 'document({doc: "' + content.shortRef + '"})';
+            if ($scope.isSite)
+                return 'document({doc: "' + content.shortRef + '"})';
+            else
+                return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})';
         }
         if (content.contentType === 'cmis:folder') {
             if ($scope.isSite)
