@@ -32,7 +32,7 @@
                                     <cm:description>This file contains the base email template.</cm:description>
                                     <cm:author>admin</cm:author>
                                     <cm:name>email.html.ftl</cm:name>
-                                    <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/ekstern-bruger.html.ftl|mimetype=text/html|size=2428|encoding=UTF-8|locale=da_DK_</cm:content>
+                                    <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/email.html.ftl|mimetype=text/html|size=2428|encoding=UTF-8|locale=da_DK_</cm:content>
                                 </view:properties>
                                 <view:associations></view:associations>
                             </cm:content>
