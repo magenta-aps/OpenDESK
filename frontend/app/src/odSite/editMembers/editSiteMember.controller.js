@@ -73,7 +73,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                             displayName: firstName + " " + lastName,
                             email: email,
                         });
-                        showSendEmailDialog(userName, response.subject, response.body);
+                        showSendEmailDialog(response.userName, response.subject, response.body);
                     },
                     function (err) {
                         $mdToast.show(
