@@ -302,6 +302,9 @@ public class Users extends AbstractWebScript {
             JSONArray result = new JSONArray();
             JSONObject json = new JSONObject();
 
+            // Set username
+            json.put("userName", userName);
+
             // Set subject
             NodeRef template = Utils.queryEmailTemplate(searchService, OpenDeskModel.TEMPLATE_EMAIL_INVITE_EXTERNAL_USER);
             if(template != null) {
