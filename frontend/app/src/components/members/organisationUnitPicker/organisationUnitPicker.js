@@ -16,10 +16,9 @@ function organisationUnitPicker (siteService) {
 
   function activate() {
     siteService.getAllOrganizationalCenters()
-    .then(response => {
+    .then(function (response) {
       vm.organisationUnits = response.data;
-      },
-      err => {
+      }, function (err) {
         console.log(err);
       }
     );
