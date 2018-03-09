@@ -18,10 +18,10 @@ function projectManagerPicker (siteService, userService) {
 
   function activate() {
     siteService.getAllOwners()
-    .then(response => {
+    .then(function (response) {
         owners = response;
       },
-      err => {
+      function (err) {
         console.log(err);
       }
     );

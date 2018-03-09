@@ -102,12 +102,12 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
 
     function getAllOrganizationalCenters() {
         return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
-            .then(response => {
+            .then(function (response) {
                 if (response.status && response.status !== 200) {
                     return $q.reject(response);
                 }
                 return response.data;
-            }, error => {
+            }, function (error) {
                 console.log("Error retrieving list of all organizational centers.");
                 console.log(error);
             });
