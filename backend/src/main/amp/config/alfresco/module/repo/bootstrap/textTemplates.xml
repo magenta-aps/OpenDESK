@@ -1,0 +1,58 @@
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+           xmlns:cm="http://www.alfresco.org/model/content/1.0"
+           xmlns:app="http://www.alfresco.org/model/application/1.0"
+           xmlns:od="http://www.magenta-aps.dk/model/content/1.0">
+
+    <cm:folder view:childName="cm:OpenDesk">
+        <app:uifacets />
+        <cm:name>OpenDesk</cm:name>
+        <app:icon>space-icon-default</app:icon>
+        <cm:title>OpenDesk</cm:title>
+        <cm:description></cm:description>
+        <cm:contains>
+            <cm:folder view:childName="cm:Templates">
+                <app:uifacets />
+                <cm:name>Templates</cm:name>
+                <app:icon>space-icon-default</app:icon>
+                <cm:title>Templates</cm:title>
+                <cm:description></cm:description>
+                <cm:contains>
+                    <cm:folder view:childName="cm:Emails">
+                        <app:uifacets />
+                        <cm:name>Emails</cm:name>
+                        <app:icon>space-icon-default</app:icon>
+                        <cm:title>Emails</cm:title>
+                        <cm:description></cm:description>
+                        <cm:contains>
+                            <cm:content view:childName="cm:email.html.ftl">
+                                <view:aspects>
+                                    <cm:author />
+                                </view:aspects>
+                                <view:properties>
+                                    <cm:description>This file contains the base email template.</cm:description>
+                                    <cm:author>admin</cm:author>
+                                    <cm:name>email.html.ftl</cm:name>
+                                    <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/email.html.ftl|mimetype=text/html|size=2428|encoding=UTF-8|locale=da_DK_</cm:content>
+                                </view:properties>
+                                <view:associations></view:associations>
+                            </cm:content>
+                            <cm:content view:childName="cm:ekstern-bruger.html.ftl">
+                                <view:aspects>
+                                    <cm:author />
+                                </view:aspects>
+                                <view:properties>
+                                    <cm:description>This file contains the email template for new external users.</cm:description>
+                                    <cm:author>admin</cm:author>
+                                    <cm:name>ekstern-bruger.html.ftl</cm:name>
+                                    <cm:title>Du er blevet oprettet i OpenDesk</cm:title>
+                                    <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/ekstern-bruger.html.ftl|mimetype=text/html|size=581|encoding=UTF-8|locale=da_DK_</cm:content>
+                                </view:properties>
+                                <view:associations></view:associations>
+                            </cm:content>
+                        </cm:contains>
+                    </cm:folder>
+                </cm:contains>
+            </cm:folder>
+        </cm:contains>
+    </cm:folder>
+</view:view>

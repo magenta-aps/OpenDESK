@@ -8,7 +8,8 @@ function AlfrescoDocumentService($http, alfrescoNodeUtils) {
 
     var service = {
         retrieveSingleDocument: retrieveSingleDocument,
-        retrieveNodeInfo: retrieveNodeInfo
+        retrieveNodeInfo: retrieveNodeInfo,
+        retrieveNodeContent: retrieveNodeContent
     };
 
     return service;
@@ -23,6 +24,13 @@ function AlfrescoDocumentService($http, alfrescoNodeUtils) {
 
     function retrieveNodeInfo(nodeRef) {
         var url = '/alfresco/s/filebrowser?method=getAll&NODE_ID=' + alfrescoNodeUtils.processNodeRef(nodeRef).id + '&STORE_TYPE=workspace&STORE_ID=SpacesStore';
+        return $http.get(url).then(function (response) {
+            return response.data;
+        });
+    }
+
+    function retrieveNodeContent(nodeRef) {
+        var url = "/api/node/content/" + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
         return $http.get(url).then(function (response) {
             return response.data;
         });

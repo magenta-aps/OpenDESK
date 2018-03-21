@@ -24,7 +24,7 @@
 
 
         <jdk>1.8</jdk>
-        <alfresco.version>5.1.e</alfresco.version>
+        <alfresco.version>5.1.g</alfresco.version>
         <!--<repo.client.war>repo</repo.client.war>-->
         <!--<repo.client.contextPath>/repo</repo.client.contextPath>-->
         <alfresco.client.war.folder>${project.build.directory}/${project.build.finalName}-war</alfresco.client.war.folder>

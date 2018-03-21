@@ -11,9 +11,10 @@ function SystemSettingsCtrl(sessionService, pageService, systemSettingsService, 
     pageService.addSystemPage(vm.pages, 'Systemgrupper', 'systemsettings.groups', true, 'group');
     if(APP_BACKEND_CONFIG.enableProjects)
         pageService.addSystemPage(vm.pages, 'Projektskabeloner', 'systemsettings.templateList', true);
+    pageService.addSystemPage(vm.pages, 'Tekstskabeloner', 'systemsettings.text_templates', true);
     pageService.addSystemPage(vm.pages, 'Mappeskabeloner', 'systemsettings.folder_templates', true);
     pageService.addSystemPage(vm.pages, 'Dokumentskabeloner', 'systemsettings.document_templates', true);
-    pageService.addSystemPage(vm.pages, 'Systemmapper', 'systemsettings.filebrowser({path: ""})', true);
+    pageService.addSystemPage(vm.pages, 'Systemmapper', 'systemsettings.filebrowser({path: ""})', true, 'folder');
 
     browserService.setTitle($translate.instant('ADMIN.ADMINISTRATION_PAGES'));
 

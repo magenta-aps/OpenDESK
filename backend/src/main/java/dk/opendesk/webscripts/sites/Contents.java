@@ -150,11 +150,12 @@ public class Contents extends AbstractWebScript {
 
 
                     String modifier = (String) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIER);
-                    NodeRef person = personService.getPerson(modifier);
-
-
-                    json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
-
+                    if(personService.personExists(modifier)) {
+                        NodeRef person = personService.getPerson(modifier);
+                        json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
+                    }
+                    else
+                        json.put("lastChangedBy", "Administrator");
 
                     Date d = (Date) nodeService.getProperty(childNodeRef, ContentModel.PROP_MODIFIED);
                     json.put("lastChanged", d.getTime());

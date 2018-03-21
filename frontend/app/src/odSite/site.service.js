@@ -49,7 +49,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         getSiteGroups: getSiteGroups,
         createTemplate: createTemplate,
         createExternalUser: createExternalUser,
-        checkIfEmailExists: checkIfEmailExists,
+        validateNewUser: validateNewUser,
         getNode: getNode,
         getSiteUserPermissions: getSiteUserPermissions,
         getPermissions: getPermissions,
@@ -62,7 +62,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         createReviewNotification: createReviewNotification,
         updateMemberList: updateMemberList
     };
-    
+
     return service;
 
     function getSite() {
@@ -72,17 +72,17 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
     function updateMemberList() {
         $rootScope.$broadcast('updateMemberList');
     }
-    
+
     function getAllOwners() {
         return $http.post("/alfresco/service/groups", {
             PARAM_METHOD: "getGroupMembers",
             PARAM_GROUP_NAME: 'OPENDESK_ProjectOwners'
         }).then(function (response) {
-            return response.data;
-        },
-        function (error) {
-            return error;
-        });
+                return response.data;
+            },
+            function (error) {
+                return error;
+            });
     }
 
     function getTemplateNames() {
@@ -99,14 +99,14 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             return templates;
         });
     }
-    
+
     function getAllOrganizationalCenters() {
         return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
             .then(function (response) {
                 if (response.status && response.status !== 200) {
                     return $q.reject(response);
                 }
-                return response.data || response;
+                return response.data;
             }, function (error) {
                 console.log("Error retrieving list of all organizational centers.");
                 console.log(error);
@@ -157,7 +157,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         );
     }
 
-    // function updateSite(shortName, newName, description, visibility) {  
+    // function updateSite(shortName, newName, description, visibility) {
     function updateSite(site) {
         return $http.put('/api/sites/' + site.shortName, {
             shortName: site.shortName,
@@ -286,7 +286,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             });
         });
     }
-    
+
     function uploadNewVersion(file, destination, existingNodeRef) {
         var formData = new FormData();
         formData.append("filedata", file);
@@ -332,7 +332,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             return response.data;
         });
     }
-    
+
     function deleteLink(source, destination) {
         return $http.post("/alfresco/service/sites", {
             PARAM_METHOD: "deleteLink",
@@ -379,25 +379,28 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
-    function createExternalUser(siteShortName, firstName, lastName, email, groupName) {
+    function createExternalUser(siteShortName, userName, firstName, lastName, email, telephone, groupName) {
         return $http.post('/alfresco/service/users', {
             PARAM_METHOD: "createExternalUser",
             PARAM_SITE_SHORT_NAME: siteShortName,
+            PARAM_USERNAME: userName,
             PARAM_FIRSTNAME: firstName,
             PARAM_LASTNAME: lastName,
             PARAM_EMAIL: email,
+            PARAM_TELEPHONE: telephone,
             PARAM_GROUP_NAME: groupName
         }).then(function (response) {
-            return response;
+            return response.data[0];
         });
     }
 
-    function checkIfEmailExists(email) {
+    function validateNewUser(userName, email) {
         return $http.post('/alfresco/service/users', {
-            PARAM_METHOD: "checkEmailIfExists",
+            PARAM_METHOD: "validateNewUser",
+            PARAM_USERNAME: userName,
             PARAM_EMAIL: email
         }).then(function (response) {
-            return response;
+            return response.data[0];
         });
     }
 
@@ -444,7 +447,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             }
         );
     }
-    
+
     function getPermissions() {
         return currentPermissions;
     }

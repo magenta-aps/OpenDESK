@@ -396,7 +396,7 @@ public class Utils {
 
         // Create components folder
         NodeRef componentsRef = createChildNode(nodeService, surfConfigRef, "components", ContentModel.TYPE_FOLDER);
-        
+
         Map<String, String> components = new HashMap<>();
         components.put("title", "title/collaboration-title");
         components.put("navigation", "navigation/collaboration-navigation");
@@ -537,12 +537,13 @@ public class Utils {
      * @return a map of properties.
      */
     public static Map<QName, Serializable> createPersonProperties(String userName, String firstName, String lastName,
-                                                                  String email) {
+                                                                  String email, String telephone) {
         Map<QName, Serializable> properties = new HashMap<>();
         properties.put(ContentModel.PROP_USERNAME, userName);
         properties.put(ContentModel.PROP_FIRSTNAME, firstName);
         properties.put(ContentModel.PROP_LASTNAME, lastName);
         properties.put(ContentModel.PROP_EMAIL, email);
+        properties.put(ContentModel.PROP_TELEPHONE, telephone);
         return properties;
     }
 
@@ -577,60 +578,43 @@ public class Utils {
      * Sends an email to a user using a template.
      * @param actionService alfresco standard service.
      * @param searchService alfresco standard service.
-     * @param templatePath the path of the template to use for the email body.
      * @param subject of the email.
+     * @param body of the email.
      * @param to the username of the user that the email is sent to.
      * @param from the username of the user that the email is sent from.
-     * @param templateArgs the template arguments used in the email template.
      */
-    public static void sendEmail(ActionService actionService, SearchService searchService, String templatePath,
-                                 String subject, String to, String from, Map<String, Serializable> templateArgs){
+    public static void sendEmail(ActionService actionService, SearchService searchService,
+                                 Serializable subject, String body, Serializable to, String from){
         Action mailAction = actionService.createAction(MailActionExecuter.NAME);
         mailAction.setParameterValue(MailActionExecuter.PARAM_SUBJECT, subject);
         mailAction.setParameterValue(MailActionExecuter.PARAM_TO, to);
         mailAction.setParameterValue(MailActionExecuter.PARAM_FROM, from);
-        mailAction.setParameterValue(MailActionExecuter.PARAM_TEXT, "Test body");
 
-        // Get Template
-        String templateRootPath = "/app:company_home/app:dictionary/app:email_templates/";
-        String templateQuery = "PATH:\"" + templateRootPath + templatePath + "\"";
-        ResultSet resultSet = searchService.query(new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore"),
-                SearchService.LANGUAGE_LUCENE, templateQuery);
-
-        if (resultSet.length()==0){
-            return;
+        // Prepare and send email from template
+        NodeRef template = queryEmailTemplate(searchService, OpenDeskModel.TEMPLATE_EMAIL_BASE);
+        if(template != null) {
+            mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE, template);
+            Map<String, Object> model = new HashMap<>();
+            model.put("body", body);
+            model.put("subject", subject);
+            mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE_MODEL, (Serializable) model);
+            actionService.executeAction(mailAction, null);
         }
-
-        NodeRef template = resultSet.getNodeRef(0);
-        mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE, template);
-
-        // Define parameters for the model (set fields in the ftl like : args.workflowTitle)
-        Map<String, Serializable> templateModel = new HashMap<String, Serializable>();
-        templateModel.put("args",(Serializable)templateArgs);
-
-        mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE_MODEL,(Serializable)templateModel);
-
-        actionService.executeAction(mailAction, null);
     }
 
-    /**
-     * Send invite user email
-     * @param messageService alfresco standard service.
-     * @param actionService alfresco standard service.
-     * @param searchService alfresco standard service.
-     * @param properties alfresco global properties.
-     * @param to the username of the user that the email is sent to.
-     * @param templateArgs the template arguments used in the email template.
-     */
-    public static void sendInviteUserEmail(MessageService messageService, ActionService actionService,
-                                           SearchService searchService, Properties properties, String to,
-                                           Map<String, Serializable> templateArgs){
+    public static NodeRef queryEmailTemplate(SearchService searchService, String templateName) {
+        String query = "PATH:\"" + OpenDeskModel.TEMPLATE_OD_FOLDER + "cm:" + templateName + "\"";
+        return queryNode(searchService, query);
+    }
 
-        String subject = messageService.getMessage("opendesk.templates.invite_user_email.subject");
-        String from = properties.getProperty("mail.from.default");
-        String templatePath = "cm:OpenDesk/cm:user-invite-email.html.ftl";
+    public static NodeRef queryNode(SearchService searchService, String query) {
+        ResultSet resultSet = searchService.query(new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore"),
+                SearchService.LANGUAGE_LUCENE, query);
 
-        sendEmail(actionService, searchService, templatePath, subject, to, from, templateArgs);
+        if (resultSet.length()==0)
+            return null;
+
+        return resultSet.getNodeRef(0);
     }
 
     /**

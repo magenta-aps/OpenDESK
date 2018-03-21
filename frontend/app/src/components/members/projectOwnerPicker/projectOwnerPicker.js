@@ -1,6 +1,6 @@
 angular.module('members')
 .component('projectOwnerPicker', {
-  templateUrl: '/app/src/components/members/projectOwnerPicker/projectOwnerPicker.html',
+  templateUrl: 'app/src/components/members/projectOwnerPicker/projectOwnerPicker.html',
   controller: projectOwnerPicker,
   bindings: {
     selected: '=',
@@ -18,10 +18,9 @@ function projectOwnerPicker (siteService, filterService) {
 
   function activate() {
     siteService.getAllOwners()
-    .then(response => {
+    .then(function (response) {
         owners = response;
-      },
-      err => {
+      }, function (err) {
         console.log(err);
       }
     );

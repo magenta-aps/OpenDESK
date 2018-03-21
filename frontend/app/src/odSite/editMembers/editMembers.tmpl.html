@@ -47,35 +47,47 @@
 
 				<div style="font-weight: bold; font-size: 90%; padding: 15px;">{{'MEMBER.ADD_EXTERNAL_MEMBERS' | translate}}</div>
 				<div style="padding-left: 15px;" layout-gt-sm="row">
+                    <md-input-container ng-if="vm.ssoLoginEnabled" class="md-block" flex-gt-sm>
+                        <label>{{'USER.USERNAME' | translate}}</label>
+                        <input type="text" name="externalUser.userName" ng-model="externalUser.userName">
+                    </md-input-container>
+                    <div ng-if="vm.ssoLoginEnabled" flex="5" hide-xs hide-sm> </div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'USER.FIRST_NAME' | translate}}</label>
 						<input type="text" name="externalUser.firstName" ng-model="externalUser.firstName">
 					</md-input-container>
-					<div flex="5" hide-xs hide-sm>
-					</div>
+					<div flex="5" hide-xs hide-sm> </div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'USER.LAST_NAME' | translate}}</label>
 						<input type="text" name="externalUser.lastName" ng-model="externalUser.lastName">
 					</md-input-container>
-					<div flex="5" hide-xs hide-sm>
-					</div>
+				</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-input-container>
+						<label>Rolle</label>
+						<md-select ng-model="externalUser.group">
+							<md-option ng-repeat="group in vm.groups | filter: vm.groupFilter" ng-value="group">
+								{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+					<div flex="5" hide-xs hide-sm></div>
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>{{'COMMON.EMAIL' | translate}}</label>
 						<input type="email" name="externalUser.email" ng-model="externalUser.email" ng-pattern="/^.+@.+\..+$/">
 					</md-input-container>
-					<div flex="5" hide-xs hide-sm>
-					</div>
-					<md-input-container>
-						<label>Rolle</label>
-						<md-select ng-model="externalUser.group">
-							<md-option ng-repeat="group in vm.groups | filter: vm.groupFilter" ng-value="group">{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}</md-option>
-						</md-select>
+					<div flex="5" hide-xs hide-sm></div>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>{{'CONTACT.PHONE' | translate}}</label>
+						<input type="text" name="externalUser.telephone" ng-model="externalUser.telephone" ng-pattern="/^\d+$/">
 					</md-input-container>
-					<div style="position: relative; top: -25px;">
-						<md-button class="md-primary" ng-click="vm.addExternalUserToGroup (externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.group)">
-							<md-icon>add</md-icon> {{'COMMON.ADD' | translate}}
-						</md-button>
-					</div>
+				</div>
+				<div style="padding-left: 15px;" layout-gt-sm="row">
+					<md-button class="md-primary" ng-click="vm.addExternalUserToGroup (externalUser.userName,
+					externalUser.firstName, externalUser.lastName, externalUser.email, externalUser.telephone,
+					externalUser.group)">
+						<md-icon>add</md-icon> {{'MEMBER.ADD_MEMBER' | translate}}
+					</md-button>
 				</div>
 			</md-content>
 		</md-dialog-content>
