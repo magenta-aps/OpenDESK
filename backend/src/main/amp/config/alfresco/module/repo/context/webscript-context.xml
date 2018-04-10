@@ -26,10 +26,9 @@
 	</bean>
 
 	<bean id="webscript.filebrowser.get"
-		  class="dk.opendesk.webscripts.FileBrowser"
+		  class="dk.opendesk.webscripts.NodePicker"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
-		<property name="repository" ref="repositoryHelper"/>
 	</bean>
 
 	<bean id="webscript.groups.post"
@@ -89,6 +88,11 @@
 		<property name="contentService" ref="ContentService"/>
 	</bean>
 
+	<bean id="webscript.node.companyhome.get"
+		  class="dk.opendesk.webscripts.node.GetCompanyHome"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
 
 	<bean id="webscript.node.children.get"
 		  class="dk.opendesk.webscripts.node.GetChildren"

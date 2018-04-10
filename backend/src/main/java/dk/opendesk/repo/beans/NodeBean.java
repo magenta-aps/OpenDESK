@@ -1,7 +1,9 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
+import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentData;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -20,19 +22,24 @@ import java.util.*;
 
 public class NodeBean {
 
-    private PersonService personService;
     private NodeService nodeService;
     private PermissionService permissionService;
+    private PersonService personService;
+    private Repository repository;
     private SiteService siteService;
 
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
-    }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
+    }
+    public void setPersonService(PersonService personService) {
+        this.personService = personService;
+    }
+    public void setRepository(Repository repository)
+    {
+        this.repository = repository;
     }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
@@ -118,12 +125,7 @@ public class NodeBean {
         return null;
     }
 
-    /**
-     * Gets children
-     * @param parentNodeRef nodeRef of the parent node.
-     * @return a JSONArray containing a list of properties of each child node.
-     */
-    public JSONArray getChildren(NodeRef parentNodeRef) throws JSONException {
+    public JSONArray getNodeList(List<NodeRef> nodeRefs) throws JSONException {
 
         JSONArray result = new JSONArray();
 
@@ -136,12 +138,8 @@ public class NodeBean {
         for (String contentType : contentTypes)
             contentTypeMap.put(contentType, new JSONArray());
 
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(parentNodeRef);
-
-        for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
-
-            NodeRef childNodeRef = childAssociationRef.getChildRef();
-            JSONObject nodeInfo = getNodeInfo(childNodeRef);
+        for (NodeRef nodeRef : nodeRefs) {
+            JSONObject nodeInfo = getNodeInfo(nodeRef);
             if(nodeInfo != null) {
                 String contentType = nodeInfo.getString("contentType");
                 contentTypeMap.get(contentType).add(nodeInfo);
@@ -152,5 +150,28 @@ public class NodeBean {
             result.add(contentTypeMap.get(contentType));
 
         return result;
+    }
+
+    /**
+     * Gets the Company Home.
+     * @return a JSONArray containing nodeRef of Company Home.
+     */
+    public JSONArray getCompanyHome() {
+        NodeRef companyHome = repository.getCompanyHome();
+        return Utils.getJSONReturnPair("nodeRef", companyHome.toString());
+    }
+
+    /**
+     * Gets children
+     * @param parentNodeRef nodeRef of the parent node.
+     * @return a JSONArray containing a list of properties of each child node.
+     */
+    public JSONArray getChildren(NodeRef parentNodeRef) throws JSONException {
+        List<NodeRef> nodeRefs = new ArrayList<>();
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(parentNodeRef);
+        for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
+            nodeRefs.add(childAssociationRef.getChildRef());
+        }
+        return getNodeList(nodeRefs);
     }
 }

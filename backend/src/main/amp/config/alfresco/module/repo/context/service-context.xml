@@ -20,8 +20,9 @@
 
     <bean id="nodeBean" class="dk.opendesk.repo.beans.NodeBean">
         <property name="nodeService" ref="NodeService"/>
-        <property name="personService" ref="PersonService"/>
         <property name="permissionService" ref="PermissionService"/>
+        <property name="personService" ref="PersonService"/>
+        <property name="repository" ref="repositoryHelper"/>
         <property name="siteService" ref="SiteService"/>
     </bean>
 
