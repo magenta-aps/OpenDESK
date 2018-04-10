@@ -93,10 +93,7 @@
 	<bean id="webscript.sites.contents.get"
 		  class="dk.opendesk.webscripts.sites.Contents"
 		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-		<property name="personService" ref="PersonService"/>
-		<property name="permissionService" ref="PermissionService"/>
-		<property name="siteService" ref="SiteService"/>
+		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
 	<bean id="webscript.sites.post"
