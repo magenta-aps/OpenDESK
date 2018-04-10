@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>site contents</shortname>
-    <description>gets the contents of a site</description>
-    <url>/contents</url>
-    <authentication>user</authentication>
-    <format default="html"></format>
-</webscript>

@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Node Children</shortname>
+    <description>Gets the children of a node</description>
+    <url>/node/{nodeId}/children</url>
+    <authentication>user</authentication>
+</webscript>

@@ -1,4 +1,4 @@
-package dk.opendesk.webscripts.sites;
+package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
 import dk.opendesk.repo.utils.Utils;
@@ -13,7 +13,7 @@ import java.io.Writer;
 import java.util.Map;
 
 
-public class Contents extends AbstractWebScript {
+public class GetChildren extends AbstractWebScript {
 
     private NodeBean nodeBean;
 
@@ -22,23 +22,21 @@ public class Contents extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Writer webScriptWriter = webScriptResponse.getWriter();
+        Map<String, String> templateArgs = req.getServiceMatch().getTemplateVars();
+        res.setContentEncoding("UTF-8");
+        Writer webScriptWriter = res.getWriter();
         JSONArray result;
 
         try {
-            String nodeId = params.get("node");
+            String nodeId = templateArgs.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-            result = nodeBean.getChildNodes(nodeRef);
-
+            result = nodeBean.getChildren(nodeRef);
         } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
+            res.setStatus(400);
         }
         Utils.writeJSONArray(webScriptWriter, result);
     }

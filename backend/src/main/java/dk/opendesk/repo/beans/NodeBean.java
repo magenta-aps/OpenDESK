@@ -119,11 +119,11 @@ public class NodeBean {
     }
 
     /**
-     * Gets child nodes
+     * Gets children
      * @param parentNodeRef nodeRef of the parent node.
      * @return a JSONArray containing a list of properties of each child node.
      */
-    public JSONArray getChildNodes(NodeRef parentNodeRef) throws JSONException {
+    public JSONArray getChildren(NodeRef parentNodeRef) throws JSONException {
 
         JSONArray result = new JSONArray();
 
