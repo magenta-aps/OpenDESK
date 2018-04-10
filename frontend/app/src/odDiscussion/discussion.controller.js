@@ -254,12 +254,6 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
     }
 
-    function createNotification(userName, subject, message, link, wtype, project) {
-        notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {
-            $mdDialog.hide();
-        });
-    }
-
     function createNewDiscussionNotification(postItem) {
         var nodeRef = postItem.nodeRef.split('/')[3];
         var subject = 'Ny samtale i et projekt';
@@ -269,17 +263,16 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         // Iterating list of items.
         angular.forEach(vm.groups, function (group) {
             angular.forEach(group[1], function (member) {
-                if (member.userName != postItem.author.username) {
-
-                    var preferenceFilter = "dk.magenta.sites.receiveNotifications";
-                    var receiveNotifications = "true";
-
-                    if (member.preferences[preferenceFilter] !== null)
-                        receiveNotifications = member.preferences[preferenceFilter];
-
-                    if (receiveNotifications !== null && receiveNotifications == "true") {
-                        createNotification(member.userName, subject, message, link, 'new-discussion', $stateParams.projekt);
-                    }
+                if (member.userName !== postItem.author.username) {
+                    notificationsService.addNotice(
+                        member.userName, 
+                        subject, 
+                        message, 
+                        link, 
+                        'new-discussion', 
+                        $stateParams.projekt).then(function (val) {
+                        $mdDialog.hide();
+                    });
                 }
             });
         });
@@ -294,16 +287,17 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         // Iterating list of items.
         angular.forEach(vm.groups, function (group) {
             angular.forEach(group[1], function (member) {
-                if (member.userName != postItem.author.username) {
-                    var preferenceFilter = discussionService.getSubscribePreferenceFilter($stateParams.projekt, nodeRef);
-                    var receiveNotifications = "false";
-
-                    if (member.preferences[preferenceFilter] !== null)
-                        receiveNotifications = member.preferences[preferenceFilter];
-
-                    if (receiveNotifications !== null && receiveNotifications == "true") {
-                        createNotification(member.userName, subject, message, link, 'new-reply', $stateParams.projekt);
-                    }
+                if (member.userName !== postItem.author.username) {
+                    notificationsService.addReplyNotice(
+                        member.userName,
+                        subject,
+                        message,
+                        link,
+                        'new-reply',
+                        $stateParams.projekt,
+                        nodeRef).then(function (val) {
+                        $mdDialog.hide();
+                    });
                 }
             });
         });

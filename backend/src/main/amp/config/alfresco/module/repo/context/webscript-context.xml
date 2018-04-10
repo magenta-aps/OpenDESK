@@ -20,6 +20,7 @@
 	<bean id="webscript.notifications.post"
 		  class="dk.opendesk.webscripts.Notifications"
 		  parent="webscript">
+        <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="siteService" ref="SiteService"/>

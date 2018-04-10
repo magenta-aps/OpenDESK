@@ -711,9 +711,6 @@ public class Utils {
             json.put("avatar", avatar);
         }
 
-        Map<String, Serializable> preferences = getPreferences(preferenceService, userName, "");
-        json.put("preferences", Utils.getJSONReturnObject(preferences));
-
         return json;
     }
 

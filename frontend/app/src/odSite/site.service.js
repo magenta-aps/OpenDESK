@@ -516,23 +516,15 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         angular.forEach(groups, function (group) {
             angular.forEach(group[1], function (member) {
                 if (member.userName !== currentUser.userName) {
-                    var preferenceFilter = "dk.magenta.sites.receiveNotifications";
-                    var receiveNotifications = "true";
-
-                    if (member.preferences[preferenceFilter] !== undefined)
-                        receiveNotifications = member.preferences[preferenceFilter];
-
-                    if (receiveNotifications == "true") {
-                        var notification = {
-                            receiver: member.userName,
-                            subject: $translate.instant('NOTIFICATION.LABEL.NEW_DOCUMENT'),
-                            message: message,
-                            link: link,
-                            wtype: "new-doc",
-                            shortName: site.shortName
-                        };
-                        createNotification(notification);
-                    }
+                    var notification = {
+                        receiver: member.userName,
+                        subject: $translate.instant('NOTIFICATION.LABEL.NEW_DOCUMENT'),
+                        message: message,
+                        link: link,
+                        wtype: "new-doc",
+                        shortName: site.shortName
+                    };
+                    createNotification(notification);
                 }
             });
         });
@@ -553,7 +545,13 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         createNotification(notification);
     }
     function createNotification(notification) {
-        notificationsService.addNotice(notification.receiver, notification.subject, notification.message, notification.link, notification.wtype, notification.shortName);
+        notificationsService.addNotice(
+            notification.receiver, 
+            notification.subject, 
+            notification.message, 
+            notification.link, 
+            notification.wtype, 
+            notification.shortName);
     }
 
 }
