@@ -816,15 +816,7 @@ public class Utils {
      * @return a map of preferences.
      */
     public static Map<String, Serializable> getPreferences(PreferenceService preferenceService, String userName, String filter) {
-        AuthenticationUtil.pushAuthentication();
-        try {
-            AuthenticationUtil.setRunAsUserSystem();
-            // ...code to be run as Admin...
-            return preferenceService.getPreferences(userName, filter);
-        }
-        finally {
-            AuthenticationUtil.popAuthentication();
-        }
+        return preferenceService.getPreferences(userName, filter);
     }
 
     /**
