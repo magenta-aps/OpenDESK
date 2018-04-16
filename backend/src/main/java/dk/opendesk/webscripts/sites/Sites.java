@@ -22,7 +22,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.preference.PreferenceService;
+import org.alfresco.service.cmr.favourites.FavouritesService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
@@ -56,7 +56,7 @@ public class Sites extends AbstractWebScript {
     private PersonService personService;
     private PermissionService permissionService;
     private AuthorityService authorityService;
-    private PreferenceService preferenceService;
+    private FavouritesService favouritesService;
 
     public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
@@ -82,8 +82,8 @@ public class Sites extends AbstractWebScript {
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
-    public void setPreferenceService(PreferenceService preferenceService) {
-        this.preferenceService = preferenceService;
+    public void setFavouritesService(FavouritesService favouritesService) {
+        this.favouritesService = favouritesService;
     }
 
     @Override
@@ -483,6 +483,10 @@ public class Sites extends AbstractWebScript {
 
         NodeRef n = s.getNodeRef();
         json.put("nodeRef", n.toString());
+
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
+        boolean isFavourite = favouritesService.isFavourite(userName, n);
+        json.put("isFavourite", isFavourite);
 
         String manager = "";
         String owner = "";

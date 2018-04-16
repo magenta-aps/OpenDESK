@@ -78,7 +78,8 @@
 								<th hide show-gt-xs sort order="'manager.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{vm.config.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
 								<th hide show-gt-md ng-show="vm.config.enableProjects" sort order="'center_name'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.ORG_UNIT' | translate}}</th>
 								<th hide show-gt-xs ng-show="vm.config.enableProjects" sort order="'state'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS' | translate}}</th>
-								<th hide show-gt-sm colspan="2" sort order="'modified'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
+								<th hide show-gt-sm sort order="'modified'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED' | translate}}</th>
+								<th hide show-gt-sm colspan="2" sort order="'isFavourite'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.FAVOURITE' | translate}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -118,6 +119,9 @@
 									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
 										{{ project.modified | date:'dd. MMMM yyyy' }}
 									</a>
+								</td>
+								<td>
+									<i ng-click='vm.toggleFavourite(project)' class="clickable material-icons od-secondary" style="outline:0;">{{vm.getFavouriteIcon(project.isFavourite)}}</i>
 								</td>
 								<td>
 									<md-menu>

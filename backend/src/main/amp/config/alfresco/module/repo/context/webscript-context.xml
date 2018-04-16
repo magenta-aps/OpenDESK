@@ -148,7 +148,7 @@
 		<property name="permissionService" ref="PermissionService"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="searchService" ref="SearchService"/>
-		<property name="preferenceService" ref="PreferenceService"/>
+		<property name="favouritesService" ref="FavouritesService"/>
 	</bean>
 
 	<bean id="webscript.users.post"
