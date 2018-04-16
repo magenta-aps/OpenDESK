@@ -68,7 +68,7 @@ angular
     $scope.previewDocument = previewDocument;
     $scope.goToLOEditPage = goToLOEditPage;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
-    vm.createReviewNotification = uploadNewVersionDialog;
+    vm.createReviewNotification = createReviewNotification;
 
     $scope.filesToFilebrowser = null;
 
