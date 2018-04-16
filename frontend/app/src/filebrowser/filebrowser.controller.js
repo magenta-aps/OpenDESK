@@ -7,7 +7,7 @@ angular
     function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout, Upload,
         siteService, fileUtilsService, filebrowserService, filterService, alfrescoDownloadService,
         documentPreviewService, documentService, alfrescoNodeUtils, userService, $translate, APP_BACKEND_CONFIG,
-        sessionService, headerService, browserService) {
+        sessionService, headerService, browserService, notificationsService) {
             
         var vm = this;
         var documentNodeRef = "";
@@ -409,6 +409,19 @@ angular
                     $mdToast.simple()
                         .textContent('Dokumentet blev delt med ' + user.displayName + ".")
                         .hideDelay(3000)
+                );
+                var nodeId = alfrescoNodeUtils.processNodeRef(documentNodeRef).id;
+                var link = "dokumenter/delte/" + nodeId;
+                var subject = 'Nyt dokument delt';
+                var message = "En bruger har delt et dokument med dig";
+
+                notificationsService.addNotice(
+                    user.userName,
+                    subject,
+                    message,
+                    link,
+                    "new-shared-doc",
+                    ""
                 );
             }
         );
