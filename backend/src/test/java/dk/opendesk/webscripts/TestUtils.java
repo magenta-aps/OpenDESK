@@ -196,4 +196,19 @@ public class TestUtils {
         List<String> docTemplatePath = OpenDeskModel.PATH_NODE_TEMPLATES;
         return fileFolderService.resolveNamePath(companyHome, docTemplatePath).getNodeRef();
     }
+
+    private static NodeRef getSettings(Repository repository, FileFolderService fileFolderService)
+            throws FileNotFoundException {
+        NodeRef companyHome = repository.getCompanyHome();
+        return fileFolderService.resolveNamePath(companyHome, OpenDeskModel.PATH_OD_SETTINGS).getNodeRef();
+    }
+
+    public static void updateSettings(TransactionService transactionService, Repository repository,
+                                      FileFolderService fileFolderService, NodeService nodeService,
+                                      Map<QName, Serializable> properties) {
+        transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+            nodeService.setProperties(getSettings(repository, fileFolderService), properties);
+            return true;
+        });
+    }
 }

@@ -83,7 +83,7 @@ function sessionService($window) {
 
     function retainCurrentLocation() {
         clearRetainedLocation();
-        var location = $window.location.hash;
+        var location = $window.location.href;
         if (location === 'login') {
             return;
         }

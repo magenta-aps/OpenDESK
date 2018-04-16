@@ -16,6 +16,7 @@ limitations under the License.
 */
 package dk.opendesk.webscripts;
 
+import dk.opendesk.repo.beans.NotificationBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -44,9 +45,13 @@ import java.util.*;
 public class Notifications extends AbstractWebScript {
 
     private NodeService nodeService;
+    private NotificationBean notificationBean;
     private PersonService personService;
     private SiteService siteService;
 
+    public void setNotificationBean(NotificationBean notificationBean) {
+        this.notificationBean = notificationBean;
+    }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
@@ -93,7 +98,13 @@ public class Notifications extends AbstractWebScript {
                         break;
 
                     case "add":
-                        result = addNotification(userName, message, subject, link, type, project);
+                        String preference = "dk.magenta.sites.receiveNotifications";
+                        notificationBean.addNotification(userName, message, subject, link, type, project, preference);
+                        break;
+
+                    case "addReply":
+                        String replyPreference = "dk.magenta.sites." + project + ".discussions." + nodeRefString + ".subscribe";
+                        notificationBean.addNotification(userName, message, subject, link, type, project, replyPreference);
                         break;
 
                     case "remove":
@@ -163,53 +174,6 @@ public class Notifications extends AbstractWebScript {
         result.add(children);
 
         return result;
-    }
-
-    /**
-     * Adds a notification to a user.
-     * (method = add)
-     * @param userName username of the receiving user.
-     * @param message of the notification.
-     * @param subject of the notification.
-     * @param link from the notification.
-     * @param type of the notification.
-     * @param project linked to from the notification.
-     * @return a JSONArray containing nodeRef of the notification.
-     */
-    private JSONArray addNotification(String userName, String message, String subject, String link, String type, String project) {
-
-        ChildAssociationRef childAssocRef = null;
-        AuthenticationUtil.pushAuthentication();
-        try {
-            AuthenticationUtil.setRunAsUserSystem();
-            // ...code to be run as Admin...
-
-            //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
-
-            NodeRef user = personService.getPerson(userName);
-
-            childAssocRef = this.nodeService.createNode(
-                    user,
-                    OpenDeskModel.PROP_NOTIFICATION_ASSOC,
-                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(userName)),
-                    OpenDeskModel.PROP_NOTIFICATION,
-                    null);
-
-            Map<QName, Serializable> contentProps = new HashMap<>();
-            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SUBJECT, subject);
-            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_MESSAGE, message);
-            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
-            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
-            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_LINK, link);
-            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_TYPE, type);
-            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_PROJECT, project);
-
-            nodeService.setProperties(childAssocRef.getChildRef(), contentProps);
-            nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
-        } finally {
-            AuthenticationUtil.popAuthentication();
-        }
-        return Utils.getJSONReturnPair("nodeRef", childAssocRef.getChildRef().toString());
     }
 
     /**

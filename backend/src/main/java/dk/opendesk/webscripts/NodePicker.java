@@ -18,7 +18,6 @@ package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -38,53 +37,30 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-public class FileBrowser extends AbstractWebScript {
+public class NodePicker extends AbstractWebScript {
 
     private NodeService nodeService;
-    private Repository repository;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-    public void setRepository(Repository repository)
-    {
-        this.repository = repository;
-    }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Writer webScriptWriter = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
+        Map<String, String> templateArgs = req.getServiceMatch().getTemplateVars();
+        res.setContentEncoding("UTF-8");
+        Writer webScriptWriter = res.getWriter();
+        JSONArray result;
 
         try {
-            NodeRef nodeRef = null;
-            String storeType = params.get("STORE_TYPE");
-            String storeId = params.get("STORE_ID");
-            String nodeId = params.get("NODE_ID");
-
-            if (storeType != null && storeId != null && nodeId != null) {
-                nodeRef = new NodeRef(storeType, storeId, nodeId);
-            }
-
-            String method = params.get("method");
-            if (method != null) {
-                switch (method) {
-                    case "getAll":
-                        result = getChildNodes(nodeRef);
-                        break;
-                    case "getCompanyHome":
-                        result = getCompanyHome();
-                        break;
-                }
-            }
+            String nodeId = templateArgs.get("nodeId");
+            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
+            result = getChildNodes(nodeRef);
         } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
+            res.setStatus(400);
         }
         Utils.writeJSONArray(webScriptWriter, result);
     }
@@ -159,15 +135,5 @@ public class FileBrowser extends AbstractWebScript {
 
         result.add(children);
         return result;
-    }
-
-    /**
-     * Gets the Company Home.
-     * (method = getCompanyHome)
-     * @return a JSONArray containing nodeRef of Company Home.
-     */
-    private JSONArray getCompanyHome() throws JSONException {
-        NodeRef companyHome = repository.getCompanyHome();
-        return Utils.getJSONReturnPair("nodeRef", companyHome.toString());
     }
 }

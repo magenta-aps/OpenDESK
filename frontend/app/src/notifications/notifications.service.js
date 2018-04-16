@@ -19,6 +19,7 @@
             getUnseenCount: getUnseenCount,
             getNotifications: getNotifications,
             addNotice: addNotice,
+            addReplyNotice: addReplyNotice,
             delNotice: delNotice,
             setReadNotice: setRead,
             getInfo: getInfo,
@@ -92,6 +93,21 @@
                 PARAM_LINK: link,
                 PARAM_TYPE: wtype,
                 PARAM_PROJECT: project
+            }).then(function (response) {
+                return response;
+            });
+        }
+
+        function addReplyNotice(userId, subject, message, link, wtype, project, nodeRef) {
+            return $http.post(restBaseUrl + "/notifications", {
+                PARAM_METHOD : "addReply",
+                PARAM_USERNAME: userId,
+                PARAM_SUBJECT: subject,
+                PARAM_MESSAGE: message,
+                PARAM_LINK: link,
+                PARAM_TYPE: wtype,
+                PARAM_PROJECT: project,
+                PARAM_NODE_REF: nodeRef
             }).then(function (response) {
                 return response;
             });

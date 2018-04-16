@@ -34,8 +34,8 @@ function fileBrowserService($http, alfrescoNodeUtils) {
         });
     }
 
-    function getContentList(node) {
-        return $http.get("/alfresco/service/contents?node=" + node).then(function (response) {
+    function getContentList(nodeId) {
+        return $http.get("/alfresco/service/node/" + nodeId + "/children").then(function (response) {
             return response.data;
         });
     }

@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Company Home</shortname>
+    <description>Get Company Home</description>
+    <url>/node/companyHome</url>
+    <authentication>user</authentication>
+</webscript>

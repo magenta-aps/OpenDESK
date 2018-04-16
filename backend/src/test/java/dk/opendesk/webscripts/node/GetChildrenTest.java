@@ -1,4 +1,4 @@
-package dk.opendesk.webscripts.sites;
+package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.webscripts.TestUtils;
@@ -12,7 +12,6 @@ import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -21,13 +20,12 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContentsTest extends BaseWebScriptTest {
+public class GetChildrenTest extends BaseWebScriptTest {
 
-    private static Logger log = Logger.getLogger(ContentsTest.class);
+    private static Logger log = Logger.getLogger(GetChildrenTest.class);
 
     private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
@@ -38,7 +36,7 @@ public class ContentsTest extends BaseWebScriptTest {
 
     private Map<String, SiteInfo> sites = new HashMap<>();
 
-    public ContentsTest() {
+    public GetChildrenTest() {
         super();
     }
 
@@ -56,8 +54,8 @@ public class ContentsTest extends BaseWebScriptTest {
         }
     }
 
-    public void testGetChildNodes() throws IOException, JSONException {
-        log.debug("ContentsTest.testGetChildNodes");
+    public void testGet3Children() throws IOException, JSONException {
+        log.debug("GetChildrenTest.testGet3Children");
 
         NodeRef docLibRef = siteService.getContainer(TestUtils.SITE_ONE, OpenDeskModel.DOC_LIBRARY);
 
@@ -71,26 +69,48 @@ public class ContentsTest extends BaseWebScriptTest {
                 docLibRef, TestUtils.FILE_TEST_TEMPLATE3);
 
         String nodeId = docLibRef.getId();
-        assertWebScriptGetChildNodes(nodeId, 3);
+        assertWebScript(nodeId, 3);
     }
 
-    private JSONArray assertWebScriptGetChildNodes (String nodeId, int childrenCount) throws IOException, JSONException {
-        JSONArray returnJSON = executeWebScriptGetChildNodes(nodeId);
+    public void testGet4Children() throws IOException, JSONException {
+        log.debug("GetChildrenTest.testGet4Children");
+
+        NodeRef docLibRef = siteService.getContainer(TestUtils.SITE_ONE, OpenDeskModel.DOC_LIBRARY);
+
+        TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                docLibRef, TestUtils.FILE_TEST_TEMPLATE1);
+
+        TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                docLibRef, TestUtils.FILE_TEST_TEMPLATE2);
+
+        TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                docLibRef, TestUtils.FILE_TEST_TEMPLATE3);
+
+        TestUtils.uploadFile(transactionService, contentService, fileFolderService,
+                docLibRef, TestUtils.FILE_TEST_TEMPLATE4);
+
+        String nodeId = docLibRef.getId();
+        assertWebScript(nodeId, 4);
+    }
+
+    private JSONArray assertWebScript(String nodeId, int childrenCount) throws IOException, JSONException {
+        JSONArray returnJSON = executeWebScript(nodeId);
         assertEquals(childrenCount, returnJSON.length());
         return returnJSON;
     }
 
-    private JSONArray executeWebScriptGetChildNodes (String nodeId) throws IOException, JSONException {
+    private JSONArray executeWebScript(String nodeId) throws IOException, JSONException {
         Map<String, String> args = new HashMap<String, String>() {
             {
-                put("node", nodeId);
+                put("nodeId", nodeId);
             }
         };
         return executeWebScript(args);
     }
 
     private JSONArray executeWebScript (Map<String, String> args) throws IOException, JSONException {
-        TestWebScriptServer.Request request = new TestWebScriptServer.GetRequest("contents").setArgs(args);
+        String url = "node/" + args.get("nodeId") + "/children";
+        TestWebScriptServer.Request request = new TestWebScriptServer.GetRequest(url);
         TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, TestUtils.ADMIN);
         return new JSONArray(response.getContentAsString());
     }

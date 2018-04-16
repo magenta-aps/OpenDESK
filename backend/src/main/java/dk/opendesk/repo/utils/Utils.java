@@ -711,9 +711,6 @@ public class Utils {
             json.put("avatar", avatar);
         }
 
-        Map<String, Serializable> preferences = getPreferences(preferenceService, userName, "");
-        json.put("preferences", Utils.getJSONReturnObject(preferences));
-
         return json;
     }
 
@@ -816,15 +813,7 @@ public class Utils {
      * @return a map of preferences.
      */
     public static Map<String, Serializable> getPreferences(PreferenceService preferenceService, String userName, String filter) {
-        AuthenticationUtil.pushAuthentication();
-        try {
-            AuthenticationUtil.setRunAsUserSystem();
-            // ...code to be run as Admin...
-            return preferenceService.getPreferences(userName, filter);
-        }
-        finally {
-            AuthenticationUtil.popAuthentication();
-        }
+        return preferenceService.getPreferences(userName, filter);
     }
 
     /**
