@@ -91,6 +91,7 @@ public interface OpenDeskModel {
     QName PROP_NOTIFICATION_SEEN = QName.createQName(OD_URI, "seen");
     QName PROP_NOTIFICATION_TYPE = QName.createQName(OD_URI, "type");
     QName PROP_NOTIFICATION_PROJECT = QName.createQName(OD_URI, "project");
+    String NOTIFICATION_TYPE_REVIEW = "review";
 
 
     /**
