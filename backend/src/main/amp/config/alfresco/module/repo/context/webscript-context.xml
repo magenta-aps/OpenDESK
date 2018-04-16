@@ -26,7 +26,7 @@
 		<property name="siteService" ref="SiteService"/>
 	</bean>
 
-	<bean id="webscript.filebrowser.get"
+	<bean id="webscript.nodepicker.get"
 		  class="dk.opendesk.webscripts.NodePicker"
 		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
@@ -89,6 +89,12 @@
 		<property name="contentService" ref="ContentService"/>
 	</bean>
 
+	<bean id="webscript.node.breadcrumb.get"
+		  class="dk.opendesk.webscripts.node.GetBreadCrumb"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.companyhome.get"
 		  class="dk.opendesk.webscripts.node.GetCompanyHome"
 		  parent="webscript">
@@ -97,6 +103,36 @@
 
 	<bean id="webscript.node.children.get"
 		  class="dk.opendesk.webscripts.node.GetChildren"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+	<bean id="webscript.node.preprocessmove.put"
+		  class="dk.opendesk.webscripts.node.PreProcessMove"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+	<bean id="webscript.node.share.delete"
+		  class="dk.opendesk.webscripts.node.StopShare"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+    <bean id="webscript.node.share.post"
+          class="dk.opendesk.webscripts.node.Share"
+          parent="webscript">
+        <property name="nodeBean" ref="nodeBean"/>
+    </bean>
+
+    <bean id="webscript.node.shared.get"
+          class="dk.opendesk.webscripts.node.GetShared"
+          parent="webscript">
+        <property name="nodeBean" ref="nodeBean"/>
+    </bean>
+
+	<bean id="webscript.node.userhome.get"
+		  class="dk.opendesk.webscripts.node.GetUserHome"
 		  parent="webscript">
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>

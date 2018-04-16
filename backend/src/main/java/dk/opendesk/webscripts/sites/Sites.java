@@ -541,21 +541,21 @@ public class Sites extends AbstractWebScript {
         //Get Manager
         if (!manager.isEmpty()) {
             NodeRef managerRef = personService.getPerson(manager);
-            JSONObject managerObj = Utils.convertUserToJSON(nodeService, preferenceService, managerRef);
+            JSONObject managerObj = Utils.convertUserToJSON(nodeService, managerRef);
             json.put("manager", managerObj);
         }
 
         //Get Owner
         if (!owner.isEmpty()) {
             NodeRef ownerRef = personService.getPerson(owner);
-            JSONObject ownerObj = Utils.convertUserToJSON(nodeService, preferenceService, ownerRef);
+            JSONObject ownerObj = Utils.convertUserToJSON(nodeService, ownerRef);
             json.put("owner", ownerObj);
         }
 
         //Get Creator
         String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
         NodeRef creatorRef = personService.getPerson(creator);
-        JSONObject creatorObj = Utils.convertUserToJSON(nodeService, preferenceService, creatorRef);
+        JSONObject creatorObj = Utils.convertUserToJSON(nodeService, creatorRef);
         json.put("creator", creatorObj);
 
         //Get Member list

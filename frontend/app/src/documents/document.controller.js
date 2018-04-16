@@ -192,57 +192,62 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     function getDocument() {
         documentService.getDocument(parentDocumentNode).then(function (response) {
 
-        vm.doc = response.item;
-        vm.loolEditable = documentService.isLoolEditable(vm.doc.node.mimetype);
-        vm.msOfficeEditable = documentService.isMsOfficeEditable(vm.doc.node.mimetype);
+            vm.doc = response.item;
+            vm.loolEditable = documentService.isLoolEditable(vm.doc.node.mimetype);
+            vm.msOfficeEditable = documentService.isMsOfficeEditable(vm.doc.node.mimetype);
 
             vm.docMetadata = response.metadata;
 
-            // Compile paths for breadcrumb directive
-            vm.paths = buildBreadCrumbPath(response);
+            if(vm.doc.location.site !== undefined) {
+                // Compile paths for breadcrumb directive
+                vm.paths = buildSiteBreadCrumbPath(response);
 
-            vm.site = vm.doc.location.site.name;
+                vm.site = vm.doc.location.site.name;
 
-            siteService.loadSiteData(vm.site).then(function (response) {
-                vm.type = response.type;
-                vm.title = response.title;
-                vm.siteNodeRef = response.nodeRef;
+                siteService.loadSiteData(vm.site).then(function (response) {
+                    vm.type = response.type;
+                    vm.title = response.title;
+                    vm.siteNodeRef = response.nodeRef;
 
-                headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title);
-            });
+                    headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title);
+                });
+            }
+            else {
+                headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT'));
+            }
 
             browserService.setTitle(response.item.node.properties["cm:name"]);
+        });
+    }
 
-            function buildBreadCrumbPath(response) {
-                var paths = [{
-                    title: response.item.location.siteTitle,
-                    link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
-                }];
-                var pathArr = response.item.location.path.split('/');
-                var pathLink = '/';
-                for (var a in pathArr) {
-                    if (pathArr[a] !== '') {
-                        var link;
-                        if (response.item.location.site === "") {
-                            link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
-                        } else {
-                            link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
-                                '", path: "' + pathLink + pathArr[a] + '"})';
-                        }
-                        paths.push({
-                            title: pathArr[a],
-                            link: link
-                        });
-                        pathLink = pathLink + pathArr[a] + '/';
-                    }
+    function buildSiteBreadCrumbPath(response) {
+        var paths = [{
+            title: response.item.location.siteTitle,
+            link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
+        }];
+        var pathArr = response.item.location.path.split('/');
+        var pathLink = '/';
+        for (var a in pathArr) {
+            if (pathArr[a] !== '') {
+                var link;
+                if (response.item.location.site === "") {
+                    link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
+                } else {
+                    link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
+                        '", path: "' + pathLink + pathArr[a] + '"})';
                 }
                 paths.push({
-                    title: response.item.location.file,
-                    link: response.item.location.path
+                    title: pathArr[a],
+                    link: link
                 });
-                return paths;
+                pathLink = pathLink + pathArr[a] + '/';
             }
+        }
+        paths.push({
+            title: response.item.location.file,
+            link: response.item.location.path
         });
+        return paths;
     }
 
     function loadPreview() {
@@ -267,7 +272,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
                     // delete the temporary node
                     documentService.cleanupThumbnail(response.data[0].nodeRef);
-
                 });
             });
 
@@ -277,6 +281,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
                 vm.plugin = plugin;
                 $scope.config = plugin;
+                $scope.restoreTitle = browserService.restoreTitle;
                 $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl;
                 $scope.download = function () {
                     alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName);

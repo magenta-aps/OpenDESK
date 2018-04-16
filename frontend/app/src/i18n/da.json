@@ -56,6 +56,7 @@
     "MODIFIED_BY": "Ændret af",
     "OWNER": "Ejer",
     "DOWNLOAD": "Download",
+    "SHARE": "Del",
     "ADDED": "Tilføjet",
     "ADDED_BY": "Tilføjet af",
     "UPLOAD": "Overfør",
@@ -233,6 +234,7 @@
     "SEND_DOCUMENTS": "Send dokumenter",
     "EMAIL_DOCUMENTS": "Email dokumenter",
     "MY_DOCUMENTS": "Mine dokumenter",
+    "SHARED_WITH_ME": "Delt med mig",
     "CHANGE_STATUS": "Skift status",
     "VERSION": "Version",
     "VERSION_ADDED": "Version tilføjet",
@@ -266,7 +268,11 @@
     "SENT_FROM_OUTLOOK": "Sent from Outlook",
     "DELETE_DOC_SUCCESS": "Dokument slettet",
     "DELETE_DOC_FAILURE": "Dokument kunne ikke slettes",
-    "NO_DOCUMENTS_ADDED_YET": "Ingen dokumenter tilføjet endnu"
+    "NO_DOCUMENTS_ADDED_YET": "Ingen dokumenter tilføjet endnu",
+    "PERMISSIONS" : {
+      "Editor": "Kan skrive",
+      "Consumer": "Kan læse"
+    }
   },
   "FILE": {
     "FILE": "Fil",

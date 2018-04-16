@@ -147,7 +147,7 @@ public class Groups extends AbstractWebScript {
             }
             else {
                 NodeRef user = personService.getPerson(shortName);
-                json = Utils.convertUserToJSON(nodeService, preferenceService, user);
+                json = Utils.convertUserToJSON(nodeService, user);
             }
             result.add(json);
         }

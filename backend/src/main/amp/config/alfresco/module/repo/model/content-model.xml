@@ -159,6 +159,17 @@
             </properties>
         </aspect>
 
+        <aspect name="od:shared">
+            <title>Marks a node as shared</title>
+            <properties>
+                <property name="od:sharedWith">
+                    <title>sharedWith</title>
+                    <type>d:text</type>
+                    <multiple>true</multiple>
+                </property>
+            </properties>
+        </aspect>
+
     </aspects>
 
 

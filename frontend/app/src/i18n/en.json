@@ -58,6 +58,7 @@
     "LAST_MODIFIED_BY": "Last modified by",
     "OWNER": "Owner",
     "DOWNLOAD": "Download",
+    "SHARE": "Share",
     "ADDED": "Added",
     "ADDED_BY": "Added by",
     "UPLOAD": "Upload",
@@ -231,6 +232,7 @@
     "SEND_DOCUMENTS": "Send documents",
     "EMAIL_DOCUMENTS": "Email documents",
     "MY_DOCUMENTS": "My documents",
+    "SHARED_WITH_ME": "Shared with me",
     "CHANGE_STATUS": "Change status",
     "VERSION": "Version",
     "VERSION_ADDED": "Version added",
@@ -264,7 +266,11 @@
     "SENT_FROM_OUTLOOK": "Sent from Outlook",
     "DELETE_DOC_SUCCESS": "Document successfully deleted",
     "DELETE_DOC_FAILURE": "Document could not be deleted",
-    "NO_DOCUMENTS_ADDED_YET": "No documents added yet"
+    "NO_DOCUMENTS_ADDED_YET": "No documents added yet",
+    "PERMISSIONS" : {
+      "Editor": "Kan skrive",
+      "Consumer": "Kan læse"
+    }
   },
   "FILE": {
     "FILE": "File",

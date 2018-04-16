@@ -1,0 +1,48 @@
+<md-dialog aria-label="Share Document" ng-cloak>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>{{'COMMON.SHARE' | translate}} {{'COMMON.DOCUMENT' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                <md-icon>close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <md-content class="md-padding" layout="column">
+            <div ng-repeat="(groupIndex, users) in content.permissions">
+                <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]"
+                    class="group-toggle"
+                    layout="row"
+                    ng-class="showGroupList[groupIndex] ? 'closed' : 'open'"
+                    aria-label="{{'DOCUMENT.PERMISSIONS' + groupIndex | translate}}">
+                    <span>{{'DOCUMENT.PERMISSIONS.' + groupIndex | translate}}</span>
+                    <span flex></span>
+                    <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+                </h4>
+                <div ng-show="!showGroupList[groupIndex]">
+                    <md-chips ng-model="users" md-autocomplete-snap md-require-match="true"
+                              md-on-remove="vm.stopSharingDocument($chip, groupIndex)"
+                              md-on-add="vm.shareDocument($chip, groupIndex)">
+                        <md-autocomplete md-selected-item="selectedProjGrpItem"
+                                         md-search-text="vm.searchTextList[groupIndex]"
+                                         md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
+                                         md-require-match="true"
+                                         md-item-text="pgitem" placeholder="{{'USER.USER' | translate}}">
+                            <img class="od-avatar od-avatar-small" ng-src="{{vm.getAvatarUrl(pgitem)}}">
+                            <span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
+                                {{ pgitem.displayName }}
+                            </span>
+                            <span class="od-secondary">({{ pgitem.userName }})</span>
+                        </md-autocomplete>
+                        <md-chip-template>
+                            <img class="od-avatar od-avatar-small" ng-src="{{vm.getAvatarUrl($chip)}}">
+                            <span style="display: table-caption">{{ $chip.displayName }}</span>
+                        </md-chip-template>
+                    </md-chips>
+                </div>
+            </div>
+        </md-content>
+    </md-dialog-content>
+</md-dialog>

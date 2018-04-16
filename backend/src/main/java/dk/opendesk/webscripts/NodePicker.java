@@ -85,11 +85,11 @@ public class NodePicker extends AbstractWebScript {
         QName parentNodeType = nodeService.getType(parentNodeRef);
 
         // Users should not be able to go further up the folder hierarchy than the Sites folder
-        if (nodeType.equals(SiteModel.TYPE_SITES)) {
-            parentNodeRef = null;
-        }
+//        if (nodeType.equals(SiteModel.TYPE_SITES)) {
+//            parentNodeRef = null;
+//        }
         // Document Libraries should link to Sites directly as parent and have their name
-        else if (parentNodeType.equals(SiteModel.TYPE_SITE)) {
+        if (parentNodeType.equals(SiteModel.TYPE_SITE)) {
             nodeName = (String) nodeService.getProperty(parentNodeRef, ContentModel.PROP_NAME);
             parentNodeRef = nodeService.getPrimaryParent(parentNodeRef).getParentRef();
         }
@@ -119,12 +119,12 @@ public class NodePicker extends AbstractWebScript {
                 childNodeType = ContentModel.TYPE_FOLDER;
             }
             // If the child is not a site and the current node is Sites folder then it is not to be displayed
-            else if (nodeType.equals(SiteModel.TYPE_SITES)) {
-                continue;
-            }
+//            else if (nodeType.equals(SiteModel.TYPE_SITES)) {
+//                continue;
+//            }
 
             // Only folders will be displayed
-            if (childNodeType.equals(ContentModel.TYPE_FOLDER)) {
+            if (childNodeType.equals(ContentModel.TYPE_FOLDER) || childNodeType.equals(SiteModel.TYPE_SITES)) {
 
                 childJson.put("nodeRef", childRef);
                 childJson.put("name", name);

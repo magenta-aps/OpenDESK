@@ -342,7 +342,7 @@ public class Users extends AbstractWebScript {
         PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(100000));
         JSONArray result = new JSONArray();
         for (PersonInfo user : users.getPage()) {
-            JSONObject json = Utils.convertUserToJSON(nodeService, preferenceService, user.getNodeRef());
+            JSONObject json = Utils.convertUserToJSON(nodeService, user.getNodeRef());
             result.add(json);
         }
         return result;

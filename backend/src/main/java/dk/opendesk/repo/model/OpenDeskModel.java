@@ -1,6 +1,8 @@
 package dk.opendesk.repo.model;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
 import java.util.*;
 
@@ -23,6 +25,7 @@ public interface OpenDeskModel {
     String DATA_LISTS = "dataLists"; // Not implemented yet
     String LINKS = "links"; // Not implemented yet
 
+    String OD_PREFIX = "od";
     String OD_URI = "http://www.magenta-aps.dk/model/content/1.0";
 
     // Roller
@@ -74,6 +77,7 @@ public interface OpenDeskModel {
     QName ASPECT_PD = QName.createQName(OD_URI, "projecttype_projectdepartment");
     QName ASPECT_PD_TEMPLATE_SITES = QName.createQName(OD_URI, "projecttype_templates");
     QName ASPECT_PD_DOCUMENT = QName.createQName(OD_URI, "document_template");
+    QName ASPECT_SHARED = QName.createQName(OD_URI, "shared");
 
 
 
@@ -117,6 +121,11 @@ public interface OpenDeskModel {
      */
     QName PROP_NOTIFICATION_ASSOC = QName.createQName(OD_URI, "ids");
 
+
+    /**
+     * settings properties
+     */
+    QName PROP_SHARED_WITH = QName.createQName(OD_URI, "sharedWith");
 
     /**
      * Projecttypes
