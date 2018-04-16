@@ -5,7 +5,7 @@ angular
 	.controller('SiteListController', SiteListController);
 
 function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService, userService,
-						 sessionService, APP_BACKEND_CONFIG, browserService, headerService) {
+						 sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils) {
 
 	var vm = this;
 
@@ -37,7 +37,9 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 				{key:'CLOSED', name:'Afsluttet'},
 				{key:'', name:'Alle'}];
 	vm.types = [];
+    vm.toggleFavourite = toggleFavourite;
 	vm.toggleFilters = toggleFilters;
+	vm.getFavouriteIcon = getFavouriteIcon;
 
 	$scope.reverse = false;
     $scope.order = 'title';
@@ -186,4 +188,20 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 			clickOutsideToClose: true
 		});
 	}
+
+    function toggleFavourite(node) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(node.nodeRef).id;
+	    if(node.isFavourite)
+	        siteService.removeFavourite(nodeId).then(function () {
+                node.isFavourite = false;
+            });
+	    else
+            siteService.addFavourite(nodeId).then(function () {
+                node.isFavourite = true;
+            });
+    }
+
+    function getFavouriteIcon(isFavourite) {
+        return isFavourite ? 'star' : 'star_border';
+    }
 }

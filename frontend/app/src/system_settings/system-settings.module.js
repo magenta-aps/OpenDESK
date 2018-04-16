@@ -31,34 +31,6 @@ function config($stateProvider, USER_ROLES) {
                 controllerAs: 'vm'
             }
         }
-    }).state('systemsettings.folder_templates', {
-        url: '/mappeskabeloner',
-        params: {
-            authorizedRoles: [USER_ROLES.admin],
-            path: "/Data Dictionary/Space Templates",
-            isSite: false
-        },
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
-                controller: 'FilebrowserController',
-                controllerAs: 'vm'
-            }
-        }
-    }).state('systemsettings.document_templates', {
-        url: '/dokumentskabeloner',
-        params: {
-            authorizedRoles: [USER_ROLES.admin],
-            path: "/Data Dictionary/Node Templates",
-            isSite: false
-        },
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
-                controller: 'FilebrowserController',
-                controllerAs: 'vm'
-            }
-        }
     }).state('systemsettings.templateList', {
         url: '/skabeloner',
         params: {
@@ -75,7 +47,8 @@ function config($stateProvider, USER_ROLES) {
         url: '/systemmapper{path:SlashFix}',
         params: {
             authorizedRoles: [USER_ROLES.admin],
-            isSite: false
+            isSite: false,
+            type: "system-folders"
         },
         views: {
             'systemsetting-view': {
@@ -105,20 +78,6 @@ function config($stateProvider, USER_ROLES) {
             'systemsetting-view': {
                 templateUrl: 'app/src/system_settings/groups/view/groups.html',
                 controller: 'SettingsGroupsController',
-                controllerAs: 'vm'
-            }
-        }
-    }).state('systemsettings.text_templates', {
-        url: '/tekstskabeloner{path:SlashFix}',
-        params: {
-            authorizedRoles: [USER_ROLES.admin],
-            path: "/Data Dictionary/Web Scripts Extensions/OpenDesk/Templates",
-            isSite: false
-        },
-        views: {
-            'systemsetting-view': {
-                templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
-                controller: 'FilebrowserController',
                 controllerAs: 'vm'
             }
         }

@@ -14,8 +14,10 @@ function BrowserService(APP_BACKEND_CONFIG) {
     var _isMac = (ua.indexOf('mac') !== -1);
     var _isWin = (ua.indexOf('win') !== -1);
     var _isIOS = (ua.indexOf('ipad') !== -1) || (ua.indexOf('iphone') !== -1) || (ua.indexOf('ipod') !== -1);
+    var latestTitle;
 
     return {
+        restoreTitle: restoreTitle,
         setTitle: setTitle,
         isIE: isIE,
         isEdge: isEdge,
@@ -27,11 +29,16 @@ function BrowserService(APP_BACKEND_CONFIG) {
         isIOS: isIOS
     };
 
+    function restoreTitle() {
+        angular.element(window.document)[0].title = latestTitle;
+    }
+
     function setTitle(pageTitle) {
         var title = APP_BACKEND_CONFIG.public.appName;
         if (pageTitle !== undefined)
             title += " - " + pageTitle;
         angular.element(window.document)[0].title = title;
+        latestTitle = title;
     }
 
     function isIE() {

@@ -1,4 +1,4 @@
-<td style="width:45%">
+<td>
     <a class="od-filebrowser-link" ui-sref="{{vm.getLink(content)}}" ui-sref-active="active">
         <i class="material-icons">
                                     {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
@@ -40,6 +40,11 @@
             </td>
         </tr>
     </table>
+</td>
+<td>
+    <a class="od-filebrowser-link" ui-sref="{{vm.getLink(content)}}" ui-sref-active="active">
+        <span class='content-name'>{{content.creator.displayName}}</span>
+    </a>
 </td>
 <td hide show-gt-md ng-if="vm.enableESDH" style="width:10%" ng-if="isSite">
     <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg" ng-click="vm.loadCheckboxes()">

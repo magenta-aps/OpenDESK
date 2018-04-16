@@ -35,7 +35,6 @@ function GenericContentDialogController(data, $rootScope, $mdDialog, filebrowser
             vm.uploading = false;
             cancelDialog();
             $rootScope.$broadcast('updateFilebrowser');
-            //hideDialogAndReloadContent();
         });
     }
 

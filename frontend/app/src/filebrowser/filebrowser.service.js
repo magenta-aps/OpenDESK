@@ -12,10 +12,14 @@ function fileBrowserService($http, alfrescoNodeUtils) {
         getCompanyHome: getCompanyHome,
         getContentList: getContentList,
         getCurrentFolderNodeRef: getCurrentFolderNodeRef,
-        getNode: getNode,
+        getHome: getHome,
+        getSharedNodes: getSharedNodes,
         getTemplates: getTemplates,
+        getUserHome: getUserHome,
         loadFromSbsys: loadFromSbsys,
-        setCurrentFolder: setCurrentFolder
+        setCurrentFolder: setCurrentFolder,
+        shareNode: shareNode,
+        stopSharingNode: stopSharingNode
     };
     
     return service;
@@ -29,7 +33,7 @@ function fileBrowserService($http, alfrescoNodeUtils) {
     }
 
     function getCompanyHome() {
-        return $http.get("/alfresco/service/filebrowser?method=getCompanyHome", {}).then(function (response) {
+        return $http.get("/alfresco/service/node/companyHome", {}).then(function (response) {
             return response.data[0].nodeRef;
         });
     }
@@ -40,8 +44,21 @@ function fileBrowserService($http, alfrescoNodeUtils) {
         });
     }
 
-    function getNode(nodeRef, path) {
-        return $http.get('/slingshot/doclib/doclist/all/node/' + nodeRef + '/' + path).then(function (response) {
+    function getHome(type) {
+        switch(type) {
+            case "user":
+                return getUserHome().then(function (nodeRef) {
+                    return nodeRef;
+                });
+            case "company":
+                return getCompanyHome().then(function (nodeRef) {
+                    return nodeRef;
+                });
+        }
+    }
+
+    function getSharedNodes() {
+        return $http.get("/alfresco/service/node/shared").then(function (response) {
             return response.data;
         });
     }
@@ -51,6 +68,12 @@ function fileBrowserService($http, alfrescoNodeUtils) {
             PARAM_METHOD: "get" + type + "Templates"
         }).then(function (response) {
             return response.data[0];
+        });
+    }
+
+    function getUserHome() {
+        return $http.get("/alfresco/service/node/userHome", {}).then(function (response) {
+            return response.data[0].nodeRef;
         });
     }
 
@@ -89,6 +112,19 @@ function fileBrowserService($http, alfrescoNodeUtils) {
     }
 
     function genericContentAction(action, sourceNodeRefs, destinationNodeRef, parentNodeRef) {
+        if(action === 'move') {
+            return preProcessMove(sourceNodeRefs, destinationNodeRef).then(function () {
+                return executeAction(action, sourceNodeRefs, destinationNodeRef, parentNodeRef).then(function (response) {
+                    return response;
+                });
+            });
+        }
+        return executeAction(action, sourceNodeRefs, destinationNodeRef, parentNodeRef).then(function (response) {
+            return response;
+        });
+    }
+
+    function executeAction(action, sourceNodeRefs, destinationNodeRef, parentNodeRef) {
         return $http.post('/slingshot/doclib/action/' + action + '-to/node/' +
             alfrescoNodeUtils.processNodeRef(destinationNodeRef).uri, {
             nodeRefs: sourceNodeRefs,
@@ -96,6 +132,33 @@ function fileBrowserService($http, alfrescoNodeUtils) {
         }).then(function (response) {
             return response;
         });
+    }
+
+    function preProcessMove(sourceNodeRefs, destinationNodeRef) {
+        return $http.put("/alfresco/service/node/preprocess",
+            {
+                destinationRef: destinationNodeRef,
+                nodeRefs: sourceNodeRefs
+            }).then(
+            function (response) {
+                return response.data[0];
+            });
+    }
+
+    function shareNode(nodeRef, userName, permission) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
+        return $http.post("/alfresco/service/node/" + nodeId + "/share/" + userName + "/" + permission, {}).then(
+            function (response) {
+                return response.data[0];
+            });
+    }
+
+    function stopSharingNode(nodeRef, userName, permission) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
+        return $http.delete("/alfresco/service/node/" + nodeId + "/share/" + userName + "/" + permission, {}).then(
+            function (response) {
+                return response.data[0];
+            });
     }
 
 }

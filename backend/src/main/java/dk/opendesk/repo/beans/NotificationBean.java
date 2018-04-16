@@ -50,6 +50,9 @@ public class NotificationBean {
 
             //TODO: mangler at overføre ændringer til modellen fra wf notifications - der er nye properties
 
+            if(type.startsWith(OpenDeskModel.NOTIFICATION_TYPE_REVIEW))
+                preferenceFilter = "";
+
             if(!preferenceFilter.isEmpty())
                 if(!"true".equals(preferenceService.getPreference(userName, preferenceFilter)))
                     return;

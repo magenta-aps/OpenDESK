@@ -5,7 +5,9 @@ angular
 .directive('odFilebrowser', function () {
     return {
         restrict: 'E',
-        scope: {},
+        scope: {
+            type: '@odType'
+        },
         templateUrl: 'app/src/filebrowser/view/filebrowser.html',
         controller: 'FilebrowserController',
         controllerAs: 'vm'
