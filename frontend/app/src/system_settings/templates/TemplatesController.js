@@ -11,54 +11,6 @@ function TemplatesController(siteService, $mdDialog, $scope, $translate, systemS
     vm.newTemplate = newTemplate;
     vm.deleteSite = deleteSite;
     vm.deleteSiteDialog = deleteSiteDialog;
-
-    function activate() {
-        
-        vm.templateUisref = "administration.systemsettings." + vm.caseType.replace(':', '_') + '_template';
-
-    }
-
-    function getPrefilledPropName(prop) {
-        for (var i = 0; i < vm.propNameKeyPrefixes.length; i++) {
-            var prefix = vm.propNameKeyPrefixes[i];
-            var propName = $translate.instant(prefix + prop);
-            if (propName.indexOf(prefix) == -1) {
-                return propName;
-            }
-        }
-        return prop;
-    }
-
-    function getWorkflowDisplayName(workflowDefId) {
-        for (var i = 0; i < vm.workflowDefs.length; i++) {
-            if (workflowDefId == vm.workflowDefs[i].id) {
-                return vm.workflowDefs[i].title;
-            }
-        }
-        return workflowDefId;
-    }
-
-    function getPrefilledProps(template) {
-        var props = [];
-        for (var i = 0; i < vm.availableProps.length; i++) {
-            var prop = vm.availableProps[i];
-            var value = template.properties[prop];
-            if (vm.isPropSet(prop, value)) {
-                props.push(prop);
-            }
-        }
-        return props;
-    }
-
-    function isPropSet(prop, value) {
-        if (value === undefined || value === "" || value.value === undefined || value.value === "") {
-            return false;
-        }
-        if (prop == "oe:owners" && value.value[0] == "admin") {
-            return false;
-        }
-        return true;
-    }
     
     function createTemplate(name, description) {
            siteService.createTemplate(name, description).then (function (response) {

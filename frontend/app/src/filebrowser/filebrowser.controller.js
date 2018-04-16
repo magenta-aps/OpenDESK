@@ -4,9 +4,10 @@ angular
     .module('openDeskApp.filebrowser')
     .controller('FilebrowserController', FilebrowserController);
     
-    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $timeout, Upload, siteService, fileUtilsService,
-        filebrowserService, filterService, alfrescoDownloadService, documentPreviewService, documentService, 
-        alfrescoNodeUtils, userService, $translate, APP_BACKEND_CONFIG) {
+    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout, Upload,
+        siteService, fileUtilsService, filebrowserService, filterService, alfrescoDownloadService,
+        documentPreviewService, documentService, alfrescoNodeUtils, userService, $translate, APP_BACKEND_CONFIG,
+        sessionService, headerService, browserService, notificationsService) {
             
         var vm = this;
         var documentNodeRef = "";
@@ -31,12 +32,17 @@ angular
         vm.loadFromSbsys = loadFromSbsys;
         vm.loadHistory = loadHistory;
         vm.loadSbsysDialog = loadSbsysDialog;
+        vm.getAvatarUrl = getAvatarUrl;
         vm.newLinkDialog = newLinkDialog;
-        vm.permissions = siteService.getPermissions();
+        vm.permissions = {};
         vm.renameContent = renameContent;
         vm.renameContentDialog = renameContentDialog;
         vm.searchProjects = searchProjects;
         vm.setAllCheckboxes = setAllCheckboxes;
+        vm.shareDocument = shareDocument;
+        vm.shareDocumentDialog = shareDocumentDialog;
+        vm.stopSharingDocument = stopSharingDocument;
+        vm.searchPeople = searchPeople;
         vm.uploading = false;
         vm.uploadDocumentsDialog = uploadDocumentsDialog;
         vm.uploadFiles = uploadFiles;
@@ -62,7 +68,7 @@ angular
     $scope.previewDocument = previewDocument;
     $scope.goToLOEditPage = goToLOEditPage;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
-    vm.createReviewNotification = uploadNewVersionDialog;
+    vm.createReviewNotification = createReviewNotification;
 
     $scope.filesToFilebrowser = null;
 
@@ -80,23 +86,46 @@ angular
     activate();
 
     function activate() {
+        vm.path = $stateParams.path;
+        if($stateParams.selectedTab !== undefined)
+            $scope.tab.selected = $stateParams.selectedTab;
+
         if ($scope.isSite) {
-            // vm.tab.selected = $stateParams.selectedTab;
-            
             $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
                 $scope.userManagedProjects = newVal;
             });
-            siteService.getNode($stateParams.projekt, "documentLibrary", $stateParams.path).then(function (val) {
+            siteService.getNode($stateParams.projekt, "documentLibrary", vm.path).then(function (val) {
                 setFolder(val.parent.nodeRef);
             });
-        } else {
-            setFolderAndPermissions($stateParams.path);
-        }
 
-        if(vm.permissions === undefined) {
-            siteService.getSiteUserPermissions($stateParams.projekt).then(function(permissions) {
-                vm.permissions = permissions;
+            vm.permissions = siteService.getPermissions();
+            if(vm.permissions === undefined) {
+                siteService.getSiteUserPermissions($stateParams.projekt).then(function(permissions) {
+                    vm.permissions = permissions;
+                });
+            }
+        }
+        else if($stateParams.nodeRef !== undefined && $stateParams.nodeRef !== "") {
+            setFolderAndPermissions($stateParams.nodeRef);
+        }
+        else if ($stateParams.type === "shared-docs") {
+            var title = $translate.instant('DOCUMENT.SHARED_WITH_ME');
+            browserService.setTitle(title);
+            headerService.setTitle(title);
+            loadSharedNodes();
+        }
+        else if($stateParams.type === "my-docs") {
+            var title;
+            title = $translate.instant('DOCUMENT.MY_DOCUMENTS');
+            browserService.setTitle(title);
+            headerService.setTitle(title);
+            filebrowserService.getUserHome().then(function (userHomeRef) {
+                var userHomeId = alfrescoNodeUtils.processNodeRef(userHomeRef).id;
+                setFolderAndPermissions(userHomeId);
             });
+        }
+        else {
+            setFolderAndPermissionsByPath(vm.path);
         }
 
         filebrowserService.getTemplates("Document").then(function (documentTemplates) {
@@ -115,20 +144,24 @@ angular
         });
     }
 
-    function setFolderAndPermissions(path) {
+    function setFolderAndPermissionsByPath(path) {
         filebrowserService.getCompanyHome().then(function (val) {
-            var companyHomeUri = alfrescoNodeUtils.processNodeRef(val).uri;
-            filebrowserService.getNode(companyHomeUri, path).then(
-                function (response) {
-                    setFolder(response.metadata.parent.nodeRef);
-                    vm.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit;
-                },
-                function (error) {
-                    vm.isLoading = false;
-                    vm.error = true;
-                }
-            );
+            var companyHomeId = alfrescoNodeUtils.processNodeRef(val).id;
+            setFolderAndPermissions(companyHomeId + path);
         });
+    }
+
+    function setFolderAndPermissions(node) {
+        documentService.getDocumentByPath(node).then(
+            function (response) {
+                setFolder(response.metadata.parent.nodeRef);
+                vm.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit;
+            },
+            function (error) {
+                vm.isLoading = false;
+                vm.error = true;
+            }
+        );
     }
 
     function setFolder(fNodeRef) {
@@ -139,22 +172,41 @@ angular
     }
 
     function loadContentList(folderUUID) {
-        filebrowserService.getContentList(folderUUID).then(function (contentList) {
-                vm.contentList = contentList;
-
-                angular.forEach(vm.contentList, function(contentTypeList) {
-                    vm.contentListLength += contentTypeList.length;
-                    processContent(contentTypeList);
-                });
-                // Compile paths for breadcrumb directive
-                vm.paths = buildBreadCrumbPath();
-                vm.isLoading = false;
+        filebrowserService.getContentList(folderUUID).then(
+            function (contentList) {
+                loadNodes(contentList);
             },
             function (error) {
                 vm.isLoading = false;
                 vm.error = true;
             }
         );
+    }
+
+    function loadSharedNodes() {
+        filebrowserService.getSharedNodes().then(
+            function (contentList) {
+                loadNodes(contentList);
+            },
+            function (error) {
+                vm.isLoading = false;
+                vm.error = true;
+            }
+        );
+    }
+
+    function loadNodes(contentList) {
+        vm.contentList = contentList;
+
+        angular.forEach(vm.contentList, function(contentTypeList) {
+            vm.contentListLength += contentTypeList.length;
+            processContent(contentTypeList);
+        });
+        // Compile paths for breadcrumb directive
+        if(folderNodeRef !== "") {
+            buildBreadCrumbPath();
+        }
+        vm.isLoading = false;
     }
 
     function processContent(content) {
@@ -167,17 +219,21 @@ angular
     
     function getLink(content) {
         if (content.contentType === 'cmis:document') {
-            if ($scope.isSite)
-                return 'document({doc: "' + content.shortRef + '"})';
-            else
+            if ($stateParams.type === "text-templates")
                 return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})';
+            else
+                return 'document({doc: "' + content.shortRef + '"})';
         }
         if (content.contentType === 'cmis:folder') {
-            if ($scope.isSite)
+            if ($stateParams.type === "system-folders")
+                return 'systemsettings.filebrowser({path: "' + vm.path + '/' + content.name + '"})';
+            else if ($stateParams.type === "my-docs")
+                return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})';
+            else if ($stateParams.type === "shared-docs")
+                return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})';
+            else if($scope.isSite)
                 return 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                    '", path: "' + $stateParams.path + '/' + content.name + '"})';
-            else
-                return 'systemsettings.filebrowser({path: "' + $stateParams.path + '/' + content.name + '"})';
+                    '", path: "' + vm.path + '/' + content.name + '"})';
         }
         if (content.contentType === 'cmis:link') {
             return 'project({projekt: "' + content.destination_link + '"})';
@@ -191,38 +247,63 @@ angular
     }
 
     function buildBreadCrumbPath() {
-        var homeLink;
 
-        if ($scope.isSite)
-            homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})';
-        else
-            homeLink = 'systemsettings.filebrowser({path: ""})';
+        if ($stateParams.type === "my-docs" || $stateParams.type === "shared-docs") {
+            var homeType;
+            switch($stateParams.type) {
+                case "my-docs":
+                    homeType = "user";
+                    break;
+                case "shared-docs":
+                    homeType = "company";
+                    break;
+            }
 
-        var paths = [{
-            title: 'Home',
-            link: homeLink
-        }];
-
-        if ($stateParams.path !== undefined) {
-            var pathArr = $stateParams.path.split('/');
-            var pathLink = '/';
-            for (var a in pathArr) {
-                if (pathArr[a] !== '') {
-                    var link;
-                    if ($scope.isSite)
-                        link = 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                        '", path: "' + pathLink + pathArr[a] + '"})';
-                    else
-                        link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
-                    paths.push({
-                        title: pathArr[a],
-                        link: link
+            filebrowserService.getHome(homeType).then(function (rootRef) {
+                documentService.getBreadCrumb($stateParams.type, folderNodeRef, rootRef).then(
+                    function (breadcrumb) {
+                        vm.paths = breadcrumb;
                     });
-                    pathLink = pathLink + pathArr[a] + '/';
-                }
+            });
+        }
+
+        else if (vm.path !== undefined) {
+            var homeLink;
+
+            if ($scope.isSite)
+                homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})';
+            else
+                homeLink = 'systemsettings.filebrowser({path: ""})';
+
+            var paths = [{
+                title: 'Home',
+                link: homeLink
+            }];
+            var pathLink = '/';
+            createBreadCrumbs(paths, pathLink);
+            vm.paths = paths;
+        }
+    }
+
+    function createBreadCrumbs(paths, pathLink) {
+        var pathArr = vm.path.split('/');
+        for (var a in pathArr) {
+            if (pathArr[a] !== '') {
+                var link;
+                if ($scope.isSite)
+                    link = 'project.filebrowser({projekt: "' + $stateParams.projekt +
+                        '", path: "' + pathLink + pathArr[a] + '"})';
+                else
+                    link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})';
+                paths.push({
+                    title: pathArr[a],
+                    link: link
+                });
+                console.log($stateParams.nodeRef);
+                console.log("Added link: " + link);
+                pathLink = pathLink + pathArr[a] + '/';
             }
         }
-        return paths;
     }
 
     // Dialogs
@@ -300,10 +381,68 @@ angular
         return userService.getUsers(filter);
     }
 
-    
     function createReviewNotification(userName, comment) {
         siteService.createReviewNotification(documentNodeRef, userName, comment);
         $mdDialog.cancel();
+    }
+
+    function getAvatarUrl (user) {
+        return sessionService.makeAvatarUrl(user);
+    }
+
+    function shareDocumentDialog(content) {
+        documentNodeRef = content.nodeRef;
+        $scope.content = content;
+
+        $mdDialog.show({
+            templateUrl: 'app/src/filebrowser/view/content/document/shareDocument.tmpl.html',
+            scope: $scope, // use parent scope in template
+            preserveScope: true, // do not forget this if use parent scope
+            clickOutsideToClose: true
+        });
+    }
+
+    function shareDocument(user, permission) {
+        filebrowserService.shareNode(documentNodeRef, user.userName, permission).then(
+            function(succes) {
+                $mdToast.show(
+                    $mdToast.simple()
+                        .textContent('Dokumentet blev delt med ' + user.displayName + ".")
+                        .hideDelay(3000)
+                );
+                var nodeId = alfrescoNodeUtils.processNodeRef(documentNodeRef).id;
+                var link = "dokumenter/delte/" + nodeId;
+                var subject = 'Nyt dokument delt';
+                var message = "En bruger har delt et dokument med dig";
+
+                notificationsService.addNotice(
+                    user.userName,
+                    subject,
+                    message,
+                    link,
+                    "new-shared-doc",
+                    ""
+                );
+            }
+        );
+    }
+
+    function stopSharingDocument(user, permission) {
+        filebrowserService.stopSharingNode(documentNodeRef, user.userName, permission).then(
+            function(succes) {
+                $mdToast.show(
+                    $mdToast.simple()
+                        .textContent('Dokumentet bliver ikke længere delt med ' + user.displayName + ".")
+                        .hideDelay(3000)
+                );
+            }
+        );
+    }
+
+    function searchPeople(query) {
+        if (query) {
+            return userService.getUsers(query);
+        }
     }
 
     
@@ -379,9 +518,6 @@ angular
             locals: {
                 data: data
             },
-            // targetEvent: event,
-            // scope: $scope,
-            // preserveScope: true,
             clickOutsideToClose: true
         });
     }

@@ -1,21 +1,9 @@
 package dk.opendesk.repo.utils;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.executer.MailActionExecuter;
 import org.alfresco.repo.content.MimetypeMap;
-import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionService;
@@ -23,7 +11,8 @@ import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
@@ -41,9 +30,21 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.alfresco.model.ContentModel.*;
 import static org.alfresco.service.namespace.NamespaceService.CONTENT_MODEL_1_0_URI;
@@ -188,6 +189,20 @@ public class Utils {
             return "";
         }
         return json.getString(parameter);
+    }
+
+    public static ArrayList<String> getJSONArray(JSONObject json, String parameter) throws JSONException {
+        ArrayList<String> result = new ArrayList<>();
+        if (!json.has(parameter) || json.getJSONArray(parameter).length() == 0)
+        {
+            return result;
+        }
+        org.json.JSONArray jsonArray = json.getJSONArray(parameter);
+        for (int i=0; i < jsonArray.length(); i++) {
+            String value = jsonArray.getString(i);
+            result.add(value);
+        }
+        return result;
     }
 
     /**
@@ -669,11 +684,10 @@ public class Utils {
     /**
      * Converts a user into a standard structured JSONObject.
      * @param nodeService alfresco standard service.
-     * @param preferenceService alfresco standard service.
      * @param person the nodeRef of the user to be converted.
      * @return a JSONObject representing the user.
      */
-    public static JSONObject convertUserToJSON (NodeService nodeService, PreferenceService preferenceService,
+    public static JSONObject convertUserToJSON (NodeService nodeService,
                                                 NodeRef person) throws JSONException {
         JSONObject json = new JSONObject();
 

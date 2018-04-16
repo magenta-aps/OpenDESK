@@ -22,7 +22,9 @@
         <property name="nodeService" ref="NodeService"/>
         <property name="permissionService" ref="PermissionService"/>
         <property name="personService" ref="PersonService"/>
+        <property name="preferenceService" ref="PreferenceService"/>
         <property name="repository" ref="repositoryHelper"/>
+        <property name="searchService" ref="SearchService"/>
         <property name="siteService" ref="SiteService"/>
     </bean>
 

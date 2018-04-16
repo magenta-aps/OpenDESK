@@ -26,6 +26,7 @@ angular
         'openDeskApp.dashboard',
         'openDeskApp.lool',
         'openDeskApp.documents',
+        'openDeskApp.odDocuments',
         'openDeskApp.search',
         'openDeskApp.calendar',
         'openDeskApp.nogletal',

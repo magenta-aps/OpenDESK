@@ -60,7 +60,9 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         getSiteManager: getSiteManager,
         createDocumentNotification: createDocumentNotification,
         createReviewNotification: createReviewNotification,
-        updateMemberList: updateMemberList
+        updateMemberList: updateMemberList,
+        addFavourite: addFavourite,
+        removeFavourite: removeFavourite
     };
 
     return service;
@@ -554,4 +556,22 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             notification.shortName);
     }
 
+    function addFavourite(nodeId) {
+        return $http.post("/alfresco/api/-default-/public/alfresco/versions/1/people/-me-/favorites", {
+            target: {
+                site : {
+                    guid : nodeId
+                }
+            }
+        }).then(function (response) {
+            return response;
+        });
+    }
+
+    function removeFavourite(nodeId) {
+        return $http.delete("/alfresco/api/-default-/public/alfresco/versions/1/people/-me-/favorites/" + nodeId)
+            .then(function (response) {
+            return response;
+        });
+    }
 }
