@@ -5,7 +5,7 @@ angular.module('openDeskApp.documents')
 
 function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state,
     documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, notificationsService, authService,
-                            siteService, headerService, $window, editOnlineMSOfficeService) {
+                            siteService, headerService, $window, editOnlineMSOfficeService, filebrowserService) {
 
     var vm = this;
 
@@ -213,6 +213,27 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 });
             }
             else {
+                var folderNodeRef = vm.doc.node.nodeRef;
+                var location = vm.doc.location.path;
+                var homeType, type;
+                var user = authService.getUserInfo().user.userName;
+                var userHomeLocation = "/User Homes/" + user + "/";
+
+                if (location.substring(0, userHomeLocation.length) === userHomeLocation) {
+                    homeType = "user";
+                    type = "my-docs";
+                }
+                else {
+                    homeType = "company";
+                    type = "shared-docs";
+                }
+
+                filebrowserService.getHome(homeType).then(function (rootRef) {
+                    documentService.getBreadCrumb(type, folderNodeRef, rootRef).then(
+                        function (breadcrumb) {
+                            vm.paths = breadcrumb;
+                        });
+                });
                 headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT'));
             }
 
