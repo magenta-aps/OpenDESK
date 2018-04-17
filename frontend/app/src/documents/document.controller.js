@@ -217,9 +217,11 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 var location = vm.doc.location.path;
                 var homeType, type;
                 var user = authService.getUserInfo().user.userName;
-                var userHomeLocation = "/User Homes/" + user + "/";
+                var userHomeLocation = "/User Homes/" + user;
+                var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation;
+                var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation;
 
-                if (location.substring(0, userHomeLocation.length) === userHomeLocation) {
+                if (pathIsUserHome || pathIsUnderUserHome) {
                     homeType = "user";
                     type = "my-docs";
                 }
