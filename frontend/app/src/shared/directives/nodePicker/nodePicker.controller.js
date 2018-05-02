@@ -17,10 +17,8 @@ function NodePickerController($scope, alfrescoDocumentService) {
     activate();
 
     function activate() {
-        console.log('start node picker');
-        alfrescoDocumentService.retrieveNodePickerInfo($scope.currentNodeRef).then(function (currentNode) {
-            console.log("currentNode");
-            console.log(currentNode);
+        alfrescoDocumentService.retrieveNodePickerInfo($scope.currentNodeRef)
+        .then(function (currentNode) {
             vm.currentNode = currentNode;
         });
     }
@@ -31,14 +29,16 @@ function NodePickerController($scope, alfrescoDocumentService) {
 
     function browseParent() {
         $scope.model = undefined;
-        alfrescoDocumentService.retrieveNodePickerInfo(vm.currentNode[0].primaryParent_nodeRef).then(function (currentNode) {
+        alfrescoDocumentService.retrieveNodePickerInfo(vm.currentNode[0].primaryParent_nodeRef)
+        .then(function (currentNode) {
             vm.currentNode = currentNode;
         });
     }
 
     function browseChild(childNodeRef) {
         $scope.model = undefined;
-        alfrescoDocumentService.retrieveNodePickerInfo(childNodeRef).then(function (currentNode) {
+        alfrescoDocumentService.retrieveNodePickerInfo(childNodeRef)
+        .then(function (currentNode) {
             vm.currentNode = currentNode;
         });
     }

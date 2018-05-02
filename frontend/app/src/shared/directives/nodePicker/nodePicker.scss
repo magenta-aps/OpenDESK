@@ -16,7 +16,15 @@
   }
 }
 
+.back-item {
+  background-color: #ddd;
+  margin-top: -12pt;
+  margin-left: -12pt;
+  margin-right: -12pt;
+}
+
 .picker-list {
+  min-width: 20vw;
   
   .picked {
     background-color: rgb(63, 81, 181);
