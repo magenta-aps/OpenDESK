@@ -27,7 +27,7 @@ public class GetUserHome extends AbstractWebScript {
         JSONArray result;
 
         try {
-            result = nodeBean.getUserHome();
+            result =  Utils.getJSONReturnPair("nodeRef", nodeBean.getUserHome().toString());
         } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);

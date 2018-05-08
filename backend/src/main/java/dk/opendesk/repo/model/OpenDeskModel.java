@@ -140,4 +140,10 @@ public interface OpenDeskModel {
     String TEMPLATE_EMAIL_BASE = "email.html.ftl";
     String TEMPLATE_EMAIL_INVITE_EXTERNAL_USER = "ekstern-bruger.html.ftl";
 
+    /**
+     * Node Picker
+     */
+    String NODE_PICKER_MY_DOCS = "my-docs";
+    String NODE_PICKER_SHARED_DOCS = "shared-docs";
+    String NODE_PICKER_SITES = "sites";
 }
