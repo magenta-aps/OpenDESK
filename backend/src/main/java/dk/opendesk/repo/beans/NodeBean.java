@@ -269,8 +269,11 @@ public class NodeBean {
         result.put("nodeRef", nodeRef.toString());
 
         // If the parent is a site then change the node ref to match the site and not its document library
-        if(parentObj != null && OpenDeskModel.NODE_PICKER_SITES.equals(parentObj.get("rootName"))){
-            nodeRef = parentRef;
+        if(parentObj != null && parentObj.has("rootName")) {
+            String rootName = (String) parentObj.get("rootName");
+            if (OpenDeskModel.NODE_PICKER_SITES.equals(rootName)) {
+                nodeRef = parentRef;
+            }
         }
         String nodeName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
         result.put("name", nodeName);
