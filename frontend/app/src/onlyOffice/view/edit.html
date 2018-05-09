@@ -1,0 +1,27 @@
+<html>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+
+    <title>OnlyOffice</title>
+
+    <link href="app/src/onlyOffice//view/onlyoffice.css" type="text/css" rel="stylesheet">
+
+    <!--Change the address on installed ONLYOFFICE Online Editors-->
+    <script id="scriptApi" type="text/javascript" src="{{vm.onlyOfficeUrl + '/OfficeWeb/apps/api/documents/api.js'}}"></script>
+</head>
+
+<body>
+<div>
+    <div id="placeholder"></div>
+</div>
+<script>
+    new DocsAPI.DocEditor("placeholder", vm.docConfig);
+    //Keep Alfresco active
+    setInterval(function() {
+        var keepAlive = new XMLHttpRequest();
+        keepAlive.open("GET", "${url.context}/proxy/alfresco/api/admin/restrictions", true);
+        keepAlive.send();
+    }, 60000);
+</script>
+</body>
+</html>
