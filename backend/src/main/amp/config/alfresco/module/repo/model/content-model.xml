@@ -13,13 +13,14 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <!-- Import Alfresco System Model Definitions -->
         <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+        <!-- Import Alfresco Forum Model Definitions -->
+        <import uri="http://www.alfresco.org/model/forum/1.0" prefix="fm"/>
     </imports>
 
     <!-- Custom namespace for your domain -->
     <namespaces>
         <namespace uri="http://www.mycompany.com/model/content/1.0" prefix="myc"/>
         <namespace uri="http://www.magenta-aps.dk/model/content/1.0" prefix="od"/>
-
     </namespaces>
 
 
@@ -57,6 +58,20 @@
                 </property>
                 <property name="od:project">
                     <type>d:text</type>
+                </property>
+            </properties>
+        </type>
+
+        <type name="od:review">
+            <title>Review</title>
+            <parent>fm:forum</parent>
+            <properties>
+                <property name="od:assignee">
+                    <type>d:text</type>
+                </property>
+                <property name="od:status">
+                    <type>d:text</type>
+                    <default>pending</default>
                 </property>
             </properties>
         </type>
@@ -168,6 +183,18 @@
                     <multiple>true</multiple>
                 </property>
             </properties>
+        </aspect>
+
+        <aspect name="od:reviewable">
+            <title>Reviewable</title>
+            <associations>
+                <child-association name="od:reviewed">
+                    <target>
+                        <class>od:review</class>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
         </aspect>
 
     </aspects>

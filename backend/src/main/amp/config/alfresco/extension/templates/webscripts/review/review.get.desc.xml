@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Review</shortname>
+    <description>Gets the review of a node</description>
+    <url>/review/{nodeId}</url>
+    <authentication>user</authentication>
+</webscript>

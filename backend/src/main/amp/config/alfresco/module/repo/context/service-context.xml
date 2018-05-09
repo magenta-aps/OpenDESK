@@ -34,6 +34,11 @@
         <property name="preferenceService" ref="PreferenceService"/>
     </bean>
 
+    <bean id="reviewBean" class="dk.opendesk.repo.beans.ReviewBean">
+        <property name="discussionService" ref="DiscussionService"/>
+        <property name="nodeService" ref="NodeService"/>
+    </bean>
+
     <bean id="settingsBean" class="dk.opendesk.repo.beans.SettingsBean">
         <property name="fileFolderService" ref="FileFolderService"/>
         <property name="nodeService" ref="NodeService"/>
