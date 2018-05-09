@@ -93,6 +93,16 @@ public interface OpenDeskModel {
     QName PROP_NOTIFICATION_PROJECT = QName.createQName(OD_URI, "project");
     String NOTIFICATION_TYPE_REVIEW = "review";
 
+    /**
+     * Review properties
+     */
+    QName TYPE_REVIEW = QName.createQName(OD_URI, "review");
+    QName PROP_REVIEW_ASSIGNEE = QName.createQName(OD_URI, "assignee");
+    QName PROP_REVIEW_STATUS = QName.createQName(OD_URI, "status");
+    QName ASPECT_REVIEWABLE = QName.createQName(OD_URI, "reviewable");
+    QName ASSOC_REVIEWED = QName.createQName(OD_URI, "reviewed");
+    String REVIEW_DISCUSSION = "review-discussion";
+
 
     /**
      * projectDepartment properties
