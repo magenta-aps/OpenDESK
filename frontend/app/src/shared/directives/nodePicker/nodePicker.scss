@@ -17,6 +17,8 @@
 }
 
 .picker-list {
+
+  min-width: 25vw;
   
   .picked {
     background-color: rgb(63, 81, 181);
@@ -41,5 +43,8 @@
   .md-icon-button:active {
       border: solid 1px #ccc;
     }
-  }
   
+  .document-name {
+    color: #ccc;
+  }
+}
