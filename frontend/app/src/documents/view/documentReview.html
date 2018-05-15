@@ -2,8 +2,12 @@
     <md-card-title>
         <h3 class="od-title-icon"><md-icon>playlist_add_check</md-icon> {{vm.wf_subject}}</h3>
     </md-card-title>
+    
+    <md-card-content>
+        <od-review-list items="[{from: 'some user', 'message': 'some message'}]"></od-review-list>
+    </md-card-content>
 
-    <md-card-content ng-if="vm.wfr">
+    <!-- <md-card-content ng-if="vm.wfr">
         <p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har skrevet kommentaren: </p>
         <p><i>{{vm.wf_comment}}</i></p>
         <p></p>
@@ -18,11 +22,11 @@
             Redigere
         </md-button>
         dokumentet, inden du godkender eller afviser.
-    </md-card-content>
+    </md-card-content> -->
 
-    <md-card-actions ng-if="vm.wf" layout="row">
+    <!-- <md-card-actions ng-if="vm.wf" layout="row">
         <span flex></span>
         <md-button ng-click="vm.rejectCommentDialog($event)">Afvis</md-button>
         <md-button class="md-primary" ng-click="vm.approveCommentDialog($event)">Godkend</md-button>
-    </md-card-actions>
+    </md-card-actions> -->
 </md-card>

@@ -1,0 +1,24 @@
+<md-autocomplete
+  required 
+  md-selected-item="$ctrl.selected" 
+  md-search-text="query" 
+  md-items="o in $ctrl.searchManagers(query)"
+  md-item-text="o.displayName" 
+  md-min-length="1" 
+  md-require-match="true"
+  md-clear-button="true"
+  md-floating-label="{{'MEMBER.MEMBER' | translate}}"
+  placeholder=""="{{'MEMBER.MEMBER' | translate}}"
+  >
+    <md-item-template>
+        <span 
+            md-highlight-text="query" 
+            md-highlight-flags="gi"
+        >
+            {{ o.displayName }}
+        </span>
+    </md-item-template>
+    <md-not-found>
+        {{'ERROR.NO_USERS_MATCHES' | translate}} "{{ query }}".
+    </md-not-found>
+</md-autocomplete>

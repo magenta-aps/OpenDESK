@@ -1,0 +1,20 @@
+<od-review-detail ng-repeat="(index, item) in items" item="item"></od-review-detail>
+
+<div>
+  <md-input-container>
+      <label>Kommentar</label>
+      <textarea 
+        name='comment' 
+        ng-model="comment" 
+        md-maxlength="250" 
+        maxlength="250" 
+        md-select-on-focus
+      ></textarea>
+  </md-input-container>
+</div>
+
+<div>
+  <span flex></span>
+  <md-button ng-click="vm.reject()">Afvis</md-button>
+  <md-button class="md-primary" ng-click="vm.approve()">Godkend</md-button>
+</div>

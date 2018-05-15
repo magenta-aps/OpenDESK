@@ -369,7 +369,8 @@ angular
         documentNodeRef = nodeRef;
 
         $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
+            templateUrl: 'app/src/review/reviewCreate.view.html',
+            controller: 'ReviewController as vm',
             targetEvent: event,
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope

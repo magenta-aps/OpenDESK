@@ -364,7 +364,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     function reviewDocumentsDialog(event) {
         $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
+            templateUrl: 'app/src/review/reviewCreate.view.html',
+            controller: 'ReviewController',
+            controllerAs: 'vm',
             parent: angular.element(document.body),
             targetEvent: event,
             scope: $scope, // use parent scope in template
