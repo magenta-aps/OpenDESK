@@ -18,6 +18,11 @@
 -->
 <beans>
 
+    <bean id="discussionBean" class="dk.opendesk.repo.beans.DiscussionBean">
+        <property name="discussionService" ref="DiscussionService"/>
+        <property name="personBean" ref="personBean"/>
+    </bean>
+
     <bean id="nodeBean" class="dk.opendesk.repo.beans.NodeBean">
         <property name="nodeService" ref="NodeService"/>
         <property name="permissionService" ref="PermissionService"/>
@@ -34,7 +39,13 @@
         <property name="preferenceService" ref="PreferenceService"/>
     </bean>
 
+    <bean id="personBean" class="dk.opendesk.repo.beans.PersonBean">
+        <property name="nodeService" ref="NodeService"/>
+        <property name="personService" ref="PersonService"/>
+    </bean>
+
     <bean id="reviewBean" class="dk.opendesk.repo.beans.ReviewBean">
+        <property name="discussionBean" ref="discussionBean"/>
         <property name="discussionService" ref="DiscussionService"/>
         <property name="nodeService" ref="NodeService"/>
     </bean>

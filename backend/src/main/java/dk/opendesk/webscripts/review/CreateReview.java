@@ -26,19 +26,17 @@ public class CreateReview extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 
-        Map<String, String> templateArgs = req.getServiceMatch().getTemplateVars();
         res.setContentEncoding("UTF-8");
         Content c = req.getContent();
         Writer webScriptWriter = res.getWriter();
         JSONArray result;
 
         try {
-            String nodeId = templateArgs.get("nodeId");
-            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-
             JSONObject json = new JSONObject(c.getContent());
             String assignee = Utils.getJSONObject(json, "assignee");
             String message = Utils.getJSONObject(json, "message");
+            String nodeId = Utils.getJSONObject(json, "nodeId");
+            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
 
             reviewBean.createReview(nodeRef, assignee, message);
             result = Utils.getJSONSuccess();

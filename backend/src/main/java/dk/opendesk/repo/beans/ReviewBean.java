@@ -2,8 +2,8 @@ package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
-import org.alfresco.query.PagingRequest;
 import org.alfresco.service.cmr.discussion.DiscussionService;
+import org.alfresco.service.cmr.discussion.PostInfo;
 import org.alfresco.service.cmr.discussion.TopicInfo;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -17,9 +17,13 @@ import java.util.Map;
 
 public class ReviewBean {
 
+    private DiscussionBean discussionBean;
     private DiscussionService discussionService;
     private NodeService nodeService;
 
+    public void setDiscussionBean(DiscussionBean discussionBean) {
+        this.discussionBean = discussionBean;
+    }
     public void setDiscussionService(DiscussionService discussionService) {
         this.discussionService = discussionService;
     }
@@ -31,6 +35,11 @@ public class ReviewBean {
         JSONObject result = new JSONObject();
         Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
 
+        TopicInfo topic = discussionService.getTopic(nodeRef, OpenDeskModel.REVIEW_DISCUSSION);
+        if(topic != null) {
+            result = discussionBean.getDiscussion(topic);
+        }
+
         if(properties.containsKey(ContentModel.PROP_CREATOR))
             result.put("reporter", properties.get(ContentModel.PROP_CREATOR));
 
@@ -39,12 +48,6 @@ public class ReviewBean {
 
         if(properties.containsKey(OpenDeskModel.PROP_REVIEW_STATUS))
             result.put("status", properties.get(OpenDeskModel.PROP_REVIEW_STATUS));
-
-        TopicInfo topic = discussionService.getTopic(nodeRef, OpenDeskModel.REVIEW_DISCUSSION);
-        if(topic != null) {
-            NodeRef discussionRef = topic.getNodeRef();
-            result.put("discussionId", discussionRef.getId());
-        }
 
         return result;
     }
@@ -69,7 +72,6 @@ public class ReviewBean {
         TopicInfo topic = discussionService.createTopic(reviewRef, OpenDeskModel.REVIEW_DISCUSSION);
         nodeService.setProperty(topic.getNodeRef(), ContentModel.PROP_NAME, OpenDeskModel.REVIEW_DISCUSSION);
         discussionService.createPost(topic, message);
-
     }
 
     public void updateReview(NodeRef nodeRef, String assignee, String status) {
