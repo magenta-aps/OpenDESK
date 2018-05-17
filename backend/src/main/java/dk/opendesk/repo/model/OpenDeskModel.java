@@ -82,7 +82,7 @@ public interface OpenDeskModel {
 
 
     /**
-     * Notification properties
+     * NotificationEventHandler properties
      */
     QName PROP_NOTIFICATION_SUBJECT = QName.createQName(OD_URI, "subject");
     QName PROP_NOTIFICATION_MESSAGE = QName.createQName(OD_URI, "message");
@@ -91,7 +91,15 @@ public interface OpenDeskModel {
     QName PROP_NOTIFICATION_SEEN = QName.createQName(OD_URI, "seen");
     QName PROP_NOTIFICATION_TYPE = QName.createQName(OD_URI, "type");
     QName PROP_NOTIFICATION_PROJECT = QName.createQName(OD_URI, "project");
+    QName PROP_NOTIFICATION_PARAMS = QName.createQName(OD_URI, "params");
     String NOTIFICATION_TYPE_REVIEW = "review";
+    String NOTIFICATION_TYPE_REVIEW_APPROVED = "review-approved";
+    String NOTIFICATION_TYPE_REVIEW_REJECTED = "review-rejected";
+    String NOTIFICATION_TYPE_CONTENT = "content";
+    String NOTIFICATION_TYPE_SHARED_CONTENT = "shared-content";
+    String NOTIFICATION_TYPE_SITE = "site";
+    String NOTIFICATION_TYPE_DISCUSSION = "discussion";
+    String NOTIFICATION_TYPE_REPLY = "reply";
 
     /**
      * Review properties

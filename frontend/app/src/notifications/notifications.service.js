@@ -42,7 +42,46 @@
             }).then(function(response) {
                 // console.log(response.data);
                 unseenNotifications = response.data[0].unseen;
-                return response.data[1];
+                var notifications = response.data[1];
+                angular.forEach(notifications, function (notification) {
+
+                    switch(notification.type) {
+                        case 'review':
+                            break;
+                        case 'review-approved':
+                            break;
+                        case 'review-rejected':
+                            break;
+                        case 'content':
+                            break;
+                        case 'shared-content':
+                            break;
+                        case 'site':
+                            break;
+                        case 'discussion':
+                            notification.link = '';
+                            notification.subject = 'Ny samtale i et projekt';
+                            notification.message = notification.params.sender + ' har oprettet en ny diskussion';
+                            break;
+                        case 'reply':
+                            break;
+                    }
+                    notification.link = '';
+                    notification.subject = '';
+                    notification.message = '';
+
+                    /*
+<p ng-if="notice.type == 'review'" class="od-notifylist--item--desc">{{notice.from}} har bedt dig om at reviewe et dokument i projektet {{notice.project}}</p>
+<p ng-if="notice.type == 'review-approved'"  class="od-notifylist--item--desc">{{notice.from}} har godkendt dit review i projektet {{notice.project}} med en kommentar</p>
+<p ng-if="notice.type == 'review-rejected'"  class="od-notifylist--item--desc">{{notice.from}} har afvist dit review i projektet {{notice.project}} med en kommentar</p>
+<p ng-if="notice.type == 'content'"  class="od-notifylist--item--desc">{{notice.from}} har lagt et nyt dokument i projektet {{notice.project}}</p>
+<p ng-if="notice.type == 'shared-content'"  class="od-notifylist--item--desc">{{notice.from}} har delt et dokument med dig</p>
+<p ng-if="notice.type == 'site'" class="od-notifylist--item--desc">{{notice.message}}</p>
+<p ng-if="notice.type == 'reply'" class="od-notifylist--item--desc">{{notice.message}}</p>
+<p ng-if="notice.type == 'discussion'" class="od-notifylist--item--desc">{{notice.message}}</p>
+                     */
+                });
+                return notifications;
             });
         }
 

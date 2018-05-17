@@ -47,13 +47,9 @@ public class Notifications extends AbstractWebScript {
     private NodeService nodeService;
     private NotificationBean notificationBean;
     private PersonService personService;
-    private SiteService siteService;
 
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
-    }
-    public void setSiteService(SiteService siteService) {
-        this.siteService = siteService;
     }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -167,7 +163,7 @@ public class Notifications extends AbstractWebScript {
         result.add(stats);
 
         for (ChildAssociationRef child : childAssociationRefs) {
-            JSONObject json = Utils.convertNotificationToJSON(nodeService, siteService, personService, child.getChildRef());
+            JSONObject json = notificationBean.getNotification(child.getChildRef());
             children.add(json);
         }
 
@@ -237,7 +233,7 @@ public class Notifications extends AbstractWebScript {
      */
     private JSONArray getInfo (NodeRef notification) throws JSONException {
         JSONArray result = new JSONArray();
-        JSONObject json = Utils.convertNotificationToJSON(nodeService, siteService, personService, notification);
+        JSONObject json = notificationBean.getNotification(notification);
         result.add(json);
         return result;
     }

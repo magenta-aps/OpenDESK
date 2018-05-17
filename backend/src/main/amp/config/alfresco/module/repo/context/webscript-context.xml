@@ -23,7 +23,6 @@
         <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="personService" ref="PersonService"/>
-		<property name="siteService" ref="SiteService"/>
 	</bean>
 
 	<bean id="webscript.nodepicker.get"
