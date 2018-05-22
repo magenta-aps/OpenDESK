@@ -5,7 +5,8 @@ angular
 	.controller('SiteListController', SiteListController);
 
 function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService, userService,
-						 sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils) {
+						 	sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils,
+                            translateService) {
 
 	var vm = this;
 
@@ -51,16 +52,11 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 		if(vm.config.enableProjects)
 			vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')});
 		vm.types.push({key: '', name: $translate.instant('COMMON.ALL')});
-	
-		if(vm.config.enableSites && vm.config.enableProjects)
-			vm.sitesName = 'SITES.NAME';
-		else if(vm.config.enableSites)
-			vm.sitesName = 'SITES.Project.NAME_PLURAL';
-		else if(vm.config.enableProjects)
-			vm.sitesName = 'SITES.PD-Project.NAME_PLURAL';
-		
-		browserService.setTitle($translate.instant('SITES.NAME'));
-		headerService.setTitle($translate.instant(vm.sitesName));
+
+		vm.sitesName = translateService.getSitesName();
+		var title = $translate.instant(vm.sitesName);
+		browserService.setTitle(title);
+		headerService.setTitle(title);
 	
 		//sets the margin to the width of sidenav
 		var tableHeight = $(window).height() - 200 - $("header").outerHeight() - $("#table-header").outerHeight() - $("#table-actions").outerHeight();
