@@ -6,15 +6,21 @@
 
     <md-card-content>
         <div>
+            <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.editInOnlyOffice()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>edit</md-icon>
+                {{'DOCUMENT.EDIT_ONLY_OFFICE' | translate }}
+            </md-button>
+        </div>
+        <div>
             <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
-                {{'DOCUMENT.EDIT_DOCUMENT' | translate }}
+                {{'DOCUMENT.EDIT_LIBRE_OFFICE' | translate }}
             </md-button>
         </div>
         <div>
             <md-button ng-show="vm.msOfficeEditable && vm.canEdit" ng-click="vm.editInMSOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
-                {{'DOCUMENT.EDIT_DOCUMENT_SHAREPOINT' | translate }}
+                {{'DOCUMENT.EDIT_MS_OFFICE' | translate }}
             </md-button>
         </div>
         <div>

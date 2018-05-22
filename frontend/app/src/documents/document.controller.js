@@ -27,6 +27,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.cancelDialog = cancelDialog;
     vm.goBack = goBack;
     vm.createWFNotification = createWFNotification;
+    vm.editInOnlyOffice = editInOnlyOffice;
     vm.highlightVersion = highlightVersion;
     vm.goToLOEditPage = goToLOEditPage;
     vm.editInMSOffice = editInMSOffice;
@@ -336,6 +337,11 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                 });
             });
         });
+    }
+
+    function editInOnlyOffice() {
+        var nodeRef = $stateParams.doc;
+        $state.go('onlyOfficeEdit', {'nodeRef': nodeRef });
     }
 
     //Goes to the libreOffice online edit page

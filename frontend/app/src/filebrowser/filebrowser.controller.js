@@ -23,6 +23,7 @@ angular
         vm.deleteFile = deleteFile;
         vm.deleteLink = deleteLink;
         vm.documentTemplates = {};
+        vm.editInOnlyOffice = editInOnlyOffice;
         vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
         vm.error = false;
         vm.folderTemplates = {};
@@ -66,7 +67,6 @@ angular
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
     $scope.previewDocument = previewDocument;
-    $scope.goToLOEditPage = goToLOEditPage;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
     vm.createReviewNotification = createReviewNotification;
 
@@ -357,12 +357,8 @@ angular
         documentPreviewService.previewDocument(nodeRef);
     }
 
-    
-    function goToLOEditPage(nodeRef, fileName) {
-        $state.go('lool', {
-            'nodeRef': nodeRef,
-            'fileName': fileName
-        });
+    function editInOnlyOffice(nodeRef) {
+        $state.go('onlyOfficeEdit', {'nodeRef': nodeRef });
     }
     
     function reviewDocumentsDialog(event, nodeRef) {

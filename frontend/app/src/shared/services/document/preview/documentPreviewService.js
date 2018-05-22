@@ -69,6 +69,7 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
     function getPlugins() {
         var plugins = [
             audioViewer(),
+            onlyOfficeViewer(),
             pdfViewer(),
             imageViewer(),
             videoViewer(),
@@ -148,6 +149,16 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
             }
         };
         var result = generalPreviewPlugin();
+        return angular.extend(result, viewer);
+    }
+
+    function onlyOfficeViewer() {
+        var viewer = {
+            mimeTypes: EDITOR_CONFIG.lool.mimeTypes,
+            templateUrl: 'onlyOffice.html'
+        };
+
+        var result = generalPlaybackPlugin();
         return angular.extend(result, viewer);
     }
 

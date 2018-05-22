@@ -10,7 +10,8 @@ function onlyOfficeService($http) {
     return {
         getDocumentType: getDocumentType,
         key: key,
-        preparePreview: preparePreview
+        displayEdit: displayEdit,
+        displayPreview: displayPreview
     };
 
     function getDocumentType (ext) {
@@ -25,15 +26,42 @@ function onlyOfficeService($http) {
         return result.substring(result.length - Math.min(result.length, 20));
     }
 
-    function preparePreview() {
-        var url = restBaseUrl + "/parashift/onlyoffice/prepare?nodeRef=" + url.args.nodeRef;
+    function displayEdit(nodeRef) {
+        return display(nodeRef, "edit").then(function(response) {
+            return response;
+        })
+    }
+
+    function displayPreview(nodeRef) {
+        return display(nodeRef, "view").then(function(response) {
+            return response;
+        })
+    }
+
+    function display(nodeRef, mode) {
+        return prepare(nodeRef, mode).then(function(response) {
+            new DocsAPI.DocEditor("placeholder", response);
+            //Keep Alfresco active
+            setInterval(function() {
+                $http.get("/proxy/alfresco/api/admin/restrictions");
+            }, 60000);
+        })
+    }
+
+    function prepare(nodeRef, mode) {
+        var url = restBaseUrl + "/parashift/onlyoffice/prepare?nodeRef=workspace://SpacesStore/" + nodeRef;
+        var height = "100%";
+        if(mode === "view")
+            height = "600px";
         return $http.get(url, {}).then(function (response) {
+            response = response.data;
             var docName = response.docTitle;
             var docType = docName.substring(docName.lastIndexOf(".") + 1).trim().toLowerCase();
             var docConfig = {
+                url: response.onlyofficeUrl + "OfficeWeb/",
                 type: "desktop",
                 width: "100%",
-                height: "100%",
+                height: height,
                 documentType: getDocumentType(docType),
                 document: {
                     title: docName,
@@ -45,7 +73,7 @@ function onlyOfficeService($http) {
                     }
                 },
                 editorConfig: {
-                    mode: "edit",
+                    mode: mode,
                     callbackUrl: response.callbackUrl,
                     user: {
                         id: response.id,
