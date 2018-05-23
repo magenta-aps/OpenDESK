@@ -16,11 +16,11 @@ function NodePickerService($http, $translate, translateService, alfrescoNodeUtil
         if(node === undefined)
             url = getRootUrl();
 
-        else if(node.nodeRef !== undefined)
-            url = getNodeUrl(node.nodeRef);
-
         else if(node.rootName !== undefined)
             url = getRootNodeUrl(node.rootName);
+
+        else if(node.nodeRef !== undefined)
+            url = getNodeUrl(node.nodeRef);
 
         if(url !== undefined) {
             return getResponse(url).then(function (response) {
