@@ -6,21 +6,21 @@
 
     <md-card-content>
         <div>
-            <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.editInOnlyOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="vm.onlyOfficeEditable && vm.canEdit" ng-click="vm.editInOnlyOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
-                {{'DOCUMENT.EDIT_ONLY_OFFICE' | translate }}
+                {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.ONLYOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.goToLOEditPage()" class="md-text-icon-button md-primary">
+            <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.editInLibreOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
-                {{'DOCUMENT.EDIT_LIBRE_OFFICE' | translate }}
+                {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.LIBREOFFICE' | translate }}
             </md-button>
         </div>
         <div>
             <md-button ng-show="vm.msOfficeEditable && vm.canEdit" ng-click="vm.editInMSOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
-                {{'DOCUMENT.EDIT_MS_OFFICE' | translate }}
+                {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.MSOFFICE' | translate }}
             </md-button>
         </div>
         <div>

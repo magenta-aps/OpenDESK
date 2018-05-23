@@ -10,10 +10,10 @@ function config($stateProvider, USER_ROLES) {
         url: '/edit/onlyOffice/:nodeRef',
         views: {
             'body@': {
-                templateUrl: 'app/src/onlyOffice/edit/edit.html',
+                templateUrl: 'app/src/onlyOffice/view/onlyOffice.html',
                 controller: 'OnlyOfficeEditController',
                 controllerAs: 'vm'
-            },
+            }
         },
         params: {
             authorizedRoles: [USER_ROLES.user]

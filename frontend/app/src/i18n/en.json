@@ -241,9 +241,7 @@
     "DOCUMENT_NAME": "Document name",
     "VERSION_DESCRIPTION": "Version description",
     "EDIT_PROPERTIES": "Edit information",
-    "EDIT_LIBRE_OFFICE": "Edit in LibreOffice",
-    "EDIT_ONLY_OFFICE": "Edit in OnlyOffice",
-    "EDIT_MS_OFFICE": "Edit in MS Office",
+    "EDIT_IN": "Edit in",
     "PRINT": "Print",
     "UPLOAD_NEW_VERSION": "Upload new version",
     "PREVIEW": "Preview",
@@ -1046,25 +1044,13 @@
     "MAP" : "Map"
   },
   "CONFIGURATION": {
-    "LINK_TO": "Link to ",
-    "enableESDH": "Enabling of SBSYS",
-    "enableProjects": "Enabling of  projects",
-    "enableSites": "Enabling of sites",
-    "enableChat": "Enabling of chat",
-    "dashboardLinks": {
-      "dashboard": "Dashboard",
-      "intra" : "Intra",
-      "email" : "Email",
-      "calendar" : "Calendar",
-      "projects" : "Projects",
-      "keyNumbers" : "Key numbers",
-      "workTime" : "15 points on work time",
-      "esdh" : "SBSYS",
-      "citrix" : "Citrix",
-      "map" : "Map"
-    },
+    "ENABLE": "Enable",
+    "enableESDH": "SBSYS",
+    "enableProjects": "Projects",
+    "enableSites": "Sites",
+    "enableChat": "Chat",
     "public" : {
-      "appName": "Name of OpenDesk instance"
+      "appName": "Name of OpenDesk"
     }
   },
   "GROUPS": {
@@ -1080,6 +1066,12 @@
     "PATH": {
       "FAILURE": "Edit in MS Office with AOS is not possible because the URL is longere than 256 signs. Use a shorter path to reduce the length. The URL: {{url}}."
     }
+  },
+  "EDITORS" : {
+    "LIBREOFFICE": "LibreOffice",
+    "ONLYOFFICE": "OnlyOffice",
+    "MSOFFICE": "MS Office",
+    "PREVIEW_ERROR": "The document cannot be displayed."
   },
   "PLACEHOLDERS": {
     "FIRSTNAME" : "First Name",

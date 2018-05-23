@@ -6,6 +6,7 @@ angular
         return {
             restrict: 'E',
             scope: {},
+            templateUrl: 'app/src/onlyOffice/view/onlyOffice.html',
             controller: 'OnlyOfficePreviewController',
             controllerAs: 'vm'
         };

@@ -140,4 +140,14 @@ public interface OpenDeskModel {
     String TEMPLATE_EMAIL_BASE = "email.html.ftl";
     String TEMPLATE_EMAIL_INVITE_EXTERNAL_USER = "ekstern-bruger.html.ftl";
 
+
+    /**
+     * Editors
+     */
+    String MODULE_AOS = "alfresco-aos-module";
+    String MODULE_LIBREOFFICE = "libreoffice-online-repo";
+    String MODULE_ONLYOFFICE = "com.parashift.onlyoffice-alfresco-repo";
+    String EDITOR_ONLYOFFICE = "onlyOffice";
+    String EDITOR_LIBREOFFICE = "libreOffice";
+    String EDITOR_MS_OFFICE = "msOffice";
 }

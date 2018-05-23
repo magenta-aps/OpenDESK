@@ -72,6 +72,9 @@ function LoolController($state, $stateParams, loolService, documentService, $mdT
                 $('#libreoffice-online').append(form);
                 $('#loleafletform').submit();
             });
+            vm.isDisplayed = true;
+        }).catch(function (response) {
+            vm.isDisplayed = false;
         });
     }
 }

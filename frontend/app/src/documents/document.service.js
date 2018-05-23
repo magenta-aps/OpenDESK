@@ -3,7 +3,7 @@
 angular.module('openDeskApp.documents')
        .factory('documentService', documentService);
 
-function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG, alfrescoNodeUtils) {
+function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG, APP_BACKEND_CONFIG, alfrescoNodeUtils) {
 
     var service = {
         getDocument: getDocument,
@@ -17,8 +17,9 @@ function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG, alfresc
         cleanupThumbnail: cleanupThumbnail,
         revertToVersion: revertToVersion,
         deleteVersion: deleteVersion,
-        isLoolEditable: isLoolEditable,
-        isMsOfficeEditable: isMsOfficeEditable
+        isLibreOfficeEditable: isLibreOfficeEditable,
+        isMsOfficeEditable: isMsOfficeEditable,
+        isOnlyOfficeEditable: isOnlyOfficeEditable
     };
 
     return service;
@@ -159,11 +160,21 @@ function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG, alfresc
         });
     }
 
-    function isLoolEditable(mimeType){
+    function isLibreOfficeEditable(mimeType){
+        if(!APP_BACKEND_CONFIG.editors.libreOffice)
+            return false;
         return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
     }
 
     function isMsOfficeEditable(mimeType){
+        if(!APP_BACKEND_CONFIG.editors.msOffice)
+            return false;
         return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1;
+    }
+
+    function isOnlyOfficeEditable(mimeType){
+        if(!APP_BACKEND_CONFIG.editors.onlyOffice)
+            return false;
+        return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
     }
 }

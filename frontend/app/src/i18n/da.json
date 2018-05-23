@@ -243,9 +243,7 @@
     "DOCUMENT_NAME": "Dokumentnavn",
     "VERSION_DESCRIPTION": "Versionsbeskrivelse",
     "EDIT_PROPERTIES": "Redigér information",
-    "EDIT_LIBRE_OFFICE": "Redigér i LibreOffice",
-    "EDIT_ONLY_OFFICE": "Redigér i OnlyOffice",
-    "EDIT_MS_OFFICE": "Redigér i MS Office",
+    "EDIT_IN": "Redigér i",
     "PRINT": "Print",
     "UPLOAD_NEW_VERSION": "Upload ny version",
     "PREVIEW": "Preview",
@@ -1019,25 +1017,13 @@
     "MAP" : "Kort"
   },
   "CONFIGURATION": {
-    "LINK_TO": "Link til ",
-    "enableESDH": "Tilkobling af SBSYS",
-    "enableProjects": "Tilkobling af projekter",
-    "enableSites": "Tilkobling af sites",
-    "enableChat": "Tilkobling af chat",
-    "dashboardLinks": {
-      "dashboard": "Instrumentbræt",
-      "intra" : "Intra",
-      "email" : "Email",
-      "calendar" : "Kalender",
-      "projects" : "Projekter",
-      "keyNumbers" : "Nøgletal",
-      "workTime" : "15 punkter om arbejdstid",
-      "esdh" : "SBSYS",
-      "citrix" : "Citrix",
-      "map" : "Kort"
-    },
+    "ENABLE": "Tilkobling af",
+    "enableESDH": "SBSYS",
+    "enableProjects": "Projekter",
+    "enableSites": "Grupperum",
+    "enableChat": "Chat",
     "public" : {
-      "appName": "Navn for OpenDesk instans"
+      "appName": "Navn for OpenDesk"
     }
   },
   "GROUPS": {
@@ -1053,6 +1039,12 @@
     "PATH": {
       "FAILURE": "Rediger i MS Office er ikke muligt, da URL'en er længere end 256 tegn. Brug en kortere sti for at reducere længden. URL'en: {{url}}."
     }
+  },
+  "EDITORS" : {
+    "LIBREOFFICE": "LibreOffice",
+    "ONLYOFFICE": "OnlyOffice",
+    "MSOFFICE": "MS Office",
+    "PREVIEW_ERROR": "Dokumentet kan ikke vises."
   },
   "PLACEHOLDERS": {
     "FIRSTNAME" : "Fornavn",

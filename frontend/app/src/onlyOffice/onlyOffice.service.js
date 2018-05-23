@@ -39,13 +39,18 @@ function onlyOfficeService($http) {
     }
 
     function display(nodeRef, mode) {
-        return prepare(nodeRef, mode).then(function(response) {
-            new DocsAPI.DocEditor("placeholder", response);
-            //Keep Alfresco active
-            setInterval(function() {
-                $http.get("/proxy/alfresco/api/admin/restrictions");
-            }, 60000);
-        })
+        return prepare(nodeRef, mode).then(
+            function (response) {
+                new DocsAPI.DocEditor("placeholder", response);
+                //Keep Alfresco active
+                setInterval(function () {
+                    $http.get("/proxy/alfresco/api/admin/restrictions");
+                }, 60000);
+                return true;
+            },
+            function (error) {
+                return false;
+            })
     }
 
     function prepare(nodeRef, mode) {

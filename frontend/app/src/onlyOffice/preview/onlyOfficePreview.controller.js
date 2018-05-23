@@ -6,10 +6,13 @@ angular
 
 function OnlyOfficePreviewController($stateParams, onlyOfficeService) {
 
+    var vm = this;
     activate();
 
     function activate() {
         var nodeRef = $stateParams.doc;
-        onlyOfficeService.displayPreview(nodeRef);
+        onlyOfficeService.displayPreview(nodeRef).then(function(response) {
+             vm.isDisplayed = response;
+        });
     }
 }

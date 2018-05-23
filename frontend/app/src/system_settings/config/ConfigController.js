@@ -12,6 +12,12 @@ function ConfigController(APP_BACKEND_CONFIG, systemSettingsService) {
 
     vm.addNewDashboardLink = addNewDashboardLink;
     vm.removeDashboardLink = removeDashboardLink;
+
+    activate();
+
+    function activate() {
+        vm.editors = systemSettingsService.getEditors();
+    }
     
     function updateSettings() {
         systemSettingsService.updateSettings(vm.config);

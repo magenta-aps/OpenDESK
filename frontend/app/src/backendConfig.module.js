@@ -7,6 +7,11 @@ angular
         enableSites: true,
         enableESDH: false,
         enableChat: false,
+        editors: {
+            msOffice: false,
+            libreOffice: false,
+            onlyOffice: false
+        },
         dashboardLink: [
             {
                 icon: 'intra',

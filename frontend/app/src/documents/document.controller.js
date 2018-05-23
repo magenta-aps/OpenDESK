@@ -27,16 +27,16 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.cancelDialog = cancelDialog;
     vm.goBack = goBack;
     vm.createWFNotification = createWFNotification;
-    vm.editInOnlyOffice = editInOnlyOffice;
     vm.highlightVersion = highlightVersion;
-    vm.goToLOEditPage = goToLOEditPage;
+    vm.editInLibreOffice = editInLibreOffice;
     vm.editInMSOffice = editInMSOffice;
+    vm.editInOnlyOffice = editInOnlyOffice;
     vm.downloadDocument = downloadDocument;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
     vm.createReviewNotification = createReviewNotification;
 
-    var selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3];
-    var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : selectedDocumentNode;
+    vm.selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3];
+    var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : vm.selectedDocumentNode;
     var docHasParent = $location.search().parent !== undefined;
     var firstDocumentNode = "";
 
@@ -162,7 +162,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     function createWFNotification(comment, wtype) {
 
         var creator = authService.getUserInfo().user.userName;
-        var link = "dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
+        var link = "dokument/" + vm.selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
         var status = wtype == 'review-approved' ? 'godkendt' : 'afvist';
 
@@ -178,7 +178,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function highlightVersion() {
-        var elm = document.getElementById(selectedDocumentNode);
+        var elm = document.getElementById(vm.selectedDocumentNode);
         if ( elm === undefined)
             elm = document.getElementById(firstDocumentNode);
 
@@ -194,8 +194,9 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         documentService.getDocument(parentDocumentNode).then(function (response) {
 
             vm.doc = response.item;
-            vm.loolEditable = documentService.isLoolEditable(vm.doc.node.mimetype);
+            vm.loolEditable = documentService.isLibreOfficeEditable(vm.doc.node.mimetype);
             vm.msOfficeEditable = documentService.isMsOfficeEditable(vm.doc.node.mimetype);
+            vm.onlyOfficeEditable = documentService.isOnlyOfficeEditable(vm.doc.node.mimetype);
 
             vm.docMetadata = response.metadata;
 
@@ -280,7 +281,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         if (docHasParent) {
             vm.store = 'versionStore://version2Store/';
 
-            documentService.createVersionThumbnail(parentDocumentNode, selectedDocumentNode).then(function (response) {
+            documentService.createVersionThumbnail(parentDocumentNode, vm.selectedDocumentNode).then(function (response) {
                 documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef).then(function (plugin) {
                     vm.plugin = plugin;
                     $scope.config = plugin;
@@ -341,11 +342,11 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     function editInOnlyOffice() {
         var nodeRef = $stateParams.doc;
-        $state.go('onlyOfficeEdit', {'nodeRef': nodeRef });
+        $window.open($state.href('onlyOfficeEdit', {'nodeRef': nodeRef }));
     }
 
     //Goes to the libreOffice online edit page
-    function goToLOEditPage() {
+    function editInLibreOffice() {
         var ref = $stateParams.doc;
         var isFirstInHistory = ref === firstDocumentNode;
         if (docHasParent && !isFirstInHistory) {

@@ -5,11 +5,14 @@ angular
     .controller('OnlyOfficeEditController', OnlyOfficeEditController);
 
 function OnlyOfficeEditController($stateParams, onlyOfficeService) {
+    var vm = this;
 
     activate();
 
     function activate() {
         var nodeRef = $stateParams.nodeRef;
-        onlyOfficeService.displayEdit(nodeRef);
+        onlyOfficeService.displayEdit(nodeRef).then(function(response) {
+            vm.isDisplayed = response;
+        });
     }
 }
