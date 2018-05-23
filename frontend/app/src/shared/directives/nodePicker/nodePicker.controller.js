@@ -50,7 +50,7 @@ function NodePickerController($scope, nodePickerService) {
     function pickNode(node) {
         if (equalsSelectedNode(node)) {
             $scope.selectedNode = undefined;
-        } else {
+        } else if (node.nodeRef !== undefined) {
             $scope.selectedNode = node;
         }
     }

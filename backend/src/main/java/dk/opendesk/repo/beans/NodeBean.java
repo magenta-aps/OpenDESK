@@ -193,6 +193,11 @@ public class NodeBean {
         for(String rootFolder : rootFolders) {
             JSONObject root = new JSONObject();
             root.put("rootName", rootFolder);
+            if(OpenDeskModel.NODE_PICKER_MY_DOCS.equals(rootFolder))
+            {
+                root.put("nodeRef", getUserHome());
+            }
+
             children.add(root);
         }
         result.put("children", children);
