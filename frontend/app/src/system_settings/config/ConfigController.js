@@ -16,7 +16,9 @@ function ConfigController(APP_BACKEND_CONFIG, systemSettingsService) {
     activate();
 
     function activate() {
-        vm.editors = systemSettingsService.getEditors();
+        systemSettingsService.getEditors().then(function (response) {
+            vm.editors = response;
+        });
     }
     
     function updateSettings() {
