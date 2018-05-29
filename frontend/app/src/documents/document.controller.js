@@ -194,7 +194,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         documentService.getDocument(parentDocumentNode).then(function (response) {
 
             vm.doc = response.item;
-            vm.doc.node.isLocked = true;
             vm.doc.node.properties['cm:lockType'] = 'WRITE_LOCK';
             vm.doc.node.properties['cm:lockOwner'] = 'admin';
 
