@@ -160,21 +160,24 @@ function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG, APP_BAC
         });
     }
 
-    function isLibreOfficeEditable(mimeType){
+    function isLibreOfficeEditable(mimeType, isLocked){
         if(!APP_BACKEND_CONFIG.editors.libreOffice)
             return false;
-        return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
+        if(!isLocked)
+            return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
     }
 
-    function isMsOfficeEditable(mimeType){
+    function isMsOfficeEditable(mimeType, isLocked){
         if(!APP_BACKEND_CONFIG.editors.msOffice)
             return false;
-        return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1;
+        if(!isLocked)
+            return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1;
     }
 
-    function isOnlyOfficeEditable(mimeType){
+    function isOnlyOfficeEditable(mimeType, isLocked, lockType){
         if(!APP_BACKEND_CONFIG.editors.onlyOffice)
             return false;
-        return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
+        if(!isLocked || lockType === 'WRITE_LOCK')
+            return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
     }
 }

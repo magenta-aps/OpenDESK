@@ -77,7 +77,7 @@
     "LIST_VIEW": "Listevisning",
     "GRID_VIEW": "Gittervisning",
     "DOWNLOAD_TEMPLATE_CSV": "Hent CSV skabelon",
-    "LOCKED_BY": "Låst af {{locked_by}}",
+    "LOCKED_BY": "Dokumentet bliver redigeret af {{locked_by}}",
     "CONGRATULATIONS": "Tillykke!",
     "ALL": "Alle",
     "RENAME": "Omdøb",

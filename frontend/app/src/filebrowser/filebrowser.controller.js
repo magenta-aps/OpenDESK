@@ -214,9 +214,16 @@ angular
     function processContent(content) {
         angular.forEach(content, function(item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
-            item.loolEditable = documentService.isLibreOfficeEditable(item.mimeType);
-            item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
-            item.onlyOfficeEditable = documentService.isOnlyOfficeEditable(item.mimeType);
+
+            var isLocked = item.isLocked;
+            var lockType;
+            if(isLocked)
+                lockType = item.lockType;
+            var mimeType = item.mimeType;
+
+            item.loolEditable = documentService.isLibreOfficeEditable(mimeType, isLocked);
+            item.msOfficeEditable = documentService.isMsOfficeEditable(mimeType, isLocked);
+            item.onlyOfficeEditable = documentService.isOnlyOfficeEditable(mimeType, isLocked, lockType);
         });
     }
     

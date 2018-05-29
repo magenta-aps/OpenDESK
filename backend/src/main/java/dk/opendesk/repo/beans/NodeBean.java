@@ -131,6 +131,16 @@ public class NodeBean {
                 if(canDelete == AccessStatus.ALLOWED) {
                     json.put("permissions", getNodeShareInfo(nodeRef));
                 }
+
+
+                if ("cmis:document".equals(json.getString("contentType"))) {
+                    String lockType = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_LOCK_TYPE);
+                    boolean isLocked = lockType != null;
+                    json.put("isLocked", isLocked);
+                    if(isLocked)
+                        json.put("lockType", lockType);
+                }
+
             } else {
                 String linkSiteShortName = (String) nodeService.getProperty(nodeRef, OpenDeskModel.PROP_LINK_TARGET);
                 NodeRef linkNodeRef = (NodeRef) nodeService.getProperty(nodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
