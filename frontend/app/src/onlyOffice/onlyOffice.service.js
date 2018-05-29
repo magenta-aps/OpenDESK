@@ -44,7 +44,7 @@ function onlyOfficeService($http) {
                 new DocsAPI.DocEditor("placeholder", response);
                 //Keep Alfresco active
                 setInterval(function () {
-                    $http.get("/proxy/alfresco/api/admin/restrictions");
+                    $http.get(restBaseUrl + "/touch");
                 }, 60000);
                 return true;
             },
