@@ -7,6 +7,7 @@ angular.module('openDeskApp.onlyOffice', ['ngMaterial'])
 function config($stateProvider, USER_ROLES) {
 
     $stateProvider.state('onlyOfficeEdit', {
+        parent: 'site',
         url: '/edit/onlyOffice/:nodeRef',
         views: {
             'body@': {
