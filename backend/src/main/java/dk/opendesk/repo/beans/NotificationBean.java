@@ -136,8 +136,15 @@ public class NotificationBean {
         nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
     }
 
-    public void createDiscussionNotification(String userName, String type, NodeRef nodeRef) throws JSONException {
+    public void createDiscussionNotification(String userName, String type, String nodeId) throws JSONException {
         JSONObject params = new JSONObject();
+        params.put("nodeId", nodeId);
+        createNotification(userName, type, params);
+    }
+
+    public void createSharedNodeNotification(String userName, String type, String nodeId) throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("nodeId", nodeId);
         createNotification(userName, type, params);
     }
 
@@ -153,13 +160,13 @@ public class NotificationBean {
 
     /**
      * Gets a notification into a standard structured JSONObject.
-     * @param nodeRef of the notification.
+     * @param notificationRef of the notification.
      * @return a JSONObject representing the notification.
      */
-    public JSONObject getNotification (NodeRef nodeRef) throws JSONException {
+    public JSONObject getNotification (NodeRef notificationRef) throws JSONException {
         JSONObject json = new JSONObject();
 
-        Map<QName, Serializable> props = nodeService.getProperties(nodeRef);
+        Map<QName, Serializable> props = nodeService.getProperties(notificationRef);
 
         String type = (String) props.get(OpenDeskModel.PROP_NOTIFICATION_TYPE);
         String paramsStr = props.get(OpenDeskModel.PROP_NOTIFICATION_PARAMS).toString();
@@ -169,30 +176,36 @@ public class NotificationBean {
         String projectName = "";
 
         String fileName = "";
+        String nodeId = null;
 
-//        switch (type) {
-//            case OpenDeskModel.NOTIFICATION_TYPE_REVIEW:
-//            case OpenDeskModel.NOTIFICATION_TYPE_REVIEW_APPROVED:
-//            case OpenDeskModel.NOTIFICATION_TYPE_REVIEW_REJECTED:
-//            case OpenDeskModel.NOTIFICATION_TYPE_CONTENT:
+        switch (type) {
+            case OpenDeskModel.NOTIFICATION_TYPE_REVIEW:
+            case OpenDeskModel.NOTIFICATION_TYPE_REVIEW_APPROVED:
+            case OpenDeskModel.NOTIFICATION_TYPE_REVIEW_REJECTED:
+            case OpenDeskModel.NOTIFICATION_TYPE_CONTENT:
 //                NodeRef document = new NodeRef("workspace://SpacesStore/" + link.replace("#!/dokument/", "").split("\\?")[0]);
 //
 //                String symbol = link.contains("?") ? "&" : "?";
 //
-//                link = link + symbol + "NID=" + nodeRef; // add this to the link, makes it easy to lookup the notification from the ui
+//                link = link + symbol + "NID=" + nodeId; // add this to the link, makes it easy to lookup the notification from the ui
 //
 //                if(nodeService.exists(document))
 //                    fileName = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-//                break;
-//        }
+                break;
+            case OpenDeskModel.NOTIFICATION_TYPE_SHARED_CONTENT:
+                nodeId = (String) json.get("nodeId");
+                break;
+        }
 
-        json.put("nodeRef", nodeRef);
+        if(nodeId != null)
+            json.put("nodeId", nodeId);
+
         json.put("read", read);
         json.put("seen", seen);
         json.put("filename", fileName);
         json.put("project", projectName);
 
-        String creatorUserName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
+        String creatorUserName = (String) nodeService.getProperty(notificationRef, ContentModel.PROP_CREATOR);
         NodeRef creator = personService.getPerson(creatorUserName);
         String firstName = (String) nodeService.getProperty(creator, ContentModel.PROP_FIRSTNAME);
         String lastName = (String) nodeService.getProperty(creator, ContentModel.PROP_LASTNAME);
@@ -201,9 +214,12 @@ public class NotificationBean {
 
         json.put("type", type);
 
-        Date d = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
+        Date d = (Date) nodeService.getProperty(notificationRef, ContentModel.PROP_CREATED);
         json.put("created", d.getTime());
 
         return json;
     }
 }
+
+
+
