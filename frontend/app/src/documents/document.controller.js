@@ -194,22 +194,16 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         documentService.getDocument(parentDocumentNode).then(function (response) {
 
             vm.doc = response.item;
-            vm.doc.node.properties['cm:lockType'] = 'WRITE_LOCK';
-            vm.doc.node.properties['cm:lockOwner'] = 'admin';
-
-            userService.getPerson(vm.doc.node.properties['cm:lockOwner']).then(function (user) {
-                vm.lockOwner = user.firstName + ' ' + user.lastName;
-            });
-
             vm.isLocked = vm.doc.node.isLocked;
-            var lockType;
-            if(vm.isLocked)
-                lockType = vm.doc.node.properties['cm:lockType'];
+            if(vm.isLocked) {
+                vm.lockType = vm.doc.node.properties['cm:lockType'];
+                vm.lockOwner = vm.doc.node.properties['cm:lockOwner'].displayName;
+            }
             var mimeType = vm.doc.node.mimetype;
 
             vm.loolEditable = documentService.isLibreOfficeEditable(mimeType, vm.isLocked);
             vm.msOfficeEditable = documentService.isMsOfficeEditable(mimeType, vm.isLocked);
-            vm.onlyOfficeEditable = documentService.isOnlyOfficeEditable(mimeType, vm.isLocked, lockType);
+            vm.onlyOfficeEditable = documentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType);
 
             vm.docMetadata = response.metadata;
 
