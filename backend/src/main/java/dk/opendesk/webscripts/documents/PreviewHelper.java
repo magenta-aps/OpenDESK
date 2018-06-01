@@ -113,7 +113,6 @@ public class PreviewHelper extends AbstractWebScript {
         Serializable parentName = nodeService.getProperty(parentRef, ContentModel.PROP_NAME);
         Serializable versionLabel = nodeService.getProperty(versionRef, ContentModel.PROP_VERSION_LABEL);
         String name =  "(v. " + versionLabel + ") " + parentName;
-
         NodeRef versionPreviewRef = nodeService.getChildByName(parentRef, OpenDeskModel.ASSOC_VERSION_PREVIEW, name);
         if(versionPreviewRef != null)
             return Utils.getJSONReturnPair("nodeRef", versionPreviewRef.toString());
@@ -132,10 +131,11 @@ public class PreviewHelper extends AbstractWebScript {
             properties.put(ContentModel.PROP_NAME, name);
             Serializable content = nodeService.getProperty(versionRef, ContentModel.PROP_CONTENT);
             properties.put(ContentModel.PROP_CONTENT, content);
+            QName cmName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
             ChildAssociationRef childAssocRef = nodeService.createNode(
                     parentRef,
                     OpenDeskModel.ASSOC_VERSION_PREVIEW,
-                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
+                    cmName,
                     ContentModel.TYPE_CONTENT,
                     properties);
             nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
