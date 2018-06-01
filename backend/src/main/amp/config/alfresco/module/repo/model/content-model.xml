@@ -178,6 +178,7 @@
                         <class>cm:content</class>
                         <many>true</many>
                     </target>
+                    <duplicate>false</duplicate>
                 </child-association>
             </associations>
         </aspect>
