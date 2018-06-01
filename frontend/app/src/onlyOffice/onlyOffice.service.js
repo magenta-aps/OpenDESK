@@ -3,7 +3,7 @@
 angular.module('openDeskApp.onlyOffice')
     .factory('onlyOfficeService', onlyOfficeService);
 
-function onlyOfficeService($http) {
+function onlyOfficeService($http, alfrescoNodeUtils) {
 
     var restBaseUrl = '/alfresco/service';
 
@@ -26,20 +26,21 @@ function onlyOfficeService($http) {
         return result.substring(result.length - Math.min(result.length, 20));
     }
 
-    function displayEdit(nodeRef) {
-        return display(nodeRef, "edit").then(function(response) {
+    function displayEdit(nodeId) {
+        return display(nodeId, "edit").then(function(response) {
             return response;
         })
     }
 
     function displayPreview(nodeRef) {
-        return display(nodeRef, "view").then(function(response) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
+        return display(nodeId, "view").then(function(response) {
             return response;
         })
     }
 
-    function display(nodeRef, mode) {
-        return prepare(nodeRef, mode).then(
+    function display(nodeId, mode) {
+        return prepare(nodeId, mode).then(
             function (response) {
                 new DocsAPI.DocEditor("placeholder", response);
                 //Keep Alfresco active
@@ -53,8 +54,8 @@ function onlyOfficeService($http) {
             })
     }
 
-    function prepare(nodeRef, mode) {
-        var url = restBaseUrl + "/parashift/onlyoffice/prepare?nodeRef=workspace://SpacesStore/" + nodeRef;
+    function prepare(nodeId, mode) {
+        var url = restBaseUrl + "/parashift/onlyoffice/prepare?nodeRef=workspace://SpacesStore/" + nodeId;
         var height = "100%";
         if(mode === "view")
             height = "600px";

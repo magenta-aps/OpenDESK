@@ -10,8 +10,8 @@ function OnlyOfficeEditController($stateParams, onlyOfficeService) {
     activate();
 
     function activate() {
-        var nodeRef = $stateParams.nodeRef;
-        onlyOfficeService.displayEdit(nodeRef).then(function(response) {
+        var nodeId = $stateParams.nodeRef;
+        onlyOfficeService.displayEdit(nodeId).then(function(response) {
             vm.isDisplayed = response;
         });
     }

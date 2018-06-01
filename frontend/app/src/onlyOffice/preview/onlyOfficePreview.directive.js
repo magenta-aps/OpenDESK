@@ -5,7 +5,9 @@ angular
     .directive('onlyOffice', function () {
         return {
             restrict: 'E',
-            scope: {},
+            scope: {
+                nodeRef: '=nodeRef'
+            },
             templateUrl: 'app/src/onlyOffice/view/onlyOffice.html',
             controller: 'OnlyOfficePreviewController',
             controllerAs: 'vm'

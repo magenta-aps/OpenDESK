@@ -301,9 +301,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
                     if (plugin.initScope) {
                         plugin.initScope($scope);
                     }
-
-                    // delete the temporary node
-                    documentService.cleanupThumbnail(response.data[0].nodeRef);
                 });
             });
 

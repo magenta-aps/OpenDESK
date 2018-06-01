@@ -4,13 +4,13 @@ angular
     .module('openDeskApp.onlyOffice')
     .controller('OnlyOfficePreviewController', OnlyOfficePreviewController);
 
-function OnlyOfficePreviewController($stateParams, onlyOfficeService) {
+function OnlyOfficePreviewController($scope, onlyOfficeService) {
 
     var vm = this;
     activate();
 
     function activate() {
-        var nodeRef = $stateParams.doc;
+        var nodeRef = $scope.nodeRef;
         onlyOfficeService.displayPreview(nodeRef).then(function(response) {
              vm.isDisplayed = response;
         });
