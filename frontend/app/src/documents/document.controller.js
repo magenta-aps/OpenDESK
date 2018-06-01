@@ -25,6 +25,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     vm.uploadNewVersion = uploadNewVersion;
     vm.searchUsers = searchUsers;
     vm.cancelDialog = cancelDialog;
+    vm.acceptEditVersionDialog = acceptEditVersionDialog;
     vm.goBack = goBack;
     vm.createWFNotification = createWFNotification;
     vm.highlightVersion = highlightVersion;
@@ -330,32 +331,42 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         return docHasParent && !isFirstInHistory;
     }
 
-    function confirmEditVersionDialog() {
-        var confirm = $mdDialog.confirm()
-            .title('Vil du redigere dette dokument?')
-            .htmlContent('<i class="material-icons">info_outline</i>' +
-                '<p>Du er på vej til at redigere et dokument fra historikken.</p>' +
-                '<p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
-            .ok('OK')
-            .cancel('Fortryd');
-
-        return $mdDialog.show(confirm).then(function (response) {
-            var selectedVersion = $location.search().version;
-            return documentService.revertToVersion("no comments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
-                return true;
-            });
-        }, function (error) {
-            return false;
+    function showEditVersionDialog(editor) {
+        $scope.editor = editor;
+        $mdDialog.show({
+            templateUrl: 'app/src/documents/view/confirmEditVersionDialog.html',
+            scope: $scope,
+            preserveScope: true
         });
+    }
+
+    function acceptEditVersionDialog(editor) {
+        if (editor === 'only-office') {
+            var newPage = $window.open();
+        }
+        var selectedVersion = $location.search().version;
+        documentService.revertToVersion("no comments", true, vm.doc.node.nodeRef, selectedVersion).then(
+            function (response) {
+                cancelDialog();
+                if (editor === 'libre-office') {
+                    $state.go('lool', {
+                        'nodeRef': vm.doc.node.nodeRef,
+                        'versionLabel': vm.doc.version,
+                        'parent': response.config.data.nodeRef
+                    });
+                }
+                else if (editor === 'ms-office') {
+                    editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
+                }
+                else if (editor === 'only-office') {
+                    newPage.location.href = $state.href('onlyOfficeEdit', {'nodeRef': parentDocumentNode});
+                }
+            });
     }
 
     function editInOnlyOffice() {
         if (isVersion()) {
-            confirmEditVersionDialog().then(function (response) {
-                if(response) {
-                    $window.open($state.href('onlyOfficeEdit', {'nodeRef': parentDocumentNode }));
-                }
-            });
+            showEditVersionDialog('only-office');
         } else {
             $window.open($state.href('onlyOfficeEdit', {'nodeRef': $stateParams.doc }));
         }
@@ -364,15 +375,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     //Goes to the libreOffice online edit page
     function editInLibreOffice() {
         if (isVersion()) {
-            confirmEditVersionDialog().then(function (response) {
-                if(response) {
-                    $state.go('lool', {
-                        'nodeRef': vm.doc.node.nodeRef,
-                        'versionLabel': vm.doc.version,
-                        'parent': response.config.data.nodeRef
-                    });
-                }
-            });
+            showEditVersionDialog('libre-office');
         } else {
             $state.go('lool', {
                 'nodeRef': vm.doc.node.nodeRef
@@ -382,11 +385,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
 
     function editInMSOffice() {
         if (isVersion()) {
-            confirmEditVersionDialog().then(function (response) {
-                if(response) {
-                    editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
-                }
-            });
+            showEditVersionDialog('ms-office');
         } else {
             editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
         }
