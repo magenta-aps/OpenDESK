@@ -78,6 +78,7 @@ public interface OpenDeskModel {
     QName ASPECT_PD_TEMPLATE_SITES = QName.createQName(OD_URI, "projecttype_templates");
     QName ASPECT_PD_DOCUMENT = QName.createQName(OD_URI, "document_template");
     QName ASPECT_SHARED = QName.createQName(OD_URI, "shared");
+    QName ASPECT_VERSION_PREVIEWABLE = QName.createQName(OD_URI, "version_previewable");
 
 
 
@@ -121,6 +122,7 @@ public interface OpenDeskModel {
      * Association Names
      */
     QName PROP_NOTIFICATION_ASSOC = QName.createQName(OD_URI, "ids");
+    QName ASSOC_VERSION_PREVIEW = QName.createQName(OD_URI, "version_preview");
 
 
     /**

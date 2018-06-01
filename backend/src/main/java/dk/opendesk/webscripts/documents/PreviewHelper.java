@@ -16,6 +16,7 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.documents;
 
+import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -30,6 +31,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.*;
 
@@ -105,35 +107,43 @@ public class PreviewHelper extends AbstractWebScript {
      */
     private JSONArray createThumbnail(String parentNode, String versionNode) {
 
-        NodeRef parentDocRef = new NodeRef("workspace", "SpacesStore", parentNode);
-        ChildAssociationRef childAssociationRef = nodeService.getPrimaryParent(parentDocRef);
-        NodeRef folderRef = childAssociationRef.getParentRef();
-
+        NodeRef parentRef = new NodeRef("workspace", "SpacesStore", parentNode);
         NodeRef versionRef = new NodeRef("versionStore", "version2Store", versionNode);
-        NodeRef thumbnailNodeRef;
+
+        Serializable parentName = nodeService.getProperty(parentRef, ContentModel.PROP_NAME);
+        Serializable versionLabel = nodeService.getProperty(versionRef, ContentModel.PROP_VERSION_LABEL);
+        String name =  "(v. " + versionLabel + ") " + parentName;
+
+        NodeRef versionPreviewRef = nodeService.getChildByName(parentRef, OpenDeskModel.ASSOC_VERSION_PREVIEW, name);
+        if(versionPreviewRef != null)
+            return Utils.getJSONReturnPair("nodeRef", versionPreviewRef.toString());
 
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
+            // Add version previewable aspect if it is not present
+            if(!nodeService.hasAspect(parentRef, OpenDeskModel.ASPECT_VERSION_PREVIEWABLE))
+                nodeService.addAspect(parentRef, OpenDeskModel.ASPECT_VERSION_PREVIEWABLE, null);
+
+            // Create new preview node of earlier version
+            Map<QName, Serializable> properties = new HashMap<>();
+            properties.put(ContentModel.PROP_NAME, name);
+            Serializable content = nodeService.getProperty(versionRef, ContentModel.PROP_CONTENT);
+            properties.put(ContentModel.PROP_CONTENT, content);
             ChildAssociationRef childAssocRef = nodeService.createNode(
-                    folderRef,
-                    ContentModel.ASSOC_CONTAINS,
-                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
-                            QName.createValidLocalName("copyofthefly_of " + versionRef.toString())),
+                    parentRef,
+                    OpenDeskModel.ASSOC_VERSION_PREVIEW,
+                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name),
                     ContentModel.TYPE_CONTENT,
-                    null);
-
-            nodeService.setProperty(childAssocRef.getChildRef(), ContentModel.PROP_CONTENT,
-                    nodeService.getProperty(versionRef, ContentModel.PROP_CONTENT));
-
+                    properties);
             nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
 
-            thumbnailNodeRef = childAssocRef.getChildRef();
+            versionPreviewRef = childAssocRef.getChildRef();
         } finally {
             AuthenticationUtil.popAuthentication();
         }
-        return Utils.getJSONReturnPair("nodeRef", thumbnailNodeRef.toString());
+        return Utils.getJSONReturnPair("nodeRef", versionPreviewRef.toString());
     }
 }

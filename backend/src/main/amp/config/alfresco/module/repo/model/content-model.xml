@@ -170,6 +170,18 @@
             </properties>
         </aspect>
 
+        <aspect name="od:version_previewable">
+            <title>Enables saving versions as live nodes for preview</title>
+            <associations>
+                <child-association name="od:version_preview">
+                    <target>
+                        <class>cm:content</class>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </aspect>
+
     </aspects>
 
 
