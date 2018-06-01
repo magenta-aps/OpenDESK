@@ -324,38 +324,55 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         }
     }
 
-    function confirmLoolEditDocDialog(event) {
+    function isVersion() {
+        var ref = $stateParams.doc;
+        var isFirstInHistory = ref === firstDocumentNode;
+        return docHasParent && !isFirstInHistory;
+    }
+
+    function confirmEditVersionDialog() {
         var confirm = $mdDialog.confirm()
             .title('Vil du redigere dette dokument?')
-            .htmlContent('<i class="material-icons">info_outline</i><p>Du er nu i gang med at redigere et dokument fra historikken.</p><p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
-            .targetEvent(event)
+            .htmlContent('<i class="material-icons">info_outline</i>' +
+                '<p>Du er på vej til at redigere et dokument fra historikken.</p>' +
+                '<p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
             .ok('OK')
             .cancel('Fortryd');
 
-        $mdDialog.show(confirm).then(function () {
+        return $mdDialog.show(confirm).then(function (response) {
             var selectedVersion = $location.search().version;
-            documentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
-                $state.go('lool', {
-                    'nodeRef': vm.doc.node.nodeRef,
-                    'versionLabel': vm.doc.version,
-                    'parent': response.config.data.nodeRef
-                });
+            return documentService.revertToVersion("no comments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
+                return true;
             });
+        }, function (error) {
+            return false;
         });
     }
 
     function editInOnlyOffice() {
-        var nodeRef = $stateParams.doc;
-        $window.open($state.href('onlyOfficeEdit', {'nodeRef': nodeRef }));
+        if (isVersion()) {
+            confirmEditVersionDialog().then(function (response) {
+                if(response) {
+                    $window.open($state.href('onlyOfficeEdit', {'nodeRef': parentDocumentNode }));
+                }
+            });
+        } else {
+            $window.open($state.href('onlyOfficeEdit', {'nodeRef': $stateParams.doc }));
+        }
     }
 
     //Goes to the libreOffice online edit page
     function editInLibreOffice() {
-        var ref = $stateParams.doc;
-        var isFirstInHistory = ref === firstDocumentNode;
-        if (docHasParent && !isFirstInHistory) {
-            //first promote doc to latest version
-            confirmLoolEditDocDialog();
+        if (isVersion()) {
+            confirmEditVersionDialog().then(function (response) {
+                if(response) {
+                    $state.go('lool', {
+                        'nodeRef': vm.doc.node.nodeRef,
+                        'versionLabel': vm.doc.version,
+                        'parent': response.config.data.nodeRef
+                    });
+                }
+            });
         } else {
             $state.go('lool', {
                 'nodeRef': vm.doc.node.nodeRef
@@ -364,7 +381,15 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function editInMSOffice() {
-        editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
+        if (isVersion()) {
+            confirmEditVersionDialog().then(function (response) {
+                if(response) {
+                    editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
+                }
+            });
+        } else {
+            editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
+        }
     }
     
     function downloadDocument() {
