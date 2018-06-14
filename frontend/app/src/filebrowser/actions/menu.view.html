@@ -54,14 +54,14 @@
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="moveContentDialog($event, content.nodeRef, content.parentNodeRef)">
+            <md-button ng-click="moveContentDialog(content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>compare_arrows</md-icon>
                 {{'COMMON.MOVE' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="vm.permissions.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="copyContentDialog($event, content.nodeRef, content.parentNodeRef)">
+            <md-button ng-click="copyContentDialog(content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>content_copy</md-icon>
                 {{'COMMON.COPY' | translate }}
             </md-button>
