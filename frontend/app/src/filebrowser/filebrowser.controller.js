@@ -20,8 +20,6 @@ angular
         vm.contentListLength = 0;
         vm.deleteContentDialog = deleteContentDialog;
         vm.createProjectLink = createProjectLink;
-        vm.deleteFile = deleteFile;
-        vm.deleteLink = deleteLink;
         vm.documentTemplates = {};
         vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
         vm.error = false;
@@ -466,12 +464,9 @@ angular
     }
 
     function renameContentDialog(content) {
-        documentNodeRef = content.nodeRef;
-        // $scope.newContentName = content.name;
-
         $mdDialog.show({
             templateUrl: 'app/src/filebrowser/actions/rename/rename.view.html',
-            locals:{content: content},
+            locals: {content: content},
             controller: 'RenameController as vm',
             clickOutsideToClose: true
         });
@@ -511,26 +506,12 @@ angular
         });
     }
     
-    function deleteContentDialog(event, content) {
-        $scope.content = content;
+    function deleteContentDialog(content) {
         $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/deleteContent.tmpl.html',
-            targetEvent: event,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
+            templateUrl: 'app/src/filebrowser/actions/delete/delete.view.html',
+            locals: {content: content},
+            controller: 'DeleteController as vm',
             clickOutsideToClose: true
-        });
-    }
-    
-    function deleteFile(nodeRef) {
-        siteService.deleteFile(nodeRef).then(function (response) {
-            hideDialogAndReloadContent();
-        });
-    }
-
-    function deleteLink(source, destination) {
-        siteService.deleteLink(source, destination).then(function () {
-            hideDialogAndReloadContent();
         });
     }
 
