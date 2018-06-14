@@ -19,6 +19,7 @@ function SiteInfoController($scope, $mdDialog, siteService) {
     function activate() {
         $scope.$watch('siteService.getSite()', function (site) {
             vm.site = site;
+            console.log(site);
             vm.hasDescription = vm.site.description.trim() !== "";
             getSiteUserPermissions();
         });
