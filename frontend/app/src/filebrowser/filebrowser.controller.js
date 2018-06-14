@@ -35,7 +35,6 @@ angular
         vm.getAvatarUrl = getAvatarUrl;
         vm.newLinkDialog = newLinkDialog;
         vm.permissions = {};
-        vm.renameContent = renameContent;
         vm.renameContentDialog = renameContentDialog;
         vm.searchProjects = searchProjects;
         vm.setAllCheckboxes = setAllCheckboxes;
@@ -466,25 +465,15 @@ angular
         });
     }
 
-    function renameContentDialog(event, content) {
+    function renameContentDialog(content) {
         documentNodeRef = content.nodeRef;
         // $scope.newContentName = content.name;
 
         $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/renameContent.tmpl.html',
-            targetEvent: event,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
+            templateUrl: 'app/src/filebrowser/actions/rename/rename.view.html',
+            locals:{content: content},
+            controller: 'RenameController as vm',
             clickOutsideToClose: true
-        });
-    }
-    
-    function renameContent(newName) {
-        var props = {
-            prop_cm_name: newName
-        };
-        siteService.updateNode(documentNodeRef, props).then(function (val) {
-            hideDialogAndReloadContent();
         });
     }
 
