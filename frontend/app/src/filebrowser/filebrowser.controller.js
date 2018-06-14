@@ -19,7 +19,6 @@ angular
         vm.contentList = [];
         vm.contentListLength = 0;
         vm.deleteContentDialog = deleteContentDialog;
-        vm.createProjectLink = createProjectLink;
         vm.documentTemplates = {};
         vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
         vm.error = false;
@@ -34,7 +33,6 @@ angular
         vm.newLinkDialog = newLinkDialog;
         vm.permissions = {};
         vm.renameContentDialog = renameContentDialog;
-        vm.searchProjects = searchProjects;
         vm.setAllCheckboxes = setAllCheckboxes;
         vm.shareDocument = shareDocument;
         vm.shareDocumentDialog = shareDocumentDialog;
@@ -463,13 +461,13 @@ angular
         });
     }
 
-    function renameContentDialog(content) {
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/actions/rename/rename.view.html',
-            locals: {content: content},
-            controller: 'RenameController as vm',
-            clickOutsideToClose: true
-        });
+    function renameContentDialog (content) {
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/actions/rename/rename.view.html',
+        locals: {content: content},
+        controller: 'RenameController as vm',
+        clickOutsideToClose: true
+      });
     }
 
     // We tried to have genericContentDialog inside the scope, but after having shown the dialog once the method was
@@ -477,11 +475,11 @@ angular
     $scope.moveContentDialog = moveContentDialog;
     $scope.copyContentDialog = copyContentDialog;
     
-    function moveContentDialog(event, sourceNodeRef, parentNodeRef) {
+    function moveContentDialog(sourceNodeRef, parentNodeRef) {
         genericContentDialog("MOVE", sourceNodeRef, parentNodeRef);
     }
 
-    function copyContentDialog(event, sourceNodeRef, parentNodeRef) {
+    function copyContentDialog(sourceNodeRef, parentNodeRef) {
         genericContentDialog("COPY", sourceNodeRef, parentNodeRef);
     }
 
@@ -506,49 +504,35 @@ angular
         });
     }
     
-    function deleteContentDialog(content) {
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/actions/delete/delete.view.html',
-            locals: {content: content},
-            controller: 'DeleteController as vm',
-            clickOutsideToClose: true
-        });
+    function deleteContentDialog (content) {
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/actions/delete/delete.view.html',
+        locals: {content: content},
+        controller: 'DeleteController as vm',
+        clickOutsideToClose: true
+      });
     }
 
     // Link
 
-    function newLinkDialog(event) {
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/link/newProjectLink.tmpl.html',
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-    function createProjectLink(project) {
-        siteService.createProjectLink(project.shortName).then(function () {
-            hideDialogAndReloadContent();
-        });
-    }
-    
-    function searchProjects(query) {
-        return filterService.search($scope.userManagedProjects, {
-            title: query
-        });
+    function newLinkDialog () {
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/siteLink/new.view.html',
+        controller: 'SiteLinkController as vm',
+        clickOutsideToClose: true
+      });
     }
 
     // SBSYS
     
     function loadSbsysDialog(event) {
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
+        targetEvent: event,
+        scope: $scope,
+        preserveScope: true,
+        clickOutsideToClose: true
+      });
     }
 
     function loadFromSbsys() {

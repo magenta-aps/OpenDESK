@@ -329,6 +329,10 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
+    /**
+     * @todo move this into a sitelink service
+     * @param {@} destination 
+     */
     function createProjectLink(destination) {
         return $http.post("/alfresco/service/sites", {
             PARAM_METHOD: "addLink",
@@ -340,13 +344,17 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
+    /**
+     * @todo move this into a sitelink service 
+     * @param {*} source 
+     * @param {*} destination 
+     */
     function deleteLink(source, destination) {
         return $http.post("/alfresco/service/sites", {
             PARAM_METHOD: "deleteLink",
             PARAM_SOURCE: source,
             PARAM_DESTINATION: destination
         }).then(function (response) {
-            console.log(response.data);
             return response.data;
         });
     }
