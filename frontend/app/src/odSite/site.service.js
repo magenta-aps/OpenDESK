@@ -307,6 +307,11 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
+    /**
+     * @todo this is only used for renaming in filebrowser.controller/rename.controller, and something in text_templates.controller. Perhaps it should be moved
+     * @param {*} nodeRef 
+     * @param {*} props 
+     */
     function updateNode(nodeRef, props) {
         return $http.post('/api/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
             return response.data;
