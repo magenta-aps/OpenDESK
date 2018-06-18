@@ -267,7 +267,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
-    function uploadFiles(file, destination, extras) {
+    function uploadFiles(file, destination) {
         return $http.post("/alfresco/service/sites", {
             PARAM_METHOD: "returnFileName",
             PARAM_FILENAME: file.name,

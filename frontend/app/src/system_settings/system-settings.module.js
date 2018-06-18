@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('openDeskApp.systemsettings', ['ngMaterial', 'pascalprecht.translate'])
+    .module('openDeskApp.systemsettings', ['openDeskApp.filebrowser', 'pascalprecht.translate'])
     .config(config);
 
 function config($stateProvider, USER_ROLES) {

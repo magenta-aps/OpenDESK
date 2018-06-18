@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.site', ['ngMaterial', 'fixed.table.header', 'members', 'odEmail'])
+angular.module('openDeskApp.site', ['openDeskApp.filebrowser', 'fixed.table.header', 'members', 'odEmail'])
 .config(config);
 
 

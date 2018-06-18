@@ -109,7 +109,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
             controller: ['$scope', 'project', function ($scope, project) {
                 $scope.project = project;
             }],
-            templateUrl: 'app/src/sites/view/deleteProject.tmpl.html',
+            templateUrl: 'app/src/odSite/siteList/deleteProject.tmpl.html',
             locals: {
                 project: project
             },
@@ -162,7 +162,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 		vm.currentDialogDescription = description;
 		vm.currentDialogShortName = shortName;
 		$mdDialog.show({
-			templateUrl: 'app/src/sites/view/updateSite.tmpl.html',
+			templateUrl: 'app/src/odSite/siteList/updateSite.tmpl.html',
 			parent: angular.element(document.body),
 			targetEvent: event,
 			scope: $scope, // use parent scope in template
