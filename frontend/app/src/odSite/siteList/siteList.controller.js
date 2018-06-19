@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.site')
 	.controller('SiteListController', SiteListController);
 
-function SiteListController($scope, $mdDialog, $window,  $interval, $translate, siteService, userService,
+function SiteListController($scope, $mdDialog,  $interval, $translate, siteService, member,
 						 sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils) {
 
 	var vm = this;
@@ -136,7 +136,8 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
     }
 	
 	function deleteSite(siteName) {
-		siteService.deleteSite(siteName).then(function (result) {
+		siteService.delete(siteName)
+		.then(function () {
 			getSites();
 			getSitesPerUser();
 			$mdDialog.cancel();
@@ -173,7 +174,7 @@ function SiteListController($scope, $mdDialog, $window,  $interval, $translate, 
 
     function searchPeople(query) {
         if (query) {
-            return userService.getUsers(query);
+            return member.search(query);
         }
     }
 

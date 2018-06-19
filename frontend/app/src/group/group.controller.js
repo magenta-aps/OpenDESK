@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.group')
     .controller('GroupController', GroupController);
 
-function GroupController($mdDialog, $mdToast, $translate, group, groupService, userService, sessionService) {
+function GroupController($mdDialog, $mdToast, $translate, group, groupService, member, sessionService) {
 
     var vm = this;
     vm.group = group;
@@ -22,7 +22,8 @@ function GroupController($mdDialog, $mdToast, $translate, group, groupService, u
 
     function updateMembers() {
         cancelDialog();
-        $translate('MEMBER.MEMBERS_UPDATED').then(function (msg) {
+        $translate('MEMBER.MEMBERS_UPDATED')
+        .then(function (msg) {
             $mdToast.show(
                 $mdToast.simple()
                     .textContent(msg)
@@ -35,7 +36,7 @@ function GroupController($mdDialog, $mdToast, $translate, group, groupService, u
         if (query) {
             switch(vm.group.type){
                 case 'USER':
-                    return userService.getUsers(query);
+                    return member.search(query);
                 case 'GROUP':
                     return groupService.getGroups(query);
             }

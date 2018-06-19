@@ -7,8 +7,7 @@ angular
         }
     });
 
-function SearchController($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService,
-                          documentService, userService) {
+function SearchController($scope, $interval, $translate, $stateParams, searchService, fileUtilsService, member) {
 
     $scope.searchTerm = $stateParams.searchTerm;
     $scope.selectedFilters = {}; //Keep track of the selected filters
@@ -173,7 +172,7 @@ function SearchController($scope, $state, $interval, $translate, $stateParams, s
 
     $scope.searchPeople = function (query) {
         if (query) {
-            return userService.getUsers(query);
+            return member.search(query);
         }
     }
 

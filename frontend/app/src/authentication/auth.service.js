@@ -73,7 +73,7 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     }
 }
 
-function authService($http, $window, $state, sessionService, userService, notificationsService) {
+function authService($http, $window, $state, sessionService, member, notificationsService) {
     var service = {
         login: login,
         logout: logout,
@@ -192,7 +192,8 @@ function authService($http, $window, $state, sessionService, userService, notifi
     }
 
     function addUserToSession(username) {
-        return userService.getPerson(username).then(function (user) {
+        return member.get(username)
+        .then(function (user) {
             delete $window._openDeskSessionExpired;
             var userInfo = sessionService.getUserInfo();
             userInfo.user = user;

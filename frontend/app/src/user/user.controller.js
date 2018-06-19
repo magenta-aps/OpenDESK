@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.user')
     .controller('UserController', UserController);
 
-function UserController($scope, $mdSidenav, userService, sessionService, preferenceService) {
+function UserController($scope, $mdSidenav, userService, member, sessionService, preferenceService) {
     var vm = this;
     
     vm.close = close;
@@ -38,7 +38,8 @@ function UserController($scope, $mdSidenav, userService, sessionService, prefere
     }
 
     function loadAvatar() {
-        userService.getPerson(vm.user.userName).then(function(user) {
+        member.get(vm.user.userName)
+        .then(function(user) {
             sessionService.setAndSaveAvatarToUserInfo(user);
             vm.user.avatar = sessionService.getUserInfo().user.avatar;
         });

@@ -4,9 +4,9 @@ angular
     .module('openDeskApp.filebrowser')
     .controller('FilebrowserController', FilebrowserController);
     
-    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout, Upload,
-        siteService, fileUtilsService, filebrowserService, filterService, alfrescoDownloadService,
-        documentPreviewService, documentService, alfrescoNodeUtils, userService, $translate, APP_BACKEND_CONFIG,
+    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
+        siteService, fileUtilsService, filebrowserService, alfrescoDownloadService,
+        documentPreviewService, documentService, alfrescoNodeUtils, member, $translate, APP_BACKEND_CONFIG,
         sessionService, headerService, browserService, notificationsService) {
             
         var vm = this;
@@ -372,8 +372,8 @@ angular
         });
     }
 
-    function searchUsers(filter) {
-        return userService.getUsers(filter);
+    function searchUsers(query) {
+        return member.search(query);
     }
 
     function createReviewNotification(userName, comment) {
@@ -436,7 +436,7 @@ angular
 
     function searchPeople(query) {
         if (query) {
-            return userService.getUsers(query);
+            return member.search(query);
         }
     }
 

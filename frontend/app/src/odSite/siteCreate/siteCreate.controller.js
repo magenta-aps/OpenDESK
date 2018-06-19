@@ -4,7 +4,8 @@ angular
     .module('openDeskApp.site')
     .controller('SiteCreateController', SiteCreateController);
 
-function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, notificationsService, authService, siteService, filterService, userService, APP_CONFIG) {
+function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, 
+    notificationsService, authService, siteService, member, APP_CONFIG) {
     var vm = this;
 
     var currentUser = authService.getUserInfo().user;
@@ -59,7 +60,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
     function searchPeople(query) {
         if (query) {
-            return userService.getUsers(query);
+            return member.search(query);
         }
     }
 

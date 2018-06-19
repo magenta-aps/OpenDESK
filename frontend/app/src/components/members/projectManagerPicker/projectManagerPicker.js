@@ -8,7 +8,7 @@ angular.module('members')
   }
 });
 
-function projectManagerPicker (siteService, userService) {
+function projectManagerPicker (siteService, member) {
   var vm = this;
   var owners = [];
 
@@ -29,7 +29,7 @@ function projectManagerPicker (siteService, userService) {
 
   function searchManagers(query) {
     if (query) {
-      return userService.getUsers(query);
+      return member.search(query);
   }
   }
 }

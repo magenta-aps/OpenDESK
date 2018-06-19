@@ -22,7 +22,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
     };
 
     var service = {
-      addMemberToSite: addMemberToSite,
       createPDSite: createPDSite,
       createSite: createSite,
       getAllOrganizationalCenters: getAllOrganizationalCenters,
@@ -34,8 +33,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
       loadSiteData: loadSiteData,
       updatePDSite: updatePDSite,
       updateSite: updateSite,
-      removeMemberFromSite: removeMemberFromSite,
-      deleteSite: deleteSite,
+      delete: deleteSite,
       deleteFile: deleteFile,
       uploadFiles: uploadFiles,
       uploadNewVersion: uploadNewVersion,
@@ -46,8 +44,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
       createMembersPDF: createMembersPDF,
       getSiteGroups: getSiteGroups,
       createTemplate: createTemplate,
-      createExternalUser: createExternalUser,
-      validateNewUser: validateNewUser,
       getNode: getNode,
       getSiteUserPermissions: getSiteUserPermissions,
       getPermissions: getPermissions,
@@ -157,7 +153,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         );
     }
 
-    // function updateSite(shortName, newName, description, visibility) {
     function updateSite(site) {
         return $http.put('/api/sites/' + site.shortName, {
             shortName: site.shortName,
@@ -191,7 +186,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
-    // function createPDSite(siteName, description, sbsys, center_id, owner, manager, visibility, template) {
     function createPDSite(newSite) {
         return $http.post('/alfresco/service/projectdepartment', {
             PARAM_NAME: newSite.siteName,
@@ -223,30 +217,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         }).then(function (response) {
             return response;
         });
-    }
-
-    function addMemberToSite(siteShortName, user, group) {
-        return $http.post("/alfresco/service/sites", {
-            PARAM_METHOD: "addUser",
-            PARAM_SITE_SHORT_NAME: siteShortName,
-            PARAM_USER: user,
-            PARAM_GROUP: group
-        }).then(function (response) {
-            return response.data;
-        });
-    }
-
-    function removeMemberFromSite(siteShortName, user, group) {
-        return $http.post("/alfresco/service/sites", {
-            PARAM_METHOD: "removeUser",
-            PARAM_SITE_SHORT_NAME: siteShortName,
-            PARAM_USER: user,
-            PARAM_GROUP: group
-        }).then(function (response) {
-            console.log(response);
-            return response.data;
-        });
-
     }
 
     function deleteSite(siteName) {
@@ -389,31 +359,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             PARAM_DESCRIPTION: description
         }).then(function (response) {
             return response.data;
-        });
-    }
-
-    function createExternalUser(siteShortName, userName, firstName, lastName, email, telephone, groupName) {
-        return $http.post('/alfresco/service/users', {
-            PARAM_METHOD: "createExternalUser",
-            PARAM_SITE_SHORT_NAME: siteShortName,
-            PARAM_USERNAME: userName,
-            PARAM_FIRSTNAME: firstName,
-            PARAM_LASTNAME: lastName,
-            PARAM_EMAIL: email,
-            PARAM_TELEPHONE: telephone,
-            PARAM_GROUP_NAME: groupName
-        }).then(function (response) {
-            return response.data[0];
-        });
-    }
-
-    function validateNewUser(userName, email) {
-        return $http.post('/alfresco/service/users', {
-            PARAM_METHOD: "validateNewUser",
-            PARAM_USERNAME: userName,
-            PARAM_EMAIL: email
-        }).then(function (response) {
-            return response.data[0];
         });
     }
 

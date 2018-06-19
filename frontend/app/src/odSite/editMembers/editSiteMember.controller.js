@@ -5,7 +5,7 @@ angular
     .controller('EditSiteMemberController', EditSiteMemberController);
 
 
-function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $translate, APP_CONFIG, siteService, userService,
+function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, member,
                              notificationsService, authService) {
     var vm = this;
 
@@ -33,32 +33,33 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
     activate();
 
     function activate() {
-        siteService.getGroupsAndMembers(vm.site.shortName).then(function (groups) {
-            vm.groups = groups;
-        });
+      siteService.getGroupsAndMembers(vm.site.shortName).then(function (groups) {
+        vm.groups = groups;
+      });
     }
 
     function saveChanges() {
-        siteService.updateMemberList();
-        cancelDialog();
+      siteService.updateMemberList();
+      cancelDialog();
     }
 
     function groupFilter(group) {
-        if (group[0].multipleMembers) {
-            return group;
-        }
+      if (group[0].multipleMembers) {
+        return group;
+      }
     }
 
     function searchPeople(query) {
-        if (query) {
-            return userService.getUsers(query);
-        }
+      if (query) {
+        return member.search(query);
+      }
     }
 
     function addExternalUserToGroup(userName, firstName, lastName, email, telephone, group) {
-        siteService.validateNewUser(userName, email).then(function (response) {
+        member.validate(userName, email)
+        .then(function (response) {
             if (response.isValid) {
-                siteService.createExternalUser(vm.site.shortName, userName, firstName, lastName, email, telephone,
+                member.addExternal(vm.site.shortName, userName, firstName, lastName, email, telephone,
                     group[0].shortName).then(
                     function (response) {
                         $mdToast.show(
@@ -71,7 +72,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
                             firstName: firstName,
                             lastName: lastName,
                             displayName: firstName + " " + lastName,
-                            email: email,
+                            email: email
                         });
                         showSendEmailDialog(response.userName, response.subject, response.body);
                     },
@@ -102,22 +103,12 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
         $mdDialog.cancel();
     }
 
-    function updateSiteGroups() {
-        $mdDialog.cancel();
-        $translate('GROUP.UPDATED').then(function (msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                .textContent(msg)
-                .hideDelay(3000)
-            );
-        });
-    }
-
     function addMemberToSite(user, groupName) {
         var userName = user.userName;
         var siteShortName = vm.site.shortName;
 
-        siteService.addMemberToSite(siteShortName, userName, groupName).then(function (response) {
+        member.add(siteShortName, userName, groupName)
+        .then(function () {
             createSiteNotification(userName, siteShortName);
 
             for (var i = 0; i < vm.groups.length; i++) {
@@ -130,12 +121,12 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
     }
 
     function removeMemberFromSite(user, groupName) {
-        siteService.removeMemberFromSite(vm.site.shortName, user.userName, groupName).then(function (response) {});
+        member.remove(vm.site.shortName, user.userName, groupName);
     }
 
     function createNotification(userName, subject, message, link, wtype, project) {
         console.log('creating notification...');
-        notificationsService.add(userName, subject, message, link, wtype, project).then(function (val) {});
+        notificationsService.add(userName, subject, message, link, wtype, project);
     }
 
     function createSiteNotification(userName, site) {

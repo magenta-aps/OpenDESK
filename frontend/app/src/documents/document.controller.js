@@ -3,7 +3,7 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, $timeout, $translate, documentService, userService, $stateParams, $location, $state,
+function DocumentController($scope, $timeout, $translate, documentService, member, $stateParams, $location, $state,
     documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, notificationsService, authService,
                             siteService, headerService, $window, editOnlineMSOfficeService, filebrowserService) {
 
@@ -74,7 +74,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function searchUsers(filter) {
-        return userService.getUsers(filter);
+        return member.search(filter);
     }
 
     function cancelDialog() {
