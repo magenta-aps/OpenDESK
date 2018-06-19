@@ -1,48 +1,49 @@
 'use strict';
 
 angular
-    .module('openDeskApp.notifications')
-    .controller('NotificationsController', NotificationsController);
-
+  .module('openDeskApp.notifications')
+  .controller('NotificationsController', NotificationsController);
 
 function NotificationsController($mdSidenav, notificationsService, sessionService) {
+  var vm = this;
 
-var vm = this;
+  var userInfo = sessionService.getUserInfo();
+  var currentUser = userInfo.user.userName;
 
-var userInfo = sessionService.getUserInfo();
-var currentUser = userInfo.user.userName;
+  vm.notifications = [];
+  vm.close = close;
+  vm.setRead = setRead;
+  vm.setSeen = setSeen;
 
-vm.notifications = [];
-vm.close = close;
-vm.setRead = setRead;
-vm.setSeen = setSeen;
+  activate();
 
-activate();
-
-function activate() {
+  function activate () {
     updateNotifications();
     notificationsService.startUpdate(updateNotifications);
-}
+  }
 
-function close() {
+  function close () {
     $mdSidenav('notifications').close();
-}
+  }
 
-function setRead(noticeObj) {
-    notificationsService.setReadNotice(currentUser, noticeObj).then(function (val) {
-        updateNotifications();
+  function setRead (noticeObj) {
+    notificationsService.setReadNotice(currentUser, noticeObj)
+    .then(function () {
+      updateNotifications();
     });
-}
+  }
 
-function setSeen(noticeObj) {
-    notificationsService.setSeenNotice(currentUser, noticeObj).then(function (val) {
-        updateNotifications();
+  function setSeen (noticeObj) {
+    notificationsService.setSeenNotice(currentUser, noticeObj)
+    .then(function () {
+      updateNotifications();
     });
-}
+  }
 
-function updateNotifications() {
-    notificationsService.getNotifications(currentUser).then(function (notifications) {
-        vm.notifications = notifications;
+  function updateNotifications () {
+    notificationsService.get(currentUser)
+    .then(function (notifications) {
+      vm.notifications = notifications;
     });
-}
+  }
 }

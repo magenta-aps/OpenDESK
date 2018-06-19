@@ -26,7 +26,8 @@ function SiteInfoController($scope, $mdDialog, siteService) {
     }
 
     function getSiteUserPermissions() {
-        siteService.getSiteUserPermissions(vm.site.shortName).then(function (permissions) {
+        siteService.getSiteUserPermissions(vm.site.shortName)
+        .then(function (permissions) {
             vm.permissions = permissions;
         });
     }

@@ -151,7 +151,8 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
             vm.wfr = paramValue === "wf-response";
     
             var NID = $location.search().NID;
-            notificationsService.getInfo(NID).then(function (response) {
+            notificationsService.getInfo(NID)
+            .then(function (response) {
                 vm.wf_comment = response.message;
                 vm.wf_subject = response.subject;
             });
@@ -169,7 +170,8 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         notificationsService.getInfo(NID).then(function (response) {
             var project = response.project;
 
-            notificationsService.addNotice(vm.wf_from, "Review " + status, comment, link, wtype, project).then(function (val) {
+            notificationsService.add(vm.wf_from, "Review " + status, comment, link, wtype, project)
+            .then(function () {
                 $mdDialog.cancel();
                 vm.goBack();
             });

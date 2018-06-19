@@ -264,7 +264,7 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
         angular.forEach(vm.groups, function (group) {
             angular.forEach(group[1], function (member) {
                 if (member.userName !== postItem.author.username) {
-                    notificationsService.addNotice(
+                    notificationsService.add(
                         member.userName, 
                         subject, 
                         message, 

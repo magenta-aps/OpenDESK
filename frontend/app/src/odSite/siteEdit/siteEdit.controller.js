@@ -26,7 +26,7 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
 
     function updatePdSite() {
         siteService.updatePDSite(vm.newSite)
-        .then(function (response) {
+        .then(function () {
             $mdDialog.cancel();
             $state.reload();
             $mdToast.show(
@@ -47,7 +47,8 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
             return;
         }
 
-        siteService.updateSite(vm.newSite).then(function (response) {
+        siteService.updateSite(vm.newSite)
+        .then(function () {
             $mdDialog.cancel();
             $state.reload();
             $mdToast.show(
@@ -57,5 +58,4 @@ function SiteEditController(sitedata, $state, $scope, $mdDialog, siteService, us
             );
         });
     }
-
 }

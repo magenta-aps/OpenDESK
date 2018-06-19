@@ -399,7 +399,7 @@ angular
 
     function shareDocument(user, permission) {
         filebrowserService.shareNode(documentNodeRef, user.userName, permission).then(
-            function(succes) {
+            function() {
                 $mdToast.show(
                     $mdToast.simple()
                         .textContent('Dokumentet blev delt med ' + user.displayName + ".")
@@ -410,7 +410,7 @@ angular
                 var subject = 'Nyt dokument delt';
                 var message = "En bruger har delt et dokument med dig";
 
-                notificationsService.addNotice(
+                notificationsService.add(
                     user.userName,
                     subject,
                     message,

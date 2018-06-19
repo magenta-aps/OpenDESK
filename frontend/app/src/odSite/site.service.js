@@ -2,10 +2,8 @@
 
 angular.module('openDeskApp.site').factory('siteService', SiteService);
 
-function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessionService, notificationsService, authService,
-                     systemSettingsService) {
+function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
 
-    var endpoint = '/alfresco/service/sites';
     var currentUser = authService.getUserInfo().user;
     var site = {};
     var groups = {};
@@ -17,52 +15,52 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
     var outsiderRole = 'Outsider';
     var ownerRole = "Owner";
     var adminPermissions = {
-        isManager: true,
-        isMember: true,
-        canEdit: true,
-        userRole: managerRole
+      isManager: true,
+      isMember: true,
+      canEdit: true,
+      userRole: managerRole
     };
 
     var service = {
-        addMemberToSite: addMemberToSite,
-        createPDSite: createPDSite,
-        createSite: createSite,
-        getAllOrganizationalCenters: getAllOrganizationalCenters,
-        getAllOwners: getAllOwners,
-        getSite: getSite,
-        getTemplateNames: getTemplateNames,
-        getSites: getSites,
-        getSitesPerUser: getSitesPerUser,
-        loadSiteData: loadSiteData,
-        updatePDSite: updatePDSite,
-        updateSite: updateSite,
-        removeMemberFromSite: removeMemberFromSite,
-        deleteSite: deleteSite,
-        deleteFile: deleteFile,
-        uploadFiles: uploadFiles,
-        uploadNewVersion: uploadNewVersion,
-        updateNode: updateNode,
-        addUser: addUser,
-        createProjectLink: createProjectLink,
-        deleteLink: deleteLink,
-        createMembersPDF: createMembersPDF,
-        getSiteGroups: getSiteGroups,
-        createTemplate: createTemplate,
-        createExternalUser: createExternalUser,
-        validateNewUser: validateNewUser,
-        getNode: getNode,
-        getSiteUserPermissions: getSiteUserPermissions,
-        getPermissions: getPermissions,
-        setUserManagedProjects: setUserManagedProjects,
-        getUserManagedProjects: getUserManagedProjects,
-        getGroupsAndMembers: getGroupsAndMembers,
-        getSiteOwner: getSiteOwner,
-        getSiteManager: getSiteManager,
-        createDocumentNotification: createDocumentNotification,
-        createReviewNotification: createReviewNotification,
-        updateMemberList: updateMemberList,
-        addFavourite: addFavourite,
-        removeFavourite: removeFavourite
+      addMemberToSite: addMemberToSite,
+      createPDSite: createPDSite,
+      createSite: createSite,
+      getAllOrganizationalCenters: getAllOrganizationalCenters,
+      getAllOwners: getAllOwners,
+      getSite: getSite,
+      getTemplateNames: getTemplateNames,
+      getSites: getSites,
+      getSitesPerUser: getSitesPerUser,
+      loadSiteData: loadSiteData,
+      updatePDSite: updatePDSite,
+      updateSite: updateSite,
+      removeMemberFromSite: removeMemberFromSite,
+      deleteSite: deleteSite,
+      deleteFile: deleteFile,
+      uploadFiles: uploadFiles,
+      uploadNewVersion: uploadNewVersion,
+      updateNode: updateNode,
+      addUser: addUser,
+      createProjectLink: createProjectLink,
+      deleteLink: deleteLink,
+      createMembersPDF: createMembersPDF,
+      getSiteGroups: getSiteGroups,
+      createTemplate: createTemplate,
+      createExternalUser: createExternalUser,
+      validateNewUser: validateNewUser,
+      getNode: getNode,
+      getSiteUserPermissions: getSiteUserPermissions,
+      getPermissions: getPermissions,
+      setUserManagedProjects: setUserManagedProjects,
+      getUserManagedProjects: getUserManagedProjects,
+      getGroupsAndMembers: getGroupsAndMembers,
+      getSiteOwner: getSiteOwner,
+      getSiteManager: getSiteManager,
+      createDocumentNotification: createDocumentNotification,
+      createReviewNotification: createReviewNotification,
+      updateMemberList: updateMemberList,
+      addFavourite: addFavourite,
+      removeFavourite: removeFavourite
     };
 
     return service;
@@ -560,7 +558,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         createNotification(notification);
     }
     function createNotification(notification) {
-        notificationsService.addNotice(
+        notificationsService.add(
             notification.receiver, 
             notification.subject, 
             notification.message, 
