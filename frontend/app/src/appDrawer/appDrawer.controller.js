@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.appDrawer')
     .controller('AppDrawerController', AppDrawerController);
 
-function AppDrawerController($mdSidenav, pageService, APP_BACKEND_CONFIG) {
+function AppDrawerController($mdSidenav, APP_BACKEND_CONFIG) {
     var vm = this;
     
     vm.close = close;

@@ -77,25 +77,6 @@ function fileBrowserService($http, alfrescoNodeUtils) {
         });
     }
 
-    //not in use
-    function findNestedTemplates(templateNodeRef) {
-        var templatesObj = [];
-
-        return getContentList(templateNodeRef).then(function(content)  {
-            var templates = content[0];
-            var folders = content[1];
-
-            templatesObj.push(templates);
-            angular.forEach(folders, function(folder) {
-                var template = folder;
-                findNestedTemplates(folder.shortRef);
-            });
-
-            return templatesObj;
-        });
-
-    }
-
     function loadFromSbsys(destinationNodeRef) {
         return $http.get("/alfresco/s/slingshot/doclib2/doclist/type/site/sbsysfakedata/documentLibrary", {}).then(function (sbsysfakedataResponse) {
             var nodeRefs = [];

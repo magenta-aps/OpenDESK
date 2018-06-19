@@ -34,11 +34,7 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
       updatePDSite: updatePDSite,
       updateSite: updateSite,
       delete: deleteSite,
-      deleteFile: deleteFile,
-      uploadFiles: uploadFiles,
-      uploadNewVersion: uploadNewVersion,
       updateNode: updateNode,
-      addUser: addUser,
       createProjectLink: createProjectLink,
       deleteLink: deleteLink,
       createMembersPDF: createMembersPDF,
@@ -228,53 +224,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
-    function deleteFile(nodeRef) {
-        var url = '/slingshot/doclib/action/file/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri;
-        return $http.delete(url).then(function (result) {
-            return result.data;
-        });
-    }
-
-    function uploadFiles(file, destination) {
-        return $http.post("/alfresco/service/sites", {
-            PARAM_METHOD: "returnFileName",
-            PARAM_FILENAME: file.name,
-            PARAM_DESTINATION: destination
-        }).then(function (response) {
-            var formData = new FormData();
-            formData.append("filedata", file);
-            formData.append("filename", response.data[0].fileName);
-            formData.append("destination", destination ? destination : null);
-
-            return $http.post("/api/upload", formData, {
-                transformRequest: angular.identity,
-                headers: {
-                    'Content-Type': undefined
-                }
-            }).then(function (response) {
-                return response;
-            });
-        });
-    }
-
-    function uploadNewVersion(file, destination, existingNodeRef) {
-        var formData = new FormData();
-        formData.append("filedata", file);
-        formData.append("updatenoderef", existingNodeRef);
-        formData.append("majorversion", false);
-        formData.append("filename", file.name);
-        formData.append("destination", destination ? destination : null);
-
-        return $http.post("/api/upload", formData, {
-            transformRequest: angular.identity,
-            headers: {
-                'Content-Type': undefined
-            }
-        }).then(function (response) {
-            return response;
-        });
-    }
-
     /**
      * @todo this is only used for renaming in filebrowser.controller/rename.controller, and something in text_templates.controller. Perhaps it should be moved
      * @param {*} nodeRef 
@@ -282,17 +231,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
      */
     function updateNode(nodeRef, props) {
         return $http.post('/api/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
-            return response.data;
-        });
-    }
-
-    function addUser(siteShortName, user, group) {
-        return $http.post("/alfresco/service/sites", {
-            PARAM_METHOD: "addUser",
-            PARAM_SITE_SHORT_NAME: siteShortName,
-            PARAM_USER: user,
-            PARAM_GROUP: group
-        }).then(function (response) {
             return response.data;
         });
     }

@@ -5,7 +5,7 @@ angular
     .controller('SiteCreateController', SiteCreateController);
 
 function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, 
-    notificationsService, authService, siteService, member, APP_CONFIG) {
+    notificationsService, authService, siteService, MemberService, APP_CONFIG) {
     var vm = this;
 
     var currentUser = authService.getUserInfo().user;
@@ -60,7 +60,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
 
     function searchPeople(query) {
         if (query) {
-            return member.search(query);
+            return MemberService.search(query);
         }
     }
 
@@ -152,9 +152,8 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
         // Iterating list of items sequential instead of async.
         angular.forEach(group, function (user) {
             var userName = user.userName;
-            promise = siteService.addUser(siteShortName, userName, groupName).then(
-                function (response) {
-
+            promise = MemberService.add(siteShortName, userName, groupName)
+            .then(function () {
                     createSiteNotification(siteName, userName, link);
                     console.log('Added user ' + userName + ' to ' + groupName + ' in project ' + siteName);
                 },

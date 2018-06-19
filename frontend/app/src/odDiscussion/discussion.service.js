@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('openDeskApp.discussion').factory('discussionService', function ($http, nodeRefUtilsService, authService, sessionService, preferenceService) {
+angular.module('openDeskApp.discussion')
+.factory('discussionService', function ($http, nodeRefUtilsService, authService, sessionService, preferenceService) {
 
     var restBaseUrl = '/alfresco/s/api';
     var currentUser = authService.getUserInfo().user.userName;
@@ -125,10 +126,6 @@ angular.module('openDeskApp.discussion').factory('discussionService', function (
 
     function getSubscribePreferenceFilter(siteShortName, id) {
         return "dk.magenta.sites." + siteShortName + ".discussions." + id + ".subscribe";
-    }
-
-    function getSiteSubscriptionsPreferenceFilter(siteShortName) {
-        return "dk.magenta.sites." + siteShortName + ".discussions";
     }
 
     function addSubscriptionFlag(siteShortName, postItems) {

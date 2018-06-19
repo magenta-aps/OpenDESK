@@ -3,9 +3,9 @@
 angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
-function DocumentController($scope, $timeout, $translate, documentService, member, $stateParams, $location, $state,
+function DocumentController($scope, $timeout, $translate, documentService, MemberService, $stateParams, $location, $state,
     documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, notificationsService, authService,
-                            siteService, headerService, $window, editOnlineMSOfficeService, filebrowserService) {
+                            siteService, headerService, $window, editOnlineMSOfficeService, filebrowserService, ContentService) {
 
     var vm = this;
 
@@ -54,7 +54,7 @@ function DocumentController($scope, $timeout, $translate, documentService, membe
             vm.showArchived = true;
         }
         
-        documentService.getHistory(parentDocumentNode).then(function (val) {
+        ContentService.history(parentDocumentNode).then(function (val) {
             $scope.history = val;
             var currentNoOfHistory = $scope.history.length;
             var orgNoOfHistory = $location.search().noOfHist;
@@ -74,7 +74,7 @@ function DocumentController($scope, $timeout, $translate, documentService, membe
     }
 
     function searchUsers(filter) {
-        return member.search(filter);
+        return MemberService.search(filter);
     }
 
     function cancelDialog() {
@@ -132,7 +132,8 @@ function DocumentController($scope, $timeout, $translate, documentService, membe
     }
 
     function uploadNewVersion(file) {
-        siteService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef).then(function (val) {
+        ContentService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef)
+        .then(function () {
             $mdDialog.cancel();
             $state.go('document', {
                 doc: parentDocumentNode
@@ -192,11 +193,11 @@ function DocumentController($scope, $timeout, $translate, documentService, membe
     }
 
     function getDocument() {
-        documentService.getDocument(parentDocumentNode).then(function (response) {
-
+        ContentService.get(parentDocumentNode)
+        .then(function (response) {
             vm.doc = response.item;
-            vm.loolEditable = documentService.isLoolEditable(vm.doc.node.mimetype);
-            vm.msOfficeEditable = documentService.isMsOfficeEditable(vm.doc.node.mimetype);
+            vm.loolEditable = ContentService.isLoolEditable(vm.doc.node.mimetype);
+            vm.msOfficeEditable = ContentService.isMsOfficeEditable(vm.doc.node.mimetype);
 
             vm.docMetadata = response.metadata;
 
@@ -330,7 +331,7 @@ function DocumentController($scope, $timeout, $translate, documentService, membe
 
         $mdDialog.show(confirm).then(function () {
             var selectedVersion = $location.search().version;
-            documentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
+            ContentService.revertToVersion("no coments", true, vm.doc.node.nodeRef, selectedVersion).then(function (response) {
                 $state.go('lool', {
                     'nodeRef': vm.doc.node.nodeRef,
                     'versionLabel': vm.doc.version,

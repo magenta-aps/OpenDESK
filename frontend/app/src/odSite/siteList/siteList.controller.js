@@ -4,7 +4,7 @@ angular
 	.module('openDeskApp.site')
 	.controller('SiteListController', SiteListController);
 
-function SiteListController($scope, $mdDialog,  $interval, $translate, siteService, member,
+function SiteListController($scope, $mdDialog,  $interval, $translate, siteService, MemberService,
 						 sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils) {
 
 	var vm = this;
@@ -174,7 +174,7 @@ function SiteListController($scope, $mdDialog,  $interval, $translate, siteServi
 
     function searchPeople(query) {
         if (query) {
-            return member.search(query);
+            return MemberService.search(query);
         }
     }
 

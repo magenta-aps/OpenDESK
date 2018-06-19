@@ -6,8 +6,8 @@ angular
     
     function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
         siteService, fileUtilsService, filebrowserService, alfrescoDownloadService,
-        documentPreviewService, documentService, alfrescoNodeUtils, member, $translate, APP_BACKEND_CONFIG,
-        sessionService, headerService, browserService, notificationsService) {
+        documentPreviewService, documentService, alfrescoNodeUtils, MemberService, $translate, APP_BACKEND_CONFIG,
+        sessionService, headerService, browserService, notificationsService, ContentService) {
             
         var vm = this;
         var documentNodeRef = "";
@@ -204,11 +204,11 @@ angular
         vm.isLoading = false;
     }
 
-    function processContent(content) {
-        angular.forEach(content, function(item) {
+    function processContent(items) {
+        angular.forEach(items, function(item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
-            item.loolEditable = documentService.isLoolEditable(item.mimeType);
-            item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
+            item.loolEditable = ContentService.isLoolEditable(item.mimeType);
+            item.msOfficeEditable = ContentService.isMsOfficeEditable(item.mimeType);
         });
     }
     
@@ -236,7 +236,7 @@ angular
     }
     
     function loadHistory(doc) {
-        documentService.getHistory(doc).then(function (val) {
+        ContentService.history(doc).then(function (val) {
             $scope.history = val;
         });
     }
@@ -331,7 +331,7 @@ angular
         vm.uploading = true;
 
         angular.forEach(files, function (file) {
-            siteService.uploadFiles(file, folderNodeRef).then(function (response) {
+            ContentService.upload(file, folderNodeRef).then(function (response) {
                 if ($scope.isSite) {
                     siteService.createDocumentNotification(response.data.nodeRef, response.data.fileName);
                 }
@@ -373,7 +373,7 @@ angular
     }
 
     function searchUsers(query) {
-        return member.search(query);
+        return MemberService.search(query);
     }
 
     function createReviewNotification(userName, comment) {
@@ -436,7 +436,7 @@ angular
 
     function searchPeople(query) {
         if (query) {
-            return member.search(query);
+            return MemberService.search(query);
         }
     }
 
@@ -456,7 +456,8 @@ angular
     
     function uploadNewVersion(file) {
         vm.uploading = true;
-        siteService.uploadNewVersion(file, folderNodeRef, documentNodeRef).then(function (val) {
+        ContentService.uploadNewVersion(file, folderNodeRef, documentNodeRef)
+        .then(function () {
             hideDialogAndReloadContent();
         });
     }
@@ -507,7 +508,7 @@ angular
     function deleteContentDialog (content) {
       $mdDialog.show({
         templateUrl: 'app/src/filebrowser/actions/delete/delete.view.html',
-        locals: {content: content},
+        locals: {data: content},
         controller: 'DeleteController as vm',
         clickOutsideToClose: true
       });

@@ -5,7 +5,7 @@ angular
     .controller('EditSiteMemberController', EditSiteMemberController);
 
 
-function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, member,
+function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, MemberService,
                              notificationsService, authService) {
     var vm = this;
 
@@ -51,15 +51,15 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CON
 
     function searchPeople(query) {
       if (query) {
-        return member.search(query);
+        return MemberService.search(query);
       }
     }
 
     function addExternalUserToGroup(userName, firstName, lastName, email, telephone, group) {
-        member.validate(userName, email)
+        MemberService.validate(userName, email)
         .then(function (response) {
             if (response.isValid) {
-                member.addExternal(vm.site.shortName, userName, firstName, lastName, email, telephone,
+                MemberService.addExternal(vm.site.shortName, userName, firstName, lastName, email, telephone,
                     group[0].shortName).then(
                     function (response) {
                         $mdToast.show(
@@ -107,7 +107,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CON
         var userName = user.userName;
         var siteShortName = vm.site.shortName;
 
-        member.add(siteShortName, userName, groupName)
+        MemberService.add(siteShortName, userName, groupName)
         .then(function () {
             createSiteNotification(userName, siteShortName);
 
@@ -121,7 +121,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CON
     }
 
     function removeMemberFromSite(user, groupName) {
-        member.remove(vm.site.shortName, user.userName, groupName);
+        MemberService.remove(vm.site.shortName, user.userName, groupName);
     }
 
     function createNotification(userName, subject, message, link, wtype, project) {

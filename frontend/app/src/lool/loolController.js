@@ -6,7 +6,7 @@ angular
 /**
  * Main Controller for the LibreOffice online module module
  */
-function LoolController($state, $stateParams, loolService, documentService, $mdToast, $translate, nodeRefUtilsService, headerService) {
+function LoolController($state, $stateParams, loolService, ContentService, $mdToast, $translate, nodeRefUtilsService, headerService) {
     var vm = this;
 
     if($stateParams.nodeRef === null)
@@ -22,7 +22,7 @@ function LoolController($state, $stateParams, loolService, documentService, $mdT
     else {
         vm.nodeRef = $stateParams.nodeRef;
         vm.nodeId = nodeRefUtilsService.getId($stateParams.nodeRef);
-        documentService.getDocument(vm.nodeId).then(function (document) {
+        ContentService.get(vm.nodeId).then(function (document) {
 
             vm.doc = document.item;
             loolService.getLoolServiceUrl().then(function (response) {
@@ -47,7 +47,8 @@ function LoolController($state, $stateParams, loolService, documentService, $mdT
             var bump = (parseInt(sp[1]) + 1);
             var newVersion = sp[0] + "." + bump;
 
-            documentService.deleteVersion($stateParams.parent, newVersion).then(function (response) {
+            ContentService.deleteVersion($stateParams.parent, newVersion)
+            .then(function () {
                 $state.go('document', {'doc': parentNodeId });
             })
 

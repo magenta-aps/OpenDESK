@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.user')
     .controller('UserController', UserController);
 
-function UserController($scope, $mdSidenav, userService, member, sessionService, preferenceService) {
+function UserController($scope, $mdSidenav, userService, MemberService, sessionService, preferenceService) {
     var vm = this;
     
     vm.close = close;
@@ -24,21 +24,23 @@ function UserController($scope, $mdSidenav, userService, member, sessionService,
     function setNotificationPreferences() {
         var preferences = { "dk.magenta.sites.receiveNotifications" : vm.receiveNotifications };
 
-        preferenceService.setPreferences(vm.user, preferences).then(function(data) {
+        preferenceService.setPreferences(vm.user, preferences)
+        .then(function(data) {
             return data;
         });
     }
 
     function uploadAvatar(element) {
         var file = element.files[0];
-        userService.uploadAvatar(file, vm.user.userName).then(function(data) {
+        userService.uploadAvatar(file, vm.user.userName)
+        .then(function(data) {
             loadAvatar();
             return data;
         });
     }
 
     function loadAvatar() {
-        member.get(vm.user.userName)
+        MemberService.get(vm.user.userName)
         .then(function(user) {
             sessionService.setAndSaveAvatarToUserInfo(user);
             vm.user.avatar = sessionService.getUserInfo().user.avatar;

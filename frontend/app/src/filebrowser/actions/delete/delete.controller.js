@@ -4,24 +4,24 @@ angular
   .module('openDeskApp.filebrowser')
   .controller('DeleteController', DeleteController);
   
-function DeleteController($rootScope, $mdDialog, content, siteService) {
+function DeleteController($rootScope, $mdDialog, data, siteService, ContentService) {
   var vm = this;
 
-  vm.content = content;
+  vm.data = data;
 
   vm.cancel = cancel;
   vm.delete = deleteContent;
 
   function deleteContent() {
-    if(vm.content.contentType != 'cmis:link') {
-      deleteFile(vm.content.nodeRef);
+    if(vm.data.contentType != 'cmis:link') {
+      deleteFile(vm.data.nodeRef);
     } else {
-      deleteLink(vm.content.nodeid, vm.content.destination_nodeid);
+      deleteLink(vm.data.nodeid, vm.data.destination_nodeid);
     }
   }
 
   function deleteFile(nodeRef) {
-    siteService.deleteFile(nodeRef)
+    ContentService.delete(nodeRef)
     .then(function () {
       hideAndReload();
     });
