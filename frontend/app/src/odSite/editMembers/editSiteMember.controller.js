@@ -6,7 +6,7 @@ angular
 
 
 function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, MemberService,
-                             notificationsService, authService) {
+                             notificationsService, UserService) {
     var vm = this;
 
     $scope.externalUser = {
@@ -27,7 +27,7 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, APP_CON
     vm.saveChanges = saveChanges;
     vm.searchPeople = searchPeople;
     vm.site = sitedata;
-    vm.user = authService.getUserInfo().user;
+    vm.user = UserService.get();
     vm.showSendEmailDialog = showSendEmailDialog;
 
     activate();

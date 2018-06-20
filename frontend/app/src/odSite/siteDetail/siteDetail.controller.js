@@ -4,7 +4,7 @@ angular
     .module('openDeskApp.site')
     .controller('SiteDetailController', SiteDetailController);
 
-function SiteDetailController($scope, $mdDialog, siteService, $stateParams, $translate, authService, browserService, headerService) {
+function SiteDetailController($scope, $mdDialog, siteService, $stateParams, $translate, browserService, headerService) {
 
     $scope.history = [];
     $scope.showGroupList = [];
@@ -12,7 +12,6 @@ function SiteDetailController($scope, $mdDialog, siteService, $stateParams, $tra
     var vm = this;
     
     vm.cancelDialog = cancelDialog;
-    vm.currentUser = authService.getUserInfo().user;
     vm.groups = {};
     vm.permissions = {};
     vm.site = {};

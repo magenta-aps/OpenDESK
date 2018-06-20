@@ -4,11 +4,10 @@ angular
   .module('openDeskApp.notifications')
   .controller('NotificationsController', NotificationsController);
 
-function NotificationsController($mdSidenav, notificationsService, sessionService) {
+function NotificationsController($mdSidenav, notificationsService, UserService) {
   var vm = this;
-
-  var userInfo = sessionService.getUserInfo();
-  var currentUser = userInfo.user.userName;
+  
+  var currentUser = UserService.get().userName;
 
   vm.notifications = [];
   vm.close = close;

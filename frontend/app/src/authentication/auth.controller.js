@@ -4,7 +4,7 @@ angular
     .module('openDeskApp')
     .controller('AuthController', AuthController);
 
-function AuthController($state, $stateParams, authService, MemberService, $mdDialog, sessionService, $window, chatService) {
+function AuthController($state, $stateParams, authService, $mdDialog, sessionService, $window, chatService) {
     var vm = this;
     var loginErrorMessage = angular.fromJson($stateParams.error);
 
@@ -15,16 +15,13 @@ function AuthController($state, $stateParams, authService, MemberService, $mdDia
     vm.updateValidator = updateValidator;
 
     function login(credentials) {
-        authService.login(credentials.username, credentials.password).then(function (response) {
+        authService.login(credentials.username, credentials.password)
+        .then(function (response) {
             // Logged in
             if (response.userName) {
                 chatService.initialize();
                 chatService.login(credentials.username, credentials.password);
-                MemberService.get(credentials.username)
-                .then(function (response) {
-                    vm.user = response;
-                    restoreLocation();
-                });
+                restoreLocation();
             }
 
             // If incorrect values            
@@ -38,7 +35,6 @@ function AuthController($state, $stateParams, authService, MemberService, $mdDia
 
     function logout() {
         chatService.logout();
-        delete vm.user;
         authService.logout();
     }
 
@@ -83,8 +79,8 @@ function AuthController($state, $stateParams, authService, MemberService, $mdDia
         dlg.forgotPassword = function () {
             if (!dlg.email) return;
 
-            authService.changePassword(dlg.email).then(
-                function success(response) {
+            authService.changePassword(dlg.email)
+            .then(function success() {
                     dlg.emailSent = true;
                 },
 

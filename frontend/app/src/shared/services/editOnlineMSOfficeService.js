@@ -2,7 +2,7 @@ angular
     .module('openDeskApp')
     .factory('editOnlineMSOfficeService', editOnlineMSOfficeService);
 
-function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionService, MemberService, $window, $mdToast, $translate) {
+function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, UserService, MemberService, $window, $mdToast, $translate) {
 
     var toastDelay = 5000;
     var msProtocolNames = {
@@ -181,7 +181,7 @@ function editOnlineMSOfficeService(fileUtilsService, BROWSER_CONFIG, sessionServ
         else if (doc.node.isLocked) {
             var checkedOut = doc.node.aspects.indexOf("cm:checkedOut") > -1;
             var lockOwner = doc.node.properties["cm:lockOwner"];
-            var currentUser = sessionService.getUserInfo().user.userName;
+            var currentUser = UserService.get().userName;
             var differentLockOwner = lockOwner.userName !== currentUser;
 
             // If locked for editing then display error message about who locked

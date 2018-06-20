@@ -6,13 +6,13 @@ angular
 
 function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
                               $location, discussionService, nodeRefUtilsService, sessionService, notificationsService,
-                              siteService) {
+                              siteService, UserService) {
     var vm = this;
 
     vm.discussions = [];
     vm.replies = [];
     vm.search = '';
-    vm.user = '';
+    vm.user = UserService.get();
     vm.isLoading = true;
 
     vm.cancelDialog = cancelDialog;
@@ -42,7 +42,6 @@ function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $
     activate();
 
     function activate() {
-        vm.user = sessionService.getUserInfo().user;
         vm.getDiscussions($stateParams.projekt);
 
         $scope.tab.selected = $stateParams.selectedTab;

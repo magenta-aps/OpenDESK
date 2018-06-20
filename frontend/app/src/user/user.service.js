@@ -1,24 +1,35 @@
 angular
     .module('openDeskApp.user')
-    .factory('userService', userService);
+    .factory('UserService', UserService);
 
-function userService($http) {
+function UserService($http, $window) {
+  var user;
 
-    return {
-        uploadAvatar: uploadAvatar
-    };
+  return {
+    get: getUser,
+    uploadAvatar: uploadAvatar
+  };
 
-    function uploadAvatar(file, username) {
+  function getUser () {
+    user = angular.fromJson($window.sessionStorage.getItem('userInfo')).user;
+    console.log(user.userName);
+    return user;
+  }
 
-        var formData = new FormData();
-        formData.append("filedata", file);
-        formData.append("username", username);
+  function uploadAvatar(file) {
 
-        return $http.post("/alfresco/service/slingshot/profile/uploadavatar", formData, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        }).then(function (response) {
-            return response;
-        });
+    var formData = new FormData();
+    formData.append("filedata", file);
+    formData.append("username", user.userName);
+
+    var headers = {
+      transformRequest: angular.identity,
+      headers: {'Content-Type': undefined}
     }
+
+    return $http.post("/alfresco/service/slingshot/profile/uploadavatar", formData, headers)
+    .then(function (response) {
+      return response;
+    });
+  }
 }

@@ -2,9 +2,9 @@
 
 angular.module('openDeskApp.site').factory('siteService', SiteService);
 
-function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessionService, notificationsService, authService, systemSettingsService) {
+function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessionService, notificationsService, UserService, systemSettingsService) {
 
-    var currentUser = authService.getUserInfo().user;
+    var currentUser = UserService.get();
     var site = {};
     var groups = {};
     var userManagedProjects = [];
@@ -301,7 +301,8 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
     }
 
     function getNode(siteName, container, path) {
-        return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
+        return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path)
+        .then(function (response) {
             return response.data;
         });
     }

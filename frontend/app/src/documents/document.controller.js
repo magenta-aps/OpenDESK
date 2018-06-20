@@ -4,7 +4,7 @@ angular.module('openDeskApp.documents')
     .controller('DocumentController', DocumentController);
 
 function DocumentController($scope, $timeout, $translate, documentService, MemberService, $stateParams, $location, $state,
-    documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, notificationsService, authService,
+    documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, notificationsService, UserService,
                             siteService, headerService, $window, editOnlineMSOfficeService, filebrowserService, ContentService) {
 
     var vm = this;
@@ -162,7 +162,7 @@ function DocumentController($scope, $timeout, $translate, documentService, Membe
 
     function createWFNotification(comment, wtype) {
 
-        var creator = authService.getUserInfo().user.userName;
+        var creator = UserService.get().userName;
         var link = "dokument/" + selectedDocumentNode + "?dtype=wf-response" + "&from=" + creator;
 
         var status = wtype == 'review-approved' ? 'godkendt' : 'afvist';
@@ -219,7 +219,7 @@ function DocumentController($scope, $timeout, $translate, documentService, Membe
                 var folderNodeRef = vm.doc.node.nodeRef;
                 var location = vm.doc.location.path;
                 var homeType, type;
-                var user = authService.getUserInfo().user.userName;
+                var user = UserService.get().userName;
                 var userHomeLocation = "/User Homes/" + user;
                 var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation;
                 var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation;

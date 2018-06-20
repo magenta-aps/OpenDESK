@@ -81,21 +81,24 @@ function SiteListController($scope, $mdDialog,  $interval, $translate, siteServi
 
 	function getSites() {
 		vm.isLoading = true;
-		return siteService.getSites().then(function (response) {
+		return siteService.getSites()
+		.then(function (response) {
 			vm.sites = response;
 			vm.isLoading = false;
 		});
 	}
 
 	function getSitesPerUser() {
-		return siteService.getSitesPerUser().then(function (response) {
+		return siteService.getSitesPerUser()
+		.then(function (response) {
 			vm.sitesPerUser = response;
 		});
 	}
 
 
 	function getAllOrganizationalCenters() {
-		siteService.getAllOrganizationalCenters().then(function (response) {
+		siteService.getAllOrganizationalCenters()
+		.then(function (response) {
 			vm.organizationalCenters = response.data;
 			vm.organizationalCenters.push({
 				"shortName": "",
@@ -183,7 +186,6 @@ function SiteListController($scope, $mdDialog,  $interval, $translate, siteServi
 		$mdDialog.show({
 			templateUrl: 'app/src/odSite/siteList/siteInfo.view.html',
 			parent: angular.element(document.body),
-			//targetEvent: event,
 			scope: $scope, // use parent scope in template
 			preserveScope: true, // do not forget this if use parent scope
 			clickOutsideToClose: true
@@ -193,11 +195,13 @@ function SiteListController($scope, $mdDialog,  $interval, $translate, siteServi
     function toggleFavourite(node) {
         var nodeId = alfrescoNodeUtils.processNodeRef(node.nodeRef).id;
 	    if(node.isFavourite)
-	        siteService.removeFavourite(nodeId).then(function () {
+			siteService.removeFavourite(nodeId)
+			.then(function () {
                 node.isFavourite = false;
             });
 	    else
-            siteService.addFavourite(nodeId).then(function () {
+			siteService.addFavourite(nodeId)
+			.then(function () {
                 node.isFavourite = true;
             });
     }

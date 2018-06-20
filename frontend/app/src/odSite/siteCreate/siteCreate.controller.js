@@ -5,10 +5,10 @@ angular
     .controller('SiteCreateController', SiteCreateController);
 
 function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, 
-    notificationsService, authService, siteService, MemberService, APP_CONFIG) {
+    notificationsService, UserService, siteService, MemberService, APP_CONFIG) {
     var vm = this;
 
-    var currentUser = authService.getUserInfo().user;
+    var currentUser = UserService.get();
 
     vm.type = sitetype;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('openDeskApp.auth', ['ngMaterial'])
+angular.module('openDeskApp.auth', [])
         .config(config);
 
 

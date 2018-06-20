@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('openDeskApp.discussion')
-.factory('discussionService', function ($http, nodeRefUtilsService, authService, sessionService, preferenceService) {
+.factory('discussionService', function ($http, nodeRefUtilsService, UserService, preferenceService) {
 
     var restBaseUrl = '/alfresco/s/api';
-    var currentUser = authService.getUserInfo().user.userName;
+    var currentUser = UserService.get().userName;
     var selectedDiscussion = [];
 
     var service = {
