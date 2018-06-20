@@ -6,7 +6,6 @@ angular
 
 function sessionService($window) {
   var userInfo;
-  var sessionTicket;
 
   var service = {
     clearRetainedLocation: clearRetainedLocation,
@@ -20,22 +19,12 @@ function sessionService($window) {
     makeURL: makeURL,
     retainCurrentLocation: retainCurrentLocation,
     makeAvatarUrl: makeAvatarUrl,
-    setAndSaveAvatarToUserInfo: setAndSaveAvatarToUserInfo,
-    getTicket: getTicket,
-    setTicket: setTicket
+    setAndSaveAvatarToUserInfo: setAndSaveAvatarToUserInfo
   };
 
   return service;
 
-  function getTicket () {
-    return sessionTicket;
-  }
-
-  function setTicket (ticket) {
-    sessionTicket = ticket;
-  }
-
-  function setUserInfo (info) {
+  function setUserInfo(info) {
     userInfo = info;
     if (userInfo.user !== undefined) {
       var avatar = makeAvatarUrl(userInfo.user);
@@ -47,28 +36,28 @@ function sessionService($window) {
     }
   }
 
-  function saveUserInfoToSession (userInfo){
+  function saveUserInfoToSession(userInfo) {
     $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));
   }
 
-  function isAdmin () {
+  function isAdmin() {
     if (userInfo === null || userInfo === undefined) return false;
     return userInfo.user.capabilities.isAdmin;
   }
 
-  function clearRetainedLocation () {
+  function clearRetainedLocation() {
     $window.sessionStorage.setItem('retainedLocation', "");
   }
 
-  function getUserInfo () {
+  function getUserInfo() {
     return userInfo;
   }
 
-  function getRetainedLocation () {
+  function getRetainedLocation() {
     return $window.sessionStorage.getItem('retainedLocation');
   }
 
-  function isExternalUser () {
+  function isExternalUser() {
     if (userInfo === null || userInfo === undefined) {
       return false;
     }
@@ -76,13 +65,13 @@ function sessionService($window) {
     return externalUserNameRe.test(userInfo.user.userName);
   }
 
-  function loadUserInfo () {
+  function loadUserInfo() {
     if ($window.sessionStorage.getItem('userInfo')) {
       userInfo = angular.fromJson($window.sessionStorage.getItem('userInfo'));
     }
   }
 
-  function makeURL (url) {
+  function makeURL(url) {
     if (sessionTicket) {
       return url + (url.indexOf("?") === -1 ? "?" : "&") + "alf_ticket=" + sessionTicket;
     } else {
@@ -90,17 +79,17 @@ function sessionService($window) {
     }
   }
 
-  function retainCurrentLocation () {
+  function retainCurrentLocation() {
     clearRetainedLocation();
     var location = $window.location.href;
     if (location === 'login') return;
-    
+
     $window.sessionStorage.setItem('retainedLocation', location);
   }
 
-  function makeAvatarUrl (user) {
+  function makeAvatarUrl(user) {
     var avatar;
-    if(user.avatar === undefined) {
+    if (user.avatar === undefined) {
       avatar = "app/assets/img/avatars/blank-profile-picture.png";
     } else {
       avatar = user.avatar.replace("/thumbnails/avatar", "");
@@ -110,12 +99,12 @@ function sessionService($window) {
     return avatar;
   }
 
-  function setAvatarToUserInfo (avatar) {
-    if(userInfo.user !== undefined)
+  function setAvatarToUserInfo(avatar) {
+    if (userInfo.user !== undefined)
       userInfo.user.avatar = avatar;
   }
 
-  function setAndSaveAvatarToUserInfo (user) {
+  function setAndSaveAvatarToUserInfo(user) {
     var avatar = makeAvatarUrl(user);
     setAvatarToUserInfo(avatar);
     saveUserInfoToSession(userInfo);
