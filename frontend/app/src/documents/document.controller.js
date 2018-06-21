@@ -368,7 +368,7 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
         if (isVersion()) {
             showEditVersionDialog('only-office');
         } else {
-            $window.open($state.href('onlyOfficeEdit', {'nodeRef': $stateParams.doc }));
+            $window.open($state.href('onlyOfficeEdit', {'nodeRef': vm.doc.node.nodeRef.split('/')[3] }));
         }
     }
 
