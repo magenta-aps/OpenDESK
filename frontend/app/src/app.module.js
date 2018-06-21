@@ -6,7 +6,6 @@ angular
     'ngMaterial',
     'ngMessages',
     'ngCookies',
-    'material.wizard',
     'ui.router',
     'rt.encodeuri',
     'ngResource',
