@@ -155,7 +155,6 @@ function documentService($http, $translate, $mdToast, $q, EDITOR_CONFIG, APP_BAC
             nodeRef: nodeRef,
             version: version
         }).then(function (response) {
-			console.log("response = " +  response);
 			return response;
         });
     }

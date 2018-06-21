@@ -134,7 +134,6 @@ function EditSiteMemberController(sitedata, $scope, $mdDialog, $mdToast, $transl
     }
 
     function createNotification(userName, subject, message, link, wtype, project) {
-        console.log('creating notification...');
         notificationsService.addNotice(userName, subject, message, link, wtype, project).then(function (val) {});
     }
 

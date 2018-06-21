@@ -245,7 +245,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             PARAM_USER: user,
             PARAM_GROUP: group
         }).then(function (response) {
-            console.log(response);
             return response.data;
         });
 

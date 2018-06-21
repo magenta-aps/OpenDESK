@@ -153,9 +153,7 @@ function SiteCreateController(sitetype, $scope, $state, $mdToast, $translate, $q
             var userName = user.userName;
             promise = siteService.addUser(siteShortName, userName, groupName).then(
                 function (response) {
-
                     createSiteNotification(siteName, userName, link);
-                    console.log('Added user ' + userName + ' to ' + groupName + ' in project ' + siteName);
                 },
                 function (err) {
                     console.log('ERROR: Problem creating user in project group ' + groupName);

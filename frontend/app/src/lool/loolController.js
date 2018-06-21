@@ -41,8 +41,6 @@ function LoolController($state, $stateParams, loolService, documentService, $mdT
         var parentNodeId = $stateParams.nodeRef.split('/')[3];
 
         if ($stateParams.versionLabel != null && $stateParams.parent != null) {
-            console.log($stateParams.parent);
-            console.log($stateParams.versionLabel);
 
             var sp = $stateParams.versionLabel.split(".");
             var bump = (parseInt(sp[1]) + 1);

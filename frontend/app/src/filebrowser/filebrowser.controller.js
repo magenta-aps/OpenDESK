@@ -304,8 +304,6 @@ angular
                     title: pathArr[a],
                     link: link
                 });
-                console.log($stateParams.nodeRef);
-                console.log("Added link: " + link);
                 pathLink = pathLink + pathArr[a] + '/';
             }
         }

@@ -284,7 +284,6 @@ function DocumentController($scope, $timeout, $translate, documentService, userS
     }
 
     function loadPreview() {
-        console.log('load preview');
         // todo check if not ok type like pdf, jpg and png - then skip this step
         if (docHasParent) {
             vm.store = 'versionStore://version2Store/';
