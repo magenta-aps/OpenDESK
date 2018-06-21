@@ -89,34 +89,34 @@
 							isContained:vm.searchMembers |
 							filter: vm.search" id="{{project.shortName}}">
 								<td class="icon">
-									<a class="od-filebrowser-link" ui-sref="project({ projekt: '{{project.shortName}}' })" ui-sref-active="active">
+									<a class="od-filebrowser-link" ui-sref="project({ projekt: project.shortName })" ui-sref-active="active">
 										<md-icon>{{project.type === "Project" ? "forum" : "content_paste"}}</md-icon>
 									</a>
 								</td>
 								<td>
-									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
+									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: project.shortName})" ui-sref-active="active">
 										<h3 class="">{{ project.title }}</h3>
 										<span>{{ project.description }}</span>
 									</a>
 
 								</td>
 								<td hide show-gt-xs>
-									<a class="od-filebrowser-link" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
+									<a class="od-filebrowser-link" ui-sref="project({ projekt: project.shortName})" ui-sref-active="active">
 										{{ project.manager.displayName }}
 									</a>
 								</td>
 								<td hide show-gt-md ng-if="vm.config.enableProjects">
-									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
+									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: project.shortName})" ui-sref-active="active">
 										{{ project.center_name }}
 									</a>
 								</td>
 								<td hide show-gt-xs ng-if="vm.config.enableProjects">
-									<a class="od-filebrowser-link" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
+									<a class="od-filebrowser-link" ui-sref="project({ projekt: project.shortName})" ui-sref-active="active">
 										<div ng-if="project.state != ''"> {{'PROJECT.STATUS.' + project.state | translate}}</div>
 									</a>
 								</td>
 								<td hide show-gt-sm>
-									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: '{{project.shortName}}'})" ui-sref-active="active">
+									<a class="od-filebrowser-link overflow" ui-sref="project({ projekt: project.shortName})" ui-sref-active="active">
 										{{ project.modified | date:'dd. MMMM yyyy' }}
 									</a>
 								</td>

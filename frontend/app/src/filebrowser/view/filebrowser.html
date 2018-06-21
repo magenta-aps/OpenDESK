@@ -74,7 +74,7 @@
         </od-template-list>
 
         <md-button ng-if="isSite && vm.permissions.isManager" class="md-icon-button md-primary "
-            ng-click="vm.newLinkDialog($event)">
+            ng-click="vm.newLinkDialog()">
             <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
             <md-icon>link</md-icon>
         </md-button>
