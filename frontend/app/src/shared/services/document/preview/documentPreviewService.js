@@ -3,7 +3,7 @@ angular
     .factory('documentPreviewService', DocumentPreviewService);
 
 function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService, sessionService,
-                                $http, $sce, ALFRESCO_URI, EDITOR_CONFIG) {
+                                $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
 
     var templatesUrl = 'app/src/shared/services/document/preview/view/';
 
@@ -69,6 +69,7 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
     function getPlugins() {
         var plugins = [
             audioViewer(),
+            onlyOfficeViewer(),
             pdfViewer(),
             imageViewer(),
             videoViewer(),
@@ -148,6 +149,16 @@ function DocumentPreviewService($mdDialog, $timeout, alfrescoDocumentService, al
             }
         };
         var result = generalPreviewPlugin();
+        return angular.extend(result, viewer);
+    }
+
+    function onlyOfficeViewer() {
+        var viewer = {
+            mimeTypes: APP_BACKEND_CONFIG.editors.onlyOffice ? EDITOR_CONFIG.lool.mimeTypes : [],
+            templateUrl: 'onlyOffice.html'
+        };
+
+        var result = generalPlaybackPlugin();
         return angular.extend(result, viewer);
     }
 

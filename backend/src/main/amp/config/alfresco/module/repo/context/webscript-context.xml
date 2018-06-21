@@ -88,6 +88,12 @@
 		<property name="repository" ref="repositoryHelper"/>
 	</bean>
 
+	<bean id="webscript.editors.editors.get"
+		  class="dk.opendesk.webscripts.editors.GetEditors"
+		  parent="webscript">
+		<property name="editorBean" ref="editorBean"/>
+	</bean>
+
 	<bean id="webscript.sites.projectdepartment.post"
 		  class="dk.opendesk.webscripts.sites.ProjectDepartment"
 		  parent="webscript">

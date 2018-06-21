@@ -79,7 +79,7 @@
     "LIST_VIEW": "List view",
     "GRID_VIEW": "Grid view",
     "DOWNLOAD_TEMPLATE_CSV": "Download template CSV",
-    "LOCKED_BY": "Locked by {{locked_by}}",
+    "LOCKED_BY": "The document is being edited by {{locked_by}}",
     "CONGRATULATIONS": "Congratulations!",
     "ALL": "All",
     "RENAME": "Rename",
@@ -241,8 +241,7 @@
     "DOCUMENT_NAME": "Document name",
     "VERSION_DESCRIPTION": "Version description",
     "EDIT_PROPERTIES": "Edit information",
-    "EDIT_DOCUMENT": "Edit document",
-    "EDIT_DOCUMENT_SHAREPOINT": "Edit document in MS Office",
+    "EDIT_IN": "Edit in",
     "PRINT": "Print",
     "UPLOAD_NEW_VERSION": "Upload new version",
     "PREVIEW": "Preview",
@@ -1045,25 +1044,13 @@
     "MAP" : "Map"
   },
   "CONFIGURATION": {
-    "LINK_TO": "Link to ",
-    "enableESDH": "Enabling of SBSYS",
-    "enableProjects": "Enabling of  projects",
-    "enableSites": "Enabling of sites",
-    "enableChat": "Enabling of chat",
-    "dashboardLinks": {
-      "dashboard": "Dashboard",
-      "intra" : "Intra",
-      "email" : "Email",
-      "calendar" : "Calendar",
-      "projects" : "Projects",
-      "keyNumbers" : "Key numbers",
-      "workTime" : "15 points on work time",
-      "esdh" : "SBSYS",
-      "citrix" : "Citrix",
-      "map" : "Map"
-    },
+    "ENABLE": "Enable",
+    "enableESDH": "SBSYS",
+    "enableProjects": "Projects",
+    "enableSites": "Sites",
+    "enableChat": "Chat",
     "public" : {
-      "appName": "Name of OpenDesk instance"
+      "appName": "Name of OpenDesk"
     }
   },
   "GROUPS": {
@@ -1079,6 +1066,12 @@
     "PATH": {
       "FAILURE": "Edit in MS Office with AOS is not possible because the URL is longere than 256 signs. Use a shorter path to reduce the length. The URL: {{url}}."
     }
+  },
+  "EDITORS" : {
+    "LIBREOFFICE": "LibreOffice",
+    "ONLYOFFICE": "OnlyOffice",
+    "MSOFFICE": "MS Office",
+    "PREVIEW_ERROR": "The document cannot be displayed."
   },
   "PLACEHOLDERS": {
     "FIRSTNAME" : "First Name",

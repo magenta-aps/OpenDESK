@@ -4,10 +4,10 @@ angular
     .module('openDeskApp.filebrowser')
     .controller('FilebrowserController', FilebrowserController);
     
-    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout, Upload,
+    function FilebrowserController($window, $state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout, Upload,
         siteService, fileUtilsService, filebrowserService, filterService, alfrescoDownloadService,
         documentPreviewService, documentService, alfrescoNodeUtils, userService, $translate, APP_BACKEND_CONFIG,
-        sessionService, headerService, browserService, notificationsService) {
+        sessionService, headerService, browserService, notificationsService, editOnlineMSOfficeService) {
             
         var vm = this;
         var documentNodeRef = "";
@@ -60,8 +60,10 @@ angular
 
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
+    vm.editInMSOffice = editInMSOffice;
+    vm.editInLibreOffice = editInLibreOffice;
+    vm.editInOnlyOffice = editInOnlyOffice;
     $scope.previewDocument = previewDocument;
-    $scope.goToLOEditPage = goToLOEditPage;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
     vm.createReviewNotification = createReviewNotification;
 
@@ -207,8 +209,16 @@ angular
     function processContent(content) {
         angular.forEach(content, function(item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
-            item.loolEditable = documentService.isLoolEditable(item.mimeType);
-            item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
+
+            var isLocked = item.isLocked;
+            var lockType;
+            if(isLocked)
+                lockType = item.lockType;
+            var mimeType = item.mimeType;
+
+            item.loolEditable = documentService.isLibreOfficeEditable(mimeType, isLocked);
+            item.msOfficeEditable = documentService.isMsOfficeEditable(mimeType, isLocked);
+            item.onlyOfficeEditable = documentService.isOnlyOfficeEditable(mimeType, isLocked, lockType);
         });
     }
     
@@ -352,12 +362,26 @@ angular
         documentPreviewService.previewDocument(nodeRef);
     }
 
-    
-    function goToLOEditPage(nodeRef, fileName) {
-        $state.go('lool', {
+    function editInLibreOffice(nodeRef, fileName) {
+        var params = {
             'nodeRef': nodeRef,
             'fileName': fileName
+        };
+        $state.go('lool', params);
+    }
+
+    function editInMSOffice(nodeRef) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
+        documentService.getDocument(nodeId).then(function (response) {
+            var doc = response.item;
+            var docMetadata = response.metadata;
+            editOnlineMSOfficeService.editOnline(undefined, doc, docMetadata);
         });
+    }
+
+    function editInOnlyOffice(nodeRef) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
+        $window.open($state.href('onlyOfficeEdit', {'nodeRef': nodeId }));
     }
     
     function reviewDocumentsDialog(event, nodeRef) {

@@ -20,6 +20,7 @@ function LoolController($state, $stateParams, loolService, documentService, $mdT
         );
     }
     else {
+        vm.isDisplayed = true;
         vm.nodeRef = $stateParams.nodeRef;
         vm.nodeId = nodeRefUtilsService.getId($stateParams.nodeRef);
         documentService.getDocument(vm.nodeId).then(function (document) {
@@ -72,6 +73,8 @@ function LoolController($state, $stateParams, loolService, documentService, $mdT
                 $('#libreoffice-online').append(form);
                 $('#loleafletform').submit();
             });
+        }).catch(function (response) {
+            vm.isDisplayed = false;
         });
     }
 }
