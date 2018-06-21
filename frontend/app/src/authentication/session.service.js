@@ -2,10 +2,10 @@
 
 angular
   .module('openDeskApp')
-  .factory('sessionService', sessionService);
+  .factory('sessionService', sessionService)
 
-function sessionService($window) {
-  var userInfo;
+function sessionService ($window) {
+  var userInfo
 
   var service = {
     clearRetainedLocation: clearRetainedLocation,
@@ -20,49 +20,51 @@ function sessionService($window) {
     retainCurrentLocation: retainCurrentLocation,
     makeAvatarUrl: makeAvatarUrl,
     setAndSaveAvatarToUserInfo: setAndSaveAvatarToUserInfo
-  };
+  }
 
-  return service;
+  return service
 
-  function setUserInfo(info) {
-    userInfo = info;
+  function setUserInfo (info) {
+    userInfo = info
     if (userInfo.user !== undefined) {
-      var avatar = makeAvatarUrl(userInfo.user);
-      setAvatarToUserInfo(avatar);
-      userInfo.user.displayName = userInfo.user.firstName;
-      if (userInfo.user.lastName !== "")
-        userInfo.user.displayName += " " + userInfo.user.lastName;
-      saveUserInfoToSession(userInfo);
+      var avatar = makeAvatarUrl(userInfo.user)
+      setAvatarToUserInfo(avatar)
+      userInfo.user.displayName = userInfo.user.firstName
+      if (userInfo.user.lastName !== '') {
+        userInfo.user.displayName += ' ' + userInfo.user.lastName
+      }
+
+      saveUserInfoToSession(userInfo)
     }
   }
 
-  function saveUserInfoToSession(userInfo) {
-    $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo));
+  function saveUserInfoToSession (userInfo) {
+    $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo))
   }
 
-  function isAdmin() {
-    if (userInfo === null || userInfo === undefined) return false;
-    return userInfo.user.capabilities.isAdmin;
+  function isAdmin () {
+    if (userInfo === null || userInfo === undefined) return false
+    return userInfo.user.capabilities.isAdmin
   }
 
-  function clearRetainedLocation() {
-    $window.sessionStorage.setItem('retainedLocation', "");
+  function clearRetainedLocation () {
+    $window.sessionStorage.setItem('retainedLocation', '');
   }
 
-  function getUserInfo() {
-    return userInfo;
+  function getUserInfo () {
+    return userInfo
   }
 
-  function getRetainedLocation() {
-    return $window.sessionStorage.getItem('retainedLocation');
+  function getRetainedLocation () {
+    return $window.sessionStorage.getItem('retainedLocation')
   }
 
-  function isExternalUser() {
+  function isExternalUser () {
     if (userInfo === null || userInfo === undefined) {
-      return false;
+      return false
     }
-    var externalUserNameRe = /.+_.+(@.+)?$/;
-    return externalUserNameRe.test(userInfo.user.userName);
+    var externalUserNameRe = /.+_.+(@.+)?$/
+    return externalUserNameRe.test(userInfo.user.userName)
   }
 
   function loadUserInfo() {
@@ -71,42 +73,44 @@ function sessionService($window) {
     }
   }
 
-  function makeURL(url) {
+  function makeURL (url) {
+    var sessionTicket = getUserInfo().ticket
     if (sessionTicket) {
-      return url + (url.indexOf("?") === -1 ? "?" : "&") + "alf_ticket=" + sessionTicket;
+      return url + (url.indexOf('?') === -1 ? '?' : '&') + 'alf_ticket=' + sessionTicket
     } else {
-      return url;
+      return url
     }
   }
 
-  function retainCurrentLocation() {
-    clearRetainedLocation();
-    var location = $window.location.href;
-    if (location === 'login') return;
+  function retainCurrentLocation () {
+    clearRetainedLocation()
+    var location = $window.location.href
+    if (location === 'login') return
 
-    $window.sessionStorage.setItem('retainedLocation', location);
+    $window.sessionStorage.setItem('retainedLocation', location)
   }
 
-  function makeAvatarUrl(user) {
-    var avatar;
+  function makeAvatarUrl (user) {
+    var avatar
     if (user.avatar === undefined) {
-      avatar = "app/assets/img/avatars/blank-profile-picture.png";
+      avatar = 'app/assets/img/avatars/blank-profile-picture.png'
     } else {
-      avatar = user.avatar.replace("/thumbnails/avatar", "");
-      avatar = makeURL("/alfresco/s/" + avatar);
+      avatar = user.avatar.replace('/thumbnails/avatar', '')
+      avatar = makeURL(`/alfresco/s/${avatar}`)
     }
 
-    return avatar;
+    return avatar
   }
 
-  function setAvatarToUserInfo(avatar) {
-    if (userInfo.user !== undefined)
-      userInfo.user.avatar = avatar;
+  function setAvatarToUserInfo (avatar) {
+    if (userInfo.user !== undefined) {
+      userInfo.user.avatar = avatar
+    }
   }
 
-  function setAndSaveAvatarToUserInfo(user) {
-    var avatar = makeAvatarUrl(user);
-    setAvatarToUserInfo(avatar);
-    saveUserInfoToSession(userInfo);
+  function setAndSaveAvatarToUserInfo (user) {
+    var avatar = makeAvatarUrl(user)
+    setAvatarToUserInfo(avatar)
+    saveUserInfoToSession(userInfo)
   }
 }

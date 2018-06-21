@@ -1,51 +1,54 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp.header')
-    .controller('HeaderController', HeaderController);
+  .module('openDeskApp.header')
+  .controller('HeaderController', HeaderController)
 
-function HeaderController($scope, $state, $mdSidenav, headerService, UserService, notificationsService) {
-    var vm = this;
+function HeaderController ($scope, $state, $mdSidenav, headerService, UserService, notificationsService) {
+  var vm = this
 
-    vm.title = '';
-    vm.toggleAppDrawer = buildToggler('appDrawer');
-    vm.toggleNotifications = function() {
-        setAllSeen();
-        $mdSidenav('notifications').toggle();
-    };
-    vm.toggleSystemSettings = toggleSystemSettings;
-    vm.toggleUserPanel = buildToggler('userpanel');
-    vm.unseenNotifications = 0;
-    vm.user = UserService.get();
+  vm.title = ''
+  vm.toggleAppDrawer = buildToggler('appDrawer')
+  vm.toggleNotifications = function () {
+    setAllSeen()
+    $mdSidenav('notifications')
+      .toggle()
+  }
+  vm.toggleSystemSettings = toggleSystemSettings
+  vm.toggleUserPanel = buildToggler('userpanel')
+  vm.unseenNotifications = 0
+  vm.user = UserService.get()
 
-    $scope.headerService = headerService;
-    $scope.notificationsService = notificationsService;
+  $scope.headerService = headerService
+  $scope.notificationsService = notificationsService
 
-    $scope.$watch('headerService.getTitle()', function (newVal) {
-        vm.title = newVal;
-    });
+  $scope.$watch('headerService.getTitle()', function (newVal) {
+    vm.title = newVal
+  })
 
-    $scope.$watch('notificationsService.getUnseenCount()', function (newVal) {
-        vm.unseenNotifications = newVal;
-    });
+  $scope.$watch('notificationsService.getUnseenCount()', function (newVal) {
+    vm.unseenNotifications = newVal
+  })
 
-    function toggleSystemSettings() {
-        $state.go('systemsettings');
+  function toggleSystemSettings () {
+    $state.go('systemsettings')
+  }
+
+  function buildToggler (navID) {
+    return function () {
+      $mdSidenav(navID)
+        .toggle()
     }
+  }
 
-    function buildToggler(navID) {
-        return function () {
-            $mdSidenav(navID).toggle();
-        };
-    }
+  function setAllSeen () {
+    notificationsService.setAllSeen(vm.user.userName)
+      .then(function () {
+        updateNotifications()
+      })
+  }
 
-    function setAllSeen() {
-        notificationsService.setAllSeen(vm.user.userName).then(function () {
-            updateNotifications();
-        });
-    }
-
-    function updateNotifications() {
-        notificationsService.get(vm.user.userName);
-    }
+  function updateNotifications () {
+    notificationsService.get(vm.user.userName)
+  }
 }
