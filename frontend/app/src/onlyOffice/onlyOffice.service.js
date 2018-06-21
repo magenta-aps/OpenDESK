@@ -3,7 +3,7 @@
 angular.module('openDeskApp.onlyOffice')
     .factory('onlyOfficeService', onlyOfficeService);
 
-function onlyOfficeService($http, alfrescoNodeUtils) {
+function onlyOfficeService($http, alfrescoNodeUtils, sessionService) {
 
     var restBaseUrl = '/alfresco/service';
 
@@ -61,6 +61,7 @@ function onlyOfficeService($http, alfrescoNodeUtils) {
             height = "600px";
         return $http.get(url, {}).then(function (response) {
             response = response.data;
+            var userInfo = sessionService.getUserInfo();
             var docName = response.docTitle;
             var docType = docName.substring(docName.lastIndexOf(".") + 1).trim().toLowerCase();
             var docConfig = {
@@ -82,9 +83,9 @@ function onlyOfficeService($http, alfrescoNodeUtils) {
                     mode: mode,
                     callbackUrl: response.callbackUrl,
                     user: {
-                        id: response.id,
-                        firstname: response.firstName,
-                        lastname: response.lastName
+                        id: userInfo.user.userName,
+                        firstname: userInfo.user.firstName,
+                        lastname: userInfo.user.lastName
                     }
                 }
             };
