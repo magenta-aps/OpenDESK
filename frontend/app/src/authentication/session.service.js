@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular
   .module('openDeskApp')
@@ -30,9 +30,8 @@ function sessionService ($window) {
       var avatar = makeAvatarUrl(userInfo.user)
       setAvatarToUserInfo(avatar)
       userInfo.user.displayName = userInfo.user.firstName
-      if (userInfo.user.lastName !== '') {
+      if (userInfo.user.lastName !== '')
         userInfo.user.displayName += ' ' + userInfo.user.lastName
-      }
 
       saveUserInfoToSession(userInfo)
     }
@@ -48,7 +47,7 @@ function sessionService ($window) {
   }
 
   function clearRetainedLocation () {
-    $window.sessionStorage.setItem('retainedLocation', '');
+    $window.sessionStorage.setItem('retainedLocation', '')
   }
 
   function getUserInfo () {
@@ -60,26 +59,24 @@ function sessionService ($window) {
   }
 
   function isExternalUser () {
-    if (userInfo === null || userInfo === undefined) {
+    if (userInfo === null || userInfo === undefined)
       return false
-    }
+
     var externalUserNameRe = /.+_.+(@.+)?$/
     return externalUserNameRe.test(userInfo.user.userName)
   }
 
-  function loadUserInfo() {
-    if ($window.sessionStorage.getItem('userInfo')) {
-      userInfo = angular.fromJson($window.sessionStorage.getItem('userInfo'));
-    }
+  function loadUserInfo () {
+    if ($window.sessionStorage.getItem('userInfo'))
+      userInfo = angular.fromJson($window.sessionStorage.getItem('userInfo'))
   }
 
   function makeURL (url) {
     var sessionTicket = getUserInfo().ticket
-    if (sessionTicket) {
+    if (sessionTicket)
       return url + (url.indexOf('?') === -1 ? '?' : '&') + 'alf_ticket=' + sessionTicket
-    } else {
+    else
       return url
-    }
   }
 
   function retainCurrentLocation () {
@@ -103,9 +100,8 @@ function sessionService ($window) {
   }
 
   function setAvatarToUserInfo (avatar) {
-    if (userInfo.user !== undefined) {
+    if (userInfo.user !== undefined)
       userInfo.user.avatar = avatar
-    }
   }
 
   function setAndSaveAvatarToUserInfo (user) {

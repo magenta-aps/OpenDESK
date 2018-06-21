@@ -1,45 +1,44 @@
-'use strict';
+'use strict'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('DeleteController', DeleteController);
-  
-function DeleteController($rootScope, $mdDialog, data, siteService, ContentService) {
-  var vm = this;
+  .controller('DeleteController', DeleteController)
 
-  vm.data = data;
+function DeleteController ($rootScope, $mdDialog, data, siteService, ContentService) {
+  var vm = this
 
-  vm.cancel = cancel;
-  vm.delete = deleteContent;
+  vm.data = data
 
-  function deleteContent() {
-    if(vm.data.contentType != 'cmis:link') {
-      deleteFile(vm.data.nodeRef);
-    } else {
-      deleteLink(vm.data.nodeid, vm.data.destination_nodeid);
-    }
+  vm.cancel = cancel
+  vm.delete = deleteContent
+
+  function deleteContent () {
+    if (vm.data.contentType !== 'cmis:link')
+      deleteFile(vm.data.nodeRef)
+    else
+      deleteLink(vm.data.nodeid, vm.data.destination_nodeid)
   }
 
-  function deleteFile(nodeRef) {
+  function deleteFile (nodeRef) {
     ContentService.delete(nodeRef)
-    .then(function () {
-      hideAndReload();
-    });
+      .then(function () {
+        hideAndReload()
+      })
   }
 
-  function deleteLink(source, destination) {
+  function deleteLink (source, destination) {
     siteService.deleteLink(source, destination)
-    .then(function () {
-      hideAndReload();
-    });
+      .then(function () {
+        hideAndReload()
+      })
   }
 
-  function hideAndReload() {
-    $rootScope.$broadcast('updateFilebrowser');
-    cancel();
+  function hideAndReload () {
+    $rootScope.$broadcast('updateFilebrowser')
+    cancel()
   }
 
-  function cancel() {
-    $mdDialog.cancel();
+  function cancel () {
+    $mdDialog.cancel()
   }
 }

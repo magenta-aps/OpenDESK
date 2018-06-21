@@ -1,21 +1,19 @@
 angular.module('openDeskApp.dashboard', ['ngMaterial'])
-        .config(config);
+  .config(config)
 
-function config($stateProvider, USER_ROLES) {
-
-    $stateProvider.state('dashboard', {
-        parent: 'site',
-        url: '/',
-        views: {
-            'content@': {
-                templateUrl: 'app/src/dashboard/view/dashboard.html',
-                controller: 'DashboardController',
-                controllerAs: 'vm'
-            }
-        },
-        params: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    });
-
-};
+function config ($stateProvider, USER_ROLES) {
+  $stateProvider.state('dashboard', {
+    parent: 'site',
+    url: '/',
+    views: {
+      'content@': {
+        templateUrl: 'app/src/dashboard/view/dashboard.html',
+        controller: 'DashboardController',
+        controllerAs: 'vm'
+      }
+    },
+    params: {
+      authorizedRoles: [USER_ROLES.user]
+    }
+  })
+}

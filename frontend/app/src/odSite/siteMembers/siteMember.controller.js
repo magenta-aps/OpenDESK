@@ -1,67 +1,67 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp.site')
-    .controller('SiteMemberController', SiteMemberController);
+  .module('openDeskApp.site')
+  .controller('SiteMemberController', SiteMemberController)
 
-function SiteMemberController($scope, $stateParams, $mdDialog, siteService, groupService, alfrescoDownloadService) {
-  var vm = this;
-  
-  vm.doPDF = doPDF;
-  vm.openMemberInfo = groupService.openMemberInfo;
-  vm.loadMembers = loadMembers;
-  vm.editSiteGroups = editSiteGroups;
-  vm.site = {};
-  vm.permissions = {};
+function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, groupService, alfrescoDownloadService) {
+  var vm = this
 
-  $scope.siteService = siteService;
+  vm.doPDF = doPDF
+  vm.openMemberInfo = groupService.openMemberInfo
+  vm.loadMembers = loadMembers
+  vm.editSiteGroups = editSiteGroups
+  vm.site = {}
+  vm.permissions = {}
 
-  activate();
+  $scope.siteService = siteService
+
+  activate()
 
   $scope.$watch('siteService.getSite()', function (site) {
-    vm.site = site;
-    loadMembers();
-  });
+    vm.site = site
+    loadMembers()
+  })
 
-  $scope.$on('updateMemberList', function() {
-    loadMembers();
-  });   
+  $scope.$on('updateMemberList', function () {
+    loadMembers()
+  })
 
-  function activate() {
-    getSiteUserPermissions();
+  function activate () {
+    getSiteUserPermissions()
   }
 
-  function getSiteUserPermissions() {
+  function getSiteUserPermissions () {
     siteService.getSiteUserPermissions($stateParams.projekt)
-    .then(function (permissions) {
-      vm.permissions = permissions;
-    });
+      .then(function (permissions) {
+        vm.permissions = permissions
+      })
   }
 
-  function doPDF() {
+  function doPDF () {
     siteService.createMembersPDF(vm.site.shortName)
-    .then(function (response) {
-      alfrescoDownloadService.downloadFile("workspace/SpacesStore/" + response[0].Noderef, "Medlemsliste.pdf");
-    });
+      .then(function (response) {
+        alfrescoDownloadService.downloadFile('workspace/SpacesStore/' + response[0].Noderef, 'Medlemsliste.pdf')
+      })
   }
 
-  function loadMembers() {
+  function loadMembers () {
     siteService.getGroupsAndMembers(vm.site.shortName)
-    .then(function (groups) {
-      vm.groups = groups;
-    });
+      .then(function (groups) {
+        vm.groups = groups
+      })
   }
 
-  function editSiteGroups(ev) {
+  function editSiteGroups (ev) {
     $mdDialog.show({
       templateUrl: 'app/src/odSite/editMembers/editMembers.tmpl.html',
       controller: 'EditSiteMemberController',
       controllerAs: 'vm',
       locals: {
-          sitedata: vm.site
+        sitedata: vm.site
       },
       targetEvent: ev,
       clickOutsideToClose: true
-    });
+    })
   }
 }

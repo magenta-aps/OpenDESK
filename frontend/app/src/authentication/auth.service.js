@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 angular
   .module('openDeskApp')
-  .factory('authService', authService);
+  .factory('authService', authService)
 
-function authService($http, $window, $state, sessionService, MemberService, notificationsService) {
+function authService ($http, $window, $state, sessionService, MemberService, notificationsService) {
   var service = {
     login: login,
     logout: logout,
@@ -15,71 +15,66 @@ function authService($http, $window, $state, sessionService, MemberService, noti
     getUserInfo: getUserInfo,
     revalidateUser: revalidateUser,
     ssoLogin: ssoLogin
-  };
-
-  return service;
-
-  function getUserInfo() {
-    return sessionService.getUserInfo();
   }
 
-  function ssoLogin() {
-    var userInfo = {};
-    return $http.get("/alfresco/s/ssologin")
+  return service
+
+  function getUserInfo () {
+    return sessionService.getUserInfo()
+  }
+
+  function ssoLogin () {
+    var userInfo = {}
+    return $http.get('/alfresco/s/ssologin')
       .then(function (response) {
-        var username = response.data;
-        return $http.get("/api/people/" + username)
+        var username = response.data
+        return $http.get('/api/people/' + username)
           .then(function (response) {
-            userInfo.user = response.data;
-            sessionService.setUserInfo(userInfo);
-            return addUserToSession(username);
+            userInfo.user = response.data
+            sessionService.setUserInfo(userInfo)
+            return addUserToSession(username)
           }, function (error) {
-            console.log(error);
-            return error;
-          });
-      });
+            console.log(error)
+            return error
+          })
+      })
   }
 
-  function authFailedSafari(response) {
-    return response.data && response.data.indexOf('Safari') != -1;
-  }
-
-  function login(username, password) {
-    var userInfo = {};
+  function login (username, password) {
+    var userInfo = {}
     var payload = {
       username: username,
       password: password
-    };
-    return $http.post("/api/login", payload)
+    }
+    return $http.post('/api/login', payload)
       .then(function (response) {
-        userInfo.ticket = response.data.data.ticket;
-        sessionService.setUserInfo(userInfo);
-        return addUserToSession(username);
+        userInfo.ticket = response.data.data.ticket
+        sessionService.setUserInfo(userInfo)
+        return addUserToSession(username)
       }, function (reason) {
-        console.log(reason);
-        return reason;
-      });
+        console.log(reason)
+        return reason
+      })
   }
 
-  function logout() {
-    var userInfo = sessionService.getUserInfo();
+  function logout () {
+    var userInfo = sessionService.getUserInfo()
 
     if (userInfo) {
-      var ticket = userInfo.ticket;
-      sessionService.clearRetainedLocation();
+      var ticket = userInfo.ticket
+      sessionService.clearRetainedLocation()
       $http.delete('/api/login/ticket/' + ticket, {
-          alf_ticket: ticket
-        })
+        alf_ticket: ticket
+      })
         .then(function (response) {
-          notificationsService.stopUpdate();
-          $state.go('login');
-        });
+          notificationsService.stopUpdate()
+          $state.go('login')
+        })
     }
-
   }
 
-  function loggedin() {
-    return sessionService.getUserInfo();
+  function loggedin () {
+    return sessionService.getUserInfo()
   }
 
   /**
@@ -88,46 +83,44 @@ function authService($http, $window, $state, sessionService, MemberService, noti
    * @param email
    * @returns {*}
    */
-  function changePassword(email) {
-    return $http.post("/api/opendesk/reset-user-password", {
+  function changePassword (email) {
+    return $http.post('/api/opendesk/reset-user-password', {
       email: email
     }).then(function (response) {
-      return response;
-    });
+      return response
+    })
   }
 
-  function isAuthenticated() {
-    return sessionService.getUserInfo();
+  function isAuthenticated () {
+    return sessionService.getUserInfo()
   }
 
-  function isAuthorized(authorizedRoles) {
-    var userInfo = sessionService.getUserInfo();
-    if (typeof userInfo === 'undefined') {
-      return false;
-    }
+  function isAuthorized (authorizedRoles) {
+    var userInfo = sessionService.getUserInfo()
+    if (typeof userInfo === 'undefined')
+      return false
 
-    if (!angular.isArray(authorizedRoles)) {
-      authorizedRoles = [authorizedRoles];
-    }
+    if (!angular.isArray(authorizedRoles))
+      authorizedRoles = [authorizedRoles]
 
     return userInfo.user.capabilities.isAdmin ||
-      (authorizedRoles.length > 0 && authorizedRoles.indexOf('user') > -1);
+      (authorizedRoles.length > 0 && authorizedRoles.indexOf('user') > -1)
   }
 
-  function revalidateUser() {
+  function revalidateUser () {
     return $http.get('/alfresco/s/ssologin').then(function (response) {
-      return addUserToSession(response.data);
-    });
+      return addUserToSession(response.data)
+    })
   }
 
-  function addUserToSession(username) {
+  function addUserToSession (username) {
     return MemberService.get(username)
       .then(function (user) {
-        delete $window._openDeskSessionExpired;
-        var userInfo = sessionService.getUserInfo();
-        userInfo.user = user;
-        sessionService.setUserInfo(userInfo);
-        return user;
-      });
+        delete $window._openDeskSessionExpired
+        var userInfo = sessionService.getUserInfo()
+        userInfo.user = user
+        sessionService.setUserInfo(userInfo)
+        return user
+      })
   }
 }

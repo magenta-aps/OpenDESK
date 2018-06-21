@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 angular
-    .module('openDeskApp.iconPicker', ['ngMaterial'])
-    .config(config);
+  .module('openDeskApp.iconPicker', ['ngMaterial'])
+  .config(config)
 
-function config() {
+function config () {
 
 }

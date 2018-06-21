@@ -1,16 +1,15 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp')
-    .directive('breadcrumb', breadcrumb);
+  .module('openDeskApp')
+  .directive('breadcrumb', breadcrumb)
 
-function breadcrumb() {
-
-    return {
-        restrict: 'E',
-        scope: {
-            bcPath: '=paths'
-        },
-        templateUrl: 'app/src/shared/directives/breadcrumb/breadcrumb.html'
-    };
+function breadcrumb () {
+  return {
+    restrict: 'E',
+    scope: {
+      bcPath: '=paths'
+    },
+    templateUrl: 'app/src/shared/directives/breadcrumb/breadcrumb.html'
+  }
 }

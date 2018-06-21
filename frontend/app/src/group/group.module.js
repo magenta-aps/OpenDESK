@@ -1,1 +1,1 @@
-angular.module('openDeskApp.group', ['ngMaterial']);
+angular.module('openDeskApp.group', [])

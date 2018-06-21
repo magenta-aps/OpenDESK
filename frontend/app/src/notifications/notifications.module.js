@@ -1,3 +1,3 @@
-'use strict';
+'use strict'
 
-angular.module('openDeskApp.notifications', []);
+angular.module('openDeskApp.notifications', [])

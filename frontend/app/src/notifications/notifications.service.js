@@ -1,15 +1,14 @@
 
-'use strict';
+'use strict'
 
 angular
   .module('openDeskApp.notifications')
-  .factory('notificationsService', notificationsService);
+  .factory('notificationsService', notificationsService)
 
-  
-function notificationsService($http, $interval) { 
-  var restBaseUrl = '/alfresco/service/notifications';
-  var update;
-  var unseenNotifications = 0;
+function notificationsService ($http, $interval) {
+  var restBaseUrl = '/alfresco/service/notifications'
+  var update
+  var unseenNotifications = 0
 
   var service = {
     getUnseenCount: getUnseenCount,
@@ -23,79 +22,79 @@ function notificationsService($http, $interval) {
     setAllSeen: setAllSeen,
     startUpdate: startUpdate,
     stopUpdate: stopUpdate
-  };
-
-  return service;
-
-  function getUnseenCount() {
-    return unseenNotifications;
   }
 
-  function getNotifications(userId) {
+  return service
+
+  function getUnseenCount () {
+    return unseenNotifications
+  }
+
+  function getNotifications (userId) {
     var payload = {
-      PARAM_METHOD : "getAll",
+      PARAM_METHOD: 'getAll',
       PARAM_USERNAME: userId
     }
     return $http.post(restBaseUrl, payload)
-    .then(function(response) {
-      unseenNotifications = response.data[0].unseen;
-      return response.data[1];
-    });
+      .then(function (response) {
+        unseenNotifications = response.data[0].unseen
+        return response.data[1]
+      })
   }
 
-  function setRead(userId, noticeObj) {
+  function setRead (userId, noticeObj) {
     var payload = {
-      PARAM_METHOD : "setRead",
+      PARAM_METHOD: 'setRead',
       PARAM_USERNAME: userId,
-      PARAM_NODE_REF : noticeObj
+      PARAM_NODE_REF: noticeObj
     }
 
     return $http.post(restBaseUrl, payload)
-    .then(function(response) {
-      return response;
-    });
+      .then(function (response) {
+        return response
+      })
   }
 
-  function getInfo(nodeRef) {
+  function getInfo (nodeRef) {
     var payload = {
-      PARAM_METHOD : "getInfo",
-      PARAM_NODE_REF : nodeRef
+      PARAM_METHOD: 'getInfo',
+      PARAM_NODE_REF: nodeRef
     }
 
     return $http.post(restBaseUrl, payload)
-    .then(function(response) {
-      return response.data[0];
-    });
+      .then(function (response) {
+        return response.data[0]
+      })
   }
 
-  function setSeen(userId, noticeObj) {
+  function setSeen (userId, noticeObj) {
     var payload = {
-      PARAM_METHOD : "setSeen",
+      PARAM_METHOD: 'setSeen',
       PARAM_USERNAME: userId,
-      PARAM_NODE_REF : noticeObj
+      PARAM_NODE_REF: noticeObj
     }
 
     return $http.post(restBaseUrl, payload)
-    .then(function(response) {
-      return response;
-    });
+      .then(function (response) {
+        return response
+      })
   }
 
-  function setAllSeen(userId) {
+  function setAllSeen (userId) {
     var payload = {
-      PARAM_METHOD : "setAllNotificationsSeen",
+      PARAM_METHOD: 'setAllNotificationsSeen',
       PARAM_USERNAME: userId
     }
 
     return $http.post(restBaseUrl, payload)
-    .then(function(response) {
-      return response;
-    });
+      .then(function (response) {
+        return response
+      })
   }
 
-  function addNotification(userId, subject, message, link, wtype, project) {
+  function addNotification (userId, subject, message, link, wtype, project) {
     var payload = {
-      PARAM_METHOD : "add",
+      PARAM_METHOD: 'add',
       PARAM_USERNAME: userId,
       PARAM_SUBJECT: subject,
       PARAM_MESSAGE: message,
@@ -105,14 +104,14 @@ function notificationsService($http, $interval) {
     }
 
     return $http.post(restBaseUrl, payload)
-    .then(function (response) {
-      return response;
-    });
+      .then(function (response) {
+        return response
+      })
   }
 
-  function addReplyNotice(userId, subject, message, link, wtype, project, nodeRef) {
+  function addReplyNotice (userId, subject, message, link, wtype, project, nodeRef) {
     var payload = {
-      PARAM_METHOD : "addReply",
+      PARAM_METHOD: 'addReply',
       PARAM_USERNAME: userId,
       PARAM_SUBJECT: subject,
       PARAM_MESSAGE: message,
@@ -123,29 +122,29 @@ function notificationsService($http, $interval) {
     }
 
     return $http.post(restBaseUrl, payload)
-    .then(function (response) {
-      return response;
-    });
+      .then(function (response) {
+        return response
+      })
   }
-  
-  function deleteNotification(userId, noticeObj) {
+
+  function deleteNotification (userId, noticeObj) {
     var payload = {
-      PARAM_METHOD : "remove",
+      PARAM_METHOD: 'remove',
       PARAM_USERNAME: userId,
-      PARAM_NODE_REF : noticeObj
+      PARAM_NODE_REF: noticeObj
     }
 
     return $http.post(restBaseUrl, payload)
-    .then(function(response) {
-      return response;
-    });
+      .then(function (response) {
+        return response
+      })
   }
 
-  function startUpdate(updateNotifications) {
-    update = $interval(updateNotifications, 10000);
+  function startUpdate (updateNotifications) {
+    update = $interval(updateNotifications, 10000)
   }
 
-  function stopUpdate() {
-    $interval.cancel(update);
+  function stopUpdate () {
+    $interval.cancel(update)
   }
 }

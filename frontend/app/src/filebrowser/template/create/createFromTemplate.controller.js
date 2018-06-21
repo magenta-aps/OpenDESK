@@ -1,31 +1,30 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp.filebrowser')
-    .controller('CreateFromTemplateController', CreateFromTemplateController);
+  .module('openDeskApp.filebrowser')
+  .controller('CreateFromTemplateController', CreateFromTemplateController)
 
-function CreateFromTemplateController($scope, $mdDialog, templateService) {
+function CreateFromTemplateController ($scope, $mdDialog, templateService) {
+  var vm = this
+  var template = templateService.getSelectedTemplate()
 
-    var vm = this;
-    var template = templateService.getSelectedTemplate();
+  vm.cancelDialog = cancelDialog
+  vm.contentType = templateService.getSelectedContentType()
+  vm.newContentName = ''
+  vm.createContent = createContent
 
-    vm.cancelDialog = cancelDialog;
-    vm.contentType = templateService.getSelectedContentType();
-    vm.newContentName = '';
-    vm.createContent = createContent;
+  activate()
 
-    activate();
+  function activate () {
+    vm.newContentName = template.name
+  }
 
-    function activate() {
-        vm.newContentName = template.name;
-    }
+  function cancelDialog () {
+    $mdDialog.cancel()
+  }
 
-    function cancelDialog() {
-        $mdDialog.cancel();
-    }
-
-    function createContent() {
-        templateService.createContent(vm.newContentName);
-        $mdDialog.cancel();
-    }
+  function createContent () {
+    templateService.createContent(vm.newContentName)
+    $mdDialog.cancel()
+  }
 }

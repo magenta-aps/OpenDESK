@@ -1,68 +1,65 @@
-'use strict';
+'use strict'
 
 angular.module('openDeskApp.filebrowser')
-    .factory('templateService', templateService);
+  .factory('templateService', templateService)
 
-function templateService($rootScope, $http, alfrescoNodeUtils, filebrowserService) {
+function templateService ($rootScope, $http, alfrescoNodeUtils, filebrowserService) {
+  var selectedTemplate
+  var selectedContentType
 
-    var selectedTemplate;
-    var selectedContentType;
+  var service = {
+    createContent: createContent,
+    getSelectedContentType: getSelectedContentType,
+    getSelectedTemplate: getSelectedTemplate,
+    setTemplate: setTemplate
+  }
 
-    var service = {
-        createContent: createContent,
-        getSelectedContentType: getSelectedContentType,
-        getSelectedTemplate: getSelectedTemplate,
-        setTemplate: setTemplate
-    };
+  return service
 
-    return service;
+  function createContent (contentName) {
+    var folderNodeRef = filebrowserService.getCurrentFolderNodeRef()
 
-    function createContent(contentName) {
-        var folderNodeRef = filebrowserService.getCurrentFolderNodeRef();
+    if (selectedContentType === 'FOLDER' && selectedTemplate.nodeRef === null)
+      createFolder(contentName, folderNodeRef)
+    else
+      createContentFromTemplate(contentName, folderNodeRef)
+  }
 
+  function createContentFromTemplate (contentName, folderNodeRef) {
+    return $http.post('/alfresco/service/template', {
+      PARAM_METHOD: 'createContentFromTemplate',
+      PARAM_TEMPLATE_NODE_ID: selectedTemplate.nodeRef,
+      PARAM_DESTINATION_NODEREF: folderNodeRef,
+      PARAM_NODE_NAME: contentName
+    }).then(function (response) {
+      $rootScope.$broadcast('updateFilebrowser')
+      return response
+    })
+  }
 
-        if(selectedContentType === 'FOLDER' && selectedTemplate.nodeRef === null) {
-            createFolder(contentName, folderNodeRef);
-        }
-        else
-            createContentFromTemplate(contentName, folderNodeRef);
+  function createFolder (contentName, folderNodeRef) {
+    var props = {
+      prop_cm_name: contentName,
+      prop_cm_title: contentName,
+      alf_destination: folderNodeRef
     }
 
-    function createContentFromTemplate(contentName, folderNodeRef) {
-        return $http.post("/alfresco/service/template", {
-            PARAM_METHOD: "createContentFromTemplate",
-            PARAM_TEMPLATE_NODE_ID: selectedTemplate.nodeRef,
-            PARAM_DESTINATION_NODEREF: folderNodeRef,
-            PARAM_NODE_NAME: contentName
-        }).then(function (response) {
-            $rootScope.$broadcast('updateFilebrowser');
-            return response;
-        });
-    }
+    return $http.post('/api/type/cm:folder/formprocessor', props).then(function (response) {
+      $rootScope.$broadcast('updateFilebrowser')
+      return response
+    })
+  }
 
-    function createFolder(contentName, folderNodeRef) {
-        var props = {
-            prop_cm_name: contentName,
-            prop_cm_title: contentName,
-            alf_destination: folderNodeRef
-        };
+  function getSelectedTemplate () {
+    return selectedTemplate
+  }
 
-        return $http.post('/api/type/cm:folder/formprocessor', props).then(function (response) {
-            $rootScope.$broadcast('updateFilebrowser');
-            return response;
-        });
-    }
+  function getSelectedContentType () {
+    return selectedContentType
+  }
 
-    function getSelectedTemplate() {
-        return selectedTemplate;
-    }
-
-    function getSelectedContentType() {
-        return selectedContentType;
-    }
-
-    function setTemplate(template, contentType) {
-        selectedTemplate = template;
-        selectedContentType = contentType;
-    }
+  function setTemplate (template, contentType) {
+    selectedTemplate = template
+    selectedContentType = contentType
+  }
 }
