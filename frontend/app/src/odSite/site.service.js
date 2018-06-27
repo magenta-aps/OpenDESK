@@ -245,7 +245,6 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
             PARAM_USER: user,
             PARAM_GROUP: group
         }).then(function (response) {
-            console.log(response);
             return response.data;
         });
 
@@ -307,6 +306,11 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
+    /**
+     * @todo this is only used for renaming in filebrowser.controller/rename.controller, and something in text_templates.controller. Perhaps it should be moved
+     * @param {*} nodeRef 
+     * @param {*} props 
+     */
     function updateNode(nodeRef, props) {
         return $http.post('/api/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
             return response.data;
@@ -324,6 +328,10 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
+    /**
+     * @todo move this into a sitelink service
+     * @param {@} destination 
+     */
     function createProjectLink(destination) {
         return $http.post("/alfresco/service/sites", {
             PARAM_METHOD: "addLink",
@@ -335,13 +343,17 @@ function SiteService($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessi
         });
     }
 
+    /**
+     * @todo move this into a sitelink service 
+     * @param {*} source 
+     * @param {*} destination 
+     */
     function deleteLink(source, destination) {
         return $http.post("/alfresco/service/sites", {
             PARAM_METHOD: "deleteLink",
             PARAM_SOURCE: source,
             PARAM_DESTINATION: destination
         }).then(function (response) {
-            console.log(response.data);
             return response.data;
         });
     }

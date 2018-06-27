@@ -18,10 +18,24 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="content.loolEditable && vm.permissions.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="goToLOEditPage(content.nodeRef)">
+        <md-menu-item ng-if="content.onlyOfficeEditable && vm.permissions.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.editInOnlyOffice(content.nodeRef)">
                 <md-icon md-menu-align-target>edit</md-icon>
-                {{'COMMON.EDIT' | translate }}
+                {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.ONLYOFFICE' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="content.loolEditable && vm.permissions.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.editInLibreOffice(content.nodeRef)">
+                <md-icon md-menu-align-target>edit</md-icon>
+                {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.LIBREOFFICE' | translate }}
+            </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="content.msOfficeEditable && vm.permissions.canEdit && content.contentType == 'cmis:document'">
+            <md-button ng-click="vm.editInMSOffice(content.nodeRef)">
+                <md-icon md-menu-align-target>edit</md-icon>
+                {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.MSOFFICE' | translate }}
             </md-button>
         </md-menu-item>
 
@@ -47,28 +61,28 @@
         </md-menu-item>
 
         <md-menu-item ng-if="vm.permissions.canEdit && content.contentType != 'cmis:link'">
-            <md-button ng-click="vm.renameContentDialog($event, content)">
+            <md-button ng-click="vm.renameContentDialog(content)">
                 <md-icon md-menu-align-target>title</md-icon>
                 {{'COMMON.RENAME' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="moveContentDialog($event, content.nodeRef, content.parentNodeRef)">
+            <md-button ng-click="moveContentDialog(content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>compare_arrows</md-icon>
                 {{'COMMON.MOVE' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="vm.permissions.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="copyContentDialog($event, content.nodeRef, content.parentNodeRef)">
+            <md-button ng-click="copyContentDialog(content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>content_copy</md-icon>
                 {{'COMMON.COPY' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="vm.deleteContentDialog($event, content)">
+            <md-button ng-click="vm.deleteContentDialog(content)">
                 <md-icon md-menu-align-target>remove_circle_outline</md-icon>
                 {{'COMMON.REMOVE' | translate }}
             </md-button>

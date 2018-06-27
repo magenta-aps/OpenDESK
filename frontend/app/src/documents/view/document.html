@@ -5,7 +5,11 @@
 				<breadcrumb paths="vm.paths"></breadcrumb>
 
 				<div>
-					<ng-include src="viewerTemplateUrl"></ng-include>
+					<div ng-if="vm.isLocked">
+						<md-icon md-menu-align-target>warning</md-icon>
+						{{'COMMON.LOCKED_BY' | translate:{ locked_by: vm.lockOwner } }}
+					</div>
+					<ng-include id="placeholder" src="viewerTemplateUrl"></ng-include>
 				</div>
 			</md-card-content>
 		</md-card>

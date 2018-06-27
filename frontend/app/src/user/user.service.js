@@ -68,8 +68,6 @@ function userService($http) {
         }
         return $http.get(url).then(
             function (result) {
-                console.log('got persons (service)');
-                console.log(result);
                 return result.data.data.items;
             },
             function (err) {

@@ -5,6 +5,6 @@
 #fi
 #echo "MAVEN_OPTS is set to '$MAVEN_OPTS'";
 #mvn clean install -Pamp-to-war
-springloadedfile=~/downloads/springloaded-1.2.5.RELEASE.jar
+#springloadedfile=~/downloads/springloaded-1.2.5.RELEASE.jar
 
-MAVEN_OPTS="-javaagent:$springloadedfile -noverify -Xms256m -Xmx4G -XX:PermSize=1024m" mvn integration-test -Pamp-to-war -DskipTests
+MAVEN_OPTS="-noverify -Xms256m -Xmx4G -XX:PermSize=1024m" mvn clean integration-test -Pamp-to-war -DskipTests

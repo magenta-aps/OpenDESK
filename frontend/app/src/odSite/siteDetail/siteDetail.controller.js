@@ -4,9 +4,7 @@ angular
     .module('openDeskApp.site')
     .controller('SiteDetailController', SiteDetailController);
 
-function SiteDetailController($scope, $mdDialog, $window, siteService, $stateParams, $translate, documentService,
-                              authService, $rootScope, searchService, userService, browserService, headerService,
-                              alfrescoDownloadService, groupService, sessionService) {
+function SiteDetailController($scope, $mdDialog, siteService, $stateParams, $translate, authService, browserService, headerService) {
 
     $scope.history = [];
     $scope.showGroupList = [];
@@ -15,9 +13,6 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     
     vm.cancelDialog = cancelDialog;
     vm.currentUser = authService.getUserInfo().user;
-    // vm.getAutoSuggestions = getAutoSuggestions;
-    // vm.getSearchResults = getSearchResults;
-    // vm.gotoPath = gotoPath;
     vm.groups = {};
     vm.permissions = {};
     vm.site = {};
@@ -53,31 +48,4 @@ function SiteDetailController($scope, $mdDialog, $window, siteService, $statePar
     function cancelDialog() {
         $mdDialog.cancel();
     }
-    
-    // function getSearchResults(term) {
-    //     return searchService.getSearchResults(term).then(function (val) {
-    //         if (val !== undefined) {
-    //             $rootScope.searchResults = [];
-    //             $rootScope.searchResults = val.data.items;
-    //             $window.location.href = "search";
-    //         } else {
-    //             return [];
-    //         }
-    //     });
-    // }
-    
-    // function getAutoSuggestions(term) {
-    //     return searchService.getSearchSuggestions(term).then(function (val) {
-    //         return val !== undefined ? val : [];
-    //     });
-    // }
-
-    // function gotoPath(ref) {
-    //     documentService.getPath(ref.split("/")[3]).then(function (val) {
-    //         $scope.selectedDocumentPath = val.container;
-    //         var path = ref.replace("workspace://SpacesStore/", "");
-
-    //         $window.location.href = "dokument/" + path;
-    //     });
-    // }
 }

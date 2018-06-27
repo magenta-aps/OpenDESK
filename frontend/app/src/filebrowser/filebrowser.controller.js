@@ -4,10 +4,10 @@ angular
     .module('openDeskApp.filebrowser')
     .controller('FilebrowserController', FilebrowserController);
     
-    function FilebrowserController($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout, Upload,
+    function FilebrowserController($window, $state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout, Upload,
         siteService, fileUtilsService, filebrowserService, filterService, alfrescoDownloadService,
         documentPreviewService, documentService, alfrescoNodeUtils, userService, $translate, APP_BACKEND_CONFIG,
-        sessionService, headerService, browserService, notificationsService) {
+        sessionService, headerService, browserService, notificationsService, editOnlineMSOfficeService) {
             
         var vm = this;
         var documentNodeRef = "";
@@ -19,9 +19,6 @@ angular
         vm.contentList = [];
         vm.contentListLength = 0;
         vm.deleteContentDialog = deleteContentDialog;
-        vm.createProjectLink = createProjectLink;
-        vm.deleteFile = deleteFile;
-        vm.deleteLink = deleteLink;
         vm.documentTemplates = {};
         vm.enableESDH = APP_BACKEND_CONFIG.enableESDH;
         vm.error = false;
@@ -35,9 +32,7 @@ angular
         vm.getAvatarUrl = getAvatarUrl;
         vm.newLinkDialog = newLinkDialog;
         vm.permissions = {};
-        vm.renameContent = renameContent;
         vm.renameContentDialog = renameContentDialog;
-        vm.searchProjects = searchProjects;
         vm.setAllCheckboxes = setAllCheckboxes;
         vm.shareDocument = shareDocument;
         vm.shareDocumentDialog = shareDocumentDialog;
@@ -65,8 +60,10 @@ angular
 
     //de her er dublikeret i document.controller!
     $scope.downloadDocument = downloadDocument;
+    vm.editInMSOffice = editInMSOffice;
+    vm.editInLibreOffice = editInLibreOffice;
+    vm.editInOnlyOffice = editInOnlyOffice;
     $scope.previewDocument = previewDocument;
-    $scope.goToLOEditPage = goToLOEditPage;
     vm.reviewDocumentsDialog = reviewDocumentsDialog;
     vm.createReviewNotification = createReviewNotification;
 
@@ -212,8 +209,16 @@ angular
     function processContent(content) {
         angular.forEach(content, function(item) {
             item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
-            item.loolEditable = documentService.isLoolEditable(item.mimeType);
-            item.msOfficeEditable = documentService.isMsOfficeEditable(item.mimeType);
+
+            var isLocked = item.isLocked;
+            var lockType;
+            if(isLocked)
+                lockType = item.lockType;
+            var mimeType = item.mimeType;
+
+            item.loolEditable = documentService.isLibreOfficeEditable(mimeType, isLocked);
+            item.msOfficeEditable = documentService.isMsOfficeEditable(mimeType, isLocked);
+            item.onlyOfficeEditable = documentService.isOnlyOfficeEditable(mimeType, isLocked, lockType);
         });
     }
     
@@ -299,8 +304,6 @@ angular
                     title: pathArr[a],
                     link: link
                 });
-                console.log($stateParams.nodeRef);
-                console.log("Added link: " + link);
                 pathLink = pathLink + pathArr[a] + '/';
             }
         }
@@ -357,12 +360,26 @@ angular
         documentPreviewService.previewDocument(nodeRef);
     }
 
-    
-    function goToLOEditPage(nodeRef, fileName) {
-        $state.go('lool', {
+    function editInLibreOffice(nodeRef, fileName) {
+        var params = {
             'nodeRef': nodeRef,
             'fileName': fileName
+        };
+        $state.go('lool', params);
+    }
+
+    function editInMSOffice(nodeRef) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
+        documentService.getDocument(nodeId).then(function (response) {
+            var doc = response.item;
+            var docMetadata = response.metadata;
+            editOnlineMSOfficeService.editOnline(undefined, doc, docMetadata);
         });
+    }
+
+    function editInOnlyOffice(nodeRef) {
+        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
+        $window.open($state.href('onlyOfficeEdit', {'nodeRef': nodeId }));
     }
     
     function reviewDocumentsDialog(event, nodeRef) {
@@ -466,26 +483,13 @@ angular
         });
     }
 
-    function renameContentDialog(event, content) {
-        documentNodeRef = content.nodeRef;
-        // $scope.newContentName = content.name;
-
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/renameContent.tmpl.html',
-            targetEvent: event,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
-            clickOutsideToClose: true
-        });
-    }
-    
-    function renameContent(newName) {
-        var props = {
-            prop_cm_name: newName
-        };
-        siteService.updateNode(documentNodeRef, props).then(function (val) {
-            hideDialogAndReloadContent();
-        });
+    function renameContentDialog (content) {
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/actions/rename/rename.view.html',
+        locals: {content: content},
+        controller: 'RenameController as vm',
+        clickOutsideToClose: true
+      });
     }
 
     // We tried to have genericContentDialog inside the scope, but after having shown the dialog once the method was
@@ -493,11 +497,11 @@ angular
     $scope.moveContentDialog = moveContentDialog;
     $scope.copyContentDialog = copyContentDialog;
     
-    function moveContentDialog(event, sourceNodeRef, parentNodeRef) {
+    function moveContentDialog(sourceNodeRef, parentNodeRef) {
         genericContentDialog("MOVE", sourceNodeRef, parentNodeRef);
     }
 
-    function copyContentDialog(event, sourceNodeRef, parentNodeRef) {
+    function copyContentDialog(sourceNodeRef, parentNodeRef) {
         genericContentDialog("COPY", sourceNodeRef, parentNodeRef);
     }
 
@@ -522,63 +526,35 @@ angular
         });
     }
     
-    function deleteContentDialog(event, content) {
-        $scope.content = content;
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/deleteContent.tmpl.html',
-            targetEvent: event,
-            scope: $scope, // use parent scope in template
-            preserveScope: true, // do not forget this if use parent scope
-            clickOutsideToClose: true
-        });
-    }
-    
-    function deleteFile(nodeRef) {
-        siteService.deleteFile(nodeRef).then(function (response) {
-            hideDialogAndReloadContent();
-        });
-    }
-
-    function deleteLink(source, destination) {
-        siteService.deleteLink(source, destination).then(function () {
-            hideDialogAndReloadContent();
-        });
+    function deleteContentDialog (content) {
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/actions/delete/delete.view.html',
+        locals: {content: content},
+        controller: 'DeleteController as vm',
+        clickOutsideToClose: true
+      });
     }
 
     // Link
 
-    function newLinkDialog(event) {
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/content/link/newProjectLink.tmpl.html',
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-    function createProjectLink(project) {
-        siteService.createProjectLink(project.shortName).then(function () {
-            hideDialogAndReloadContent();
-        });
-    }
-    
-    function searchProjects(query) {
-        return filterService.search($scope.userManagedProjects, {
-            title: query
-        });
+    function newLinkDialog () {
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/siteLink/new.view.html',
+        controller: 'SiteLinkController as vm',
+        clickOutsideToClose: true
+      });
     }
 
     // SBSYS
     
     function loadSbsysDialog(event) {
-        $mdDialog.show({
-            templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
-            targetEvent: event,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
+      $mdDialog.show({
+        templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
+        targetEvent: event,
+        scope: $scope,
+        preserveScope: true,
+        clickOutsideToClose: true
+      });
     }
 
     function loadFromSbsys() {

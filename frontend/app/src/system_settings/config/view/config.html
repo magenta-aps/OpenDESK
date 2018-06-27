@@ -71,9 +71,17 @@
                     </md-input-container>
                 </md-list-item>
                 <md-list-item ng-repeat="(key, value) in vm.config" ng-if="!isObject(value)">
-                    <p>{{'CONFIGURATION.' + key | translate}}</p>
+                    <p>{{'CONFIGURATION.ENABLE' | translate}} {{'CONFIGURATION.' + key | translate}}</p>
                     <md-input-container>
                         <md-switch ng-if="isBoolean(value)" class="md-secondary" ng-model="vm.config[key]"></md-switch>
+                    </md-input-container>
+                </md-list-item>
+
+                <!-- Editors -->
+                <md-list-item ng-repeat="(key, value) in vm.config.editors" ng-if="vm.editors[key].installed">
+                    <p>{{'CONFIGURATION.ENABLE' | translate}} {{'EDITORS.' + key.toUpperCase() | translate}}</p>
+                    <md-input-container>
+                        <md-switch ng-if="isBoolean(value)" class="md-secondary" ng-model="vm.config.editors[key]"></md-switch>
                     </md-input-container>
                 </md-list-item>
             </md-list>

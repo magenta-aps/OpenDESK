@@ -1,24 +1,42 @@
-<!-- <div class="picker-header">
-    <md-button ng-show="vm.currentNode[0].primaryParent_nodeRef != undefined" class="md-icon-button" ng-click="vm.browseParent();">
+<!-- Parent -->
+<md-list-item
+style="background:#ccc; margin: -1rem -1rem 0"
+ng-show="vm.hasParent()" ng-class="vm.equalsSelectedNode(vm.currentNode) ? 'picked' : ''"
+    ng-click="vm.pickNode(vm.currentNode)">
+    <md-button
+           class="md-icon-button back"
+           ng-click="vm.browseParent()">
         <md-icon>navigate_before</md-icon>
     </md-button>
-    <strong ng-click="vm.pickNode(vm.currentNode[0].currentNodeRef_nodeRef)">{{ vm.currentNode[0].currentNodeRef_name }}</strong>
-</div> -->
+   <p style="color:#333"><strong>{{ vm.currentNode.name }}</strong></p>
+</md-list-item>
 <md-list class="picker-list">
-    <md-list-item ng-class="model === vm.currentNode[0].currentNodeRef_nodeRef ? 'picked' : ''" 
-    ng-click="vm.pickNode(vm.currentNode[0].currentNodeRef_nodeRef)" 
-    ng-if="vm.currentNode[0].currentNodeRef_nodeRef !== undefined">
-    <md-button ng-show="vm.currentNode[0].primaryParent_nodeRef != undefined" class="md-icon-button back" ng-click="vm.browseParent();">
-            <md-icon>navigate_before</md-icon>
-        </md-button>
-       <p>{{ vm.currentNode[0].currentNodeRef_name }}</p>
-    </md-list-item>
-    <md-list-item ng-class="model === dir.nodeRef ? 'picked' : ''" ng-repeat="dir in vm.currentNode[1]"
-                  ng-click="vm.pickNode(dir.nodeRef)" ng-if="dir.nodeRef !== undefined">
-        <p>{{ dir.name }}</p>
+    <!-- Folders -->
+    <md-list-item ng-repeat="node in vm.currentNode.children"
+                  ng-show="vm.isFolder(node)"
+                  ng-class="vm.equalsSelectedNode(node) ? 'picked' : ''"
+                  ng-click="vm.pickNode(node)">
+
+        <i class="material-icons">folder_open</i>
+        <span class='content-name'>{{node.name}}</span>
+        <span flex></span>
         <md-button class="md-icon-button"
-                   ng-click="vm.browseChild(dir.nodeRef); $event.stopPropagation();" class="md-raised">
+                   ng-click="vm.browseChild(node); $event.stopPropagation();">
             <md-icon>navigate_next</md-icon>
         </md-button>
+    </md-list-item>
+
+    <!-- Documents and Links -->
+    <md-list-item ng-repeat="node in vm.currentNode.children"
+                  ng-show="!vm.isFolder(node)">
+
+        <i class="material-icons">
+            {{node.contentType == 'cmis:link' ? 'link' : ''}}
+            <img class="md-avatar"
+                 ng-show="node.contentType === 'cmis:document'"
+                 ng-src="app/assets/img/filetypes/{{node.thumbNailURL}}"
+                 onerror="this.src='app/assets/img/filetypes/generic-file-24.png'">
+        </i>
+        <span class='content-name document-name'>{{node.name}}</span>
     </md-list-item>
 </md-list>

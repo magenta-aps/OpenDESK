@@ -10,6 +10,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,7 +33,8 @@ public class GetChildren extends AbstractWebScript {
         try {
             String nodeId = templateArgs.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-            result = nodeBean.getChildren(nodeRef);
+            List<NodeRef> childNodeRefs = nodeBean.getChildren(nodeRef);
+            result = nodeBean.getNodeList(childNodeRefs);
         } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);

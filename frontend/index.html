@@ -57,6 +57,7 @@
 
     <script src="./bower_components/ng-ckeditor/dist/ng-ckeditor.min.js"></script>
     <script src="./app/assets/libs/ckeditor/ckeditor.js"></script>
+    <script id="scriptApi" type="text/javascript" src="app/src/onlyOffice/api.js"></script>
 
     <!-- style sheet -->
     <link href="bower_components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
@@ -64,7 +65,7 @@
     <script type="text/javascript" src="bower_components/angular-material-data-table/dist/md-data-table.min.js"></script>
 </head>
 
-<body>
+<body ui-view="body">
     <header ui-view="header"></header>
     <main ui-view="content"></main>
     <div id="loader"></div>

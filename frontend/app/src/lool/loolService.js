@@ -30,7 +30,6 @@ function loolService($http, transformRequestAsFormPost, ALFRESCO_URI) {
         var encNodeRef = encodeURIComponent(nodeRef);
         return $http.get('/lool/token?nodeRef=' + encNodeRef + '&action=edit')
             .then(function (response) {
-                console.log(response.data.access_token, response.data.wopi_src_url);
                 return response.data;
             })
     }

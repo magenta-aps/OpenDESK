@@ -4,23 +4,26 @@
     <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
 
     <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
-            <table class="od-members od-members-row">
-                    <thead ng-show="vm.contentListLength > 0" fix-head>
-                        <tr>
-                            <th sort order="'name'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.NAME' | translate }}</th>
-                            <th hide show-gt-sm sort order="'lastChanged'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.HISTORY' | translate }}</th>
-                            <th hide show-gt-sm sort order="'creator.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.CREATEDBY' | translate }}</th>
-                            <th hide show-gt-md ng-if="vm.enableESDH" ng-if="isSite" colspan="2">
-                                <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToSbsys" ng-click="vm.setAllCheckboxes()">
-                                <img ng-src="app/assets/img/sbsys.png" class="od-sbsys-logo">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody ng-repeat="contentTypeList in vm.contentList">
-                        <tr ng-repeat="content in contentTypeList | orderObjectBy:order:reverse" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
-                        </tr>
-                    </tbody>
-                </table>
+        <table class="od-members od-members-row">
+            <colgroup>
+                <col span="1" style="width: 40%;">
+            </colgroup>
+            <thead ng-show="vm.contentListLength > 0" fix-head>
+                <tr>
+                    <th sort order="'name'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.NAME' | translate }}</th>
+                    <th hide show-gt-sm sort order="'lastChanged'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.HISTORY' | translate }}</th>
+                    <th hide show-gt-sm sort order="'creator.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.CREATEDBY' | translate }}</th>
+                    <th hide show-gt-md ng-if="vm.enableESDH" ng-if="isSite" colspan="2">
+                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToSbsys" ng-click="vm.setAllCheckboxes()">
+                        <img ng-src="app/assets/img/sbsys.png" class="od-sbsys-logo">
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="contentTypeList in vm.contentList">
+                <tr ng-repeat="content in contentTypeList | orderObjectBy:order:reverse" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
@@ -71,7 +74,7 @@
         </od-template-list>
 
         <md-button ng-if="isSite && vm.permissions.isManager" class="md-icon-button md-primary "
-            ng-click="vm.newLinkDialog($event)">
+            ng-click="vm.newLinkDialog()">
             <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
             <md-icon>link</md-icon>
         </md-button>
