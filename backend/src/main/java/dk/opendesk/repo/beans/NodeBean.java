@@ -88,6 +88,9 @@ public class NodeBean {
             String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
             json.put("name", name);
 
+            AccessStatus canEdit = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
+            json.put("canEdit", canEdit == AccessStatus.ALLOWED);
+
             AccessStatus canDelete = permissionService.hasPermission(nodeRef, PermissionService.DELETE);
             json.put("canMoveAndDelete", canDelete == AccessStatus.ALLOWED);
 
