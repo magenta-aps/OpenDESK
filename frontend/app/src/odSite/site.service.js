@@ -152,7 +152,7 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeUtils, sess
     return $http.put('/api/sites/' + site.shortName, {
       shortName: site.shortName,
       sitePreset: 'default',
-      title: site.siteName,
+      title: site.title,
       description: site.description,
       visibility: site.visibility
     }).then(function (response) {
