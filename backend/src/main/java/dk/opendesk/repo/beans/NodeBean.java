@@ -88,6 +88,9 @@ public class NodeBean {
             String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
             json.put("name", name);
 
+            AccessStatus canEdit = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
+            json.put("canEdit", canEdit == AccessStatus.ALLOWED);
+
             AccessStatus canDelete = permissionService.hasPermission(nodeRef, PermissionService.DELETE);
             json.put("canMoveAndDelete", canDelete == AccessStatus.ALLOWED);
 
@@ -264,7 +267,11 @@ public class NodeBean {
      * @param nodeRef of the parent node.
      * @return a JSONArray containing JSONObjects for all child nodes.
      */
-    public JSONObject getNodePickerNodeInfo(NodeRef nodeRef) throws JSONException {
+    public JSONObject getNodePickerNodeInfo(NodeRef nodeRef) throws Exception {
+
+        // If the node is the user's home then return it as a Root Folder
+        if(nodeRef.equals(getUserHome()))
+            return getNodePickerRootNodeInfo(OpenDeskModel.NODE_PICKER_MY_DOCS);
 
         // Children
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
