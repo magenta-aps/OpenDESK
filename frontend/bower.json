@@ -8,7 +8,7 @@
   "dependencies": {
     "angular": "^1.6.x",
     "angular-animate": "^1.6.x",
-    "angular-aria": "1.6.x",
+    "angular-aria": "^1.6.x",
     "angular-messages": "^1.6.x",
     "angular-encode-uri": "",
     "angular-file-saver": "",
