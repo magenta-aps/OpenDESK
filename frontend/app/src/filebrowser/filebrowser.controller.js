@@ -419,7 +419,7 @@ angular
         });
     }
 
-    function shareDocument(user, permission) {
+    function shareDocument(user, permission, content) {
         filebrowserService.shareNode(documentNodeRef, user.userName, permission).then(
             function(succes) {
                 $mdToast.show(
@@ -428,7 +428,14 @@ angular
                         .hideDelay(3000)
                 );
                 var nodeId = alfrescoNodeUtils.processNodeRef(documentNodeRef).id;
-                var link = "dokumenter/delte/" + nodeId;
+
+                // Link differs depending of type
+                var link;
+                if(content.contentType === "cmis:document")
+                    link = "dokument/" + nodeId;
+                else
+                    link = "dokumenter/delte/" + nodeId;
+
                 var subject = 'Nyt dokument delt';
                 var message = "En bruger har delt et dokument med dig";
 
