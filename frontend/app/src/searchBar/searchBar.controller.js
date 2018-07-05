@@ -2,12 +2,19 @@ angular
     .module('openDeskApp')
     .controller('SearchBarController', SearchBarController);
 
-function SearchBarController($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService) {
+function SearchBarController($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService,
+                             translateService) {
 
     var vm = this;
     vm.getLiveSearch = getLiveSearch;
     vm.goToDocument = goToDocument;
     vm.goToSearchPage = goToSearchPage;
+
+    activate();
+
+    function activate() {
+        vm.sitesName = translateService.getSitesName();
+    }
 
     function getLiveSearch(term) {
         return searchService.documentLiveSearch(term).then(function (response) {
