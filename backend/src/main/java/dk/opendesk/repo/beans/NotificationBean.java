@@ -53,9 +53,11 @@ public class NotificationBean {
             if(type.startsWith(OpenDeskModel.NOTIFICATION_TYPE_REVIEW))
                 preferenceFilter = "";
 
-            if(!preferenceFilter.isEmpty())
-                if(!"true".equals(preferenceService.getPreference(userName, preferenceFilter)))
+            if(!preferenceFilter.isEmpty()) {
+                Serializable preferenceValue = preferenceService.getPreference(userName, preferenceFilter);
+                if ("false".equals(preferenceValue))
                     return;
+            }
 
             NodeRef user = personService.getPerson(userName);
 
