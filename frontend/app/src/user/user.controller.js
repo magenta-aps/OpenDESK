@@ -39,8 +39,7 @@ function UserController($scope, $mdSidenav, userService, sessionService, prefere
 
     function loadAvatar() {
         userService.getPerson(vm.user.userName).then(function(user) {
-            sessionService.setAndSaveAvatarToUserInfo(user);
-            vm.user.avatar = sessionService.getUserInfo().user.avatar;
+            vm.user.avatar = sessionService.updateAvatar(user);
         });
     }
 }

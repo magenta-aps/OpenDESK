@@ -41,8 +41,10 @@ function setSeen(noticeObj) {
 }
 
 function updateNotifications() {
-    notificationsService.getNotifications(currentUser).then(function (notifications) {
-        vm.notifications = notifications;
-    });
+    if(sessionService.getUserInfo().ticket) {
+        notificationsService.getNotifications(currentUser).then(function (notifications) {
+            vm.notifications = notifications;
+        });
+    }
 }
 }

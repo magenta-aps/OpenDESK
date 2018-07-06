@@ -15,15 +15,13 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     vm.updateValidator = updateValidator;
 
     function login(credentials) {
-        authService.login(credentials.username, credentials.password).then(function (response) {
+        authService.login(credentials).then(function (response) {
             // Logged in
             if (response.userName) {
                 chatService.initialize();
                 chatService.login(credentials.username, credentials.password);
-                userService.getPerson(credentials.username).then(function (response) {
-                    vm.user = response;
-                    restoreLocation();
-                });
+                vm.user = response;
+                restoreLocation();
             }
 
             // If incorrect values            
@@ -60,9 +58,10 @@ function AuthController($state, $stateParams, authService, userService, $mdDialo
     function restoreLocation() {
         var retainedLocation = sessionService.getRetainedLocation();
         if (!retainedLocation || retainedLocation === undefined) {
-            $state.go('siteList');
+            $state.go('dashboard');
         } else {
             $window.location = retainedLocation;
+            sessionService.clearRetainedLocation();
         }
     }
 

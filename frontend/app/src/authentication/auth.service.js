@@ -62,12 +62,11 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
             return;
 
         $window._openDeskSessionExpired = true;
-        sessionService.setUserInfo(null);
         var $mdDialog = $injector.get('$mdDialog'),
             notificationUtilsService = $injector.get('notificationUtilsService');
         $mdDialog.cancel();
         sessionService.retainCurrentLocation();
-        $state.go('login');
+        sessionService.logout();
         notificationUtilsService.notify($translate.instant('LOGIN.SESSION_TIMEOUT'));
         delete $window._openDeskSessionExpired;
     }
@@ -77,12 +76,10 @@ function authService($http, $window, $state, sessionService, userService, notifi
     var service = {
         login: login,
         logout: logout,
-        loggedin: loggedin,
         changePassword: changePassword,
         isAuthenticated: isAuthenticated,
         isAuthorized: isAuthorized,
         getUserInfo: getUserInfo,
-        revalidateUser: revalidateUser,
         ssoLogin: ssoLogin
     };
 
@@ -93,33 +90,22 @@ function authService($http, $window, $state, sessionService, userService, notifi
     }
 
     function ssoLogin() {
-        var userInfo = {};
         return $http.get("/alfresco/s/ssologin").then(function (response) {
             var username = response.data;
-            return $http.get("/api/people/" + username).then(function (response) {
-                userInfo.user = response.data;
-                sessionService.setUserInfo(userInfo);
-                return addUserToSession(username);
-            }, function (error) {
-                console.log(error);
-                return error;
+            return userService.getPerson(username).then(function (user) {
+                sessionService.login(user);
+                return user;
             });
         });
     }
 
-    function authFailedSafari(response) {
-        return response.data && response.data.indexOf('Safari') != -1;
-    }
-
-    function login(username, password) {
-        var userInfo = {};
-        return $http.post("/api/login", {
-            username: username,
-            password: password
-        }).then(function (response) {
-            userInfo.ticket = response.data.data.ticket;
-            sessionService.setUserInfo(userInfo);
-            return addUserToSession(username);
+    function login(credentials) {
+        return $http.post("/api/login", credentials).then(function (response) {
+            sessionService.saveTicketToSession(response.data.data.ticket);
+            return userService.getPerson(credentials.username).then(function (user) {
+                sessionService.login(user);
+                return user;
+            });
         }, function (reason) {
             console.log(reason);
             return reason;
@@ -128,21 +114,15 @@ function authService($http, $window, $state, sessionService, userService, notifi
 
     function logout() {
         var userInfo = sessionService.getUserInfo();
-
-
         if (userInfo) {
             var ticket =  userInfo.ticket;
-            sessionService.clearRetainedLocation();
             $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function (response) {
+                sessionService.logout();
                 notificationsService.stopUpdate();
                 $state.go('login');
             });
         }
 
-    }
-
-    function loggedin() {
-        return sessionService.getUserInfo();
     }
 
     /**
@@ -183,21 +163,5 @@ function authService($http, $window, $state, sessionService, userService, notifi
 //        }
         return userInfo.user.capabilities.isAdmin ||
             (authorizedRoles.length > 0 && authorizedRoles.indexOf('user') > -1);
-    }
-
-    function revalidateUser() {
-        return $http.get('/alfresco/s/ssologin').then(function (response) {
-            return addUserToSession(response.data);
-        });
-    }
-
-    function addUserToSession(username) {
-        return userService.getPerson(username).then(function (user) {
-            delete $window._openDeskSessionExpired;
-            var userInfo = sessionService.getUserInfo();
-            userInfo.user = user;
-            sessionService.setUserInfo(userInfo);
-            return user;
-        });
     }
 }
