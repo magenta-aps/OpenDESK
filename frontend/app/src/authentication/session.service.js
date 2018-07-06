@@ -19,8 +19,12 @@ function sessionService($window) {
         updateAvatar: updateAvatar
     };
 
-    function login(user) {
+    function login(user, isSSO) {
         var userInfo = getUserInfo();
+
+        if(isSSO && userInfo === undefined)
+            userInfo = {};
+
         delete $window._openDeskSessionExpired;
         user.avatar = makeAvatarUrl(user);
         user.displayName = user.firstName;

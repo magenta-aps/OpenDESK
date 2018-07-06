@@ -93,7 +93,7 @@ function authService($http, $window, $state, sessionService, userService, notifi
         return $http.get("/alfresco/s/ssologin").then(function (response) {
             var username = response.data;
             return userService.getPerson(username).then(function (user) {
-                sessionService.login(user);
+                sessionService.login(user, true);
                 return user;
             });
         });
@@ -103,7 +103,7 @@ function authService($http, $window, $state, sessionService, userService, notifi
         return $http.post("/api/login", credentials).then(function (response) {
             sessionService.saveTicketToSession(response.data.data.ticket);
             return userService.getPerson(credentials.username).then(function (user) {
-                sessionService.login(user);
+                sessionService.login(user, false);
                 return user;
             });
         }, function (reason) {
