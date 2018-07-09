@@ -13,11 +13,7 @@
         <p>{{vm.notificationFrom.firstName}} {{vm.notificationFrom.lastName}} har sendt dokumentet til godkendelse hos dig med kommentaren:</p>
         <p><i>{{vm.wf_comment}}</i></p>
 
-        Du kan
-        <md-button class="md-primary" style="padding: 2px 0 2px 0; margin: 2px 0 2px 0; min-width: 0;" ng-click="vm.goToLOEditPage()">
-            Redigere
-        </md-button>
-        dokumentet, inden du godkender eller afviser.
+        Du kan redigere dokumentet, inden du godkender eller afviser.
     </md-card-content>
 
     <md-card-actions ng-if="vm.wf" layout="row">

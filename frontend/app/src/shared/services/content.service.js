@@ -3,7 +3,7 @@
 angular.module('openDeskApp')
   .factory('ContentService', ContentService)
 
-function ContentService ($http, alfrescoNodeUtils, EDITOR_CONFIG) {
+function ContentService ($http, alfrescoNodeUtils, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
   var service = {
     delete: deleteContent,
     get: getContent,
@@ -12,8 +12,9 @@ function ContentService ($http, alfrescoNodeUtils, EDITOR_CONFIG) {
     uploadNewVersion: uploadNewVersion,
     deleteVersion: deleteVersion,
     revertToVersion: revertToVersion,
-    isLoolEditable: isLoolEditable,
-    isMsOfficeEditable: isMsOfficeEditable
+    isLibreOfficeEditable: isLibreOfficeEditable,
+    isMsOfficeEditable: isMsOfficeEditable,
+    isOnlyOfficeEditable: isOnlyOfficeEditable
   }
 
   return service
@@ -104,11 +105,24 @@ function ContentService ($http, alfrescoNodeUtils, EDITOR_CONFIG) {
     })
   }
 
-  function isLoolEditable (mimeType) {
-    return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1
+  function isLibreOfficeEditable(mimeType, isLocked) {
+      if (!APP_BACKEND_CONFIG.editors.libreOffice)
+          return false;
+      if (!isLocked)
+          return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
   }
 
-  function isMsOfficeEditable (mimeType) {
-    return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1
-  }
+    function isMsOfficeEditable(mimeType, isLocked) {
+        if (!APP_BACKEND_CONFIG.editors.msOffice)
+            return false;
+        if (!isLocked)
+            return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1;
+    }
+
+    function isOnlyOfficeEditable(mimeType, isLocked, lockType){
+        if(!APP_BACKEND_CONFIG.editors.onlyOffice)
+            return false;
+        if(!isLocked || lockType === 'WRITE_LOCK')
+            return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
+    }
 }

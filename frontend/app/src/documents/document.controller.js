@@ -30,7 +30,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   vm.createWFNotification = createWFNotification
   vm.highlightVersion = highlightVersion
   vm.editInLibreOffice = editInLibreOffice
-  vm.goToLOEditPage = goToLOEditPage
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
   vm.downloadDocument = downloadDocument
@@ -38,7 +37,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   vm.createReviewNotification = createReviewNotification
   vm.selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3]
 
-  var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : selectedDocumentNode
+  var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : vm.selectedDocumentNode
   var docHasParent = $location.search().parent !== undefined
   var firstDocumentNode = ''
 
@@ -205,7 +204,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
         }
         var mimeType = vm.doc.node.mimetype
 
-        vm.loolEditable = ContentService.isLoolEditable(mimeType, vm.isLocked)
+        vm.loolEditable = ContentService.isLibreOfficeEditable(mimeType, vm.isLocked)
         vm.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, vm.isLocked)
         vm.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
 
@@ -292,7 +291,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
     if (docHasParent) {
       vm.store = 'versionStore://version2Store/'
 
-      documentService.createVersionThumbnail(parentDocumentNode, selectedDocumentNode)
+      documentService.createVersionThumbnail(parentDocumentNode, vm.selectedDocumentNode)
         .then(function (response) {
           documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef)
             .then(function (plugin) {
