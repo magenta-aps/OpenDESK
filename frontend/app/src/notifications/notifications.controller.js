@@ -40,9 +40,10 @@ function NotificationsController ($mdSidenav, notificationsService, UserService)
   }
 
   function updateNotifications () {
-    notificationsService.get(currentUser)
-      .then(function (notifications) {
-        vm.notifications = notifications
-      })
+    if (UserService.getUserInfo().ticket)
+      notificationsService.get(currentUser)
+        .then(function (notifications) {
+          vm.notifications = notifications
+        })
   }
 }

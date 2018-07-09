@@ -90,7 +90,6 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
       function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
         var d = $q.defer()
 
-        sessionService.loadUserInfo()
         if (authService.isAuthenticated())
           resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d)
         else if (APP_CONFIG.ssoLoginEnabled)
@@ -103,7 +102,6 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
             })
         else
           rejectUnauthenticatedUser($state, sessionService, d)
-
         return d.promise
       }
     ]

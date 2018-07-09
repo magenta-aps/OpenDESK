@@ -15,21 +15,21 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   vm.updateValidator = updateValidator
 
   function login (credentials) {
-    authService.login(credentials.username, credentials.password)
-      .then(function (response) {
-        // Logged in
-        if (response.userName) {
-          chatService.initialize()
-          chatService.login(credentials.username, credentials.password)
-          restoreLocation()
-        }
+    authService.login(credentials).then(function (response) {
+      // Logged in
+      if (response.userName) {
+        chatService.initialize()
+        chatService.login(credentials.username, credentials.password);
+        vm.user = response
+        restoreLocation()
+      }
 
-        // If incorrect values
-        if (response.status === 403)
-          vm.form.password.$setValidity('loginFailure', false)
-        else if (response.status === 500)
-          vm.form.password.$setValidity('loginError', false)
-      })
+      // If incorrect values
+      if (response.status === 403)
+        vm.form.password.$setValidity('loginFailure', false)
+      else if (response.status === 500)
+        vm.form.password.$setValidity('loginError', false)
+    })
   }
 
   function logout () {
@@ -56,9 +56,10 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   function restoreLocation () {
     var retainedLocation = sessionService.getRetainedLocation()
     if (!retainedLocation || retainedLocation === undefined)
-      $state.go('siteList')
+      $state.go('dashboard')
     else
       $window.location = retainedLocation
+    sessionService.clearRetainedLocation()
   }
 
   function forgotPasswordCtrl ($scope, $mdDialog) {

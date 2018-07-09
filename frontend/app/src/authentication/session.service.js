@@ -5,71 +5,78 @@ angular
   .factory('sessionService', sessionService)
 
 function sessionService ($window) {
-  var userInfo
 
   var service = {
-    clearRetainedLocation: clearRetainedLocation,
     getRetainedLocation: getRetainedLocation,
     getUserInfo: getUserInfo,
-    saveUserInfoToSession: saveUserInfoToSession,
-    setUserInfo: setUserInfo,
+    login: login,
+    saveTicketToSession: saveTicketToSession,
     isAdmin: isAdmin,
-    isExternalUser: isExternalUser,
-    loadUserInfo: loadUserInfo,
+    logout: logout,
     makeURL: makeURL,
     retainCurrentLocation: retainCurrentLocation,
     makeAvatarUrl: makeAvatarUrl,
-    setAndSaveAvatarToUserInfo: setAndSaveAvatarToUserInfo
+    updateAvatar: updateAvatar
   }
 
   return service
 
-  function setUserInfo (info) {
-    userInfo = info
-    if (userInfo.user !== undefined) {
-      var avatar = makeAvatarUrl(userInfo.user)
-      setAvatarToUserInfo(avatar)
-      userInfo.user.displayName = userInfo.user.firstName
-      if (userInfo.user.lastName !== '')
-        userInfo.user.displayName += ' ' + userInfo.user.lastName
+  function login (user, isSSO) {
+    var userInfo = getUserInfo();
 
-      saveUserInfoToSession(userInfo)
+    if(isSSO && userInfo === undefined)
+      userInfo = {};
+        delete $window._openDeskSessionExpired;
+        user.avatar = makeAvatarUrl(user);
+        user.displayName = user.firstName;
+        if (user.lastName !== "")
+            user.displayName += " " + user.lastName;
+        userInfo.user = user;
+        saveUserInfoToSession(userInfo);
     }
-  }
+
+    function saveTicketToSession(ticket) {
+        var userInfo = {};
+        userInfo.ticket = ticket;
+        saveUserInfoToSession(userInfo);
+    }
 
   function saveUserInfoToSession (userInfo) {
-    $window.sessionStorage.setItem('userInfo', angular.toJson(userInfo))
+    $window.localStorage.setItem('userInfo', angular.toJson(userInfo))
   }
 
-  function isAdmin () {
-    if (userInfo === null || userInfo === undefined) return false
-    return userInfo.user.capabilities.isAdmin
-  }
+    function isAdmin() {
+        var userInfo = getUserInfo();
+        if (userInfo === undefined) {
+            return false;
+        }
+        return userInfo.user.capabilities.isAdmin;
+    }
 
-  function clearRetainedLocation () {
-    $window.sessionStorage.setItem('retainedLocation', '')
-  }
+    function clearRetainedLocation() {
+        $window.sessionStorage.removeItem('retainedLocation');
+    }
 
-  function getUserInfo () {
-    return userInfo
-  }
+    function clearUserInfoFromSession() {
+        $window.localStorage.removeItem('userInfo');
+    }
+
+    function getUserInfo() {
+        if ($window.localStorage.getItem('userInfo')) {
+            return angular.fromJson($window.localStorage.getItem('userInfo'));
+        }
+        else
+            return undefined;
+    }
 
   function getRetainedLocation () {
     return $window.sessionStorage.getItem('retainedLocation')
   }
 
-  function isExternalUser () {
-    if (userInfo === null || userInfo === undefined)
-      return false
-
-    var externalUserNameRe = /.+_.+(@.+)?$/
-    return externalUserNameRe.test(userInfo.user.userName)
-  }
-
-  function loadUserInfo () {
-    if ($window.sessionStorage.getItem('userInfo'))
-      userInfo = angular.fromJson($window.sessionStorage.getItem('userInfo'))
-  }
+    function logout() {
+        clearRetainedLocation();
+        clearUserInfoFromSession();
+    }
 
   function makeURL (url) {
     var sessionTicket = getUserInfo().ticket
@@ -99,14 +106,10 @@ function sessionService ($window) {
     return avatar
   }
 
-  function setAvatarToUserInfo (avatar) {
-    if (userInfo.user !== undefined)
-      userInfo.user.avatar = avatar
-  }
-
-  function setAndSaveAvatarToUserInfo (user) {
-    var avatar = makeAvatarUrl(user)
-    setAvatarToUserInfo(avatar)
-    saveUserInfoToSession(userInfo)
-  }
+    function updateAvatar(user){
+        var userInfo = getUserInfo();
+        userInfo.user.avatar = makeAvatarUrl(user);
+        saveUserInfoToSession(userInfo);
+        return userInfo.user.avatar;
+    }
 }
