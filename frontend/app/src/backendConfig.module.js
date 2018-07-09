@@ -7,6 +7,11 @@ angular
         enableSites: true,
         enableESDH: false,
         enableChat: false,
+        editors: {
+            msOffice: false,
+            libreOffice: false,
+            onlyOffice: false
+        },
         dashboardLink: [
             {
                 icon: 'intra',
@@ -15,17 +20,23 @@ angular
                 newWindow: false
             },
             {
-            icon: 'project',
-            label: 'Projekter',
-            url: 'projekter',
-            newWindow: true
-        },
-        {
-            icon: 'mail',
-            label: 'Mail',
-            url: '',
-            newWindow: false
-        },
+                icon: 'project',
+                label: 'Grupperum',
+                url: 'grupperum',
+                newWindow: false
+            },
+            {
+                icon: 'mail',
+                label: 'Mail',
+                url: '',
+                newWindow: false
+            },
+            {
+                icon: 'library',
+                label: 'Dokumenter',
+                url: 'dokumenter',
+                newWindow: false
+            }
         ],
         public: {
             appName: "OpenDesk"

@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get List of Editors</shortname>
+    <description>Gets a list of editors with info about them</description>
+    <url>/editors</url>
+    <authentication>user</authentication>
+</webscript>

@@ -146,7 +146,6 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
       MemberService.add(siteShortName, userName, groupName)
         .then(function () {
           createSiteNotification(siteName, userName, link)
-          console.log('Added user ' + userName + ' to ' + groupName + ' in project ' + siteName)
         },
         function (err) {
           console.log('ERROR: Problem creating user in project group ' + groupName)

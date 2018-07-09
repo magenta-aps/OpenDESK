@@ -10,6 +10,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   var vm = this
 
   vm.discussions = []
+  vm.permissions = []
   vm.replies = []
   vm.search = ''
   vm.user = UserService.get()
@@ -43,6 +44,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function activate () {
     vm.getDiscussions($stateParams.projekt)
+    getSiteUserPermissions()
 
     $scope.tab.selected = $stateParams.selectedTab
 
@@ -90,6 +92,16 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
           $anchorScroll()
       })
     })
+  }
+
+  function getSiteUserPermissions() {
+      vm.permissions = siteService.getPermissions()
+      if(vm.permissions === undefined) {
+          siteService.getSiteUserPermissions($stateParams.projekt)
+              .then(function(permissions) {
+              vm.permissions = permissions
+            })
+      }
   }
 
   function replyDialog () {

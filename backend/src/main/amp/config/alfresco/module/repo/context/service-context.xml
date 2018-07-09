@@ -18,6 +18,10 @@
 -->
 <beans>
 
+    <bean id="editorBean" class="dk.opendesk.repo.beans.EditorBean">
+        <property name="moduleService" ref="ModuleService"/>
+    </bean>
+
     <bean id="nodeBean" class="dk.opendesk.repo.beans.NodeBean">
         <property name="nodeService" ref="NodeService"/>
         <property name="permissionService" ref="PermissionService"/>

@@ -73,8 +73,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
               })
               showSendEmailDialog(response.userName, response.subject, response.body)
             },
-            function (err) {
-              console.log(err)
+            function () {
               $mdToast.show(
                 $mdToast.simple()
                   .textContent('Brugeren kunne ikke oprettes. Tjek at du ikke bruger nogle specielle karakterer i navnet')
@@ -122,8 +121,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   }
 
   function createNotification (userName, subject, message, link, wtype, project) {
-    console.log('creating notification...')
-    notificationsService.add(userName, subject, message, link, wtype, project)
+   notificationsService.add(userName, subject, message, link, wtype, project)
   }
 
   function createSiteNotification (userName, site) {

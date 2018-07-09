@@ -4,6 +4,7 @@ angular.module('openDeskApp.systemsettings')
 
   .factory('systemSettingsService', function ($http, APP_BACKEND_CONFIG) {
     var service = {
+      getEditors: getEditors,
       getTemplates: getTemplates,
       loadSettings: loadSettings,
       loadPublicSettings: loadPublicSettings,
@@ -11,6 +12,12 @@ angular.module('openDeskApp.systemsettings')
     }
 
     return service
+
+      function getEditors() {
+          return $http.get("/alfresco/service/editors").then(function (response) {
+              return response.data[0];
+          });
+      }
 
     function getTemplates () {
       return $http.post('/alfresco/service/sites', {

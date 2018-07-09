@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Node Picker Root</shortname>
+    <description>Gets root info for node picker</description>
+    <url>/nodepicker/root</url>
+    <authentication>user</authentication>
+</webscript>

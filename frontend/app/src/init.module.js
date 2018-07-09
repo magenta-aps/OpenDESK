@@ -17,7 +17,7 @@ angular
         phone: /^[+]?[0-9\- ]+$/
     })
     .constant('APP_CONFIG', {
-        sitesUrl: "projekter",
+        sitesUrl: "grupperum",
         landingPageState: "dashboard",
         landingPageUrl: "",
         ssoLoginEnabled: false

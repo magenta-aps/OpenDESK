@@ -80,7 +80,7 @@
 <md-card-actions layout="row" layout-align="start center">
     <span flex></span>
 
-    <md-button ng-click="vm.replyDialog()" class="md-primary" aria-label="{{'COMMON.REPLY' | translate }}">
+    <md-button ng-if="vm.permissions.canEdit" ng-click="vm.replyDialog()" class="md-primary" aria-label="{{'COMMON.REPLY' | translate }}">
         <span>{{'COMMON.REPLY' | translate }}</span>
     </md-button>
 </md-card-actions>

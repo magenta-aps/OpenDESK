@@ -21,7 +21,7 @@ function GenericContentDialogController (data, $rootScope, $mdDialog, filebrowse
   function dialogResponse () {
     vm.uploading = true
     filebrowserService.genericContentAction(vm.data.contentAction.toLowerCase(),
-      vm.data.sourceNodeRefs, vm.destinationNodeRef, vm.data.parentNodeRef)
+      vm.data.sourceNodeRefs, vm.destinationNodeRef.nodeRef, vm.data.parentNodeRef)
       .then(function (response) {
         if (response.data.results[0].fileExist)
           $mdDialog.show(

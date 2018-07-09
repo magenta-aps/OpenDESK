@@ -20,6 +20,7 @@ function LoolController($state, $stateParams, loolService, ContentService, $mdTo
         );
     }
     else {
+        vm.isDisplayed = true;
         vm.nodeRef = $stateParams.nodeRef;
         vm.nodeId = nodeRefUtilsService.getId($stateParams.nodeRef);
         ContentService.get(vm.nodeId).then(function (document) {
@@ -40,8 +41,6 @@ function LoolController($state, $stateParams, loolService, ContentService, $mdTo
         var parentNodeId = $stateParams.nodeRef.split('/')[3];
 
         if ($stateParams.versionLabel != null && $stateParams.parent != null) {
-            console.log($stateParams.parent);
-            console.log($stateParams.versionLabel);
 
             var sp = $stateParams.versionLabel.split(".");
             var bump = (parseInt(sp[1]) + 1);
@@ -73,6 +72,8 @@ function LoolController($state, $stateParams, loolService, ContentService, $mdTo
                 $('#libreoffice-online').append(form);
                 $('#loleafletform').submit();
             });
+        }).catch(function (response) {
+            vm.isDisplayed = false;
         });
     }
 }

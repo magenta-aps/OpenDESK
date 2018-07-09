@@ -44,18 +44,9 @@ function TemplatesController(siteService, $mdDialog, $scope, systemSettingsServi
         $mdDialog.show(confirm).then(
             function() {
                 vm.deleteSite(siteName).then (function() {
-
-                    console.log("hvad er $scope.templateSites");
-                    console.log($scope.templateSites.length);
-
                     systemSettingsService.getTemplates().then (function(response) {
-                        console.log(response);
-
                         $scope.templateSites = response;
                         $mdDialog.hide();
-
-                        console.log("hvad er $scope.templateSites");
-                        console.log($scope.templateSites.length);
                     });
                 });
             },

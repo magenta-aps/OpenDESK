@@ -25,16 +25,19 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   vm.uploadNewVersion = uploadNewVersion
   vm.searchUsers = searchUsers
   vm.cancelDialog = cancelDialog
+  vm.acceptEditVersionDialog = acceptEditVersionDialog
   vm.goBack = goBack
   vm.createWFNotification = createWFNotification
   vm.highlightVersion = highlightVersion
+  vm.editInLibreOffice = editInLibreOffice
   vm.goToLOEditPage = goToLOEditPage
   vm.editInMSOffice = editInMSOffice
+  vm.editInOnlyOffice = editInOnlyOffice
   vm.downloadDocument = downloadDocument
   vm.reviewDocumentsDialog = reviewDocumentsDialog
   vm.createReviewNotification = createReviewNotification
+  vm.selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3]
 
-  var selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3]
   var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : selectedDocumentNode
   var docHasParent = $location.search().parent !== undefined
   var firstDocumentNode = ''
@@ -162,7 +165,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   function createWFNotification (comment, wtype) {
     var creator = UserService.get().userName
-    var link = 'dokument/' + selectedDocumentNode + '?dtype=wf-response' + '&from=' + creator
+    var link = 'dokument/' + vm.selectedDocumentNode + '?dtype=wf-response' + '&from=' + creator
 
     var status = wtype === 'review-approved' ? 'godkendt' : 'afvist'
 
@@ -180,7 +183,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   }
 
   function highlightVersion () {
-    var elm = document.getElementById(selectedDocumentNode)
+    var elm = document.getElementById(vm.selectedDocumentNode)
     if (elm === undefined) elm = document.getElementById(firstDocumentNode)
 
     if (elm === null) {
@@ -195,8 +198,16 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
     ContentService.get(parentDocumentNode)
       .then(function (response) {
         vm.doc = response.item
-        vm.loolEditable = ContentService.isLoolEditable(vm.doc.node.mimetype)
-        vm.msOfficeEditable = ContentService.isMsOfficeEditable(vm.doc.node.mimetype)
+        vm.isLocked = vm.doc.node.isLocked
+        if(vm.isLocked) {
+          vm.lockType = vm.doc.node.properties['cm:lockType']
+          vm.lockOwner = vm.doc.node.properties['cm:lockOwner'].displayName
+        }
+        var mimeType = vm.doc.node.mimetype
+
+        vm.loolEditable = ContentService.isLoolEditable(mimeType, vm.isLocked)
+        vm.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, vm.isLocked)
+        vm.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
 
         vm.docMetadata = response.metadata
 
@@ -277,7 +288,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   }
 
   function loadPreview () {
-    console.log('load preview')
     // todo check if not ok type like pdf, jpg and png - then skip this step
     if (docHasParent) {
       vm.store = 'versionStore://version2Store/'
@@ -296,9 +306,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
               if (plugin.initScope)
                 plugin.initScope($scope)
-
-              // delete the temporary node
-              documentService.cleanupThumbnail(response.data[0].nodeRef)
             })
         })
     } else {
@@ -319,49 +326,77 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
     }
   }
 
-  function confirmLoolEditDocDialog (event) {
-    var confirm = $mdDialog.confirm()
-      .title('Vil du redigere dette dokument?')
-      .htmlContent('<i class="material-icons">info_outline</i><p>Du er nu i gang med at redigere et dokument fra historikken.</p><p>Hvis du trykker OK nu, bliver dette dokument ophøjet til den gældende version.</p>')
-      .targetEvent(event)
-      .ok('OK')
-      .cancel('Fortryd')
+    function isVersion() {
+        var ref = $stateParams.doc;
+        var isFirstInHistory = ref === firstDocumentNode;
+        return docHasParent && !isFirstInHistory;
+    }
 
-    $mdDialog.show(confirm)
-      .then(function () {
-        var selectedVersion = $location.search().version
-        ContentService.revertToVersion('no coments', true, vm.doc.node.nodeRef, selectedVersion)
-          .then(function (response) {
+    function showEditVersionDialog(editor) {
+        $scope.editor = editor;
+        $mdDialog.show({
+            templateUrl: 'app/src/documents/view/confirmEditVersionDialog.html',
+            scope: $scope,
+            preserveScope: true
+        });
+    }
+
+    function acceptEditVersionDialog(editor) {
+        if (editor === 'only-office') {
+            var newPage = $window.open();
+        }
+        var selectedVersion = $location.search().version;
+        documentService.revertToVersion("no comments", true, vm.doc.node.nodeRef, selectedVersion).then(
+            function (response) {
+                cancelDialog();
+                if (editor === 'libre-office') {
+                    $state.go('lool', {
+                        'nodeRef': vm.doc.node.nodeRef,
+                        'versionLabel': vm.doc.version,
+                        'parent': response.config.data.nodeRef
+                    });
+                }
+                else if (editor === 'ms-office') {
+                    editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
+                }
+                else if (editor === 'only-office') {
+                    newPage.location.href = $state.href('onlyOfficeEdit', {'nodeRef': parentDocumentNode});
+                }
+            });
+    }
+
+    function editInOnlyOffice() {
+        if (isVersion()) {
+            showEditVersionDialog('only-office');
+        } else {
+            $window.open($state.href('onlyOfficeEdit', {'nodeRef': vm.doc.node.nodeRef.split('/')[3] }));
+        }
+    }
+
+    //Goes to the libreOffice online edit page
+    function editInLibreOffice() {
+        if (isVersion()) {
+            showEditVersionDialog('libre-office');
+        } else {
             $state.go('lool', {
-              'nodeRef': vm.doc.node.nodeRef,
-              'versionLabel': vm.doc.version,
-              'parent': response.config.data.nodeRef
-            })
-          })
-      })
-  }
+                'nodeRef': vm.doc.node.nodeRef
+            });
+        }
+    }
 
-  // Goes to the libreOffice online edit page
-  function goToLOEditPage () {
-    var ref = $stateParams.doc
-    var isFirstInHistory = ref === firstDocumentNode
-    if (docHasParent && !isFirstInHistory)
-      // first promote doc to latest version
-      confirmLoolEditDocDialog()
-    else
-      $state.go('lool', {
-        'nodeRef': vm.doc.node.nodeRef
-      })
-  }
+    function editInMSOffice() {
+        if (isVersion()) {
+            showEditVersionDialog('ms-office');
+        } else {
+            editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
+        }
+    }
+    
+    function downloadDocument() {
+        var versionRef = vm.store + $stateParams.doc;
+        alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file);
+    }
 
-  function editInMSOffice () {
-    editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata)
-  }
-
-  function downloadDocument () {
-    var versionRef = vm.store + $stateParams.doc
-    alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file)
-  }
 
   function reviewDocumentsDialog (event) {
     $mdDialog.show({

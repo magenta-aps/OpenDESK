@@ -7,7 +7,7 @@ angular
       restrict: 'E',
       scope: {
         currentNodeRef: '=root',
-        model: '=model'
+        selectedNode: '=model'
       },
       templateUrl: 'app/src/shared/directives/nodePicker/nodePicker.view.html',
       controller: 'NodePickerController',

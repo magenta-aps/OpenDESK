@@ -4,12 +4,12 @@ angular
   .module('openDeskApp')
   .factory('alfrescoDocumentService', AlfrescoDocumentService)
 
-function AlfrescoDocumentService ($http, alfrescoNodeUtils) {
-  var service = {
-    retrieveSingleDocument: retrieveSingleDocument,
-    retrieveNodePickerInfo: retrieveNodePickerInfo,
-    retrieveNodeContent: retrieveNodeContent
-  }
+function AlfrescoDocumentService($http, alfrescoNodeUtils) {
+
+    var service = {
+        retrieveSingleDocument: retrieveSingleDocument,
+        retrieveNodeContent: retrieveNodeContent
+    }
 
   return service
 
@@ -22,19 +22,12 @@ function AlfrescoDocumentService ($http, alfrescoNodeUtils) {
       })
   }
 
-  function retrieveNodePickerInfo (nodeRef) {
-    var url = '/alfresco/s/nodepicker/' + alfrescoNodeUtils.processNodeRef(nodeRef).id
-    return $http.get(url)
-      .then(function (response) {
-        return response.data
-      })
-  }
+    function retrieveNodeContent (nodeRef) {
+        var url = '/api/node/content/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri
+        return $http.get(url)
+            .then(function (response) {
+                return response.data
+            })
+    }
 
-  function retrieveNodeContent (nodeRef) {
-    var url = '/api/node/content/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri
-    return $http.get(url)
-      .then(function (response) {
-        return response.data
-      })
-  }
 }
