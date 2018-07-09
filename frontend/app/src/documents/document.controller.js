@@ -198,7 +198,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
       .then(function (response) {
         vm.doc = response.item
         vm.isLocked = vm.doc.node.isLocked
-        if(vm.isLocked) {
+        if (vm.isLocked) {
           vm.lockType = vm.doc.node.properties['cm:lockType']
           vm.lockOwner = vm.doc.node.properties['cm:lockOwner'].displayName
         }
@@ -325,77 +325,72 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
     }
   }
 
-    function isVersion() {
-        var ref = $stateParams.doc;
-        var isFirstInHistory = ref === firstDocumentNode;
-        return docHasParent && !isFirstInHistory;
-    }
+  function isVersion () {
+    var ref = $stateParams.doc
+    var isFirstInHistory = ref === firstDocumentNode
+    return docHasParent && !isFirstInHistory
+  }
 
-    function showEditVersionDialog(editor) {
-        $scope.editor = editor;
-        $mdDialog.show({
-            templateUrl: 'app/src/documents/view/confirmEditVersionDialog.html',
-            scope: $scope,
-            preserveScope: true
-        });
-    }
+  function showEditVersionDialog (editor) {
+    $scope.editor = editor
+    $mdDialog.show({
+      templateUrl: 'app/src/documents/view/confirmEditVersionDialog.html',
+      scope: $scope,
+      preserveScope: true
+    })
+  }
 
-    function acceptEditVersionDialog(editor) {
-        if (editor === 'only-office') {
-            var newPage = $window.open();
-        }
-        var selectedVersion = $location.search().version;
-        documentService.revertToVersion("no comments", true, vm.doc.node.nodeRef, selectedVersion).then(
-            function (response) {
-                cancelDialog();
-                if (editor === 'libre-office') {
-                    $state.go('lool', {
-                        'nodeRef': vm.doc.node.nodeRef,
-                        'versionLabel': vm.doc.version,
-                        'parent': response.config.data.nodeRef
-                    });
-                }
-                else if (editor === 'ms-office') {
-                    editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
-                }
-                else if (editor === 'only-office') {
-                    newPage.location.href = $state.href('onlyOfficeEdit', {'nodeRef': parentDocumentNode});
-                }
-            });
-    }
+  function acceptEditVersionDialog (editor) {
+    if (editor === 'only-office')
+      var newPage = $window.open()
 
-    function editInOnlyOffice() {
-        if (isVersion()) {
-            showEditVersionDialog('only-office');
-        } else {
-            $window.open($state.href('onlyOfficeEdit', {'nodeRef': vm.doc.node.nodeRef.split('/')[3] }));
-        }
-    }
+    var selectedVersion = $location.search().version
+    documentService.revertToVersion('no comments', true, vm.doc.node.nodeRef, selectedVersion).then(
+      function (response) {
+        cancelDialog()
+        if (editor === 'libre-office')
+          $state.go('lool', {
+            'nodeRef': vm.doc.node.nodeRef,
+            'versionLabel': vm.doc.version,
+            'parent': response.config.data.nodeRef
+          })
 
-    //Goes to the libreOffice online edit page
-    function editInLibreOffice() {
-        if (isVersion()) {
-            showEditVersionDialog('libre-office');
-        } else {
-            $state.go('lool', {
-                'nodeRef': vm.doc.node.nodeRef
-            });
-        }
-    }
+        else if (editor === 'ms-office')
+          editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata)
 
-    function editInMSOffice() {
-        if (isVersion()) {
-            showEditVersionDialog('ms-office');
-        } else {
-            editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata);
-        }
-    }
-    
-    function downloadDocument() {
-        var versionRef = vm.store + $stateParams.doc;
-        alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file);
-    }
+        else if (editor === 'only-office')
+          newPage.location.href = $state.href('onlyOfficeEdit', {'nodeRef': parentDocumentNode})
+      })
+  }
 
+  function editInOnlyOffice () {
+    if (isVersion())
+      showEditVersionDialog('only-office')
+    else
+      $window.open($state.href('onlyOfficeEdit', {'nodeRef': vm.doc.node.nodeRef.split('/')[3] }))
+  }
+
+  // Goes to the libreOffice online edit page
+  function editInLibreOffice () {
+    if (isVersion())
+      showEditVersionDialog('libre-office')
+    else
+      $state.go('lool', {
+        'nodeRef': vm.doc.node.nodeRef
+      })
+  }
+
+  function editInMSOffice () {
+    if (isVersion())
+      showEditVersionDialog('ms-office')
+    else
+      editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata)
+  }
+
+  function downloadDocument () {
+    var versionRef = vm.store + $stateParams.doc
+    alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file)
+  }
 
   function reviewDocumentsDialog (event) {
     $mdDialog.show({
