@@ -22,10 +22,18 @@ function httpTicketInterceptor($injector, $translate, $window, $q, sessionServic
     function request(config) {
 
         config.url = prefixAlfrescoServiceUrl(config.url);
+        var userInfo = sessionService.getUserInfo();
 
-        if (sessionService.getUserInfo()) {
+        if (userInfo) {
             config.params = config.params || {};
             config.params.alf_ticket = sessionService.getUserInfo().ticket;
+        }
+        else if (config.url.startsWith("/alfresco") &&
+            config.url !== "/alfresco/service/api/login" &&
+            config.url !== "/alfresco/s/ssologin" &&
+            config.url !== "/alfresco/service/settings/public"
+        ){
+            config = {};
         }
 
         return config;
