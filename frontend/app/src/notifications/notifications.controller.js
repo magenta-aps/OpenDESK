@@ -4,7 +4,7 @@ angular
   .module('openDeskApp.notifications')
   .controller('NotificationsController', NotificationsController)
 
-function NotificationsController ($mdSidenav, notificationsService, UserService) {
+function NotificationsController ($mdSidenav, notificationsService, UserService, sessionService) {
   var vm = this
 
   var currentUser = UserService.get().userName
@@ -40,7 +40,7 @@ function NotificationsController ($mdSidenav, notificationsService, UserService)
   }
 
   function updateNotifications () {
-    if (UserService.getUserInfo().ticket)
+    if (sessionService.getUserInfo().ticket)
       notificationsService.get(currentUser)
         .then(function (notifications) {
           vm.notifications = notifications
