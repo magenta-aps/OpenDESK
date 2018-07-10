@@ -1,40 +1,66 @@
 'use strict'
 
+import angular from 'angular'
+import ngSanitize from 'angular-sanitize'
+import ngMessages from 'angular-messages'
+import ngMaterial from 'angular-material'
+import ngCookies from 'angular-cookies'
+import uiRouter from 'angular-ui-router'
+import ngResource from 'angular-resource'
+
+import init from './init.module'
+import systemSettings from './system_settings/system-settings.module'
+import backendConfig from './backendConfig.module'
+import auth from './authentication/auth.module'
+import sites from './odSite/site.module'
+import groups from './group/group.module'
+import discussions from './odDiscussion/discussion.module'
+import notifications from './notifications/notifications.module'
+import search from './search/search.module'
+import dashboard from './dashboard/dashboard.module'
+import documents from './documents/document.module'
+import odDocuments from './odDocuments/documents.module'
+import chat from './odChat/chat.module'
+import user from './user/user.module'
+import appDrawer from './appDrawer/appDrawer.module'
+import lool from './lool/lool.module'
+import onlyOffice from './onlyOffice/onlyOffice.module'
+import header from './header/header.module'
+// import translations from './i18n/translations.module'
+
 angular
   .module('openDeskApp', [
-    'ngSanitize',
-    'ngMaterial',
-    'ngMessages',
-    'ngCookies',
-    'ui.router',
+    backendConfig,
+    init,
+    auth,
+    ngSanitize,
+    ngMaterial,
+    ngMessages,
+    ngCookies,
+    uiRouter,
     'rt.encodeuri',
-    'ngResource',
+    ngResource,
     'pdf',
-    'swfobject',
     'pdfjsViewer',
     'isteven-multi-select',
-    'openDeskApp.backendConfig',
-    'openDeskApp.init',
-    'openDeskApp.systemsettings',
-    'openDeskApp.auth',
-    'openDeskApp.group',
-    'openDeskApp.site',
-    // 'openDeskApp.filebrowser',
+    systemSettings,
+    groups,
+    sites,
     'openDeskApp.translations.init',
-    'openDeskApp.header',
-    'openDeskApp.dashboard',
-    'openDeskApp.lool',
-    'openDeskApp.onlyOffice',
-    'openDeskApp.documents',
-    'openDeskApp.odDocuments',
-    'openDeskApp.search',
+    header,
+    dashboard,
+    lool,
+    onlyOffice,
+    documents,
+    odDocuments,
+    search,
     'm43nu.auto-height',
     'dcbImgFallback',
-    'openDeskApp.notifications',
-    'openDeskApp.discussion',
-    'openDeskApp.chat',
-    'openDeskApp.user',
-    'openDeskApp.appDrawer',
+    notifications,
+    discussions,
+    chat,
+    user,
+    appDrawer,
     'dndLists',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules

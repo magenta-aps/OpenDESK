@@ -11,6 +11,7 @@
     "babel-eslint": "^8.2.3",
     "babel-plugin-transform-es2015-template-literals": "^6.22.0",
     "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^4.5.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-friendly-formatter": "^4.0.1",
@@ -19,6 +20,8 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "friendly-errors-webpack-plugin": "^1.7.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "~3.1.0",
     "gulp-babel": "^7.0.1",
@@ -42,20 +45,28 @@
     "gulp-webserver": "^0.9.1",
     "gulp-wrap": "^0.14.0",
     "gulp-xml2json": "^0.1.5",
+    "html-webpack-plugin": "^3.2.0",
     "http-proxy-middleware": "^0.18.0",
     "karma": "~0.13",
     "karma-jasmine": "^0.3.6",
     "karma-junit-reporter": "^0.2.2",
     "karma-phantomjs-launcher": "^0.2.1",
+    "node-notifier": "^5.2.1",
+    "optimize-css-assets-webpack-plugin": "^4.0.3",
+    "ora": "^2.1.0",
     "phantomjs": "^1.9.20",
     "protractor": "^4.0.14",
     "shelljs": "^0.2.6",
+    "webpack": "^4.15.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.3",
     "yargs": "^3.31.0"
   },
   "scripts": {
-    "prestart": "npm update",
-    "test": "protractor app/tests/e2e/conf.js",
-    "test-loaddata": "protractor app/tests/e2e/loaddata_conf.js"
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --mode development",
+    "start": "npm run dev",
+    "build": "node build/build.js"
   },
   "dependencies": {
     "angular": "1.6.1",
@@ -77,7 +88,6 @@
     "angular-resource": "1.6.1",
     "angular-route": "1.6.1",
     "angular-sanitize": "1.6.1",
-    "angular-swfobject": "",
     "angular-translate": "",
     "angular-translate-loader-static-files": "",
     "angular-ui-router": "1.0.10",
@@ -90,5 +100,9 @@
     "ng-file-upload": "^12.2.13",
     "pdf.js-viewer": "^0.2.8",
     "pdfjs-dist": ""
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
   }
 }
