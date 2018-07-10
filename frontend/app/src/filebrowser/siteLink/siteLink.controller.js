@@ -11,7 +11,7 @@ function SiteLinkController ($rootScope, $mdDialog, siteService, filterService) 
   vm.create = create
   vm.search = search
   vm.projects = []
-  vm.destination = {}
+  vm.destination = ''
 
   activated()
 
