@@ -4,7 +4,7 @@ angular
     .module('openDeskApp')
     .controller('TemplatesController', TemplatesController);
 
-function TemplatesController(siteService, $mdDialog, $scope, $translate, systemSettingsService) {
+function TemplatesController(siteService, $mdDialog, $scope, systemSettingsService) {
     var vm = this;
 
     vm.createTemplate = createTemplate;
@@ -19,7 +19,6 @@ function TemplatesController(siteService, $mdDialog, $scope, $translate, systemS
            });
     }
 
-    
     function newTemplate(event) {
         $mdDialog.show({
             templateUrl: 'app/src/system_settings/templates/view/newTemplate.tmpl.html',
@@ -31,11 +30,9 @@ function TemplatesController(siteService, $mdDialog, $scope, $translate, systemS
         });
     }
 
-
     function deleteSite(shortName) {
-        return siteService.deleteSite(shortName);
+        return siteService.delete(shortName);
     }
-
     
     function deleteSiteDialog(siteName) {
         var confirm = $mdDialog.confirm()
@@ -46,7 +43,7 @@ function TemplatesController(siteService, $mdDialog, $scope, $translate, systemS
             
         $mdDialog.show(confirm).then(
             function() {
-                vm.deleteSite(siteName).then (function(response){
+                vm.deleteSite(siteName).then (function() {
                     systemSettingsService.getTemplates().then (function(response) {
                         $scope.templateSites = response;
                         $mdDialog.hide();

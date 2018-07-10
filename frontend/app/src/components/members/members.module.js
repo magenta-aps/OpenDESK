@@ -1,6 +1,6 @@
 angular.module('members', [])
-.config(config);
+  .config(config)
 
-function config() {
+function config () {
 
 }

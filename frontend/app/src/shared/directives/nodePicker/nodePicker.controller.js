@@ -1,22 +1,21 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp')
-    .controller('NodePickerController', NodePickerController);
+  .module('openDeskApp')
+  .controller('NodePickerController', NodePickerController)
 
 function NodePickerController($scope, nodePickerService) {
+  var vm = this
 
-    var vm = this;
+  vm.browseParent = browseParent
+  vm.browseChild = browseChild
+  vm.pickNode = pickNode
+  vm.equalsSelectedNode = equalsSelectedNode
+  vm.hasParent = hasParent
+  vm.isFolder = isFolder
+  vm.currentNode = []
 
-    vm.browseParent = browseParent;
-    vm.browseChild = browseChild;
-    vm.pickNode = pickNode;
-    vm.equalsSelectedNode = equalsSelectedNode;
-    vm.hasParent = hasParent;
-    vm.isFolder = isFolder;
-    vm.currentNode = {};
-    
-    activate();
+  activate()
 
     function activate() {
         vm.currentNode.nodeRef = $scope.currentNodeRef;

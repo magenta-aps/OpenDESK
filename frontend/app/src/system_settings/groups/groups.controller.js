@@ -4,10 +4,8 @@ angular
     .module('openDeskApp.systemsettings')
     .controller('SettingsGroupsController', SettingsGroupsController);
 
-function SettingsGroupsController($scope, groupService, userService) {
+function SettingsGroupsController($scope, groupService) {
     var vm = this;
-
-    $scope.userService = userService;
 
     $scope.$watch(function () { return groupService.getOpenDeskGroups(); }, function (newVal) {
         vm.groups = newVal;

@@ -1,31 +1,31 @@
-'use strict';
+'use strict'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('RenameController', RenameController);
-  
-function RenameController($rootScope, $mdDialog, content, siteService) {
-  var vm = this;
+  .controller('RenameController', RenameController)
 
-  vm.nodeRef = content.nodeRef;
-  vm.newName = content.name;
+function RenameController ($rootScope, $mdDialog, content, siteService) {
+  var vm = this
 
-  vm.cancel = cancel;
-  vm.rename = rename;
+  vm.nodeRef = content.nodeRef
+  vm.newName = content.name
 
-  function rename() {
+  vm.cancel = cancel
+  vm.rename = rename
+
+  function rename () {
     var props = {
       prop_cm_name: vm.newName
-    };
+    }
 
     siteService.updateNode(vm.nodeRef, props)
-    .then(function () {
-      $rootScope.$broadcast('updateFilebrowser');
-      cancel();
-    });
+      .then(function () {
+        $rootScope.$broadcast('updateFilebrowser')
+        cancel()
+      })
   }
 
-  function cancel() {
-    $mdDialog.cancel();
+  function cancel () {
+    $mdDialog.cancel()
   }
 }

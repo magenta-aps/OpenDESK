@@ -1,82 +1,84 @@
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
-    <title>OpenDesk</title>
+  <title>OpenDesk</title>
 
-    <base href="/"> <!-- Change this to f.i. /opendesk/ when opendesk i not in the root -->
+  <base href="/">
+  <!-- Change this to f.i. /opendesk/ when opendesk i not in the root -->
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
 
-    <!-- Vendor stylesheets -->
-    <link rel="stylesheet" href="./bower_components/converse.js/css/converse.css">
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
-    <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css">
-    <link rel="stylesheet" href="./bower_components/isteven-angular-multiselect/isteven-multi-select.css">
-    <link rel="stylesheet" href="./dist/opendesk-app.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Vendor stylesheets -->
+  <link rel="stylesheet" href="./node_modules/converse.js/css/converse.css">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+  <link rel="stylesheet" href="./node_modules/angular-material/angular-material.css">
+  <link rel="stylesheet" href="./node_modules/isteven-angular-multiselect/isteven-multi-select.css">
+  <link rel="stylesheet" href="./dist/opendesk-app.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
 
-    <!-- Vendor scripts -->
-    <script src="./bower_components/pdfjs-dist/build/pdf.combined.js"></script>
-    <script src="./bower_components/swfobject/swfobject/swfobject.js"></script>
-    <script src="bower_components/pdf.js-viewer/pdf.js"></script>
+  <!-- Vendor scripts -->
+  <script src="./node_modules/angular/angular.js"></script>
 
-    <script src="./bower_components/angular/angular.js"></script>
-    <script src="./bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="./node_modules/pdfjs-dist/build/pdf.min.js"></script>
+  <script src="./node_modules/swfobject-npm/swfobject/swfobject.js"></script>
+  <script src="node_modules/pdf.js-viewer/pdf.js"></script>
 
-    <script src="./bower_components/checklist-model/checklist-model.js"></script>
-    <script src="./bower_components/angular-messages/angular-messages.js"></script>
-    <script src="./bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="./bower_components/angular-route/angular-route.js"></script>
-    <script src="./bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="./bower_components/angular-resource/angular-resource.js"></script>
-    <script src="./bower_components/angular-animate/angular-animate.js"></script>
-    <script src="./bower_components/angular-aria/angular-aria.js"></script>
-    <script src="./bower_components/angular-encode-uri/dist/angular-encode-uri.js"></script>
-    <script src="./bower_components/angular-material/angular-material.js"></script>
-    <script src="./bower_components/material-wizard/dist/material-wizard.js"></script>
-    <script src="./bower_components/angular-translate/angular-translate.js"></script>
-    <script src="./bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
-    <script src="./bower_components/isteven-angular-multiselect/isteven-multi-select.js"></script>
-    <script src="./bower_components/angular-pdf/dist/angular-pdf.js"></script>
-    <script src="./bower_components/angular-swfobject/angular-swfobject.js"></script>
-    <script src="./bower_components/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
-    <script src="./bower_components/angular-auto-height/dist/auto-height.js"></script>
-    <script src="./bower_components/angular-img-fallback/angular.dcb-img-fallback.min.js"></script>
-    <script src="./bower_components/converse.js/dist/converse.js"></script>
-    <script src="./bower_components/converse.js/dist/locales.js"></script>
-    <script src="./bower_components/angular-fixed-table-header/src/fixed-table-header.min.js"></script>
-    <script src="./bower_components/angular-i18n/angular-locale_da-dk.js"></script>
-    <script src="./bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="./bower_components/ng-file-upload/ng-file-upload.min.js"></script>
-    <script src="./bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+  <script src="./node_modules/angular-cookies/angular-cookies.js"></script>
+  <script src="./node_modules/checklist-model/checklist-model.js"></script>
+  <script src="./node_modules/angular-messages/angular-messages.js"></script>
+  <script src="./node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="./node_modules/angular-route/angular-route.js"></script>
+  <script src="./node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="./node_modules/angular-resource/angular-resource.js"></script>
+  <script src="./node_modules/angular-animate/angular-animate.js"></script>
+  <script src="./node_modules/angular-aria/angular-aria.js"></script>
+  <script src="./node_modules/angular-encode-uri/dist/angular-encode-uri.js"></script>
+  <script src="./node_modules/angular-material/angular-material.js"></script>
+  <script src="./node_modules/angular-translate/dist/angular-translate.min.js"></script>
+  <script src="./node_modules/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="./node_modules/isteven-angular-multiselect/isteven-multi-select.js"></script>
+  <script src="./node_modules/angular-pdf/dist/angular-pdf.js"></script>
+  <script src="./node_modules/angular-swfobject/angular-swfobject.js"></script>
+  <script src="./node_modules/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
+  <script src="./node_modules/angular-auto-height/dist/auto-height.js"></script>
+  <script src="./node_modules/angular-img-fallback/angular.dcb-img-fallback.min.js"></script>
+  <script src="./node_modules/converse.js/dist/converse.js"></script>
+  <script src="./node_modules/converse.js/dist/locales.js"></script>
+  <script src="./node_modules/angular-fixed-table-header/src/fixed-table-header.min.js"></script>
+  <script src="./node_modules/angular-i18n/angular-locale_da-dk.js"></script>
+  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="./node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+  <script src="./node_modules/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
 
-    <script src="./bower_components/ng-ckeditor/dist/ng-ckeditor.min.js"></script>
-    <script src="./app/assets/libs/ckeditor/ckeditor.js"></script>
-    <script id="scriptApi" type="text/javascript" src="app/src/onlyOffice/api.js"></script>
+  <script src="./node_modules/ng-ckeditor/dist/ng-ckeditor.min.js"></script>
+  <script src="./app/assets/libs/ckeditor/ckeditor.js"></script>
+  <script id="scriptApi" type="text/javascript" src="app/src/onlyOffice/api.js"></script>
 
-    <!-- style sheet -->
-    <link href="bower_components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
-    <!-- module -->
-    <script type="text/javascript" src="bower_components/angular-material-data-table/dist/md-data-table.min.js"></script>
+  <!-- style sheet -->
+  <link href="node_modules/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css" />
+  <!-- module -->
+  <script type="text/javascript" src="node_modules/angular-material-data-table/dist/md-data-table.min.js"></script>
 </head>
 
 <body ui-view="body">
-    <header ui-view="header"></header>
-    <main ui-view="content"></main>
-    <div id="loader"></div>
-    <div ui-view="sideNavs"></div>
-    <script src="bower_components/angular-pdfjs-viewer/dist/angular-pdfjs-viewer.js"></script>
-    <script src="./dist/opendesk-app.js"></script>
-    <script>
-        angular.element(document).ready(function () {
-            angular.bootstrap(document, ['openDeskApp']);
-        });
-    </script>
+  <header ui-view="header"></header>
+  <main ui-view="content"></main>
+  <div id="loader"></div>
+  <div ui-view="sideNavs"></div>
+  <script src="node_modules/angular-pdfjs-viewer/dist/angular-pdfjs-viewer.js"></script>
+  <script src="./dist/opendesk-app.js"></script>
+  <script>
+    angular.element(document).ready(function () {
+      angular.bootstrap(document, ['openDeskApp']);
+    });
+
+  </script>
 </body>
 
 </html>

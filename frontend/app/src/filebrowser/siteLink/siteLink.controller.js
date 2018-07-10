@@ -1,40 +1,37 @@
-'use strict';
+'use strict'
 
 angular
-.module('openDeskApp.filebrowser')
-.controller('SiteLinkController', SiteLinkController);
+  .module('openDeskApp.filebrowser')
+  .controller('SiteLinkController', SiteLinkController)
 
-function SiteLinkController($rootScope, $mdDialog, siteService, filterService) {
-  var vm = this;
+function SiteLinkController ($rootScope, $mdDialog, siteService, filterService) {
+  var vm = this
 
-  vm.cancel = cancel;
-  vm.create = create;
-  vm.search = search;
-  vm.projects;
-  vm.destination;
+  vm.cancel = cancel
+  vm.create = create
+  vm.search = search
+  vm.projects = []
+  vm.destination = ''
 
-  activated();
+  activated()
 
   function activated () {
-    vm.projects = siteService.getUserManagedProjects();
+    vm.projects = siteService.getUserManagedProjects()
   }
 
   function create () {
     siteService.createProjectLink(vm.destination.shortName)
-    .then(function () {
-      $rootScope.$broadcast('updateFilebrowser');
-      cancel();
-    });
+      .then(function () {
+        $rootScope.$broadcast('updateFilebrowser')
+        cancel()
+      })
   }
 
   function search (query) {
-    return filterService.search(vm.projects, { title: query });
+    return filterService.search(vm.projects, { title: query })
   }
 
   function cancel () {
-    $mdDialog.cancel();
+    $mdDialog.cancel()
   }
 }
-
-
-

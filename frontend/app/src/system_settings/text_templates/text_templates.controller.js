@@ -4,7 +4,7 @@ angular
     .module('openDeskApp')
     .controller('EmailTemplatesController', EmailTemplatesController);
 
-function EmailTemplatesController($stateParams, $mdToast, alfrescoDocumentService, siteService) {
+function EmailTemplatesController($stateParams, $mdToast, alfrescoDocumentService, siteService, ContentService) {
     var vm = this;
 
     vm.save = save;
@@ -28,10 +28,12 @@ function EmailTemplatesController($stateParams, $mdToast, alfrescoDocumentServic
 
     function activate() {
         vm.nodeRef = "workspace://SpacesStore/" + $stateParams.doc;
-        alfrescoDocumentService.retrieveNodeContent(vm.nodeRef).then(function (response) {
+        alfrescoDocumentService.retrieveNodeContent(vm.nodeRef)
+        .then(function (response) {
             vm.template = response;
         });
-        alfrescoDocumentService.retrieveSingleDocument(vm.nodeRef).then(function (response) {
+        alfrescoDocumentService.retrieveSingleDocument(vm.nodeRef)
+        .then(function (response) {
             vm.subject = response.node.properties['cm:title'];
         });
     }
@@ -39,7 +41,8 @@ function EmailTemplatesController($stateParams, $mdToast, alfrescoDocumentServic
     function save() {
         vm.uploading = true;
         var file = new Blob([vm.template], { type: 'plain/text' });
-        siteService.uploadNewVersion(file, null, vm.nodeRef).then(function (val) {
+        ContentService.uploadNewVersion(file, null, vm.nodeRef)
+        .then(function () {
             $mdToast.show(
                 $mdToast.simple()
                     .textContent('Du har gemt skabelonen.')

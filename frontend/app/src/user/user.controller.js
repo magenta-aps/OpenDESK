@@ -1,46 +1,48 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp.user')
-    .controller('UserController', UserController);
+  .module('openDeskApp.user')
+  .controller('UserController', UserController)
 
-function UserController($scope, $mdSidenav, userService, sessionService, preferenceService) {
-    var vm = this;
-    
-    vm.close = close;
-    vm.loadAvatar = loadAvatar;
-    vm.receiveNotifications = "true";
-    vm.setNotificationPreferences = setNotificationPreferences;
-    vm.user = sessionService.getUserInfo().user;
-    
-    $scope.uploadAvatar = uploadAvatar;
+function UserController ($scope, $mdSidenav, UserService, MemberService, sessionService, preferenceService) {
+  var vm = this
 
-    loadAvatar();
-    
-    function close() {
-        $mdSidenav('userpanel').close();
-    }
+  vm.close = close
+  vm.loadAvatar = loadAvatar
+  vm.receiveNotifications = 'true'
+  vm.setNotificationPreferences = setNotificationPreferences
+  vm.user = UserService.get()
 
-    function setNotificationPreferences() {
-        var preferences = { "dk.magenta.sites.receiveNotifications" : vm.receiveNotifications };
+  $scope.uploadAvatar = uploadAvatar
 
-        preferenceService.setPreferences(vm.user, preferences).then(function(data) {
-            return data;
-        });
-    }
+  loadAvatar()
 
-    function uploadAvatar(element) {
-        var file = element.files[0];
-        userService.uploadAvatar(file, vm.user.userName).then(function(data) {
-            loadAvatar();
-            return data;
-        });
-    }
+  function close () {
+    $mdSidenav('userpanel').close()
+  }
 
-    function loadAvatar() {
-        userService.getPerson(vm.user.userName).then(function(user) {
-            sessionService.setAndSaveAvatarToUserInfo(user);
-            vm.user.avatar = sessionService.getUserInfo().user.avatar;
-        });
-    }
+  function setNotificationPreferences () {
+    var preferences = { 'dk.magenta.sites.receiveNotifications': vm.receiveNotifications }
+
+    preferenceService.setPreferences(vm.user, preferences)
+      .then(function (data) {
+        return data
+      })
+  }
+
+  function uploadAvatar (element) {
+    var file = element.files[0]
+    UserService.uploadAvatar(file)
+      .then(function (data) {
+        loadAvatar()
+        return data
+      })
+  }
+
+  function loadAvatar () {
+    MemberService.get(vm.user.userName)
+      .then(function (user) {
+        vm.user.avatar = sessionService.updateAvatar(user)
+      })
+  }
 }

@@ -2,7 +2,7 @@ angular
     .module('openDeskApp')
     .factory('preferenceService', preferenceService);
 
-function preferenceService($http, $q, sessionService) {
+function preferenceService($http, $q, UserService) {
 
     var FAVOURITE_CASE = "dk_openesdh_cases_favourites";
 
@@ -112,9 +112,9 @@ function preferenceService($http, $q, sessionService) {
 
     function _url(username) {
         if (username === undefined) {
-            var userInfo = sessionService.getUserInfo();
-            if (userInfo.user) {
-                username = userInfo.user.userName;
+            var userInfo = UserService.get();
+            if (userInfo) {
+                username = userInfo.userName;
             } else {
                 return undefined;
             }
