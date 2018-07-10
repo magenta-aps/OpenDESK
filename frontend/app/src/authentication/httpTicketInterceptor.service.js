@@ -20,10 +20,17 @@ function httpTicketInterceptor ($injector, $state, $translate, $window, $q, sess
 
   function request (config) {
     config.url = prefixAlfrescoServiceUrl(config.url)
+    var userInfo = sessionService.getUserInfo()
 
-    if (sessionService.getUserInfo()) {
+    if (userInfo) {
       config.params = config.params || {}
       config.params.alf_ticket = sessionService.getUserInfo().ticket
+    } else if (config.url.startsWith('/alfresco') &&
+      config.url !== '/alfresco/service/api/login' &&
+      config.url !== '/alfresco/s/ssologin' &&
+      config.url !== '/alfresco/service/settings/public'
+    ) {
+      config = {}
     }
 
     return config
@@ -56,14 +63,7 @@ function httpTicketInterceptor ($injector, $state, $translate, $window, $q, sess
   function sessionExpired () {
     if (typeof $window._openDeskSessionExpired !== 'undefined') return
 
-    $window._openDeskSessionExpired = true
-    sessionService.setUserInfo(null)
-    var $mdDialog = $injector.get('$mdDialog')
-    var notificationUtilsService = $injector.get('notificationUtilsService')
-    $mdDialog.cancel()
     sessionService.retainCurrentLocation()
-    $state.go('login')
-    notificationUtilsService.notify($translate.instant('LOGIN.SESSION_TIMEOUT'))
-    delete $window._openDeskSessionExpired
+    sessionService.logout()
   }
 }

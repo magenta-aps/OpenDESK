@@ -11,8 +11,10 @@ function UserService ($http, $window) {
   }
 
   function getUser () {
-    user = angular.fromJson($window.sessionStorage.getItem('userInfo')).user
-    return user
+    if ($window.localStorage.getItem('userInfo')) {
+      user = angular.fromJson($window.localStorage.getItem('userInfo')).user
+      return user
+    } else { return undefined }
   }
 
   function uploadAvatar (file) {

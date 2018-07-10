@@ -5,8 +5,8 @@ angular
   .factory('sessionService', sessionService)
 
 function sessionService ($window) {
-
   var service = {
+    clearRetainedLocation: clearRetainedLocation,
     getRetainedLocation: getRetainedLocation,
     getUserInfo: getUserInfo,
     login: login,
@@ -22,61 +22,60 @@ function sessionService ($window) {
   return service
 
   function login (user, isSSO) {
-    var userInfo = getUserInfo();
+    var userInfo = getUserInfo()
 
-    if(isSSO && userInfo === undefined)
-      userInfo = {};
-        delete $window._openDeskSessionExpired;
-        user.avatar = makeAvatarUrl(user);
-        user.displayName = user.firstName;
-        if (user.lastName !== "")
-            user.displayName += " " + user.lastName;
-        userInfo.user = user;
-        saveUserInfoToSession(userInfo);
-    }
+    if (isSSO && userInfo === undefined)
+      userInfo = {}
+    user.avatar = makeAvatarUrl(user)
+    user.displayName = user.firstName
+    if (user.lastName !== '')
+      user.displayName += ' ' + user.lastName
+    userInfo.user = user
+    saveUserInfoToSession(userInfo)
+  }
 
-    function saveTicketToSession(ticket) {
-        var userInfo = {};
-        userInfo.ticket = ticket;
-        saveUserInfoToSession(userInfo);
-    }
+  function saveTicketToSession (ticket) {
+    var userInfo = {}
+    userInfo.ticket = ticket
+    saveUserInfoToSession(userInfo)
+  }
 
   function saveUserInfoToSession (userInfo) {
     $window.localStorage.setItem('userInfo', angular.toJson(userInfo))
   }
 
-    function isAdmin() {
-        var userInfo = getUserInfo();
-        if (userInfo === undefined) {
-            return false;
-        }
-        return userInfo.user.capabilities.isAdmin;
-    }
+  function isAdmin () {
+    var userInfo = getUserInfo()
+    if (userInfo === undefined)
+      return false
 
-    function clearRetainedLocation() {
-        $window.sessionStorage.removeItem('retainedLocation');
-    }
+    return userInfo.user.capabilities.isAdmin
+  }
 
-    function clearUserInfoFromSession() {
-        $window.localStorage.removeItem('userInfo');
-    }
+  function clearRetainedLocation () {
+    $window.sessionStorage.removeItem('retainedLocation')
+  }
 
-    function getUserInfo() {
-        if ($window.localStorage.getItem('userInfo')) {
-            return angular.fromJson($window.localStorage.getItem('userInfo'));
-        }
-        else
-            return undefined;
-    }
+  function clearUserInfoFromSession () {
+    $window.localStorage.removeItem('userInfo')
+  }
+
+  function getUserInfo () {
+    if ($window.localStorage.getItem('userInfo'))
+      return angular.fromJson($window.localStorage.getItem('userInfo'))
+
+    else
+      return undefined
+  }
 
   function getRetainedLocation () {
     return $window.sessionStorage.getItem('retainedLocation')
   }
 
-    function logout() {
-        clearRetainedLocation();
-        clearUserInfoFromSession();
-    }
+  function logout () {
+    clearRetainedLocation()
+    clearUserInfoFromSession()
+  }
 
   function makeURL (url) {
     var sessionTicket = getUserInfo().ticket
@@ -106,10 +105,10 @@ function sessionService ($window) {
     return avatar
   }
 
-    function updateAvatar(user){
-        var userInfo = getUserInfo();
-        userInfo.user.avatar = makeAvatarUrl(user);
-        saveUserInfoToSession(userInfo);
-        return userInfo.user.avatar;
-    }
+  function updateAvatar (user) {
+    var userInfo = getUserInfo()
+    userInfo.user.avatar = makeAvatarUrl(user)
+    saveUserInfoToSession(userInfo)
+    return userInfo.user.avatar
+  }
 }
