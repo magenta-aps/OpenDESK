@@ -2,7 +2,6 @@ import $ from 'jquery'
 import 'angular-material/angular-material.css'
 import 'isteven-angular-multiselect/isteven-multi-select.css'
 import 'angular-material-data-table/dist/md-data-table.min.css'
-import 'pdfjs-dist'
 
 window.$ = $
 
