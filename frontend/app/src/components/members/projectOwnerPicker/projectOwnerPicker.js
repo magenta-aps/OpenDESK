@@ -1,4 +1,4 @@
-angular.module('members')
+angular.module('openDeskApp.members')
   .component('projectOwnerPicker', {
     templateUrl: 'app/src/components/members/projectOwnerPicker/projectOwnerPicker.html',
     controller: projectOwnerPicker,

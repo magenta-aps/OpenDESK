@@ -1,5 +1,5 @@
 angular
-  .module('openDeskApp.documents', ['ngMaterial', 'pascalprecht.translate'])
+  .module('openDeskApp.documents', [])
   .constant('EDITOR_CONFIG', {
     lool: {
       mimeTypes: [

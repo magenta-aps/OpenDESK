@@ -1,6 +1,8 @@
 'use strict'
 
-angular.module('openDeskApp.discussion', ['ngMaterial', 'ng.ckeditor'])
+import 'ng-ckeditor'
+
+angular.module('openDeskApp.discussion', ['ng.ckeditor'])
   .config(config)
 
 function config ($stateProvider) {

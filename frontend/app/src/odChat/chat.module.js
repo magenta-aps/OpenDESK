@@ -1,2 +1,2 @@
 angular.module('openDeskApp.chat', [])
-    .constant('XMPP_DOMAIN', 'localhost');
+    .constant('XMPP_DOMAIN', 'localhost')

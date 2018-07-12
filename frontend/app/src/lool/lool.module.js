@@ -1,6 +1,6 @@
 'use strict';
 angular
-    .module('openDeskApp.lool', ['ngMaterial', 'pascalprecht.translate'])
+    .module('openDeskApp.lool', [])
     .config(config)
     .factory('transformRequestAsFormPost', transformRequestAsFormPost);
 

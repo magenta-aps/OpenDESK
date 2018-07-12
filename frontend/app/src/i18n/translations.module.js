@@ -2,7 +2,7 @@ angular
     .module('openDeskApp.translations.init', []);
 
 angular
-    .module('openDeskApp.translations', ['pascalprecht.translate'])
+    .module('openDeskApp.translations', [])
     .factory('availableLanguages', AvailableLanguages)
     .config(config);
 

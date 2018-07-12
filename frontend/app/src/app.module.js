@@ -1,67 +1,57 @@
 'use strict'
 
-import angular from 'angular'
-import ngSanitize from 'angular-sanitize'
-import ngMessages from 'angular-messages'
-import ngMaterial from 'angular-material'
-import ngCookies from 'angular-cookies'
-import uiRouter from 'angular-ui-router'
-import ngResource from 'angular-resource'
+import 'angular'
+// import './index'
+// import './templates'
+import 'angular-sanitize'
+import 'angular-messages'
+import 'angular-material'
+import 'angular-cookies'
+import 'angular-ui-router'
+import 'angular-resource'
+import 'angular-translate'
+import 'angular-translate-loader-static-files'
+import 'isteven-angular-multiselect/isteven-multi-select'
+import 'angular-auto-height'
+import 'angular-swfobject'
+import 'angular-drag-and-drop-lists'
+import 'angular-img-fallback'
 
-import init from './init.module'
-import systemSettings from './system_settings/system-settings.module'
-import backendConfig from './backendConfig.module'
-import auth from './authentication/auth.module'
-import sites from './odSite/site.module'
-import groups from './group/group.module'
-import discussions from './odDiscussion/discussion.module'
-import notifications from './notifications/notifications.module'
-import search from './search/search.module'
-import dashboard from './dashboard/dashboard.module'
-import documents from './documents/document.module'
-import odDocuments from './odDocuments/documents.module'
-import chat from './odChat/chat.module'
-import user from './user/user.module'
-import appDrawer from './appDrawer/appDrawer.module'
-import lool from './lool/lool.module'
-import onlyOffice from './onlyOffice/onlyOffice.module'
-import header from './header/header.module'
-// import translations from './i18n/translations.module'
+console.log('start of app.module')
 
 angular
   .module('openDeskApp', [
-    backendConfig,
-    init,
-    auth,
-    ngSanitize,
-    ngMaterial,
-    ngMessages,
-    ngCookies,
-    uiRouter,
-    'rt.encodeuri',
-    ngResource,
-    'pdf',
-    'pdfjsViewer',
+    'ngSanitize',
+    'ngMaterial',
+    'ngMessages',
+    'ngCookies',
+    'ui.router',
+    'pascalprecht.translate',
+    'ngResource',
+    'swfobject',
     'isteven-multi-select',
-    systemSettings,
-    groups,
-    sites,
-    'openDeskApp.translations.init',
-    header,
-    dashboard,
-    lool,
-    onlyOffice,
-    documents,
-    odDocuments,
-    search,
     'm43nu.auto-height',
     'dcbImgFallback',
-    notifications,
-    discussions,
-    chat,
-    user,
-    appDrawer,
     'dndLists',
+    'openDeskApp.backendConfig',
+    'openDeskApp.init',
+    'openDeskApp.systemsettings',
+    'openDeskApp.auth',
+    'openDeskApp.group',
+    'openDeskApp.site',
+    'openDeskApp.filebrowser',
+    'openDeskApp.translations.init',
+    'openDeskApp.header',
+    'openDeskApp.dashboard',
+    'openDeskApp.lool',
+    'openDeskApp.onlyOffice',
+    'openDeskApp.documents',
+    'openDeskApp.odDocuments',
+    'openDeskApp.search',
+    'openDeskApp.notifications',
+    'openDeskApp.discussion',
+    'openDeskApp.user',
+    'openDeskApp.appDrawer',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules
     /* LAST */
@@ -101,6 +91,8 @@ function run ($rootScope, systemSettingsService, BROWSER_CONFIG, browserService)
 function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider,
   APP_CONFIG, USER_ROLES) {
   $urlMatcherFactoryProvider.type('SlashFix', { raw: true })
+
+  console.log('config')
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true).hashPrefix('!')

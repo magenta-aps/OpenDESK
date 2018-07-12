@@ -1,4 +1,4 @@
-angular.module('openDeskApp.search', ['ngMaterial', 'pascalprecht.translate'])
+angular.module('openDeskApp.search', [])
   .config(config)
 
 function config ($stateProvider, USER_ROLES) {

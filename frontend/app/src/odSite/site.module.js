@@ -1,6 +1,8 @@
 'use strict'
 
-angular.module('openDeskApp.site', ['openDeskApp.filebrowser', 'fixed.table.header', 'members', 'odEmail'])
+import 'angular-fixed-table-header'
+
+angular.module('openDeskApp.site', ['openDeskApp.filebrowser', 'fixed.table.header', 'openDeskApp.members', 'odEmail'])
   .config(config)
 
 function config ($stateProvider, APP_CONFIG, USER_ROLES) {

@@ -1,4 +1,4 @@
-angular.module('members')
+angular.module('openDeskApp.members')
   .component('organisationUnitPicker', {
     templateUrl: '/app/src/components/members/organisationUnitPicker/organisationUnitPicker.html',
     controller: organisationUnitPicker,

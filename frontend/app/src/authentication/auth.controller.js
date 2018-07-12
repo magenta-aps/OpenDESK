@@ -4,7 +4,7 @@ angular
   .module('openDeskApp')
   .controller('AuthController', AuthController)
 
-function AuthController ($state, $stateParams, authService, $mdDialog, sessionService, $window, chatService) {
+function AuthController ($state, $stateParams, authService, $mdDialog, sessionService, $window) {
   var vm = this
   var loginErrorMessage = angular.fromJson($stateParams.error)
 
@@ -14,12 +14,14 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   vm.showForgotDialog = showForgotDialog
   vm.updateValidator = updateValidator
 
+  console.log('auth controller')
+
   function login (credentials) {
     authService.login(credentials).then(function (response) {
       // Logged in
       if (response.userName) {
-        chatService.initialize()
-        chatService.login(credentials.username, credentials.password);
+        // chatService.initialize()
+        // chatService.login(credentials.username, credentials.password)
         vm.user = response
         restoreLocation()
       }
@@ -33,7 +35,7 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   }
 
   function logout () {
-    chatService.logout()
+    // chatService.logout()
     authService.logout()
   }
 

@@ -13,7 +13,7 @@
   "rules": {
     "max-len": ["error", {
       "code": 120,
-      "tabWidth": 4,
+      "tabWidth": 2,
       "ignoreComments": true,
       "ignoreTrailingComments": true,
       "ignoreUrls": true,

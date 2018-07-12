@@ -11,8 +11,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/service': {
-        target: process.env.BASE_URL || 'http://localhost:5000/',
+      '/alfresco': {
+        target: process.env.BASE_URL || 'http://localhost:8080',
         changeOrigin: true
       }
     },

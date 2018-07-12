@@ -1,4 +1,4 @@
-angular.module('members', [])
+angular.module('openDeskApp.members', [])
   .config(config)
 
 function config () {

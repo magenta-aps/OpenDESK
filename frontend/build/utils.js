@@ -47,10 +47,10 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
+        fallback: 'style-loader'
       })
     } else {
-      return ['vue-style-loader'].concat(loaders)
+      return ['style-loader'].concat(loaders)
     }
   }
 
@@ -60,10 +60,14 @@ exports.cssLoaders = function (options) {
     postcss: generateLoaders(),
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass'),
+    scss: generateLoaders('sass', {
+      outputStyle: 'expanded',
+      sourceMap: false,
+      data: '@import "vars";',
+      includePaths: [path.join(__dirname, '../app/src')]
+    }),
     stylus: generateLoaders('stylus'),
-    styl: generateLoaders('stylus'),
-    i18n: '@kazupon/vue-i18n-loader'
+    styl: generateLoaders('stylus')
   }
 }
 
