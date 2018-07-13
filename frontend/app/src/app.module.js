@@ -1,20 +1,5 @@
 'use strict'
 
-import 'angular'
-import 'angular-sanitize'
-import 'angular-messages'
-import 'angular-material'
-import 'angular-cookies'
-import 'angular-ui-router'
-import 'angular-resource'
-import 'angular-translate'
-import 'angular-translate-loader-static-files'
-import 'isteven-angular-multiselect/isteven-multi-select'
-import 'angular-auto-height'
-import 'angular-swfobject'
-import 'angular-drag-and-drop-lists'
-import 'angular-img-fallback'
-
 angular
   .module('openDeskApp', [
     'ngSanitize',
