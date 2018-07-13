@@ -1,8 +1,6 @@
 'use strict'
 
 import 'angular'
-// import './index'
-// import './templates'
 import 'angular-sanitize'
 import 'angular-messages'
 import 'angular-material'
@@ -16,8 +14,6 @@ import 'angular-auto-height'
 import 'angular-swfobject'
 import 'angular-drag-and-drop-lists'
 import 'angular-img-fallback'
-
-console.log('start of app.module')
 
 angular
   .module('openDeskApp', [
@@ -91,8 +87,6 @@ function run ($rootScope, systemSettingsService, BROWSER_CONFIG, browserService)
 function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider,
   APP_CONFIG, USER_ROLES) {
   $urlMatcherFactoryProvider.type('SlashFix', { raw: true })
-
-  console.log('config')
 
   // use the HTML5 History API
   $locationProvider.html5Mode(true).hashPrefix('!')

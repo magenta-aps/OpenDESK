@@ -25,7 +25,6 @@ importAll(
   require.context('./', true, /.*\.scss$/)
 )
 
-console.log('index.js')
 angular.element(document).ready(function () {
   angular.bootstrap(document, ['openDeskApp'])
 })

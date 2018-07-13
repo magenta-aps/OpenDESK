@@ -14,8 +14,6 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   vm.showForgotDialog = showForgotDialog
   vm.updateValidator = updateValidator
 
-  console.log('auth controller')
-
   function login (credentials) {
     authService.login(credentials).then(function (response) {
       // Logged in
