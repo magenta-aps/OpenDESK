@@ -1,40 +1,40 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp')
-    .controller('ConfigController', ConfigController);
+  .module('openDeskApp')
+  .controller('ConfigController', ConfigController)
 
-function ConfigController(APP_BACKEND_CONFIG, systemSettingsService) {
-    var vm = this;
+function ConfigController (APP_BACKEND_CONFIG, systemSettingsService) {
+  var vm = this
 
-    vm.config = angular.copy(APP_BACKEND_CONFIG);
-    vm.updateSettings = updateSettings;
+  vm.config = angular.copy(APP_BACKEND_CONFIG)
+  vm.updateSettings = updateSettings
 
-    vm.addNewDashboardLink = addNewDashboardLink;
-    vm.removeDashboardLink = removeDashboardLink;
+  vm.addNewDashboardLink = addNewDashboardLink
+  vm.removeDashboardLink = removeDashboardLink
 
-    activate();
+  activate()
 
-    function activate() {
-        systemSettingsService.getEditors().then(function (response) {
-            vm.editors = response;
-        });
-    }
-    
-    function updateSettings() {
-        systemSettingsService.updateSettings(vm.config);
-    }
+  function activate () {
+    systemSettingsService.getEditors().then(function (response) {
+      vm.editors = response
+    })
+  }
 
-    function addNewDashboardLink() {
-        vm.config.dashboardLink.push({
-            icon: '',
-            label: '',
-            url: '',
-            newWindow: false
-        });
-    }
+  function updateSettings () {
+    systemSettingsService.updateSettings(vm.config)
+  }
 
-    function removeDashboardLink(index) {
-        vm.config.dashboardLink.splice(index,1);
-    }
+  function addNewDashboardLink () {
+    vm.config.dashboardLink.push({
+      icon: '',
+      label: '',
+      url: '',
+      newWindow: false
+    })
+  }
+
+  function removeDashboardLink (index) {
+    vm.config.dashboardLink.splice(index, 1)
+  }
 }
