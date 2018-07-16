@@ -137,7 +137,7 @@ public class Groups extends AbstractWebScript {
      */
     private JSONArray getGroupMembers(String group, AuthorityType memberType) throws JSONException {
 
-        Set<String> members = authorityService.getContainedAuthorities(memberType, group, true);
+        Set<String> members = authorityService.getContainedAuthorities(memberType, group, false);
 
         JSONArray result = new JSONArray();
         for (String shortName : members) {
