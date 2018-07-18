@@ -28,8 +28,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].bundle.js'),
-    chunkFilename: utils.assetsPath('js/[name].[id].bundle.js')
+    filename: utils.assetsPath('js/[name].opendesk.js'),
+    chunkFilename: utils.assetsPath('js/[name].opendesk.js')
   },
   optimization: {
     splitChunks: {
