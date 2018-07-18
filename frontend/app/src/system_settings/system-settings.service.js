@@ -13,11 +13,11 @@ angular.module('openDeskApp.systemsettings')
 
     return service
 
-      function getEditors() {
-          return $http.get("/alfresco/service/editors").then(function (response) {
-              return response.data[0];
-          });
-      }
+    function getEditors () {
+      return $http.get('/alfresco/service/editors').then(function (response) {
+        return response.data[0]
+      })
+    }
 
     function getTemplates () {
       return $http.post('/alfresco/service/sites', {
