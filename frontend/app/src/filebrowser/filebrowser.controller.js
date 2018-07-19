@@ -5,7 +5,7 @@ angular
   .controller('FilebrowserController', FilebrowserController)
 
 function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
-  siteService, fileUtilsService, filebrowserService, alfrescoDownloadService,
+  siteService, fileUtilsService, filebrowserService, alfrescoDownloadService, $window,
   documentPreviewService, documentService, alfrescoNodeUtils, MemberService, $translate, APP_BACKEND_CONFIG,
   sessionService, headerService, browserService, notificationsService, ContentService, editOnlineMSOfficeService) {
   var vm = this
@@ -60,7 +60,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   vm.editInLibreOffice = editInLibreOffice
   vm.editInOnlyOffice = editInOnlyOffice
 
-    // de her er dublikeret i document.controller!
+  // de her er dublikeret i document.controller!
   $scope.downloadDocument = downloadDocument
   $scope.previewDocument = previewDocument
   vm.reviewDocumentsDialog = reviewDocumentsDialog
@@ -210,50 +210,49 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     vm.isLoading = false
   }
 
-    function processContent(items) {
-        angular.forEach(items, function(item) {
-            item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
+  function processContent (items) {
+    angular.forEach(items, function (item) {
+      item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24)
 
-            var isLocked = item.isLocked;
-            var lockType;
-            if(isLocked)
-                lockType = item.lockType;
-            var mimeType = item.mimeType;
+      var isLocked = item.isLocked
+      var lockType
+      if (isLocked)
+        lockType = item.lockType
+      var mimeType = item.mimeType
 
-            item.loolEditable = ContentService.isLibreOfficeEditable(mimeType, isLocked);
-            item.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, isLocked);
-            item.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, isLocked, lockType);
-        });
-    }
-    
-    function getLink(content) {
-        if (content.contentType === 'cmis:document') {
-            if ($stateParams.type === "text-templates")
-                return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})';
-            else
-                return 'document({doc: "' + content.shortRef + '"})';
-        }
-        if (content.contentType === 'cmis:folder') {
-            if ($stateParams.type === "system-folders")
-                return 'systemsettings.filebrowser({path: "' + vm.path + '/' + content.name + '"})';
-            else if ($stateParams.type === "my-docs")
-                return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})';
-            else if ($stateParams.type === "shared-docs")
-                return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})';
-            else if($scope.isSite)
-                return 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                    '", path: "' + vm.path + '/' + content.name + '"})';
-        }
-        if (content.contentType === 'cmis:link') {
-            return 'project({projekt: "' + content.destination_link + '"})';
-        }
-    }
-    
-    function loadHistory(doc) {
-        ContentService.getHistory(doc).then(function (val) {
-            $scope.history = val;
-        });
-    }
+      item.loolEditable = ContentService.isLibreOfficeEditable(mimeType, isLocked)
+      item.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, isLocked)
+      item.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, isLocked, lockType)
+    })
+  }
+
+  function getLink (content) {
+    if (content.contentType === 'cmis:document')
+      if ($stateParams.type === 'text-templates')
+        return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})'
+      else
+        return 'document({doc: "' + content.shortRef + '"})'
+
+    if (content.contentType === 'cmis:folder')
+      if ($stateParams.type === 'system-folders')
+        return 'systemsettings.filebrowser({path: "' + vm.path + '/' + content.name + '"})'
+      else if ($stateParams.type === 'my-docs')
+        return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})'
+      else if ($stateParams.type === 'shared-docs')
+        return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})'
+      else if ($scope.isSite)
+        return 'project.filebrowser({projekt: "' + $stateParams.projekt +
+                    '", path: "' + vm.path + '/' + content.name + '"})'
+
+    if (content.contentType === 'cmis:link')
+      return 'project({projekt: "' + content.destination_link + '"})'
+  }
+
+  function loadHistory (doc) {
+    ContentService.getHistory(doc).then(function (val) {
+      $scope.history = val
+    })
+  }
 
   function buildBreadCrumbPath () {
     if ($stateParams.type === 'my-docs' || $stateParams.type === 'shared-docs') {
@@ -357,30 +356,30 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     documentPreviewService.previewDocument(nodeRef)
   }
 
-    function editInLibreOffice(nodeRef, fileName) {
-        var params = {
-            'nodeRef': nodeRef,
-            'fileName': fileName
-        };
-        $state.go('lool', params)
+  function editInLibreOffice (nodeRef, fileName) {
+    var params = {
+      'nodeRef': nodeRef,
+      'fileName': fileName
     }
+    $state.go('lool', params)
+  }
 
-    function editInMSOffice(nodeRef) {
-        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
-        documentService.getDocument(nodeId).then(function (response) {
-            var doc = response.item;
-            var docMetadata = response.metadata;
-            editOnlineMSOfficeService.editOnline(undefined, doc, docMetadata);
-        });
-    }
+  function editInMSOffice (nodeRef) {
+    var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    documentService.getDocument(nodeId).then(function (response) {
+      var doc = response.item
+      var docMetadata = response.metadata
+      editOnlineMSOfficeService.editOnline(undefined, doc, docMetadata)
+    })
+  }
 
-    function editInOnlyOffice(nodeRef) {
-        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
-        $window.open($state.href('onlyOfficeEdit', {'nodeRef': nodeId }));
-    }
-    
-    function reviewDocumentsDialog(event, nodeRef) {
-        documentNodeRef = nodeRef
+  function editInOnlyOffice (nodeRef) {
+    var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    $window.open($state.href('onlyOfficeEdit', { 'nodeRef': nodeId }))
+  }
+
+  function reviewDocumentsDialog (event, nodeRef) {
+    documentNodeRef = nodeRef
 
     $mdDialog.show({
       templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
@@ -428,11 +427,11 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
           var nodeId = alfrescoNodeUtils.processNodeRef(documentNodeRef).id
 
           // Link differs depending of type
-          var link;
-          if(content.contentType === "cmis:document")
-            link = "dokument/" + nodeId;
+          var link
+          if (content.contentType === 'cmis:document')
+            link = 'dokument/' + nodeId
           else
-            link = "dokumenter/delte/" + nodeId;
+            link = 'dokumenter/delte/' + nodeId
 
           var subject = 'Nyt dokument delt'
           var message = 'En bruger har delt et dokument med dig'
