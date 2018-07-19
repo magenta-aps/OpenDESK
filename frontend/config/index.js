@@ -14,6 +14,13 @@ module.exports = {
       '/alfresco': {
         target: process.env.BASE_URL || 'http://localhost:8080',
         changeOrigin: true
+      },
+      '/static': {
+        target: 'http://localhost:8081/app/assets',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/static': ''
+        }
       }
     },
 
