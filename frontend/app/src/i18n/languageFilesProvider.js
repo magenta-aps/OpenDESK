@@ -1,29 +1,29 @@
 angular
-    .module('openDeskApp.translations.init')
-    .provider('languageFiles', LanguageFilesProvider);
+  .module('openDeskApp.translations.init')
+  .provider('languageFiles', LanguageFilesProvider)
 
-function LanguageFilesProvider() {
-    var availableFiles = {files: []};
-    this.addFile = addFile;
-    this.getLanguageFiles = getLanguageFiles;
-    this.$get = LanguageFilesService;
+function LanguageFilesProvider () {
+  var availableFiles = {files: []}
+  this.addFile = addFile
+  this.getLanguageFiles = getLanguageFiles
+  this.$get = LanguageFilesService
 
-    function addFile(prefix, suffix) {
-        availableFiles.files.push({
-            prefix: prefix,
-            suffix: suffix
-        });
-        return this;
+  function addFile (prefix, suffix) {
+    availableFiles.files.push({
+      prefix: prefix,
+      suffix: suffix
+    })
+    return this
+  }
+
+  function getLanguageFiles () {
+    return availableFiles
+  }
+
+  function LanguageFilesService () {
+    var service = {
+      getLanguageFiles: getLanguageFiles
     }
-
-    function getLanguageFiles() {
-        return availableFiles;
-    }
-
-    function LanguageFilesService() {
-        var service = {
-            getLanguageFiles: getLanguageFiles
-        };
-        return service;
-    }
+    return service
+  }
 }
