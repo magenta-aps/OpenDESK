@@ -25,7 +25,7 @@ function getLanguageFiles () {
 }
 
 function config ($translateProvider) {
-  addFile('app/src/language/', '.json')
+  addFile('app/src/i18n/', '.json')
   $translateProvider.useStaticFilesLoader(getLanguageFiles())
 
   $translateProvider.useSanitizeValueStrategy('sanitizeParameters')
