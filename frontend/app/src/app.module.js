@@ -21,7 +21,6 @@ angular
     'openDeskApp.group',
     'openDeskApp.site',
     'openDeskApp.filebrowser',
-    'openDeskApp.translations.init',
     'openDeskApp.header',
     'openDeskApp.dashboard',
     'openDeskApp.lool',

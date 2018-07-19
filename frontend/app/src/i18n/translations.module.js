@@ -1,11 +1,8 @@
 angular
-  .module('openDeskApp.translations.init', [])
-
-angular
   .module('openDeskApp.translations', [])
-  .factory('availableLanguages', AvailableLanguages)
-  .config(config)
+  .config(['$translateProvider', config])
 
+var availableFiles = {files: []}
 var availableLanguages = {
   keys: ['en', 'da'],
   localesKeys: {
@@ -15,13 +12,21 @@ var availableLanguages = {
   }
 }
 
-function AvailableLanguages () {
-  return availableLanguages
+function addFile (prefix, suffix) {
+  availableFiles.files.push({
+    prefix: prefix,
+    suffix: suffix
+  })
+  return this
 }
 
-function config ($translateProvider, languageFilesProvider) {
-  languageFilesProvider.addFile('app/src/i18n/', '.json')
-  $translateProvider.useStaticFilesLoader(languageFilesProvider.getLanguageFiles())
+function getLanguageFiles () {
+  return availableFiles
+}
+
+function config ($translateProvider) {
+  addFile('app/src/language/', '.json')
+  $translateProvider.useStaticFilesLoader(getLanguageFiles())
 
   $translateProvider.useSanitizeValueStrategy('sanitizeParameters')
 
