@@ -34,8 +34,8 @@ ng-show="vm.hasParent()" ng-class="vm.equalsSelectedNode(vm.currentNode) ? 'pick
             {{node.contentType == 'cmis:link' ? 'link' : ''}}
             <img class="md-avatar"
                  ng-show="node.contentType === 'cmis:document'"
-                 ng-src="app/assets/img/filetypes/{{node.thumbNailURL}}"
-                 onerror="this.src='app/assets/img/filetypes/generic-file-24.png'">
+                 ng-src="assets/img/filetypes/{{node.thumbNailURL}}"
+                 onerror="this.src='assets/img/filetypes/generic-file-24.png'">
         </i>
         <span class='content-name document-name'>{{node.name}}</span>
     </md-list-item>

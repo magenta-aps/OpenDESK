@@ -96,7 +96,7 @@ function sessionService ($window) {
   function makeAvatarUrl (user) {
     var avatar
     if (user.avatar === undefined) {
-      avatar = 'app/assets/img/avatars/blank-profile-picture.png'
+      avatar = 'assets/img/avatars/blank-profile-picture.png'
     } else {
       avatar = user.avatar.replace('/thumbnails/avatar', '')
       avatar = makeURL(`/alfresco/s/${avatar}`)
