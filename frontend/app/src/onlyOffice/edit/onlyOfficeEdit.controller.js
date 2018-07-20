@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.onlyOffice')
-  .controller('OnlyOfficeEditController', OnlyOfficeEditController)
+  .controller('OnlyOfficeEditController', ['$stateParams', 'onlyOfficeService', OnlyOfficeEditController])
 
 function OnlyOfficeEditController ($stateParams, onlyOfficeService) {
   var vm = this

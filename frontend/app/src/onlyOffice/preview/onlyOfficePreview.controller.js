@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.onlyOffice')
-  .controller('OnlyOfficePreviewController', OnlyOfficePreviewController)
+  .controller('OnlyOfficePreviewController', ['$scope', 'onlyOfficeService', OnlyOfficePreviewController])
 
 function OnlyOfficePreviewController ($scope, onlyOfficeService) {
   var vm = this

@@ -7,11 +7,12 @@ import editTitleTemplate from './view/editTitle.tmpl.html'
 
 angular
   .module('openDeskApp.discussion')
-  .controller('DiscussionController', DiscussionController)
+  .controller('DiscussionController', ['APP_CONFIG', '$scope', '$timeout', '$mdDialog', '$state', '$stateParams',
+    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'sessionService',
+    'notificationsService', 'siteService', 'UserService', DiscussionController])
 
 function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
-  $location, discussionService, nodeRefUtilsService, sessionService, notificationsService,
-  siteService, UserService) {
+  $location, discussionService, nodeRefUtilsService, sessionService, notificationsService, siteService, UserService) {
   var vm = this
 
   vm.discussions = []

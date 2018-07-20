@@ -1,9 +1,10 @@
 angular
   .module('openDeskApp')
-  .controller('SearchController', SearchController)
+  .controller('SearchController', ['$scope', '$interval', '$translate', '$stateParams', 'searchService',
+    'fileUtilsService', 'MemberService', SearchController])
 
-function SearchController ($scope, $interval, $translate, $stateParams, searchService,
-  fileUtilsService, MemberService) {
+function SearchController ($scope, $interval, $translate, $stateParams, searchService, fileUtilsService,
+  MemberService) {
   $scope.searchTerm = $stateParams.searchTerm
   $scope.selectedFilters = {} // Keep track of the selected filters
   $scope.filtersQueryString = '' // the selected filters as query string

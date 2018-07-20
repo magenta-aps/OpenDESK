@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('openDeskApp.onlyOffice')
-  .factory('onlyOfficeService', onlyOfficeService)
+  .factory('onlyOfficeService', ['$http', 'alfrescoNodeUtils', 'sessionService', onlyOfficeService])
 
 function onlyOfficeService ($http, alfrescoNodeUtils, sessionService) {
   var restBaseUrl = '/alfresco/service'
