@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp')
-  .factory('translateService', TranslateService)
+  .factory('translateService', ['APP_BACKEND_CONFIG', TranslateService])
 
 function TranslateService (APP_BACKEND_CONFIG) {
   var service = {
