@@ -10,21 +10,23 @@ import cannotPreviewTemplate from './view/cannotPreview.html'
 
 angular
   .module('openDeskApp')
-  .factory('documentPreviewService', DocumentPreviewService)
-  .run(['$templateProvider', run])
+  .factory('documentPreviewService', ['$mdDialog', '$timeout', 'alfrescoDocumentService',
+    'alfrescoDownloadService', 'sessionService', '$http', '$sce', 'ALFRESCO_URI', 'EDITOR_CONFIG', 'APP_BACKEND_CONFIG',
+    DocumentPreviewService])
+  .run(['$templateCache', run])
 
-function run ($templateProvider) {
-  $templateProvider.put('audio.html', audioTemplate)
-  $templateProvider.put('video.html', videoTemplate)
-  $templateProvider.put('strobeMediaPlayBack.html', strobeMediaPlayBackTemplate)
-  $templateProvider.put('image.html', imageTemplate)
-  $templateProvider.put('onlyOffice.html', onlyOfficeTemplate)
-  $templateProvider.put('pdf.html', pdfTemplate)
-  $templateProvider.put('web.html', webTemplate)
-  $templateProvider.put('cannotPreview.html', cannotPreviewTemplate)
+function run ($templateCache) {
+  $templateCache.put('audio.html', audioTemplate)
+  $templateCache.put('video.html', videoTemplate)
+  $templateCache.put('strobeMediaPlayBack.html', strobeMediaPlayBackTemplate)
+  $templateCache.put('image.html', imageTemplate)
+  $templateCache.put('onlyOffice.html', onlyOfficeTemplate)
+  $templateCache.put('pdf.html', pdfTemplate)
+  $templateCache.put('web.html', webTemplate)
+  $templateCache.put('cannotPreview.html', cannotPreviewTemplate)
 }
 
-function DocumentPreviewService ($templateCache, $mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
+function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
   sessionService, $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
   var service = {
     previewDocument: previewDocument,

@@ -1,6 +1,6 @@
 angular
   .module('openDeskApp')
-  .factory('alfrescoDownloadService', AlfrescoDownloadService)
+  .factory('alfrescoDownloadService', ['alfrescoNodeUtils', 'ALFRESCO_URI', 'sessionService', AlfrescoDownloadService])
 
 function AlfrescoDownloadService (alfrescoNodeUtils, ALFRESCO_URI, sessionService) {
   var service = {
