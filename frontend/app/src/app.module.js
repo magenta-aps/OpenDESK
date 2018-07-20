@@ -31,14 +31,14 @@ angular
     'openDeskApp.notifications',
     'openDeskApp.discussion',
     'openDeskApp.user',
-    'openDeskApp.appDrawer',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules
     /* LAST */
     'openDeskApp.translations'
   ]) // TRANSLATIONS IS ALWAYS LAST!
-  .config(config)
-  .run(run)
+  .config(['$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$locationProvider',
+    'APP_CONFIG', 'USER_ROLES', config])
+  .run(['$rootScope', 'systemSettingsService', 'BROWSER_CONFIG', 'browserService', run])
 
 function run ($rootScope, systemSettingsService, BROWSER_CONFIG, browserService) {
   $rootScope.isBoolean = function (value) {
