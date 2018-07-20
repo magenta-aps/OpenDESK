@@ -56,10 +56,10 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     if (vm.config.enableProjects) vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')})
     vm.types.push({key: '', name: $translate.instant('COMMON.ALL')})
 
-    vm.sitesName = translateService.getSitesName();
-    var title = $translate.instant(vm.sitesName);
-    browserService.setTitle(title);
-    headerService.setTitle(title);
+    vm.sitesName = translateService.getSitesName()
+    var title = $translate.instant(vm.sitesName)
+    browserService.setTitle(title)
+    headerService.setTitle(title)
 
     // sets the margin to the width of sidenav
     var tableHeight = $(window).height() - 200 - $('header').outerHeight() - $('#table-header').outerHeight() - $('#table-actions').outerHeight()

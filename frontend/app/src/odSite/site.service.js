@@ -299,11 +299,11 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeUtils, sess
     })
   }
 
-    function getNode(siteName, container, path) {
-        return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
-            return response.data;
-        });
-    }
+  function getNode (siteName, container, path) {
+    return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
+      return response.data
+    })
+  }
 
   function getSiteUserPermissions (siteShortName) {
     if (sessionService.isAdmin()) {

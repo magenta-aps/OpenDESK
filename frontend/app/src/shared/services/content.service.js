@@ -105,24 +105,24 @@ function ContentService ($http, alfrescoNodeUtils, APP_BACKEND_CONFIG, EDITOR_CO
     })
   }
 
-  function isLibreOfficeEditable(mimeType, isLocked) {
-      if (!APP_BACKEND_CONFIG.editors.libreOffice)
-          return false;
-      if (!isLocked)
-          return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
+  function isLibreOfficeEditable (mimeType, isLocked) {
+    if (!APP_BACKEND_CONFIG.editors.libreOffice)
+      return false
+    if (!isLocked)
+      return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1
   }
 
-    function isMsOfficeEditable(mimeType, isLocked) {
-        if (!APP_BACKEND_CONFIG.editors.msOffice)
-            return false;
-        if (!isLocked)
-            return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1;
-    }
+  function isMsOfficeEditable (mimeType, isLocked) {
+    if (!APP_BACKEND_CONFIG.editors.msOffice)
+      return false
+    if (!isLocked)
+      return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1
+  }
 
-    function isOnlyOfficeEditable(mimeType, isLocked, lockType){
-        if(!APP_BACKEND_CONFIG.editors.onlyOffice)
-            return false;
-        if(!isLocked || lockType === 'WRITE_LOCK')
-            return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1;
-    }
+  function isOnlyOfficeEditable (mimeType, isLocked, lockType) {
+    if (!APP_BACKEND_CONFIG.editors.onlyOffice)
+      return false
+    if (!isLocked || lockType === 'WRITE_LOCK')
+      return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1
+  }
 }

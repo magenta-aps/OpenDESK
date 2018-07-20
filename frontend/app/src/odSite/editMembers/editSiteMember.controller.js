@@ -122,7 +122,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   }
 
   function createNotification (userName, subject, message, link, wtype, project) {
-   notificationsService.add(userName, subject, message, link, wtype, project)
+    notificationsService.add(userName, subject, message, link, wtype, project)
   }
 
   function createSiteNotification (userName, site) {

@@ -3,17 +3,17 @@ angular
   .controller('SearchBarController', SearchBarController)
 
 function SearchBarController ($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService,
-                              translateService) {
+  translateService) {
   var vm = this
   vm.getLiveSearch = getLiveSearch
   vm.goToDocument = goToDocument
   vm.goToSearchPage = goToSearchPage
 
-    activate();
+  activate()
 
-    function activate() {
-        vm.sitesName = translateService.getSitesName();
-    }
+  function activate () {
+    vm.sitesName = translateService.getSitesName()
+  }
 
   function getLiveSearch (term) {
     return searchService.documentLiveSearch(term).then(function (response) {
