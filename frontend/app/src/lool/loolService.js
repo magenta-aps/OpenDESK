@@ -2,7 +2,7 @@ angular
   .module('openDeskApp.lool')
   .factory('loolService', loolService)
 
-function loolService ($http, transformRequestAsFormPost, ALFRESCO_URI) {
+function loolService ($http, transformRequestAsFormPost) {
   return {
     getWopiUrl: getWopiUrl,
     getIframeSrc: getIframeSrc,
@@ -48,15 +48,15 @@ function loolService ($http, transformRequestAsFormPost, ALFRESCO_URI) {
      * Currently not in use. The idea of this was to submit a (form) request to the libreoffice online service and
      * collect the return for use in the iFrame ro render the Loleaflet client.
      * @param frameSrcURL
-     * @param access_token
+     * @param accessToken
      * @returns {*}
      */
-  function getIframeSrc (frameSrcURL, access_token) {
+  function getIframeSrc (frameSrcURL, accessToken) {
     return $http({
       method: 'POST',
       url: frameSrcURL,
       transformRequest: transformRequestAsFormPost,
-      data: {access_token: access_token},
+      data: {access_token: accessToken},
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
         'x-requested-with': ''
