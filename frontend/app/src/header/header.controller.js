@@ -12,8 +12,7 @@ function HeaderController ($scope, $state, $mdSidenav, headerService, UserServic
   vm.toggleAppDrawer = buildToggler('appDrawer')
   vm.toggleNotifications = function () {
     setAllSeen()
-    $mdSidenav('notifications')
-      .toggle()
+    buildToggler('notifications')
   }
   vm.toggleSystemSettings = toggleSystemSettings
   vm.toggleUserPanel = buildToggler('userpanel')
