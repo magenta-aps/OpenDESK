@@ -3,7 +3,7 @@
 
   angular
     .module('openDeskApp.documents')
-    .factory('documentService', documentService)
+    .factory('documentService', ['$http', 'alfrescoNodeUtils', documentService])
 
   function documentService ($http, alfrescoNodeUtils) {
     var service = {

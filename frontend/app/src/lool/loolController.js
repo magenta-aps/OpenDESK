@@ -1,7 +1,8 @@
 'use strict'
 angular
   .module('openDeskApp.lool')
-  .controller('LoolController', LoolController)
+  .controller('LoolController', ['$state', '$stateParams', 'loolService', 'ContentService', '$mdToast', '$translate',
+    'nodeRefUtilsService', 'headerService', LoolController])
 
 /**
  * Main Controller for the LibreOffice online module module

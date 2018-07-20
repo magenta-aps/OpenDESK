@@ -1,6 +1,7 @@
 angular
   .module('openDeskApp')
-  .factory('editOnlineMSOfficeService', editOnlineMSOfficeService)
+  .factory('editOnlineMSOfficeService', ['fileUtilsService', 'BROWSER_CONFIG', 'UserService', 'MemberService',
+    '$window', '$mdToast', '$translate', editOnlineMSOfficeService])
 
 function editOnlineMSOfficeService (fileUtilsService, BROWSER_CONFIG, UserService, MemberService, $window, $mdToast,
   $translate) {

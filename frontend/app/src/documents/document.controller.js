@@ -6,7 +6,10 @@ import confirmEditVersionDialogTemplate from './view/confirmEditVersionDialog.ht
 import reviewDocumentTemplate from '../filebrowser/view/content/document/reviewDocument.tmpl.html'
 
 angular.module('openDeskApp.documents')
-  .controller('DocumentController', DocumentController)
+  .controller('DocumentController', ['$scope', '$timeout', '$translate', 'documentService', 'MemberService',
+    '$stateParams', '$location', '$state', 'documentPreviewService', 'alfrescoDownloadService', 'browserService',
+    '$mdDialog', 'notificationsService', 'UserService', 'siteService', 'headerService', '$window',
+    'editOnlineMSOfficeService', 'filebrowserService', 'ContentService', DocumentController])
 
 function DocumentController ($scope, $timeout, $translate, documentService, MemberService, $stateParams,
   $location, $state, documentPreviewService, alfrescoDownloadService, browserService, $mdDialog,

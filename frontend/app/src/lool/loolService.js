@@ -1,6 +1,6 @@
 angular
   .module('openDeskApp.lool')
-  .factory('loolService', loolService)
+  .factory('loolService', ['$http', 'transformRequestAsFormPost', loolService])
 
 function loolService ($http, transformRequestAsFormPost) {
   return {

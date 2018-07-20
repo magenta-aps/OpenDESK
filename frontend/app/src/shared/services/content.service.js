@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('openDeskApp')
-  .factory('ContentService', ContentService)
+  .factory('ContentService', ['$http', 'alfrescoNodeUtils', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', ContentService])
 
 function ContentService ($http, alfrescoNodeUtils, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
   var service = {
