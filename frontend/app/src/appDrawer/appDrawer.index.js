@@ -5,6 +5,6 @@ function importAll (r) {
 }
 
 importAll(
-  // including subdirectories, find all *.js files except those matching *.module.js or *.spec.js
-  require.context('./', true, /^(?!.*\.module\.js$)^(?!.*\.spec\.js$).*\.js$/)
+  // including subdirectories, find all *.js files except those matching *.module.js
+  require.context('./', true, /^(?!.*\.module\.js$).*\.js$/)
 )
