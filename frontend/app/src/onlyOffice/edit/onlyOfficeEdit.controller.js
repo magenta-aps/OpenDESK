@@ -1,18 +1,17 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp.onlyOffice')
-    .controller('OnlyOfficeEditController', OnlyOfficeEditController);
+  .module('openDeskApp.onlyOffice')
+  .controller('OnlyOfficeEditController', OnlyOfficeEditController)
 
-function OnlyOfficeEditController($stateParams, onlyOfficeService) {
-    var vm = this;
+function OnlyOfficeEditController ($stateParams, onlyOfficeService) {
+  var vm = this
+  activate()
 
-    activate();
-
-    function activate() {
-        var nodeId = $stateParams.nodeRef;
-        onlyOfficeService.displayEdit(nodeId).then(function(response) {
-            vm.isDisplayed = response;
-        });
-    }
+  function activate () {
+    var nodeId = $stateParams.nodeRef
+    onlyOfficeService.displayEdit(nodeId).then(function (response) {
+      vm.isDisplayed = response
+    })
+  }
 }
