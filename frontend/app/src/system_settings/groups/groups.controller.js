@@ -1,5 +1,4 @@
 'use strict'
-import '../../group/group.index'
 
 angular
   .module('openDeskApp.systemsettings')
