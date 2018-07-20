@@ -4,7 +4,7 @@ import filebrowserTemplate from '../filebrowser/view/filebrowser.html'
 
 angular
   .module('openDeskApp.odDocuments', ['ngMaterial'])
-  .config(config)
+  .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('odDocuments', {

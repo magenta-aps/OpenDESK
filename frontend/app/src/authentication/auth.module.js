@@ -2,7 +2,7 @@
 import loginTemplate from './view/login.html'
 
 angular.module('openDeskApp.auth', [])
-  .config(config)
+  .config(['$stateProvider', config])
 
 function config ($stateProvider) {
   $stateProvider.state('login', {

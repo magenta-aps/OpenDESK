@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp')
-  .factory('sessionService', sessionService)
+  .factory('sessionService', ['$window', sessionService])
 
 function sessionService ($window) {
   var service = {

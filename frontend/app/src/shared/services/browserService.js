@@ -1,6 +1,6 @@
 angular
   .module('openDeskApp')
-  .factory('browserService', BrowserService)
+  .factory('browserService', ['APP_BACKEND_CONFIG', BrowserService])
 
 function BrowserService (APP_BACKEND_CONFIG) {
   var ua = window.navigator.userAgent.toLowerCase()

@@ -6,7 +6,7 @@ import overviewTemplate from './view/overview.html'
 import conversationTemplate from './view/conversation.html'
 
 angular.module('openDeskApp.discussion', ['ng.ckeditor'])
-  .config(config)
+  .config(['$stateProvider', config])
 
 function config ($stateProvider) {
   $stateProvider.state('project.discussions', {

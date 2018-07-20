@@ -3,7 +3,7 @@ import loolTemplate from './view/lool.html'
 
 angular
   .module('openDeskApp.lool', [])
-  .config(config)
+  .config(['$stateProvider', 'USER_ROLES', config])
   .factory('transformRequestAsFormPost', transformRequestAsFormPost)
 
 function config ($stateProvider, USER_ROLES) {

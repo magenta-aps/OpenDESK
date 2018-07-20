@@ -2,7 +2,7 @@
 import dashboardTemplate from './view/dashboard.html'
 
 angular.module('openDeskApp.dashboard', ['ngMaterial'])
-  .config(config)
+  .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('dashboard', {

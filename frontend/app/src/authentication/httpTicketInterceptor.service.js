@@ -2,8 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .config(config)
-  .factory('httpTicketInterceptor', httpTicketInterceptor)
+  .config(['$httpProvider', config])
+  .factory('httpTicketInterceptor', ['$injector', '$state', '$translate', '$window', '$q', 'sessionService',
+    'ALFRESCO_URI', httpTicketInterceptor])
 
 function config ($httpProvider) {
   $httpProvider.interceptors.push('httpTicketInterceptor')

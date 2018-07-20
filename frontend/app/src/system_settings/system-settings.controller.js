@@ -1,3 +1,5 @@
+import '../shared/services/pageService'
+
 angular
   .module('openDeskApp.systemsettings')
   .controller('SystemSettingsController', SystemSettingsCtrl)

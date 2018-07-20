@@ -5,7 +5,7 @@ import siteDetailTemplate from './siteDetail/siteDetail.view.html'
 import filebrowserTemplate from '../filebrowser/view/filebrowser.html'
 
 angular.module('openDeskApp.site', ['openDeskApp.filebrowser', 'fixed.table.header', 'openDeskApp.members', 'odEmail'])
-  .config(config)
+  .config(['$stateProvider', 'APP_CONFIG', 'USER_ROLES', config])
 
 function config ($stateProvider, APP_CONFIG, USER_ROLES) {
   $stateProvider.state('siteList', {

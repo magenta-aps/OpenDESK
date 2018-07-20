@@ -2,7 +2,7 @@
 import searchTemplate from './view/search.html'
 
 angular.module('openDeskApp.search', [])
-  .config(config)
+  .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider

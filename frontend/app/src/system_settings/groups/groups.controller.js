@@ -1,8 +1,9 @@
 'use strict'
+import '../../group/group.index'
 
 angular
   .module('openDeskApp.systemsettings')
-  .controller('SettingsGroupsController', SettingsGroupsController)
+  .controller('SettingsGroupsController', ['$scope', 'groupService', SettingsGroupsController])
 
 function SettingsGroupsController ($scope, groupService) {
   var vm = this

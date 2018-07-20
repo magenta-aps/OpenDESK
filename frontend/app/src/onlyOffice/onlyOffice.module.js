@@ -2,7 +2,7 @@
 import onlyOfficeTemplate from './view/onlyOffice.html'
 
 angular.module('openDeskApp.onlyOffice', ['ngMaterial'])
-  .config(config)
+  .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('onlyOfficeEdit', {

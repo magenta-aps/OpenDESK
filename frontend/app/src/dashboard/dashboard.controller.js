@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.dashboard')
-  .controller('DashboardController', DashboardController)
+  .controller('DashboardController', ['headerService', 'APP_BACKEND_CONFIG', DashboardController])
 
 function DashboardController (headerService, APP_BACKEND_CONFIG) {
   var vm = this

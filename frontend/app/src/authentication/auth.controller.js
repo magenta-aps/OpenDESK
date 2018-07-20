@@ -3,7 +3,8 @@ import forgotPasswordDialogTemplate from './view/forgotPasswordDialog.html'
 
 angular
   .module('openDeskApp')
-  .controller('AuthController', AuthController)
+  .controller('AuthController', ['$state', '$stateParams', 'authService', '$mdDialog', 'sessionService', '$window',
+    AuthController])
 
 function AuthController ($state, $stateParams, authService, $mdDialog, sessionService, $window) {
   var vm = this
