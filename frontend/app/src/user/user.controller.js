@@ -11,25 +11,27 @@ function UserController ($scope, $mdSidenav, UserService, MemberService, session
 
   vm.close = close
   vm.loadAvatar = loadAvatar
-  vm.receiveNotifications = 'true'
   vm.setNotificationPreferences = setNotificationPreferences
   vm.user = UserService.get()
 
   $scope.uploadAvatar = uploadAvatar
 
+  loadNotificationPreferences()
   loadAvatar()
 
   function close () {
     $mdSidenav('userpanel').close()
   }
 
-  function setNotificationPreferences () {
-    var preferences = { 'dk.magenta.sites.receiveNotifications': vm.receiveNotifications }
-
-    preferenceService.setPreferences(vm.user, preferences)
-      .then(function (data) {
-        return data
+  function loadNotificationPreferences () {
+    preferenceService.getNotificationPreferences()
+      .then(function (response) {
+        vm.receiveNotifications = response
       })
+  }
+
+  function setNotificationPreferences () {
+    preferenceService.setNotificationPreferences(vm.receiveNotifications)
   }
 
   function uploadAvatar (element) {

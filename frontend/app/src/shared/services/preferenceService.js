@@ -1,27 +1,38 @@
 angular
   .module('openDeskApp')
-  .factory('preferenceService', preferenceService)
+  .factory('preferenceService', ['$http', '$q', 'UserService', preferenceService])
 
 function preferenceService ($http, $q, UserService) {
-  var FAVOURITE_CASE = 'dk_openesdh_cases_favourites'
+  var preferenceFilter = 'dk.magenta.sites.receiveNotifications'
 
   return {
-    getAllPreferences: getAllPreferences,
+    getNotificationPreferences: getNotificationPreferences,
+    setNotificationPreferences: setNotificationPreferences,
     getPreferences: getPreferences,
     setPreferences: setPreferences,
-    removeAllPreferences: removeAllPreferences,
-    removePreferences: removePreferences,
-    addFavouriteCase: addFavouriteCase,
-    removeFavouriteCase: removeFavouriteCase,
-    isFavouriteCase: isFavouriteCase,
-    _update: _update,
     _url: _url
   }
 
-  // Gets all preferences
-  // username: ID of the user
-  function getAllPreferences (username) {
-    return getPreferences(username, '')
+  function getNotificationPreferences () {
+    var userName = getUserName()
+    return getPreferences(userName, preferenceFilter)
+      .then(function (data) {
+      // If the preference is set then return it
+        if (data[preferenceFilter] != null)
+          return data[preferenceFilter]
+        // Otherwise return default value; true
+        return true
+      })
+  }
+
+  function setNotificationPreferences (value) {
+    var userName = getUserName()
+    var preferences = { 'dk.magenta.sites.receiveNotifications': value }
+    setPreferences(userName, preferences)
+  }
+
+  function getUserName () {
+    return UserService.get().userName
   }
 
   // Gets preferences matching preferenceFilter
@@ -40,72 +51,6 @@ function preferenceService ($http, $q, UserService) {
     return $http.post(this._url(username), preferences).then(function (response) {
       return response.data
     })
-  }
-
-  // Removes all preferences
-  // username: ID of the user
-  function removeAllPreferences (username) {
-    return removePreferences(username, '')
-  }
-
-  // Removes preferences matching the filter
-  // username: ID of the user
-  // preferenceFilter: Can be "namespaced" by using package notation. For example "dk.magenta.sites.<site_name>.notifications"
-  function removePreferences (username, preferenceFilter) {
-    return $http.post(this._url(username) + '?pf=' + preferenceFilter).then(function (response) {
-      return response.data
-    })
-  }
-
-  function isFavouriteCase (caseId) {
-    return this.getPreferences({pf: FAVOURITE_CASE}).then(function (result) {
-      if (result === undefined)
-        return false
-
-      var values = result[FAVOURITE_CASE]
-      var arrValues = values ? values.split(',') : []
-      return arrValues.indexOf(caseId) != -1
-    })
-  }
-
-  function addFavouriteCase (caseId) {
-    var data = {
-      name: FAVOURITE_CASE,
-      value: caseId,
-      add: true
-    }
-    return this._update(data)
-  }
-
-  function removeFavouriteCase (caseId) {
-    var data = {
-      name: FAVOURITE_CASE,
-      value: caseId,
-      add: false
-    }
-    return this._update(data)
-  }
-
-  function _update (preference) {
-    var deferred = $q.defer()
-    var _this = this
-    this.getPreferences().then(function (preferences) {
-      var values = preferences[preference.name]
-      var arrValues = values ? values.split(',') : []
-      if (preference.add === true) {
-        arrValues.push(preference.value)
-      } else {
-        var index = arrValues.indexOf(preference.value)
-        if (index >= 0)
-          arrValues.splice(index, 1)
-      }
-      var preferenceObj = {}
-      preferenceObj[preference.name] = arrValues.join(',')
-      _this.setPreferences(preferenceObj).then(function (result) {
-        deferred.resolve(result)
-      })
-    })
-    return deferred.promise
   }
 
   function _url (username) {
