@@ -1,6 +1,6 @@
 angular
   .module('odEmail')
-  .service('odEmailService', odEmailService)
+  .service('odEmailService', ['$http', odEmailService])
 
 function odEmailService ($http) {
   return {

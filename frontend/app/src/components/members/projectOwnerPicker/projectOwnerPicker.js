@@ -4,7 +4,7 @@ import projectOwnerPickerTemplate from './projectOwnerPicker.html'
 angular.module('openDeskApp.members')
   .component('projectOwnerPicker', {
     template: projectOwnerPickerTemplate,
-    controller: projectOwnerPicker,
+    controller: ['siteService', 'filterService', projectOwnerPicker],
     bindings: {
       selected: '=',
       type: '<'

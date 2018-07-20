@@ -1,6 +1,6 @@
 angular
   .module('odEmail')
-  .controller('odEmailController', odEmailController)
+  .controller('odEmailController', ['$mdDialog', '$mdToast', 'odEmailService', odEmailController])
 
 function odEmailController ($mdDialog, $mdToast, odEmailService) {
   var vm = this

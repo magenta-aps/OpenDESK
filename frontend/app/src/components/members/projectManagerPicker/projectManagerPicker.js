@@ -4,7 +4,7 @@ import projectManagerPickerTemplate from './projectManagerPicker.html'
 angular.module('openDeskApp.members')
   .component('projectManagerPicker', {
     template: projectManagerPickerTemplate,
-    controller: projectManagerPicker,
+    controller: ['siteService', 'MemberService', projectManagerPicker],
     bindings: {
       selected: '=',
       type: '<'

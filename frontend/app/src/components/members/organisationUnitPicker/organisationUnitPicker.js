@@ -4,7 +4,7 @@ import organisationUnitPickerTemplate from './organisationUnitPicker.html'
 angular.module('openDeskApp.members')
   .component('organisationUnitPicker', {
     template: organisationUnitPickerTemplate,
-    controller: organisationUnitPicker,
+    controller: ['siteService', organisationUnitPicker],
     bindings: {
       selected: '=',
       type: '<'
