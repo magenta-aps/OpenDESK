@@ -2,7 +2,8 @@
 
 angular
   .module('openDeskApp')
-  .controller('EmailTemplatesController', EmailTemplatesController)
+  .controller('EmailTemplatesController', ['$stateParams', '$mdToast', 'alfrescoDocumentService', 'siteService',
+    'ContentService', EmailTemplatesController])
 
 function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentService, siteService, ContentService) {
   var vm = this

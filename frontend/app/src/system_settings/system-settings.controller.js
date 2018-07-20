@@ -2,7 +2,8 @@ import '../shared/services/pageService'
 
 angular
   .module('openDeskApp.systemsettings')
-  .controller('SystemSettingsController', SystemSettingsCtrl)
+  .controller('SystemSettingsController', ['sessionService', 'pageService', 'systemSettingsService', '$scope',
+    'browserService', '$translate', 'APP_BACKEND_CONFIG', SystemSettingsCtrl])
 
 function SystemSettingsCtrl (sessionService, pageService, systemSettingsService, $scope,
   browserService, $translate, APP_BACKEND_CONFIG) {

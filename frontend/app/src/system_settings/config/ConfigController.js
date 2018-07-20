@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp')
-  .controller('ConfigController', ConfigController)
+  .controller('ConfigController', ['APP_BACKEND_CONFIG', 'systemSettingsService', ConfigController])
 
 function ConfigController (APP_BACKEND_CONFIG, systemSettingsService) {
   var vm = this

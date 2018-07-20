@@ -5,7 +5,8 @@ import newTemplateTemplate from './view/newTemplate.tmpl.html'
 
 angular
   .module('openDeskApp')
-  .controller('TemplatesController', TemplatesController)
+  .controller('TemplatesController', ['siteService', '$mdDialog', '$scope', 'systemSettingsService',
+    TemplatesController])
 
 function TemplatesController (siteService, $mdDialog, $scope, systemSettingsService) {
   var vm = this
