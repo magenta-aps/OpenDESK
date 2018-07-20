@@ -13,7 +13,7 @@ function onlyOfficeService ($http, alfrescoNodeUtils, sessionService) {
   }
 
   function getDocumentType (ext) {
-    if ('.docx.doc.odt.rtf.txt.html.htm.mht.pdf.djvu.fb2.epub.xps'.indexOf(ext) != -1) return 'text'
+    if ('.docx.doc.odt.rtf.txt.html.htm.mht.pdf.djvu.fb2.epub.xps'.indexOf(ext) !== -1) return 'text'
     if ('.xls.xlsx.ods.csv'.indexOf(ext) !== -1) return 'spreadsheet'
     if ('.pps.ppsx.ppt.pptx.odp'.indexOf(ext) !== -1) return 'presentation'
     return null
@@ -47,7 +47,7 @@ function onlyOfficeService ($http, alfrescoNodeUtils, sessionService) {
         }, 60000)
         return true
       },
-      function (error) {
+      function () {
         return false
       })
   }
