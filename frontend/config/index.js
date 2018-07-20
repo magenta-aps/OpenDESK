@@ -15,11 +15,11 @@ module.exports = {
         target: process.env.BASE_URL || 'http://localhost:8080',
         changeOrigin: true
       },
-      '/static': {
+      '/assets': {
         target: 'http://localhost:8081/app/assets',
         changeOrigin: true,
         pathRewrite: {
-          '^/static': ''
+          '^/assets': ''
         }
       }
     },
