@@ -4,7 +4,7 @@ angular
 
 var availableFiles = {files: [
   {
-    prefix: 'static/i18n/',
+    prefix: 'assets/i18n/',
     suffix: '.json'
   }
 ]}
