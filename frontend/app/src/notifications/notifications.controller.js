@@ -2,7 +2,8 @@
 
 angular
   .module('openDeskApp.notifications')
-  .controller('NotificationsController', NotificationsController)
+  .controller('NotificationsController', ['$mdSidenav', 'notificationsService', 'UserService', 'sessionService',
+    NotificationsController])
 
 function NotificationsController ($mdSidenav, notificationsService, UserService, sessionService) {
   var vm = this

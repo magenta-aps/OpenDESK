@@ -1,8 +1,10 @@
 'use strict'
+import '../shared/services/preferenceService'
 
 angular
   .module('openDeskApp.user')
-  .controller('UserController', UserController)
+  .controller('UserController', ['$scope', '$mdSidenav', 'UserService', 'MemberService', 'sessionService',
+    'preferenceService', UserController])
 
 function UserController ($scope, $mdSidenav, UserService, MemberService, sessionService, preferenceService) {
   var vm = this
