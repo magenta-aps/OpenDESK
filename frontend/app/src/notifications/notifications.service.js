@@ -3,7 +3,7 @@
 
 angular
   .module('openDeskApp.notifications')
-  .factory('notificationsService', notificationsService)
+  .factory('notificationsService', ['$http', '$interval', notificationsService])
 
 function notificationsService ($http, $interval) {
   var restBaseUrl = '/alfresco/service/notifications'
