@@ -1,4 +1,5 @@
 'use strict'
+import filebrowserTemplate from './view/filebrowser.html'
 
 angular
   .module('openDeskApp.filebrowser')
@@ -8,7 +9,7 @@ angular
       scope: {
         type: '@odType'
       },
-      templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+      template: filebrowserTemplate,
       controller: 'FilebrowserController',
       controllerAs: 'vm'
     }

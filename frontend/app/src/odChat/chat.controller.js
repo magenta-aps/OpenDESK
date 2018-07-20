@@ -1,3 +1,6 @@
+'use strict'
+import chatTemplate from './view/chat.html'
+
 angular
   .module('openDeskApp.chat')
   .controller('ChatController', ChatController)
@@ -5,7 +8,7 @@ angular
     return {
       restrict: 'E',
       scope: {},
-      templateUrl: 'app/src/odChat/view/chat.html'
+      template: chatTemplate
     }
   })
 

@@ -1,4 +1,9 @@
 'use strict'
+import aproveCommentTemplate from './view/aproveComment.tmpl.html'
+import rejectCommentTemplate from './view/rejectComment.tmpl.html'
+import uploadNewVersionTemplate from '../filebrowser/view/content/document/uploadNewVersion.tmpl.html'
+import confirmEditVersionDialogTemplate from './view/confirmEditVersionDialog.html'
+import reviewDocumentTemplate from '../filebrowser/view/content/document/reviewDocument.tmpl.html'
 
 angular.module('openDeskApp.documents')
   .controller('DocumentController', DocumentController)
@@ -105,7 +110,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   function approveCommentDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/documents/view/aproveComment.tmpl.html',
+      template: aproveCommentTemplate,
       targetEvent: event,
       scope: $scope,
       preserveScope: true,
@@ -115,7 +120,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   function rejectCommentDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/documents/view/rejectComment.tmpl.html',
+      template: rejectCommentTemplate,
       targetEvent: event,
       scope: $scope,
       preserveScope: true,
@@ -125,7 +130,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   function uploadNewVersionDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
+      template: uploadNewVersionTemplate,
       targetEvent: event,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
@@ -297,7 +302,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
             .then(function (plugin) {
               vm.plugin = plugin
               $scope.config = plugin
-              $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl
+              $scope.viewerTemplateUrl = plugin.templateUrl
               $scope.download = function () {
                 // todo fix the download url to download from version/version2store
                 alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName)
@@ -314,7 +319,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
           vm.plugin = plugin
           $scope.config = plugin
           $scope.restoreTitle = browserService.restoreTitle
-          $scope.viewerTemplateUrl = documentPreviewService.templatesUrl + plugin.templateUrl
+          $scope.viewerTemplateUrl = plugin.templateUrl
           $scope.download = function () {
             alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName)
           }
@@ -334,7 +339,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   function showEditVersionDialog (editor) {
     $scope.editor = editor
     $mdDialog.show({
-      templateUrl: 'app/src/documents/view/confirmEditVersionDialog.html',
+      template: confirmEditVersionDialogTemplate,
       scope: $scope,
       preserveScope: true
     })
@@ -367,7 +372,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
     if (isVersion())
       showEditVersionDialog('only-office')
     else
-      $window.open($state.href('onlyOfficeEdit', {'nodeRef': vm.doc.node.nodeRef.split('/')[3] }))
+      $window.open($state.href('onlyOfficeEdit', { 'nodeRef': vm.doc.node.nodeRef.split('/')[3] }))
   }
 
   // Goes to the libreOffice online edit page
@@ -394,7 +399,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   function reviewDocumentsDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
+      template: reviewDocumentTemplate,
       parent: angular.element(document.body),
       targetEvent: event,
       scope: $scope, // use parent scope in template

@@ -1,4 +1,9 @@
 'use strict'
+import replyTemplate from './view/reply.tmpl.html'
+import newThreadTemplate from './view/newThread.tmpl.html'
+import editTemplate from './view/edit.tmpl.html'
+import editFirstPostTemplate from './view/editFirstPost.tmpl.html'
+import editTitleTemplate from './view/editTitle.tmpl.html'
 
 angular
   .module('openDeskApp.discussion')
@@ -105,7 +110,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function replyDialog () {
     $mdDialog.show({
-      templateUrl: 'app/src/odDiscussion/view/reply.tmpl.html',
+      template: replyTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
@@ -124,7 +129,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function newDiscussionDialog () {
     $mdDialog.show({
-      templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
+      template: newThreadTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
@@ -167,7 +172,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
       locals: {
         postItem: postItem
       },
-      templateUrl: 'app/src/odDiscussion/view/edit.tmpl.html',
+      template: editTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
@@ -189,7 +194,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
       locals: {
         postItem: postItem
       },
-      templateUrl: 'app/src/odDiscussion/view/editFirstPost.tmpl.html',
+      template: editFirstPostTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
@@ -205,7 +210,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
       locals: {
         postItem: postItem
       },
-      templateUrl: 'app/src/odDiscussion/view/editTitle.tmpl.html',
+      template: editTitleTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,

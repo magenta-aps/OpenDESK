@@ -1,3 +1,6 @@
+'use strict'
+import dashboardTemplate from './view/dashboard.html'
+
 angular.module('openDeskApp.dashboard', ['ngMaterial'])
   .config(config)
 
@@ -7,7 +10,7 @@ function config ($stateProvider, USER_ROLES) {
     url: '/',
     views: {
       'content@': {
-        templateUrl: 'app/src/dashboard/view/dashboard.html',
+        template: dashboardTemplate,
         controller: 'DashboardController',
         controllerAs: 'vm'
       }

@@ -1,4 +1,7 @@
 'use strict'
+import '../../odSite/site.module'
+import '../../odSite/site.service'
+import newTemplateTemplate from './view/newTemplate.tmpl.html'
 
 angular
   .module('openDeskApp')
@@ -21,7 +24,7 @@ function TemplatesController (siteService, $mdDialog, $scope, systemSettingsServ
 
   function newTemplate (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/system_settings/templates/view/newTemplate.tmpl.html',
+      template: newTemplateTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,

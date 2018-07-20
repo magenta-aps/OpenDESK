@@ -1,4 +1,6 @@
 'use strict'
+import loolTemplate from './view/lool.html'
+
 angular
   .module('openDeskApp.lool', [])
   .config(config)
@@ -18,7 +20,7 @@ function config ($stateProvider, USER_ROLES) {
     },
     views: {
       'content@': {
-        templateUrl: 'app/src/lool/view/lool.html',
+        template: loolTemplate,
         controller: 'LoolController',
         controllerAs: 'vm'
       }

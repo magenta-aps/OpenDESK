@@ -1,4 +1,14 @@
 'use strict'
+import uploadDocumentsTemplate from './view/content/document/uploadDocuments.tmpl.html'
+import reviewDocumentTemplate from './view/content/document/reviewDocument.tmpl.html'
+import shareDocumentTemplate from './view/content/document/shareDocument.tmpl.html'
+import uploadNewVersionTemplate from './view/content/document/uploadNewVersion.tmpl.html'
+import deleteTemplate from './actions/delete/delete.view.html'
+import renameTemplate from './actions/rename/rename.view.html'
+import genericContentDialogTemplate from './genericDialog/genericContentDialog.view.html'
+import newSiteLinkTemplate from './siteLink/new.view.html'
+import loadSbsysTemplate from './view/sbsys/loadSbsys.tmpl.html'
+import uploadSbsysTemplate from './view/sbsys/uploadSbsys.tmpl.html'
 
 angular
   .module('openDeskApp.filebrowser')
@@ -324,7 +334,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function uploadDocumentsDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/uploadDocuments.tmpl.html',
+      template: uploadDocumentsTemplate,
       targetEvent: event,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
@@ -382,7 +392,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     documentNodeRef = nodeRef
 
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
+      template: reviewDocumentTemplate,
       targetEvent: event,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
@@ -408,7 +418,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     $scope.content = content
 
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/shareDocument.tmpl.html',
+      template: shareDocumentTemplate,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
       clickOutsideToClose: true
@@ -470,7 +480,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     documentNodeRef = nodeRef
 
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
+      template: uploadNewVersionTemplate,
       targetEvent: event,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
@@ -488,7 +498,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function renameContentDialog (content) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/actions/rename/rename.view.html',
+      template: renameTemplate,
       locals: {content: content},
       controller: 'RenameController as vm',
       clickOutsideToClose: true
@@ -519,7 +529,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     }
 
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/genericDialog/genericContentDialog.view.html',
+      template: genericContentDialogTemplate,
       controller: 'GenericContentDialogController',
       controllerAs: 'vm',
       locals: {
@@ -531,7 +541,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function deleteContentDialog (content) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/actions/delete/delete.view.html',
+      template: deleteTemplate,
       locals: {data: content},
       controller: 'DeleteController as vm',
       clickOutsideToClose: true
@@ -542,7 +552,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function newLinkDialog () {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/siteLink/new.view.html',
+      template: newSiteLinkTemplate,
       controller: 'SiteLinkController as vm',
       clickOutsideToClose: true
     })
@@ -552,7 +562,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function loadSbsysDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
+      template: loadSbsysTemplate,
       targetEvent: event,
       scope: $scope,
       preserveScope: true,
@@ -569,7 +579,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function uploadSbsysDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/sbsys/uploadSbsys.tmpl.html',
+      template: uploadSbsysTemplate,
       targetEvent: event,
       scope: $scope,
       preserveScope: true,

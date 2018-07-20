@@ -1,3 +1,6 @@
+'use strict'
+import documentTemplate from './view/document.html'
+
 angular
   .module('openDeskApp.documents', [])
   .constant('EDITOR_CONFIG', {
@@ -129,7 +132,7 @@ function config ($stateProvider, USER_ROLES) {
     url: '/dokument/:doc',
     views: {
       'content@': {
-        templateUrl: 'app/src/documents/view/document.html',
+        template: documentTemplate,
         controller: 'DocumentController',
         controllerAs: 'vm'
       }

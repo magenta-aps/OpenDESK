@@ -1,5 +1,5 @@
 'use strict'
-
+import templateListTemplate from './templateList.view.html'
 angular
   .module('openDeskApp.filebrowser')
   .directive('odTemplateList', function () {
@@ -12,7 +12,7 @@ angular
         label: '@odLabel',
         nested: '=odNested'
       },
-      templateUrl: 'app/src/filebrowser/template/list/templateList.view.html',
+      template: templateListTemplate,
       controller: 'TemplateListController',
       controllerAs: 'vm'
     }

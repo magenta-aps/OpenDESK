@@ -1,4 +1,5 @@
 'use strict'
+import userPanelTemplate from './userPanel.view.html'
 
 angular
   .module('openDeskApp.user')
@@ -6,7 +7,7 @@ angular
     return {
       restrict: 'E',
       scope: {},
-      templateUrl: 'app/src/user/userPanel.view.html',
+      template: userPanelTemplate,
       controller: 'UserController',
       controllerAs: 'vm'
     }

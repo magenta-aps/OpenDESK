@@ -1,4 +1,5 @@
 'use strict'
+import onlyOfficeTemplate from './view/onlyOffice.html'
 
 angular.module('openDeskApp.onlyOffice', ['ngMaterial'])
   .config(config)
@@ -9,7 +10,7 @@ function config ($stateProvider, USER_ROLES) {
     url: '/edit/onlyOffice/:nodeRef',
     views: {
       'body@': {
-        templateUrl: 'app/src/onlyOffice/view/onlyOffice.html',
+        template: onlyOfficeTemplate,
         controller: 'OnlyOfficeEditController',
         controllerAs: 'vm'
       }

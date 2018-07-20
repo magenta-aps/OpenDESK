@@ -1,4 +1,5 @@
 'use strict'
+import forgotPasswordDialogTemplate from './view/forgotPasswordDialog.html'
 
 angular
   .module('openDeskApp')
@@ -41,7 +42,7 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
     $mdDialog.show({
       controller: forgotPasswordCtrl,
       controllerAs: 'dlg',
-      templateUrl: 'app/src/authentication/view/forgotPasswordDialog.html',
+      template: forgotPasswordDialogTemplate,
       parent: angular.element(document.body),
       targetEvent: ev,
       clickOutsideToClose: true

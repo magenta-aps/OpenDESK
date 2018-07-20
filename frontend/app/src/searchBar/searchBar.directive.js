@@ -1,4 +1,5 @@
 'use strict'
+import searchBarTemplate from './view/searchBar.html'
 
 angular
   .module('openDeskApp')
@@ -6,7 +7,7 @@ angular
     return {
       restrict: 'E',
       scope: {},
-      templateUrl: 'app/src/searchBar/view/searchBar.html',
+      template: searchBarTemplate,
       controller: 'SearchBarController',
       controllerAs: 'vm'
     }

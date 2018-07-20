@@ -1,6 +1,9 @@
+'use strict'
+import projectOwnerPickerTemplate from './projectOwnerPicker.html'
+
 angular.module('openDeskApp.members')
   .component('projectOwnerPicker', {
-    templateUrl: 'app/src/components/members/projectOwnerPicker/projectOwnerPicker.html',
+    template: projectOwnerPickerTemplate,
     controller: projectOwnerPicker,
     bindings: {
       selected: '=',

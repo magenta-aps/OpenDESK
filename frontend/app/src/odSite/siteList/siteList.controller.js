@@ -1,4 +1,8 @@
 'use strict'
+import deleteProjectTemplate from './deleteProject.tmpl.html'
+import siteCreateTemplate from '../siteCreate/siteCreate.view.html'
+import updateSiteTemplate from './updateSite.tmpl.html'
+import siteInfoTemplate from './siteInfo.view.html'
 
 angular
   .module('openDeskApp.site')
@@ -103,7 +107,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
       controller: ['$scope', 'project', function ($scope, project) {
         $scope.project = project
       }],
-      templateUrl: 'app/src/odSite/siteList/deleteProject.tmpl.html',
+      template: deleteProjectTemplate,
       locals: {
         project: project
       },
@@ -117,7 +121,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
   function createSiteDialog (ev, type) {
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/siteCreate/siteCreate.view.html',
+      template: siteCreateTemplate,
       controller: 'SiteCreateController',
       controllerAs: 'vm',
       locals: {
@@ -156,7 +160,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     vm.currentDialogDescription = description
     vm.currentDialogShortName = shortName
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/siteList/updateSite.tmpl.html',
+      template: updateSiteTemplate,
       parent: angular.element(document.body),
       targetEvent: event,
       scope: $scope, // use parent scope in template
@@ -173,7 +177,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   function infoSiteDialog (site) {
     vm.currentDialogSite = site
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/siteList/siteInfo.view.html',
+      template: siteInfoTemplate,
       parent: angular.element(document.body),
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope

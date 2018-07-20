@@ -1,13 +1,32 @@
+import previewDialogTemplate from './view/previewDialog.html'
+import audioTemplate from './view/audio.html'
+import videoTemplate from './view/video.html'
+import strobeMediaPlayBackTemplate from './view/strobeMediaPlayBack.html'
+import imageTemplate from './view/image.html'
+import onlyOfficeTemplate from './view/onlyOffice.html'
+import pdfTemplate from './view/pdf.html'
+import webTemplate from './view/web.html'
+import cannotPreviewTemplate from './view/cannotPreview.html'
+
 angular
   .module('openDeskApp')
   .factory('documentPreviewService', DocumentPreviewService)
+  .run(['$templateProvider', run])
 
-function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService, sessionService,
-  $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
-  var templatesUrl = 'app/src/shared/services/document/preview/view/'
+function run ($templateProvider) {
+  $templateProvider.put('audio.html', audioTemplate)
+  $templateProvider.put('video.html', videoTemplate)
+  $templateProvider.put('strobeMediaPlayBack.html', strobeMediaPlayBackTemplate)
+  $templateProvider.put('image.html', imageTemplate)
+  $templateProvider.put('onlyOffice.html', onlyOfficeTemplate)
+  $templateProvider.put('pdf.html', pdfTemplate)
+  $templateProvider.put('web.html', webTemplate)
+  $templateProvider.put('cannotPreview.html', cannotPreviewTemplate)
+}
 
+function DocumentPreviewService ($templateCache, $mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
+  sessionService, $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
   var service = {
-    templatesUrl: templatesUrl,
     previewDocument: previewDocument,
     previewDocumentPlugin: previewDocumentPlugin,
     _getPluginByMimeType: _getPluginByMimeType,
@@ -31,7 +50,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
   function previewDialog (plugin) {
     return $mdDialog.show({
       controller: DialogController,
-      templateUrl: templatesUrl + 'previewDialog.html',
+      template: previewDialogTemplate,
       parent: angular.element(document.body),
       targetEvent: null,
       clickOutsideToClose: true,
@@ -43,7 +62,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
 
   function DialogController ($scope, $mdDialog, plugin) {
     $scope.config = plugin
-    $scope.viewerTemplateUrl = templatesUrl + plugin.templateUrl
+    $scope.viewerTemplateUrl = plugin.templateUrl
 
     $scope.cancel = function () {
       $mdDialog.cancel()

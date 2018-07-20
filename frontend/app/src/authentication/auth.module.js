@@ -1,4 +1,5 @@
 'use strict'
+import loginTemplate from './view/login.html'
 
 angular.module('openDeskApp.auth', [])
   .config(config)
@@ -8,7 +9,7 @@ function config ($stateProvider) {
     url: '/login',
     views: {
       'content@': {
-        templateUrl: 'app/src/authentication/view/login.html',
+        template: loginTemplate,
         controller: 'AuthController',
         controllerAs: 'vm'
       }

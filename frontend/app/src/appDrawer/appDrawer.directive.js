@@ -1,4 +1,5 @@
 'use strict'
+import appDrawerTemplate from './appDrawer.view.html'
 
 angular
   .module('openDeskApp.appDrawer')
@@ -6,7 +7,7 @@ angular
     return {
       restrict: 'E',
       scope: false,
-      templateUrl: 'app/src/appDrawer/appDrawer.view.html',
+      template: appDrawerTemplate,
       controller: 'AppDrawerController',
       controllerAs: 'vm'
     }

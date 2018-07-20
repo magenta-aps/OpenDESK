@@ -1,6 +1,8 @@
 'use strict'
-
 import 'angular-fixed-table-header'
+import siteListTemplate from './siteList/siteList.view.html'
+import siteDetailTemplate from './siteDetail/siteDetail.view.html'
+import filebrowserTemplate from '../filebrowser/view/filebrowser.html'
 
 angular.module('openDeskApp.site', ['openDeskApp.filebrowser', 'fixed.table.header', 'openDeskApp.members', 'odEmail'])
   .config(config)
@@ -11,7 +13,7 @@ function config ($stateProvider, APP_CONFIG, USER_ROLES) {
     url: '/' + APP_CONFIG.sitesUrl,
     views: {
       'content@': {
-        templateUrl: 'app/src/odSite/siteList/siteList.view.html',
+        template: siteListTemplate,
         controller: 'SiteListController',
         controllerAs: 'vm'
       }
@@ -25,7 +27,7 @@ function config ($stateProvider, APP_CONFIG, USER_ROLES) {
       url: '/' + APP_CONFIG.sitesUrl + '/:projekt',
       views: {
         'content@': {
-          templateUrl: 'app/src/odSite/siteDetail/siteDetail.view.html',
+          template: siteDetailTemplate,
           controller: 'SiteDetailController',
           controllerAs: 'vm'
         }
@@ -40,7 +42,7 @@ function config ($stateProvider, APP_CONFIG, USER_ROLES) {
       url: '/dokumenter{path:SlashFix}',
       views: {
         'filebrowser': {
-          templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+          template: filebrowserTemplate,
           controller: 'FilebrowserController',
           controllerAs: 'vm'
         }

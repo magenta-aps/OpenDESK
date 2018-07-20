@@ -1,6 +1,9 @@
 'use strict'
 
 import 'ng-ckeditor'
+import '../shared/filters/customDateFilter'
+import overviewTemplate from './view/overview.html'
+import conversationTemplate from './view/conversation.html'
 
 angular.module('openDeskApp.discussion', ['ng.ckeditor'])
   .config(config)
@@ -13,7 +16,7 @@ function config ($stateProvider) {
     },
     views: {
       'discussions': {
-        templateUrl: 'app/src/odDiscussion/view/overview.html',
+        template: overviewTemplate,
         controller: 'DiscussionController',
         controllerAs: 'vm'
       }
@@ -26,7 +29,7 @@ function config ($stateProvider) {
       },
       views: {
         'discussions': {
-          templateUrl: 'app/src/odDiscussion/view/conversation.html',
+          template: conversationTemplate,
           controller: 'DiscussionController',
           controllerAs: 'vm'
         }
