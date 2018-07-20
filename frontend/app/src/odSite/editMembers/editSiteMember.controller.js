@@ -2,7 +2,8 @@
 
 angular
   .module('openDeskApp.site')
-  .controller('EditSiteMemberController', EditSiteMemberController)
+  .controller('EditSiteMemberController', ['sitedata', '$scope', '$mdDialog', '$mdToast', 'APP_CONFIG', 'siteService',
+    'MemberService', 'notificationsService', 'UserService', EditSiteMemberController])
 
 function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, MemberService,
   notificationsService, UserService) {

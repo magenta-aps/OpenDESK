@@ -1,6 +1,8 @@
 'use strict'
 
-angular.module('openDeskApp.site').factory('siteService', SiteService)
+angular.module('openDeskApp.site')
+  .factory('siteService', ['$q', '$http', '$rootScope', '$translate', 'alfrescoNodeUtils', 'sessionService',
+    'notificationsService', 'UserService', 'systemSettingsService', SiteService])
 
 function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessionService,
   notificationsService, UserService, systemSettingsService) {

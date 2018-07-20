@@ -3,7 +3,7 @@ import siteEditTemplate from '../siteEdit/siteEdit.view.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteInfoController', SiteInfoController)
+  .controller('SiteInfoController', ['$scope', '$mdDialog', 'siteService', SiteInfoController])
 
 function SiteInfoController ($scope, $mdDialog, siteService) {
   var vm = this

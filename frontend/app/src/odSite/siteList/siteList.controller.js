@@ -6,7 +6,9 @@ import siteInfoTemplate from './siteInfo.view.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteListController', SiteListController)
+  .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'MemberService',
+    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'headerService', 'alfrescoNodeUtils', 'translateService',
+    SiteListController])
 
 function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, MemberService,
   sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils, translateService) {

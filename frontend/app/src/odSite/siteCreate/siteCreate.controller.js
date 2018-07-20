@@ -2,10 +2,11 @@
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteCreateController', SiteCreateController)
+  .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$q', '$mdDialog',
+    'notificationsService', 'UserService', 'siteService', 'MemberService', 'APP_CONFIG', SiteCreateController])
 
-function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog,
-  notificationsService, UserService, siteService, MemberService, APP_CONFIG) {
+function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, notificationsService,
+  UserService, siteService, MemberService, APP_CONFIG) {
   var vm = this
 
   var currentUser = UserService.get()

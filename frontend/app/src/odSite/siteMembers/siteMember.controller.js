@@ -3,7 +3,8 @@ import editMembersTemplate from '../editMembers/editMembers.tmpl.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteMemberController', SiteMemberController)
+  .controller('SiteMemberController', ['$scope', '$stateParams', '$mdDialog', 'siteService', 'groupService',
+    'alfrescoDownloadService', SiteMemberController])
 
 function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, groupService, alfrescoDownloadService) {
   var vm = this
