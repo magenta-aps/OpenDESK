@@ -94,14 +94,13 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     })
   }
 
-  function getSiteUserPermissions() {
-      vm.permissions = siteService.getPermissions()
-      if(vm.permissions === undefined) {
-          siteService.getSiteUserPermissions($stateParams.projekt)
-              .then(function(permissions) {
-              vm.permissions = permissions
-            })
-      }
+  function getSiteUserPermissions () {
+    vm.permissions = siteService.getPermissions()
+    if (vm.permissions === undefined)
+      siteService.getSiteUserPermissions($stateParams.projekt)
+        .then(function (permissions) {
+          vm.permissions = permissions
+        })
   }
 
   function replyDialog () {
