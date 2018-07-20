@@ -22,6 +22,7 @@ angular
     'openDeskApp.site',
     'openDeskApp.filebrowser',
     'openDeskApp.header',
+    'openDeskApp.appDrawer',
     'openDeskApp.dashboard',
     'openDeskApp.lool',
     'openDeskApp.onlyOffice',
