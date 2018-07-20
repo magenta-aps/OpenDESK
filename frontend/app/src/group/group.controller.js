@@ -45,7 +45,6 @@ function GroupController ($mdDialog, $mdToast, $translate, group, groupService, 
     var shortName = getMemberShortName(member)
     groupService.addMember(shortName, groupName).then(function () {
       member.avatar = sessionService.makeAvatarUrl(member)
-      vm.groups.push(member)
     })
   }
 
