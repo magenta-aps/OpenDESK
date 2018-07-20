@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('openDeskApp.filebrowser')
-  .factory('templateService', templateService)
+  .factory('templateService', ['$rootScope', '$http', 'alfrescoNodeUtils', 'filebrowserService', templateService])
 
 function templateService ($rootScope, $http, alfrescoNodeUtils, filebrowserService) {
   var selectedTemplate

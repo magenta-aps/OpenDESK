@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('DeleteController', DeleteController)
+  .controller('DeleteController', ['$rootScope', '$mdDialog', 'data', 'siteService', 'ContentService', DeleteController])
 
 function DeleteController ($rootScope, $mdDialog, data, siteService, ContentService) {
   var vm = this

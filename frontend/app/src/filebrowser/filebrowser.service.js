@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.filebrowser')
-  .factory('filebrowserService', fileBrowserService)
+  .factory('filebrowserService', ['$http', 'alfrescoNodeUtils', fileBrowserService])
 
 function fileBrowserService ($http, alfrescoNodeUtils) {
   var currentFolderNodeRef

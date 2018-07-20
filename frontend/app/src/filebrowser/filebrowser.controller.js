@@ -12,7 +12,11 @@ import uploadSbsysTemplate from './view/sbsys/uploadSbsys.tmpl.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('FilebrowserController', FilebrowserController)
+  .controller('FilebrowserController', ['$state', '$stateParams', '$scope', '$rootScope', '$mdDialog', '$mdToast',
+    '$timeout', 'siteService', 'fileUtilsService', 'filebrowserService', 'alfrescoDownloadService', '$window',
+    'documentPreviewService', 'documentService', 'alfrescoNodeUtils', 'MemberService', '$translate',
+    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'notificationsService',
+    'ContentService', 'editOnlineMSOfficeService', FilebrowserController])
 
 function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
   siteService, fileUtilsService, filebrowserService, alfrescoDownloadService, $window,

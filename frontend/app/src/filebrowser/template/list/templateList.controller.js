@@ -3,7 +3,7 @@ import createFromTemplateTemplate from '../create/createFromTemplate.view.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('TemplateListController', TemplateListController)
+  .controller('TemplateListController', ['$scope', '$mdDialog', 'templateService', TemplateListController])
 
 function TemplateListController ($scope, $mdDialog, templateService) {
   var vm = this
