@@ -1,4 +1,4 @@
-import '../shared/services/pageService'
+import '../shared/services/page.service'
 
 angular
   .module('openDeskApp.systemsettings')
