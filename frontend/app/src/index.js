@@ -52,9 +52,6 @@ import './components/odEmail'
 import './shared/services/browser.service'
 import './shared/services/member.service'
 
-// CSS
-import './app.scss'
-
 window.$ = $
 
 function importAll (r) {
@@ -63,10 +60,6 @@ function importAll (r) {
 
 importAll(
   require.context('./', true, /.*\.scss$/)
-)
-
-importAll(
-  require.context('./', true, /.*\.html$/)
 )
 
 angular.element(document).ready(function () {
