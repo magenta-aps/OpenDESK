@@ -1,5 +1,6 @@
 'use strict'
 import '../../alfrescoDocument.service'
+import '../../alfrescoDownload.service'
 import previewDialogTemplate from './view/previewDialog.html'
 import audioTemplate from './view/audio.html'
 import videoTemplate from './view/video.html'
