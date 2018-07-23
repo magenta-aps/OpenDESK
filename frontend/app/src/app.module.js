@@ -33,6 +33,7 @@ angular
     'openDeskApp.notifications',
     'openDeskApp.discussion',
     'openDeskApp.user',
+    // 'openDeskApp.chat', Not added because it has not been maintained and converse is not managed by npm
     'openDeskApp.members',
     'odEmail',
 

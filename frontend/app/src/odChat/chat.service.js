@@ -1,6 +1,6 @@
 angular
   .module('openDeskApp.chat')
-  .factory('chatService', chatService)
+  .factory('chatService', ['XMPP_DOMAIN', 'UserService', chatService])
 
 function chatService (XMPP_DOMAIN, UserService) {
   var initialized = false
@@ -88,5 +88,5 @@ function chatService (XMPP_DOMAIN, UserService) {
       window.open(videoLink, '', 'width=600,height=600')
     })
     return true
-  };
+  }
 }

@@ -3,7 +3,7 @@ import chatTemplate from './view/chat.html'
 
 angular
   .module('openDeskApp.chat')
-  .controller('ChatController', ChatController)
+  .controller('ChatController', ['chatService', 'APP_BACKEND_CONFIG', ChatController])
   .directive('odChat', function () {
     return {
       restrict: 'E',
@@ -15,4 +15,4 @@ angular
 function ChatController (chatService, APP_BACKEND_CONFIG) {
   if (APP_BACKEND_CONFIG.enableChat)
     chatService.initialize()
-};
+}
