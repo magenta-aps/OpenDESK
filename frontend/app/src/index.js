@@ -50,7 +50,6 @@ import './components/odEmail'
 
 // Shared Services
 import './shared/services/browser.service'
-import './shared/services/editOnlineMSOfficeService'
 import './shared/services/fileUtilsService'
 import './shared/services/member.service'
 import './shared/services/translateService'
