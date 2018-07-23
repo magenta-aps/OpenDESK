@@ -1,5 +1,6 @@
 'use strict'
 import '../../shared/services/alfrescoNode.service'
+import '../../shared/services/translate.service'
 import deleteProjectTemplate from './deleteProject.tmpl.html'
 import siteCreateTemplate from '../siteCreate/siteCreate.view.html'
 import updateSiteTemplate from './updateSite.tmpl.html'

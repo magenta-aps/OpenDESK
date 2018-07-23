@@ -1,5 +1,6 @@
 'use strict'
 import '../shared/services/file.service'
+import '../shared/services/translate.service'
 
 angular
   .module('openDeskApp.searchBar')

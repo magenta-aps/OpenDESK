@@ -1,5 +1,6 @@
 'use strict'
 import '../../services/file.service'
+import '../../services/translate.service'
 
 angular
   .module('openDeskApp')
