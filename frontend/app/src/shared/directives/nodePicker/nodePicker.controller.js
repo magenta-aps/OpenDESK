@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp')
-  .controller('NodePickerController', NodePickerController)
+  .controller('NodePickerController', ['$scope', 'nodePickerService', NodePickerController])
 
 function NodePickerController ($scope, nodePickerService) {
   var vm = this

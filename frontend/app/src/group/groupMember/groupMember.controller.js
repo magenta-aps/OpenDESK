@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.group')
-  .controller('GroupMemberController', GroupMemberController)
+  .controller('GroupMemberController', ['$mdDialog', 'member', GroupMemberController])
 
 function GroupMemberController ($mdDialog, member) {
   var vm = this

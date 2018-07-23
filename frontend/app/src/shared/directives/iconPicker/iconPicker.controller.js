@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .controller('IconPickerController', IconPickerController)
+  .controller('IconPickerController', ['ICON_CONFIG', '$scope', IconPickerController])
 
-function IconPickerController (ICON_CONFIG, $scope, $mdMenu) {
+function IconPickerController (ICON_CONFIG, $scope) {
   var vm = this
 
   vm.selectIcon = selectIcon

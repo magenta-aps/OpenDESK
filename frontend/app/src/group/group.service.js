@@ -3,7 +3,7 @@ import infoMemberTemplate from './groupMember/infoMember.tmpl.html'
 import editMembersTemplate from './view/editMembers.tmpl.html'
 
 angular.module('openDeskApp.group')
-  .factory('groupService', groupService)
+  .factory('groupService', ['$http', '$mdDialog', '$translate', 'sessionService', groupService])
 
 function groupService ($http, $mdDialog, $translate, sessionService) {
   var openDeskGroups = []
