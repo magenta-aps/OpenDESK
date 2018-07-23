@@ -1,5 +1,5 @@
 'use strict'
-import '../shared/services/preferenceService'
+import '../shared/services/preference.service'
 
 angular
   .module('openDeskApp.user')

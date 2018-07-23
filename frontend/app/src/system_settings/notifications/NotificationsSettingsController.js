@@ -1,3 +1,6 @@
+'use strict'
+import '../../shared/services/preference.service'
+
 angular
   .module('openDeskApp.systemsettings')
   .controller('NotificationsSettingsController', ['preferenceService', NotificationsSettingsController])
