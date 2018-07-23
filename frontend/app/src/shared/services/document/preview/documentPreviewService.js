@@ -7,24 +7,22 @@ import onlyOfficeTemplate from './view/onlyOffice.html'
 import pdfTemplate from './view/pdf.html'
 import webTemplate from './view/web.html'
 import cannotPreviewTemplate from './view/cannotPreview.html'
+import previewManagerTemplate from './view/previewManager.html'
 
 angular
   .module('openDeskApp')
   .factory('documentPreviewService', ['$mdDialog', '$timeout', 'alfrescoDocumentService',
     'alfrescoDownloadService', 'sessionService', '$http', '$sce', 'ALFRESCO_URI', 'EDITOR_CONFIG', 'APP_BACKEND_CONFIG',
     DocumentPreviewService])
-  .run(['$templateCache', run])
-
-function run ($templateCache) {
-  $templateCache.put('audio.html', audioTemplate)
-  $templateCache.put('video.html', videoTemplate)
-  $templateCache.put('strobeMediaPlayBack.html', strobeMediaPlayBackTemplate)
-  $templateCache.put('image.html', imageTemplate)
-  $templateCache.put('onlyOffice.html', onlyOfficeTemplate)
-  $templateCache.put('pdf.html', pdfTemplate)
-  $templateCache.put('web.html', webTemplate)
-  $templateCache.put('cannotPreview.html', cannotPreviewTemplate)
-}
+  .component('audioPreview', {template: audioTemplate, bindings: { plugin: '=' }})
+  .component('videoPreview', {template: videoTemplate, bindings: { plugin: '=' }})
+  .component('strobeMediaPlayBackPreview', {template: strobeMediaPlayBackTemplate, bindings: { plugin: '=' }})
+  .component('imagePreview', {template: imageTemplate, bindings: { plugin: '=' }})
+  .component('onlyOfficePreview', {template: onlyOfficeTemplate, bindings: { plugin: '=' }})
+  .component('pdfPreview', {template: pdfTemplate, bindings: { plugin: '=' }})
+  .component('webPreview', {template: webTemplate, bindings: { plugin: '=' }})
+  .component('cannotPreviewPreview', {template: cannotPreviewTemplate, bindings: { plugin: '=' }})
+  .component('previewManager', {template: previewManagerTemplate, bindings: { plugin: '=', template: '=' }})
 
 function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
   sessionService, $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
@@ -86,11 +84,11 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
     var plugins = [
       audioViewer(),
       onlyOfficeViewer(),
+      webViewer(),
       pdfViewer(),
       imageViewer(),
       videoViewer(),
       strobeMediaPlayback(),
-      webViewer(),
       cannotPreviewPlugin()
     ]
     return plugins
@@ -156,11 +154,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
       templateUrl: 'image.html',
       maxItemSize: 20000000,
       initScope: function ($scope) {
-        $scope.itemMaxSizeExceeded = (this.itemSize && parseInt(this.itemSize) > this.maxItemSize)
-        if ($scope.itemMaxSizeExceeded === false) {
-          $scope.previewUrl = $scope.config.thumbnailUrl
-          $scope.imageUrl = $scope.config.contentUrl
-        }
+        this.itemMaxSizeExceeded = (this.itemSize && parseInt(this.itemSize) > this.maxItemSize)
       }
     }
     var result = generalPreviewPlugin()
@@ -182,33 +176,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
       transformableMimeTypes: EDITOR_CONFIG.lool.mimeTypes,
       mimeTypes: ['application/pdf'],
       thumbnail: 'pdf',
-      templateUrl: 'pdf.html',
-      initScope: function ($scope) {
-        $scope.pdfUrl = $scope.config.contentUrl
-
-        // Generate a random canvas id
-        $scope.canvasid = Math.random().toString(36)
-          .slice(2)
-        // TODO: Loading message
-        // $scope.loading = $translate.instant();
-
-        $scope.getNavStyle = function (scroll) {
-          if (scroll > 100) return 'pdf-controls fixed'
-          else return 'pdf-controls'
-        }
-
-        $scope.onError = function (error) {
-          console.log(error)
-        }
-
-        $scope.onLoad = function () {
-          $scope.loading = ''
-        }
-
-        $scope.onProgress = function (progress) {
-          // console.log(progress);
-        }
-      }
+      templateUrl: 'pdf.html'
     }
     var result = generalPreviewPlugin()
     return angular.extend(result, viewer)
@@ -227,9 +195,9 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
         var _this = this
         $http.get(this.contentUrl).then(function (response) {
           if (_this.mimeType === 'text/html' || _this.mimeType === 'text/xhtml+xml')
-            $scope.htmlContent = $sce.trustAsHtml(response.data)
+            _this.htmlContent = $sce.trustAsHtml(response.data)
           else
-            $scope.plainTextContent = response.data
+            _this.plainTextContent = response.data
         })
       }
     }

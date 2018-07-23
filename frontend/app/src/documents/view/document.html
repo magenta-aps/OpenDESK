@@ -9,7 +9,7 @@
 						<md-icon md-menu-align-target>warning</md-icon>
 						{{'COMMON.LOCKED_BY' | translate:{ locked_by: vm.lockOwner } }}
 					</div>
-					<ng-include id="placeholder" src="viewerTemplateUrl"></ng-include>
+                    <preview-manager plugin="vm.plugin" template="viewerTemplateUrl"></preview-manager>
 				</div>
 			</md-card-content>
 		</md-card>
