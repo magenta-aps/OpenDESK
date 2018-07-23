@@ -1,6 +1,9 @@
 'use strict'
 import '../shared/directives/breadcrumb'
 import documentTemplate from './view/document.html'
+import documentActionsTemplate from './view/documentActions.html'
+import documentHistoryTemplate from './view/documentHistory.html'
+import documentReviewTemplate from './view/documentReview.html'
 
 angular
   .module('openDeskApp.documents', [])
@@ -126,6 +129,9 @@ angular
     }
   })
   .config(['$stateProvider', 'USER_ROLES', config])
+  .component('documentActions', { template: documentActionsTemplate })
+  .component('documentHistory', { template: documentHistoryTemplate })
+  .component('documentReview', { template: documentReviewTemplate })
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('document', {
