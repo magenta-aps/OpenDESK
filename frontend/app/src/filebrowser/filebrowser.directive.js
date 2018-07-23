@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/filters/openeDateFilter'
 import filebrowserTemplate from './view/filebrowser.html'
 
 angular

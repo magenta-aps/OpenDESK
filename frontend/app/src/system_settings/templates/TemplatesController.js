@@ -1,4 +1,5 @@
 'use strict'
+import '../../shared/filters/openeDateFilter'
 import newTemplateTemplate from './view/newTemplate.tmpl.html'
 
 angular

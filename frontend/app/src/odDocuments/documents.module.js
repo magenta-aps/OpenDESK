@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/filters/openeDateFilter'
 import documentsTemplate from './view/documents.html'
 import filebrowserTemplate from '../filebrowser/view/filebrowser.html'
 
