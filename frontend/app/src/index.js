@@ -49,7 +49,7 @@ import './components/members'
 import './components/odEmail'
 
 // Shared Services
-import './shared/services/browserService'
+import './shared/services/browser.service'
 import './shared/services/content.service'
 import './shared/services/editOnlineMSOfficeService'
 import './shared/services/fileUtilsService'
