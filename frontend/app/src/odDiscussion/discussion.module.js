@@ -2,6 +2,7 @@
 
 import 'ng-ckeditor'
 import '../shared/filters/customDateFilter'
+import '../shared/directives/breadcrumb'
 import overviewTemplate from './view/overview.html'
 import conversationTemplate from './view/conversation.html'
 

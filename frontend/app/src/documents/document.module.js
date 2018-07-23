@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/directives/breadcrumb'
 import documentTemplate from './view/document.html'
 
 angular
