@@ -1,5 +1,6 @@
 'use strict'
 import projectOwnerPickerTemplate from './projectOwnerPicker.html'
+import '../../../shared/services/filter.service'
 
 angular.module('openDeskApp.members')
   .component('projectOwnerPicker', {

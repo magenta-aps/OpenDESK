@@ -1,6 +1,6 @@
 angular
   .module('openDeskApp')
-  .factory('filterService', filterService)
+  .factory('filterService', ['$filter', filterService])
 
 function filterService ($filter) {
   return {
@@ -8,7 +8,6 @@ function filterService ($filter) {
   }
 
   function search (array, query) {
-    var hitList = $filter('filter')(array, query)
-    return hitList
+    return $filter('filter')(array, query)
   }
 }
