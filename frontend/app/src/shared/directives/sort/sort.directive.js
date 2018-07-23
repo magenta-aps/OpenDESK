@@ -1,4 +1,5 @@
 'use strict'
+import sortTemplate from './sort.html'
 
 angular
   .module('openDeskApp')
@@ -6,10 +7,7 @@ angular
     return {
       restrict: 'A',
       transclude: true,
-      template: '<a ng-click="onClick()">' +
-                '<span ng-transclude></span>' +
-                '<i class="material-icons">{{reverse ? "keyboard_arrow_down" : "keyboard_arrow_up"}}</i>' +
-                '</a>',
+      template: sortTemplate,
       scope: {
         order: '=',
         by: '=',
