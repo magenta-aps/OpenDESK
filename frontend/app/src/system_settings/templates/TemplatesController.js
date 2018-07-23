@@ -1,6 +1,4 @@
 'use strict'
-import '../../odSite/site.module'
-import '../../odSite/site.service'
 import newTemplateTemplate from './view/newTemplate.tmpl.html'
 
 angular
