@@ -53,7 +53,6 @@ import './shared/services/browser.service'
 import './shared/services/member.service'
 
 // Shared Filters
-import './shared/filters/exactMatchFilter'
 import './shared/filters/isContainedFilter'
 import './shared/filters/openeDateFilter'
 import './shared/filters/orderByObjectFilter'
