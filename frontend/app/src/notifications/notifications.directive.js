@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/filters/customDateFilter'
 import notificationsTemplate from './notifications.view.html'
 
 angular
