@@ -1,4 +1,5 @@
 'use strict'
+import '../../shared/directives/iconPicker'
 
 angular
   .module('openDeskApp')
