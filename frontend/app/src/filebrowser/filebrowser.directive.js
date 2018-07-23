@@ -1,5 +1,6 @@
 'use strict'
 import '../shared/filters/openeDateFilter'
+import '../shared/filters/orderByObjectFilter'
 import filebrowserTemplate from './view/filebrowser.html'
 
 angular

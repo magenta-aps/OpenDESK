@@ -52,9 +52,7 @@ import './components/odEmail'
 import './shared/services/browser.service'
 import './shared/services/member.service'
 
-// Shared Filters
-import './shared/filters/orderByObjectFilter'
-
+// CSS
 import './app.scss'
 
 window.$ = $

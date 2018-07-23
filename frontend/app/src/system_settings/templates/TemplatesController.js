@@ -1,5 +1,6 @@
 'use strict'
 import '../../shared/filters/openeDateFilter'
+import '../../shared/filters/orderByObjectFilter'
 import newTemplateTemplate from './view/newTemplate.tmpl.html'
 
 angular
