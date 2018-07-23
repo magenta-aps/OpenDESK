@@ -1,13 +1,14 @@
+<tr>
 <td>
     <a class="od-filebrowser-link" ui-sref="{{vm.getLink(content)}}" ui-sref-active="active">
         <i class="material-icons">
                                     {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
                                     {{content.contentType == 'cmis:link' ? 'link' : ''}}
-                                    <img class="md-avatar" 
-                                         ng-show="content.contentType === 'cmis:document'" 
+                                    <img class="md-avatar"
+                                         ng-show="content.contentType === 'cmis:document'"
                                          ng-src="assets/img/filetypes/{{content.thumbNailURL}}"
                                          onerror="this.src='assets/img/filetypes/generic-file-24.png'">
-                                    </i> 
+                                    </i>
                                     <span class='content-name'>{{content.name}}</span>
     </a>
 </td>
@@ -50,5 +51,6 @@
     <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg" ng-click="vm.loadCheckboxes()">
 </td>
 <td style="width:5%">
-    <div ng-include=" 'app/src/filebrowser/actions/menu.view.html' "></div>
+    <filebrowser-menu content="content"></filebrowser-menu>
 </td>
+</tr>

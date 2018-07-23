@@ -20,7 +20,8 @@
                 </tr>
             </thead>
             <tbody ng-repeat="contentTypeList in vm.contentList">
-                <tr ng-repeat="content in contentTypeList | orderObjectBy:order:reverse" ng-include="'app/src/filebrowser/view/fileTableRow.tmpl.html'">
+                <tr filebrowser-row ng-repeat="content in contentTypeList | orderObjectBy:order:reverse"
+                    content="content">
                 </tr>
             </tbody>
         </table>
