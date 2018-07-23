@@ -61,7 +61,6 @@ function preferenceService ($http, $q, UserService) {
       else
         return undefined
     }
-    var url = '/api/people/' + username + '/preferences'
-    return url
+    return '/api/people/' + username + '/preferences'
   }
 }
