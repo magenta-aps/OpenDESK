@@ -20,6 +20,56 @@ import 'angular-material/angular-material.css'
 import 'angular-material-data-table/dist/md-data-table.min.css'
 import 'isteven-angular-multiselect/isteven-multi-select.css'
 
+// Modules
+import './app.module'
+import './init.module'
+import './backendConfig.module'
+import './translations'
+import './authentication'
+import './header'
+import './dashboard'
+import './system_settings'
+import './notifications'
+import './user'
+import './appDrawer'
+import './filebrowser'
+import './odSite'
+import './group'
+import './lool'
+import './documents'
+import './onlyOffice'
+import './odDocuments'
+import './odDiscussion'
+import './search'
+import './searchBar'
+// import './odChat' Not added because it has not been maintained and converse is not managed by npm
+
+// Components
+import './components/members'
+import './components/odEmail'
+
+// Shared Services
+import './shared/services/alfrescoDocumentService'
+import './shared/services/alfrescoDownloadService'
+import './shared/services/alfrescoNodeUtilsService'
+import './shared/services/browserService'
+import './shared/services/content.service'
+import './shared/services/editOnlineMSOfficeService'
+import './shared/services/fileUtilsService'
+import './shared/services/member.service'
+import './shared/services/translateService'
+import './shared/services/document/preview/preview.controller'
+import './shared/services/document/preview/preview.service'
+
+// Shared Filters
+import './shared/filters/customDateFilter'
+import './shared/filters/exactMatchFilter'
+import './shared/filters/isContainedFilter'
+import './shared/filters/openeDateFilter'
+import './shared/filters/orderByObjectFilter'
+
+import './app.scss'
+
 window.$ = $
 
 function importAll (r) {
@@ -27,19 +77,11 @@ function importAll (r) {
 }
 
 importAll(
-  require.context('./', true, /^(.*\.module\.js$)/)
-)
-
-importAll(
-  // including subdirectories, find all *.js files except those matching *.module.js or *.spec.js
-  // require.context('./', true, /^(?!.*\.module\.js$)^(?!.*\.spec\.js$).*\.js$/)
-  require.context('./', true, /^(?!.*\.module\.js$).*\.js$/)
-)
-
-require('./app.scss')
-
-importAll(
   require.context('./', true, /.*\.scss$/)
+)
+
+importAll(
+  require.context('./', true, /.*\.html$/)
 )
 
 angular.element(document).ready(function () {
