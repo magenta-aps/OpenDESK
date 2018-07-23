@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/services/nodeRefUtils.service'
 
 angular.module('openDeskApp.discussion')
   .factory('discussionService', ['$http', 'nodeRefUtilsService', 'UserService', 'sessionService',

@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/services/nodeRefUtils.service'
 import replyTemplate from './view/reply.tmpl.html'
 import newThreadTemplate from './view/newThread.tmpl.html'
 import editTemplate from './view/edit.tmpl.html'

@@ -1,4 +1,6 @@
 'use strict'
+import '../shared/services/nodeRefUtils.service'
+
 angular
   .module('openDeskApp.lool')
   .controller('LoolController', ['$state', '$stateParams', 'loolService', 'ContentService', '$mdToast', '$translate',
