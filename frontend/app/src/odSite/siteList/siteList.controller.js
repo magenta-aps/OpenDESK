@@ -1,5 +1,6 @@
 'use strict'
 import '../../shared/filters/exactMatchFilter'
+import '../../shared/filters/isContainedFilter'
 import '../../shared/services/alfrescoNode.service'
 import '../../shared/services/translate.service'
 import deleteProjectTemplate from './deleteProject.tmpl.html'
