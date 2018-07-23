@@ -13,7 +13,7 @@ angular
   .module('openDeskApp')
   .factory('documentPreviewService', ['$mdDialog', '$timeout', 'alfrescoDocumentService',
     'alfrescoDownloadService', 'sessionService', '$http', '$sce', 'ALFRESCO_URI', 'EDITOR_CONFIG', 'APP_BACKEND_CONFIG',
-    DocumentPreviewService])
+    PreviewService])
   .component('audioPreview', {template: audioTemplate, bindings: { plugin: '=' }})
   .component('videoPreview', {template: videoTemplate, bindings: { plugin: '=' }})
   .component('strobeMediaPlayBackPreview', {template: strobeMediaPlayBackTemplate, bindings: { plugin: '=' }})
@@ -24,7 +24,7 @@ angular
   .component('cannotPreviewPreview', {template: cannotPreviewTemplate, bindings: { plugin: '=' }})
   .component('previewManager', {template: previewManagerTemplate, bindings: { plugin: '=', template: '=' }})
 
-function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
+function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
   sessionService, $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
   var service = {
     previewDocument: previewDocument,
@@ -49,7 +49,8 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
 
   function previewDialog (plugin) {
     return $mdDialog.show({
-      controller: DialogController,
+      controller: 'DialogController',
+      controllerAs: 'vm',
       template: previewDialogTemplate,
       parent: angular.element(document.body),
       targetEvent: null,
@@ -58,26 +59,6 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
         plugin: plugin
       }
     })
-  }
-
-  function DialogController ($scope, $mdDialog, plugin) {
-    $scope.config = plugin
-    $scope.viewerTemplateUrl = plugin.templateUrl
-
-    $scope.cancel = function () {
-      $mdDialog.cancel()
-    }
-
-    $scope.close = function () {
-      $mdDialog.hide()
-    }
-
-    $scope.download = function () {
-      alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName)
-    }
-
-    if (plugin.initScope)
-      plugin.initScope($scope)
   }
 
   function getPlugins () {
@@ -99,6 +80,8 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
       var plugin = this.plugins[i]
       if (plugin.acceptsItem(item)) {
         plugin.initPlugin(item)
+        if (plugin.extendPlugin)
+          plugin.extendPlugin()
         return plugin
       }
     }
@@ -107,7 +90,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
   function audioViewer () {
     var viewer = {
       mimeTypes: ['audio/x-wav'],
-      templateUrl: 'audio.html'
+      name: 'audio'
     }
     var result = generalPlaybackPlugin()
     return angular.extend(result, viewer)
@@ -121,7 +104,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
         'video/x-m4v',
         'video/mp4'
       ],
-      templateUrl: 'video.html'
+      name: 'video'
     }
     var result = generalPlaybackPlugin()
     return angular.extend(result, viewer)
@@ -136,7 +119,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
         'video/quicktime',
         'audio/mpeg'
       ],
-      templateUrl: 'strobeMediaPlayBack.html'
+      name: 'strobeMediaPlayBack'
     }
 
     var result = generalPlaybackPlugin()
@@ -151,9 +134,9 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
         'image/jpeg'
       ],
       thumbnail: 'imgpreview',
-      templateUrl: 'image.html',
+      name: 'image',
       maxItemSize: 20000000,
-      initScope: function ($scope) {
+      extendPlugin: function () {
         this.itemMaxSizeExceeded = (this.itemSize && parseInt(this.itemSize) > this.maxItemSize)
       }
     }
@@ -164,7 +147,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
   function onlyOfficeViewer () {
     var viewer = {
       mimeTypes: APP_BACKEND_CONFIG.editors.onlyOffice ? EDITOR_CONFIG.lool.mimeTypes : [],
-      templateUrl: 'onlyOffice.html'
+      name: 'onlyOffice'
     }
 
     var result = generalPlaybackPlugin()
@@ -176,7 +159,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
       transformableMimeTypes: EDITOR_CONFIG.lool.mimeTypes,
       mimeTypes: ['application/pdf'],
       thumbnail: 'pdf',
-      templateUrl: 'pdf.html'
+      name: 'pdf'
     }
     var result = generalPreviewPlugin()
     return angular.extend(result, viewer)
@@ -190,8 +173,8 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
         'text/xml',
         'text/xhtml+xml'
       ],
-      templateUrl: 'web.html',
-      initScope: function ($scope) {
+      name: 'web',
+      extendPlugin: function () {
         var _this = this
         $http.get(this.contentUrl).then(function (response) {
           if (_this.mimeType === 'text/html' || _this.mimeType === 'text/xhtml+xml')
@@ -207,7 +190,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
 
   function cannotPreviewPlugin () {
     var viewer = {
-      templateUrl: 'cannotPreview.html',
+      name: 'cannotPreview',
       _acceptsMimeType: function (item) {
         return true
       }
@@ -217,7 +200,7 @@ function DocumentPreviewService ($mdDialog, $timeout, alfrescoDocumentService, a
 
   function generalPlaybackPlugin () {
     var plugin = {
-      initScope: function ($scope) {
+      extendPlugin: function () {
         var hostUrl = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '')
         this.contentUrl = hostUrl + this.contentUrl
       }

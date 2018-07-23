@@ -1,10 +1,10 @@
-<div id="placeholder" ng-switch="$ctrl.template">
-    <audio-preview ng-switch-when="audio.html" plugin="$ctrl.plugin"></audio-preview>
-    <video-preview ng-switch-when="video.html" plugin="$ctrl.plugin"></video-preview>
-    <strobe-media-play-back-preview ng-switch-when="strobeMediaPlayBack.html" plugin="$ctrl.plugin"></strobe-media-play-back-preview>
-    <image-preview ng-switch-when="image.html" plugin="$ctrl.plugin"></image-preview>
-    <only-office-preview ng-switch-when="onlyOffice.html" plugin="$ctrl.plugin"></only-office-preview>
-    <pdf-preview ng-switch-when="pdf.html" plugin="$ctrl.plugin"></pdf-preview>
-    <web-preview ng-switch-when="web.html" plugin="$ctrl.plugin"></web-preview>
-    <cannot-preview-preview ng-switch-when="cannotPreview.html" plugin="$ctrl.plugin"></cannot-preview-preview>
+<div id="placeholder" ng-switch="$ctrl.plugin.name">
+    <audio-preview ng-switch-when="audio" plugin="$ctrl.plugin"></audio-preview>
+    <video-preview ng-switch-when="video" plugin="$ctrl.plugin"></video-preview>
+    <strobe-media-play-back-preview ng-switch-when="strobeMediaPlayBack" plugin="$ctrl.plugin"></strobe-media-play-back-preview>
+    <image-preview ng-switch-when="image" plugin="$ctrl.plugin"></image-preview>
+    <only-office-preview ng-switch-when="onlyOffice" plugin="$ctrl.plugin"></only-office-preview>
+    <pdf-preview ng-switch-when="pdf" plugin="$ctrl.plugin"></pdf-preview>
+    <web-preview ng-switch-when="web" plugin="$ctrl.plugin"></web-preview>
+    <cannot-preview-preview ng-switch-when="cannotPreview" plugin="$ctrl.plugin"></cannot-preview-preview>
 </div>

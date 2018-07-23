@@ -1,7 +1,7 @@
 <md-dialog aria-label="{{ 'DOCUMENT.PREVIEW_DOCUMENT' | translate }}" style="min-width:50vw">
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <h2>{{ 'DOCUMENT.PREVIEW_DOCUMENT' | translate }} "{{config.fileName}}"</h2>
+            <h2>{{ 'DOCUMENT.PREVIEW_DOCUMENT' | translate }} "{{plugin.fileName}}"</h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="cancel()">
                 <md-icon>close</md-icon>
@@ -10,6 +10,6 @@
     </md-toolbar>
 
     <md-dialog-content>
-        <preview-manager plugin="config" template="viewerTemplateUrl"></preview-manager>
+        <preview-manager plugin="vm.plugin"></preview-manager>
     </md-dialog-content>
 </md-dialog>

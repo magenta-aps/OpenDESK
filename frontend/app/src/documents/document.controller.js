@@ -304,15 +304,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
           documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef)
             .then(function (plugin) {
               vm.plugin = plugin
-              $scope.config = plugin
-              $scope.viewerTemplateUrl = plugin.templateUrl
-              $scope.download = function () {
-                // todo fix the download url to download from version/version2store
-                alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName)
-              }
-
-              if (plugin.initScope)
-                plugin.initScope($scope)
             })
         })
     } else {
@@ -320,15 +311,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
       documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc)
         .then(function (plugin) {
           vm.plugin = plugin
-          $scope.config = plugin
-          $scope.restoreTitle = browserService.restoreTitle
-          $scope.viewerTemplateUrl = plugin.templateUrl
-          $scope.download = function () {
-            alfrescoDownloadService.downloadFile($scope.config.nodeRef, $scope.config.fileName)
-          }
-
-          if (plugin.initScope)
-            plugin.initScope($scope)
         })
     }
   }
