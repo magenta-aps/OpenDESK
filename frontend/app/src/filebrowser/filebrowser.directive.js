@@ -2,6 +2,7 @@
 import '../shared/filters/openeDateFilter'
 import '../shared/filters/orderByObjectFilter'
 import '../shared/directives/breadcrumb'
+import '../shared/directives/nodePicker'
 import filebrowserTemplate from './view/filebrowser.html'
 
 angular
