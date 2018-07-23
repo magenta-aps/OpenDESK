@@ -1,6 +1,7 @@
 'use strict'
 import '../../alfrescoDocument.service'
 import '../../alfrescoDownload.service'
+import '../../document/preview/preview.controller'
 import previewDialogTemplate from './view/previewDialog.html'
 import audioTemplate from './view/audio.html'
 import videoTemplate from './view/video.html'
@@ -52,7 +53,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
 
   function previewDialog (plugin) {
     return $mdDialog.show({
-      controller: 'DialogController',
+      controller: 'PreviewController',
       controllerAs: 'vm',
       template: previewDialogTemplate,
       parent: angular.element(document.body),

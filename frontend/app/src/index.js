@@ -51,8 +51,6 @@ import './components/odEmail'
 // Shared Services
 import './shared/services/browser.service'
 import './shared/services/member.service'
-import './shared/services/document/preview/preview.controller'
-import './shared/services/document/preview/preview.service'
 
 // Shared Filters
 import './shared/filters/customDateFilter'

@@ -1,8 +1,8 @@
 angular
   .module('openDeskApp')
-  .controller('DialogController', ['$scope', '$mdDialog', 'plugin', DialogController])
+  .controller('PreviewController', ['$scope', '$mdDialog', 'plugin', PreviewController])
 
-function DialogController ($scope, $mdDialog, plugin) {
+function PreviewController ($scope, $mdDialog, plugin) {
   var vm = this
   vm.plugin = plugin
 
