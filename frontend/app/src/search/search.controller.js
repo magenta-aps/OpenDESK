@@ -1,9 +1,12 @@
+'use strict'
+import '../shared/services/file.service'
+
 angular
   .module('openDeskApp')
   .controller('SearchController', ['$scope', '$interval', '$translate', '$stateParams', 'searchService',
-    'fileUtilsService', 'MemberService', SearchController])
+    'fileService', 'MemberService', SearchController])
 
-function SearchController ($scope, $interval, $translate, $stateParams, searchService, fileUtilsService,
+function SearchController ($scope, $interval, $translate, $stateParams, searchService, fileService,
   MemberService) {
   $scope.searchTerm = $stateParams.searchTerm
   $scope.selectedFilters = {} // Keep track of the selected filters
@@ -13,7 +16,7 @@ function SearchController ($scope, $interval, $translate, $stateParams, searchSe
 
   function addThumbnailUrl (files) {
     files.forEach(function (item) {
-      item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24)
+      item.thumbNailURL = fileService.getFileIconByMimetype(item.mimetype, 24)
     })
   };
 
@@ -74,7 +77,7 @@ function SearchController ($scope, $interval, $translate, $stateParams, searchSe
             continue
 
           // Get file type
-          value.fileType = fileUtilsService.getFiletypeByMimetype(value.mimetype)
+          value.fileType = fileService.getFiletypeByMimetype(value.mimetype)
           if (fileType.array.indexOf(value.fileType) === -1)
             fileType.array.push(value.fileType)
 

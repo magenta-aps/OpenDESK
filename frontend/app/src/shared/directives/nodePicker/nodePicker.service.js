@@ -1,10 +1,11 @@
 'use strict'
+import '../../services/file.service'
 
 angular
   .module('openDeskApp')
   .factory('nodePickerService', NodePickerService)
 
-function NodePickerService ($http, $translate, translateService, alfrescoNodeService, fileUtilsService) {
+function NodePickerService ($http, $translate, translateService, alfrescoNodeService, fileService) {
   return {
     getNodeInfo: getNodeInfo
   }
@@ -42,7 +43,7 @@ function NodePickerService ($http, $translate, translateService, alfrescoNodeSer
     return $http.get(url).then(function (response) {
       var nodeInfo = response.data[0]
       angular.forEach(nodeInfo.children, function (item) {
-        item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24)
+        item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
         translateName(item)
       })
 

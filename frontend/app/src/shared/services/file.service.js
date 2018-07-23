@@ -1,8 +1,8 @@
 angular
   .module('openDeskApp')
-  .factory('fileUtilsService', fileUtilsService)
+  .factory('fileService', fileService)
 
-function fileUtilsService () {
+function fileService () {
   return {
     getFileIconByMimetype: getFileIconByMimetype,
     getFiletypeByMimetype: getFiletypeByMimetype,

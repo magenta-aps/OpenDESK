@@ -1,9 +1,12 @@
+'use strict'
+import '../services/file.service'
+
 angular
   .module('openDeskApp')
-  .factory('editOnlineMSOfficeService', ['fileUtilsService', 'BROWSER_CONFIG', 'UserService', 'MemberService',
+  .factory('editOnlineMSOfficeService', ['fileService', 'BROWSER_CONFIG', 'UserService', 'MemberService',
     '$window', '$mdToast', '$translate', editOnlineMSOfficeService])
 
-function editOnlineMSOfficeService (fileUtilsService, BROWSER_CONFIG, UserService, MemberService, $window, $mdToast,
+function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, MemberService, $window, $mdToast,
   $translate) {
   var toastDelay = 5000
   var msProtocolNames = {
@@ -117,7 +120,7 @@ function editOnlineMSOfficeService (fileUtilsService, BROWSER_CONFIG, UserServic
   // AOS will be used for MS Office 2013 and above
   function createOnlineEditUrlAos (doc, docMetadata) {
     var urlParts = getOnlineEditUrlPathParts(doc, docMetadata)
-    var ext = fileUtilsService.getFileExtension(urlParts.end)
+    var ext = fileService.getFileExtension(urlParts.end)
     var protocol = msProtocolNames[ext]
     return protocol + ':ofe%7Cu%7C' + urlParts.start + '/alfresco' + urlParts.end
   }
@@ -214,7 +217,7 @@ function editOnlineMSOfficeService (fileUtilsService, BROWSER_CONFIG, UserServic
     var controlProgID = 'SharePoint.OpenDocuments'
     var mimetype = doc.node.mimetype
     var appProgID = null
-    var extn = fileUtilsService.getFileExtension(doc.location.file)
+    var extn = fileService.getFileExtension(doc.location.file)
 
     // Try to resolve the doc to an application ProgID; by mimetype first, then file extension.
     if (onlineEditMimetypes.hasOwnProperty(mimetype)) { appProgID = onlineEditMimetypes[mimetype] } else

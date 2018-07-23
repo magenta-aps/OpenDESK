@@ -2,6 +2,7 @@
 import '../shared/services/alfrescoNode.service'
 import '../shared/services/content.service'
 import '../shared/services/editOnlineMSOffice.service'
+import '../shared/services/file.service'
 import uploadDocumentsTemplate from './view/content/document/uploadDocuments.tmpl.html'
 import reviewDocumentTemplate from './view/content/document/reviewDocument.tmpl.html'
 import shareDocumentTemplate from './view/content/document/shareDocument.tmpl.html'
@@ -16,13 +17,13 @@ import uploadSbsysTemplate from './view/sbsys/uploadSbsys.tmpl.html'
 angular
   .module('openDeskApp.filebrowser')
   .controller('FilebrowserController', ['$state', '$stateParams', '$scope', '$rootScope', '$mdDialog', '$mdToast',
-    '$timeout', 'siteService', 'fileUtilsService', 'filebrowserService', 'alfrescoDownloadService', '$window',
+    '$timeout', 'siteService', 'fileService', 'filebrowserService', 'alfrescoDownloadService', '$window',
     'documentPreviewService', 'documentService', 'alfrescoNodeService', 'MemberService', '$translate',
     'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'notificationsService',
     'ContentService', 'editOnlineMSOfficeService', FilebrowserController])
 
 function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
-  siteService, fileUtilsService, filebrowserService, alfrescoDownloadService, $window,
+  siteService, fileService, filebrowserService, alfrescoDownloadService, $window,
   documentPreviewService, documentService, alfrescoNodeService, MemberService, $translate, APP_BACKEND_CONFIG,
   sessionService, headerService, browserService, notificationsService, ContentService, editOnlineMSOfficeService) {
   var vm = this
@@ -229,7 +230,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function processContent (items) {
     angular.forEach(items, function (item) {
-      item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24)
+      item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
 
       var isLocked = item.isLocked
       var lockType
