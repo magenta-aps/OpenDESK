@@ -32,6 +32,8 @@ angular
     'openDeskApp.notifications',
     'openDeskApp.discussion',
     'openDeskApp.user',
+    'openDeskApp.members',
+    'odEmail',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules
     /* LAST */

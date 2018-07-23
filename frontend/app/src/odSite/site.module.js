@@ -3,10 +3,8 @@ import 'angular-fixed-table-header'
 import siteListTemplate from './siteList/siteList.view.html'
 import siteDetailTemplate from './siteDetail/siteDetail.view.html'
 import filebrowserTemplate from '../filebrowser/view/filebrowser.html'
-import '../components/members'
-import '../components/odEmail'
 
-angular.module('openDeskApp.site', ['openDeskApp.filebrowser', 'fixed.table.header', 'openDeskApp.members', 'odEmail'])
+angular.module('openDeskApp.site', ['openDeskApp.filebrowser', 'fixed.table.header'])
   .config(['$stateProvider', 'APP_CONFIG', 'USER_ROLES', config])
 
 function config ($stateProvider, APP_CONFIG, USER_ROLES) {
