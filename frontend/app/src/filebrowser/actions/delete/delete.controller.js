@@ -1,4 +1,5 @@
 'use strict'
+import '../../../shared/services/content.service'
 
 angular
   .module('openDeskApp.filebrowser')

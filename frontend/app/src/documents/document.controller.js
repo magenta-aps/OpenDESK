@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/services/content.service'
 import aproveCommentTemplate from './view/aproveComment.tmpl.html'
 import rejectCommentTemplate from './view/rejectComment.tmpl.html'
 import uploadNewVersionTemplate from '../filebrowser/view/content/document/uploadNewVersion.tmpl.html'

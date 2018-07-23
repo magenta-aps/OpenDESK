@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/services/content.service'
 import '../shared/services/nodeRefUtils.service'
 
 angular

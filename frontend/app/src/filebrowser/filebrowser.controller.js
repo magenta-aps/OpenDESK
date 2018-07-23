@@ -1,5 +1,6 @@
 'use strict'
 import '../shared/services/alfrescoNode.service'
+import '../shared/services/content.service'
 import uploadDocumentsTemplate from './view/content/document/uploadDocuments.tmpl.html'
 import reviewDocumentTemplate from './view/content/document/reviewDocument.tmpl.html'
 import shareDocumentTemplate from './view/content/document/shareDocument.tmpl.html'
