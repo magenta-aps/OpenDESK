@@ -1,15 +1,18 @@
+'use strict'
+import '../services/alfrescoNode.service'
+
 angular
   .module('openDeskApp')
-  .factory('alfrescoDownloadService', ['alfrescoNodeUtils', 'ALFRESCO_URI', 'sessionService', AlfrescoDownloadService])
+  .factory('alfrescoDownloadService', ['alfrescoNodeService', 'ALFRESCO_URI', 'sessionService', AlfrescoDownloadService])
 
-function AlfrescoDownloadService (alfrescoNodeUtils, ALFRESCO_URI, sessionService) {
+function AlfrescoDownloadService (alfrescoNodeService, ALFRESCO_URI, sessionService) {
   var service = {
     downloadFile: downloadFile
   }
   return service
 
   function downloadFile (nodeRef, fileName) {
-    var url = ALFRESCO_URI.webClientServiceProxy + '/api/node/content/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/' + fileName + '?a=true'
+    var url = ALFRESCO_URI.webClientServiceProxy + '/api/node/content/' + alfrescoNodeService.processNodeRef(nodeRef).uri + '/' + fileName + '?a=true'
     url = sessionService.makeURL(url)
 
     var iframe = document.querySelector('#downloadFrame')

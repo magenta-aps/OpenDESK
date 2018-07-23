@@ -4,7 +4,7 @@ angular
   .module('openDeskApp')
   .factory('nodePickerService', NodePickerService)
 
-function NodePickerService ($http, $translate, translateService, alfrescoNodeUtils, fileUtilsService) {
+function NodePickerService ($http, $translate, translateService, alfrescoNodeService, fileUtilsService) {
   return {
     getNodeInfo: getNodeInfo
   }
@@ -27,7 +27,7 @@ function NodePickerService ($http, $translate, translateService, alfrescoNodeUti
   }
 
   function getNodeUrl (nodeRef) {
-    return '/alfresco/s/nodepicker/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).id
+    return '/alfresco/s/nodepicker/node/' + alfrescoNodeService.processNodeRef(nodeRef).id
   }
 
   function getRootUrl () {

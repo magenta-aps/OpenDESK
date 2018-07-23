@@ -1,4 +1,5 @@
 'use strict'
+import '../shared/services/alfrescoNode.service'
 import uploadDocumentsTemplate from './view/content/document/uploadDocuments.tmpl.html'
 import reviewDocumentTemplate from './view/content/document/reviewDocument.tmpl.html'
 import shareDocumentTemplate from './view/content/document/shareDocument.tmpl.html'
@@ -14,13 +15,13 @@ angular
   .module('openDeskApp.filebrowser')
   .controller('FilebrowserController', ['$state', '$stateParams', '$scope', '$rootScope', '$mdDialog', '$mdToast',
     '$timeout', 'siteService', 'fileUtilsService', 'filebrowserService', 'alfrescoDownloadService', '$window',
-    'documentPreviewService', 'documentService', 'alfrescoNodeUtils', 'MemberService', '$translate',
+    'documentPreviewService', 'documentService', 'alfrescoNodeService', 'MemberService', '$translate',
     'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'notificationsService',
     'ContentService', 'editOnlineMSOfficeService', FilebrowserController])
 
 function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
   siteService, fileUtilsService, filebrowserService, alfrescoDownloadService, $window,
-  documentPreviewService, documentService, alfrescoNodeUtils, MemberService, $translate, APP_BACKEND_CONFIG,
+  documentPreviewService, documentService, alfrescoNodeService, MemberService, $translate, APP_BACKEND_CONFIG,
   sessionService, headerService, browserService, notificationsService, ContentService, editOnlineMSOfficeService) {
   var vm = this
   var documentNodeRef = ''
@@ -128,7 +129,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
       headerService.setTitle(title)
       filebrowserService.getUserHome()
         .then(function (userHomeRef) {
-          var userHomeId = alfrescoNodeUtils.processNodeRef(userHomeRef).id
+          var userHomeId = alfrescoNodeService.processNodeRef(userHomeRef).id
           setFolderAndPermissions(userHomeId)
         })
     } else {
@@ -155,7 +156,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   function setFolderAndPermissionsByPath (path) {
     filebrowserService.getCompanyHome()
       .then(function (val) {
-        var companyHomeId = alfrescoNodeUtils.processNodeRef(val).id
+        var companyHomeId = alfrescoNodeService.processNodeRef(val).id
         setFolderAndPermissions(companyHomeId + path)
       })
   }
@@ -178,7 +179,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   function setFolder (fNodeRef) {
     filebrowserService.setCurrentFolder(fNodeRef)
     folderNodeRef = fNodeRef
-    var folder = alfrescoNodeUtils.processNodeRef(folderNodeRef).id
+    var folder = alfrescoNodeService.processNodeRef(folderNodeRef).id
     loadContentList(folder)
   }
 
@@ -379,7 +380,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   }
 
   function editInMSOffice (nodeRef) {
-    var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
     documentService.getDocument(nodeId).then(function (response) {
       var doc = response.item
       var docMetadata = response.metadata
@@ -388,7 +389,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   }
 
   function editInOnlyOffice (nodeRef) {
-    var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
     $window.open($state.href('onlyOfficeEdit', { 'nodeRef': nodeId }))
   }
 
@@ -438,7 +439,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
               .textContent('Dokumentet blev delt med ' + user.displayName + '.')
               .hideDelay(3000)
           )
-          var nodeId = alfrescoNodeUtils.processNodeRef(documentNodeRef).id
+          var nodeId = alfrescoNodeService.processNodeRef(documentNodeRef).id
 
           // Link differs depending of type
           var link

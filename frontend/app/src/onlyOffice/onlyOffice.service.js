@@ -1,9 +1,10 @@
 'use strict'
+import '../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp.onlyOffice')
-  .factory('onlyOfficeService', ['$http', 'alfrescoNodeUtils', 'sessionService', onlyOfficeService])
+  .factory('onlyOfficeService', ['$http', 'alfrescoNodeService', 'sessionService', onlyOfficeService])
 
-function onlyOfficeService ($http, alfrescoNodeUtils, sessionService) {
+function onlyOfficeService ($http, alfrescoNodeService, sessionService) {
   var restBaseUrl = '/alfresco/service'
 
   return {
@@ -31,7 +32,7 @@ function onlyOfficeService ($http, alfrescoNodeUtils, sessionService) {
   }
 
   function displayPreview (nodeRef) {
-    var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
     return display(nodeId, 'view').then(function (response) {
       return response
     })

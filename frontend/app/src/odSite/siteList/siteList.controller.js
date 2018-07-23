@@ -1,4 +1,5 @@
 'use strict'
+import '../../shared/services/alfrescoNode.service'
 import deleteProjectTemplate from './deleteProject.tmpl.html'
 import siteCreateTemplate from '../siteCreate/siteCreate.view.html'
 import updateSiteTemplate from './updateSite.tmpl.html'
@@ -7,11 +8,11 @@ import siteInfoTemplate from './siteInfo.view.html'
 angular
   .module('openDeskApp.site')
   .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'MemberService',
-    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'headerService', 'alfrescoNodeUtils', 'translateService',
+    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'headerService', 'alfrescoNodeService', 'translateService',
     SiteListController])
 
 function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, MemberService,
-  sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils, translateService) {
+  sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeService, translateService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -188,7 +189,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   }
 
   function toggleFavourite (node) {
-    var nodeId = alfrescoNodeUtils.processNodeRef(node.nodeRef).id
+    var nodeId = alfrescoNodeService.processNodeRef(node.nodeRef).id
     if (node.isFavourite)
       siteService.removeFavourite(nodeId)
         .then(function () {

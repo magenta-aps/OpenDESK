@@ -1,9 +1,10 @@
 'use strict'
+import '../../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp')
-  .factory('ContentService', ['$http', 'alfrescoNodeUtils', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', ContentService])
+  .factory('ContentService', ['$http', 'alfrescoNodeService', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', ContentService])
 
-function ContentService ($http, alfrescoNodeUtils, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
+function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
   var service = {
     delete: deleteContent,
     get: getContent,
@@ -27,7 +28,7 @@ function ContentService ($http, alfrescoNodeUtils, APP_BACKEND_CONFIG, EDITOR_CO
   }
 
   function deleteContent (nodeRef) {
-    return $http.delete(`/slingshot/doclib/action/file/node/${alfrescoNodeUtils.processNodeRef(nodeRef).uri}`)
+    return $http.delete(`/slingshot/doclib/action/file/node/${alfrescoNodeService.processNodeRef(nodeRef).uri}`)
       .then(function (result) {
         return result.data
       })

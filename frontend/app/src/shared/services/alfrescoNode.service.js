@@ -1,8 +1,8 @@
 angular
   .module('openDeskApp')
-  .factory('alfrescoNodeUtils', alfrescoNodeUtils)
+  .factory('alfrescoNodeService', alfrescoNodeService)
 
-function alfrescoNodeUtils () {
+function alfrescoNodeService () {
   var service = {
     processNodeRef: processNodeRef
   }
