@@ -1,4 +1,5 @@
 'use strict'
+import '../../shared/services/alfrescoDocument.service'
 
 angular
   .module('openDeskApp')

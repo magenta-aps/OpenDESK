@@ -49,7 +49,6 @@ import './components/members'
 import './components/odEmail'
 
 // Shared Services
-import './shared/services/alfrescoDocumentService'
 import './shared/services/alfrescoDownloadService'
 import './shared/services/alfrescoNodeUtilsService'
 import './shared/services/browserService'
