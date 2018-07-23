@@ -29,6 +29,7 @@ angular
     'openDeskApp.documents',
     'openDeskApp.odDocuments',
     'openDeskApp.search',
+    'openDeskApp.searchBar',
     'openDeskApp.notifications',
     'openDeskApp.discussion',
     'openDeskApp.user',

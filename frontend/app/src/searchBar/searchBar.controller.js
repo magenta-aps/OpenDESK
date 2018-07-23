@@ -1,6 +1,7 @@
 angular
-  .module('openDeskApp')
-  .controller('SearchBarController', SearchBarController)
+  .module('openDeskApp.searchBar')
+  .controller('SearchBarController', ['$scope', '$state', '$interval', '$translate', '$stateParams', 'searchService',
+    'fileUtilsService', 'translateService', SearchBarController])
 
 function SearchBarController ($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService,
   translateService) {

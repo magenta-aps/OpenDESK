@@ -2,7 +2,7 @@
 import searchBarTemplate from './view/searchBar.html'
 
 angular
-  .module('openDeskApp')
+  .module('openDeskApp.searchBar')
   .directive('odSearchBar', function () {
     return {
       restrict: 'E',
