@@ -1,6 +1,6 @@
 angular
   .module('openDeskApp')
-  .filter('openeDate', openeDateFilterFactory)
+  .filter('openeDate', ['dateFilter', openeDateFilterFactory])
 
 function openeDateFilterFactory (dateFilter) {
   function openeDateFilter (dateValue, givenFormat) {
