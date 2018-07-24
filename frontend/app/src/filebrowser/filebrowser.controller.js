@@ -68,7 +68,6 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   $scope.isSite = $stateParams.isSite
 
-  $scope.siteService = siteService
   $scope.history = []
   $scope.uploadedToSbsys = false
   $scope.showProgress = false
