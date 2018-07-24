@@ -25,7 +25,9 @@ angular
     return {
       restrict: 'A',
       scope: {
-        content: '='
+        content: '=',
+        showESDH: '=showEsdh',
+        loadCheckboxes: '='
       },
       template: filebrowserRowTemplate
     }

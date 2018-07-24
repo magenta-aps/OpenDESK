@@ -40,11 +40,9 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   vm.enableESDH = APP_BACKEND_CONFIG.enableESDH
   vm.error = false
   vm.folderTemplates = {}
-  vm.getLink = getLink
   vm.isLoading = true
   vm.loadCheckboxes = loadCheckboxes
   vm.loadFromSbsys = loadFromSbsys
-  vm.loadHistory = loadHistory
   vm.loadSbsysDialog = loadSbsysDialog
   vm.getAvatarUrl = getAvatarUrl
   vm.newLinkDialog = newLinkDialog
@@ -67,8 +65,6 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   vm.sendToSbsys = false
 
   $scope.isSite = $stateParams.isSite
-
-  $scope.history = []
   $scope.uploadedToSbsys = false
   $scope.showProgress = false
   $scope.reverse = false
@@ -241,10 +237,18 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
       item.loolEditable = ContentService.isLibreOfficeEditable(mimeType, isLocked)
       item.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, isLocked)
       item.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, isLocked, lockType)
+
+      // Set link
+      item.uiRef = getUiRef(item)
+
+      // Set history
+      getHistory(item.shortRef).then(function (response) {
+        item.history = response
+      })
     })
   }
 
-  function getLink (content) {
+  function getUiRef (content) {
     if (content.contentType === 'cmis:document')
       if ($stateParams.type === 'text-templates')
         return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})'
@@ -266,9 +270,9 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
       return 'project({projekt: "' + content.destination_link + '"})'
   }
 
-  function loadHistory (doc) {
-    ContentService.getHistory(doc).then(function (val) {
-      $scope.history = val
+  function getHistory (nodeId) {
+    return ContentService.history(nodeId).then(function (val) {
+      return val
     })
   }
 

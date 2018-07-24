@@ -21,7 +21,7 @@
             </thead>
             <tbody ng-repeat="contentTypeList in vm.contentList">
                 <tr filebrowser-row ng-repeat="content in contentTypeList | orderObjectBy:order:reverse"
-                    content="content">
+                    content="content" show-esdh="vm.enableESDH && isSite" load-checkboxes="vm.loadCheckboxes">
                 </tr>
             </tbody>
         </table>
@@ -81,6 +81,7 @@
         </md-button>
 
         <span flex></span>
+        {{vm.sendToSbsys}}
         <md-button ng-show="vm.sendToSbsys" ng-if="isSite" ng-click="vm.uploadSbsysDialog($event)"
             class="md-primary" aria-label="SBSYS">
             <md-tooltip md-direction="top">
