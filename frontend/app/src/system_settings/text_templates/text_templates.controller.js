@@ -1,6 +1,5 @@
 'use strict'
 import '../../shared/services/alfrescoDocument.service'
-import '../../shared/services/alfrescoDownload.service'
 import '../../shared/services/content.service'
 
 angular
