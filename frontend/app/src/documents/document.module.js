@@ -129,9 +129,30 @@ angular
     }
   })
   .config(['$stateProvider', 'USER_ROLES', config])
-  .component('documentActions', { template: documentActionsTemplate })
-  .component('documentHistory', { template: documentHistoryTemplate })
-  .component('documentReview', { template: documentReviewTemplate })
+  .directive('documentActions', function () {
+    return {
+      restrict: 'E',
+      template: documentActionsTemplate,
+      controller: 'DocumentController',
+      controllerAs: 'vm'
+    }
+  })
+  .directive('documentHistory', function () {
+    return {
+      restrict: 'E',
+      template: documentHistoryTemplate,
+      controller: 'DocumentController',
+      controllerAs: 'vm'
+    }
+  })
+  .directive('documentReview', function () {
+    return {
+      restrict: 'E',
+      template: documentReviewTemplate,
+      controller: 'DocumentController',
+      controllerAs: 'vm'
+    }
+  })
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('document', {
