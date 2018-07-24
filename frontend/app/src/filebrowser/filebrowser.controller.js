@@ -218,7 +218,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
   function getUiRef (content) {
     if (content.contentType === 'cmis:document')
-      if ($stateParams.type === 'text-templates')
+      if ($stateParams.type === 'system-folders' && content.name.endsWith('.ftl'))
         return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})'
       else
         return 'document({doc: "' + content.shortRef + '"})'
