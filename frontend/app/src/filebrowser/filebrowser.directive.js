@@ -38,6 +38,8 @@ angular
       scope: {
         content: '='
       },
-      template: filebrowserMenuTemplate
+      template: filebrowserMenuTemplate,
+      controller: 'ActionsController',
+      controllerAs: 'vm'
     }
   })

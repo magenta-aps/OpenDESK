@@ -5,14 +5,14 @@
 
     <md-menu-content width="4">
         <md-menu-item ng-if="content.contentType == 'cmis:document'">
-            <md-button ng-click="downloadDocument(content.nodeRef, content.name)">
+            <md-button ng-click="vm.downloadDocument(content.nodeRef, content.name)">
                 <md-icon md-menu-align-target>get_app</md-icon>
                 {{'COMMON.DOWNLOAD' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="content.contentType == 'cmis:document'">
-            <md-button ng-click="previewDocument(content.nodeRef)">
+            <md-button ng-click="vm.previewDocument(content.nodeRef)">
                 <md-icon md-menu-align-target>search</md-icon>
                 {{'COMMON.PREVIEW' | translate }}
             </md-button>
@@ -54,7 +54,7 @@
         </md-menu-item>
 
         <md-menu-item ng-if="content.canEdit && content.contentType == 'cmis:document'">
-            <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef)">
+            <md-button ng-click="vm.uploadNewVersionDialog($event, content.nodeRef, content.parent)">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
             </md-button>
@@ -68,14 +68,14 @@
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete">
-            <md-button ng-click="moveContentDialog(content.nodeRef, content.parentNodeRef)">
+            <md-button ng-click="vm.moveContentDialog(content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>compare_arrows</md-icon>
                 {{'COMMON.MOVE' | translate }}
             </md-button>
         </md-menu-item>
 
         <md-menu-item ng-if="content.canMoveAndDelete && content.contentType == 'cmis:document'">
-            <md-button ng-click="copyContentDialog(content.nodeRef, content.parentNodeRef)">
+            <md-button ng-click="vm.copyContentDialog(content.nodeRef, content.parentNodeRef)">
                 <md-icon md-menu-align-target>content_copy</md-icon>
                 {{'COMMON.COPY' | translate }}
             </md-button>

@@ -1,41 +1,28 @@
 'use strict'
-import '../shared/services/alfrescoNode.service'
 import '../shared/services/content.service'
-import '../shared/services/editOnlineMSOffice.service'
 import '../shared/services/file.service'
-import '../shared/services/document/preview/preview.service'
 import uploadDocumentsTemplate from './view/content/document/uploadDocuments.tmpl.html'
-import reviewDocumentTemplate from './view/content/document/reviewDocument.tmpl.html'
-import shareDocumentTemplate from './view/content/document/shareDocument.tmpl.html'
-import uploadNewVersionTemplate from './view/content/document/uploadNewVersion.tmpl.html'
-import deleteTemplate from './actions/delete/delete.view.html'
-import renameTemplate from './actions/rename/rename.view.html'
-import genericContentDialogTemplate from './genericDialog/genericContentDialog.view.html'
 import newSiteLinkTemplate from './siteLink/new.view.html'
 import loadSbsysTemplate from './view/sbsys/loadSbsys.tmpl.html'
 import uploadSbsysTemplate from './view/sbsys/uploadSbsys.tmpl.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('FilebrowserController', ['$state', '$stateParams', '$scope', '$rootScope', '$mdDialog', '$mdToast',
-    '$timeout', 'siteService', 'fileService', 'filebrowserService', 'alfrescoDownloadService', '$window',
-    'documentPreviewService', 'documentService', 'alfrescoNodeService', 'MemberService', '$translate',
-    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'notificationsService',
-    'ContentService', 'editOnlineMSOfficeService', FilebrowserController])
+  .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout', 'siteService',
+    'fileService', 'filebrowserService', 'documentService', 'alfrescoNodeService', 'MemberService', '$translate',
+    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'ContentService',
+    FilebrowserController])
 
-function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
-  siteService, fileService, filebrowserService, alfrescoDownloadService, $window,
-  documentPreviewService, documentService, alfrescoNodeService, MemberService, $translate, APP_BACKEND_CONFIG,
-  sessionService, headerService, browserService, notificationsService, ContentService, editOnlineMSOfficeService) {
+function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, siteService, fileService,
+  filebrowserService, documentService, alfrescoNodeService, MemberService, $translate, APP_BACKEND_CONFIG,
+  sessionService, headerService, browserService, ContentService) {
   var vm = this
-  var documentNodeRef = ''
   var folderNodeRef = ''
 
   vm.cancelDialog = cancelDialog
   vm.cancelSbsysDialog = cancelSbsysDialog
   vm.contentList = []
   vm.contentListLength = 0
-  vm.deleteContentDialog = deleteContentDialog
   vm.documentTemplates = {}
   vm.enableESDH = APP_BACKEND_CONFIG.enableESDH
   vm.error = false
@@ -47,17 +34,11 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   vm.getAvatarUrl = getAvatarUrl
   vm.newLinkDialog = newLinkDialog
   vm.permissions = {}
-  vm.renameContentDialog = renameContentDialog
   vm.setAllCheckboxes = setAllCheckboxes
-  vm.shareDocument = shareDocument
-  vm.shareDocumentDialog = shareDocumentDialog
-  vm.stopSharingDocument = stopSharingDocument
   vm.searchPeople = searchPeople
   vm.uploading = false
   vm.uploadDocumentsDialog = uploadDocumentsDialog
   vm.uploadFiles = uploadFiles
-  vm.uploadNewVersion = uploadNewVersion
-  vm.uploadNewVersionDialog = uploadNewVersionDialog
   vm.uploadSbsys = uploadSbsys
   vm.uploadSbsysDialog = uploadSbsysDialog
   vm.searchUsers = searchUsers
@@ -69,16 +50,6 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   $scope.showProgress = false
   $scope.reverse = false
   $scope.order = 'name'
-
-  vm.editInMSOffice = editInMSOffice
-  vm.editInLibreOffice = editInLibreOffice
-  vm.editInOnlyOffice = editInOnlyOffice
-
-  // de her er dublikeret i document.controller!
-  $scope.downloadDocument = downloadDocument
-  $scope.previewDocument = previewDocument
-  vm.reviewDocumentsDialog = reviewDocumentsDialog
-  vm.createReviewNotification = createReviewNotification
 
   $scope.filesToFilebrowser = null
 
@@ -109,7 +80,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
         })
 
       vm.permissions = siteService.getPermissions()
-      var title = ''
+      var title
       if (vm.permissions === undefined)
         siteService.getSiteUserPermissions($stateParams.projekt)
           .then(function (permissions) {
@@ -370,194 +341,17 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     $scope.files = []
   }
 
-  function downloadDocument (nodeRef, name) {
-    alfrescoDownloadService.downloadFile(nodeRef, name)
-  }
-
-  function previewDocument (nodeRef) {
-    documentPreviewService.previewDocument(nodeRef)
-  }
-
-  function editInLibreOffice (nodeRef, fileName) {
-    var params = {
-      'nodeRef': nodeRef,
-      'fileName': fileName
-    }
-    $state.go('lool', params)
-  }
-
-  function editInMSOffice (nodeRef) {
-    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
-    documentService.getDocument(nodeId).then(function (response) {
-      var doc = response.item
-      var docMetadata = response.metadata
-      editOnlineMSOfficeService.editOnline(undefined, doc, docMetadata)
-    })
-  }
-
-  function editInOnlyOffice (nodeRef) {
-    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
-    $window.open($state.href('onlyOfficeEdit', { 'nodeRef': nodeId }))
-  }
-
-  function reviewDocumentsDialog (event, nodeRef) {
-    documentNodeRef = nodeRef
-
-    $mdDialog.show({
-      template: reviewDocumentTemplate,
-      targetEvent: event,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
   function searchUsers (query) {
     return MemberService.search(query)
-  }
-
-  function createReviewNotification (userName, comment) {
-    siteService.createReviewNotification(documentNodeRef, userName, comment)
-    $mdDialog.cancel()
   }
 
   function getAvatarUrl (user) {
     return sessionService.makeAvatarUrl(user)
   }
 
-  function shareDocumentDialog (content) {
-    documentNodeRef = content.nodeRef
-    $scope.content = content
-
-    $mdDialog.show({
-      template: shareDocumentTemplate,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
-  function shareDocument (user, permission, content) {
-    filebrowserService.shareNode(documentNodeRef, user.userName, permission)
-      .then(
-        function () {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet blev delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-          var nodeId = alfrescoNodeService.processNodeRef(documentNodeRef).id
-
-          // Link differs depending of type
-          var link
-          if (content.contentType === 'cmis:document')
-            link = 'dokument/' + nodeId
-          else
-            link = 'dokumenter/delte/' + nodeId
-
-          var subject = 'Nyt dokument delt'
-          var message = 'En bruger har delt et dokument med dig'
-
-          notificationsService.add(
-            user.userName,
-            subject,
-            message,
-            link,
-            'new-shared-doc',
-            ''
-          )
-        }
-      )
-  }
-
-  function stopSharingDocument (user, permission) {
-    filebrowserService.stopSharingNode(documentNodeRef, user.userName, permission)
-      .then(
-        function (succes) {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet bliver ikke længere delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-        }
-      )
-  }
-
   function searchPeople (query) {
     if (query)
       return MemberService.search(query)
-  }
-
-  function uploadNewVersionDialog (event, nodeRef) {
-    documentNodeRef = nodeRef
-
-    $mdDialog.show({
-      template: uploadNewVersionTemplate,
-      targetEvent: event,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
-  function uploadNewVersion (file) {
-    vm.uploading = true
-    ContentService.uploadNewVersion(file, folderNodeRef, documentNodeRef)
-      .then(function () {
-        hideDialogAndReloadContent()
-      })
-  }
-
-  function renameContentDialog (content) {
-    $mdDialog.show({
-      template: renameTemplate,
-      locals: {content: content},
-      controller: 'RenameController as vm',
-      clickOutsideToClose: true
-    })
-  }
-
-  // We tried to have genericContentDialog inside the scope, but after having shown the dialog once the method was
-  // missing from the scope.
-  $scope.moveContentDialog = moveContentDialog
-  $scope.copyContentDialog = copyContentDialog
-
-  function moveContentDialog (sourceNodeRef, parentNodeRef) {
-    genericContentDialog('MOVE', sourceNodeRef, parentNodeRef)
-  }
-
-  function copyContentDialog (sourceNodeRef, parentNodeRef) {
-    genericContentDialog('COPY', sourceNodeRef, parentNodeRef)
-  }
-
-  function genericContentDialog (action, sourceNodeRef, parentNodeRef) {
-    var sourceNodeRefs = []
-    sourceNodeRefs.push(sourceNodeRef)
-
-    var data = {
-      parentNodeRef: parentNodeRef,
-      contentAction: action,
-      sourceNodeRefs: sourceNodeRefs
-    }
-
-    $mdDialog.show({
-      template: genericContentDialogTemplate,
-      controller: 'GenericContentDialogController',
-      controllerAs: 'vm',
-      locals: {
-        data: data
-      },
-      clickOutsideToClose: true
-    })
-  }
-
-  function deleteContentDialog (content) {
-    $mdDialog.show({
-      template: deleteTemplate,
-      locals: {data: content},
-      controller: 'DeleteController as vm',
-      clickOutsideToClose: true
-    })
   }
 
   // Link
