@@ -30,7 +30,6 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   var vm = this
   var documentNodeRef = ''
   var folderNodeRef = ''
-  var sendAllToSbsys = false
 
   vm.cancelDialog = cancelDialog
   vm.cancelSbsysDialog = cancelSbsysDialog
@@ -64,6 +63,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   vm.uploadSbsys = uploadSbsys
   vm.uploadSbsysDialog = uploadSbsysDialog
   vm.searchUsers = searchUsers
+  vm.sendAllToSbsys = false
   vm.sendToSbsys = false
 
   $scope.isSite = $stateParams.isSite
@@ -607,10 +607,12 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   }
 
   function loadCheckboxes () {
+    vm.sendAllToSbsys = true
     vm.sendToSbsys = false
     vm.contentList.forEach(function (contentTypeList) {
       contentTypeList.forEach(function (content) {
-        vm.sendToSbsys = vm.sendToSbsys | content.sendToSbsys
+        vm.sendToSbsys = vm.sendToSbsys || content.sendToSbsys
+        vm.sendAllToSbsys = vm.sendAllToSbsys && content.sendToSbsys
       })
     })
   }
@@ -618,10 +620,10 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   function setAllCheckboxes () {
     vm.contentList.forEach(function (contentTypeList) {
       contentTypeList.forEach(function (content) {
-        content.sendToSbsys = sendAllToSbsys
+        content.sendToSbsys = vm.sendAllToSbsys
       })
     })
-    vm.sendToSbsys = sendAllToSbsys
+    vm.sendToSbsys = vm.sendAllToSbsys
   }
 
   function setSbsysShowAttr () {

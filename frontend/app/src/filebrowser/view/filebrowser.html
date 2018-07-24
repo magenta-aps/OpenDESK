@@ -14,7 +14,7 @@
                     <th hide show-gt-sm sort order="'lastChanged'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.HISTORY' | translate }}</th>
                     <th hide show-gt-sm sort order="'creator.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.CREATEDBY' | translate }}</th>
                     <th hide show-gt-md ng-if="vm.enableESDH" ng-if="isSite" colspan="2">
-                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendToSbsys" ng-click="vm.setAllCheckboxes()">
+                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendAllToSbsys" ng-change="vm.setAllCheckboxes()">
                         <img ng-src="assets/img/sbsys.png" class="od-sbsys-logo">
                     </th>
                 </tr>
