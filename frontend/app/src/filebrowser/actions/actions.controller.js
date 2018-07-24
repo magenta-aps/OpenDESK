@@ -14,11 +14,12 @@ angular
   .module('openDeskApp.filebrowser')
   .controller('ActionsController', ['$mdMenu', '$rootScope', '$scope', '$state', '$mdDialog', '$mdToast', '$window',
     'alfrescoDownloadService', 'alfrescoNodeService', 'ContentService', 'documentPreviewService', 'documentService',
-    'editOnlineMSOfficeService', 'filebrowserService', 'notificationsService', 'siteService', ActionsController])
+    'editOnlineMSOfficeService', 'filebrowserService', 'MemberService', 'notificationsService', 'sessionService',
+    'siteService', ActionsController])
 
 function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdToast, $window, alfrescoDownloadService,
   alfrescoNodeService, ContentService, documentPreviewService, documentService, editOnlineMSOfficeService,
-  filebrowserService, notificationsService, siteService) {
+  filebrowserService, MemberService, notificationsService, sessionService, siteService) {
   var vm = this
   vm.cancelDialog = cancelDialog
   vm.copyContentDialog = copyContentDialog
@@ -26,8 +27,10 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
+  vm.getAvatarUrl = getAvatarUrl
   vm.moveContentDialog = moveContentDialog
   vm.renameContentDialog = renameContentDialog
+  vm.searchPeople = searchPeople
   vm.shareDocument = shareDocument
   vm.shareDocumentDialog = shareDocumentDialog
   vm.stopSharingDocument = stopSharingDocument
@@ -40,45 +43,45 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   vm.previewDocument = previewDocument
   vm.reviewDocumentsDialog = reviewDocumentsDialog
 
-  var documentNodeRef = ''
+  var content = $scope.content
 
   function cancelDialog () {
     $mdDialog.cancel()
     $scope.files = []
   }
 
-  function copyContentDialog (sourceNodeRef, parentNodeRef) {
-    genericContentDialog('COPY', sourceNodeRef, parentNodeRef)
+  function copyContentDialog () {
+    genericContentDialog('COPY')
   }
 
   function createReviewNotification (userName, comment) {
-    siteService.createReviewNotification(documentNodeRef, userName, comment)
+    siteService.createReviewNotification(content.nodeRef, userName, comment)
     $mdDialog.cancel()
   }
 
-  function deleteContentDialog (content) {
+  function deleteContentDialog () {
     $mdDialog.show({
       template: deleteTemplate,
-      locals: {data: content},
+      locals: {data: $scope.content},
       controller: 'DeleteController as vm',
       clickOutsideToClose: true
     })
   }
 
-  function downloadDocument (nodeRef, name) {
-    alfrescoDownloadService.downloadFile(nodeRef, name)
+  function downloadDocument () {
+    alfrescoDownloadService.downloadFile(content.nodeRef, content.name)
   }
 
-  function editInLibreOffice (nodeRef, fileName) {
+  function editInLibreOffice () {
     var params = {
-      'nodeRef': nodeRef,
-      'fileName': fileName
+      'nodeRef': content.nodeRef,
+      'fileName': content.name
     }
     $state.go('lool', params)
   }
 
-  function editInMSOffice (nodeRef) {
-    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
+  function editInMSOffice () {
+    var nodeId = alfrescoNodeService.processNodeRef(content.nodeRef).id
     documentService.getDocument(nodeId).then(function (response) {
       var doc = response.item
       var docMetadata = response.metadata
@@ -86,17 +89,17 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
     })
   }
 
-  function editInOnlyOffice (nodeRef) {
-    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
+  function editInOnlyOffice () {
+    var nodeId = alfrescoNodeService.processNodeRef(content.nodeRef).id
     $window.open($state.href('onlyOfficeEdit', { 'nodeRef': nodeId }))
   }
 
-  function genericContentDialog (action, sourceNodeRef, parentNodeRef) {
+  function genericContentDialog (action) {
     var sourceNodeRefs = []
-    sourceNodeRefs.push(sourceNodeRef)
+    sourceNodeRefs.push(content.nodeRef)
 
     var data = {
-      parentNodeRef: parentNodeRef,
+      parentNodeRef: content.parentNodeRef,
       contentAction: action,
       sourceNodeRefs: sourceNodeRefs
     }
@@ -112,45 +115,48 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
     })
   }
 
+  function getAvatarUrl (user) {
+    return sessionService.makeAvatarUrl(user)
+  }
+
   function hideDialogAndReloadContent () {
     vm.uploading = false
     $rootScope.$broadcast('updateFilebrowser')
     cancelDialog()
   }
 
-  function moveContentDialog (sourceNodeRef, parentNodeRef) {
-    genericContentDialog('MOVE', sourceNodeRef, parentNodeRef)
+  function moveContentDialog () {
+    genericContentDialog('MOVE')
   }
 
-  function previewDocument (nodeRef) {
-    documentPreviewService.previewDocument(nodeRef)
+  function previewDocument () {
+    documentPreviewService.previewDocument(content.nodeRef)
   }
 
-  function renameContentDialog (content) {
+  function renameContentDialog () {
     $mdDialog.show({
       template: renameTemplate,
-      locals: {content: content},
+      locals: {content: $scope.content},
       controller: 'RenameController as vm',
       clickOutsideToClose: true
     })
   }
 
-  function reviewDocumentsDialog (event, nodeRef) {
-    documentNodeRef = nodeRef
-
+  function reviewDocumentsDialog () {
     $mdDialog.show({
       template: reviewDocumentTemplate,
-      targetEvent: event,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
       clickOutsideToClose: true
     })
   }
 
-  function shareDocumentDialog (content) {
-    documentNodeRef = content.nodeRef
-    $scope.content = content
+  function searchPeople (query) {
+    if (query)
+      return MemberService.search(query)
+  }
 
+  function shareDocumentDialog () {
     $mdDialog.show({
       template: shareDocumentTemplate,
       scope: $scope, // use parent scope in template
@@ -159,8 +165,8 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
     })
   }
 
-  function shareDocument (user, permission, content) {
-    filebrowserService.shareNode(documentNodeRef, user.userName, permission)
+  function shareDocument (user, permission) {
+    filebrowserService.shareNode(content.nodeRef, user.userName, permission)
       .then(
         function () {
           $mdToast.show(
@@ -168,11 +174,11 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
               .textContent('Dokumentet blev delt med ' + user.displayName + '.')
               .hideDelay(3000)
           )
-          var nodeId = alfrescoNodeService.processNodeRef(documentNodeRef).id
+          var nodeId = alfrescoNodeService.processNodeRef(content.nodeRef).id
 
           // Link differs depending of type
           var link
-          if (content.contentType === 'cmis:document')
+          if ($scope.content.contentType === 'cmis:document')
             link = 'dokument/' + nodeId
           else
             link = 'dokumenter/delte/' + nodeId
@@ -193,7 +199,7 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   }
 
   function stopSharingDocument (user, permission) {
-    filebrowserService.stopSharingNode(documentNodeRef, user.userName, permission)
+    filebrowserService.stopSharingNode(content.nodeRef, user.userName, permission)
       .then(
         function () {
           $mdToast.show(
@@ -205,21 +211,18 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
       )
   }
 
-  function uploadNewVersionDialog (event, nodeRef) {
-    documentNodeRef = nodeRef
-
+  function uploadNewVersionDialog () {
     $mdDialog.show({
       template: uploadNewVersionTemplate,
-      targetEvent: event,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
       clickOutsideToClose: true
     })
   }
 
-  function uploadNewVersion (file, folderNodeRef) {
+  function uploadNewVersion (file) {
     vm.uploading = true
-    ContentService.uploadNewVersion(file, folderNodeRef, documentNodeRef)
+    ContentService.uploadNewVersion(file, null, content.nodeRef)
       .then(function () {
         hideDialogAndReloadContent()
       })

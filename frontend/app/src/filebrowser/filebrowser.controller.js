@@ -17,10 +17,20 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
   filebrowserService, documentService, alfrescoNodeService, MemberService, $translate, APP_BACKEND_CONFIG,
   sessionService, headerService, browserService, ContentService) {
   var vm = this
-  var folderNodeRef = ''
 
   vm.cancelDialog = cancelDialog
   vm.cancelSbsysDialog = cancelSbsysDialog
+  vm.loadCheckboxes = loadCheckboxes
+  vm.loadFromSbsys = loadFromSbsys
+  vm.loadSbsysDialog = loadSbsysDialog
+  vm.newLinkDialog = newLinkDialog
+  vm.setAllCheckboxes = setAllCheckboxes
+  vm.uploadDocumentsDialog = uploadDocumentsDialog
+  vm.uploadFiles = uploadFiles
+  vm.uploadSbsys = uploadSbsys
+  vm.uploadSbsysDialog = uploadSbsysDialog
+
+  var folderNodeRef = ''
   vm.contentList = []
   vm.contentListLength = 0
   vm.documentTemplates = {}
@@ -28,30 +38,17 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
   vm.error = false
   vm.folderTemplates = {}
   vm.isLoading = true
-  vm.loadCheckboxes = loadCheckboxes
-  vm.loadFromSbsys = loadFromSbsys
-  vm.loadSbsysDialog = loadSbsysDialog
-  vm.getAvatarUrl = getAvatarUrl
-  vm.newLinkDialog = newLinkDialog
   vm.permissions = {}
-  vm.setAllCheckboxes = setAllCheckboxes
-  vm.searchPeople = searchPeople
-  vm.uploading = false
-  vm.uploadDocumentsDialog = uploadDocumentsDialog
-  vm.uploadFiles = uploadFiles
-  vm.uploadSbsys = uploadSbsys
-  vm.uploadSbsysDialog = uploadSbsysDialog
-  vm.searchUsers = searchUsers
   vm.sendAllToSbsys = false
   vm.sendToSbsys = false
-
-  $scope.isSite = $stateParams.isSite
-  $scope.uploadedToSbsys = false
-  $scope.showProgress = false
-  $scope.reverse = false
-  $scope.order = 'name'
+  vm.uploading = false
 
   $scope.filesToFilebrowser = null
+  $scope.isSite = $stateParams.isSite
+  $scope.order = 'name'
+  $scope.reverse = false
+  $scope.showProgress = false
+  $scope.uploadedToSbsys = false
 
   $scope.$on('updateFilebrowser', function () {
     activate()
@@ -339,19 +336,6 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     })
 
     $scope.files = []
-  }
-
-  function searchUsers (query) {
-    return MemberService.search(query)
-  }
-
-  function getAvatarUrl (user) {
-    return sessionService.makeAvatarUrl(user)
-  }
-
-  function searchPeople (query) {
-    if (query)
-      return MemberService.search(query)
   }
 
   // Link
