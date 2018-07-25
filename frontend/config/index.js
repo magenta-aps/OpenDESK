@@ -15,11 +15,11 @@ module.exports = {
         target: process.env.BASE_URL || 'http://localhost:8080',
         changeOrigin: true
       },
-      '/assets': {
+      '/opendesk/assets': {
         target: 'http://localhost:8081/app/assets',
         changeOrigin: true,
         pathRewrite: {
-          '^/assets': ''
+          '^/opendesk/assets': ''
         }
       }
     },
