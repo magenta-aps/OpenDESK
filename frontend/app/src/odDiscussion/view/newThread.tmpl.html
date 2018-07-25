@@ -1,6 +1,5 @@
-
 <md-dialog aria-label="{{'DISCUSSIONS.NEW' | translate }}" ng-cloak>
-    <form name="newDiscussionForm" ng-submit="vm.newDiscussion(newDiscussionTitle,newDiscussionContent)">
+    <form name="newDiscussionForm" ng-submit="vm.newDiscussion(newDiscussionTitle, changedContent)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -14,12 +13,12 @@
         </md-toolbar>
 
         <md-dialog-content class="md-padding" layout='column'>
-                <md-input-container>
-                    <label>{{'DISCUSSIONS.TITLE' | translate}}</label>
-                    <input type="text" name="newDiscussionTitle" required ng-model="newDiscussionTitle" md-autofocus>
-                </md-input-container>
+            <md-input-container>
+                <label>{{'DISCUSSIONS.TITLE' | translate}}</label>
+                <input type="text" name="newDiscussionTitle" required ng-model="newDiscussionTitle" md-autofocus>
+            </md-input-container>
 
-                <ng-ckeditor ng-model="newDiscussionContent" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash" required></ng-ckeditor>
+            <ck-editor ng-if="vm.loaded" value="''" callback="ckEditorCallback"></ck-editor>
         </md-dialog-content>
 
         <md-dialog-actions>

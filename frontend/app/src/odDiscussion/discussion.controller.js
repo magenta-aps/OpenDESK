@@ -112,11 +112,20 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function replyDialog () {
     $mdDialog.show({
+      controller: ['$scope', function ($scope) {
+        $scope.changedContent = ''
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
+      }],
       template: replyTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 
@@ -131,11 +140,20 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function newDiscussionDialog () {
     $mdDialog.show({
+      controller: ['$scope', function ($scope) {
+        $scope.changedContent = ''
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
+      }],
       template: newThreadTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 
@@ -170,6 +188,10 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     $mdDialog.show({
       controller: ['$scope', 'postItem', function ($scope, postItem) {
         $scope.postItem = postItem
+        $scope.changedContent = postItem
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
       }],
       locals: {
         postItem: postItem
@@ -178,7 +200,10 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 
@@ -193,6 +218,10 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     $mdDialog.show({
       controller: ['$scope', 'postItem', function ($scope, postItem) {
         $scope.postItem = postItem
+        $scope.changedContent = postItem
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
       }],
       locals: {
         postItem: postItem
@@ -201,7 +230,10 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 

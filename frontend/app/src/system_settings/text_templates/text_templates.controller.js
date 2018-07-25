@@ -10,6 +10,7 @@ angular
 function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentService, siteService, ContentService) {
   var vm = this
 
+  vm.ckEditorCallback = ckEditorCallback
   vm.save = save
   vm.showLegend = false
 
@@ -41,9 +42,13 @@ function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentServi
       })
   }
 
+  function ckEditorCallback (value) {
+    vm.changedTemplate = value
+  }
+
   function save () {
     vm.uploading = true
-    var file = new Blob([vm.template], { type: 'plain/text' })
+    var file = new Blob([vm.changedTemplate], { type: 'plain/text' })
     ContentService.uploadNewVersion(file, null, vm.nodeRef)
       .then(function () {
         $mdToast.show(

@@ -14,12 +14,7 @@
             <div class="md-errors-spacer"></div>
         </md-input-container>
 
-        <ng-ckeditor
-                ng-model="vm.template"
-                skin="moono-lisa"
-                remove-buttons="Image"
-                remove-plugins="iframe,flash">
-        </ng-ckeditor>
+        <ck-editor value="vm.template" callback="vm.ckEditorCallback"></ck-editor>
 
         <div class="accordion">
             <h4 ng-click="vm.showLegend = !vm.showLegend"

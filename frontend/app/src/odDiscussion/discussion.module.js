@@ -1,12 +1,12 @@
 'use strict'
 
-import 'ng-ckeditor'
+import '../components/ckEditor'
 import '../shared/filters/customDateFilter'
 import '../shared/directives/breadcrumb'
 import overviewTemplate from './view/overview.html'
 import conversationTemplate from './view/conversation.html'
 
-angular.module('openDeskApp.discussion', ['ng.ckeditor'])
+angular.module('openDeskApp.discussion', ['ckEditor'])
   .config(['$stateProvider', config])
 
 function config ($stateProvider) {

@@ -1,4 +1,5 @@
 'use strict'
+import '../components/ckEditor'
 import systemSettingsTemplate from './system_settings.html'
 import notificationsTemplate from './notifications/view/notifications.html'
 import templateListTemplate from './templates/view/templateList.html'
@@ -7,7 +8,7 @@ import configTemplate from './config/view/config.html'
 import groupsTemplate from './groups/view/groups.html'
 import editTextTemplatesTemplate from './text_templates/view/edit.html'
 angular
-  .module('openDeskApp.systemsettings', [])
+  .module('openDeskApp.systemsettings', ['ckEditor'])
   .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
