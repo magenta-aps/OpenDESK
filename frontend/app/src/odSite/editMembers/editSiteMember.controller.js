@@ -145,7 +145,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
       locals: { email: email },
       controller: ['$scope', 'email', function ($scope, email) {
         $scope.email = email
-      },
+      }],
       template: '<od-email-send email="email"></od-email-send>',
       clickOutsideToClose: true
     })
