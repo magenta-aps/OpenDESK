@@ -183,8 +183,9 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   }
 
   function editFirstPost (postItem, title, content) {
-    discussionService.updatePost(postItem, title, content).then(function (response) {
+    discussionService.updatePost(postItem, title, content).then(function () {
       $mdDialog.cancel()
+      vm.selectedDiscussion.content = content
     })
   }
 
