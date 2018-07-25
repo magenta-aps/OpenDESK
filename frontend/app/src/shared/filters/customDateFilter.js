@@ -1,6 +1,6 @@
 angular
   .module('openDeskApp')
-  .filter('customDate', customDateFilterFactory)
+  .filter('customDate', ['dateFilter', customDateFilterFactory])
 
 function customDateFilterFactory (dateFilter) {
   function customDateFilter (dateValue, givenFormat) {
