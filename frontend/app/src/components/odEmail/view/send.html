@@ -19,12 +19,7 @@
             <div class="md-errors-spacer"></div>
         </md-input-container>
 
-        <ng-ckeditor ng-model="$ctrl.email.body"
-                     skin="moono-lisa"
-                     remove-buttons="Image"
-                     remove-plugins="iframe,flash"
-                     required>
-        </ng-ckeditor>
+        <ck-editor ng-if="$ctrl.isLoaded" value="$ctrl.email.body" callback="$ctrl.ckEditorCallback"></ck-editor>
     </md-dialog-content>
 
     <md-dialog-actions>

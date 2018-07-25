@@ -6,6 +6,7 @@ angular.module('odEmail')
     template: sendTemplate,
     controller: 'odEmailController',
     bindings: {
-      email: '<'
+      email: '<',
+      isLoaded: '<'
     }
   })

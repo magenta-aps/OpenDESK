@@ -146,8 +146,10 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
       controller: ['$scope', 'email', function ($scope, email) {
         $scope.email = email
       }],
-      template: '<od-email-send email="email"></od-email-send>',
-      clickOutsideToClose: true
+      template: '<od-email-send email="email" is-loaded="isLoaded"></od-email-send>',
+      onComplete: function (scope) {
+        scope.isLoaded = true
+      }
     })
   }
 }
