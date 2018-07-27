@@ -89,13 +89,7 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
     state.resolve.authorize = [
       'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
       function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
-        var defer = $q.defer()
-        // SSO is enabled and the user has just logged in
-        // We need to get info about the user before we check authorization
-        if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated())
-          authService.ssoLogin()
-        // The user is authenticated. Now we check if the user is authorized to view this page
-        if (authService.isAuthenticated()) {
+        function checkAuthorization () {
           systemSettingsService.loadSettings()
             .then(function () {
               if (authService.isAuthorized($stateParams.authorizedRoles))
@@ -103,6 +97,20 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
               else
                 $state.go(APP_CONFIG.landingPageState)
             })
+        }
+
+        var defer = $q.defer()
+        // SSO is enabled and the user has just logged in
+        // We need to get info about the user before we check authorization
+        if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated())
+          authService.ssoLogin()
+            .then(function () {
+              checkAuthorization()
+              return defer.promise
+            })
+        // The user is authenticated. Now we check if the user is authorized to view this page
+        if (authService.isAuthenticated()) {
+          checkAuthorization()
         } else {
           // The user is not authenticated
           defer.reject('Please login')
