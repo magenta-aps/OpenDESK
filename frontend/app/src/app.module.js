@@ -89,41 +89,29 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
     state.resolve.authorize = [
       'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
       function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
-        var d = $q.defer()
-
-        if (authService.isAuthenticated())
-          resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d)
-        else if (APP_CONFIG.ssoLoginEnabled)
+        var defer = $q.defer()
+        // SSO is enabled and the user has just logged in
+        // We need to get info about the user before we check authorization
+        if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated())
           authService.ssoLogin()
+        // The user is authenticated. Now we check if the user is authorized to view this page
+        if (authService.isAuthenticated())
+          systemSettingsService.loadSettings()
             .then(function () {
-              if (authService.isAuthenticated())
-                resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d)
+              if (authService.isAuthorized($stateParams.authorizedRoles))
+                defer.resolve(authService.user)
               else
-                rejectUnauthenticatedUser($state, sessionService, d)
+                $state.go(APP_CONFIG.landingPageState)
             })
-        else
-          rejectUnauthenticatedUser($state, sessionService, d)
-        return d.promise
+        // The user is not authenticated
+        defer.reject('Please login')
+        sessionService.retainCurrentLocation()
+        $state.go('login')
+        return defer.promise
       }
     ]
     return stateData
   })
-
-  function resolveUserAfterAuthorization ($state, authService, $stateParams, systemSettingsService, APP_CONFIG, defer) {
-    systemSettingsService.loadSettings()
-      .then(function () {
-        if (authService.isAuthorized($stateParams.authorizedRoles))
-          defer.resolve(authService.user)
-        else
-          $state.go(APP_CONFIG.landingPageState)
-      })
-  }
-
-  function rejectUnauthenticatedUser ($state, sessionService, defer) {
-    defer.reject('Please login')
-    sessionService.retainCurrentLocation()
-    $state.go('login')
-  }
 
   $stateProvider.state('site', {
     abstract: true,

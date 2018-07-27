@@ -4,9 +4,9 @@ import forgotPasswordDialogTemplate from './view/forgotPasswordDialog.html'
 angular
   .module('openDeskApp')
   .controller('AuthController', ['$state', '$stateParams', 'authService', '$mdDialog', 'sessionService', '$window',
-    AuthController])
+    'notificationsService', AuthController])
 
-function AuthController ($state, $stateParams, authService, $mdDialog, sessionService, $window) {
+function AuthController ($state, $stateParams, authService, $mdDialog, sessionService, $window, notificationsService) {
   var vm = this
   var loginErrorMessage = angular.fromJson($stateParams.error)
 
@@ -37,6 +37,7 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   function logout () {
     // chatService.logout()
     authService.logout()
+    notificationsService.stopUpdate()
   }
 
   function showForgotDialog (ev) {

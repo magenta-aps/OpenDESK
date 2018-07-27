@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .factory('sessionService', ['$window', sessionService])
+  .factory('sessionService', ['$window', '$state', sessionService])
 
-function sessionService ($window) {
+function sessionService ($window, $state) {
   var service = {
     clearRetainedLocation: clearRetainedLocation,
     getRetainedLocation: getRetainedLocation,
@@ -75,6 +75,7 @@ function sessionService ($window) {
   function logout () {
     clearRetainedLocation()
     clearUserInfoFromSession()
+    $state.go('login')
   }
 
   function makeURL (url) {

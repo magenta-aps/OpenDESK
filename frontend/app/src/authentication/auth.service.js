@@ -48,10 +48,8 @@ function authService ($http, $window, $state, sessionService, MemberService) {
     var userInfo = sessionService.getUserInfo()
     if (userInfo) {
       var ticket = userInfo.ticket
-      $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function (response) {
+      $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function () {
         sessionService.logout()
-        // notificationsService.stopUpdate()
-        $state.go('login')
       })
     }
   }

@@ -26,12 +26,6 @@ function httpTicketInterceptor ($injector, $state, $translate, $window, $q, sess
     if (userInfo) {
       config.params = config.params || {}
       config.params.alf_ticket = sessionService.getUserInfo().ticket
-    } else if (config.url.startsWith('/alfresco') &&
-      config.url !== '/alfresco/service/api/login' &&
-      config.url !== '/alfresco/s/ssologin' &&
-      config.url !== '/alfresco/service/settings/public'
-    ) {
-      config = {}
     }
 
     return config
@@ -40,31 +34,32 @@ function httpTicketInterceptor ($injector, $state, $translate, $window, $q, sess
   function prefixAlfrescoServiceUrl (url) {
     if (url.indexOf('/api/') === 0 || url.indexOf('/opendesk/') === 0 || url.indexOf('/slingshot/') === 0 || url.indexOf('/lool') === 0 || url.indexOf('/wopi') === 0 || url === '/touch')
       return ALFRESCO_URI.webClientServiceProxy + url
-    else if (url.indexOf('/share/') === 0 || url.indexOf('/opendesk/') === 0 || url.indexOf('/slingshot/') === 0 || url === '/touch')
-      return ALFRESCO_URI.webClientServiceProxy + url
 
     return url
   }
 
   function response (response) {
-    if (response.status === 401 && typeof $window._openDeskSessionExpired === 'undefined')
+    if (response.status === 401)
       sessionExpired()
 
     return response || $q.when(response)
   }
 
   function responseError (rejection) {
-    // Prevent from popping up the message on failed SSO attempt
-    if (rejection.status === 401 && rejection.config.url.indexOf('/touch') === -1)
+    if (rejection.status === 401)
       sessionExpired()
 
     return $q.reject(rejection)
   }
 
   function sessionExpired () {
-    if (typeof $window._openDeskSessionExpired !== 'undefined') return
-
-    sessionService.retainCurrentLocation()
+    // Important to inject mdToast like this to prevent 'Uncaught Error: [$injector:cdep] Circular dependency found'
+    var $mdToast = $injector.get('$mdToast')
+    $mdToast.show(
+      $mdToast.simple()
+        .content($translate.instant('LOGIN.SESSION_TIMEOUT'))
+        .hideDelay(3000)
+    )
     sessionService.logout()
   }
 }
