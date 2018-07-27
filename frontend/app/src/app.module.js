@@ -102,14 +102,14 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
         var defer = $q.defer()
         // SSO is enabled and the user has just logged in
         // We need to get info about the user before we check authorization
-        if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated())
+        if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated()) {
           authService.ssoLogin()
             .then(function () {
               checkAuthorization()
               return defer.promise
             })
-        // The user is authenticated. Now we check if the user is authorized to view this page
-        if (authService.isAuthenticated()) {
+        } else if (authService.isAuthenticated()) {
+          // The user is authenticated. Now we check if the user is authorized to view this page
           checkAuthorization()
         } else {
           // The user is not authenticated
