@@ -16,7 +16,7 @@ public class CustomRemoteUserAuthenticatorFactory extends RemoteUserAuthenticato
         return new CustomBasicHttpAuthenticator(req, res, this.listener);
     }
 
-    public class CustomBasicHttpAuthenticator extends BasicHttpAuthenticator {
+    public class CustomBasicHttpAuthenticator extends RemoteUserAuthenticator {
         public CustomBasicHttpAuthenticator(WebScriptServletRequest req, WebScriptServletResponse res, AuthenticationListener listener) {
             super(req, res, listener);
         }
@@ -26,7 +26,8 @@ public class CustomRemoteUserAuthenticatorFactory extends RemoteUserAuthenticato
             boolean authenticate = super.authenticate(required, isGuest);
             HttpServletResponse res = this.servletRes.getHttpServletResponse();
             // Change the WWW-Authenticate header value to something else than Basic to avoid force login prompts
-            res.setHeader("WWW-Authenticate", "BasicX realm=\"Alfresco\"");
+            if(!authenticate)
+                res.setHeader("WWW-Authenticate", "BasicX realm=\"Alfresco\"");
             return authenticate;
         }
     }
