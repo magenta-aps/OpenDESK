@@ -95,7 +95,7 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
         if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated())
           authService.ssoLogin()
         // The user is authenticated. Now we check if the user is authorized to view this page
-        if (authService.isAuthenticated())
+        if (authService.isAuthenticated()) {
           systemSettingsService.loadSettings()
             .then(function () {
               if (authService.isAuthorized($stateParams.authorizedRoles))
@@ -103,10 +103,12 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
               else
                 $state.go(APP_CONFIG.landingPageState)
             })
-        // The user is not authenticated
-        defer.reject('Please login')
-        sessionService.retainCurrentLocation()
-        $state.go('login')
+        } else {
+          // The user is not authenticated
+          defer.reject('Please login')
+          sessionService.retainCurrentLocation()
+          $state.go('login')
+        }
         return defer.promise
       }
     ]
