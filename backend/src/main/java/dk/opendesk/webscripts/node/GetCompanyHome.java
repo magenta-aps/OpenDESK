@@ -27,7 +27,7 @@ public class GetCompanyHome extends AbstractWebScript {
         JSONArray result;
 
         try {
-            result = nodeBean.getCompanyHome();
+            result = Utils.getJSONReturnPair("nodeRef", nodeBean.getCompanyHome().toString());
         } catch (Exception e) {
             e.printStackTrace();
             result = Utils.getJSONError(e);

@@ -5,15 +5,19 @@
 				<breadcrumb paths="vm.paths"></breadcrumb>
 
 				<div>
-					<ng-include src="viewerTemplateUrl"></ng-include>
+					<div ng-if="vm.isLocked">
+						<md-icon md-menu-align-target>warning</md-icon>
+						{{'COMMON.LOCKED_BY' | translate:{ locked_by: vm.lockOwner } }}
+					</div>
+                    <preview-manager plugin="vm.plugin"></preview-manager>
 				</div>
 			</md-card-content>
 		</md-card>
 
 		<div flex="25">
-			<div ng-include="'app/src/documents/view/documentHistory.html'"></div>
-			<div ng-include="'app/src/documents/view/documentActions.html'"></div>
-			<div ng-include="'app/src/documents/view/documentReview.html'"></div>
+            <document-history></document-history>
+            <document-actions></document-actions>
+            <document-review></document-review>
 		</div>
 	</div>
 </div>

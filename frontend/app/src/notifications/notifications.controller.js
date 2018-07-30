@@ -1,48 +1,52 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp.notifications')
-    .controller('NotificationsController', NotificationsController);
+  .module('openDeskApp.notifications')
+  .controller('NotificationsController', ['$mdSidenav', 'notificationsService', 'UserService', NotificationsController])
 
+function NotificationsController ($mdSidenav, notificationsService, UserService) {
+  var vm = this
 
-function NotificationsController($mdSidenav, notificationsService, sessionService) {
+  var currentUser = UserService.get().userName
 
-var vm = this;
+  vm.notifications = []
+  vm.close = close
+  vm.setRead = setRead
+  vm.setSeen = setSeen
 
-var userInfo = sessionService.getUserInfo();
-var currentUser = userInfo.user.userName;
+  activate()
 
-vm.notifications = [];
-vm.close = close;
-vm.setRead = setRead;
-vm.setSeen = setSeen;
+  function activate () {
+    updateNotifications()
+    notificationsService.startUpdate(updateNotifications)
+  }
 
-activate();
+  function close () {
+    $mdSidenav('notifications').close()
+  }
 
-function activate() {
-    updateNotifications();
-    notificationsService.startUpdate(updateNotifications);
-}
+  function setRead (noticeObj) {
+    notificationsService.setReadNotice(currentUser, noticeObj)
+      .then(function () {
+        updateNotifications()
+      })
+  }
 
-function close() {
-    $mdSidenav('notifications').close();
-}
+  function setSeen (noticeObj) {
+    notificationsService.setSeenNotice(currentUser, noticeObj)
+      .then(function () {
+        updateNotifications()
+      })
+  }
 
-function setRead(noticeObj) {
-    notificationsService.setReadNotice(currentUser, noticeObj).then(function (val) {
-        updateNotifications();
-    });
-}
-
-function setSeen(noticeObj) {
-    notificationsService.setSeenNotice(currentUser, noticeObj).then(function (val) {
-        updateNotifications();
-    });
-}
-
-function updateNotifications() {
-    notificationsService.getNotifications(currentUser).then(function (notifications) {
-        vm.notifications = notifications;
-    });
-}
+  function updateNotifications () {
+    notificationsService.get(currentUser)
+      .then(function (notifications) {
+        vm.notifications = notifications
+      },
+      function (error) {
+        if (error.status === 401)
+          notificationsService.stopUpdate()
+      })
+  }
 }

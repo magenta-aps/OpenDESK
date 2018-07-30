@@ -1,3 +1,3 @@
-'use strict';
+'use strict'
 
-angular.module('openDeskApp.appDrawer', ['ngMaterial']);
+angular.module('openDeskApp.appDrawer', [])

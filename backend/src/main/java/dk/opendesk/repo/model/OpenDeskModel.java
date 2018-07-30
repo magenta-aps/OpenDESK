@@ -78,6 +78,7 @@ public interface OpenDeskModel {
     QName ASPECT_PD_TEMPLATE_SITES = QName.createQName(OD_URI, "projecttype_templates");
     QName ASPECT_PD_DOCUMENT = QName.createQName(OD_URI, "document_template");
     QName ASPECT_SHARED = QName.createQName(OD_URI, "shared");
+    QName ASPECT_VERSION_PREVIEWABLE = QName.createQName(OD_URI, "version_previewable");
 
 
 
@@ -139,6 +140,7 @@ public interface OpenDeskModel {
      * Association Names
      */
     QName PROP_NOTIFICATION_ASSOC = QName.createQName(OD_URI, "ids");
+    QName ASSOC_VERSION_PREVIEW = QName.createQName(OD_URI, "version_preview");
 
 
     /**
@@ -158,4 +160,20 @@ public interface OpenDeskModel {
     String TEMPLATE_EMAIL_BASE = "email.html.ftl";
     String TEMPLATE_EMAIL_INVITE_EXTERNAL_USER = "ekstern-bruger.html.ftl";
 
+    /**
+     * Node Picker
+     */
+    String NODE_PICKER_MY_DOCS = "my-docs";
+    String NODE_PICKER_SHARED_DOCS = "shared-docs";
+    String NODE_PICKER_SITES = "sites";
+
+    /**
+     * Editors
+     */
+    String MODULE_AOS = "alfresco-aos-module";
+    String MODULE_LIBREOFFICE = "libreoffice-online-repo";
+    String MODULE_ONLYOFFICE = "com.parashift.onlyoffice-alfresco-repo";
+    String EDITOR_ONLYOFFICE = "onlyOffice";
+    String EDITOR_LIBREOFFICE = "libreOffice";
+    String EDITOR_MS_OFFICE = "msOffice";
 }

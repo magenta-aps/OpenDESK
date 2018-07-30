@@ -1,1 +1,1 @@
-angular.module('odEmail', []);
+angular.module('odEmail', [])

@@ -1,305 +1,343 @@
-'use strict';
+'use strict'
+import '../shared/services/nodeRefUtils.service'
+import replyTemplate from './view/reply.tmpl.html'
+import newThreadTemplate from './view/newThread.tmpl.html'
+import editTemplate from './view/edit.tmpl.html'
+import editFirstPostTemplate from './view/editFirstPost.tmpl.html'
+import editTitleTemplate from './view/editTitle.tmpl.html'
 
 angular
-    .module('openDeskApp.discussion')
-    .controller('DiscussionController', DiscussionController);
+  .module('openDeskApp.discussion')
+  .controller('DiscussionController', ['APP_CONFIG', '$scope', '$timeout', '$mdDialog', '$state', '$stateParams',
+    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'sessionService',
+    'notificationsService', 'siteService', 'UserService', DiscussionController])
 
-function DiscussionController(APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
-                              $location, discussionService, nodeRefUtilsService, sessionService, notificationsService,
-                              siteService) {
-    var vm = this;
+function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
+  $location, discussionService, nodeRefUtilsService, sessionService, notificationsService, siteService, UserService) {
+  var vm = this
 
-    vm.discussions = [];
-    vm.replies = [];
-    vm.search = '';
-    vm.user = '';
-    vm.isLoading = true;
+  vm.discussions = []
+  vm.permissions = []
+  vm.replies = []
+  vm.search = ''
+  vm.user = UserService.get()
+  vm.isLoading = true
 
-    vm.cancelDialog = cancelDialog;
-    vm.changeSubscription = changeSubscription;
-    vm.deleteDiscussion = deleteDiscussion;
-    vm.editFirstPost = editFirstPost;
-    vm.editFirstPostDialog = editFirstPostDialog;
-    vm.editReply = editReply;
-    vm.editReplyDialog = editReplyDialog;
-    vm.editTitleDialog = editTitleDialog;
-    vm.evaluateFilter = evaluateFilter;
-    vm.getAvatarUrl = getAvatarUrl;
-    vm.getDiscussions = getDiscussions;
-    vm.getReplies = getReplies;
-    vm.newDiscussion = newDiscussion;
-    vm.newDiscussionDialog = newDiscussionDialog;
-    vm.reply = reply;
-    vm.replyDialog = replyDialog;
-    vm.subscriptionIcon = subscriptionIcon;
-    vm.viewDiscussions = viewDiscussions;
-    vm.viewThread = viewThread;
+  vm.cancelDialog = cancelDialog
+  vm.changeSubscription = changeSubscription
+  vm.deleteDiscussion = deleteDiscussion
+  vm.editFirstPost = editFirstPost
+  vm.editFirstPostDialog = editFirstPostDialog
+  vm.editReply = editReply
+  vm.editReplyDialog = editReplyDialog
+  vm.editTitleDialog = editTitleDialog
+  vm.evaluateFilter = evaluateFilter
+  vm.getAvatarUrl = getAvatarUrl
+  vm.getDiscussions = getDiscussions
+  vm.getReplies = getReplies
+  vm.newDiscussion = newDiscussion
+  vm.newDiscussionDialog = newDiscussionDialog
+  vm.reply = reply
+  vm.replyDialog = replyDialog
+  vm.subscriptionIcon = subscriptionIcon
+  vm.viewDiscussions = viewDiscussions
+  vm.viewThread = viewThread
 
-    //sets the margin to the width of sidenav
-    var tableHeight = $(window).height() - 300 - $("header").outerHeight() - $("md-tabs-wrapper").outerHeight();
-    $(".od-discussion").css("max-height", tableHeight + "px");
+  // sets the margin to the width of sidenav
+  var tableHeight = $(window).height() - 300 - $('header').outerHeight() - $('md-tabs-wrapper').outerHeight()
+  $('.od-discussion').css('max-height', tableHeight + 'px')
 
-    activate();
+  activate()
 
-    function activate() {
-        vm.user = sessionService.getUserInfo().user;
-        vm.getDiscussions($stateParams.projekt);
+  function activate () {
+    vm.getDiscussions($stateParams.projekt)
+    getSiteUserPermissions()
 
-        $scope.tab.selected = $stateParams.selectedTab;
+    $scope.tab.selected = $stateParams.selectedTab
 
-        if ($stateParams.path) {
-            discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path).then(function (response) {
-                vm.selectedDiscussion = discussionService.getSelectedDiscussion();
-                vm.getReplies(vm.selectedDiscussion);
-            });
+    if ($stateParams.path)
+      discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path)
+        .then(function () {
+          vm.selectedDiscussion = discussionService.getSelectedDiscussion()
+          vm.getReplies(vm.selectedDiscussion)
+        })
+
+    siteService.getGroupsAndMembers($stateParams.projekt)
+      .then(function (groups) {
+        vm.groups = groups
+      })
+  }
+
+  function cancelDialog () {
+    $mdDialog.cancel()
+  }
+
+  function getDiscussions (siteShortName) {
+    vm.isLoading = true
+    discussionService.getDiscussions(siteShortName)
+      .then(function (response) {
+        response.items.forEach(function (item) {
+          if (item.lastReplyOn === undefined)
+            item.lastReplyOn = item.modifiedOn
+        })
+        vm.discussions = response.items
+        vm.isLoading = false
+      })
+  }
+
+  function getReplies (postItem) {
+    vm.replies = ''
+    discussionService.getReplies(postItem).then(function (response) {
+      vm.replies = response
+
+      vm.replies.forEach(function (reply) {
+        reply.author.avatarUrl = vm.getAvatarUrl(reply.author.avatarRef)
+      })
+
+      $timeout(function () {
+        if ($location.hash())
+          $anchorScroll()
+      })
+    })
+  }
+
+  function getSiteUserPermissions () {
+    vm.permissions = siteService.getPermissions()
+    if (vm.permissions === undefined)
+      siteService.getSiteUserPermissions($stateParams.projekt)
+        .then(function (permissions) {
+          vm.permissions = permissions
+        })
+  }
+
+  function replyDialog () {
+    $mdDialog.show({
+      controller: ['$scope', function ($scope) {
+        $scope.changedContent = ''
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
         }
-        siteService.getGroupsAndMembers($stateParams.projekt).then(function (groups) {
-            vm.groups = groups;
-        });
-    }
+      }],
+      template: replyTemplate,
+      parent: angular.element(document.body),
+      scope: $scope,
+      preserveScope: true,
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
+    })
+  }
 
-    function cancelDialog() {
-        $mdDialog.cancel();
-    }
+  function reply (content) {
+    discussionService.addReply(vm.selectedDiscussion, content).then(function (response) {
+      discussionService.subscribeToDiscussion($stateParams.projekt, vm.selectedDiscussion)
+      createReplyNotification(response.item)
+      vm.getReplies(vm.selectedDiscussion)
+      $mdDialog.cancel()
+    })
+  }
 
-    function getDiscussions(siteShortName) {
-        vm.isLoading = true;
-        discussionService.getDiscussions(siteShortName).then(function (response) {
-            response.items.forEach(function (item) {
-                if (item.lastReplyOn === undefined) {
-                    item.lastReplyOn = item.modifiedOn;
-                }
-            });
-            vm.discussions = response.items;
-            vm.isLoading = false;
-        });
-    }
-
-    function getReplies(postItem) {
-        vm.replies = '';
-        discussionService.getReplies(postItem).then(function (response) {
-            vm.replies = response;
-
-            vm.replies.forEach(function (reply) {
-                reply.author.avatarUrl = vm.getAvatarUrl(reply.author.avatarRef);
-            });
-
-            $timeout(function () {
-                if ($location.hash()) {
-                    $anchorScroll();
-                }
-            });
-        });
-    }
-
-    function replyDialog() {
-        $mdDialog.show({
-            templateUrl: 'app/src/odDiscussion/view/reply.tmpl.html',
-            parent: angular.element(document.body),
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-    function reply(content) {
-        discussionService.addReply(vm.selectedDiscussion, content).then(function (response) {
-            discussionService.subscribeToDiscussion($stateParams.projekt, vm.selectedDiscussion);
-            createReplyNotification(response.item);
-            vm.getReplies(vm.selectedDiscussion);
-            $mdDialog.cancel();
-        });
-    }
-
-    function newDiscussionDialog() {
-        $mdDialog.show({
-            templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
-            parent: angular.element(document.body),
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-    function newDiscussion(title, content) {
-        discussionService.addDiscussion($stateParams.projekt, title, content).then(function (response) {
-            discussionService.subscribeToDiscussion($stateParams.projekt, response.item);
-            createNewDiscussionNotification(response.item);
-            vm.getDiscussions($stateParams.projekt);
-            $mdDialog.cancel();
-        });
-    }
-
-
-    function viewThread(postItem) {
-        return APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef);
-    }
-
-
-    function deleteDiscussion(postItem) {
-        discussionService.deletePost(postItem).then(function (response) {
-            vm.getDiscussions($stateParams.projekt);
-            vm.getReplies(vm.selectedDiscussion);
-        });
-    }
-
-
-    function editReply(postItem, content) {
-        discussionService.updatePost(postItem, '', content).then(function (response) {
-            $mdDialog.cancel();
-            vm.getReplies(vm.selectedDiscussion);
-        });
-    }
-
-
-    function editReplyDialog(postItem) {
-        $mdDialog.show({
-            controller: ['$scope', 'postItem', function ($scope, postItem) {
-                $scope.postItem = postItem;
-            }],
-            locals: {
-                postItem: postItem
-            },
-            templateUrl: 'app/src/odDiscussion/view/edit.tmpl.html',
-            parent: angular.element(document.body),
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-
-    function editFirstPost(postItem, title, content) {
-        discussionService.updatePost(postItem, title, content).then(function (response) {
-            $mdDialog.cancel();
-        });
-    }
-
-
-    function editFirstPostDialog(postItem) {
-        $mdDialog.show({
-            controller: ['$scope', 'postItem', function ($scope, postItem) {
-                $scope.postItem = postItem;
-            }],
-            locals: {
-                postItem: postItem
-            },
-            templateUrl: 'app/src/odDiscussion/view/editFirstPost.tmpl.html',
-            parent: angular.element(document.body),
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-    function editTitleDialog(postItem) {
-        $mdDialog.show({
-            controller: ['$scope', 'postItem', function ($scope, postItem) {
-                $scope.postItem = postItem;
-            }],
-            locals: {
-                postItem: postItem
-            },
-            templateUrl: 'app/src/odDiscussion/view/editTitle.tmpl.html',
-            parent: angular.element(document.body),
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
-
-    function viewDiscussions() {
-        $state.go('project.discussions');
-    }
-
-    function evaluateFilter() {
-        if (vm.search == 'all') {
-            vm.searchSubscribed = undefined;
-            vm.searchUser = undefined;
+  function newDiscussionDialog () {
+    $mdDialog.show({
+      controller: ['$scope', function ($scope) {
+        $scope.changedContent = ''
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
         }
-        if (vm.search == 'follow') {
-            vm.searchUser = undefined;
-            vm.searchSubscribed = "true";
+      }],
+      template: newThreadTemplate,
+      parent: angular.element(document.body),
+      scope: $scope,
+      preserveScope: true,
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
+    })
+  }
+
+  function newDiscussion (title, content) {
+    discussionService.addDiscussion($stateParams.projekt, title, content).then(function (response) {
+      discussionService.subscribeToDiscussion($stateParams.projekt, response.item)
+      createNewDiscussionNotification(response.item)
+      vm.getDiscussions($stateParams.projekt)
+      $mdDialog.cancel()
+    })
+  }
+
+  function viewThread (postItem) {
+    return APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRefUtilsService.getId(postItem.nodeRef)
+  }
+
+  function deleteDiscussion (postItem) {
+    discussionService.deletePost(postItem).then(function (response) {
+      vm.getDiscussions($stateParams.projekt)
+      vm.getReplies(vm.selectedDiscussion)
+    })
+  }
+
+  function editReply (postItem, content) {
+    discussionService.updatePost(postItem, '', content).then(function (response) {
+      $mdDialog.cancel()
+      vm.getReplies(vm.selectedDiscussion)
+    })
+  }
+
+  function editReplyDialog (postItem) {
+    $mdDialog.show({
+      controller: ['$scope', 'postItem', function ($scope, postItem) {
+        $scope.postItem = postItem
+        $scope.changedContent = postItem
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
         }
+      }],
+      locals: {
+        postItem: postItem
+      },
+      template: editTemplate,
+      parent: angular.element(document.body),
+      scope: $scope,
+      preserveScope: true,
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
+    })
+  }
 
-        if (vm.search == 'mine') {
-            vm.searchSubscribed = undefined;
-            vm.searchUser = vm.user.userName;
+  function editFirstPost (postItem, title, content) {
+    discussionService.updatePost(postItem, title, content).then(function () {
+      $mdDialog.cancel()
+      vm.selectedDiscussion.content = content
+    })
+  }
+
+  function editFirstPostDialog (postItem) {
+    $mdDialog.show({
+      controller: ['$scope', 'postItem', function ($scope, postItem) {
+        $scope.postItem = postItem
+        $scope.changedContent = postItem
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
         }
+      }],
+      locals: {
+        postItem: postItem
+      },
+      template: editFirstPostTemplate,
+      parent: angular.element(document.body),
+      scope: $scope,
+      preserveScope: true,
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
+    })
+  }
 
-        $interval(function () {}, 1, 1000);
+  function editTitleDialog (postItem) {
+    $mdDialog.show({
+      controller: ['$scope', 'postItem', function ($scope, postItem) {
+        $scope.postItem = postItem
+      }],
+      locals: {
+        postItem: postItem
+      },
+      template: editTitleTemplate,
+      parent: angular.element(document.body),
+      scope: $scope,
+      preserveScope: true,
+      clickOutsideToClose: true
+    })
+  }
+
+  function viewDiscussions () {
+    $state.go('project.discussions')
+  }
+
+  function evaluateFilter () {
+    if (vm.search === 'all') {
+      vm.searchSubscribed = undefined
+      vm.searchUser = undefined
+    }
+    if (vm.search === 'follow') {
+      vm.searchUser = undefined
+      vm.searchSubscribed = 'true'
     }
 
-
-    function changeSubscription(postItem) {
-        postItem.isSubscribed = !postItem.isSubscribed;
-
-        if (postItem.isSubscribed) {
-            discussionService.subscribeToDiscussion($stateParams.projekt, postItem);
-        } else {
-            discussionService.unSubscribeToDiscussion($stateParams.projekt, postItem);
-        }
+    if (vm.search === 'mine') {
+      vm.searchSubscribed = undefined
+      vm.searchUser = vm.user.userName
     }
 
+    $interval(function () {}, 1, 1000)
+  }
 
-    function subscriptionIcon(value) {
-        return String(value) == "true" ? 'notifications_active' : 'notifications_none';
-    }
+  function changeSubscription (postItem) {
+    postItem.isSubscribed = !postItem.isSubscribed
 
+    if (postItem.isSubscribed)
+      discussionService.subscribeToDiscussion($stateParams.projekt, postItem)
+    else
+      discussionService.unSubscribeToDiscussion($stateParams.projekt, postItem)
+  }
 
-    function getAvatarUrl(avatarRef) {
-        if (avatarRef === undefined)
-            return;
-        var avatarId = avatarRef.split('/')[3];
-        return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
-    }
+  function subscriptionIcon (value) {
+    return String(value) === 'true' ? 'notifications_active' : 'notifications_none'
+  }
 
-    function createNewDiscussionNotification(postItem) {
-        var nodeRef = postItem.nodeRef.split('/')[3];
-        var subject = 'Ny samtale i et projekt';
-        var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion';
-        var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef;
+  function getAvatarUrl (avatarRef) {
+    if (avatarRef === undefined) return
+    var avatarId = avatarRef.split('/')[3]
+    return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
+  }
 
-        // Iterating list of items.
-        angular.forEach(vm.groups, function (group) {
-            angular.forEach(group[1], function (member) {
-                if (member.userName !== postItem.author.username) {
-                    notificationsService.addNotice(
-                        member.userName, 
-                        subject, 
-                        message, 
-                        link, 
-                        'new-discussion', 
-                        $stateParams.projekt).then(function (val) {
-                        $mdDialog.hide();
-                    });
-                }
-            });
-        });
-    }
+  function createNewDiscussionNotification (postItem) {
+    var nodeRef = postItem.nodeRef.split('/')[3]
+    var subject = 'Ny samtale i et projekt'
+    var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion'
+    var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef
 
-    function createReplyNotification(postItem) {
-        var nodeRef = vm.selectedDiscussion.nodeRef.split('/')[3];
-        var subject = 'Ny kommentar på en samtale du følger';
-        var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger';
-        var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name;
+    // Iterating list of items.
+    angular.forEach(vm.groups, function (group) {
+      angular.forEach(group[1], function (member) {
+        if (member.userName !== postItem.author.username)
+          notificationsService.add(
+            member.userName,
+            subject,
+            message,
+            link,
+            'new-discussion',
+            $stateParams.projekt).then(function (val) {
+            $mdDialog.hide()
+          })
+      })
+    })
+  }
 
-        // Iterating list of items.
-        angular.forEach(vm.groups, function (group) {
-            angular.forEach(group[1], function (member) {
-                if (member.userName !== postItem.author.username) {
-                    notificationsService.addReplyNotice(
-                        member.userName,
-                        subject,
-                        message,
-                        link,
-                        'new-reply',
-                        $stateParams.projekt,
-                        nodeRef).then(function (val) {
-                        $mdDialog.hide();
-                    });
-                }
-            });
-        });
-    }
+  function createReplyNotification (postItem) {
+    var nodeRef = vm.selectedDiscussion.nodeRef.split('/')[3]
+    var subject = 'Ny kommentar på en samtale du følger'
+    var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger'
+    var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name
+
+    // Iterating list of items.
+    angular.forEach(vm.groups, function (group) {
+      angular.forEach(group[1], function (member) {
+        if (member.userName !== postItem.author.username)
+          notificationsService.addReplyNotice(
+            member.userName,
+            subject,
+            message,
+            link,
+            'new-reply',
+            $stateParams.projekt,
+            nodeRef).then(function (val) {
+            $mdDialog.hide()
+          })
+      })
+    })
+  }
 }

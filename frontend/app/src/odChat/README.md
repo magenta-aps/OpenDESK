@@ -1,5 +1,9 @@
 # Chat integration
 
+This is not used anymore! 2018-07-11
+Since changing to webpack for building this module was causing issues.
+Since nobody uses chat we decided to disable it for now.
+
 The **odChat** module ([`/app/src/odChat/`](/app/src/odChat/)) integrates [ConverseJS](https://conversejs.org/) chat into OpenDesk.
 odChat supplies an `odChat` directive that can be inserted into any view like this:
 ```

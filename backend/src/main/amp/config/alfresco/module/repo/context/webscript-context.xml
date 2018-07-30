@@ -25,10 +25,22 @@
 		<property name="personService" ref="PersonService"/>
 	</bean>
 
-	<bean id="webscript.nodepicker.get"
-		  class="dk.opendesk.webscripts.NodePicker"
+	<bean id="webscript.nodepicker.node.get"
+		  class="dk.opendesk.webscripts.nodepicker.GetNode"
 		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+	<bean id="webscript.nodepicker.root.get"
+		  class="dk.opendesk.webscripts.nodepicker.GetRoot"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+	<bean id="webscript.nodepicker.rootnode.get"
+		  class="dk.opendesk.webscripts.nodepicker.GetRootNode"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
 	<bean id="webscript.groups.post"
@@ -73,6 +85,12 @@
 		<property name="nodeService" ref="NodeService"/>
 		<property name="fileFolderService" ref="fileFolderService"/>
 		<property name="repository" ref="repositoryHelper"/>
+	</bean>
+
+	<bean id="webscript.editors.editors.get"
+		  class="dk.opendesk.webscripts.editors.GetEditors"
+		  parent="webscript">
+		<property name="editorBean" ref="editorBean"/>
 	</bean>
 
 	<bean id="webscript.sites.projectdepartment.post"

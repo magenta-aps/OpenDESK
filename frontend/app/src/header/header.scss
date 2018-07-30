@@ -1,15 +1,11 @@
-header {
+.header-toolbar {
+  height: 64px; // Added because of IE11 error with min-height and flex
   background-color: $primary-color;
   color: $headline-color;
   left: 0;
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 1;
-}
-
-header md-toolbar {
-  height: 64px; // Added because of IE11 error with min-height and flex
 }
 
 header .od-avatar {

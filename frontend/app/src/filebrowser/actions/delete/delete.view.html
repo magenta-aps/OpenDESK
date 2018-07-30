@@ -1,0 +1,27 @@
+<md-dialog aria-label="{'COMMON.REMOVE' | translate}}">
+  <form name="deleteForm" ng-submit="vm.delete()">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{'COMMON.REMOVE' | translate}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="vm.cancel()">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content class="md-padding">
+      <p>{{'COMMON.SURETOREMOVE' | translate}} <em>{{vm.data.name}}</em>?</p>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+      <md-button 
+        type="submit" 
+        class="md-primary" 
+        aria-label="{{'COMMON.REMOVE' | translate}}"
+      >
+        {{'COMMON.REMOVE' | translate}}
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

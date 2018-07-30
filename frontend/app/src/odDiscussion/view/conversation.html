@@ -4,7 +4,7 @@
         </span>
 <h1 class="discussion-title md-display-1">{{vm.selectedDiscussion.title}}</h1>
 
-<table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)" ng-init="vm.getReplies(vm.selectedDiscussion)">
+<table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)">
     <tbody>
         <tr class="seperator">
             <td class="avatar-container">
@@ -80,7 +80,7 @@
 <md-card-actions layout="row" layout-align="start center">
     <span flex></span>
 
-    <md-button ng-click="vm.replyDialog()" class="md-primary" aria-label="{{'COMMON.REPLY' | translate }}">
+    <md-button ng-if="vm.permissions.canEdit" ng-click="vm.replyDialog()" class="md-primary" aria-label="{{'COMMON.REPLY' | translate }}">
         <span>{{'COMMON.REPLY' | translate }}</span>
     </md-button>
 </md-card-actions>

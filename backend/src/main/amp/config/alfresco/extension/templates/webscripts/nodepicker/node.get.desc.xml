@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Node Picker Node</shortname>
+    <description>Gets node info for node picker</description>
+    <url>/nodepicker/node/{nodeId}</url>
+    <authentication>user</authentication>
+</webscript>

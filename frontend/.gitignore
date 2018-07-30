@@ -13,7 +13,6 @@ alfresco.log
 
 ### Backend ###
 
-build/
 junitresults.xml
 logs/*
 !.gitkeep

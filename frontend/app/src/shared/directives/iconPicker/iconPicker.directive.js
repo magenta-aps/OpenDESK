@@ -1,15 +1,16 @@
-'use strict';
+'use strict'
+import iconPickerTemplate from './iconPicker.view.html'
 
 angular
-    .module('openDeskApp')
-    .directive('iconPicker', function () {
-        return {
-            restrict: 'E',
-            scope: {
-                selectedIcon: '=selectedIcon'
-            },
-            templateUrl: 'app/src/shared/directives/iconPicker/iconPicker.view.html',
-            controller: 'IconPickerController',
-            controllerAs: 'vm'
-        };
-    });
+  .module('openDeskApp')
+  .directive('iconPicker', function () {
+    return {
+      restrict: 'E',
+      scope: {
+        selectedIcon: '=selectedIcon'
+      },
+      template: iconPickerTemplate,
+      controller: 'IconPickerController',
+      controllerAs: 'vm'
+    }
+  })

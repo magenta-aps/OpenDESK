@@ -16,16 +16,10 @@
   }
 }
 
-.back-item {
-  background-color: #ddd;
-  margin-top: -12pt;
-  margin-left: -12pt;
-  margin-right: -12pt;
-}
-
 .picker-list {
-  min-width: 20vw;
-  
+
+  min-width: 25vw;
+
   .picked {
     background-color: rgb(63, 81, 181);
     color: rgba(255, 255, 255, 0.87);
@@ -49,5 +43,8 @@
   .md-icon-button:active {
       border: solid 1px #ccc;
     }
+
+  .document-name {
+    color: #ccc;
   }
-  
+}

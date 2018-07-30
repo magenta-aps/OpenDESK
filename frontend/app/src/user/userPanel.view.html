@@ -47,18 +47,16 @@
                 </md-list-item>
             </md-list>
 
-            <div ng-controller="NotificationsSettingsController as nsc">
-                <md-subheader>{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-subheader>
-                <md-list>
-                    <md-list-item>
-                        <p>{{'COMMON.RECEIVE' | translate}} {{'NOTIFICATION.NOTIFICATIONS' | translate | lowercase}}</p>
-                        <md-input-container>
-                            <md-switch class="md-secondary" aria-label="Notifikationer" ng-true-value="'true'" ng-false-value="'false'" ng-model="nsc.receiveNotifications"
-                                ng-change='nsc.setNotificationPreferences()'></md-switch>
-                        </md-input-container>
-                    </md-list-item>
-                </md-list>
-            </div>
+            <md-subheader>{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-subheader>
+            <md-list>
+                <md-list-item>
+                    <p>{{'COMMON.RECEIVE' | translate}} {{'NOTIFICATION.NOTIFICATIONS' | translate | lowercase}}</p>
+                    <md-input-container>
+                        <md-switch class="md-secondary" aria-label="Notifikationer" ng-true-value="'true'" ng-false-value="'false'" ng-model="vm.receiveNotifications"
+                            ng-change='vm.setNotificationPreferences()'></md-switch>
+                    </md-input-container>
+                </md-list-item>
+            </md-list>
 
             <md-button class="md-raised md-primary" id='logout' ng-controller="AuthController as ac" ng-click="ac.logout()">
                 {{ 'MENU.LOGOUT' | translate }}

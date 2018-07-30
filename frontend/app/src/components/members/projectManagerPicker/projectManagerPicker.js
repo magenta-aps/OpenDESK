@@ -1,35 +1,23 @@
-angular.module('members')
-.component('projectManagerPicker', {
-  templateUrl: 'app/src/components/members/projectManagerPicker/projectManagerPicker.html',
-  controller: projectManagerPicker,
-  bindings: {
-    selected: '=',
-    type: '<'
-  }
-});
+'use strict'
+import projectManagerPickerTemplate from './projectManagerPicker.html'
 
-function projectManagerPicker (siteService, userService) {
-  var vm = this;
-  var owners = [];
+angular.module('openDeskApp.members')
+  .component('projectManagerPicker', {
+    template: projectManagerPickerTemplate,
+    controller: ['siteService', 'MemberService', projectManagerPicker],
+    bindings: {
+      selected: '=',
+      type: '<'
+    }
+  })
 
-  vm.searchManagers = searchManagers;
+function projectManagerPicker (siteService, MemberService) {
+  var vm = this
 
-  activate();
+  vm.searchManagers = searchManagers
 
-  function activate() {
-    siteService.getAllOwners()
-    .then(function (response) {
-        owners = response;
-      },
-      function (err) {
-        console.log(err);
-      }
-    );
-  }
-
-  function searchManagers(query) {
-    if (query) {
-      return userService.getUsers(query);
-  }
+  function searchManagers (query) {
+    if (query)
+      return MemberService.search(query)
   }
 }

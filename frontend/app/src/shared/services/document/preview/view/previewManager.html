@@ -1,0 +1,10 @@
+<div id="placeholder" ng-switch="$ctrl.plugin.name">
+    <audio-preview ng-switch-when="audio" plugin="$ctrl.plugin"></audio-preview>
+    <video-preview ng-switch-when="video" plugin="$ctrl.plugin"></video-preview>
+    <strobe-media-play-back-preview ng-switch-when="strobeMediaPlayBack" plugin="$ctrl.plugin"></strobe-media-play-back-preview>
+    <image-preview ng-switch-when="image" plugin="$ctrl.plugin"></image-preview>
+    <only-office-preview ng-switch-when="onlyOffice" plugin="$ctrl.plugin"></only-office-preview>
+    <pdf-preview ng-switch-when="pdf" plugin="$ctrl.plugin"></pdf-preview>
+    <web-preview ng-switch-when="web" plugin="$ctrl.plugin"></web-preview>
+    <cannot-preview-preview ng-switch-when="cannotPreview" plugin="$ctrl.plugin"></cannot-preview-preview>
+</div>

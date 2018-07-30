@@ -1,6 +1,6 @@
 
 <md-dialog aria-label="Rediger" ng-cloak>
-    <form name="editReplyForm" ng-submit="vm.editFirstPost(postItem,postItem.title,postItem.content)">
+    <form name="editReplyForm" ng-submit="vm.editFirstPost(postItem, postItem.title, changedContent)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -18,7 +18,7 @@
                     <label>{{'DISCUSSIONS.TITLE' | translate}}</label>
                     <input type="text" name="postTitle" required ng-model="postItem.title" required md-autofocus>
                 </md-input-container>
-                <ng-ckeditor ng-model="postItem.content" skin="moono-lisa" remove-buttons="Image" remove-plugins="iframe,flash" required></ng-ckeditor>
+            <ck-editor ng-if="vm.loaded" value="postItem.content" callback="ckEditorCallback"></ck-editor>
         </md-dialog-content>
 
         <md-dialog-actions>
