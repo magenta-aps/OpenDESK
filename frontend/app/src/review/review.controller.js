@@ -2,7 +2,7 @@
 import reviewDetailTemplate from './reviewDetail.view.html'
 import reviewListTemplate from './reviewList.view.html'
 
-angular.module('od.review', [])
+angular.module('od.review')
   .controller('ReviewController', ['review', '$mdDialog', ReviewController])
   .directive('odReviewList', odReviewList)
   .directive('odReviewDetail', odReviewDetail)
@@ -44,7 +44,8 @@ function odReviewList () {
       items: '=items'
     },
     template: reviewListTemplate,
-    controller: 'ReviewController as vm'
+    controller: 'ReviewController',
+    controllerAs: 'vm'
   }
 }
 
