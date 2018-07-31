@@ -4,13 +4,13 @@ import memberPickerTemplate from './memberPicker.html'
 angular.module('openDeskApp.members')
   .component('memberPicker', {
     template: memberPickerTemplate,
-    controller: ['siteService', 'userService', memberPicker],
+    controller: ['siteService', 'MemberService', memberPicker],
     bindings: {
       selected: '='
     }
   })
 
-function memberPicker (siteService, userService) {
+function memberPicker (siteService, MemberService) {
   var vm = this
   var owners = []
 
@@ -31,6 +31,6 @@ function memberPicker (siteService, userService) {
 
   function searchManagers (query) {
     if (query)
-      return userService.getUsers(query)
+      return MemberService.search(query)
   }
 }
