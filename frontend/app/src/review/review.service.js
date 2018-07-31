@@ -1,9 +1,9 @@
 'use strict'
 
 angular.module('od.review')
-  .factory('review', ['$http', review])
+  .factory('reviewService', ['$http', reviewService])
 
-function review ($http) {
+function reviewService ($http) {
   var service = {
     approve: approve,
     create: create,

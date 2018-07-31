@@ -3,11 +3,11 @@ import reviewDetailTemplate from './reviewDetail.view.html'
 import reviewListTemplate from './reviewList.view.html'
 
 angular.module('od.review')
-  .controller('ReviewController', ['review', '$mdDialog', ReviewController])
+  .controller('ReviewController', ['reviewService', '$mdDialog', ReviewController])
   .directive('odReviewList', odReviewList)
   .directive('odReviewDetail', odReviewDetail)
 
-function ReviewController (review, $mdDialog) {
+function ReviewController (reviewService, $mdDialog) {
   var vm = this
 
   vm.approve = approve
@@ -19,17 +19,17 @@ function ReviewController (review, $mdDialog) {
     console.log('create review')
     console.log(vm.member)
     console.log(vm.comment)
-    review.create()
+    reviewService.create()
   }
 
   function approve () {
     console.log('approve review')
-    review.approve()
+    reviewService.approve()
   }
 
   function reject () {
     console.log('reject review')
-    review.reject()
+    reviewService.reject()
   }
 
   function cancelDialog () {
