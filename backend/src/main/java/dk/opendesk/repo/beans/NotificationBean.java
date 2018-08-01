@@ -54,34 +54,39 @@ public class NotificationBean {
                                      String project, String preferenceFilter) {
     }
 
-    public void createNotification(String receiver, JSONObject params, String preferenceFilter) throws JSONException {
-        // Don't send notification if the receiver turned off notifications for this event
-        if(!preferenceFilter.isEmpty())
-            if("false".equals(preferenceService.getPreference(receiver, preferenceFilter)))
-                return;
-
-        // Create notification
-        NodeRef receiverNodeRef = personService.getPerson(receiver);
-        ChildAssociationRef childAssocRef = this.nodeService.createNode(
-                receiverNodeRef,
-                OpenDeskModel.PROP_NOTIFICATION_ASSOC,
-                QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(receiver)),
-                OpenDeskModel.TYPE_NOTIFICATION,
-                null);
-
-        // Set sender in params
+    public void createNotification(String receiver, JSONObject params, String preferenceFilter) {
+        // Important get current user before running as SystemUser
         String sender = AuthenticationUtil.getFullyAuthenticatedUser();
-        params.put("sender", sender);
+        // Then run as SystemUser
+        AuthenticationUtil.runAs(() -> {
+            // Don't send notification if the receiver turned off notifications for this event
+            if (!preferenceFilter.isEmpty())
+                if ("false".equals(preferenceService.getPreference(receiver, preferenceFilter)))
+                    return false;
 
-        // Set properties
-        Map<QName, Serializable> contentProps = new HashMap<>();
-        contentProps.put(OpenDeskModel.PROP_NOTIFICATION_PARAMS, params.toString());
-        contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
-        contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
-        nodeService.setProperties(childAssocRef.getChildRef(), contentProps);
+            // Create notification
+            NodeRef receiverNodeRef = personService.getPerson(receiver);
+            ChildAssociationRef childAssocRef = nodeService.createNode(
+                    receiverNodeRef,
+                    OpenDeskModel.PROP_NOTIFICATION_ASSOC,
+                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(receiver)),
+                    OpenDeskModel.TYPE_NOTIFICATION,
+                    null);
 
-        // Add hidden aspect
-        nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
+            // Set sender in params
+            params.put("sender", sender);
+
+            // Set properties
+            Map<QName, Serializable> contentProps = new HashMap<>();
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_PARAMS, params.toString());
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_READ, "false");
+            contentProps.put(OpenDeskModel.PROP_NOTIFICATION_SEEN, "false");
+            nodeService.setProperties(childAssocRef.getChildRef(), contentProps);
+
+            // Add hidden aspect
+            nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
+            return true;
+        }, AuthenticationUtil.getSystemUserName());
     }
 
     /**
