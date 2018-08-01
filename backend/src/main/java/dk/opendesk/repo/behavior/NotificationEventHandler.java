@@ -123,7 +123,7 @@ public class NotificationEventHandler {
                     PostInfo primaryPost = discussionService.getPrimaryPost(topic);
                     if(nodeRef.equals(primaryPost.getNodeRef())) return;
 
-                    notificationBean.notifyReply(userName, nodeRef, site, primaryPost);
+                    notificationBean.notifyReply(userName, nodeRef, site);
                     /*
 
     angular.forEach(vm.groups, function (group) {

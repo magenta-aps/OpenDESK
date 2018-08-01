@@ -144,7 +144,7 @@ public class NotificationBean {
         createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifyReply(String userName, NodeRef nodeRef, SiteInfo site, PostInfo primaryPost) throws JSONException {
+    public void notifyReply(String userName, NodeRef nodeRef, SiteInfo site) throws JSONException {
         String nodeId = nodeRef.getId();
         String siteShortName = site.getShortName();
         String siteName = getSiteName(siteShortName);
