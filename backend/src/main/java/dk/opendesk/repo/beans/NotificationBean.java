@@ -55,6 +55,11 @@ public class NotificationBean {
     }
 
     public void createNotification(String receiver, JSONObject params, String preferenceFilter) {
+        createNotification(receiver, params, preferenceFilter, false);
+    }
+
+    public void createNotification(String receiver, JSONObject params, String preferenceFilter,
+                                   boolean requireSubscribe) {
         // Important get current user before running as SystemUser
         String sender = AuthenticationUtil.getFullyAuthenticatedUser();
         // Then run as SystemUser
@@ -63,6 +68,9 @@ public class NotificationBean {
             if (!preferenceFilter.isEmpty())
                 if ("false".equals(preferenceService.getPreference(receiver, preferenceFilter)))
                     return false;
+            // Don't send notification if the user did not explicitly subscribe for it
+            else if(requireSubscribe)
+                return false;
 
             // Create notification
             NodeRef receiverNodeRef = personService.getPerson(receiver);
@@ -155,7 +163,7 @@ public class NotificationBean {
         params.put(OpenDeskModel.PARAM_SITE_SHORT_NAME, siteShortName);
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_REPLY);
         String preferenceFilter = "dk.magenta.sites." + siteShortName + ".discussions." + nodeId + ".subscribe";
-        createNotification(userName, params, preferenceFilter);
+        createNotification(userName, params, preferenceFilter, true);
     }
 
     public void notifyReview(String userName, NodeRef nodeRef, NodeRef reviewRef) throws JSONException {
