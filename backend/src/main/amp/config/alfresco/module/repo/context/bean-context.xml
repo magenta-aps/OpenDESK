@@ -41,6 +41,7 @@
         <property name="nodeService" ref="NodeService"/>
         <property name="personService" ref="PersonService"/>
         <property name="preferenceService" ref="PreferenceService"/>
+        <property name="siteService" ref="SiteService"/>
     </bean>
 
     <bean id="personBean" class="dk.opendesk.repo.beans.PersonBean">
@@ -52,6 +53,7 @@
         <property name="discussionBean" ref="discussionBean"/>
         <property name="discussionService" ref="DiscussionService"/>
         <property name="nodeService" ref="NodeService"/>
+        <property name="notificationBean" ref="notificationBean"/>
     </bean>
 
     <bean id="settingsBean" class="dk.opendesk.repo.beans.SettingsBean">

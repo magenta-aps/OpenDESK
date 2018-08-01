@@ -15,28 +15,66 @@ function reviewService ($http) {
 
   return service
 
-  function get (nodeRef) {
-    console.log('get review')
+  function get (nodeId) {
+    return $http.get('/alfresco/service/review/' + nodeId)
+      .then(function (response) {
+        return response.data[0]
+      })
   }
 
-  function create (params) {
-    console.log('create review')
+  function create (nodeId, userName, message) {
+    var payload = {
+      assignee: userName,
+      message: message,
+      nodeId: nodeId
+    }
+    return $http.post('/alfresco/service/review', payload)
+      .then(function (response) {
+        return response
+      })
   }
 
-  function approve () {
-    console.log('approve review')
+  function approve (nodeId, reply) {
+    var payload = {
+      status: 'approved'
+    }
+    if (reply)
+      payload.reply = reply
+
+    return $http.put('/alfresco/service/review/' + nodeId, payload)
+      .then(function (response) {
+        return response
+      })
   }
 
-  function reject () {
-    console.log('reject review')
+  function reject (nodeId, reply) {
+    var payload = {
+      status: 'rejected'
+    }
+    if (reply)
+      payload.reply = reply
+
+    return $http.put('/alfresco/service/review/' + nodeId, payload)
+      .then(function (response) {
+        return response
+      })
   }
 
-  function reply (params) {
-    console.log('reply review')
+  function reply (nodeId, reply) {
+    var payload = {
+      reply: reply
+    }
+    return $http.put('/alfresco/service/review/' + nodeId, payload)
+      .then(function (response) {
+        return response
+      })
   }
 
-  function update (params) {
-    return $http.delete('/alfresco/api/')
+  function update (nodeId, assignee) {
+    var payload = {
+      assignee: assignee
+    }
+    return $http.put('/alfresco/service/review/' + nodeId, payload)
       .then(function (response) {
         return response
       })

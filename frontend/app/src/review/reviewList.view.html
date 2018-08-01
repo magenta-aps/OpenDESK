@@ -1,20 +1,28 @@
-<od-review-detail ng-repeat="(index, item) in items" item="item"></od-review-detail>
+<od-review-detail ng-repeat="reply in vm.review.posts" reply="reply"></od-review-detail>
 
-<div>
-  <md-input-container>
+<div ng-if="vm.review.status === 'pending'">
+    <md-input-container>
       <label>Kommentar</label>
-      <textarea 
-        name='comment' 
-        ng-model="comment" 
-        md-maxlength="250" 
-        maxlength="250" 
+      <textarea
+        name='comment'
+        ng-model="comment"
+        md-maxlength="250"
+        maxlength="250"
         md-select-on-focus
       ></textarea>
-  </md-input-container>
+    </md-input-container>
+    <div>
+        <span flex></span>
+        <md-button ng-click="vm.reject(comment)">Afvis</md-button>
+        <md-button class="md-primary" ng-click="vm.approve(comment)">Godkend</md-button>
+        <md-button class="md-primary" ng-click="vm.reply(comment)">Svar</md-button>
+    </div>
 </div>
 
-<div>
-  <span flex></span>
-  <md-button ng-click="vm.reject()">Afvis</md-button>
-  <md-button class="md-primary" ng-click="vm.approve()">Godkend</md-button>
-</div>
+<h3 ng-if="vm.review.status === 'approved'">
+    GODKENDT
+</h3>
+
+<h3 ng-if="vm.review.status === 'rejected'">
+    AFVIST
+</h3>

@@ -1,8 +1,10 @@
-<p>
-  {{review.from}}
-</p>
-<p>
-  <i>
-      {{review.message}}
-  </i>
-</p>
+<md-card>
+    <md-card-content>
+        <p>
+          {{reply.content}}
+        </p>
+        <i>
+            - {{reply.author.displayName}} ({{reply.createdOn | customDate}}).
+        </i>
+    </md-card-content>
+</md-card>

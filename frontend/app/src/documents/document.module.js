@@ -157,7 +157,7 @@ angular
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('document', {
     parent: 'site',
-    url: '/dokument/:doc',
+    url: '/dokument/:doc?reviewId',
     views: {
       'content@': {
         template: documentTemplate,

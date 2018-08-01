@@ -20,14 +20,10 @@ import dk.opendesk.repo.beans.NotificationBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.error.AlfrescoRuntimeException;
-import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,16 +89,6 @@ public class Notifications extends AbstractWebScript {
                             result = this.getInfo(nodeRef);
                         break;
 
-                    case "add":
-                        String preference = "dk.magenta.sites.receiveNotifications";
-                        notificationBean.addNotification(userName, message, subject, link, type, project, preference);
-                        break;
-
-                    case "addReply":
-                        String replyPreference = "dk.magenta.sites." + project + ".discussions." + nodeRefString + ".subscribe";
-                        notificationBean.addNotification(userName, message, subject, link, type, project, replyPreference);
-                        break;
-
                     case "remove":
                         if (nodeRef != null && !nodeService.exists(nodeRef)) {
                             throw new AlfrescoRuntimeException("Sorry, nodeRef: " + nodeRef + " doesn't exist.");
@@ -143,7 +129,7 @@ public class Notifications extends AbstractWebScript {
      * @param userName username of the user whose notifications are to be returned.
      * @return a JSONArray containing a JSONObject for each notification.
      */
-    private JSONArray getAllNotifications(String userName) throws JSONException {
+    private JSONArray getAllNotifications(String userName) throws Exception {
 
         int unSeenSize = countUnSeenNotifications(userName);
         int unReadSize = countUnReadNotifications(userName);
@@ -151,7 +137,7 @@ public class Notifications extends AbstractWebScript {
         NodeRef user = personService.getPerson(userName);
 
         Set<QName> types = new HashSet<>();
-        types.add(OpenDeskModel.PROP_NOTIFICATION);
+        types.add(OpenDeskModel.TYPE_NOTIFICATION);
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
         JSONArray result = new JSONArray();
@@ -164,7 +150,8 @@ public class Notifications extends AbstractWebScript {
 
         for (ChildAssociationRef child : childAssociationRefs) {
             JSONObject json = notificationBean.getNotification(child.getChildRef());
-            children.add(json);
+            if(json != null)
+                children.add(json);
         }
 
         result.add(children);
@@ -231,10 +218,11 @@ public class Notifications extends AbstractWebScript {
      * @param notification nodeRef of the notification.
      * @return a JSONObject representing the notification.
      */
-    private JSONArray getInfo (NodeRef notification) throws JSONException {
+    private JSONArray getInfo (NodeRef notification) throws Exception {
         JSONArray result = new JSONArray();
         JSONObject json = notificationBean.getNotification(notification);
-        result.add(json);
+        if(json != null)
+            result.add(json);
         return result;
     }
 

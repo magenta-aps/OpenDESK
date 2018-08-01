@@ -39,8 +39,9 @@ public class UpdateReview extends AbstractWebScript {
             JSONObject json = new JSONObject(c.getContent());
             String assignee = Utils.getJSONObject(json, "assignee");
             String status = Utils.getJSONObject(json, "status");
+            String reply = Utils.getJSONObject(json, "reply");
 
-            reviewBean.updateReview(nodeRef, assignee, status);
+            reviewBean.updateReview(nodeRef, assignee, status, reply);
             result = Utils.getJSONSuccess();
         } catch (Exception e) {
             e.printStackTrace();

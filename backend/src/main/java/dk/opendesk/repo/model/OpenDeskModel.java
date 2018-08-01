@@ -63,11 +63,7 @@ public interface OpenDeskModel {
     /**
      * types
      */
-    QName PROP_NOTIFICATION = QName.createQName(OD_URI, "notification");
-    String PD_NOTIFICATION_REVIEW_REQUEST = "review-request";
-    String PD_NOTIFICATION_REVIEW_APPROVED = "review-approved";
-    String PD_NOTIFICATION_NEWDOC = "new-doc";
-    String PD_NOTIFICATION_REJECTED = "review-rejected";
+    QName TYPE_NOTIFICATION = QName.createQName(OD_URI, "notification");
 
 
     /**
@@ -85,22 +81,27 @@ public interface OpenDeskModel {
     /**
      * NotificationEventHandler properties
      */
-    QName PROP_NOTIFICATION_SUBJECT = QName.createQName(OD_URI, "subject");
-    QName PROP_NOTIFICATION_MESSAGE = QName.createQName(OD_URI, "message");
     QName PROP_NOTIFICATION_READ = QName.createQName(OD_URI, "read");
-    QName PROP_NOTIFICATION_LINK = QName.createQName(OD_URI, "link");
     QName PROP_NOTIFICATION_SEEN = QName.createQName(OD_URI, "seen");
-    QName PROP_NOTIFICATION_TYPE = QName.createQName(OD_URI, "type");
-    QName PROP_NOTIFICATION_PROJECT = QName.createQName(OD_URI, "project");
     QName PROP_NOTIFICATION_PARAMS = QName.createQName(OD_URI, "params");
     String NOTIFICATION_TYPE_REVIEW = "review";
     String NOTIFICATION_TYPE_REVIEW_APPROVED = "review-approved";
     String NOTIFICATION_TYPE_REVIEW_REJECTED = "review-rejected";
-    String NOTIFICATION_TYPE_CONTENT = "content";
+    String NOTIFICATION_TYPE_REVIEW_REPLY = "review-reply";
     String NOTIFICATION_TYPE_SHARED_CONTENT = "shared-content";
-    String NOTIFICATION_TYPE_SITE = "site";
+    String NOTIFICATION_TYPE_SHARED_FOLDER = "shared-folder";
+    String NOTIFICATION_TYPE_SITE_CONTENT = "site-content";
+    String NOTIFICATION_TYPE_SITE_MEMBER = "site-member";
     String NOTIFICATION_TYPE_DISCUSSION = "discussion";
     String NOTIFICATION_TYPE_REPLY = "reply";
+
+    String PARAM_NODE_NAME = "nodeName";
+    String PARAM_NODE_ID = "nodeId";
+    String PARAM_REPLY_SHORT_NAME = "replyShortName";
+    String PARAM_REVIEW_ID = "reviewId";
+    String PARAM_SITE_NAME = "siteName";
+    String PARAM_SITE_SHORT_NAME = "siteShortName";
+    String PARAM_TYPE = "type";
 
     /**
      * Review properties
@@ -111,6 +112,9 @@ public interface OpenDeskModel {
     QName ASPECT_REVIEWABLE = QName.createQName(OD_URI, "reviewable");
     QName ASSOC_REVIEWED = QName.createQName(OD_URI, "reviewed");
     String REVIEW_DISCUSSION = "review-discussion";
+    String REVIEW_STATUS_APPROVED = "approved";
+    String REVIEW_STATUS_PENDING = "pending";
+    String REVIEW_STATUS_REJECTED = "rejected";
 
 
     /**

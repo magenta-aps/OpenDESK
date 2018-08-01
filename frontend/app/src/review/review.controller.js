@@ -1,60 +1,44 @@
 'use strict'
-import reviewDetailTemplate from './reviewDetail.view.html'
-import reviewListTemplate from './reviewList.view.html'
 
 angular.module('od.review')
-  .controller('ReviewController', ['reviewService', '$mdDialog', ReviewController])
-  .directive('odReviewList', odReviewList)
-  .directive('odReviewDetail', odReviewDetail)
+  .controller('ReviewController', ['reviewService', '$mdDialog', '$scope', ReviewController])
 
-function ReviewController (reviewService, $mdDialog) {
+function ReviewController (reviewService, $mdDialog, $scope) {
   var vm = this
+
+  if ($scope.reviewId)
+    reviewService.get($scope.reviewId)
+      .then(function (response) {
+        vm.review = response
+      })
 
   vm.approve = approve
   vm.reject = reject
   vm.create = create
+  vm.reply = reply
   vm.cancelDialog = cancelDialog
 
-  function create () {
-    console.log('create review')
-    console.log(vm.member)
-    console.log(vm.comment)
-    reviewService.create()
+  function create (nodeId, user, message) {
+    reviewService.create(nodeId, user.userName, message)
+    cancelDialog()
   }
 
-  function approve () {
-    console.log('approve review')
-    reviewService.approve()
+  function approve (reply) {
+    reviewService.approve($scope.reviewId, reply)
+    cancelDialog()
   }
 
-  function reject () {
-    console.log('reject review')
-    reviewService.reject()
+  function reject (reply) {
+    reviewService.reject($scope.reviewId, reply)
+    cancelDialog()
+  }
+
+  function reply (reply) {
+    reviewService.reply($scope.reviewId, reply)
+    cancelDialog()
   }
 
   function cancelDialog () {
     $mdDialog.cancel()
-  }
-}
-
-function odReviewList () {
-  return {
-    restrict: 'E',
-    scope: {
-      items: '=items'
-    },
-    template: reviewListTemplate,
-    controller: 'ReviewController',
-    controllerAs: 'vm'
-  }
-}
-
-function odReviewDetail () {
-  return {
-    restrict: 'E',
-    scope: {
-      review: '=item'
-    },
-    template: reviewDetailTemplate
   }
 }

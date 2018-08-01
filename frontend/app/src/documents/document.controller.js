@@ -6,7 +6,6 @@ import aproveCommentTemplate from './view/aproveComment.tmpl.html'
 import rejectCommentTemplate from './view/rejectComment.tmpl.html'
 import uploadNewVersionTemplate from '../filebrowser/view/content/document/uploadNewVersion.tmpl.html'
 import confirmEditVersionDialogTemplate from './view/confirmEditVersionDialog.html'
-import reviewDocumentTemplate from '../review/reviewCreate.view.html'
 
 angular.module('openDeskApp.documents')
   .controller('DocumentController', ['$scope', '$timeout', '$translate', 'documentService', 'MemberService',
@@ -157,20 +156,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   // prepare to handle a preview of a document to review
 
   function prepDocumentToReview () {
-    var paramValue = $location.search().dtype
-
-    if (paramValue !== undefined) {
-      vm.wf_from = $location.search().from
-      vm.wf = paramValue === 'wf'
-      vm.wfr = paramValue === 'wf-response'
-
-      var NID = $location.search().NID
-      notificationsService.getInfo(NID)
-        .then(function (response) {
-          vm.wf_comment = response.message
-          vm.wf_subject = response.subject
-        })
-    }
+    vm.reviewId = $stateParams.reviewId
   }
 
   function createWFNotification (comment, wtype) {
@@ -387,13 +373,14 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   function reviewDocumentsDialog (event) {
     $mdDialog.show({
-      template: reviewDocumentTemplate,
-      controller: 'ReviewController',
-      controllerAs: 'vm',
-      parent: angular.element(document.body),
+      locals: {
+        nodeId: vm.selectedDocumentNode
+      },
+      controller: ['$scope', 'nodeId', function ($scope, nodeId) {
+        $scope.nodeId = nodeId
+      }],
+      template: '<md-dialog od-create-review node-id="nodeId"></md-dialog>',
       targetEvent: event,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
       clickOutsideToClose: true
     })
   }

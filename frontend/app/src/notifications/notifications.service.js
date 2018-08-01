@@ -13,10 +13,8 @@ function notificationsService ($http, $interval) {
     getUnseenCount: getUnseenCount,
     get: getNotifications,
     add: addNotification,
-    addReplyNotice: addReplyNotice,
     delete: deleteNotification,
     setReadNotice: setRead,
-    getInfo: getInfo,
     setSeenNotice: setSeen,
     setAllSeen: setAllSeen,
     startUpdate: startUpdate,
@@ -36,47 +34,70 @@ function notificationsService ($http, $interval) {
     }
     return $http.post(restBaseUrl, payload)
       .then(function (response) {
-        unseenNotifications = response.data[0].unseen;
-        var notifications = response.data[1];
+        unseenNotifications = response.data[0].unseen
+        var notifications = response.data[1]
         angular.forEach(notifications, function (notification) {
-
-          switch(notification.type) {
-            case 'review':
-              break;
-            case 'review-approved':
-              break;
-            case 'review-rejected':
-              break;
-            case 'content':
-              break;
-            case 'shared-content':
-              break;
-            case 'site':
-              break;
-            case 'discussion':
-              notification.link = '';
-              notification.subject = 'Ny samtale i et projekt';
-              notification.message = notification.params.sender + ' har oprettet en ny diskussion';
-              break;
-            case 'reply':
-              break;
+          var params = notification.params
+          if (params && params.type) {
+            switch (notification.params.type) {
+              case 'review':
+                notification.link = 'document({doc: "' + params.nodeId + '", reviewId:"' + params.reviewId + '"})'
+                notification.subject = 'Godkendelse af ' + params.nodeName
+                notification.message = params.sender + ' har anmodet om godkendelse af dokumentet. Klik for at læse mere.'
+                break
+              case 'review-approved':
+                notification.link = 'document({doc: "' + params.nodeId + '", reviewId:"' + params.reviewId + '"})'
+                notification.subject = params.nodeName + ' er godkendt'
+                notification.message = params.sender + ' har godkendt dokumentet. Klik for at læse mere.'
+                break
+              case 'review-rejected':
+                notification.link = 'document({doc: "' + params.nodeId + '", reviewId:"' + params.reviewId + '"})'
+                notification.subject = params.nodeName + ' er afvist'
+                notification.message = params.sender + ' har afvist dokumentet. Klik for at læse mere.'
+                break
+              case 'review-reply':
+                notification.link = 'document({doc: "' + params.nodeId + '", reviewId:"' + params.reviewId + '"})'
+                notification.subject = 'Svar på godkendelse af ' + params.nodeName
+                notification.message = params.sender + ' har svaret på godkendelsen af dokumentet. Klik for at læse mere.'
+                break
+              case 'site-content':
+                notification.link = 'document({doc: "' + params.nodeId + '"})'
+                notification.subject = 'Nyt dokument i ' + params.siteName
+                notification.message = params.sender + ' har uploadet dokumentet ' + params.nodeName + '.'
+                break
+              case 'shared-content':
+                notification.link = 'document({doc: "' + params.nodeId + '"})'
+                notification.subject = 'Nyt delt dokument'
+                notification.message = params.sender + ' har delt dokumentet ' + params.nodeName + ' med dig.'
+                break
+              case 'shared-folder':
+                notification.link = 'odDocuments.sharedDocs({nodeRef: "' + params.nodeId + '"})'
+                notification.subject = 'Ny delt mappe'
+                notification.message = params.sender + ' har delt mappen ' + params.nodeName + ' med dig.'
+                break
+              case 'site-member':
+                notification.link = 'project({projekt: "' + params.siteShortName + '"})'
+                notification.subject = 'Du er blevet tilføjet til ' + params.siteName
+                notification.message = params.sender + ' har tilføjet dig som medlem.'
+                break
+              case 'discussion':
+                notification.link = 'project.viewthread({projekt: "' + params.siteShortName + '", path: "' + params.nodeId + '"})'
+                notification.subject = 'Ny kommentar i ' + params.siteName
+                notification.message = params.sender + ' har oprettet en ny kommentar.'
+                break
+              case 'reply':
+                notification.link = 'project.viewthread({projekt: "' + params.siteShortName + '", path: "' + params.nodeId + '#' + params.replyShortName + '"})'
+                notification.subject = 'Nyt svar i kommentaren ' + params.nodeName
+                notification.message = params.sender + ' har svaret på kommentaren, du følger i ' + params.siteName + '.'
+                break
+            }
+          } else {
+            notification.link = ''
+            notification.subject = ''
+            notification.message = ''
           }
-          notification.link = '';
-          notification.subject = '';
-          notification.message = '';
-
-          /*
-<p ng-if="notice.type == 'review'" class="od-notifylist--item--desc">{{notice.from}} har bedt dig om at reviewe et dokument i projektet {{notice.project}}</p>
-<p ng-if="notice.type == 'review-approved'"  class="od-notifylist--item--desc">{{notice.from}} har godkendt dit review i projektet {{notice.project}} med en kommentar</p>
-<p ng-if="notice.type == 'review-rejected'"  class="od-notifylist--item--desc">{{notice.from}} har afvist dit review i projektet {{notice.project}} med en kommentar</p>
-<p ng-if="notice.type == 'content'"  class="od-notifylist--item--desc">{{notice.from}} har lagt et nyt dokument i projektet {{notice.project}}</p>
-<p ng-if="notice.type == 'shared-content'"  class="od-notifylist--item--desc">{{notice.from}} har delt et dokument med dig</p>
-<p ng-if="notice.type == 'site'" class="od-notifylist--item--desc">{{notice.message}}</p>
-<p ng-if="notice.type == 'reply'" class="od-notifylist--item--desc">{{notice.message}}</p>
-<p ng-if="notice.type == 'discussion'" class="od-notifylist--item--desc">{{notice.message}}</p>
-           */
-        });
-        return notifications;
+        })
+        return notifications
       })
   }
 
@@ -90,18 +111,6 @@ function notificationsService ($http, $interval) {
     return $http.post(restBaseUrl, payload)
       .then(function (response) {
         return response
-      })
-  }
-
-  function getInfo (nodeRef) {
-    var payload = {
-      PARAM_METHOD: 'getInfo',
-      PARAM_NODE_REF: nodeRef
-    }
-
-    return $http.post(restBaseUrl, payload)
-      .then(function (response) {
-        return response.data[0]
       })
   }
 
@@ -139,24 +148,6 @@ function notificationsService ($http, $interval) {
       PARAM_LINK: link,
       PARAM_TYPE: wtype,
       PARAM_PROJECT: project
-    }
-
-    return $http.post(restBaseUrl, payload)
-      .then(function (response) {
-        return response
-      })
-  }
-
-  function addReplyNotice (userId, subject, message, link, wtype, project, nodeRef) {
-    var payload = {
-      PARAM_METHOD: 'addReply',
-      PARAM_USERNAME: userId,
-      PARAM_SUBJECT: subject,
-      PARAM_MESSAGE: message,
-      PARAM_LINK: link,
-      PARAM_TYPE: wtype,
-      PARAM_PROJECT: project,
-      PARAM_NODE_REF: nodeRef
     }
 
     return $http.post(restBaseUrl, payload)

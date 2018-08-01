@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ReviewBean {
+    private NotificationBean notificationBean;
 
     private DiscussionBean discussionBean;
     private DiscussionService discussionService;
@@ -30,6 +31,9 @@ public class ReviewBean {
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
+    public void setNotificationBean(NotificationBean notificationBean) {
+        this.notificationBean = notificationBean;
+    }
 
     public JSONObject getReview(NodeRef nodeRef) throws JSONException {
         JSONObject result = new JSONObject();
@@ -41,7 +45,7 @@ public class ReviewBean {
         }
 
         if(properties.containsKey(ContentModel.PROP_CREATOR))
-            result.put("reporter", properties.get(ContentModel.PROP_CREATOR));
+            result.put("sender", properties.get(ContentModel.PROP_CREATOR));
 
         if(properties.containsKey(OpenDeskModel.PROP_REVIEW_ASSIGNEE))
             result.put("assignee", properties.get(OpenDeskModel.PROP_REVIEW_ASSIGNEE));
@@ -52,7 +56,7 @@ public class ReviewBean {
         return result;
     }
 
-    public void createReview(NodeRef nodeRef, String assignee, String message) {
+    public void createReview(NodeRef nodeRef, String assignee, String message) throws JSONException {
 
         // Add Reviewable Aspect if the node is of content type and does not have it yet
         if(!nodeService.hasAspect(nodeRef, OpenDeskModel.ASPECT_REVIEWABLE))
@@ -64,7 +68,7 @@ public class ReviewBean {
         QName type = OpenDeskModel.TYPE_REVIEW;
 
         Map<QName, Serializable> properties = new HashMap<>();
-        properties.put(ContentModel.PROP_NAME, assignee);
+        properties.put(ContentModel.PROP_NAME, message);
         properties.put(OpenDeskModel.PROP_REVIEW_ASSIGNEE, assignee);
 
         NodeRef reviewRef = nodeService.createNode(nodeRef, assoc, type, type, properties).getChildRef();
@@ -72,15 +76,36 @@ public class ReviewBean {
         TopicInfo topic = discussionService.createTopic(reviewRef, OpenDeskModel.REVIEW_DISCUSSION);
         nodeService.setProperty(topic.getNodeRef(), ContentModel.PROP_NAME, OpenDeskModel.REVIEW_DISCUSSION);
         discussionService.createPost(topic, message);
+        notificationBean.notifyReview("admin", nodeRef, reviewRef);
     }
 
-    public void updateReview(NodeRef nodeRef, String assignee, String status) {
-
-        Map<QName, Serializable> properties = new HashMap<>();
-        if(!status.isEmpty())
+    public void updateReview(NodeRef nodeRef, String assignee, String status, String reply) throws JSONException {
+        Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+        // Create reply
+        if(!reply.isEmpty()) {
+            TopicInfo topic = discussionService.getTopic(nodeRef, OpenDeskModel.REVIEW_DISCUSSION);
+            PostInfo primaryPost = discussionService.getPrimaryPost(topic);
+            discussionService.createReply(primaryPost, reply);
+        }
+        // Change status
+        if(!status.isEmpty()) {
             properties.put(OpenDeskModel.PROP_REVIEW_STATUS, status);
+            String creator = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
+            if(status.equals(OpenDeskModel.REVIEW_STATUS_APPROVED))
+                notificationBean.notifyReviewApproved(creator, nodeRef);
+            else if(status.equals(OpenDeskModel.REVIEW_STATUS_REJECTED))
+                notificationBean.notifyReviewRejected(creator, nodeRef);
+        }
+        // Only send reply notification when status was not changed.
+        else if(!reply.isEmpty()) {
+            NodeRef documentRef = nodeService.getPrimaryParent(nodeRef).getParentRef();
+            notificationBean.notifyReviewReply("admin", documentRef, nodeRef);
+        }
+
+        // Change assignee
         if(!assignee.isEmpty())
             properties.put(OpenDeskModel.PROP_REVIEW_ASSIGNEE, assignee);
+
         nodeService.setProperties(nodeRef, properties);
     }
 }

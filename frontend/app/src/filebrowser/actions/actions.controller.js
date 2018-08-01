@@ -6,7 +6,6 @@ import '../../shared/services/editOnlineMSOffice.service'
 import deleteTemplate from './delete/delete.view.html'
 import genericContentDialogTemplate from '../genericDialog/genericContentDialog.view.html'
 import renameTemplate from './rename/rename.view.html'
-import reviewDocumentTemplate from '../../review/reviewCreate.view.html'
 import shareDocumentTemplate from '../view/content/document/shareDocument.tmpl.html'
 import uploadNewVersionTemplate from '../view/content/document/uploadNewVersion.tmpl.html'
 
@@ -144,11 +143,13 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
 
   function reviewDocumentsDialog () {
     $mdDialog.show({
-      template: reviewDocumentTemplate,
-      controller: 'ReviewController',
-      controllerAs: 'vm',
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
+      locals: {
+        nodeId: alfrescoNodeService.processNodeRef(content.nodeRef).id
+      },
+      controller: ['$scope', 'nodeId', function ($scope, nodeId) {
+        $scope.nodeId = nodeId
+      }],
+      template: '<md-dialog od-create-review node-id="nodeId"></md-dialog>',
       clickOutsideToClose: true
     })
   }
