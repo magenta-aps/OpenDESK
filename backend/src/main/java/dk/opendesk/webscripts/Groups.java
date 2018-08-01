@@ -29,7 +29,6 @@ public class Groups extends AbstractWebScript {
     private NodeService nodeService;
     private AuthorityService authorityService;
     private PersonService personService;
-    private PreferenceService preferenceService;
 
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
@@ -42,9 +41,6 @@ public class Groups extends AbstractWebScript {
     }
     public void setPersonService(PersonService personService) {
         this.personService = personService;
-    }
-    public void setPreferenceService(PreferenceService preferenceService) {
-        this.preferenceService = preferenceService;
     }
 
     @Override

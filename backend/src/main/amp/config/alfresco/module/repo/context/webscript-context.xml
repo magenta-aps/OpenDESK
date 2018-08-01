@@ -50,7 +50,6 @@
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="siteService" ref="SiteService"/>
-		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
     <bean id="webscript.preferences.get"
