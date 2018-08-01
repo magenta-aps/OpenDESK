@@ -1,12 +1,19 @@
 'use strict'
+import '../shared/services/nodeRefUtils.service'
+import replyTemplate from './view/reply.tmpl.html'
+import newThreadTemplate from './view/newThread.tmpl.html'
+import editTemplate from './view/edit.tmpl.html'
+import editFirstPostTemplate from './view/editFirstPost.tmpl.html'
+import editTitleTemplate from './view/editTitle.tmpl.html'
 
 angular
   .module('openDeskApp.discussion')
-  .controller('DiscussionController', DiscussionController)
+  .controller('DiscussionController', ['APP_CONFIG', '$scope', '$timeout', '$mdDialog', '$state', '$stateParams',
+    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'sessionService',
+    'notificationsService', 'siteService', 'UserService', DiscussionController])
 
 function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
-  $location, discussionService, nodeRefUtilsService, sessionService, notificationsService,
-  siteService, UserService) {
+  $location, discussionService, nodeRefUtilsService, sessionService, notificationsService, siteService, UserService) {
   var vm = this
 
   vm.discussions = []
@@ -94,23 +101,31 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     })
   }
 
-  function getSiteUserPermissions() {
-      vm.permissions = siteService.getPermissions()
-      if(vm.permissions === undefined) {
-          siteService.getSiteUserPermissions($stateParams.projekt)
-              .then(function(permissions) {
-              vm.permissions = permissions
-            })
-      }
+  function getSiteUserPermissions () {
+    vm.permissions = siteService.getPermissions()
+    if (vm.permissions === undefined)
+      siteService.getSiteUserPermissions($stateParams.projekt)
+        .then(function (permissions) {
+          vm.permissions = permissions
+        })
   }
 
   function replyDialog () {
     $mdDialog.show({
-      templateUrl: 'app/src/odDiscussion/view/reply.tmpl.html',
+      controller: ['$scope', function ($scope) {
+        $scope.changedContent = ''
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
+      }],
+      template: replyTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 
@@ -125,11 +140,20 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function newDiscussionDialog () {
     $mdDialog.show({
-      templateUrl: 'app/src/odDiscussion/view/newThread.tmpl.html',
+      controller: ['$scope', function ($scope) {
+        $scope.changedContent = ''
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
+      }],
+      template: newThreadTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 
@@ -164,21 +188,29 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     $mdDialog.show({
       controller: ['$scope', 'postItem', function ($scope, postItem) {
         $scope.postItem = postItem
+        $scope.changedContent = postItem
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
       }],
       locals: {
         postItem: postItem
       },
-      templateUrl: 'app/src/odDiscussion/view/edit.tmpl.html',
+      template: editTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 
   function editFirstPost (postItem, title, content) {
-    discussionService.updatePost(postItem, title, content).then(function (response) {
+    discussionService.updatePost(postItem, title, content).then(function () {
       $mdDialog.cancel()
+      vm.selectedDiscussion.content = content
     })
   }
 
@@ -186,15 +218,22 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     $mdDialog.show({
       controller: ['$scope', 'postItem', function ($scope, postItem) {
         $scope.postItem = postItem
+        $scope.changedContent = postItem
+        $scope.ckEditorCallback = function (value) {
+          $scope.changedContent = value
+        }
       }],
       locals: {
         postItem: postItem
       },
-      templateUrl: 'app/src/odDiscussion/view/editFirstPost.tmpl.html',
+      template: editFirstPostTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      onComplete: function () {
+        vm.loaded = true
+      }
     })
   }
 
@@ -206,7 +245,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
       locals: {
         postItem: postItem
       },
-      templateUrl: 'app/src/odDiscussion/view/editTitle.tmpl.html',
+      template: editTitleTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,

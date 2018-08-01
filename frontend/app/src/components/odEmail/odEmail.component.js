@@ -1,8 +1,12 @@
+'use strict'
+import sendTemplate from './view/send.html'
+
 angular.module('odEmail')
   .component('odEmailSend', {
-    templateUrl: 'app/src/components/odEmail/view/send.html',
+    template: sendTemplate,
     controller: 'odEmailController',
     bindings: {
-      email: '<'
+      email: '<',
+      isLoaded: '<'
     }
   })

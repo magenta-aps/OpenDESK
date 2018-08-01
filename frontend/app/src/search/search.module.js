@@ -1,5 +1,8 @@
-angular.module('openDeskApp.search', ['ngMaterial', 'pascalprecht.translate'])
-  .config(config)
+'use strict'
+import searchTemplate from './view/search.html'
+
+angular.module('openDeskApp.search', [])
+  .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider
@@ -8,7 +11,7 @@ function config ($stateProvider, USER_ROLES) {
       parent: 'site',
       views: {
         'content@': {
-          templateUrl: 'app/src/search/view/search.html',
+          template: searchTemplate,
           controller: 'SearchController'
         }
       },

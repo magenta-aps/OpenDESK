@@ -1,34 +1,24 @@
+'use strict'
+import '../../shared/services/preference.service'
+
 angular
-        .module('openDeskApp.systemsettings')
-        .controller('NotificationsSettingsController', NotificationsSettingsController);
+  .module('openDeskApp.systemsettings')
+  .controller('NotificationsSettingsController', ['preferenceService', NotificationsSettingsController])
 
-function NotificationsSettingsController($mdDialog, $translate, $state, preferenceService, UserService) {
-  var vm = this;
+function NotificationsSettingsController (preferenceService) {
+  var vm = this
+  vm.setNotificationPreferences = setNotificationPreferences
 
-  var preferenceFilter = "dk.magenta.sites.receiveNotifications";
-  vm.receiveNotifications = "true";
-  vm.currentUser = UserService.get().userName;
+  loadNotificationPreferences()
 
-  vm.loadNotificationPreferences = loadNotificationPreferences;
-  vm.setNotificationPreferences = setNotificationPreferences;
-
-  loadNotificationPreferences();
-
-  function loadNotificationPreferences() {
-    preferenceService.getPreferences(vm.currentUser, preferenceFilter)
-    .then(function(data) {
-      if(data[preferenceFilter] != null)
-        vm.receiveNotifications = data[preferenceFilter];
-      return data[preferenceFilter];
-    });
+  function loadNotificationPreferences () {
+    preferenceService.getNotificationPreferences()
+      .then(function (response) {
+        vm.receiveNotifications = response
+      })
   }
 
-  function setNotificationPreferences() {
-    var preferences = { "dk.magenta.sites.receiveNotifications" : vm.receiveNotifications };
-
-    preferenceService.setPreferences(vm.currentUser, preferences)
-    .then(function(data) {
-      return data;
-    });
+  function setNotificationPreferences () {
+    preferenceService.setNotificationPreferences(vm.receiveNotifications)
   }
 }

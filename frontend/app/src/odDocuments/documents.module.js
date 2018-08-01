@@ -1,8 +1,11 @@
 'use strict'
+import '../shared/filters/openeDateFilter'
+import documentsTemplate from './view/documents.html'
+import filebrowserTemplate from '../filebrowser/view/filebrowser.html'
 
 angular
   .module('openDeskApp.odDocuments', ['ngMaterial'])
-  .config(config)
+  .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('odDocuments', {
@@ -10,7 +13,7 @@ function config ($stateProvider, USER_ROLES) {
     url: '/dokumenter',
     views: {
       'content@': {
-        templateUrl: 'app/src/odDocuments/view/documents.html'
+        template: documentsTemplate
       }
     },
     params: {
@@ -21,7 +24,7 @@ function config ($stateProvider, USER_ROLES) {
     url: '/mine/{nodeRef:SlashFix}',
     views: {
       'filebrowser': {
-        templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+        template: filebrowserTemplate,
         controller: 'FilebrowserController',
         controllerAs: 'vm'
       }
@@ -36,7 +39,7 @@ function config ($stateProvider, USER_ROLES) {
       url: '/delte/{nodeRef:SlashFix}',
       views: {
         'filebrowser': {
-          templateUrl: 'app/src/filebrowser/view/filebrowser.html',
+          template: filebrowserTemplate,
           controller: 'FilebrowserController',
           controllerAs: 'vm'
         }

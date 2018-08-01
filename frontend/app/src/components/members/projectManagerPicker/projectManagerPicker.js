@@ -1,7 +1,10 @@
-angular.module('members')
+'use strict'
+import projectManagerPickerTemplate from './projectManagerPicker.html'
+
+angular.module('openDeskApp.members')
   .component('projectManagerPicker', {
-    templateUrl: 'app/src/components/members/projectManagerPicker/projectManagerPicker.html',
-    controller: projectManagerPicker,
+    template: projectManagerPickerTemplate,
+    controller: ['siteService', 'MemberService', projectManagerPicker],
     bindings: {
       selected: '=',
       type: '<'

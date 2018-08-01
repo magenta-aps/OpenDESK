@@ -1,11 +1,24 @@
 'use strict'
+import '../../shared/filters/exactMatchFilter'
+import '../../shared/filters/isContainedFilter'
+import '../../shared/filters/openeDateFilter'
+import '../../shared/filters/orderByObjectFilter'
+import '../../shared/directives/sort'
+import '../../shared/services/alfrescoNode.service'
+import '../../shared/services/translate.service'
+import deleteProjectTemplate from './deleteProject.tmpl.html'
+import siteCreateTemplate from '../siteCreate/siteCreate.view.html'
+import updateSiteTemplate from './updateSite.tmpl.html'
+import siteInfoTemplate from './siteInfo.view.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteListController', SiteListController)
+  .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'MemberService',
+    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'headerService', 'alfrescoNodeService', 'translateService',
+    SiteListController])
 
 function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, MemberService,
-  sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeUtils, translateService) {
+  sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeService, translateService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -50,10 +63,10 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     if (vm.config.enableProjects) vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')})
     vm.types.push({key: '', name: $translate.instant('COMMON.ALL')})
 
-    vm.sitesName = translateService.getSitesName();
-    var title = $translate.instant(vm.sitesName);
-    browserService.setTitle(title);
-    headerService.setTitle(title);
+    vm.sitesName = translateService.getSitesName()
+    var title = $translate.instant(vm.sitesName)
+    browserService.setTitle(title)
+    headerService.setTitle(title)
 
     // sets the margin to the width of sidenav
     var tableHeight = $(window).height() - 200 - $('header').outerHeight() - $('#table-header').outerHeight() - $('#table-actions').outerHeight()
@@ -103,7 +116,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
       controller: ['$scope', 'project', function ($scope, project) {
         $scope.project = project
       }],
-      templateUrl: 'app/src/odSite/siteList/deleteProject.tmpl.html',
+      template: deleteProjectTemplate,
       locals: {
         project: project
       },
@@ -117,7 +130,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
   function createSiteDialog (ev, type) {
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/siteCreate/siteCreate.view.html',
+      template: siteCreateTemplate,
       controller: 'SiteCreateController',
       controllerAs: 'vm',
       locals: {
@@ -156,7 +169,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     vm.currentDialogDescription = description
     vm.currentDialogShortName = shortName
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/siteList/updateSite.tmpl.html',
+      template: updateSiteTemplate,
       parent: angular.element(document.body),
       targetEvent: event,
       scope: $scope, // use parent scope in template
@@ -173,7 +186,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   function infoSiteDialog (site) {
     vm.currentDialogSite = site
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/siteList/siteInfo.view.html',
+      template: siteInfoTemplate,
       parent: angular.element(document.body),
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
@@ -182,7 +195,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   }
 
   function toggleFavourite (node) {
-    var nodeId = alfrescoNodeUtils.processNodeRef(node.nodeRef).id
+    var nodeId = alfrescoNodeService.processNodeRef(node.nodeRef).id
     if (node.isFavourite)
       siteService.removeFavourite(nodeId)
         .then(function () {

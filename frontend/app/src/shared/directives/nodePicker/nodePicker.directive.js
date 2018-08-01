@@ -1,4 +1,5 @@
 'use strict'
+import nodePickerTemplate from './nodePicker.view.html'
 
 angular
   .module('openDeskApp')
@@ -9,7 +10,7 @@ angular
         currentNodeRef: '=root',
         selectedNode: '=model'
       },
-      templateUrl: 'app/src/shared/directives/nodePicker/nodePicker.view.html',
+      template: nodePickerTemplate,
       controller: 'NodePickerController',
       controllerAs: 'vm'
     }

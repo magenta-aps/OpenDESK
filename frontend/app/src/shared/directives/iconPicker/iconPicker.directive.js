@@ -1,4 +1,5 @@
 'use strict'
+import iconPickerTemplate from './iconPicker.view.html'
 
 angular
   .module('openDeskApp')
@@ -8,7 +9,7 @@ angular
       scope: {
         selectedIcon: '=selectedIcon'
       },
-      templateUrl: 'app/src/shared/directives/iconPicker/iconPicker.view.html',
+      template: iconPickerTemplate,
       controller: 'IconPickerController',
       controllerAs: 'vm'
     }

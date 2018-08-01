@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('CreateFromTemplateController', CreateFromTemplateController)
+  .controller('CreateFromTemplateController', ['$scope', '$mdDialog', 'templateService', CreateFromTemplateController])
 
 function CreateFromTemplateController ($scope, $mdDialog, templateService) {
   var vm = this

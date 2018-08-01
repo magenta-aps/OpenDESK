@@ -1,8 +1,9 @@
 'use strict'
+import createFromTemplateTemplate from '../create/createFromTemplate.view.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('TemplateListController', TemplateListController)
+  .controller('TemplateListController', ['$scope', '$mdDialog', 'templateService', TemplateListController])
 
 function TemplateListController ($scope, $mdDialog, templateService) {
   var vm = this
@@ -18,7 +19,7 @@ function TemplateListController ($scope, $mdDialog, templateService) {
     templateService.setTemplate(template, contentType)
 
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/template/create/createFromTemplate.view.html',
+      template: createFromTemplateTemplate,
       controller: 'CreateFromTemplateController',
       controllerAs: 'vm',
       clickOutsideToClose: true

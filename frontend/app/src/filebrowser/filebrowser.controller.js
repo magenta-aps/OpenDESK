@@ -1,72 +1,54 @@
 'use strict'
+import '../shared/services/content.service'
+import '../shared/services/file.service'
+import uploadDocumentsTemplate from './view/content/document/uploadDocuments.tmpl.html'
+import newSiteLinkTemplate from './siteLink/new.view.html'
+import loadSbsysTemplate from './view/sbsys/loadSbsys.tmpl.html'
+import uploadSbsysTemplate from './view/sbsys/uploadSbsys.tmpl.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('FilebrowserController', FilebrowserController)
+  .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout', 'siteService',
+    'fileService', 'filebrowserService', 'documentService', 'alfrescoNodeService', 'MemberService', '$translate',
+    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'ContentService',
+    FilebrowserController])
 
-function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDialog, $mdToast, $timeout,
-  siteService, fileUtilsService, filebrowserService, alfrescoDownloadService,
-  documentPreviewService, documentService, alfrescoNodeUtils, MemberService, $translate, APP_BACKEND_CONFIG,
-  sessionService, headerService, browserService, notificationsService, ContentService, editOnlineMSOfficeService) {
+function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, siteService, fileService,
+  filebrowserService, documentService, alfrescoNodeService, MemberService, $translate, APP_BACKEND_CONFIG,
+  sessionService, headerService, browserService, ContentService) {
   var vm = this
-  var documentNodeRef = ''
-  var folderNodeRef = ''
-  var sendAllToSbsys = false
 
   vm.cancelDialog = cancelDialog
   vm.cancelSbsysDialog = cancelSbsysDialog
+  vm.loadCheckboxes = loadCheckboxes
+  vm.loadFromSbsys = loadFromSbsys
+  vm.loadSbsysDialog = loadSbsysDialog
+  vm.newLinkDialog = newLinkDialog
+  vm.setAllCheckboxes = setAllCheckboxes
+  vm.uploadDocumentsDialog = uploadDocumentsDialog
+  vm.uploadFiles = uploadFiles
+  vm.uploadSbsys = uploadSbsys
+  vm.uploadSbsysDialog = uploadSbsysDialog
+
+  var folderNodeRef = ''
   vm.contentList = []
   vm.contentListLength = 0
-  vm.deleteContentDialog = deleteContentDialog
   vm.documentTemplates = {}
   vm.enableESDH = APP_BACKEND_CONFIG.enableESDH
   vm.error = false
   vm.folderTemplates = {}
-  vm.getLink = getLink
   vm.isLoading = true
-  vm.loadCheckboxes = loadCheckboxes
-  vm.loadFromSbsys = loadFromSbsys
-  vm.loadHistory = loadHistory
-  vm.loadSbsysDialog = loadSbsysDialog
-  vm.getAvatarUrl = getAvatarUrl
-  vm.newLinkDialog = newLinkDialog
   vm.permissions = {}
-  vm.renameContentDialog = renameContentDialog
-  vm.setAllCheckboxes = setAllCheckboxes
-  vm.shareDocument = shareDocument
-  vm.shareDocumentDialog = shareDocumentDialog
-  vm.stopSharingDocument = stopSharingDocument
-  vm.searchPeople = searchPeople
-  vm.uploading = false
-  vm.uploadDocumentsDialog = uploadDocumentsDialog
-  vm.uploadFiles = uploadFiles
-  vm.uploadNewVersion = uploadNewVersion
-  vm.uploadNewVersionDialog = uploadNewVersionDialog
-  vm.uploadSbsys = uploadSbsys
-  vm.uploadSbsysDialog = uploadSbsysDialog
-  vm.searchUsers = searchUsers
+  vm.sendAllToSbsys = false
   vm.sendToSbsys = false
-
-  $scope.isSite = $stateParams.isSite
-
-  $scope.siteService = siteService
-  $scope.history = []
-  $scope.uploadedToSbsys = false
-  $scope.showProgress = false
-  $scope.reverse = false
-  $scope.order = 'name'
-
-  vm.editInMSOffice = editInMSOffice
-  vm.editInLibreOffice = editInLibreOffice
-  vm.editInOnlyOffice = editInOnlyOffice
-
-    // de her er dublikeret i document.controller!
-  $scope.downloadDocument = downloadDocument
-  $scope.previewDocument = previewDocument
-  vm.reviewDocumentsDialog = reviewDocumentsDialog
-  vm.createReviewNotification = createReviewNotification
+  vm.uploading = false
 
   $scope.filesToFilebrowser = null
+  $scope.isSite = $stateParams.isSite
+  $scope.order = 'name'
+  $scope.reverse = false
+  $scope.showProgress = false
+  $scope.uploadedToSbsys = false
 
   $scope.$on('updateFilebrowser', function () {
     activate()
@@ -95,7 +77,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
         })
 
       vm.permissions = siteService.getPermissions()
-      var title = ''
+      var title
       if (vm.permissions === undefined)
         siteService.getSiteUserPermissions($stateParams.projekt)
           .then(function (permissions) {
@@ -114,7 +96,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
       headerService.setTitle(title)
       filebrowserService.getUserHome()
         .then(function (userHomeRef) {
-          var userHomeId = alfrescoNodeUtils.processNodeRef(userHomeRef).id
+          var userHomeId = alfrescoNodeService.processNodeRef(userHomeRef).id
           setFolderAndPermissions(userHomeId)
         })
     } else {
@@ -141,7 +123,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   function setFolderAndPermissionsByPath (path) {
     filebrowserService.getCompanyHome()
       .then(function (val) {
-        var companyHomeId = alfrescoNodeUtils.processNodeRef(val).id
+        var companyHomeId = alfrescoNodeService.processNodeRef(val).id
         setFolderAndPermissions(companyHomeId + path)
       })
   }
@@ -164,7 +146,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   function setFolder (fNodeRef) {
     filebrowserService.setCurrentFolder(fNodeRef)
     folderNodeRef = fNodeRef
-    var folder = alfrescoNodeUtils.processNodeRef(folderNodeRef).id
+    var folder = alfrescoNodeService.processNodeRef(folderNodeRef).id
     loadContentList(folder)
   }
 
@@ -210,50 +192,57 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     vm.isLoading = false
   }
 
-    function processContent(items) {
-        angular.forEach(items, function(item) {
-            item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimeType, 24);
+  function processContent (items) {
+    angular.forEach(items, function (item) {
+      item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
 
-            var isLocked = item.isLocked;
-            var lockType;
-            if(isLocked)
-                lockType = item.lockType;
-            var mimeType = item.mimeType;
+      var isLocked = item.isLocked
+      var lockType
+      if (isLocked)
+        lockType = item.lockType
+      var mimeType = item.mimeType
 
-            item.loolEditable = ContentService.isLibreOfficeEditable(mimeType, isLocked);
-            item.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, isLocked);
-            item.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, isLocked, lockType);
-        });
-    }
-    
-    function getLink(content) {
-        if (content.contentType === 'cmis:document') {
-            if ($stateParams.type === "text-templates")
-                return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})';
-            else
-                return 'document({doc: "' + content.shortRef + '"})';
-        }
-        if (content.contentType === 'cmis:folder') {
-            if ($stateParams.type === "system-folders")
-                return 'systemsettings.filebrowser({path: "' + vm.path + '/' + content.name + '"})';
-            else if ($stateParams.type === "my-docs")
-                return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})';
-            else if ($stateParams.type === "shared-docs")
-                return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})';
-            else if($scope.isSite)
-                return 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                    '", path: "' + vm.path + '/' + content.name + '"})';
-        }
-        if (content.contentType === 'cmis:link') {
-            return 'project({projekt: "' + content.destination_link + '"})';
-        }
-    }
-    
-    function loadHistory(doc) {
-        ContentService.getHistory(doc).then(function (val) {
-            $scope.history = val;
-        });
-    }
+      item.loolEditable = ContentService.isLibreOfficeEditable(mimeType, isLocked)
+      item.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, isLocked)
+      item.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, isLocked, lockType)
+
+      // Set link
+      item.uiRef = getUiRef(item)
+
+      // Set history
+      getHistory(item.shortRef).then(function (response) {
+        item.history = response
+      })
+    })
+  }
+
+  function getUiRef (content) {
+    if (content.contentType === 'cmis:document')
+      if ($stateParams.type === 'system-folders' && content.name.endsWith('.ftl'))
+        return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})'
+      else
+        return 'document({doc: "' + content.shortRef + '"})'
+
+    if (content.contentType === 'cmis:folder')
+      if ($stateParams.type === 'system-folders')
+        return 'systemsettings.filebrowser({path: "' + vm.path + '/' + content.name + '"})'
+      else if ($stateParams.type === 'my-docs')
+        return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})'
+      else if ($stateParams.type === 'shared-docs')
+        return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})'
+      else if ($scope.isSite)
+        return 'project.filebrowser({projekt: "' + $stateParams.projekt +
+                    '", path: "' + vm.path + '/' + content.name + '"})'
+
+    if (content.contentType === 'cmis:link')
+      return 'project({projekt: "' + content.destination_link + '"})'
+  }
+
+  function getHistory (nodeId) {
+    return ContentService.history(nodeId).then(function (val) {
+      return val
+    })
+  }
 
   function buildBreadCrumbPath () {
     if ($stateParams.type === 'my-docs' || $stateParams.type === 'shared-docs') {
@@ -325,7 +314,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function uploadDocumentsDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/uploadDocuments.tmpl.html',
+      template: uploadDocumentsTemplate,
       targetEvent: event,
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
@@ -349,201 +338,11 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
     $scope.files = []
   }
 
-  function downloadDocument (nodeRef, name) {
-    alfrescoDownloadService.downloadFile(nodeRef, name)
-  }
-
-  function previewDocument (nodeRef) {
-    documentPreviewService.previewDocument(nodeRef)
-  }
-
-    function editInLibreOffice(nodeRef, fileName) {
-        var params = {
-            'nodeRef': nodeRef,
-            'fileName': fileName
-        };
-        $state.go('lool', params)
-    }
-
-    function editInMSOffice(nodeRef) {
-        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
-        documentService.getDocument(nodeId).then(function (response) {
-            var doc = response.item;
-            var docMetadata = response.metadata;
-            editOnlineMSOfficeService.editOnline(undefined, doc, docMetadata);
-        });
-    }
-
-    function editInOnlyOffice(nodeRef) {
-        var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id;
-        $window.open($state.href('onlyOfficeEdit', {'nodeRef': nodeId }));
-    }
-    
-    function reviewDocumentsDialog(event, nodeRef) {
-        documentNodeRef = nodeRef
-
-    $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/reviewDocument.tmpl.html',
-      targetEvent: event,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
-  function searchUsers (query) {
-    return MemberService.search(query)
-  }
-
-  function createReviewNotification (userName, comment) {
-    siteService.createReviewNotification(documentNodeRef, userName, comment)
-    $mdDialog.cancel()
-  }
-
-  function getAvatarUrl (user) {
-    return sessionService.makeAvatarUrl(user)
-  }
-
-  function shareDocumentDialog (content) {
-    documentNodeRef = content.nodeRef
-    $scope.content = content
-
-    $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/shareDocument.tmpl.html',
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
-  function shareDocument (user, permission, content) {
-    filebrowserService.shareNode(documentNodeRef, user.userName, permission)
-      .then(
-        function () {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet blev delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-          var nodeId = alfrescoNodeUtils.processNodeRef(documentNodeRef).id
-
-          // Link differs depending of type
-          var link;
-          if(content.contentType === "cmis:document")
-            link = "dokument/" + nodeId;
-          else
-            link = "dokumenter/delte/" + nodeId;
-
-          var subject = 'Nyt dokument delt'
-          var message = 'En bruger har delt et dokument med dig'
-
-          notificationsService.add(
-            user.userName,
-            subject,
-            message,
-            link,
-            'new-shared-doc',
-            ''
-          )
-        }
-      )
-  }
-
-  function stopSharingDocument (user, permission) {
-    filebrowserService.stopSharingNode(documentNodeRef, user.userName, permission)
-      .then(
-        function (succes) {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet bliver ikke længere delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-        }
-      )
-  }
-
-  function searchPeople (query) {
-    if (query)
-      return MemberService.search(query)
-  }
-
-  function uploadNewVersionDialog (event, nodeRef) {
-    documentNodeRef = nodeRef
-
-    $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/content/document/uploadNewVersion.tmpl.html',
-      targetEvent: event,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
-  function uploadNewVersion (file) {
-    vm.uploading = true
-    ContentService.uploadNewVersion(file, folderNodeRef, documentNodeRef)
-      .then(function () {
-        hideDialogAndReloadContent()
-      })
-  }
-
-  function renameContentDialog (content) {
-    $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/actions/rename/rename.view.html',
-      locals: {content: content},
-      controller: 'RenameController as vm',
-      clickOutsideToClose: true
-    })
-  }
-
-  // We tried to have genericContentDialog inside the scope, but after having shown the dialog once the method was
-  // missing from the scope.
-  $scope.moveContentDialog = moveContentDialog
-  $scope.copyContentDialog = copyContentDialog
-
-  function moveContentDialog (sourceNodeRef, parentNodeRef) {
-    genericContentDialog('MOVE', sourceNodeRef, parentNodeRef)
-  }
-
-  function copyContentDialog (sourceNodeRef, parentNodeRef) {
-    genericContentDialog('COPY', sourceNodeRef, parentNodeRef)
-  }
-
-  function genericContentDialog (action, sourceNodeRef, parentNodeRef) {
-    var sourceNodeRefs = []
-    sourceNodeRefs.push(sourceNodeRef)
-
-    var data = {
-      parentNodeRef: parentNodeRef,
-      contentAction: action,
-      sourceNodeRefs: sourceNodeRefs
-    }
-
-    $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/genericDialog/genericContentDialog.view.html',
-      controller: 'GenericContentDialogController',
-      controllerAs: 'vm',
-      locals: {
-        data: data
-      },
-      clickOutsideToClose: true
-    })
-  }
-
-  function deleteContentDialog (content) {
-    $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/actions/delete/delete.view.html',
-      locals: {data: content},
-      controller: 'DeleteController as vm',
-      clickOutsideToClose: true
-    })
-  }
-
   // Link
 
   function newLinkDialog () {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/siteLink/new.view.html',
+      template: newSiteLinkTemplate,
       controller: 'SiteLinkController as vm',
       clickOutsideToClose: true
     })
@@ -553,7 +352,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function loadSbsysDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/sbsys/loadSbsys.tmpl.html',
+      template: loadSbsysTemplate,
       targetEvent: event,
       scope: $scope,
       preserveScope: true,
@@ -570,7 +369,7 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
 
   function uploadSbsysDialog (event) {
     $mdDialog.show({
-      templateUrl: 'app/src/filebrowser/view/sbsys/uploadSbsys.tmpl.html',
+      template: uploadSbsysTemplate,
       targetEvent: event,
       scope: $scope,
       preserveScope: true,
@@ -590,10 +389,12 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   }
 
   function loadCheckboxes () {
+    vm.sendAllToSbsys = true
     vm.sendToSbsys = false
     vm.contentList.forEach(function (contentTypeList) {
       contentTypeList.forEach(function (content) {
-        vm.sendToSbsys = vm.sendToSbsys | content.sendToSbsys
+        vm.sendToSbsys = vm.sendToSbsys || content.sendToSbsys
+        vm.sendAllToSbsys = vm.sendAllToSbsys && content.sendToSbsys
       })
     })
   }
@@ -601,10 +402,10 @@ function FilebrowserController ($state, $stateParams, $scope, $rootScope, $mdDia
   function setAllCheckboxes () {
     vm.contentList.forEach(function (contentTypeList) {
       contentTypeList.forEach(function (content) {
-        content.sendToSbsys = sendAllToSbsys
+        content.sendToSbsys = vm.sendAllToSbsys
       })
     })
-    vm.sendToSbsys = sendAllToSbsys
+    vm.sendToSbsys = vm.sendAllToSbsys
   }
 
   function setSbsysShowAttr () {

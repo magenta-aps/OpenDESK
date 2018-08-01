@@ -1,4 +1,5 @@
 'use strict'
+import siteInfoTemplate from './siteInfo.view.html'
 
 angular
   .module('openDeskApp.filebrowser')
@@ -8,7 +9,7 @@ angular
       scope: {
         groups: '=odGroups'
       },
-      templateUrl: 'app/src/odSite/siteInfo/siteInfo.view.html',
+      template: siteInfoTemplate,
       controller: 'SiteInfoController',
       controllerAs: 'vm'
     }

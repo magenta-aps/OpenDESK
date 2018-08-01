@@ -1,4 +1,5 @@
 'use strict'
+import headerTemplate from './header.view.html'
 
 angular
   .module('openDeskApp.header')
@@ -6,7 +7,7 @@ angular
     return {
       restrict: 'E',
       scope: {},
-      templateUrl: 'app/src/header/header.view.html',
+      template: headerTemplate,
       controller: 'HeaderController',
       controllerAs: 'vm'
     }

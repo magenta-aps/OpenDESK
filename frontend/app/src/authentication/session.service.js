@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .factory('sessionService', sessionService)
+  .factory('sessionService', ['$window', '$state', sessionService])
 
-function sessionService ($window) {
+function sessionService ($window, $state) {
   var service = {
     clearRetainedLocation: clearRetainedLocation,
     getRetainedLocation: getRetainedLocation,
@@ -75,6 +75,7 @@ function sessionService ($window) {
   function logout () {
     clearRetainedLocation()
     clearUserInfoFromSession()
+    $state.go('login')
   }
 
   function makeURL (url) {
@@ -96,7 +97,7 @@ function sessionService ($window) {
   function makeAvatarUrl (user) {
     var avatar
     if (user.avatar === undefined) {
-      avatar = 'app/assets/img/avatars/blank-profile-picture.png'
+      avatar = 'assets/img/avatars/blank-profile-picture.png'
     } else {
       avatar = user.avatar.replace('/thumbnails/avatar', '')
       avatar = makeURL(`/alfresco/s/${avatar}`)

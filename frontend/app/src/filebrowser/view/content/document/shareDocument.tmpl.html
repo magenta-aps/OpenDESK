@@ -24,7 +24,7 @@
                 <div ng-show="!showGroupList[groupIndex]">
                     <md-chips ng-model="users" md-autocomplete-snap md-require-match="true"
                               md-on-remove="vm.stopSharingDocument($chip, groupIndex)"
-                              md-on-add="vm.shareDocument($chip, groupIndex, content)">
+                              md-on-add="vm.shareDocument($chip, groupIndex)">
                         <md-autocomplete md-selected-item="selectedProjGrpItem"
                                          md-search-text="vm.searchTextList[groupIndex]"
                                          md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"

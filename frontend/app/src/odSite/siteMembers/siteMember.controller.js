@@ -1,8 +1,10 @@
 'use strict'
+import editMembersTemplate from '../editMembers/editMembers.tmpl.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteMemberController', SiteMemberController)
+  .controller('SiteMemberController', ['$scope', '$stateParams', '$mdDialog', 'siteService', 'groupService',
+    'alfrescoDownloadService', SiteMemberController])
 
 function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, groupService, alfrescoDownloadService) {
   var vm = this
@@ -54,7 +56,7 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
 
   function editSiteGroups (ev) {
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/editMembers/editMembers.tmpl.html',
+      template: editMembersTemplate,
       controller: 'EditSiteMemberController',
       controllerAs: 'vm',
       locals: {

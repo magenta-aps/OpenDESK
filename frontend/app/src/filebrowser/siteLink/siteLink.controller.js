@@ -1,8 +1,9 @@
 'use strict'
+import '../../shared/services/filter.service'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('SiteLinkController', SiteLinkController)
+  .controller('SiteLinkController', ['$rootScope', '$mdDialog', 'siteService', 'filterService', SiteLinkController])
 
 function SiteLinkController ($rootScope, $mdDialog, siteService, filterService) {
   var vm = this
