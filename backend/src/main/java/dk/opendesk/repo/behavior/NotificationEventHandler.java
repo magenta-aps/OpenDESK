@@ -97,10 +97,18 @@ public class NotificationEventHandler {
         String userName = "admin";
         NodeRef nodeRef = parentChildAssocRef.getChildRef();
 
+
         // Check if node exists, might be moved, or created and deleted in same transaction.
         if (nodeRef != null && nodeService.exists(nodeRef)) {
 
             QName type = nodeService.getType(nodeRef);
+            if(ContentModel.TYPE_THUMBNAIL.equals(type))
+                return;
+            if(OpenDeskModel.TYPE_NOTIFICATION.equals(type))
+                return;
+            if(OpenDeskModel.TYPE_REVIEW.equals(type))
+                return;
+
             // If the node is contained by a site then notify members.
             SiteInfo site = siteService.getSite(nodeRef);
             if(site != null) {
@@ -140,14 +148,9 @@ public class NotificationEventHandler {
                     notificationBean.notifySiteContent(userName, nodeRef, site);
                 }
             }
-            // Make sure that it is not a notification or review.
-            // Notifications will result in endless loop as they create new notifications
             else {
                 // Discussions can only be added under sites so this must be shared content
-                if(!OpenDeskModel.TYPE_NOTIFICATION.equals(type) &&
-                        !OpenDeskModel.TYPE_REVIEW.equals(type)) {
-                    notificationBean.notifySharedNode(userName, nodeRef);
-                }
+                notificationBean.notifySharedNode(userName, nodeRef);
             }
         }
     }
