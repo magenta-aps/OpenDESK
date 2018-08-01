@@ -105,8 +105,6 @@ public class History extends AbstractWebScript {
      */
     private JSONArray getVersions(NodeRef nodeRef) throws JSONException {
 
-        System.out.println("nodeRef" + nodeRef);
-
         JSONArray result = new JSONArray();
         VersionHistory h = versionService.getVersionHistory(nodeRef);
 
