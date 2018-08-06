@@ -6,7 +6,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
-import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -23,11 +22,11 @@ import java.io.Serializable;
 import java.util.*;
 
 public class NodeBean {
+    private NotificationBean notificationBean;
 
     private NodeService nodeService;
     private PermissionService permissionService;
     private PersonService personService;
-    private PreferenceService preferenceService;
     private Repository repository;
     private SearchService searchService;
     private SiteService siteService;
@@ -35,14 +34,14 @@ public class NodeBean {
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
+    public void setNotificationBean(NotificationBean notificationBean) {
+        this.notificationBean = notificationBean;
+    }
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
     public void setPersonService(PersonService personService) {
         this.personService = personService;
-    }
-    public void setPreferenceService(PreferenceService preferenceService) {
-        this.preferenceService = preferenceService;
     }
     public void setRepository(Repository repository)
     {
@@ -466,7 +465,7 @@ public class NodeBean {
         return nodeRefs;
     }
 
-    public void shareNode(NodeRef nodeRef, String userName, String permission) {
+    public void shareNode(NodeRef nodeRef, String userName, String permission) throws JSONException {
         // Add permission first
         permissionService.setPermission(nodeRef, userName, permission, true);
 
@@ -480,6 +479,7 @@ public class NodeBean {
         }
         else
             nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_SHARED, properties);
+        notificationBean.notifySharedNode(userName, nodeRef);
     }
 
     public void stopSharingNode(NodeRef nodeRef, String userName, String permission) {

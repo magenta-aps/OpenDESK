@@ -23,7 +23,6 @@
         <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="personService" ref="PersonService"/>
-		<property name="siteService" ref="SiteService"/>
 	</bean>
 
 	<bean id="webscript.nodepicker.node.get"
@@ -51,7 +50,6 @@
 		<property name="authorityService" ref="AuthorityService"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="siteService" ref="SiteService"/>
-		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
     <bean id="webscript.preferences.get"
@@ -158,6 +156,7 @@
 	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
+        <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="personService" ref="PersonService"/>
@@ -211,6 +210,24 @@
 		  class="dk.opendesk.webscripts.settings.UpdateSettings"
 		  parent="webscript">
 		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
+	<bean id="webscript.review.review.get"
+		  class="dk.opendesk.webscripts.review.GetReview"
+		  parent="webscript">
+		<property name="reviewBean" ref="reviewBean"/>
+	</bean>
+
+	<bean id="webscript.review.review.post"
+		  class="dk.opendesk.webscripts.review.CreateReview"
+		  parent="webscript">
+		<property name="reviewBean" ref="reviewBean"/>
+	</bean>
+
+	<bean id="webscript.review.review.put"
+		  class="dk.opendesk.webscripts.review.UpdateReview"
+		  parent="webscript">
+		<property name="reviewBean" ref="reviewBean"/>
 	</bean>
 
 </beans>

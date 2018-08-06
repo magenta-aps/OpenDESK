@@ -40,6 +40,7 @@ import './odDocuments'
 import './odDiscussion'
 import './search'
 import './searchBar'
+import './review'
 // import './odChat' Not added because it has not been maintained and converse is not managed by npm
 
 // Components

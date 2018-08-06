@@ -14,16 +14,9 @@
         <ul class="od-notifylist">
             <li ng-repeat="notice in vm.notifications | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                 <span class="od-notifylist--item--link">
-                    <a href="{{ notice.link }}" ng-click="vm.close();vm.setRead(notice.nodeRef)">
+                    <a ui-sref="{{ notice.link }}" ng-click="vm.close();vm.setRead(notice.nodeRef)">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
-                        <p ng-if="notice.type == 'review-request'" class="od-notifylist--item--desc">{{notice.from}} har bedt dig om at reviewe et dokument i projektet {{notice.project}}</p>
-                        <p ng-if="notice.type == 'review-approved'"  class="od-notifylist--item--desc">{{notice.from}} har godkendt dit review i projektet {{notice.project}} med en kommentar</p>
-                        <p ng-if="notice.type == 'review-rejected'"  class="od-notifylist--item--desc">{{notice.from}} har afvist dit review i projektet {{notice.project}} med en kommentar</p>
-                        <p ng-if="notice.type == 'new-doc'"  class="od-notifylist--item--desc">{{notice.from}} har lagt et nyt dokument i projektet {{notice.project}}</p>
-                        <p ng-if="notice.type == 'new-shared-doc'"  class="od-notifylist--item--desc">{{notice.from}} har delt et dokument med dig</p>
-                        <p ng-if="notice.type == 'project'" class="od-notifylist--item--desc">{{notice.message}}</p>
-                        <p ng-if="notice.type == 'new-reply'" class="od-notifylist--item--desc">{{notice.message}}</p>
-                        <p ng-if="notice.type == 'new-discussion'" class="od-notifylist--item--desc">{{notice.message}}</p>
+                        <p class="od-notifylist--item--desc">{{notice.message}}</p>
                         <p class="od-notifylist--item--desc od-notifylist--item--date">{{notice.created | customDate}}</p> 
                     </a>
                 </span>

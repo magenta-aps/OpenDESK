@@ -9,13 +9,11 @@ function preferenceService ($http, $q, UserService) {
     getNotificationPreferences: getNotificationPreferences,
     setNotificationPreferences: setNotificationPreferences,
     getPreferences: getPreferences,
-    setPreferences: setPreferences,
-    _url: _url
+    setPreferences: setPreferences
   }
 
   function getNotificationPreferences () {
-    var userName = getUserName()
-    return getPreferences(userName, preferenceFilter)
+    return getPreferences(preferenceFilter)
       .then(function (data) {
       // If the preference is set then return it
         if (data[preferenceFilter] != null)
@@ -26,20 +24,14 @@ function preferenceService ($http, $q, UserService) {
   }
 
   function setNotificationPreferences (value) {
-    var userName = getUserName()
     var preferences = { 'dk.magenta.sites.receiveNotifications': value }
-    setPreferences(userName, preferences)
-  }
-
-  function getUserName () {
-    return UserService.get().userName
+    setPreferences(preferences)
   }
 
   // Gets preferences matching preferenceFilter
-  // username: ID of the user
   // preferenceFilter: Can be "namespaced" by using package notation. For example "dk.magenta.sites.<site_name>.notifications"
-  function getPreferences (username, preferenceFilter) {
-    return $http.get('/alfresco/service/preferences?username=' + username + '&pf=' + preferenceFilter).then(function (response) {
+  function getPreferences (preferenceFilter) {
+    return $http.get('/alfresco/service/preferences?pf=' + preferenceFilter).then(function (response) {
       return response.data[0]
     })
   }
@@ -47,20 +39,10 @@ function preferenceService ($http, $q, UserService) {
   // Sets preferences
   // username: ID of the user
   // preferences: JSONArray with namespace(key) and value. For example "dk.magenta.sites.<site_name>.notifications" : "true"
-  function setPreferences (username, preferences) {
-    return $http.post(this._url(username), preferences).then(function (response) {
+  function setPreferences (preferences) {
+    var username = UserService.get().userName
+    return $http.post('/api/people/' + username + '/preferences', preferences).then(function (response) {
       return response.data
     })
-  }
-
-  function _url (username) {
-    if (username === undefined) {
-      var userInfo = UserService.get()
-      if (userInfo)
-        username = userInfo.userName
-      else
-        return undefined
-    }
-    return '/api/people/' + username + '/preferences'
   }
 }

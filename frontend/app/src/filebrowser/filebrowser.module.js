@@ -2,4 +2,4 @@
 
 import 'ng-file-upload'
 
-angular.module('openDeskApp.filebrowser', ['ngFileUpload'])
+angular.module('openDeskApp.filebrowser', ['od.review', 'ngFileUpload'])

@@ -14,8 +14,6 @@ import java.util.*;
 
 public class Preferences extends AbstractWebScript {
 
-    final Logger logger = LoggerFactory.getLogger(Preferences.class);
-
     public void setPreferenceService(PreferenceService preferenceService) {
         this.preferenceService = preferenceService;
     }
@@ -29,7 +27,7 @@ public class Preferences extends AbstractWebScript {
         try {
             Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-            String username = params.get("username");
+            String username = AuthenticationUtil.getFullyAuthenticatedUser();
             String pf = params.get("pf");
             Map<String, Serializable> preferences = Utils.getPreferences(preferenceService, username, pf);
             result = Utils.getJSONReturnArray(preferences);

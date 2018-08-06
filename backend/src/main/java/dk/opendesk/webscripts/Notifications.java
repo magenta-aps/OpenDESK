@@ -20,14 +20,10 @@ import dk.opendesk.repo.beans.NotificationBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.error.AlfrescoRuntimeException;
-import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,13 +43,9 @@ public class Notifications extends AbstractWebScript {
     private NodeService nodeService;
     private NotificationBean notificationBean;
     private PersonService personService;
-    private SiteService siteService;
 
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
-    }
-    public void setSiteService(SiteService siteService) {
-        this.siteService = siteService;
     }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -74,13 +66,8 @@ public class Notifications extends AbstractWebScript {
             JSONObject json = new JSONObject(c.getContent());
 
             String userName = Utils.getJSONObject(json, "PARAM_USERNAME");
-            String project = Utils.getJSONObject(json, "PARAM_PROJECT");
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
-            String subject = Utils.getJSONObject(json, "PARAM_SUBJECT");
-            String message = Utils.getJSONObject(json, "PARAM_MESSAGE");
-            String link = Utils.getJSONObject(json, "PARAM_LINK");
             String nodeRefString = Utils.getJSONObject(json, "PARAM_NODE_REF");
-            String type = Utils.getJSONObject(json, "PARAM_TYPE");
 
             NodeRef nodeRef = null;
             if(NodeRef.isNodeRef(nodeRefString))
@@ -90,21 +77,6 @@ public class Notifications extends AbstractWebScript {
                 switch (method) {
                     case "getAll":
                         result = this.getAllNotifications(userName);
-                        break;
-
-                    case "getInfo":
-                        if (nodeRef != null)
-                            result = this.getInfo(nodeRef);
-                        break;
-
-                    case "add":
-                        String preference = "dk.magenta.sites.receiveNotifications";
-                        notificationBean.addNotification(userName, message, subject, link, type, project, preference);
-                        break;
-
-                    case "addReply":
-                        String replyPreference = "dk.magenta.sites." + project + ".discussions." + nodeRefString + ".subscribe";
-                        notificationBean.addNotification(userName, message, subject, link, type, project, replyPreference);
                         break;
 
                     case "remove":
@@ -147,7 +119,7 @@ public class Notifications extends AbstractWebScript {
      * @param userName username of the user whose notifications are to be returned.
      * @return a JSONArray containing a JSONObject for each notification.
      */
-    private JSONArray getAllNotifications(String userName) throws JSONException {
+    private JSONArray getAllNotifications(String userName) throws Exception {
 
         int unSeenSize = countUnSeenNotifications(userName);
         int unReadSize = countUnReadNotifications(userName);
@@ -155,7 +127,7 @@ public class Notifications extends AbstractWebScript {
         NodeRef user = personService.getPerson(userName);
 
         Set<QName> types = new HashSet<>();
-        types.add(OpenDeskModel.PROP_NOTIFICATION);
+        types.add(OpenDeskModel.TYPE_NOTIFICATION);
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
         JSONArray result = new JSONArray();
@@ -167,8 +139,9 @@ public class Notifications extends AbstractWebScript {
         result.add(stats);
 
         for (ChildAssociationRef child : childAssociationRefs) {
-            JSONObject json = Utils.convertNotificationToJSON(nodeService, siteService, personService, child.getChildRef());
-            children.add(json);
+            JSONObject json = notificationBean.getNotification(child.getChildRef());
+            if(json != null)
+                children.add(json);
         }
 
         result.add(children);
@@ -227,19 +200,6 @@ public class Notifications extends AbstractWebScript {
             this.setNotificationSeen(n);
         }
         return Utils.getJSONSuccess();
-    }
-
-    /**
-     * Gets the information of a notification.
-     * (method = getInfo)
-     * @param notification nodeRef of the notification.
-     * @return a JSONObject representing the notification.
-     */
-    private JSONArray getInfo (NodeRef notification) throws JSONException {
-        JSONArray result = new JSONArray();
-        JSONObject json = Utils.convertNotificationToJSON(nodeService, siteService, personService, notification);
-        result.add(json);
-        return result;
     }
 
     /**

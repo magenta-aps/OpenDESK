@@ -6,7 +6,7 @@ import documentHistoryTemplate from './view/documentHistory.html'
 import documentReviewTemplate from './view/documentReview.html'
 
 angular
-  .module('openDeskApp.documents', [])
+  .module('openDeskApp.documents', ['od.review'])
   .constant('EDITOR_CONFIG', {
     lool: {
       mimeTypes: [
@@ -157,7 +157,7 @@ angular
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('document', {
     parent: 'site',
-    url: '/dokument/:doc',
+    url: '/dokument/:doc?reviewId',
     views: {
       'content@': {
         template: documentTemplate,
