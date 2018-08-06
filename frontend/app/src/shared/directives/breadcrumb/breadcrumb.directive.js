@@ -1,4 +1,5 @@
 'use strict'
+import breadcrumbTemplate from './breadcrumb.html'
 
 angular
   .module('openDeskApp')
@@ -10,6 +11,6 @@ function breadcrumb () {
     scope: {
       bcPath: '=paths'
     },
-    templateUrl: 'app/src/shared/directives/breadcrumb/breadcrumb.html'
+    template: breadcrumbTemplate
   }
 }

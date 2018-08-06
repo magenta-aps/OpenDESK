@@ -1,73 +1,80 @@
-'use strict';
+'use strict'
+import loolTemplate from './view/lool.html'
+
 angular
-    .module('openDeskApp.lool', ['ngMaterial', 'pascalprecht.translate'])
-    .config(config)
-    .factory('transformRequestAsFormPost', transformRequestAsFormPost);
+  .module('openDeskApp.lool', [])
+  .config(['$stateProvider', 'USER_ROLES', config])
+  .factory('transformRequestAsFormPost', transformRequestAsFormPost)
 
-function config($stateProvider, USER_ROLES) {
-
-    $stateProvider.state('lool', {
-        parent: 'site',
-        url: '/lool/',
-        params: {
-            authorizedRoles: [USER_ROLES.user],
-			nodeRef: null,
-            versionLabel: null,
-            parent: null,
-			showArchived: null,
-			backToDocPreview: null
-		},
-        views: {
-            'content@': {
-                templateUrl: 'app/src/lool/view/lool.html',
-                controller: 'LoolController',
-                controllerAs: 'vm'
-            }
-        }
-    });
+function config ($stateProvider, USER_ROLES) {
+  $stateProvider.state('lool', {
+    parent: 'site',
+    url: '/lool/',
+    params: {
+      authorizedRoles: [USER_ROLES.user],
+      nodeRef: null,
+      versionLabel: null,
+      parent: null,
+      showArchived: null,
+      backToDocPreview: null
+    },
+    views: {
+      'content@': {
+        template: loolTemplate,
+        controller: 'LoolController',
+        controllerAs: 'vm'
+      }
+    }
+  })
 }
 /**
  * Was to be used to apply a transform for non-xhr requests.
  * Currently doesn't work due to the global interceptor.
  * @returns {transformRequest}
  */
-function transformRequestAsFormPost() {
-
-    /**
+function transformRequestAsFormPost () {
+  /**
      * The workhorse; converts an object to x-www-form-urlencoded serialization.
      * @param {Object} obj
      * @return {String}
      */
-    function transformRequest(obj) {
-        var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
+  function transformRequest (obj) {
+    var query = ''
+    var name
+    var value
+    var fullSubName
+    var subName
+    var subValue
+    var innerObj
+    var i
 
-        for (name in obj) {
-            value = obj[name];
+    for (name in obj) {
+      value = obj[name]
 
-            if (value instanceof Array) {
-                for (i = 0; i < value.length; ++i) {
-                    subValue = value[i];
-                    fullSubName = name + '[' + i + ']';
-                    innerObj = {};
-                    innerObj[fullSubName] = subValue;
-                    query += serializeObj(innerObj) + '&';
-                }
-            }
-            else if (value instanceof Object) {
-                for (subName in value) {
-                    subValue = value[subName];
-                    fullSubName = name + '[' + subName + ']';
-                    innerObj = {};
-                    innerObj[fullSubName] = subValue;
-                    query += param(innerObj) + '&';
-                }
-            }
-            else if (value !== undefined && value !== null)
-                query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+      if (value instanceof Array)
+        for (i = 0; i < value.length; ++i) {
+          subValue = value[i]
+          fullSubName = name + '[' + i + ']'
+          innerObj = {}
+          innerObj[fullSubName] = subValue
+          query += serializeObj(innerObj) + '&'
         }
 
-        return query.length ? query.substr(0, query.length - 1) : query;
+      else if (value instanceof Object)
+        for (subName in value) {
+          subValue = value[subName]
+          fullSubName = name + '[' + subName + ']'
+          innerObj = {}
+          innerObj[fullSubName] = subValue
+          query += param(innerObj) + '&'
+        }
+
+      else if (value !== undefined && value !== null)
+        query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&'
     }
 
-    return ( transformRequest );
+    return query.length ? query.substr(0, query.length - 1) : query
+  }
+
+  return (transformRequest)
 }

@@ -1,15 +1,20 @@
 angular
   .module('odEmail')
-  .controller('odEmailController', odEmailController)
+  .controller('odEmailController', ['$mdDialog', '$mdToast', 'odEmailService', odEmailController])
 
 function odEmailController ($mdDialog, $mdToast, odEmailService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
+  vm.ckEditorCallback = ckEditorCallback
   vm.sendEmail = sendEmail
 
   function cancelDialog () {
     $mdDialog.cancel()
+  }
+
+  function ckEditorCallback (value) {
+    vm.email.body = value
   }
 
   function sendEmail () {

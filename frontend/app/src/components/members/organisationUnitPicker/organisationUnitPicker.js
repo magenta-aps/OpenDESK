@@ -1,7 +1,10 @@
-angular.module('members')
+'use strict'
+import organisationUnitPickerTemplate from './organisationUnitPicker.html'
+
+angular.module('openDeskApp.members')
   .component('organisationUnitPicker', {
-    templateUrl: '/app/src/components/members/organisationUnitPicker/organisationUnitPicker.html',
-    controller: organisationUnitPicker,
+    template: organisationUnitPickerTemplate,
+    controller: ['siteService', organisationUnitPicker],
     bindings: {
       selected: '=',
       type: '<'

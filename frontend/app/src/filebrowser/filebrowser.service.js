@@ -1,10 +1,11 @@
 'use strict'
+import '../shared/services/alfrescoNode.service'
 
 angular
   .module('openDeskApp.filebrowser')
-  .factory('filebrowserService', fileBrowserService)
+  .factory('filebrowserService', ['$http', 'alfrescoNodeService', fileBrowserService])
 
-function fileBrowserService ($http, alfrescoNodeUtils) {
+function fileBrowserService ($http, alfrescoNodeService) {
   var currentFolderNodeRef
 
   var service = {
@@ -156,7 +157,7 @@ function fileBrowserService ($http, alfrescoNodeUtils) {
         '/slingshot/doclib/action/' +
           action +
           '-to/node/' +
-          alfrescoNodeUtils.processNodeRef(destinationNodeRef).uri,
+          alfrescoNodeService.processNodeRef(destinationNodeRef).uri,
         payload
       )
       .then(function (response) {
@@ -178,7 +179,7 @@ function fileBrowserService ($http, alfrescoNodeUtils) {
   }
 
   function shareNode (nodeRef, userName, permission) {
-    var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
     return $http
       .post(
         `/alfresco/service/node/${nodeId}/share/${userName}/${permission}`,
@@ -190,7 +191,7 @@ function fileBrowserService ($http, alfrescoNodeUtils) {
   }
 
   function stopSharingNode (nodeRef, userName, permission) {
-    var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
 
     return $http
       .delete(

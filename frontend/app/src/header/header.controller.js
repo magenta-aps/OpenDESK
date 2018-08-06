@@ -2,7 +2,8 @@
 
 angular
   .module('openDeskApp.header')
-  .controller('HeaderController', HeaderController)
+  .controller('HeaderController', ['$scope', '$state', '$mdSidenav', 'headerService', 'UserService',
+    'notificationsService', HeaderController])
 
 function HeaderController ($scope, $state, $mdSidenav, headerService, UserService, notificationsService) {
   var vm = this
@@ -11,8 +12,7 @@ function HeaderController ($scope, $state, $mdSidenav, headerService, UserServic
   vm.toggleAppDrawer = buildToggler('appDrawer')
   vm.toggleNotifications = function () {
     setAllSeen()
-    $mdSidenav('notifications')
-      .toggle()
+    buildToggler('notifications')()
   }
   vm.toggleSystemSettings = toggleSystemSettings
   vm.toggleUserPanel = buildToggler('userpanel')

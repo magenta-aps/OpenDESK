@@ -1,7 +1,11 @@
-angular.module('members')
+'use strict'
+import projectOwnerPickerTemplate from './projectOwnerPicker.html'
+import '../../../shared/services/filter.service'
+
+angular.module('openDeskApp.members')
   .component('projectOwnerPicker', {
-    templateUrl: 'app/src/components/members/projectOwnerPicker/projectOwnerPicker.html',
-    controller: projectOwnerPicker,
+    template: projectOwnerPickerTemplate,
+    controller: ['siteService', 'filterService', projectOwnerPicker],
     bindings: {
       selected: '=',
       type: '<'

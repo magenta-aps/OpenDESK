@@ -1,10 +1,12 @@
 'use strict'
+import forgotPasswordDialogTemplate from './view/forgotPasswordDialog.html'
 
 angular
   .module('openDeskApp')
-  .controller('AuthController', AuthController)
+  .controller('AuthController', ['$state', '$stateParams', 'authService', '$mdDialog', 'sessionService', '$window',
+    'notificationsService', AuthController])
 
-function AuthController ($state, $stateParams, authService, $mdDialog, sessionService, $window, chatService) {
+function AuthController ($state, $stateParams, authService, $mdDialog, sessionService, $window, notificationsService) {
   var vm = this
   var loginErrorMessage = angular.fromJson($stateParams.error)
 
@@ -18,8 +20,8 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
     authService.login(credentials).then(function (response) {
       // Logged in
       if (response.userName) {
-        chatService.initialize()
-        chatService.login(credentials.username, credentials.password);
+        // chatService.initialize()
+        // chatService.login(credentials.username, credentials.password)
         vm.user = response
         restoreLocation()
       }
@@ -33,15 +35,16 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   }
 
   function logout () {
-    chatService.logout()
+    // chatService.logout()
     authService.logout()
+    notificationsService.stopUpdate()
   }
 
   function showForgotDialog (ev) {
     $mdDialog.show({
       controller: forgotPasswordCtrl,
       controllerAs: 'dlg',
-      templateUrl: 'app/src/authentication/view/forgotPasswordDialog.html',
+      template: forgotPasswordDialogTemplate,
       parent: angular.element(document.body),
       targetEvent: ev,
       clickOutsideToClose: true

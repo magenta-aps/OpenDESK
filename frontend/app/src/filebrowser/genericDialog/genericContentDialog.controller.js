@@ -2,7 +2,8 @@
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('GenericContentDialogController', GenericContentDialogController)
+  .controller('GenericContentDialogController', ['data', '$rootScope', '$mdDialog', 'filebrowserService',
+    GenericContentDialogController])
 
 function GenericContentDialogController (data, $rootScope, $mdDialog, filebrowserService) {
   var vm = this

@@ -7,42 +7,43 @@ angular
     'ngMessages',
     'ngCookies',
     'ui.router',
-    'rt.encodeuri',
+    'pascalprecht.translate',
     'ngResource',
-    'pdf',
     'swfobject',
-    'pdfjsViewer',
     'isteven-multi-select',
+    'm43nu.auto-height',
+    'dcbImgFallback',
+    'dndLists',
     'openDeskApp.backendConfig',
     'openDeskApp.init',
     'openDeskApp.systemsettings',
     'openDeskApp.auth',
     'openDeskApp.group',
     'openDeskApp.site',
-    // 'openDeskApp.filebrowser',
-    'openDeskApp.translations.init',
+    'openDeskApp.filebrowser',
     'openDeskApp.header',
+    'openDeskApp.appDrawer',
     'openDeskApp.dashboard',
     'openDeskApp.lool',
     'openDeskApp.onlyOffice',
     'openDeskApp.documents',
     'openDeskApp.odDocuments',
     'openDeskApp.search',
-    'm43nu.auto-height',
-    'dcbImgFallback',
+    'openDeskApp.searchBar',
     'openDeskApp.notifications',
     'openDeskApp.discussion',
-    'openDeskApp.chat',
     'openDeskApp.user',
-    'openDeskApp.appDrawer',
-    'dndLists',
+    // 'openDeskApp.chat', Not added because it has not been maintained and converse is not managed by npm
+    'openDeskApp.members',
+    'odEmail',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules
     /* LAST */
     'openDeskApp.translations'
   ]) // TRANSLATIONS IS ALWAYS LAST!
-  .config(config)
-  .run(run)
+  .config(['$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$locationProvider',
+    'APP_CONFIG', 'USER_ROLES', config])
+  .run(['$rootScope', 'systemSettingsService', 'BROWSER_CONFIG', 'browserService', run])
 
 function run ($rootScope, systemSettingsService, BROWSER_CONFIG, browserService) {
   $rootScope.isBoolean = function (value) {
@@ -88,41 +89,39 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
     state.resolve.authorize = [
       'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
       function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
-        var d = $q.defer()
+        function checkAuthorization () {
+          systemSettingsService.loadSettings()
+            .then(function () {
+              if (authService.isAuthorized($stateParams.authorizedRoles))
+                defer.resolve(authService.user)
+              else
+                $state.go(APP_CONFIG.landingPageState)
+            })
+        }
 
-        if (authService.isAuthenticated())
-          resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d)
-        else if (APP_CONFIG.ssoLoginEnabled)
+        var defer = $q.defer()
+        // SSO is enabled and the user has just logged in
+        // We need to get info about the user before we check authorization
+        if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated()) {
           authService.ssoLogin()
             .then(function () {
-              if (authService.isAuthenticated())
-                resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d)
-              else
-                rejectUnauthenticatedUser($state, sessionService, d)
+              checkAuthorization()
+              return defer.promise
             })
-        else
-          rejectUnauthenticatedUser($state, sessionService, d)
-        return d.promise
+        } else if (authService.isAuthenticated()) {
+          // The user is authenticated. Now we check if the user is authorized to view this page
+          checkAuthorization()
+        } else {
+          // The user is not authenticated
+          defer.reject('Please login')
+          sessionService.retainCurrentLocation()
+          $state.go('login')
+        }
+        return defer.promise
       }
     ]
     return stateData
   })
-
-  function resolveUserAfterAuthorization ($state, authService, $stateParams, systemSettingsService, APP_CONFIG, defer) {
-    systemSettingsService.loadSettings()
-      .then(function () {
-        if (authService.isAuthorized($stateParams.authorizedRoles))
-          defer.resolve(authService.user)
-        else
-          $state.go(APP_CONFIG.landingPageState)
-      })
-  }
-
-  function rejectUnauthenticatedUser ($state, sessionService, defer) {
-    defer.reject('Please login')
-    sessionService.retainCurrentLocation()
-    $state.go('login')
-  }
 
   $stateProvider.state('site', {
     abstract: true,

@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('RenameController', RenameController)
+  .controller('RenameController', ['$rootScope', '$mdDialog', 'content', 'siteService', RenameController])
 
 function RenameController ($rootScope, $mdDialog, content, siteService) {
   var vm = this

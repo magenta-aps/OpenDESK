@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('openDeskApp')
-  .factory('MemberService', MemberService)
+  .factory('MemberService', ['$http', MemberService])
 
 function MemberService ($http) {
   var service = {

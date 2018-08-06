@@ -2,10 +2,11 @@
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteDetailController', SiteDetailController)
+  .controller('SiteDetailController', ['$scope', '$mdDialog', 'siteService', '$stateParams', '$translate',
+    'browserService', 'headerService', SiteDetailController])
 
-function SiteDetailController ($scope, $mdDialog, siteService, $stateParams, $translate,
-  browserService, headerService) {
+function SiteDetailController ($scope, $mdDialog, siteService, $stateParams, $translate, browserService,
+  headerService) {
   $scope.history = []
   $scope.showGroupList = []
 

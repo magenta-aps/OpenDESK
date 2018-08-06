@@ -1,8 +1,15 @@
 'use strict'
-
+import '../components/ckEditor'
+import systemSettingsTemplate from './system_settings.html'
+import notificationsTemplate from './notifications/view/notifications.html'
+import templateListTemplate from './templates/view/templateList.html'
+import filebrowserCardTemplate from './filebrowser/view/filebrowserCard.html'
+import configTemplate from './config/view/config.html'
+import groupsTemplate from './groups/view/groups.html'
+import editTextTemplatesTemplate from './text_templates/view/edit.html'
 angular
-  .module('openDeskApp.systemsettings', ['openDeskApp.filebrowser', 'pascalprecht.translate'])
-  .config(config)
+  .module('openDeskApp.systemsettings', ['ckEditor'])
+  .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('systemsettings', {
@@ -13,7 +20,7 @@ function config ($stateProvider, USER_ROLES) {
     },
     views: {
       'content@': {
-        templateUrl: 'app/src/system_settings/system_settings.html',
+        template: systemSettingsTemplate,
         controller: 'SystemSettingsController',
         controllerAs: 'vm'
       }
@@ -25,7 +32,7 @@ function config ($stateProvider, USER_ROLES) {
     },
     views: {
       'systemsetting-view': {
-        templateUrl: 'app/src/system_settings/notifications/view/notifications.html',
+        template: notificationsTemplate,
         controller: 'NotificationsSettingsController',
         controllerAs: 'vm'
       }
@@ -38,7 +45,7 @@ function config ($stateProvider, USER_ROLES) {
       },
       views: {
         'systemsetting-view': {
-          templateUrl: 'app/src/system_settings/templates/view/templateList.html',
+          template: templateListTemplate,
           controller: 'TemplatesController',
           controllerAs: 'vm'
         }
@@ -53,7 +60,7 @@ function config ($stateProvider, USER_ROLES) {
       },
       views: {
         'systemsetting-view': {
-          templateUrl: 'app/src/filebrowser/view/filebrowserCard.html',
+          template: filebrowserCardTemplate,
           controller: 'FilebrowserController',
           controllerAs: 'vm'
         }
@@ -66,7 +73,7 @@ function config ($stateProvider, USER_ROLES) {
       },
       views: {
         'systemsetting-view': {
-          templateUrl: 'app/src/system_settings/config/view/config.html',
+          template: configTemplate,
           controller: 'ConfigController',
           controllerAs: 'vm'
         }
@@ -79,7 +86,7 @@ function config ($stateProvider, USER_ROLES) {
       },
       views: {
         'systemsetting-view': {
-          templateUrl: 'app/src/system_settings/groups/view/groups.html',
+          template: groupsTemplate,
           controller: 'SettingsGroupsController',
           controllerAs: 'vm'
         }
@@ -92,7 +99,7 @@ function config ($stateProvider, USER_ROLES) {
       },
       views: {
         'systemsetting-view': {
-          templateUrl: 'app/src/system_settings/text_templates/view/edit.html',
+          template: editTextTemplatesTemplate,
           controller: 'EmailTemplatesController',
           controllerAs: 'vm'
         }

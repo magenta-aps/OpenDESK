@@ -1,19 +1,24 @@
-angular
-  .module('openDeskApp')
-  .controller('SearchBarController', SearchBarController)
+'use strict'
+import '../shared/services/file.service'
+import '../shared/services/translate.service'
 
-function SearchBarController ($scope, $state, $interval, $translate, $stateParams, searchService, fileUtilsService,
-                              translateService) {
+angular
+  .module('openDeskApp.searchBar')
+  .controller('SearchBarController', ['$scope', '$state', '$interval', '$translate', '$stateParams', 'searchService',
+    'fileService', 'translateService', SearchBarController])
+
+function SearchBarController ($scope, $state, $interval, $translate, $stateParams, searchService, fileService,
+  translateService) {
   var vm = this
   vm.getLiveSearch = getLiveSearch
   vm.goToDocument = goToDocument
   vm.goToSearchPage = goToSearchPage
 
-    activate();
+  activate()
 
-    function activate() {
-        vm.sitesName = translateService.getSitesName();
-    }
+  function activate () {
+    vm.sitesName = translateService.getSitesName()
+  }
 
   function getLiveSearch (term) {
     return searchService.documentLiveSearch(term).then(function (response) {
@@ -21,7 +26,7 @@ function SearchBarController ($scope, $state, $interval, $translate, $stateParam
 
       if (results !== undefined) {
         results.forEach(function (item) {
-          item.thumbNailURL = fileUtilsService.getFileIconByMimetype(item.mimetype, 24)
+          item.thumbNailURL = fileService.getFileIconByMimetype(item.mimetype, 24)
         })
         return results
       } else {

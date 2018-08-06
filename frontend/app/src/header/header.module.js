@@ -1,3 +1,3 @@
 'use strict'
 
-angular.module('openDeskApp.header', [])
+angular.module('openDeskApp.header', ['openDeskApp.notifications'])

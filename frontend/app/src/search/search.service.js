@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.search')
-  .factory('searchService', searchService)
+  .factory('searchService', ['$http', searchService])
 
 function searchService ($http) {
   var repoQuery = {

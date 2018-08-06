@@ -1,4 +1,6 @@
 'use strict'
+import '../shared/filters/customDateFilter'
+import notificationsTemplate from './notifications.view.html'
 
 angular
   .module('openDeskApp.notifications')
@@ -6,7 +8,7 @@ angular
     return {
       restrict: 'E',
       scope: {},
-      templateUrl: 'app/src/notifications/notifications.view.html',
+      template: notificationsTemplate,
       controller: 'NotificationsController',
       controllerAs: 'vm'
     }

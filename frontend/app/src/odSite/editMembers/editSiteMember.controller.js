@@ -2,7 +2,8 @@
 
 angular
   .module('openDeskApp.site')
-  .controller('EditSiteMemberController', EditSiteMemberController)
+  .controller('EditSiteMemberController', ['sitedata', '$scope', '$mdDialog', '$mdToast', 'APP_CONFIG', 'siteService',
+    'MemberService', 'notificationsService', 'UserService', EditSiteMemberController])
 
 function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, MemberService,
   notificationsService, UserService) {
@@ -121,7 +122,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   }
 
   function createNotification (userName, subject, message, link, wtype, project) {
-   notificationsService.add(userName, subject, message, link, wtype, project)
+    notificationsService.add(userName, subject, message, link, wtype, project)
   }
 
   function createSiteNotification (userName, site) {
@@ -142,11 +143,13 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
 
     $mdDialog.show({
       locals: { email: email },
-      controller: function ($scope, email) {
+      controller: ['$scope', 'email', function ($scope, email) {
         $scope.email = email
-      },
-      template: '<od-email-send email="email"></od-email-send>',
-      clickOutsideToClose: true
+      }],
+      template: '<od-email-send email="email" is-loaded="isLoaded"></od-email-send>',
+      onComplete: function (scope) {
+        scope.isLoaded = true
+      }
     })
   }
 }

@@ -2,7 +2,7 @@
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteEditController', SiteEditController)
+  .controller('SiteEditController', ['sitedata', '$state', '$mdDialog', 'siteService', '$mdToast', SiteEditController])
 
 function SiteEditController (sitedata, $state, $mdDialog, siteService, $mdToast) {
   var vm = this

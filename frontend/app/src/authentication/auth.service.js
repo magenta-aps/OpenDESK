@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .factory('authService', authService)
+  .factory('authService', ['$http', '$window', '$state', 'sessionService', 'MemberService', authService])
 
-function authService ($http, $window, $state, sessionService, MemberService, notificationsService) {
+function authService ($http, $window, $state, sessionService, MemberService) {
   var service = {
     login: login,
     logout: logout,
@@ -48,10 +48,8 @@ function authService ($http, $window, $state, sessionService, MemberService, not
     var userInfo = sessionService.getUserInfo()
     if (userInfo) {
       var ticket = userInfo.ticket
-      $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function (response) {
+      $http.delete('/api/login/ticket/' + ticket, {alf_ticket: ticket}).then(function () {
         sessionService.logout()
-        notificationsService.stopUpdate()
-        $state.go('login')
       })
     }
   }

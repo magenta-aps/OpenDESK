@@ -1,8 +1,9 @@
 'use strict'
+import siteEditTemplate from '../siteEdit/siteEdit.view.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteInfoController', SiteInfoController)
+  .controller('SiteInfoController', ['$scope', '$mdDialog', 'siteService', SiteInfoController])
 
 function SiteInfoController ($scope, $mdDialog, siteService) {
   var vm = this
@@ -33,7 +34,7 @@ function SiteInfoController ($scope, $mdDialog, siteService) {
 
   function editSiteDialog (ev) {
     $mdDialog.show({
-      templateUrl: 'app/src/odSite/siteEdit/siteEdit.view.html',
+      template: siteEditTemplate,
       controller: 'SiteEditController',
       controllerAs: 'vm',
       locals: {

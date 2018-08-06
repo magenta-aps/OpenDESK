@@ -1,8 +1,11 @@
 'use strict'
+import '../shared/services/alfrescoNode.service'
 
-angular.module('openDeskApp.site').factory('siteService', SiteService)
+angular.module('openDeskApp.site')
+  .factory('siteService', ['$q', '$http', '$rootScope', '$translate', 'alfrescoNodeService', 'sessionService',
+    'notificationsService', 'UserService', 'systemSettingsService', SiteService])
 
-function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeUtils, sessionService,
+function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, sessionService,
   notificationsService, UserService, systemSettingsService) {
   var currentUser = UserService.get()
   var site = {}
@@ -229,7 +232,7 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeUtils, sess
      * @param {*} props
      */
   function updateNode (nodeRef, props) {
-    return $http.post('/api/node/' + alfrescoNodeUtils.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
+    return $http.post('/api/node/' + alfrescoNodeService.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
       return response.data
     })
   }
@@ -297,11 +300,11 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeUtils, sess
     })
   }
 
-    function getNode(siteName, container, path) {
-        return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
-            return response.data;
-        });
-    }
+  function getNode (siteName, container, path) {
+    return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
+      return response.data
+    })
+  }
 
   function getSiteUserPermissions (siteShortName) {
     if (sessionService.isAdmin()) {
@@ -397,7 +400,7 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeUtils, sess
   }
 
   function createDocumentNotification (nodeRef, fileName) {
-    var id = alfrescoNodeUtils.processNodeRef(nodeRef).id
+    var id = alfrescoNodeService.processNodeRef(nodeRef).id
     var message = 'Et nyt dokument "' + fileName + '" er blevet uploadet af ' + currentUser.displayName
     var link = 'dokument/' + id
 

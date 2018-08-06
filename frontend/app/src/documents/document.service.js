@@ -3,9 +3,9 @@
 
   angular
     .module('openDeskApp.documents')
-    .factory('documentService', documentService)
+    .factory('documentService', ['$http', 'alfrescoNodeService', documentService])
 
-  function documentService ($http, alfrescoNodeUtils) {
+  function documentService ($http, alfrescoNodeService) {
     var service = {
       getDocumentByPath: getDocumentByPath,
       getBreadCrumb: getBreadCrumb,
@@ -24,15 +24,15 @@
     }
 
     function getBreadCrumb (type, nodeRef, rootRef) {
-      var nodeId = alfrescoNodeUtils.processNodeRef(nodeRef).id
-      var rootId = alfrescoNodeUtils.processNodeRef(rootRef).id
+      var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
+      var rootId = alfrescoNodeService.processNodeRef(rootRef).id
 
       return $http.get(`/alfresco/s/node/${nodeId}/breadcrumb/${rootId}`)
         .then(function (response) {
           var breadcrumb = response.data
           var paths = []
           breadcrumb.forEach(function (part) {
-            var nodeId = alfrescoNodeUtils.processNodeRef(part.nodeRef).id
+            var nodeId = alfrescoNodeService.processNodeRef(part.nodeRef).id
             var link = getBreadCrumbPath(type, nodeId)
             paths.push({
               title: part.name,

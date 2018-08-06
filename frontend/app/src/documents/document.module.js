@@ -1,5 +1,12 @@
+'use strict'
+import '../shared/directives/breadcrumb'
+import documentTemplate from './view/document.html'
+import documentActionsTemplate from './view/documentActions.html'
+import documentHistoryTemplate from './view/documentHistory.html'
+import documentReviewTemplate from './view/documentReview.html'
+
 angular
-  .module('openDeskApp.documents', ['ngMaterial', 'pascalprecht.translate'])
+  .module('openDeskApp.documents', [])
   .constant('EDITOR_CONFIG', {
     lool: {
       mimeTypes: [
@@ -121,7 +128,31 @@ angular
       ]
     }
   })
-  .config(config)
+  .config(['$stateProvider', 'USER_ROLES', config])
+  .directive('documentActions', function () {
+    return {
+      restrict: 'E',
+      template: documentActionsTemplate,
+      controller: 'DocumentController',
+      controllerAs: 'vm'
+    }
+  })
+  .directive('documentHistory', function () {
+    return {
+      restrict: 'E',
+      template: documentHistoryTemplate,
+      controller: 'DocumentController',
+      controllerAs: 'vm'
+    }
+  })
+  .directive('documentReview', function () {
+    return {
+      restrict: 'E',
+      template: documentReviewTemplate,
+      controller: 'DocumentController',
+      controllerAs: 'vm'
+    }
+  })
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('document', {
@@ -129,7 +160,7 @@ function config ($stateProvider, USER_ROLES) {
     url: '/dokument/:doc',
     views: {
       'content@': {
-        templateUrl: 'app/src/documents/view/document.html',
+        template: documentTemplate,
         controller: 'DocumentController',
         controllerAs: 'vm'
       }
