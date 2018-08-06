@@ -1,15 +1,10 @@
-<link rel="stylesheet" href="bower_components/pdf.js-viewer/viewer.css">
-<style>
-    body {
-        background: #ddd !important;
-        font-family: Roboto, "Helvetica Neue", sans-serif !important;
-        font-size: 16px !important;
-    }
-    .pdfjs .toolbar {
-        z-index: 1;
-    }
-</style>
-
-<div style="height:80vh">
-    <pdfjs-viewer src="{{ config.contentUrl }}" on-init="restoreTitle()"></pdfjs-viewer>
+<div>
+  <iframe id="pdf"
+          name="pdf"
+          ng-src="{{ $ctrl.plugin.contentUrl }}"
+          ng-style="iframeStyle"
+          style="width:100%;height:75vh"
+          wmode="transparent">
+  </iframe>
 </div>
+  

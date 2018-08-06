@@ -1,32 +1,38 @@
 angular
-    .module('odEmail')
-    .controller('odEmailController', odEmailController);
+  .module('odEmail')
+  .controller('odEmailController', ['$mdDialog', '$mdToast', 'odEmailService', odEmailController])
 
 function odEmailController ($mdDialog, $mdToast, odEmailService) {
-    var vm = this;
+  var vm = this
 
-    vm.cancelDialog = cancelDialog;
-    vm.sendEmail = sendEmail;
+  vm.cancelDialog = cancelDialog
+  vm.ckEditorCallback = ckEditorCallback
+  vm.sendEmail = sendEmail
 
-    function cancelDialog() {
-        $mdDialog.cancel();
-    }
+  function cancelDialog () {
+    $mdDialog.cancel()
+  }
 
-    function sendEmail() {
-        cancelDialog();
-        odEmailService.sendEmail(vm.email).then(
-            function (response) {
-                $mdToast.show(
-                    $mdToast.simple()
-                        .textContent('Email sendt til ' + vm.email.userName + '.')
-                        .hideDelay(3000)
-                );
-            }, function (error) {
-                $mdToast.show(
-                    $mdToast.simple()
-                        .textContent('Email kunne ikke sendes til ' + vm.email.userName + '.')
-                        .hideDelay(3000)
-                );
-            });
-    }
+  function ckEditorCallback (value) {
+    vm.email.body = value
+  }
+
+  function sendEmail () {
+    cancelDialog()
+    odEmailService.sendEmail(vm.email).then(
+      function (response) {
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Email sendt til ' + vm.email.userName + '.')
+            .hideDelay(3000)
+        )
+      }, function (error) {
+        console.log(error)
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Email kunne ikke sendes til ' + vm.email.userName + '.')
+            .hideDelay(3000)
+        )
+      })
+  }
 }

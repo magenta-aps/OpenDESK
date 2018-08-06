@@ -1,93 +1,35 @@
 angular
-    .module('openDeskApp.user')
-    .factory('userService', userService);
+  .module('openDeskApp.user')
+  .factory('UserService', ['$http', '$window', UserService])
 
-function userService($http) {
+function UserService ($http, $window) {
+  var user
 
-    var showUserPanel = false;
+  return {
+    get: getUser,
+    uploadAvatar: uploadAvatar
+  }
 
-    return {
-        toggleUserPanel: toggleUserPanel,
-        getUserPanelState: getUserPanelState,
-        getPerson: getPerson,
-        getUsers: getUsers,
-        getAuthorities: getAuthorities,
-        getPersons: getPersons,
-        uploadAvatar: uploadAvatar
-    };
+  function getUser () {
+    if ($window.localStorage.getItem('userInfo')) {
+      user = angular.fromJson($window.localStorage.getItem('userInfo')).user
+      return user
+    } else { return undefined }
+  }
 
-    function toggleUserPanel() {
-        showUserPanel = !showUserPanel;
+  function uploadAvatar (file) {
+    var formData = new FormData()
+    formData.append('filedata', file)
+    formData.append('username', user.userName)
+
+    var headers = {
+      transformRequest: angular.identity,
+      headers: {'Content-Type': undefined}
     }
 
-    function getUserPanelState() {
-        return showUserPanel;
-    }
-
-    function getPerson(username) {
-        return $http.get('/api/people/' + username).then(function (response) {
-            return response.data;
-        });
-    }
-
-    function getHome() {
-        return $http.get('/api/nodelocator/userhome').then(function (response) {
-            return response.data.data;
-        });
-    }
-
-    /*
-     * gets all authorities
-     */
-    function getAuthorities() {
-        return $http.get('/api/opendesk/authorities').then(function (response) {
-            var items = response.data;
-            //TODO: remove this temp fix:
-            if (items.data && items.data.items) {
-                items = items.data.items;
-            }
-            return Object.keys(items).map(function (key) {
-                return items[key];
-            });
-        });
-    }
-
-    function getUsers(filter) {
-        return $http.post("/alfresco/service/users", {
-            PARAM_METHOD : "getUsers",
-            PARAM_FILTER: filter
-        }).then(function(response) {
-            return response.data;
-        });
-    }
-
-    function getPersons(searchTerm) {
-        var url = '/api/forms/picker/authority/children?selectableType=cm:person';
-        if (searchTerm && searchTerm.length > 0) {
-            url += '&searchTerm=' + searchTerm;
-        }
-        return $http.get(url).then(
-            function (result) {
-                return result.data.data.items;
-            },
-            function (err) {
-                console.log('no got persons (service)');
-                console.log(err);
-            }
-        );
-    }
-
-    function uploadAvatar(file, username) {
-
-        var formData = new FormData();
-        formData.append("filedata", file);
-        formData.append("username", username);
-
-        return $http.post("/alfresco/service/slingshot/profile/uploadavatar", formData, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        }).then(function (response) {
-            return response;
-        });
-    }
+    return $http.post(`/alfresco/service/slingshot/profile/uploadavatar`, formData, headers)
+      .then(function (response) {
+        return response
+      })
+  }
 }

@@ -1,18 +1,16 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp.systemsettings')
-    .controller('SettingsGroupsController', SettingsGroupsController);
+  .module('openDeskApp.systemsettings')
+  .controller('SettingsGroupsController', ['$scope', 'groupService', SettingsGroupsController])
 
-function SettingsGroupsController($scope, groupService, userService) {
-    var vm = this;
+function SettingsGroupsController ($scope, groupService) {
+  var vm = this
 
-    $scope.userService = userService;
+  $scope.$watch(function () { return groupService.getOpenDeskGroups() }, function (newVal) {
+    vm.groups = newVal
+  }, true)
 
-    $scope.$watch(function () { return groupService.getOpenDeskGroups(); }, function (newVal) {
-        vm.groups = newVal;
-    }, true);
-
-    vm.openMemberInfo = groupService.openMemberInfo;
-    vm.editMembers = groupService.editMembers;
+  vm.openMemberInfo = groupService.openMemberInfo
+  vm.editMembers = groupService.editMembers
 }

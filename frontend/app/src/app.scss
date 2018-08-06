@@ -1,45 +1,4 @@
 //
-// SASS constants
-//
-
-$black: #000;
-$white: #fff;
-
-$gray-90: #eee;
-$gray-85: #ddd;
-$gray-80: #ccc;
-$gray-60: #999;
-$gray-40: #666;
-$gray-20: #333;
-
-$primary-color: rgb(63, 81, 181);
-$primary-color-light: lighten($primary-color, 15%);
-$primary-color-dark: darken($primary-color, 15%);
-
-$secondary-color: rgb(255, 215, 89);
-$secondary-color-light: lighten($secondary-color, 15%);
-$secondary-color-dark: darken($secondary-color, 15%);
-
-
-$primary-text-color: rgba($black, .87);
-$secondary-text-color: $white;
-$gray-text-color: rgba($black, .38);
-$dark-gray-text-color: rgba($black, .54);
-
-$error: #ff645f;
-
-$headline-color: $white;
-
-$overlay: rgba($black, .4);
-$card-shadow: rgba($black, .2);
-
-$u: 16px;
-// Unit of measurement - usually default font size
-$br-sm-md: $u * 40;
-// Breakpoint between small and medium screens
-
-
-//
 // Element level (atom) styles
 //
 

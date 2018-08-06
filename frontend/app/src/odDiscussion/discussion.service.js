@@ -1,142 +1,143 @@
-'use strict';
+'use strict'
+import '../shared/services/nodeRefUtils.service'
+import '../shared/services/preference.service'
 
-angular.module('openDeskApp.discussion').factory('discussionService', function ($http, nodeRefUtilsService, authService, sessionService, preferenceService) {
+angular.module('openDeskApp.discussion')
+  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'UserService', 'sessionService',
+    'preferenceService', discussionService])
 
-    var restBaseUrl = '/alfresco/s/api';
-    var currentUser = authService.getUserInfo().user.userName;
-    var selectedDiscussion = [];
+function discussionService ($http, nodeRefUtilsService, UserService, sessionService, preferenceService) {
+  var restBaseUrl = '/alfresco/s/api'
+  var currentUser = UserService.get().userName
+  var selectedDiscussion = []
 
-    var service = {
-        addDiscussion: addDiscussion,
-        addReply: addReply,
-        deletePost: deletePost,
-        getDiscussionFromNodeRef: getDiscussionFromNodeRef,
-        getDiscussions: getDiscussions,
-        getReplies: getReplies,
-        getSelectedDiscussion: getSelectedDiscussion,
-        getSubscribePreferenceFilter: getSubscribePreferenceFilter,
-        isSubscribedToDiscussion: isSubscribedToDiscussion,
-        subscribeToDiscussion: subscribeToDiscussion,
-        unSubscribeToDiscussion: unSubscribeToDiscussion,
-        updatePost: updatePost
-    };
+  var service = {
+    addDiscussion: addDiscussion,
+    addReply: addReply,
+    deletePost: deletePost,
+    getDiscussionFromNodeRef: getDiscussionFromNodeRef,
+    getDiscussions: getDiscussions,
+    getReplies: getReplies,
+    getSelectedDiscussion: getSelectedDiscussion,
+    getSubscribePreferenceFilter: getSubscribePreferenceFilter,
+    isSubscribedToDiscussion: isSubscribedToDiscussion,
+    subscribeToDiscussion: subscribeToDiscussion,
+    unSubscribeToDiscussion: unSubscribeToDiscussion,
+    updatePost: updatePost
+  }
 
-    return service;
+  return service
 
-    function getSelectedDiscussion() {
-        return selectedDiscussion;
+  function getSelectedDiscussion () {
+    return selectedDiscussion
+  }
+
+  function getDiscussionFromNodeRef (siteShortName, nodeRef) {
+    return getDiscussions(siteShortName).then(function (response) {
+      var discussions = response
+
+      discussions.items.forEach(function (discussion) {
+        if (discussion.nodeRef.split('/')[3] === nodeRef)
+          selectedDiscussion = discussion
+      })
+    })
+  }
+
+  function getDiscussions (siteShortName) {
+    return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {})
+      .then(function (response) {
+        addSubscriptionFlag(siteShortName, response.data.items)
+        return response.data
+      })
+  }
+
+  function getReplies (postItem) {
+    selectedDiscussion = postItem
+    selectedDiscussion.author.avatarUrl = ''
+    if (postItem.author.avatarRef !== undefined) {
+      var avatarId = postItem.author.avatarRef.split('/')[3]
+      selectedDiscussion.author.avatarUrl = sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
     }
+    return $http.get(restBaseUrl + postItem.repliesUrl, {})
+      .then(function (response) {
+        return response.data.items
+      })
+  }
 
-    function getDiscussionFromNodeRef(siteShortName,nodeRef) {
-        return getDiscussions(siteShortName).then(function(response) {
-            var discussions = response;
+  function addDiscussion (siteShortName, title, content) {
+    return $http.post(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {
+      title: title,
+      content: content
+    }).then(function (response) {
+      return response.data
+    })
+  }
 
-            discussions.items.forEach(function(discussion) {
-                if(discussion.nodeRef.split('/')[3] === nodeRef) {
-                    selectedDiscussion = discussion;
-                }
-            });
-        });
-    }
+  function addReply (postItem, content) {
+    var id = nodeRefUtilsService.getId(postItem.nodeRef)
+    return $http.post(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id + '/replies', {
+      content: content
+    }).then(function (response) {
+      return response.data
+    })
+  }
 
-    function getDiscussions(siteShortName) {
-        return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {}).then(function (response) {
-            addSubscriptionFlag(siteShortName,response.data.items);
-            return response.data;
-        });
-    }
+  function updatePost (postItem, title, content) {
+    var id = nodeRefUtilsService.getId(postItem.nodeRef)
+    return $http.put(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {
+      title: title,
+      content: content
+    }).then(function (response) {
+      return response.data
+    })
+  }
 
-    function getReplies(postItem) {
-        selectedDiscussion = postItem;
-        selectedDiscussion.author.avatarUrl = '';
-        if(postItem.author.avatarRef != undefined) {
-            var avatarId = postItem.author.avatarRef.split('/')[3];
-            selectedDiscussion.author.avatarUrl = sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content');
-        }
-        return $http.get(restBaseUrl + postItem.repliesUrl, {}).then(function (response) {
-            return response.data.items;
-        });
-    }
+  function deletePost (postItem) {
+    var id = nodeRefUtilsService.getId(postItem.nodeRef)
+    return $http.delete(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {}).then(function (response) {
+      return response.data
+    })
+  }
 
-    function addDiscussion(siteShortName, title, content) {
-        return $http.post(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {
-            title: title,
-            content: content
-        }).then(function (response) {
-            return response.data;
-        });
-    }
+  function subscribeToDiscussion (siteShortName, postItem) {
+    setSubscribe(siteShortName, postItem, true)
+  }
 
-    function addReply(postItem, content) {
-        var id = nodeRefUtilsService.getId(postItem.nodeRef);
-        return $http.post(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id + "/replies", {
-            content: content
-        }).then(function (response) {
-            return response.data;
-        });
-    }
+  function unSubscribeToDiscussion (siteShortName, postItem) {
+    setSubscribe(siteShortName, postItem, false)
+  }
 
-    function updatePost(postItem, title, content) {
-        var id = nodeRefUtilsService.getId(postItem.nodeRef);
-        return $http.put(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {
-            title: title,
-            content: content
-        }).then(function (response) {
-            return response.data;
-        });
-    }
+  function isSubscribedToDiscussion (siteShortName, postItem) {
+    var id = nodeRefUtilsService.getId(postItem.nodeRef)
+    var subscriptionsPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id)
 
-    function deletePost(postItem) {
-        var id = nodeRefUtilsService.getId(postItem.nodeRef);
-        return $http.delete(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {}).then(function (response) {
-            return response.data;
-        });
-    }
+    return preferenceService.getPreferences(currentUser, subscriptionsPreferenceFilter)
+      .then(function (preferenceResponse) {
+        if (preferenceResponse[subscriptionsPreferenceFilter] === undefined) return false
+        return preferenceResponse[subscriptionsPreferenceFilter]
+      })
+  }
 
-    function subscribeToDiscussion(siteShortName, postItem) {
-        setSubscribe(siteShortName, postItem, true);
-    }
+  // Private methods
 
-    function unSubscribeToDiscussion(siteShortName, postItem) {
-        setSubscribe(siteShortName, postItem, false);
-    }
+  function setSubscribe (siteShortName, postItem, value) {
+    var id = nodeRefUtilsService.getId(postItem.nodeRef)
+    var preferenceFilter = getSubscribePreferenceFilter(siteShortName, id)
+    var preferences = {}
+    preferences[preferenceFilter] = value
 
-    function isSubscribedToDiscussion(siteShortName, postItem) {
-        var id = nodeRefUtilsService.getId(postItem.nodeRef);
-        var subscriptionsPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id);
+    preferenceService.setPreferences(currentUser, preferences)
+  }
 
-        return preferenceService.getPreferences(currentUser, subscriptionsPreferenceFilter).then(function (preferenceResponse) {
-            if(preferenceResponse[subscriptionsPreferenceFilter] == undefined)
-                return false;
-            return preferenceResponse[subscriptionsPreferenceFilter];
-        });
-    }
+  function getSubscribePreferenceFilter (siteShortName, id) {
+    return 'dk.magenta.sites.' + siteShortName + '.discussions.' + id + '.subscribe'
+  }
 
-    // Private methods
-
-    function setSubscribe(siteShortName, postItem, value) {
-        var id = nodeRefUtilsService.getId(postItem.nodeRef);
-        var preferenceFilter = getSubscribePreferenceFilter(siteShortName, id);
-        var preferences = {};
-        preferences[preferenceFilter] = value;
-
-        preferenceService.setPreferences(currentUser, preferences);
-    }
-
-    function getSubscribePreferenceFilter(siteShortName, id) {
-        return "dk.magenta.sites." + siteShortName + ".discussions." + id + ".subscribe";
-    }
-
-    function getSiteSubscriptionsPreferenceFilter(siteShortName) {
-        return "dk.magenta.sites." + siteShortName + ".discussions";
-    }
-
-    function addSubscriptionFlag(siteShortName, postItems) {
-        postItems.forEach(function (postItem) {
-            isSubscribedToDiscussion(siteShortName,postItem).then(function (response) {
-                postItem.isSubscribed = response;
-            });
-        });
-    }
-
-});
+  function addSubscriptionFlag (siteShortName, postItems) {
+    postItems.forEach(function (postItem) {
+      isSubscribedToDiscussion(siteShortName, postItem).then(function (response) {
+        postItem.isSubscribed = response
+      })
+    })
+  }
+}

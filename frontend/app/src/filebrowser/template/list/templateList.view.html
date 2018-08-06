@@ -7,7 +7,7 @@
         <md-menu-item ng-repeat="template in templates">
             <md-button ng-if="!template.isFolder" ng-click="vm.createContentFromTemplateDialog(template, 'DOCUMENT')">
                 <i class="material-icons">
-                    <img class="md-avatar" ng-src="app/assets/img/filetypes/{{template.thumbNailURL}}" onerror="this.src='app/assets/img/filetypes/generic-file-24.png'">
+                    <img class="md-avatar" ng-src="assets/img/filetypes/{{template.thumbNailURL}}" onerror="this.src='assets/img/filetypes/generic-file-24.png'">
                 </i> {{template.name}}
             </md-button>
 

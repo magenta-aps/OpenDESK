@@ -1,6 +1,1 @@
-angular.module('members', [])
-.config(config);
-
-function config() {
-
-}
+angular.module('openDeskApp.members', [])

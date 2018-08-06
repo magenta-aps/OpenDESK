@@ -1,147 +1,141 @@
-'use strict';
+'use strict'
 
 angular
-    .module('openDeskApp', [
-        'ngSanitize',
-        'ngMaterial',
-        'ngMessages',
-        'ngCookies',
-        'material.wizard',
-        'ui.router',
-        'rt.encodeuri',
-        'ngResource',
-        'pdf',
-        'swfobject',
-        'pdfjsViewer',
-        'isteven-multi-select',
-        'openDeskApp.backendConfig',
-        'openDeskApp.init',
-        'openDeskApp.systemsettings',
-        'openDeskApp.auth',
-        'openDeskApp.group',
-        'openDeskApp.site',
-        'openDeskApp.filebrowser',
-        'openDeskApp.translations.init',
-        'openDeskApp.header',
-        'openDeskApp.dashboard',
-        'openDeskApp.lool',
-        'openDeskApp.onlyOffice',
-        'openDeskApp.documents',
-        'openDeskApp.odDocuments',
-        'openDeskApp.search',
-        'openDeskApp.calendar',
-        'openDeskApp.nogletal',
-        'm43nu.auto-height',
-        'dcbImgFallback',
-        'openDeskApp.notifications',
-        'openDeskApp.discussion',
-        'openDeskApp.chat',
-        'openDeskApp.user',
-        'openDeskApp.appDrawer',
-        'dndLists',
+  .module('openDeskApp', [
+    'ngSanitize',
+    'ngMaterial',
+    'ngMessages',
+    'ngCookies',
+    'ui.router',
+    'pascalprecht.translate',
+    'ngResource',
+    'swfobject',
+    'isteven-multi-select',
+    'm43nu.auto-height',
+    'dcbImgFallback',
+    'dndLists',
+    'openDeskApp.backendConfig',
+    'openDeskApp.init',
+    'openDeskApp.systemsettings',
+    'openDeskApp.auth',
+    'openDeskApp.group',
+    'openDeskApp.site',
+    'openDeskApp.filebrowser',
+    'openDeskApp.header',
+    'openDeskApp.appDrawer',
+    'openDeskApp.dashboard',
+    'openDeskApp.lool',
+    'openDeskApp.onlyOffice',
+    'openDeskApp.documents',
+    'openDeskApp.odDocuments',
+    'openDeskApp.search',
+    'openDeskApp.searchBar',
+    'openDeskApp.notifications',
+    'openDeskApp.discussion',
+    'openDeskApp.user',
+    // 'openDeskApp.chat', Not added because it has not been maintained and converse is not managed by npm
+    'openDeskApp.members',
+    'odEmail',
 
-        /*DO NOT REMOVE MODULES PLACEHOLDER!!!*/ //openDesk-modules
-        /*LAST*/ 'openDeskApp.translations']) //TRANSLATIONS IS ALWAYS LAST!
-    .config(config)
-    .run(function ($rootScope, $transitions, $state, $mdDialog, authService, sessionService, systemSettingsService,
-                   APP_CONFIG, APP_BACKEND_CONFIG, BROWSER_CONFIG, EDITOR_CONFIG, browserService, loolService) {
+    /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules
+    /* LAST */
+    'openDeskApp.translations'
+  ]) // TRANSLATIONS IS ALWAYS LAST!
+  .config(['$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$locationProvider',
+    'APP_CONFIG', 'USER_ROLES', config])
+  .run(['$rootScope', 'systemSettingsService', 'BROWSER_CONFIG', 'browserService', run])
 
-        $rootScope.isBoolean = function(value) {
-            return typeof value === 'boolean';
-        };
+function run ($rootScope, systemSettingsService, BROWSER_CONFIG, browserService) {
+  $rootScope.isBoolean = function (value) {
+    return typeof value === 'boolean'
+  };
 
-        ['isArray', 'isDate', 'isDefined', 'isFunction', 'isNumber', 'isObject', 'isString', 'isUndefined'].forEach(function(name) {
-            $rootScope[name] = angular[name];
-        });
+  ['isArray', 'isDate', 'isDefined', 'isFunction', 'isNumber', 'isObject', 'isString', 'isUndefined'].forEach(function (name) {
+    $rootScope[name] = angular[name]
+  })
 
-        // If the LooL discovery file changes we can use this method to retrieve the updated list of mimetypes.
-        // loolService.getValidMimeTypes().then(function(response) {
-        //     EDITOR_CONFIG.lool.mimeTypes = response;
-        // });
+  // If the LooL discovery file changes we can use this method to retrieve the updated list of mimetypes.
+  // loolService.getValidMimeTypes().then(function(response) {
+  //     EDITOR_CONFIG.lool.mimeTypes = response;
+  // });
 
-        systemSettingsService.loadPublicSettings().then(function(response) {
-            browserService.setTitle();
-            BROWSER_CONFIG.isIE = browserService.isIE();
-            BROWSER_CONFIG.isEdge = browserService.isEdge();
-            BROWSER_CONFIG.isChrome = browserService.isChrome();
-            BROWSER_CONFIG.isFirefox = browserService.isFirefox();
-            BROWSER_CONFIG.isSafari = browserService.isSafari();
-            BROWSER_CONFIG.isMac = browserService.isMac();
-            BROWSER_CONFIG.isWin = browserService.isWin();
-            BROWSER_CONFIG.isIOS = browserService.isIOS();
-        });
-    });
-
-function config($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider, APP_CONFIG,
-                USER_ROLES) {
-
-    $urlMatcherFactoryProvider.type('SlashFix', {
-        raw: true
-    });
-
-    // use the HTML5 History API
-    $locationProvider.html5Mode(true).hashPrefix('!');
-
-    $urlRouterProvider.when('', '/' + APP_CONFIG.landingPageUrl);
-
-    $stateProvider.decorator('data', function(state, parent) {
-        var stateData = parent(state);
-
-        state.resolve = state.resolve || {};
-        state.resolve.authorize = [
-            'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
-            function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
-                var d = $q.defer();
-
-                sessionService.loadUserInfo();
-                if (authService.isAuthenticated())
-                    resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, d);
-
-                else if (APP_CONFIG.ssoLoginEnabled) {
-                    authService.ssoLogin().then(function (response) {
-                        if (authService.isAuthenticated())
-                            resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService,
-                                APP_CONFIG, d);
-                        else rejectUnauthenticatedUser($state, sessionService, d);
-                    });
-                }
-
-                else rejectUnauthenticatedUser($state, sessionService, d);
-
-                return d.promise;
-            }];
-        return stateData;
-    });
-
-    function resolveUserAfterAuthorization($state, authService, $stateParams, systemSettingsService, APP_CONFIG, defer) {
-        systemSettingsService.loadSettings().then(function(response) {
-            if (authService.isAuthorized($stateParams.authorizedRoles))
-                defer.resolve(authService.user);
-            else
-                $state.go(APP_CONFIG.landingPageState);
-        });
-    }
-
-    function rejectUnauthenticatedUser($state, sessionService, defer) {
-        defer.reject('Please login');
-        sessionService.retainCurrentLocation();
-        $state.go('login');
-    }
-
-    $stateProvider.state('site', {
-        abstract: true,
-        url: '',
-        views: {
-            'header@': {
-                template: '<od-header></od-header>'
-            },
-            'sideNavs@': {
-                template: '<od-chat></od-chat><od-notifications></od-notifications><od-user-panel></od-user-panel><od-app-drawer></od-app-drawer>'
-            }
-        },
-        params: {
-            authorizedRoles: [USER_ROLES.user]
-        }
-    });
+  systemSettingsService.loadPublicSettings()
+    .then(function () {
+      browserService.setTitle()
+      BROWSER_CONFIG.isIE = browserService.isIE()
+      BROWSER_CONFIG.isEdge = browserService.isEdge()
+      BROWSER_CONFIG.isChrome = browserService.isChrome()
+      BROWSER_CONFIG.isFirefox = browserService.isFirefox()
+      BROWSER_CONFIG.isSafari = browserService.isSafari()
+      BROWSER_CONFIG.isMac = browserService.isMac()
+      BROWSER_CONFIG.isWin = browserService.isWin()
+      BROWSER_CONFIG.isIOS = browserService.isIOS()
+    })
 }
 
+function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider,
+  APP_CONFIG, USER_ROLES) {
+  $urlMatcherFactoryProvider.type('SlashFix', { raw: true })
+
+  // use the HTML5 History API
+  $locationProvider.html5Mode(true).hashPrefix('!')
+
+  $urlRouterProvider.when('', '/' + APP_CONFIG.landingPageUrl)
+
+  $stateProvider.decorator('data', function (state, parent) {
+    var stateData = parent(state)
+
+    state.resolve = state.resolve || {}
+    state.resolve.authorize = [
+      'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
+      function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
+        function checkAuthorization () {
+          systemSettingsService.loadSettings()
+            .then(function () {
+              if (authService.isAuthorized($stateParams.authorizedRoles))
+                defer.resolve(authService.user)
+              else
+                $state.go(APP_CONFIG.landingPageState)
+            })
+        }
+
+        var defer = $q.defer()
+        // SSO is enabled and the user has just logged in
+        // We need to get info about the user before we check authorization
+        if (APP_CONFIG.ssoLoginEnabled && !authService.isAuthenticated()) {
+          authService.ssoLogin()
+            .then(function () {
+              checkAuthorization()
+              return defer.promise
+            })
+        } else if (authService.isAuthenticated()) {
+          // The user is authenticated. Now we check if the user is authorized to view this page
+          checkAuthorization()
+        } else {
+          // The user is not authenticated
+          defer.reject('Please login')
+          sessionService.retainCurrentLocation()
+          $state.go('login')
+        }
+        return defer.promise
+      }
+    ]
+    return stateData
+  })
+
+  $stateProvider.state('site', {
+    abstract: true,
+    url: '',
+    views: {
+      'header@': {
+        template: '<od-header></od-header>'
+      },
+      'sideNavs@': {
+        template: '<od-chat></od-chat><od-notifications></od-notifications><od-user-panel></od-user-panel><od-app-drawer></od-app-drawer>'
+      }
+    },
+    params: {
+      authorizedRoles: [USER_ROLES.user]
+    }
+  })
+}

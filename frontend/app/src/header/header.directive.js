@@ -1,13 +1,14 @@
-'use strict';
+'use strict'
+import headerTemplate from './header.view.html'
 
 angular
-.module('openDeskApp.header')
-.directive('odHeader', function () {
+  .module('openDeskApp.header')
+  .directive('odHeader', function () {
     return {
-        restrict: 'E',
-        scope: {},
-        templateUrl: 'app/src/header/header.view.html',
-        controller: 'HeaderController',
-        controllerAs: 'vm'
-    };
-});
+      restrict: 'E',
+      scope: {},
+      template: headerTemplate,
+      controller: 'HeaderController',
+      controllerAs: 'vm'
+    }
+  })
