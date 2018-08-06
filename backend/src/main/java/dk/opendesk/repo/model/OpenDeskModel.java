@@ -106,7 +106,8 @@ public interface OpenDeskModel {
     /**
      * Review properties
      */
-    QName TYPE_REVIEW = QName.createQName(OD_URI, "review");
+    String REVIEW = "review";
+    QName TYPE_REVIEW = QName.createQName(OD_URI, REVIEW);
     QName PROP_REVIEW_ASSIGNEE = QName.createQName(OD_URI, "assignee");
     QName PROP_REVIEW_STATUS = QName.createQName(OD_URI, "status");
     QName ASPECT_REVIEWABLE = QName.createQName(OD_URI, "reviewable");

@@ -2,21 +2,18 @@
 import '../shared/services/content.service'
 import '../shared/services/editOnlineMSOffice.service'
 import '../shared/services/document/preview/preview.service'
-import aproveCommentTemplate from './view/aproveComment.tmpl.html'
-import rejectCommentTemplate from './view/rejectComment.tmpl.html'
 import uploadNewVersionTemplate from '../filebrowser/view/content/document/uploadNewVersion.tmpl.html'
 import confirmEditVersionDialogTemplate from './view/confirmEditVersionDialog.html'
 
 angular.module('openDeskApp.documents')
   .controller('DocumentController', ['$scope', '$timeout', '$translate', 'documentService', 'MemberService',
     '$stateParams', '$location', '$state', 'documentPreviewService', 'alfrescoDownloadService', 'browserService',
-    '$mdDialog', 'notificationsService', 'UserService', 'siteService', 'headerService', '$window',
-    'editOnlineMSOfficeService', 'filebrowserService', 'ContentService', DocumentController])
+    '$mdDialog', 'UserService', 'siteService', 'headerService', '$window', 'editOnlineMSOfficeService',
+    'filebrowserService', 'ContentService', DocumentController])
 
 function DocumentController ($scope, $timeout, $translate, documentService, MemberService, $stateParams,
-  $location, $state, documentPreviewService, alfrescoDownloadService, browserService, $mdDialog,
-  notificationsService, UserService, siteService, headerService, $window, editOnlineMSOfficeService,
-  filebrowserService, ContentService) {
+  $location, $state, documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, UserService,
+  siteService, headerService, $window, editOnlineMSOfficeService, filebrowserService, ContentService) {
   var vm = this
 
   vm.doc = []
@@ -29,22 +26,18 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   vm.updatePreview = loadPreview
   vm.selectFile = selectFile
-  vm.approveCommentDialog = approveCommentDialog
-  vm.rejectCommentDialog = rejectCommentDialog
   vm.uploadNewVersionDialog = uploadNewVersionDialog
   vm.uploadNewVersion = uploadNewVersion
   vm.searchUsers = searchUsers
   vm.cancelDialog = cancelDialog
   vm.acceptEditVersionDialog = acceptEditVersionDialog
   vm.goBack = goBack
-  vm.createWFNotification = createWFNotification
   vm.highlightVersion = highlightVersion
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
   vm.downloadDocument = downloadDocument
   vm.reviewDocumentsDialog = reviewDocumentsDialog
-  vm.createReviewNotification = createReviewNotification
   vm.selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3]
 
   var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : vm.selectedDocumentNode
@@ -113,26 +106,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
     document.getElementById('uploadFile').innerHTML = fileName
   }
 
-  function approveCommentDialog (event) {
-    $mdDialog.show({
-      template: aproveCommentTemplate,
-      targetEvent: event,
-      scope: $scope,
-      preserveScope: true,
-      clickOutsideToClose: true
-    })
-  }
-
-  function rejectCommentDialog (event) {
-    $mdDialog.show({
-      template: rejectCommentTemplate,
-      targetEvent: event,
-      scope: $scope,
-      preserveScope: true,
-      clickOutsideToClose: true
-    })
-  }
-
   function uploadNewVersionDialog (event) {
     $mdDialog.show({
       template: uploadNewVersionTemplate,
@@ -157,25 +130,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
 
   function prepDocumentToReview () {
     vm.reviewId = $stateParams.reviewId
-  }
-
-  function createWFNotification (comment, wtype) {
-    var creator = UserService.get().userName
-    var link = 'dokument/' + vm.selectedDocumentNode + '?dtype=wf-response' + '&from=' + creator
-
-    var status = wtype === 'review-approved' ? 'godkendt' : 'afvist'
-
-    var NID = $location.search().NID
-    notificationsService.getInfo(NID)
-      .then(function (response) {
-        var project = response.project
-
-        notificationsService.add(vm.wf_from, 'Review ' + status, comment, link, wtype, project)
-          .then(function () {
-            $mdDialog.cancel()
-            vm.goBack()
-          })
-      })
   }
 
   function highlightVersion () {
@@ -383,11 +337,6 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
       targetEvent: event,
       clickOutsideToClose: true
     })
-  }
-
-  function createReviewNotification (userName, comment) {
-    siteService.createReviewNotification(vm.doc.node.nodeRef, userName, comment)
-    $mdDialog.cancel()
   }
 
   // this should be removed, do not edit dom in controller!

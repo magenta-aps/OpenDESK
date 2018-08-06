@@ -37,7 +37,6 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   vm.uploadNewVersionDialog = uploadNewVersionDialog
 
   // TODO: Remove duplicates in document.controller
-  vm.createReviewNotification = createReviewNotification
   vm.downloadDocument = downloadDocument
   vm.previewDocument = previewDocument
   vm.reviewDocumentsDialog = reviewDocumentsDialog
@@ -51,11 +50,6 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
 
   function copyContentDialog () {
     genericContentDialog('COPY')
-  }
-
-  function createReviewNotification (userName, comment) {
-    siteService.createReviewNotification(content.nodeRef, userName, comment)
-    $mdDialog.cancel()
   }
 
   function deleteContentDialog () {

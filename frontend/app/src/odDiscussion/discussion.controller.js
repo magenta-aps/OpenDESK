@@ -9,11 +9,11 @@ import editTitleTemplate from './view/editTitle.tmpl.html'
 angular
   .module('openDeskApp.discussion')
   .controller('DiscussionController', ['APP_CONFIG', '$scope', '$timeout', '$mdDialog', '$state', '$stateParams',
-    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'sessionService',
-    'siteService', 'UserService', DiscussionController])
+    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'siteService',
+    'UserService', DiscussionController])
 
 function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
-  $location, discussionService, nodeRefUtilsService, sessionService, siteService, UserService) {
+  $location, discussionService, nodeRefUtilsService, siteService, UserService) {
   var vm = this
 
   vm.discussions = []
@@ -32,7 +32,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   vm.editReplyDialog = editReplyDialog
   vm.editTitleDialog = editTitleDialog
   vm.evaluateFilter = evaluateFilter
-  vm.getAvatarUrl = getAvatarUrl
   vm.getDiscussions = getDiscussions
   vm.getReplies = getReplies
   vm.newDiscussion = newDiscussion
@@ -50,17 +49,19 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   activate()
 
   function activate () {
-    vm.getDiscussions($stateParams.projekt)
+    $scope.tab.selected = $stateParams.selectedTab
     getSiteUserPermissions()
 
-    $scope.tab.selected = $stateParams.selectedTab
-
-    if ($stateParams.path)
-      discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path)
-        .then(function () {
-          vm.selectedDiscussion = discussionService.getSelectedDiscussion()
+    if ($stateParams.path) {
+      var nodeId = $stateParams.path.split('#')[0]
+      discussionService.getDiscussionFromNodeRef($stateParams.projekt, nodeId)
+        .then(function (discussion) {
+          vm.selectedDiscussion = discussion
           vm.getReplies(vm.selectedDiscussion)
         })
+    } else {
+      vm.getDiscussions($stateParams.projekt)
+    }
 
     siteService.getGroupsAndMembers($stateParams.projekt)
       .then(function (groups) {
@@ -89,10 +90,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     vm.replies = ''
     discussionService.getReplies(postItem).then(function (response) {
       vm.replies = response
-
-      vm.replies.forEach(function (reply) {
-        reply.author.avatarUrl = vm.getAvatarUrl(reply.author.avatarRef)
-      })
 
       $timeout(function () {
         if ($location.hash())
@@ -284,11 +281,5 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function subscriptionIcon (value) {
     return String(value) === 'true' ? 'notifications_active' : 'notifications_none'
-  }
-
-  function getAvatarUrl (avatarRef) {
-    if (avatarRef === undefined) return
-    var avatarId = avatarRef.split('/')[3]
-    return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
   }
 }

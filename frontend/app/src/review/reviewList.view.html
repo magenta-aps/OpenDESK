@@ -1,23 +1,15 @@
 <od-review-detail ng-repeat="reply in vm.review.posts" reply="reply"></od-review-detail>
 
-<div ng-if="vm.review.status === 'pending'">
+<p ng-if="vm.review.status === 'pending'">
     <md-input-container>
-      <label>Kommentar</label>
-      <textarea
-        name='comment'
-        ng-model="comment"
-        md-maxlength="250"
-        maxlength="250"
-        md-select-on-focus
-      ></textarea>
+        <textarea ng-model="vm.comment" md-maxlength="250" md-select-on-focus placeholder="Kommentar"></textarea>
+        <br>
+        <md-checkbox ng-if="!vm.checkboxReject" ng-model="vm.checkboxApprove">Godkend</md-checkbox>
+        <md-checkbox ng-if="!vm.checkboxApprove" ng-model="vm.checkboxReject">Afvis</md-checkbox>
+        <br>
+        <md-button class="md-primary" ng-click="vm.respond()">Besvar</md-button>
     </md-input-container>
-    <div>
-        <span flex></span>
-        <md-button ng-click="vm.reject(comment)">Afvis</md-button>
-        <md-button class="md-primary" ng-click="vm.approve(comment)">Godkend</md-button>
-        <md-button class="md-primary" ng-click="vm.reply(comment)">Svar</md-button>
-    </div>
-</div>
+</p>
 
 <h3 ng-if="vm.review.status === 'approved'">
     GODKENDT

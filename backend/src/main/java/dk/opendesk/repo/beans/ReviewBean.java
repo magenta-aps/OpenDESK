@@ -68,7 +68,7 @@ public class ReviewBean {
         QName type = OpenDeskModel.TYPE_REVIEW;
 
         Map<QName, Serializable> properties = new HashMap<>();
-        properties.put(ContentModel.PROP_NAME, message);
+        properties.put(ContentModel.PROP_NAME, OpenDeskModel.REVIEW);
         properties.put(OpenDeskModel.PROP_REVIEW_ASSIGNEE, assignee);
 
         NodeRef reviewRef = nodeService.createNode(nodeRef, assoc, type, type, properties).getChildRef();
@@ -76,7 +76,7 @@ public class ReviewBean {
         TopicInfo topic = discussionService.createTopic(reviewRef, OpenDeskModel.REVIEW_DISCUSSION);
         nodeService.setProperty(topic.getNodeRef(), ContentModel.PROP_NAME, OpenDeskModel.REVIEW_DISCUSSION);
         discussionService.createPost(topic, message);
-        notificationBean.notifyReview("admin", nodeRef, reviewRef);
+        notificationBean.notifyReview(nodeRef, reviewRef);
     }
 
     public void updateReview(NodeRef nodeRef, String assignee, String status, String reply) throws JSONException {
@@ -90,16 +90,15 @@ public class ReviewBean {
         // Change status
         if(!status.isEmpty()) {
             properties.put(OpenDeskModel.PROP_REVIEW_STATUS, status);
-            String creator = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
             if(status.equals(OpenDeskModel.REVIEW_STATUS_APPROVED))
-                notificationBean.notifyReviewApproved(creator, nodeRef);
+                notificationBean.notifyReviewApproved(nodeRef);
             else if(status.equals(OpenDeskModel.REVIEW_STATUS_REJECTED))
-                notificationBean.notifyReviewRejected(creator, nodeRef);
+                notificationBean.notifyReviewRejected(nodeRef);
         }
         // Only send reply notification when status was not changed.
         else if(!reply.isEmpty()) {
             NodeRef documentRef = nodeService.getPrimaryParent(nodeRef).getParentRef();
-            notificationBean.notifyReviewReply("admin", documentRef, nodeRef);
+            notificationBean.notifyReviewReply(documentRef, nodeRef);
         }
 
         // Change assignee

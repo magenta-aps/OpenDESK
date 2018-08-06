@@ -59,10 +59,8 @@ public class NotificationEventHandler {
     }
 
     public void onCreateTopic(ChildAssociationRef parentChildAssocRef) throws JSONException {
-        String userName = "admin";
-        NodeRef nodeRef = parentChildAssocRef.getChildRef();
-
         // Check if node exists, might be moved, or created and deleted in same transaction.
+        NodeRef nodeRef = parentChildAssocRef.getChildRef();
         if (nodeRef != null && nodeService.exists(nodeRef)) {
 
             // If the node is contained by a site then notify members.
@@ -71,34 +69,14 @@ public class NotificationEventHandler {
                 // If the topic is an empty topic then return as it is inside a review.
                 TopicInfo topic = discussionService.getForNodeRef(nodeRef).getFirst();
                 if(topic == null) return;
-                notificationBean.notifyDiscussion(userName, nodeRef, site);
-
-                /*
-    angular.forEach(vm.groups, function (group) {
-      angular.forEach(group[1], function (member) {
-        if (member.userName !== postItem.author.username)
-          notificationsService.add(
-            member.userName,
-            subject,
-            message,
-            link,
-            'new-discussion',
-            $stateParams.projekt).then(function (val) {
-            $mdDialog.hide()
-          })
-      })
-    })
-                 */
+                notificationBean.notifyDiscussion(nodeRef, site);
             }
         }
     }
 
     public void onCreateContent(ChildAssociationRef parentChildAssocRef) throws JSONException {
-        String userName = "admin";
-        NodeRef nodeRef = parentChildAssocRef.getChildRef();
-
-
         // Check if node exists, might be moved, or created and deleted in same transaction.
+        NodeRef nodeRef = parentChildAssocRef.getChildRef();
         if (nodeRef != null && nodeService.exists(nodeRef)) {
 
             QName type = nodeService.getType(nodeRef);
@@ -119,38 +97,18 @@ public class NotificationEventHandler {
                     NodeRef parentRef = nodeService.getPrimaryParent(nodeRef).getParentRef();
                     TopicInfo topic = discussionService.getForNodeRef(parentRef).getFirst();
                     if(topic == null) return;
+                    NodeRef topicRef = topic.getNodeRef();
+
                     // If the post is the primary post then return.
                     PostInfo primaryPost = discussionService.getPrimaryPost(topic);
-                    if(nodeRef.equals(primaryPost.getNodeRef())) return;
-
-                    notificationBean.notifyReply(userName, nodeRef, site);
-                    /*
-
-    angular.forEach(vm.groups, function (group) {
-      angular.forEach(group[1], function (member) {
-        if (member.userName !== postItem.author.username)
-          notificationsService.addReplyNotice(
-            member.userName,
-            subject,
-            message,
-            link,
-            'new-reply',
-            $stateParams.projekt,
-            nodeRef).then(function (val) {
-            $mdDialog.hide()
-          })
-      })
-    })
-                     */
+                    NodeRef primaryPostRef = primaryPost.getNodeRef();
+                    if(nodeRef.equals(primaryPostRef)) return;
+                    notificationBean.notifyReply(nodeRef, primaryPostRef, topicRef, site);
                 }
                 // Content
                 else if(!OpenDeskModel.TYPE_REVIEW.equals(type)) {
-                    notificationBean.notifySiteContent(userName, nodeRef, site);
+                    notificationBean.notifySiteContent(nodeRef, site);
                 }
-            }
-            else {
-                // Discussions can only be added under sites so this must be shared content
-                notificationBean.notifySharedNode(userName, nodeRef);
             }
         }
     }

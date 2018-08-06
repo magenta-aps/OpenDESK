@@ -12,7 +12,6 @@ function notificationsService ($http, $interval) {
   var service = {
     getUnseenCount: getUnseenCount,
     get: getNotifications,
-    add: addNotification,
     delete: deleteNotification,
     setReadNotice: setRead,
     setSeenNotice: setSeen,
@@ -131,23 +130,6 @@ function notificationsService ($http, $interval) {
     var payload = {
       PARAM_METHOD: 'setAllNotificationsSeen',
       PARAM_USERNAME: userId
-    }
-
-    return $http.post(restBaseUrl, payload)
-      .then(function (response) {
-        return response
-      })
-  }
-
-  function addNotification (userId, subject, message, link, wtype, project) {
-    var payload = {
-      PARAM_METHOD: 'add',
-      PARAM_USERNAME: userId,
-      PARAM_SUBJECT: subject,
-      PARAM_MESSAGE: message,
-      PARAM_LINK: link,
-      PARAM_TYPE: wtype,
-      PARAM_PROJECT: project
     }
 
     return $http.post(restBaseUrl, payload)

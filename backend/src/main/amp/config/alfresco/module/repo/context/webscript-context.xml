@@ -156,6 +156,7 @@
 	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
+        <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="personService" ref="PersonService"/>

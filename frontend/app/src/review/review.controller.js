@@ -6,17 +6,20 @@ angular.module('od.review')
 function ReviewController (reviewService, $mdDialog, $scope) {
   var vm = this
 
-  if ($scope.reviewId)
-    reviewService.get($scope.reviewId)
-      .then(function (response) {
-        vm.review = response
-      })
-
-  vm.approve = approve
-  vm.reject = reject
   vm.create = create
-  vm.reply = reply
+  vm.respond = respond
   vm.cancelDialog = cancelDialog
+
+  vm.checkboxApprove = false
+  vm.checkboxReject = false
+  vm.comment = ''
+
+  activate()
+
+  function activate () {
+    if ($scope.reviewId)
+      load()
+  }
 
   function create (nodeId, user, message) {
     reviewService.create(nodeId, user.userName, message)
@@ -25,16 +28,40 @@ function ReviewController (reviewService, $mdDialog, $scope) {
 
   function approve (reply) {
     reviewService.approve($scope.reviewId, reply)
-    cancelDialog()
+      .then(function () {
+        load()
+      })
+  }
+
+  function load () {
+    reviewService.get($scope.reviewId)
+      .then(function (response) {
+        vm.review = response
+        vm.comment = ''
+      })
   }
 
   function reject (reply) {
     reviewService.reject($scope.reviewId, reply)
-    cancelDialog()
+      .then(function () {
+        load()
+      })
   }
 
   function reply (reply) {
     reviewService.reply($scope.reviewId, reply)
+      .then(function () {
+        load()
+      })
+  }
+
+  function respond () {
+    if (vm.checkboxApprove)
+      approve(vm.comment)
+    else if (vm.checkboxReject)
+      reject(vm.comment)
+    else
+      reply(vm.comment)
     cancelDialog()
   }
 

@@ -327,10 +327,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
     angular.forEach(files, function (file) {
       ContentService.upload(file, folderNodeRef)
-        .then(function (response) {
-          if ($scope.isSite)
-            siteService.createDocumentNotification(response.data.nodeRef, response.data.fileName)
-
+        .then(function () {
           hideDialogAndReloadContent()
         })
     })

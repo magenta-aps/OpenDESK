@@ -3,11 +3,12 @@ package dk.opendesk.repo.beans;
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.discussion.PostInfo;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
@@ -20,14 +21,19 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class NotificationBean {
 
+    private AuthorityService authorityService;
     private NodeService nodeService;
     private PersonService personService;
     private PreferenceService preferenceService;
     private SiteService siteService;
 
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -42,35 +48,45 @@ public class NotificationBean {
     }
 
     /**
-     * Adds a notification to a user.
-     * @param userName username of the receiving user.
-     * @param message of the notification.
-     * @param subject of the notification.
-     * @param link from the notification.
-     * @param type of the notification.
-     * @param project linked to from the notification.
+     * Creates a notification.
+     * @param receiver username of the receiving user.
+     * @param params of the notification.
+     * @param preferenceFilter to check for of the receiving user.
      */
-    public void addNotification(String userName, String message, String subject, String link, String type,
-                                     String project, String preferenceFilter) {
-    }
-
-    public void createNotification(String receiver, JSONObject params, String preferenceFilter) {
+    private void createNotification(String receiver, JSONObject params, String preferenceFilter) {
         createNotification(receiver, params, preferenceFilter, false);
     }
 
-    public void createNotification(String receiver, JSONObject params, String preferenceFilter,
-                                   boolean requireSubscribe) {
+    /**
+     * Creates a notification
+     * @param receiver username of the receiving user.
+     * @param params of the notification.
+     * @param preferenceFilter to check for of the receiving user.
+     * @param requireSubscribe true if the user needs to explicitly subscribe to this kind of notification
+     */
+    private void createNotification(String receiver, JSONObject params, String preferenceFilter,
+                                    boolean requireSubscribe) {
         // Important get current user before running as SystemUser
         String sender = AuthenticationUtil.getFullyAuthenticatedUser();
+
+        // Don't send notifications to your self.
+        if(receiver.equals(sender))
+            return;
+
         // Then run as SystemUser
         AuthenticationUtil.runAs(() -> {
             // Don't send notification if the receiver turned off notifications for this event
-            if (!preferenceFilter.isEmpty())
-                if ("false".equals(preferenceService.getPreference(receiver, preferenceFilter)))
+            if (!preferenceFilter.isEmpty()) {
+                Serializable preference = preferenceService.getPreference(receiver, preferenceFilter);
+                // Don't send notification if the user did not explicitly subscribe for it
+                if(requireSubscribe)
+                {
+                    if (!"true".equals(preference))
+                        return false;
+                }
+                else if ("false".equals(preference))
                     return false;
-            // Don't send notification if the user did not explicitly subscribe for it
-            else if(requireSubscribe)
-                return false;
+            }
 
             // Create notification
             NodeRef receiverNodeRef = personService.getPerson(receiver);
@@ -141,7 +157,7 @@ public class NotificationBean {
         return json;
     }
 
-    public void notifyDiscussion(String userName, NodeRef nodeRef, SiteInfo site) throws JSONException {
+    public void notifyDiscussion(NodeRef nodeRef, SiteInfo site) throws JSONException {
         String siteShortName = site.getShortName();
         String siteName = getSiteName(siteShortName);
         JSONObject params = getNodeParams(nodeRef);
@@ -149,24 +165,38 @@ public class NotificationBean {
         params.put(OpenDeskModel.PARAM_SITE_SHORT_NAME, siteShortName);
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_DISCUSSION);
         String preferenceFilter = "dk.magenta.sites." + siteShortName + ".discussions.subscribe";
-        createNotification(userName, params, preferenceFilter);
+
+        // Send notifications to all members of this site
+        Set<String> siteMembers = getSiteMembers(siteShortName);
+        for(String userName : siteMembers)
+            createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifyReply(String userName, NodeRef nodeRef, SiteInfo site) throws JSONException {
-        String nodeId = nodeRef.getId();
+    public void notifyReply(NodeRef postRef, NodeRef primaryPostRef, NodeRef topicRef, SiteInfo site)
+            throws JSONException {
         String siteShortName = site.getShortName();
         String siteName = getSiteName(siteShortName);
-        Serializable replyShortName = getNodeName(nodeRef);
-        JSONObject params = getNodeParams(nodeRef);
-        params.put(OpenDeskModel.PARAM_REPLY_SHORT_NAME, replyShortName);
+        Serializable postName = getNodeName(postRef);
+        String topicId = topicRef.getId();
+        Serializable primaryPostTitle = getNodeTitle(primaryPostRef);
+        JSONObject params = new JSONObject();
+        params.put(OpenDeskModel.PARAM_NODE_NAME, primaryPostTitle);
+        params.put(OpenDeskModel.PARAM_NODE_ID, topicId);
+        params.put(OpenDeskModel.PARAM_REPLY_SHORT_NAME, postName);
         params.put(OpenDeskModel.PARAM_SITE_NAME, siteName);
         params.put(OpenDeskModel.PARAM_SITE_SHORT_NAME, siteShortName);
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_REPLY);
-        String preferenceFilter = "dk.magenta.sites." + siteShortName + ".discussions." + nodeId + ".subscribe";
-        createNotification(userName, params, preferenceFilter, true);
+        String discussionId = topicRef.getId();
+        String preferenceFilter = "dk.magenta.sites." + siteShortName + ".discussions." + discussionId + ".subscribe";
+
+        // Send notifications to all members of this site
+        Set<String> siteMembers = getSiteMembers(siteShortName);
+        for(String userName : siteMembers)
+            createNotification(userName, params, preferenceFilter, true);
     }
 
-    public void notifyReview(String userName, NodeRef nodeRef, NodeRef reviewRef) throws JSONException {
+    public void notifyReview(NodeRef nodeRef, NodeRef reviewRef) throws JSONException {
+        String userName = getReviewAssignee(reviewRef);
         JSONObject params = getNodeParams(nodeRef);
         params.put(OpenDeskModel.PARAM_REVIEW_ID,  reviewRef.getId());
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_REVIEW);
@@ -174,7 +204,8 @@ public class NotificationBean {
         createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifyReviewApproved(String userName, NodeRef reviewRef) throws JSONException {
+    public void notifyReviewApproved(NodeRef reviewRef) throws JSONException {
+        String userName = getReviewSender(reviewRef);
         NodeRef nodeRef = nodeService.getPrimaryParent(reviewRef).getParentRef();
         JSONObject params = getNodeParams(nodeRef);
         params.put(OpenDeskModel.PARAM_REVIEW_ID,  reviewRef.getId());
@@ -183,7 +214,8 @@ public class NotificationBean {
         createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifyReviewRejected(String userName, NodeRef reviewRef) throws JSONException {
+    public void notifyReviewRejected(NodeRef reviewRef) throws JSONException {
+        String userName = getReviewSender(reviewRef);
         NodeRef nodeRef = nodeService.getPrimaryParent(reviewRef).getParentRef();
         JSONObject params = getNodeParams(nodeRef);
         params.put(OpenDeskModel.PARAM_REVIEW_ID,  reviewRef.getId());
@@ -192,7 +224,17 @@ public class NotificationBean {
         createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifyReviewReply(String userName, NodeRef nodeRef, NodeRef reviewRef) throws JSONException {
+    public void notifyReviewReply(NodeRef nodeRef, NodeRef reviewRef) throws JSONException {
+        // Send notify to the other user connected to the review
+        String currentUserName = AuthenticationUtil.getFullyAuthenticatedUser();
+        String assignee = getReviewAssignee(reviewRef);
+        String sender = getReviewSender(reviewRef);
+        String userName;
+        if(currentUserName.equals(assignee))
+            userName = sender;
+        else
+            userName = assignee;
+
         JSONObject params = getNodeParams(nodeRef);
         params.put(OpenDeskModel.PARAM_REVIEW_ID,  reviewRef.getId());
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_REVIEW_REPLY);
@@ -215,20 +257,25 @@ public class NotificationBean {
         createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifySiteContent(String userName, NodeRef nodeRef, SiteInfo site) throws JSONException {
+    public void notifySiteContent(NodeRef nodeRef, SiteInfo site) throws JSONException {
         String siteShortName = site.getShortName();
         String siteName = getSiteName(siteShortName);
         JSONObject params = getNodeParams(nodeRef);
         params.put(OpenDeskModel.PARAM_SITE_NAME, siteName);
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_SITE_CONTENT);
         String preferenceFilter = "dk.magenta.sites." + siteShortName + ".documentLibrary.subscribe";
-        createNotification(userName, params, preferenceFilter);
+
+        // Send notifications to all members of this site
+        Set<String> siteMembers = getSiteMembers(siteShortName);
+        for(String userName : siteMembers)
+            createNotification(userName, params, preferenceFilter);
     }
 
     public void notifySiteMember(String userName, String siteShortName) throws JSONException {
         String siteName = getSiteName(siteShortName);
         JSONObject params = new JSONObject();
         params.put(OpenDeskModel.PARAM_SITE_NAME, siteName);
+        params.put(OpenDeskModel.PARAM_SITE_SHORT_NAME, siteShortName);
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_SITE_MEMBER);
         String preferenceFilter = "";
         createNotification(userName, params, preferenceFilter);
@@ -247,6 +294,18 @@ public class NotificationBean {
         return params;
     }
 
+    private String getNodeTitle(NodeRef nodeRef) {
+        return (String) nodeService.getProperty(nodeRef, ContentModel.PROP_TITLE);
+    }
+
+    private String getReviewAssignee(NodeRef reviewRef) {
+        return (String) nodeService.getProperty(reviewRef, OpenDeskModel.PROP_REVIEW_ASSIGNEE);
+    }
+
+    private String getReviewSender(NodeRef reviewRef) {
+        return (String) nodeService.getProperty(reviewRef, ContentModel.PROP_CREATOR);
+    }
+
     private String getSiteName(String shortName) {
         if (shortName != null) {
             SiteInfo site = siteService.getSite(shortName);
@@ -255,6 +314,11 @@ public class NotificationBean {
             }
         }
         return "";
+    }
+
+    private Set<String> getSiteMembers(String shortName) {
+        String group = "GROUP_site_" + shortName;
+        return authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
     }
 }
 

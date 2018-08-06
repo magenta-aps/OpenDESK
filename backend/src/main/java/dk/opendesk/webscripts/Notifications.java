@@ -66,13 +66,8 @@ public class Notifications extends AbstractWebScript {
             JSONObject json = new JSONObject(c.getContent());
 
             String userName = Utils.getJSONObject(json, "PARAM_USERNAME");
-            String project = Utils.getJSONObject(json, "PARAM_PROJECT");
             String method = Utils.getJSONObject(json, "PARAM_METHOD");
-            String subject = Utils.getJSONObject(json, "PARAM_SUBJECT");
-            String message = Utils.getJSONObject(json, "PARAM_MESSAGE");
-            String link = Utils.getJSONObject(json, "PARAM_LINK");
             String nodeRefString = Utils.getJSONObject(json, "PARAM_NODE_REF");
-            String type = Utils.getJSONObject(json, "PARAM_TYPE");
 
             NodeRef nodeRef = null;
             if(NodeRef.isNodeRef(nodeRefString))
@@ -82,11 +77,6 @@ public class Notifications extends AbstractWebScript {
                 switch (method) {
                     case "getAll":
                         result = this.getAllNotifications(userName);
-                        break;
-
-                    case "getInfo":
-                        if (nodeRef != null)
-                            result = this.getInfo(nodeRef);
                         break;
 
                     case "remove":
@@ -210,20 +200,6 @@ public class Notifications extends AbstractWebScript {
             this.setNotificationSeen(n);
         }
         return Utils.getJSONSuccess();
-    }
-
-    /**
-     * Gets the information of a notification.
-     * (method = getInfo)
-     * @param notification nodeRef of the notification.
-     * @return a JSONObject representing the notification.
-     */
-    private JSONArray getInfo (NodeRef notification) throws Exception {
-        JSONArray result = new JSONArray();
-        JSONObject json = notificationBean.getNotification(notification);
-        if(json != null)
-            result.add(json);
-        return result;
     }
 
     /**
