@@ -278,7 +278,7 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
       var newPage = $window.open()
 
     var selectedVersion = $location.search().version
-    documentService.revertToVersion('no comments', true, vm.doc.node.nodeRef, selectedVersion).then(
+    ContentService.revertToVersion('no comments', true, vm.doc.node.nodeRef, selectedVersion).then(
       function (response) {
         cancelDialog()
         if (editor === 'libre-office')
