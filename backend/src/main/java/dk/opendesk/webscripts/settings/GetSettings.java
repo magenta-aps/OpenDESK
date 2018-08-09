@@ -19,6 +19,7 @@ public class GetSettings extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
+        webScriptResponse.setContentEncoding("UTF-8");
         JSONObject result;
 
         try {
