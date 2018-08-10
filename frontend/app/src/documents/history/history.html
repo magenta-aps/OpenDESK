@@ -1,11 +1,11 @@
 <md-card class="dropdown-card">
-    <md-card-title ng-click="vm.showArchived = !vm.showArchived" ng-class="vm.showArchived ? 'open' : 'closed'">
+    <md-card-title ng-click="showVersions = !showVersions" ng-class="showVersions ? 'open' : 'closed'">
         <h3 class="md-title od-title-icon"><md-icon>history</md-icon> {{'COMMON.HISTORY' | translate }}</h3>
         <span flex></span>
         <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
     </md-card-title>
 
-    <md-card-content ng-class="vm.showArchived ? 'fold-out' : 'fold-in'">
+    <md-card-content ng-if="$ctrl.history" ng-class="showVersions ? 'fold-out' : 'fold-in'">
         <div layout="row">
             <div flex="50">
                 <span class="od-secondary">{{'COMMON.LAST_MODIFIED' | translate}}</span>
@@ -15,13 +15,13 @@
             </div>
         </div>
 
-        <div id="{{h.nodeRef}}" ng-repeat="h in history" layout="row" style="line-height:2">
+        <div class="entry" ng-repeat="h in $ctrl.history" layout="row" ng-class="$ctrl.selectedVersion === h.nodeRef ? 'selected' : ''">
             <div flex="50">
-                <a href="dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">{{ h.created | openeDate }}</a>
+                <a ui-sref="document({ doc: h.parent_nodeRef, versionId: h.nodeRef, version: h.version})">{{ h.created | openeDate }}</a>
             </div>
 
             <div flex="50">
-                <a href="dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}}">{{ h.modifier }}</a>
+                <a ui-sref="document({ doc: h.parent_nodeRef, versionId: h.nodeRef, version: h.version})">{{ h.modifier }}</a>
             </div>
         </div>
     </md-card-content>

@@ -1,9 +1,9 @@
 'use strict'
 import '../shared/directives/breadcrumb'
 import documentTemplate from './view/document.html'
-import documentActionsTemplate from './view/documentActions.html'
-import documentHistoryTemplate from './view/documentHistory.html'
-import documentReviewTemplate from './view/documentReview.html'
+import documentActionsTemplate from './action/action.html'
+import documentHistoryTemplate from './history/history.html'
+import documentReviewTemplate from './review/review.html'
 
 angular
   .module('openDeskApp.documents', ['od.review'])
@@ -129,44 +129,40 @@ angular
     }
   })
   .config(['$stateProvider', 'USER_ROLES', config])
-  .directive('documentActions', function () {
-    return {
-      restrict: 'E',
-      template: documentActionsTemplate,
-      controller: 'DocumentController',
-      controllerAs: 'vm'
+  .component('documentActions', {
+    template: documentActionsTemplate,
+    controller: 'DocumentActionController',
+    controllerAs: 'DAC',
+    bindings: {
+      doc: '<'
     }
   })
-  .directive('documentHistory', function () {
-    return {
-      restrict: 'E',
-      template: documentHistoryTemplate,
-      controller: 'DocumentController',
-      controllerAs: 'vm'
+  .component('documentHistory', {
+    template: documentHistoryTemplate,
+    bindings: {
+      history: '<',
+      selectedVersion: '<'
     }
   })
-  .directive('documentReview', function () {
-    return {
-      restrict: 'E',
-      template: documentReviewTemplate,
-      controller: 'DocumentController',
-      controllerAs: 'vm'
+  .component('documentReview', {
+    template: documentReviewTemplate,
+    bindings: {
+      reviewId: '<'
     }
   })
 
 function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('document', {
     parent: 'site',
-    url: '/dokument/:doc?reviewId',
+    url: '/dokument/:doc?reviewId&versionId&version',
     views: {
       'content@': {
         template: documentTemplate,
         controller: 'DocumentController',
-        controllerAs: 'vm'
+        controllerAs: 'DC'
       }
     },
     params: {
-      nodiref: null,
       authorizedRoles: [USER_ROLES.user]
     }
   })

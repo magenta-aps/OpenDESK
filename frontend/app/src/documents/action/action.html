@@ -6,43 +6,43 @@
 
     <md-card-content>
         <div>
-            <md-button ng-show="vm.onlyOfficeEditable && vm.canEdit" ng-click="vm.editInOnlyOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.onlyOfficeEditable && DAC.canEdit" ng-click="DAC.editInOnlyOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.ONLYOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="vm.loolEditable && vm.canEdit" ng-click="vm.editInLibreOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.loolEditable && DAC.canEdit" ng-click="DAC.editInLibreOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.LIBREOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="vm.msOfficeEditable && vm.canEdit" ng-click="vm.editInMSOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.msOfficeEditable && DAC.canEdit" ng-click="DAC.editInMSOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.MSOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-click="vm.downloadDocument()" class="md-text-icon-button md-primary">
+            <md-button ng-click="DAC.downloadDocument()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>get_app</md-icon>
                 {{'COMMON.DOWNLOAD' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="vm.canEdit" ng-click="vm.uploadNewVersionDialog($event)" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.canEdit" ng-click="DAC.uploadNewVersionDialog()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="vm.canEdit" ng-click="vm.reviewDocumentsDialog($event)" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.canEdit" ng-click="DAC.reviewDocumentsDialog($event)" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
             </md-button>
         </div>
         <div>
-            <md-button ng-click="vm.updatePreview()" class="md-text-icon-button md-primary">
+            <md-button ng-click="DAC.updatePreview()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>cached</md-icon>
                 {{'COMMON.UPDATE' | translate }} {{'COMMON.PREVIEW' | translate}}
             </md-button>
