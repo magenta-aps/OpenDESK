@@ -131,7 +131,6 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
   }
 
   function loadPreview () {
-    // todo check if not ok type like pdf, jpg and png - then skip this step
     if (vm.docHasParent)
       documentService.createVersionThumbnail(vm.parentNodeId, vm.nodeId)
         .then(function (response) {
