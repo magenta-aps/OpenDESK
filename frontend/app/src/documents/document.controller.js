@@ -33,8 +33,34 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     getReview()
   }
 
-  function getReview () {
-    vm.reviewId = $stateParams.reviewId
+  function buildSiteBreadCrumbPath (response) {
+    var paths = [{
+      title: response.item.location.siteTitle,
+      link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
+    }]
+    var pathArr = response.item.location.path.split('/')
+    var pathLink = '/'
+    for (var a in pathArr)
+      if (pathArr[a] !== '') {
+        var link
+        if (response.item.location.site === '')
+          link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})'
+        else
+          link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
+                        '", path: "' + pathLink + pathArr[a] + '"})'
+
+        paths.push({
+          title: pathArr[a],
+          link: link
+        })
+        pathLink = pathLink + pathArr[a] + '/'
+      }
+
+    paths.push({
+      title: response.item.location.file,
+      link: response.item.location.path
+    })
+    return paths
   }
 
   function getDocument () {
@@ -100,34 +126,8 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
       })
   }
 
-  function buildSiteBreadCrumbPath (response) {
-    var paths = [{
-      title: response.item.location.siteTitle,
-      link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
-    }]
-    var pathArr = response.item.location.path.split('/')
-    var pathLink = '/'
-    for (var a in pathArr)
-      if (pathArr[a] !== '') {
-        var link
-        if (response.item.location.site === '')
-          link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})'
-        else
-          link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
-                        '", path: "' + pathLink + pathArr[a] + '"})'
-
-        paths.push({
-          title: pathArr[a],
-          link: link
-        })
-        pathLink = pathLink + pathArr[a] + '/'
-      }
-
-    paths.push({
-      title: response.item.location.file,
-      link: response.item.location.path
-    })
-    return paths
+  function getReview () {
+    vm.reviewId = $stateParams.reviewId
   }
 
   function loadPreview () {
