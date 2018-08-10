@@ -3,14 +3,12 @@ import '../shared/services/content.service'
 import '../shared/services/document/preview/preview.service'
 
 angular.module('openDeskApp.documents')
-  .controller('DocumentController', ['$scope', '$timeout', '$translate', 'documentService', 'MemberService',
-    '$stateParams', '$location', '$state', 'documentPreviewService', 'alfrescoDownloadService', 'browserService',
-    '$mdDialog', 'UserService', 'siteService', 'headerService', '$window',
-    'filebrowserService', 'ContentService', DocumentController])
+  .controller('DocumentController', ['$translate', 'documentService', '$stateParams', '$location',
+    'documentPreviewService', 'browserService', 'UserService', 'siteService', 'headerService', 'filebrowserService',
+    'ContentService', DocumentController])
 
-function DocumentController ($scope, $timeout, $translate, documentService, MemberService, $stateParams,
-  $location, $state, documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, UserService,
-  siteService, headerService, $window, filebrowserService, ContentService) {
+function DocumentController ($translate, documentService, $stateParams, $location, documentPreviewService,
+  browserService, UserService, siteService, headerService, filebrowserService, ContentService) {
   var vm = this
 
   vm.doc = []
@@ -19,18 +17,9 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
   activate()
 
   function activate () {
-
     vm.docHasParent = $location.search().versionId !== undefined
     vm.parentNodeId = $stateParams.doc
     vm.nodeId = vm.docHasParent ? $location.search().versionId : $stateParams.doc
-
-    angular.element($window)
-      .bind('resize', function () {
-        setPDFViewerHeight()
-        // manuall $digest required as resize event
-        // is outside of angular
-        $scope.$digest()
-      })
 
     ContentService.history(vm.parentNodeId)
       .then(function (val) {
@@ -40,24 +29,12 @@ function DocumentController ($scope, $timeout, $translate, documentService, Memb
           vm.doc.firstDocumentNode = vm.history[0].nodeRef
       })
 
-    setPDFViewerHeight()
     getDocument()
-    prepDocumentToReview()
+    getReview()
   }
 
-  function prepDocumentToReview () {
+  function getReview () {
     vm.reviewId = $stateParams.reviewId
-  }
-
-  function setPDFViewerHeight () {
-    var height = $(window)
-      .height() - 150 - $('header')
-      .outerHeight()
-
-    $scope.iframeStyle = {
-      'height': height + 'px',
-      'width': '100%'
-    }
   }
 
   function getDocument () {
