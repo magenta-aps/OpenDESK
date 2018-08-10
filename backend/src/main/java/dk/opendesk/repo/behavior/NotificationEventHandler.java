@@ -19,6 +19,8 @@ import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 
+import java.util.List;
+
 public class NotificationEventHandler {
     // Dependencies
     private DiscussionService discussionService;
@@ -106,7 +108,11 @@ public class NotificationEventHandler {
                     notificationBean.notifyReply(nodeRef, primaryPostRef, topicRef, site);
                 }
                 // Content
-                else if(!OpenDeskModel.TYPE_REVIEW.equals(type)) {
+                else {
+                    // Do not send notifications when previews are made of versions.
+                    QName qName = parentChildAssocRef.getTypeQName();
+                    if(qName.equals(OpenDeskModel.ASSOC_VERSION_PREVIEW))
+                        return;
                     notificationBean.notifySiteContent(nodeRef, site);
                 }
             }
