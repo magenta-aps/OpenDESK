@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model name="myc:contentModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+<model name="od:contentModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
     <!-- Optional meta-data about the model -->
-    <description>Document Model for Repo Extension X</description>
-    <author>My Name</author>
+    <description>Document Model for OpenDesk</description>
+    <author>Magenta ApS</author>
     <version>1.0</version>
 
     <imports>
@@ -19,11 +19,8 @@
 
     <!-- Custom namespace for your domain -->
     <namespaces>
-        <namespace uri="http://www.mycompany.com/model/content/1.0" prefix="myc"/>
         <namespace uri="http://www.magenta-aps.dk/model/content/1.0" prefix="od"/>
     </namespaces>
-
-
 
     <!-- ===============================================================================================================
         Constraints, Types, and Aspects go here...
@@ -33,15 +30,6 @@
             <title>Notification</title>
             <parent>cm:content</parent>
             <properties>
-                <!--<property name="od:subject">-->
-                    <!--<type>d:text</type>-->
-                <!--</property>-->
-                <!--<property name="od:message">-->
-                    <!--<type>d:text</type>-->
-                <!--</property>-->
-                <!--<property name="od:type">-->
-                    <!--<type>d:text</type>-->
-                <!--</property>-->
                 <property name="od:read">
                     <type>d:boolean</type>
                     <default>false</default>
@@ -53,15 +41,6 @@
                 <property name="od:params">
                     <type>d:text</type>
                 </property>
-                <!--<property name="od:document">-->
-                    <!--<type>d:noderef</type>-->
-                <!--</property>-->
-                <!--<property name="od:creator">-->
-                    <!--<type>d:text</type>-->
-                <!--</property>-->
-                <!--<property name="od:project">-->
-                    <!--<type>d:text</type>-->
-                <!--</property>-->
             </properties>
         </type>
 
@@ -215,9 +194,5 @@
         </aspect>
 
     </aspects>
-
-
-
-
 
 </model>
