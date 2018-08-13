@@ -16,6 +16,7 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.sites;
 
+import dk.opendesk.repo.beans.NotificationBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
@@ -47,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Sites extends AbstractWebScript {
+    private NotificationBean notificationBean;
 
     private AuthenticationService authenticationService;
     private ContentService contentService;
@@ -57,6 +59,10 @@ public class Sites extends AbstractWebScript {
     private PermissionService permissionService;
     private AuthorityService authorityService;
     private FavouritesService favouritesService;
+
+    public void setNotificationBean(NotificationBean notificationBean) {
+        this.notificationBean = notificationBean;
+    }
 
     public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
@@ -270,10 +276,11 @@ public class Sites extends AbstractWebScript {
      * @param group group name.
      * @return JSONSuccess.
      */
-    private JSONArray addUser(String siteShortName, String user, String group) {
+    private JSONArray addUser(String siteShortName, String user, String group) throws JSONException {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
         authorityService.addAuthority(groupName, user);
+        notificationBean.notifySiteMember(user, siteShortName);
         return Utils.getJSONSuccess();
     }
 

@@ -3,10 +3,10 @@
 angular
   .module('openDeskApp.site')
   .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$q', '$mdDialog',
-    'notificationsService', 'UserService', 'siteService', 'MemberService', 'APP_CONFIG', SiteCreateController])
+    'UserService', 'siteService', 'MemberService', SiteCreateController])
 
-function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, notificationsService,
-  UserService, siteService, MemberService, APP_CONFIG) {
+function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, UserService, siteService,
+  MemberService) {
   var vm = this
 
   var currentUser = UserService.get()
@@ -82,14 +82,10 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
       function (response) {
         var siteShortName = response.data[0].shortName
         var siteName = vm.newSite.siteName
-        var link = APP_CONFIG.sitesUrl + '/' + siteShortName
-
-        createSiteNotification(siteName, vm.newSite.owner.userName, link)
-        createSiteNotification(siteName, vm.newSite.manager.userName, link)
 
         angular.forEach(vm.newSite.groups, function (group) {
           if (group.multipleMembers)
-            addUserToGroup(siteShortName, siteName, group.members, group.shortName, link)
+            addUserToGroup(siteShortName, siteName, group.members, group.shortName)
         })
 
         $mdDialog.cancel()
@@ -119,11 +115,10 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
     siteService.createSite(vm.newSite.siteName, vm.newSite.desc, visibility).then(function (response) {
       var siteShortName = response[0].shortName
       var siteName = vm.newSite.siteName
-      var link = APP_CONFIG.sitesUrl + '/' + siteShortName
 
       angular.forEach(vm.newSite.groups, function (group) {
         if (group.multipleMembers)
-          addUserToGroup(siteShortName, siteName, group.members, group.shortName, link)
+          addUserToGroup(siteShortName, siteName, group.members, group.shortName)
       })
 
       $state.go('project', {
@@ -140,13 +135,12 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
     })
   }
 
-  function addUserToGroup (siteShortName, siteName, group, groupName, link) {
+  function addUserToGroup (siteShortName, siteName, group, groupName) {
     // Iterating list of items sequential instead of async.
     angular.forEach(group, function (user) {
       var userName = user.userName
       MemberService.add(siteShortName, userName, groupName)
         .then(function () {
-          createSiteNotification(siteName, userName, link)
         },
         function (err) {
           console.log('ERROR: Problem creating user in project group ' + groupName)
@@ -154,15 +148,5 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
         }
         )
     })
-  }
-
-  function createSiteNotification (siteName, userName, link) {
-    if (userName !== currentUser.userName) {
-      var subject = 'Du er blevet tilføjet til ' + siteName
-      var message = 'har tilføjet dig til projektet ' + siteName + '.'
-      notificationsService.add(userName, subject, message, link, 'project', siteName).then(function (val) {
-        $mdDialog.cancel()
-      })
-    }
   }
 }

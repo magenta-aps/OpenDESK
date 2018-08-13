@@ -8,8 +8,6 @@ angular.module('openDeskApp.discussion')
 
 function discussionService ($http, nodeRefUtilsService, UserService, sessionService, preferenceService) {
   var restBaseUrl = '/alfresco/s/api'
-  var currentUser = UserService.get().userName
-  var selectedDiscussion = []
 
   var service = {
     addDiscussion: addDiscussion,
@@ -18,9 +16,6 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
     getDiscussionFromNodeRef: getDiscussionFromNodeRef,
     getDiscussions: getDiscussions,
     getReplies: getReplies,
-    getSelectedDiscussion: getSelectedDiscussion,
-    getSubscribePreferenceFilter: getSubscribePreferenceFilter,
-    isSubscribedToDiscussion: isSubscribedToDiscussion,
     subscribeToDiscussion: subscribeToDiscussion,
     unSubscribeToDiscussion: unSubscribeToDiscussion,
     updatePost: updatePost
@@ -28,19 +23,25 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
 
   return service
 
-  function getSelectedDiscussion () {
-    return selectedDiscussion
+  function getAvatarUrl (avatarRef) {
+    if (avatarRef !== undefined) {
+      var avatarId = avatarRef.split('/')[3]
+      return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
+    } else { return 'assets/img/avatars/blank-profile-picture.png' }
   }
 
-  function getDiscussionFromNodeRef (siteShortName, nodeRef) {
-    return getDiscussions(siteShortName).then(function (response) {
-      var discussions = response
-
-      discussions.items.forEach(function (discussion) {
-        if (discussion.nodeRef.split('/')[3] === nodeRef)
-          selectedDiscussion = discussion
+  function getDiscussionFromNodeRef (siteShortName, nodeId) {
+    // return getDiscussions(siteShortName)
+    //   .then(function (response) {
+    //     response.items.forEach(function (discussion) {
+    //       if (discussion.nodeRef.split('/')[3] === nodeId)
+    //         return discussion
+    //     })
+    //   })
+    return $http.get(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + nodeId, {})
+      .then(function (response) {
+        return response.data.item
       })
-    })
   }
 
   function getDiscussions (siteShortName) {
@@ -52,15 +53,14 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
   }
 
   function getReplies (postItem) {
-    selectedDiscussion = postItem
-    selectedDiscussion.author.avatarUrl = ''
-    if (postItem.author.avatarRef !== undefined) {
-      var avatarId = postItem.author.avatarRef.split('/')[3]
-      selectedDiscussion.author.avatarUrl = sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
-    }
+    postItem.author.avatarUrl = getAvatarUrl(postItem.author.avatarRef)
     return $http.get(restBaseUrl + postItem.repliesUrl, {})
       .then(function (response) {
-        return response.data.items
+        var items = response.data.items
+        items.forEach(function (reply) {
+          reply.author.avatarUrl = getAvatarUrl(reply.author.avatarRef)
+        })
+        return items
       })
   }
 
@@ -111,7 +111,7 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
     var subscriptionsPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id)
 
-    return preferenceService.getPreferences(currentUser, subscriptionsPreferenceFilter)
+    return preferenceService.getPreferences(subscriptionsPreferenceFilter)
       .then(function (preferenceResponse) {
         if (preferenceResponse[subscriptionsPreferenceFilter] === undefined) return false
         return preferenceResponse[subscriptionsPreferenceFilter]
@@ -126,7 +126,7 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
     var preferences = {}
     preferences[preferenceFilter] = value
 
-    preferenceService.setPreferences(currentUser, preferences)
+    preferenceService.setPreferences(preferences)
   }
 
   function getSubscribePreferenceFilter (siteShortName, id) {

@@ -18,6 +18,11 @@
 -->
 <beans>
 
+    <bean id="discussionBean" class="dk.opendesk.repo.beans.DiscussionBean">
+        <property name="discussionService" ref="DiscussionService"/>
+        <property name="personBean" ref="personBean"/>
+    </bean>
+
     <bean id="editorBean" class="dk.opendesk.repo.beans.EditorBean">
         <property name="moduleService" ref="ModuleService"/>
     </bean>
@@ -26,16 +31,30 @@
         <property name="nodeService" ref="NodeService"/>
         <property name="permissionService" ref="PermissionService"/>
         <property name="personService" ref="PersonService"/>
-        <property name="preferenceService" ref="PreferenceService"/>
         <property name="repository" ref="repositoryHelper"/>
         <property name="searchService" ref="SearchService"/>
         <property name="siteService" ref="SiteService"/>
+        <property name="notificationBean" ref="notificationBean"/>
     </bean>
 
     <bean id="notificationBean" class="dk.opendesk.repo.beans.NotificationBean">
+        <property name="authorityService" ref="AuthorityService"/>
         <property name="nodeService" ref="NodeService"/>
         <property name="personService" ref="PersonService"/>
         <property name="preferenceService" ref="PreferenceService"/>
+        <property name="siteService" ref="SiteService"/>
+    </bean>
+
+    <bean id="personBean" class="dk.opendesk.repo.beans.PersonBean">
+        <property name="nodeService" ref="NodeService"/>
+        <property name="personService" ref="PersonService"/>
+    </bean>
+
+    <bean id="reviewBean" class="dk.opendesk.repo.beans.ReviewBean">
+        <property name="discussionBean" ref="discussionBean"/>
+        <property name="discussionService" ref="DiscussionService"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="notificationBean" ref="notificationBean"/>
     </bean>
 
     <bean id="settingsBean" class="dk.opendesk.repo.beans.SettingsBean">

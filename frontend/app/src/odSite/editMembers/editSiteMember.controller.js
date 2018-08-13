@@ -3,10 +3,10 @@
 angular
   .module('openDeskApp.site')
   .controller('EditSiteMemberController', ['sitedata', '$scope', '$mdDialog', '$mdToast', 'APP_CONFIG', 'siteService',
-    'MemberService', 'notificationsService', 'UserService', EditSiteMemberController])
+    'MemberService', 'UserService', EditSiteMemberController])
 
 function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, MemberService,
-  notificationsService, UserService) {
+  UserService) {
   var vm = this
 
   $scope.externalUser = {
@@ -107,8 +107,6 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
 
     MemberService.add(siteShortName, userName, groupName)
       .then(function () {
-        createSiteNotification(userName, siteShortName)
-
         for (var i = 0; i < vm.groups.length; i++)
           if (vm.groups[i][0].role === groupName) {
             vm.groups[i][1].push(user)
@@ -119,19 +117,6 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
 
   function removeMemberFromSite (user, groupName) {
     MemberService.remove(vm.site.shortName, user.userName, groupName)
-  }
-
-  function createNotification (userName, subject, message, link, wtype, project) {
-    notificationsService.add(userName, subject, message, link, wtype, project)
-  }
-
-  function createSiteNotification (userName, site) {
-    var subject = 'Du er blevet tilføjet til ' + vm.site.title
-    var author = vm.user.firstName + ' ' + vm.user.lastName
-
-    var message = author + ' har tilføjet dig til projektet ' + vm.site.title + '.'
-    var link = APP_CONFIG.sitesUrl + '/' + site
-    createNotification(userName, subject, message, link, 'project', site)
   }
 
   function showSendEmailDialog (userName, subject, body) {

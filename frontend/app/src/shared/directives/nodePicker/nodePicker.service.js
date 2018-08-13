@@ -4,7 +4,8 @@ import '../../services/translate.service'
 
 angular
   .module('openDeskApp')
-  .factory('nodePickerService', NodePickerService)
+  .factory('nodePickerService', ['$http', '$translate', 'translateService', 'alfrescoNodeService', 'fileService',
+    NodePickerService])
 
 function NodePickerService ($http, $translate, translateService, alfrescoNodeService, fileService) {
   return {

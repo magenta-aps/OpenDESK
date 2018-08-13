@@ -3,11 +3,10 @@ import '../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp.site')
   .factory('siteService', ['$q', '$http', '$rootScope', '$translate', 'alfrescoNodeService', 'sessionService',
-    'notificationsService', 'UserService', 'systemSettingsService', SiteService])
+    'UserService', 'systemSettingsService', SiteService])
 
-function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, sessionService,
-  notificationsService, UserService, systemSettingsService) {
-  var currentUser = UserService.get()
+function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, sessionService, UserService,
+  systemSettingsService) {
   var site = {}
   var groups = {}
   var userManagedProjects = []
@@ -51,8 +50,6 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     getGroupsAndMembers: getGroupsAndMembers,
     getSiteOwner: getSiteOwner,
     getSiteManager: getSiteManager,
-    createDocumentNotification: createDocumentNotification,
-    createReviewNotification: createReviewNotification,
     updateMemberList: updateMemberList,
     addFavourite: addFavourite,
     removeFavourite: removeFavourite
@@ -397,53 +394,6 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
 
       return members
     })
-  }
-
-  function createDocumentNotification (nodeRef, fileName) {
-    var id = alfrescoNodeService.processNodeRef(nodeRef).id
-    var message = 'Et nyt dokument "' + fileName + '" er blevet uploadet af ' + currentUser.displayName
-    var link = 'dokument/' + id
-
-    // Iterating list of items.
-    angular.forEach(groups, function (group) {
-      angular.forEach(group[1], function (member) {
-        if (member.userName !== currentUser.userName) {
-          var notification = {
-            receiver: member.userName,
-            subject: $translate.instant('NOTIFICATION.LABEL.NEW_DOCUMENT'),
-            message: message,
-            link: link,
-            wtype: 'new-doc',
-            shortName: site.shortName
-          }
-          createNotification(notification)
-        }
-      })
-    })
-  }
-
-  function createReviewNotification (documentNodeRef, receiver, message) {
-    var ref = documentNodeRef.split('/')[3]
-    var link = 'dokument/' + ref + '?dtype=wf' + '&from=' + currentUser.userName
-
-    var notification = {
-      receiver: receiver,
-      subject: $translate.instant('NOTIFICATION.LABEL.REVIEW_REQUEST'),
-      message: message,
-      link: link,
-      wtype: 'review-request',
-      shortName: site.shortName
-    }
-    createNotification(notification)
-  }
-  function createNotification (notification) {
-    notificationsService.add(
-      notification.receiver,
-      notification.subject,
-      notification.message,
-      notification.link,
-      notification.wtype,
-      notification.shortName)
   }
 
   function addFavourite (nodeId) {
