@@ -7,9 +7,9 @@
 	The ASF licenses this file to You under the Apache License, Version 2.0
 	(the "License"); you may not use this file except in compliance with
 	the License.  You may obtain a copy of the License at
-	
+
 	http://www.apache.org/licenses/LICENSE-2.0
-	
+
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,10 +46,7 @@
 	<bean id="webscript.groups.post"
 		  class="dk.opendesk.webscripts.Groups"
 		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-		<property name="authorityService" ref="AuthorityService"/>
-		<property name="personService" ref="PersonService"/>
-		<property name="siteService" ref="SiteService"/>
+		<property name="groupBean" ref="groupBean"/>
 	</bean>
 
     <bean id="webscript.preferences.get"
@@ -156,6 +153,8 @@
 	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
+        <property name="authorityBean" ref="authorityBean"/>
+		<property name="groupBean" ref="groupBean"/>
         <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="siteService" ref="SiteService"/>
@@ -171,6 +170,7 @@
 	<bean id="webscript.users.post"
 		  class="dk.opendesk.webscripts.users.Users"
 		  parent="webscript">
+        <property name="authorityBean" ref="authorityBean"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
@@ -179,7 +179,6 @@
 		<property name="searchService" ref="SearchService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="properties"> <ref bean="global-properties"/> </property>
-		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
 	<bean id="webscript.cleanupandpurge.get"

@@ -62,11 +62,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     } else {
       vm.getDiscussions($stateParams.projekt)
     }
-
-    siteService.getGroupsAndMembers($stateParams.projekt)
-      .then(function (groups) {
-        vm.groups = groups
-      })
   }
 
   function cancelDialog () {

@@ -52,7 +52,7 @@ function groupService ($http, $mdDialog, $translate, sessionService) {
 
   function getMembers (groupName) {
     return $http.post('/alfresco/service/groups', {
-      PARAM_METHOD: 'getGroupMembers',
+      PARAM_METHOD: 'getUsers',
       PARAM_GROUP_NAME: groupName
     }).then(function (response) {
       var group = response.data

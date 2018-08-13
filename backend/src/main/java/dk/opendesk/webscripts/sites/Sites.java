@@ -16,6 +16,8 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.sites;
 
+import dk.opendesk.repo.beans.AuthorityBean;
+import dk.opendesk.repo.beans.GroupBean;
 import dk.opendesk.repo.beans.NotificationBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
@@ -48,6 +50,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Sites extends AbstractWebScript {
+    private AuthorityBean authorityBean;
+    private GroupBean groupBean;
     private NotificationBean notificationBean;
 
     private AuthenticationService authenticationService;
@@ -60,6 +64,12 @@ public class Sites extends AbstractWebScript {
     private AuthorityService authorityService;
     private FavouritesService favouritesService;
 
+    public void setAuthorityBean(AuthorityBean authorityBean) {
+        this.authorityBean = authorityBean;
+    }
+    public void setGroupBean(GroupBean groupBean) {
+        this.groupBean = groupBean;
+    }
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
     }
@@ -107,7 +117,7 @@ public class Sites extends AbstractWebScript {
             String query = Utils.getJSONObject(json, "PARAM_QUERY");
             String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
             String siteDisplayName = Utils.getJSONObject(json, "PARAM_SITE_DISPLAY_NAME");
-            String user = Utils.getJSONObject(json, "PARAM_USER");
+            String authority = Utils.getJSONObject(json, "PARAM_AUTHORITY");
             String group = Utils.getJSONObject(json, "PARAM_GROUP");
             String role = Utils.getJSONObject(json, "PARAM_ROLE");
             String source = Utils.getJSONObject(json, "PARAM_SOURCE");
@@ -117,6 +127,7 @@ public class Sites extends AbstractWebScript {
             String siteVisibilityStr = Utils.getJSONObject(json, "PARAM_VISIBILITY");
             SiteVisibility siteVisibility = Utils.getVisibility(siteVisibilityStr);
             String siteType = Utils.getJSONObject(json, "PARAM_SITE_TYPE");
+            String filter = Utils.getJSONObject(json, "PARAM_FILTER");
 
             if (method != null) {
                 switch (method) {
@@ -136,20 +147,36 @@ public class Sites extends AbstractWebScript {
                         result = getAllSitesForCurrentUser();
                         break;
 
-                    case "addUser":
-                        result = addUser(siteShortName, user, group);
+                    case "getAuthorities":
+                        result = getAuthorities(siteShortName);
                         break;
 
-                    case "removeUser":
-                        result = removeUser(siteShortName, user, group);
+                    case "getUsers":
+                        result = getUsers(siteShortName);
                         break;
 
+                    case "findAuthorities":
+                        result = findAuthorities(siteShortName, filter);
+                        break;
+
+                    case "findUsers":
+                        result = findUsers(siteShortName, filter);
+                        break;
+
+                    case "addMember":
+                        result = addMember(siteShortName, authority, group);
+                        break;
+
+                    case "removeMember":
+                        result = removeMember(siteShortName, authority, group);
+                        break;
+                    // UNUSED
                     case "addPermission":
-                        result = addPermission(siteShortName, user, role);
+                        result = addPermission(siteShortName, authority, role);
                         break;
-
+                    // UNUSED
                     case "removePermission":
-                        result = removePermission(siteShortName, user, role);
+                        result = removePermission(siteShortName, authority, role);
                         break;
 
                     case "getCurrentUserSiteRole":
@@ -168,7 +195,8 @@ public class Sites extends AbstractWebScript {
                         break;
 
                     case "getSiteType":
-                        result = getSiteType(siteShortName);
+                        String type = getSiteType(siteShortName);
+                        result = Utils.getJSONReturnPair("type", type);
                         break;
 
                     case "getSiteGroups": // test not needed
@@ -256,6 +284,68 @@ public class Sites extends AbstractWebScript {
         return result;
     }
 
+
+    private JSONArray getAuthorities(String siteShortName) throws JSONException {
+        return getMembers(siteShortName, true);
+    }
+
+    /**
+     * Gets all groups of a site and their members.
+     * (method = getUsers)
+     * @param siteShortName short name of a site.
+     * @return a JSONArray containing JSONObjects for each group and each of their members.
+     */
+    private JSONArray getUsers(String siteShortName) throws JSONException {
+        return getMembers(siteShortName, false);
+    }
+
+    /**
+     * Gets all groups of a site and their members.
+     * (method = getUsers)
+     * @param siteShortName short name of a site.
+     * @return a JSONArray containing JSONObjects for each group and each of their members.
+     */
+    private JSONArray getMembers(String siteShortName, boolean authorities) throws JSONException {
+        String siteType = getSiteType(siteShortName);
+        JSONArray result = new JSONArray();
+        for (Object groupObject : Utils.siteGroups.get(siteType)) {
+
+            JSONArray json = new JSONArray();
+            JSONObject groupJSON = (JSONObject) groupObject;
+            json.add(groupJSON);
+
+            String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
+            JSONArray members;
+            if(authorities)
+                members = groupBean.getAuthorities(groupAuthorityName);
+            else
+                members = groupBean.getUsers(groupAuthorityName);
+            json.add(members);
+            result.add(json);
+        }
+
+        return result;
+
+    }
+
+    private List<String> getAuthorityList(String siteShortName, boolean authorities) throws JSONException {
+        String siteType = getSiteType(siteShortName);
+        List<String> result = new ArrayList<>();
+        for (Object groupObject : Utils.siteGroups.get(siteType)) {
+            JSONObject groupJSON = (JSONObject) groupObject;
+            String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
+            if(authorities){
+                Set<String> authorityList = groupBean.getAuthorityList(groupAuthorityName);
+                result.addAll(authorityList);
+            }
+            else {
+                Set<String> authorityList = groupBean.getUserList(groupAuthorityName);
+                result.addAll(authorityList);
+            }
+        }
+        return result;
+    }
+
     /**
      * Checks if a site is special.
      * A site is special if it has aspects; 'projecttype_templates' or 'document_template'.
@@ -269,63 +359,65 @@ public class Sites extends AbstractWebScript {
     }
 
     /**
-     * Adds a user to an authority group.
-     * (method = addUser)
+     * Adds an authority to an site authority group.
+     * (method = addMember)
      * @param siteShortName short name of a site.
-     * @param user username.
+     * @param authority authority.
      * @param group group name.
      * @return JSONSuccess.
      */
-    private JSONArray addUser(String siteShortName, String user, String group) throws JSONException {
+    private JSONArray addMember(String siteShortName, String authority, String group) throws JSONException {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
-        authorityService.addAuthority(groupName, user);
-        notificationBean.notifySiteMember(user, siteShortName);
+        authorityService.addAuthority(groupName, authority);
+        // Do not send notifications to a group
+        if(!authority.startsWith("GROUP"))
+            notificationBean.notifySiteMember(authority, siteShortName);
         return Utils.getJSONSuccess();
     }
 
     /**
-     * Removes a user from an authority group.
-     * (method = removeUser)
+     * Removes an authority from an site authority group.
+     * (method = removeMember)
      * @param siteShortName short name of a site.
-     * @param user username.
+     * @param authority authority.
      * @param group group name.
      * @return JSONSuccess.
      */
-    private JSONArray removeUser(String siteShortName, String user, String group) {
+    private JSONArray removeMember(String siteShortName, String authority, String group) {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
-        authorityService.removeAuthority(groupName, user);
+        authorityService.removeAuthority(groupName, authority);
         return Utils.getJSONSuccess();
     }
 
     /**
-     * Adds a permission for a site to a user.
+     * Adds a permission for a site to an authority.
      * (method = addPermission)
      * @param siteShortName short name of a site.
-     * @param user username.
+     * @param authority authority.
      * @param permission permission name.
      * @return JSONSuccess.
      */
-    private JSONArray addPermission(String siteShortName, String user, String permission) {
+    private JSONArray addPermission(String siteShortName, String authority, String permission) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
-        permissionService.setPermission(ref, user, permission, true);
+        permissionService.setPermission(ref, authority, permission, true);
         return Utils.getJSONSuccess();
     }
 
     /**
-     * Removes a permission for a site from a user.
+     * Removes a permission for a site from an authority.
      * (method = removePermission)
      * @param siteShortName short name of a site.
-     * @param user username.
+     * @param authority authority.
      * @param permission permission name.
      * @return JSONSuccess.
      */
-    private JSONArray removePermission(String siteShortName, String user, String permission) {
+    private JSONArray removePermission(String siteShortName, String authority, String permission) {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
-        permissionService.deletePermission(ref, user, permission);
+        permissionService.deletePermission(ref, authority, permission);
         return Utils.getJSONSuccess();
     }
 
@@ -440,11 +532,10 @@ public class Sites extends AbstractWebScript {
      * @param siteShortName shortname of a site.
      * @return a JSONArray containing type.
      */
-    private JSONArray getSiteType(String siteShortName) {
+    private String getSiteType(String siteShortName) {
 
         NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
-        String type = Utils.getSiteType(nodeService, nodeRef);
-        return Utils.getJSONReturnPair("type", type);
+        return Utils.getSiteType(nodeService, nodeRef);
     }
 
     /**
@@ -843,5 +934,19 @@ public class Sites extends AbstractWebScript {
         NodeRef destinationNodeRef = new NodeRef(destination);
         String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
         return Utils.getJSONReturnPair("fileName", fileName);
+    }
+
+    private JSONArray findAuthorities(String siteShortName, String filter) throws JSONException {
+        List<String> authorities = getAuthorityList(siteShortName, true);
+        List<String> users = getAuthorityList(siteShortName, false);
+        authorities.addAll(users);
+        return authorityBean.findAuthorities(filter, authorities);
+    }
+
+    private JSONArray findUsers(String siteShortName, String filter) throws JSONException {
+        List<String> authorities = getAuthorityList(siteShortName, true);
+        List<String> users = getAuthorityList(siteShortName, false);
+        authorities.addAll(users);
+        return authorityBean.findUsers(filter, authorities);
     }
 }
