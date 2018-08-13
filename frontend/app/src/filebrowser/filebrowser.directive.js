@@ -27,6 +27,7 @@ angular
       scope: {
         content: '=',
         showESDH: '=showEsdh',
+        isSite: '<',
         loadCheckboxes: '='
       },
       template: filebrowserRowTemplate
@@ -36,7 +37,8 @@ angular
     return {
       restrict: 'E',
       scope: {
-        content: '='
+        content: '=',
+        isSite: '<'
       },
       template: filebrowserMenuTemplate,
       controller: 'ActionsController',

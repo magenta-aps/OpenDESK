@@ -21,7 +21,7 @@
             </thead>
             <tbody ng-repeat="contentTypeList in vm.contentList">
                 <tr filebrowser-row ng-repeat="content in contentTypeList | orderObjectBy:order:reverse"
-                    content="content" show-esdh="vm.enableESDH && isSite" load-checkboxes="vm.loadCheckboxes">
+                    content="content" show-esdh="vm.enableESDH && isSite" is-site="isSite" load-checkboxes="vm.loadCheckboxes">
                 </tr>
             </tbody>
         </table>
@@ -60,7 +60,7 @@
         </div>
 
         <od-template-list
-            od-permission="vm.permissions.canEdit" 
+            od-permission="vm.permissions.canEdit"
             od-templates="vm.documentTemplates"
             od-icon="note_add"
             od-nested="true"
