@@ -8,8 +8,6 @@ angular
 
 function config ($httpProvider) {
   $httpProvider.interceptors.push('httpTicketInterceptor')
-  $httpProvider.defaults.headers.common.Authorization = undefined
-  $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 }
 
 function httpTicketInterceptor ($injector, $state, $translate, $window, $q, sessionService, ALFRESCO_URI) {
