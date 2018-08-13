@@ -3,9 +3,12 @@ package dk.opendesk.repo.beans;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -24,13 +27,18 @@ import java.util.*;
 public class NodeBean {
     private NotificationBean notificationBean;
 
+    private FileFolderService fileFolderService;
     private NodeService nodeService;
     private PermissionService permissionService;
     private PersonService personService;
     private Repository repository;
     private SearchService searchService;
     private SiteService siteService;
+    private SysAdminParams sysAdminParams;
 
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -52,6 +60,23 @@ public class NodeBean {
     }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
+    }
+    public void setSysAdminParams(SysAdminParams sysAdminParams) { this.sysAdminParams = sysAdminParams; }
+
+    public JSONObject getChildInfo(NodeRef nodeRef) throws JSONException {
+        return getNodeInfo(nodeRef, false);
+    }
+
+    public JSONObject getMetadata(NodeRef nodeRef) throws JSONException {
+        JSONObject json = new JSONObject();
+        String host = sysAdminParams.getAlfrescoHost();
+        json.put("serverURL", host);
+        return json;
+    }
+
+    public NodeRef getNodeByPath(List<String> path) throws FileNotFoundException {
+        NodeRef companyHome = getCompanyHome();
+        return fileFolderService.resolveNamePath(companyHome, path).getNodeRef();
     }
 
     public JSONObject getNodeType(NodeRef nodeRef) throws JSONException {
@@ -81,11 +106,20 @@ public class NodeBean {
     }
 
     public JSONObject getNodeInfo(NodeRef nodeRef) throws JSONException {
+        return getNodeInfo(nodeRef, true);
+    }
+
+    public JSONObject getNodeInfo(NodeRef nodeRef, boolean isExtensive) throws JSONException {
         if (!nodeService.hasAspect(nodeRef, ContentModel.ASPECT_HIDDEN)) {
 
             JSONObject json = getNodeType(nodeRef);
             String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
             json.put("name", name);
+
+            if(isExtensive) {
+                JSONObject metadata = getMetadata(nodeRef);
+                json.put("metadata", metadata);
+            }
 
             AccessStatus canEdit = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
             json.put("canEdit", canEdit == AccessStatus.ALLOWED);
@@ -96,9 +130,15 @@ public class NodeBean {
             if (!"cmis:link".equals(json.getString("contentType"))) {
                 json.put("nodeRef", nodeRef);
 
-                ChildAssociationRef parent = nodeService.getPrimaryParent(nodeRef);
+                ChildAssociationRef parentChildAssocRef = nodeService.getPrimaryParent(nodeRef);
 
-                json.put("parentNodeRef", parent.getParentRef());
+                QName qName = parentChildAssocRef.getQName();
+                boolean isVersionPreviewable = qName.equals(OpenDeskModel.ASPECT_VERSION_PREVIEWABLE);
+                json.put("isVersion", isVersionPreviewable);
+
+                NodeRef parentRef = parentChildAssocRef.getParentRef();
+                json.put("parentNodeRef", parentRef);
+                json.put("parentNodeId", parentRef.getId());
                 json.put("shortRef", nodeRef.getId());
 
 
@@ -397,7 +437,7 @@ public class NodeBean {
             contentTypeMap.put(contentType, new JSONArray());
 
         for (NodeRef nodeRef : nodeRefs) {
-            JSONObject nodeInfo = getNodeInfo(nodeRef);
+            JSONObject nodeInfo = getChildInfo(nodeRef);
             if(nodeInfo != null) {
                 String contentType = nodeInfo.getString("contentType");
                 contentTypeMap.get(contentType).add(nodeInfo);

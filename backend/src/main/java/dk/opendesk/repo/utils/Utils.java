@@ -240,6 +240,13 @@ public class Utils {
         return getJSONReturnArray(map);
     }
 
+
+    public static JSONObject getJSONErrorObj (Exception e) {
+        Map<String, Serializable> map = new HashMap<>();
+        map.put("error", e.getStackTrace()[0].toString());
+        return getJSONReturnObject(map);
+    }
+
     /**
      * Gets a JSONObject from a key-value pair.
      * @param key key of the object.
@@ -294,6 +301,14 @@ public class Utils {
     public static void writeJSONArray (Writer writer, JSONArray result) {
         try {
             result.writeJSONString(writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeJSONObject (Writer writer, JSONObject result) {
+        try {
+            result.write(writer);
         } catch (Exception e) {
             e.printStackTrace();
         }

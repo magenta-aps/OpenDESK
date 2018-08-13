@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Node</shortname>
+    <description>Gets a node</description>
+    <url>/node/{nodeId}</url>
+    <authentication>user</authentication>
+</webscript>

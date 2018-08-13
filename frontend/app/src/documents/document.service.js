@@ -7,7 +7,8 @@
 
   function documentService ($http, alfrescoNodeService) {
     var service = {
-      getDocumentByPath: getDocumentByPath,
+      getNode: getNode,
+      getSystemNode: getSystemNode,
       getBreadCrumb: getBreadCrumb,
       getEditPermission: getEditPermission,
       createVersionThumbnail: createVersionThumbnail,
@@ -16,8 +17,15 @@
 
     return service
 
-    function getDocumentByPath (node) {
-      return $http.get(`/slingshot/doclib/doclist/all/node/workspace/SpacesStore/${node}`)
+    function getNode (nodeId) {
+      return $http.get(`/alfresco/s/node/${nodeId}`)
+        .then(function (response) {
+          return response.data
+        })
+    }
+
+    function getSystemNode (shortName) {
+      return $http.get(`/alfresco/s/node/system/${shortName}`)
         .then(function (response) {
           return response.data
         })

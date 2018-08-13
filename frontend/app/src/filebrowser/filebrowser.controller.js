@@ -65,26 +65,15 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
   function activate () {
     vm.path = $stateParams.path
-    if ($stateParams.selectedTab !== undefined) $scope.tab.selected = $stateParams.selectedTab
-
+    if ($stateParams.selectedTab !== undefined) {
+      $scope.tab = {}
+      $scope.tab.selected = $stateParams.selectedTab
+    }
+    var title
     if ($scope.isSite) {
       $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
         $scope.userManagedProjects = newVal
       })
-      siteService.getNode($stateParams.projekt, 'documentLibrary', vm.path)
-        .then(function (val) {
-          setFolder(val.parent.nodeRef)
-        })
-
-      vm.permissions = siteService.getPermissions()
-      var title
-      if (vm.permissions === undefined)
-        siteService.getSiteUserPermissions($stateParams.projekt)
-          .then(function (permissions) {
-            vm.permissions = permissions
-          })
-    } else if ($stateParams.nodeRef !== undefined && $stateParams.nodeRef !== '') {
-      setFolderAndPermissions($stateParams.nodeRef)
     } else if ($stateParams.type === 'shared-docs') {
       title = $translate.instant('DOCUMENT.SHARED_WITH_ME')
       browserService.setTitle(title)
@@ -94,14 +83,20 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
       title = $translate.instant('DOCUMENT.MY_DOCUMENTS')
       browserService.setTitle(title)
       headerService.setTitle(title)
-      filebrowserService.getUserHome()
-        .then(function (userHomeRef) {
-          var userHomeId = alfrescoNodeService.processNodeRef(userHomeRef).id
-          setFolderAndPermissions(userHomeId)
-        })
-    } else {
-      setFolderAndPermissionsByPath(vm.path)
     }
+
+    if ($stateParams.nodeRef !== undefined && $stateParams.nodeRef !== '')
+      documentService.getNode($stateParams.nodeRef)
+        .then(
+          function (document) {
+            setFolderAndPermissions(document)
+          })
+    else if ($stateParams.type !== 'shared-docs')
+      documentService.getSystemNode($stateParams.type)
+        .then(
+          function (document) {
+            setFolderAndPermissions(document)
+          })
 
     filebrowserService.getTemplates('Document')
       .then(function (documentTemplates) {
@@ -120,27 +115,9 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
       })
   }
 
-  function setFolderAndPermissionsByPath (path) {
-    filebrowserService.getCompanyHome()
-      .then(function (val) {
-        var companyHomeId = alfrescoNodeService.processNodeRef(val).id
-        setFolderAndPermissions(companyHomeId + path)
-      })
-  }
-
-  function setFolderAndPermissions (node) {
-    documentService.getDocumentByPath(node)
-      .then(
-        function (response) {
-          setFolder(response.metadata.parent.nodeRef)
-          vm.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit
-        },
-        function (error) {
-          console.log(error)
-          vm.isLoading = false
-          vm.error = true
-        }
-      )
+  function setFolderAndPermissions (document) {
+    setFolder(document.nodeRef)
+    vm.permissions.canEdit = document.canEdit
   }
 
   function setFolder (fNodeRef) {
