@@ -126,6 +126,12 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+	<bean id="webscript.node.rename.put"
+		  class="dk.opendesk.webscripts.node.Rename"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.share.delete"
 		  class="dk.opendesk.webscripts.node.StopShare"
 		  parent="webscript">

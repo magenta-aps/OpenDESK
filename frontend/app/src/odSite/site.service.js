@@ -35,7 +35,6 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
     updatePDSite: updatePDSite,
     updateSite: updateSite,
     delete: deleteSite,
-    updateNode: updateNode,
     createProjectLink: createProjectLink,
     deleteLink: deleteLink,
     createMembersPDF: createMembersPDF,
@@ -219,17 +218,6 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
       PARAM_METHOD: 'deleteSite',
       PARAM_SITE_SHORT_NAME: siteName
     }).then(function (response) {
-      return response.data
-    })
-  }
-
-  /**
-     * @todo this is only used for renaming in filebrowser.controller/rename.controller, and something in text_templates.controller. Perhaps it should be moved
-     * @param {*} nodeRef
-     * @param {*} props
-     */
-  function updateNode (nodeRef, props) {
-    return $http.post('/api/node/' + alfrescoNodeService.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
       return response.data
     })
   }
