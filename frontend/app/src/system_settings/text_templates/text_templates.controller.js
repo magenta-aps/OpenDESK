@@ -48,7 +48,14 @@ function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentServi
 
   function save () {
     vm.uploading = true
-    var file = new Blob([vm.changedTemplate], { type: 'plain/text' })
+    if (vm.changedTemplate !== undefined)
+      saveEmailContent()
+    if (vm.subject)
+      saveEmailSubject()
+  }
+
+  function saveEmailContent () {
+    var file = new Blob([vm.changedTemplate], {type: 'html/text'})
     ContentService.uploadNewVersion(file, null, vm.nodeRef)
       .then(function () {
         $mdToast.show(
@@ -57,8 +64,6 @@ function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentServi
             .hideDelay(3000)
         )
       })
-    if (vm.subject)
-      saveEmailSubject()
   }
 
   function saveEmailSubject () {
