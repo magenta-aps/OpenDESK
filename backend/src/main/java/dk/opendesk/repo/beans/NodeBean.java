@@ -335,14 +335,18 @@ public class NodeBean {
     private JSONObject getNodePickerChildren(List<NodeRef> childrenRefs) throws JSONException {
         JSONArray children = new JSONArray();
         for (NodeRef childRef : childrenRefs) {
-            Map<QName, Serializable> props = nodeService.getProperties(childRef);
-            String name = (String) props.get(ContentModel.PROP_NAME);
             QName childNodeType = nodeService.getType(childRef);
 
-            // If the child is a site then link directly to its document library
+            Map<QName, Serializable> props = nodeService.getProperties(childRef);
+            String name;
+            // If the child is a site then link directly to its document library and use the title of the site
             if (childNodeType.equals(SiteModel.TYPE_SITE)) {
                 childRef = nodeService.getChildByName(childRef, ContentModel.ASSOC_CONTAINS, SiteService.DOCUMENT_LIBRARY);
                 childNodeType = ContentModel.TYPE_FOLDER;
+                name = (String) props.get(ContentModel.PROP_TITLE);
+            }
+            else {
+                name = (String) props.get(ContentModel.PROP_NAME);
             }
 
             // Only folders, content and sites will be displayed
