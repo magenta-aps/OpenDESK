@@ -5,6 +5,7 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.site.SiteMembership;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -253,10 +254,16 @@ public class NodeBean {
     }
 
     private JSONObject getNodePickerSites() throws JSONException {
-        List<SiteInfo> sites = siteService.listSites("", "");
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
+        // List all the sites that the specified user has a explicit membership to.
+        List<SiteMembership> siteMemberships = siteService.listSiteMemberships(userName, 0);
         ArrayList<NodeRef> childrenRefs = new ArrayList<>();
-        for (SiteInfo siteInfo : sites) {
-            childrenRefs.add(siteInfo.getNodeRef());
+        for (SiteMembership siteMembership : siteMemberships) {
+            String role = siteMembership.getRole();
+            if(!role.equals(SiteModel.SITE_CONSUMER)) {
+                SiteInfo siteInfo = siteMembership.getSiteInfo();
+                childrenRefs.add(siteInfo.getNodeRef());
+            }
         }
         return getNodePickerChildren(childrenRefs);
     }
