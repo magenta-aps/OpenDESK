@@ -371,7 +371,9 @@ public class Sites extends AbstractWebScript {
         String groupName = Utils.getAuthorityName(siteShortName, group);
         authorityService.addAuthority(groupName, authority);
         // Do not send notifications to a group
-        if(!authority.startsWith("GROUP"))
+        if(authority.startsWith("GROUP"))
+            notificationBean.notifySiteGroup(authority, siteShortName);
+        else
             notificationBean.notifySiteMember(authority, siteShortName);
         return Utils.getJSONSuccess();
     }

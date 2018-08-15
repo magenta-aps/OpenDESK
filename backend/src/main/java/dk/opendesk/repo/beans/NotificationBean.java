@@ -157,6 +157,15 @@ public class NotificationBean {
         return json;
     }
 
+    private JSONObject getSiteParams(String siteShortName) throws JSONException {
+        String siteName = getSiteName(siteShortName);
+        JSONObject params = new JSONObject();
+        params.put(OpenDeskModel.PARAM_SITE_NAME, siteName);
+        params.put(OpenDeskModel.PARAM_SITE_SHORT_NAME, siteShortName);
+        params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_SITE_MEMBER);
+        return params;
+    }
+
     public void notifyDiscussion(NodeRef nodeRef, SiteInfo site) throws JSONException {
         String siteShortName = site.getShortName();
         String siteName = getSiteName(siteShortName);
@@ -271,12 +280,18 @@ public class NotificationBean {
             createNotification(userName, params, preferenceFilter);
     }
 
+    public void notifySiteGroup(String authority, String siteShortName) throws JSONException {
+        JSONObject params = getSiteParams(siteShortName);
+        String preferenceFilter = "";
+
+        // Send notifications to all members of this group
+        Set<String> groupMembers = getAuthorityMembers(authority);
+        for(String userName : groupMembers)
+            createNotification(userName, params, preferenceFilter);
+    }
+
     public void notifySiteMember(String userName, String siteShortName) throws JSONException {
-        String siteName = getSiteName(siteShortName);
-        JSONObject params = new JSONObject();
-        params.put(OpenDeskModel.PARAM_SITE_NAME, siteName);
-        params.put(OpenDeskModel.PARAM_SITE_SHORT_NAME, siteShortName);
-        params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_SITE_MEMBER);
+        JSONObject params = getSiteParams(siteShortName);
         String preferenceFilter = "";
         createNotification(userName, params, preferenceFilter);
     }
@@ -317,8 +332,12 @@ public class NotificationBean {
     }
 
     private Set<String> getSiteMembers(String shortName) {
-        String group = "GROUP_site_" + shortName;
-        return authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
+        String authority = "GROUP_site_" + shortName;
+        return getAuthorityMembers(authority);
+    }
+
+    private Set<String> getAuthorityMembers(String authority) {
+        return authorityService.getContainedAuthorities(AuthorityType.USER, authority, false);
     }
 }
 
