@@ -33,7 +33,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   activate()
 
   function activate () {
-    siteService.getGroupsAndMembers(vm.site.shortName).then(function (groups) {
+    siteService.getAuthorities(vm.site.shortName).then(function (groups) {
       vm.groups = groups
     })
   }
@@ -50,7 +50,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
 
   function searchPeople (query) {
     if (query)
-      return MemberService.search(query)
+      return siteService.findAuthorities(vm.site.shortName, query)
   }
 
   function addExternalUserToGroup (userName, firstName, lastName, email, telephone, group) {
@@ -101,22 +101,24 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
     $mdDialog.cancel()
   }
 
-  function addMemberToSite (user, groupName) {
-    var userName = user.userName
+  function addMemberToSite (authority, groupName) {
+    var authorityName = authority.userName ? authority.userName : authority.fullName
     var siteShortName = vm.site.shortName
 
-    MemberService.add(siteShortName, userName, groupName)
+    MemberService.add(siteShortName, authorityName, groupName)
       .then(function () {
         for (var i = 0; i < vm.groups.length; i++)
           if (vm.groups[i][0].role === groupName) {
-            vm.groups[i][1].push(user)
+            vm.groups[i][1].push(authority)
             break
           }
       })
   }
 
-  function removeMemberFromSite (user, groupName) {
-    MemberService.remove(vm.site.shortName, user.userName, groupName)
+  function removeMemberFromSite (authority, groupName) {
+    var authorityName = authority.userName ? authority.userName : authority.fullName
+    var siteShortName = vm.site.shortName
+    MemberService.remove(siteShortName, authorityName, groupName)
   }
 
   function showSendEmailDialog (userName, subject, body) {

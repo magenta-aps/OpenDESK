@@ -2,10 +2,10 @@
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$q', '$mdDialog',
+  .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$mdDialog',
     'UserService', 'siteService', 'MemberService', SiteCreateController])
 
-function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, UserService, siteService,
+function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $mdDialog, UserService, siteService,
   MemberService) {
   var vm = this
 
@@ -60,7 +60,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
   function searchPeople (query) {
     if (query)
-      return MemberService.search(query)
+      return MemberService.findAuthorities(query)
   }
 
   function loadSiteGroups () {
@@ -137,13 +137,13 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
   function addUserToGroup (siteShortName, siteName, group, groupName) {
     // Iterating list of items sequential instead of async.
-    angular.forEach(group, function (user) {
-      var userName = user.userName
-      MemberService.add(siteShortName, userName, groupName)
+    angular.forEach(group, function (authority) {
+      var authorityName = authority.userName ? authority.userName : authority.fullName
+      MemberService.add(siteShortName, authorityName, groupName)
         .then(function () {
         },
         function (err) {
-          console.log('ERROR: Problem creating user in project group ' + groupName)
+          console.log('ERROR: Could not add ' + authorityName + ' in site group ' + groupName)
           console.log(err)
         }
         )

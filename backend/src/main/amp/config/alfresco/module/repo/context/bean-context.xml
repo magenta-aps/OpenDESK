@@ -18,6 +18,12 @@
 -->
 <beans>
 
+    <bean id="authorityBean" class="dk.opendesk.repo.beans.AuthorityBean">
+        <property name="authorityService" ref="AuthorityService"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="personService" ref="PersonService"/>
+    </bean>
+
     <bean id="discussionBean" class="dk.opendesk.repo.beans.DiscussionBean">
         <property name="discussionService" ref="DiscussionService"/>
         <property name="personBean" ref="personBean"/>
@@ -25,6 +31,12 @@
 
     <bean id="editorBean" class="dk.opendesk.repo.beans.EditorBean">
         <property name="moduleService" ref="ModuleService"/>
+    </bean>
+
+    <bean id="groupBean" class="dk.opendesk.repo.beans.GroupBean">
+        <property name="authorityService" ref="AuthorityService"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="personService" ref="PersonService"/>
     </bean>
 
     <bean id="nodeBean" class="dk.opendesk.repo.beans.NodeBean">

@@ -14,9 +14,9 @@
 			<md-content class="md-padding" layout="column">
 				<div ng-repeat="(groupIndex, group) in vm.groups">
 					<div ng-if="group[0].multipleMembers">
-						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]" 
-							class="group-toggle" 
-							layout="row" 
+						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]"
+							class="group-toggle"
+							layout="row"
 							ng-class="showGroupList[groupIndex] ? 'closed' : 'open'"
 							aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}">
 							<span>{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}</span>
@@ -26,7 +26,7 @@
 						<div ng-show="!showGroupList[groupIndex]">
 							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
 									  md-on-remove="vm.removeMemberFromSite($chip, group[0].shortName)"
-							    md-on-add="vm.addMemberToSite($chip, group[0].shortName)">
+									  md-on-add="vm.addMemberToSite($chip, group[0].shortName)">
 								<md-autocomplete md-selected-item="selectedProjGrpItem"
 												 md-search-text="vm.searchTextList[groupIndex]"
 												 md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
@@ -35,7 +35,7 @@
 									<span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
 										{{ pgitem.displayName }}
 									</span>
-									<span class="od-secondary">({{ pgitem.userName }})</span>
+									<span ng-if="pgitem.userName" class="od-secondary">({{ pgitem.userName }})</span>
 								</md-autocomplete>
 								<md-chip-template>
 									<span>{{ $chip.displayName }}</span>

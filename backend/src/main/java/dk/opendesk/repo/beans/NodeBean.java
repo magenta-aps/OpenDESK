@@ -6,6 +6,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.site.SiteMembership;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileNotFoundException;
@@ -113,7 +114,7 @@ public class NodeBean {
         if (!nodeService.hasAspect(nodeRef, ContentModel.ASPECT_HIDDEN)) {
 
             JSONObject json = getNodeType(nodeRef);
-            String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+            String name = getName(nodeRef);
             json.put("name", name);
 
             if(isExtensive) {
@@ -293,10 +294,16 @@ public class NodeBean {
     }
 
     private JSONObject getNodePickerSites() throws JSONException {
-        List<SiteInfo> sites = siteService.listSites("", "");
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
+        // List all the sites that the specified user has a explicit membership to.
+        List<SiteMembership> siteMemberships = siteService.listSiteMemberships(userName, 0);
         ArrayList<NodeRef> childrenRefs = new ArrayList<>();
-        for (SiteInfo siteInfo : sites) {
-            childrenRefs.add(siteInfo.getNodeRef());
+        for (SiteMembership siteMembership : siteMemberships) {
+            String role = siteMembership.getRole();
+            if(!role.equals(SiteModel.SITE_CONSUMER)) {
+                SiteInfo siteInfo = siteMembership.getSiteInfo();
+                childrenRefs.add(siteInfo.getNodeRef());
+            }
         }
         return getNodePickerChildren(childrenRefs);
     }
@@ -375,14 +382,18 @@ public class NodeBean {
     private JSONObject getNodePickerChildren(List<NodeRef> childrenRefs) throws JSONException {
         JSONArray children = new JSONArray();
         for (NodeRef childRef : childrenRefs) {
-            Map<QName, Serializable> props = nodeService.getProperties(childRef);
-            String name = (String) props.get(ContentModel.PROP_NAME);
             QName childNodeType = nodeService.getType(childRef);
 
-            // If the child is a site then link directly to its document library
+            Map<QName, Serializable> props = nodeService.getProperties(childRef);
+            String name;
+            // If the child is a site then link directly to its document library and use the title of the site
             if (childNodeType.equals(SiteModel.TYPE_SITE)) {
                 childRef = nodeService.getChildByName(childRef, ContentModel.ASSOC_CONTAINS, SiteService.DOCUMENT_LIBRARY);
                 childNodeType = ContentModel.TYPE_FOLDER;
+                name = (String) props.get(ContentModel.PROP_TITLE);
+            }
+            else {
+                name = (String) props.get(ContentModel.PROP_NAME);
             }
 
             // Only folders, content and sites will be displayed
@@ -548,5 +559,39 @@ public class NodeBean {
             }
         }
         return Utils.getJSONSuccess();
+    }
+
+    public JSONArray rename(NodeRef nodeRef, String name) {
+        QName qname = nodeService.getType(nodeRef);
+        if (qname.equals(ContentModel.TYPE_CONTENT)) {
+            String fileExtension = getFileExtension(nodeRef);
+            if(fileExtension != null)
+                name += fileExtension;
+        }
+        nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, name);
+        return Utils.getJSONSuccess();
+    }
+
+    private String getName(NodeRef nodeRef) {
+        String[] nameAndExtension = getNameAndExtension(nodeRef);
+        return nameAndExtension[0];
+    }
+
+    private String getFileExtension(NodeRef nodeRef) {
+        String[] nameAndExtension = getNameAndExtension(nodeRef);
+        return nameAndExtension[1];
+    }
+
+    private String[] getNameAndExtension(NodeRef nodeRef) {
+        String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+        int extensionIndex = name.lastIndexOf(".");
+        String [] split = new String[2];
+        if(extensionIndex > 0) {
+            split[0] = name.substring(0, extensionIndex);
+            split[1] = name.substring(extensionIndex);
+        } else {
+            split[0] = name;
+        }
+        return split;
     }
 }

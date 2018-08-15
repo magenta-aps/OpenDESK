@@ -52,8 +52,8 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     $scope.tab.selected = $stateParams.selectedTab
     getSiteUserPermissions()
 
-    if ($stateParams.path) {
-      var nodeId = $stateParams.path.split('#')[0]
+    if ($stateParams.discussion) {
+      var nodeId = $stateParams.discussion.split('#')[0]
       discussionService.getDiscussionFromNodeRef($stateParams.projekt, nodeId)
         .then(function (discussion) {
           vm.selectedDiscussion = discussion
@@ -62,11 +62,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     } else {
       vm.getDiscussions($stateParams.projekt)
     }
-
-    siteService.getGroupsAndMembers($stateParams.projekt)
-      .then(function (groups) {
-        vm.groups = groups
-      })
   }
 
   function cancelDialog () {

@@ -46,10 +46,7 @@
 	<bean id="webscript.groups.post"
 		  class="dk.opendesk.webscripts.Groups"
 		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-		<property name="authorityService" ref="AuthorityService"/>
-		<property name="personService" ref="PersonService"/>
-		<property name="siteService" ref="SiteService"/>
+		<property name="groupBean" ref="groupBean"/>
 	</bean>
 
     <bean id="webscript.preferences.get"
@@ -135,6 +132,12 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+	<bean id="webscript.node.rename.put"
+		  class="dk.opendesk.webscripts.node.Rename"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.share.delete"
 		  class="dk.opendesk.webscripts.node.StopShare"
 		  parent="webscript">
@@ -168,6 +171,8 @@
 	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
+        <property name="authorityBean" ref="authorityBean"/>
+		<property name="groupBean" ref="groupBean"/>
         <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="siteService" ref="SiteService"/>
@@ -183,6 +188,7 @@
 	<bean id="webscript.users.post"
 		  class="dk.opendesk.webscripts.users.Users"
 		  parent="webscript">
+        <property name="authorityBean" ref="authorityBean"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
@@ -191,7 +197,6 @@
 		<property name="searchService" ref="SearchService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="properties"> <ref bean="global-properties"/> </property>
-		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
 	<bean id="webscript.cleanupandpurge.get"
