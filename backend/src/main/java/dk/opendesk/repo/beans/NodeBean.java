@@ -303,7 +303,7 @@ public class NodeBean {
                 nodeRef = parentRef;
             }
         }
-        String nodeName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+        String nodeName = getName(nodeRef);
         result.put("name", nodeName);
 
         return result;
@@ -344,16 +344,13 @@ public class NodeBean {
         for (NodeRef childRef : childrenRefs) {
             QName childNodeType = nodeService.getType(childRef);
 
-            Map<QName, Serializable> props = nodeService.getProperties(childRef);
-            String name;
-            // If the child is a site then link directly to its document library and use the title of the site
+            // Important to get name before changing childRef to its document library
+            String name = getName(childRef);
+
+            // If the child is a site then link directly to its document library
             if (childNodeType.equals(SiteModel.TYPE_SITE)) {
                 childRef = nodeService.getChildByName(childRef, ContentModel.ASSOC_CONTAINS, SiteService.DOCUMENT_LIBRARY);
                 childNodeType = ContentModel.TYPE_FOLDER;
-                name = (String) props.get(ContentModel.PROP_TITLE);
-            }
-            else {
-                name = (String) props.get(ContentModel.PROP_NAME);
             }
 
             // Only folders, content and sites will be displayed
@@ -533,6 +530,9 @@ public class NodeBean {
     }
 
     public String getName(NodeRef nodeRef) {
+        QName type = nodeService.getType(nodeRef);
+        if (type.equals(SiteModel.TYPE_SITE))
+            return (String) nodeService.getProperty(nodeRef, ContentModel.PROP_TITLE);
         String[] nameAndExtension = getNameAndExtension(nodeRef);
         return nameAndExtension[0];
     }
