@@ -8,6 +8,7 @@
   function documentService ($http, alfrescoNodeService) {
     var service = {
       getNode: getNode,
+      getSiteNode: getSiteNode,
       getSystemNode: getSystemNode,
       getBreadCrumb: getBreadCrumb,
       getEditPermission: getEditPermission,
@@ -19,6 +20,13 @@
 
     function getNode (nodeId) {
       return $http.get(`/alfresco/s/node/${nodeId}`)
+        .then(function (response) {
+          return response.data
+        })
+    }
+
+    function getSiteNode (siteShortName) {
+      return $http.get(`/alfresco/s/node/site/${siteShortName}`)
         .then(function (response) {
           return response.data
         })

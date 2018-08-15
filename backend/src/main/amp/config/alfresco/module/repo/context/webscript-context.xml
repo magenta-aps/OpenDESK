@@ -156,6 +156,13 @@
         <property name="nodeBean" ref="nodeBean"/>
     </bean>
 
+	<bean id="webscript.node.site.get"
+		  class="dk.opendesk.webscripts.node.GetSiteNode"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
 	<bean id="webscript.node.system.get"
 		  class="dk.opendesk.webscripts.node.GetSystemNode"
 		  parent="webscript">

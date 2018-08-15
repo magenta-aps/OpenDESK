@@ -77,4 +77,8 @@
         <property name="repository" ref="repositoryHelper"/>
     </bean>
 
+    <bean id="siteBean" class="dk.opendesk.repo.beans.SiteBean">
+        <property name="siteService" ref="SiteService"/>
+    </bean>
+
 </beans>

@@ -50,7 +50,8 @@ function config ($stateProvider, APP_CONFIG, USER_ROLES) {
       params: {
         authorizedRoles: [USER_ROLES.user],
         selectedTab: 0,
-        isSite: true
+        isSite: true,
+        type: 'site'
       }
     })
 }

@@ -70,7 +70,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
       $scope.tab.selected = $stateParams.selectedTab
     }
     var title
-    if ($scope.isSite) {
+    if ($stateParams.type === 'site') {
       $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
         $scope.userManagedProjects = newVal
       })
@@ -87,6 +87,12 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
     if ($stateParams.nodeRef !== undefined && $stateParams.nodeRef !== '')
       documentService.getNode($stateParams.nodeRef)
+        .then(
+          function (document) {
+            setFolderAndPermissions(document)
+          })
+    else if ($stateParams.type === 'site')
+      documentService.getSiteNode($stateParams.projekt)
         .then(
           function (document) {
             setFolderAndPermissions(document)
@@ -207,7 +213,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
         return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})'
       else if ($stateParams.type === 'shared-docs')
         return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})'
-      else if ($scope.isSite)
+      else if ($stateParams.type === 'site')
         return 'project.filebrowser({projekt: "' + $stateParams.projekt +
                     '", path: "' + vm.path + '/' + content.name + '"})'
 
@@ -243,8 +249,10 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     } else if (vm.path !== undefined) {
       var homeLink
 
-      if ($scope.isSite) homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})'
-      else homeLink = 'systemsettings.filebrowser({path: ""})'
+      if ($stateParams.type === 'site')
+        homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})'
+      else
+        homeLink = 'systemsettings.filebrowser({path: ""})'
 
       var paths = [{
         title: 'Home',
@@ -261,7 +269,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     for (var a in pathArr)
       if (pathArr[a] !== '') {
         var link
-        if ($scope.isSite)
+        if ($stateParams.type === 'site')
           link = 'project.filebrowser({projekt: "' + $stateParams.projekt +
                         '", path: "' + pathLink + pathArr[a] + '"})'
         else
