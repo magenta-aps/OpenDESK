@@ -78,6 +78,7 @@
 	<bean id="webscript.documents.template.post"
 		  class="dk.opendesk.webscripts.documents.Template"
 		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="fileFolderService" ref="fileFolderService"/>
 		<property name="repository" ref="repositoryHelper"/>

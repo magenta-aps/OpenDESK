@@ -16,6 +16,7 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.documents;
 
+import dk.opendesk.repo.beans.NodeBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
@@ -45,9 +46,15 @@ import java.util.Map;
 
 public class Template extends AbstractWebScript {
 
+    private NodeBean nodeBean;
+
     private FileFolderService fileFolderService;
     private NodeService nodeService;
     private Repository repository;
+
+    public void setNodeBean(NodeBean nodeBean) {
+        this.nodeBean = nodeBean;
+    }
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
@@ -103,7 +110,7 @@ public class Template extends AbstractWebScript {
      * @param templateFolderPath path of the template folder.
      * @return nodeRef of the template folder.
      */
-    private NodeRef getTemplateFolderRef(List<String> templateFolderPath) throws SearcherException, JSONException, FileNotFoundException {
+    private NodeRef getTemplateFolderRef(List<String> templateFolderPath) throws SearcherException, FileNotFoundException {
         NodeRef companyHome = repository.getCompanyHome();
         return fileFolderService.resolveNamePath(companyHome, templateFolderPath).getNodeRef();
     }
@@ -125,16 +132,16 @@ public class Template extends AbstractWebScript {
         for (ChildAssociationRef child : childAssociationRefs) {
             JSONObject json = new JSONObject();
 
-            Map<QName, Serializable> props = nodeService.getProperties(child.getChildRef());
-            String name = (String) props.get(ContentModel.PROP_NAME);
+            NodeRef templateRef = child.getChildRef();
+            String name = nodeBean.getName(templateRef);
 
-            QName childNodeType = nodeService.getType(child.getChildRef());
+            QName childNodeType = nodeService.getType(templateRef);
 
-            json.put("nodeRef", child.getChildRef().getId());
+            json.put("nodeRef", templateRef.getId());
             json.put("name", name);
             json.put("isFolder", childNodeType.equals(ContentModel.TYPE_FOLDER));
 
-            ContentData contentData = (ContentData) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_CONTENT);
+            ContentData contentData = (ContentData) nodeService.getProperty(templateRef, ContentModel.PROP_CONTENT);
             if(contentData != null) {
                 String originalMimeType = contentData.getMimetype();
                 json.put("mimeType", originalMimeType);
@@ -157,10 +164,12 @@ public class Template extends AbstractWebScript {
      * @return a JSONArray containing nodeRef and filename of each template.
      */
     private JSONArray createContentFromTemplate(String nodeName, String templateNodeId, String destinationNodeRefStr)
-            throws JSONException, FileNotFoundException {
+            throws FileNotFoundException {
 
         NodeRef templateNodeRef = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, templateNodeId);
         NodeRef destinationNodeRef = new NodeRef(destinationNodeRefStr);
+        // Add file extension to name
+        nodeName += nodeBean.getFileExtension(templateNodeRef);
         String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
 
         FileInfo newFile = fileFolderService.copy(templateNodeRef, destinationNodeRef, fileName);

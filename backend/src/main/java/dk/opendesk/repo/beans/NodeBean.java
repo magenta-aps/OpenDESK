@@ -532,12 +532,12 @@ public class NodeBean {
         return Utils.getJSONSuccess();
     }
 
-    private String getName(NodeRef nodeRef) {
+    public String getName(NodeRef nodeRef) {
         String[] nameAndExtension = getNameAndExtension(nodeRef);
         return nameAndExtension[0];
     }
 
-    private String getFileExtension(NodeRef nodeRef) {
+    public String getFileExtension(NodeRef nodeRef) {
         String[] nameAndExtension = getNameAndExtension(nodeRef);
         return nameAndExtension[1];
     }
