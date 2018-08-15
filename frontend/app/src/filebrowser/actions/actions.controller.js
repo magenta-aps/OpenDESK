@@ -211,6 +211,8 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   function uploadNewVersionDialog () {
     $mdDialog.show({
       template: uploadNewVersionTemplate,
+      controller: 'ActionsController',
+      controllerAs: 'DAC',
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
       clickOutsideToClose: true
