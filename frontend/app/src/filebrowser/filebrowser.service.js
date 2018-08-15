@@ -10,13 +10,11 @@ function fileBrowserService ($http, alfrescoNodeService) {
 
   var service = {
     genericContentAction: genericContentAction,
-    getCompanyHome: getCompanyHome,
     getContentList: getContentList,
     getCurrentFolderNodeRef: getCurrentFolderNodeRef,
     getHome: getHome,
     getSharedNodes: getSharedNodes,
     getTemplates: getTemplates,
-    getUserHome: getUserHome,
     loadFromSbsys: loadFromSbsys,
     setCurrentFolder: setCurrentFolder,
     shareNode: shareNode,
