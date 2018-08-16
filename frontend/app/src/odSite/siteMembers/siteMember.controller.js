@@ -48,7 +48,7 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
   }
 
   function loadMembers () {
-    siteService.getGroupsAndMembers(vm.site.shortName)
+    siteService.getUsers(vm.site.shortName)
       .then(function (groups) {
         vm.groups = groups
       })

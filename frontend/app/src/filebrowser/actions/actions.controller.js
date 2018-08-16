@@ -6,7 +6,6 @@ import '../../shared/services/editOnlineMSOffice.service'
 import deleteTemplate from './delete/delete.view.html'
 import genericContentDialogTemplate from '../genericDialog/genericContentDialog.view.html'
 import renameTemplate from './rename/rename.view.html'
-import reviewDocumentTemplate from '../view/content/document/reviewDocument.tmpl.html'
 import shareDocumentTemplate from '../view/content/document/shareDocument.tmpl.html'
 import uploadNewVersionTemplate from '../view/content/document/uploadNewVersion.tmpl.html'
 
@@ -38,7 +37,6 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   vm.uploadNewVersionDialog = uploadNewVersionDialog
 
   // TODO: Remove duplicates in document.controller
-  vm.createReviewNotification = createReviewNotification
   vm.downloadDocument = downloadDocument
   vm.previewDocument = previewDocument
   vm.reviewDocumentsDialog = reviewDocumentsDialog
@@ -52,11 +50,6 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
 
   function copyContentDialog () {
     genericContentDialog('COPY')
-  }
-
-  function createReviewNotification (userName, comment) {
-    siteService.createReviewNotification(content.nodeRef, userName, comment)
-    $mdDialog.cancel()
   }
 
   function deleteContentDialog () {
@@ -144,9 +137,13 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
 
   function reviewDocumentsDialog () {
     $mdDialog.show({
-      template: reviewDocumentTemplate,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
+      locals: {
+        nodeId: alfrescoNodeService.processNodeRef(content.nodeRef).id
+      },
+      controller: ['$scope', 'nodeId', function ($scope, nodeId) {
+        $scope.nodeId = nodeId
+      }],
+      template: '<md-dialog od-create-review node-id="nodeId"></md-dialog>',
       clickOutsideToClose: true
     })
   }
@@ -214,6 +211,8 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   function uploadNewVersionDialog () {
     $mdDialog.show({
       template: uploadNewVersionTemplate,
+      controller: 'ActionsController',
+      controllerAs: 'DAC',
       scope: $scope, // use parent scope in template
       preserveScope: true, // do not forget this if use parent scope
       clickOutsideToClose: true

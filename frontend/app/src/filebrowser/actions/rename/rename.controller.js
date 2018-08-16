@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('RenameController', ['$rootScope', '$mdDialog', 'content', 'siteService', RenameController])
+  .controller('RenameController', ['$rootScope', '$mdDialog', 'content', 'alfrescoNodeService', RenameController])
 
-function RenameController ($rootScope, $mdDialog, content, siteService) {
+function RenameController ($rootScope, $mdDialog, content, alfrescoNodeService) {
   var vm = this
 
   vm.nodeRef = content.nodeRef
@@ -14,11 +14,7 @@ function RenameController ($rootScope, $mdDialog, content, siteService) {
   vm.rename = rename
 
   function rename () {
-    var props = {
-      prop_cm_name: vm.newName
-    }
-
-    siteService.updateNode(vm.nodeRef, props)
+    alfrescoNodeService.updateName(vm.nodeRef, vm.newName)
       .then(function () {
         $rootScope.$broadcast('updateFilebrowser')
         cancel()

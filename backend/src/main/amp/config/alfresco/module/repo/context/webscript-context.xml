@@ -7,9 +7,9 @@
 	The ASF licenses this file to You under the Apache License, Version 2.0
 	(the "License"); you may not use this file except in compliance with
 	the License.  You may obtain a copy of the License at
-	
+
 	http://www.apache.org/licenses/LICENSE-2.0
-	
+
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,6 @@
         <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="personService" ref="PersonService"/>
-		<property name="siteService" ref="SiteService"/>
 	</bean>
 
 	<bean id="webscript.nodepicker.node.get"
@@ -47,11 +46,7 @@
 	<bean id="webscript.groups.post"
 		  class="dk.opendesk.webscripts.Groups"
 		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-		<property name="authorityService" ref="AuthorityService"/>
-		<property name="personService" ref="PersonService"/>
-		<property name="siteService" ref="SiteService"/>
-		<property name="preferenceService" ref="PreferenceService"/>
+		<property name="groupBean" ref="groupBean"/>
 	</bean>
 
     <bean id="webscript.preferences.get"
@@ -83,6 +78,7 @@
 	<bean id="webscript.documents.template.post"
 		  class="dk.opendesk.webscripts.documents.Template"
 		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="fileFolderService" ref="fileFolderService"/>
 		<property name="repository" ref="repositoryHelper"/>
@@ -131,6 +127,12 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+	<bean id="webscript.node.rename.put"
+		  class="dk.opendesk.webscripts.node.Rename"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.share.delete"
 		  class="dk.opendesk.webscripts.node.StopShare"
 		  parent="webscript">
@@ -158,6 +160,9 @@
 	<bean id="webscript.sites.post"
 		  class="dk.opendesk.webscripts.sites.Sites"
 		  parent="webscript">
+        <property name="authorityBean" ref="authorityBean"/>
+		<property name="groupBean" ref="groupBean"/>
+        <property name="notificationBean" ref="notificationBean"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="personService" ref="PersonService"/>
@@ -172,6 +177,7 @@
 	<bean id="webscript.users.post"
 		  class="dk.opendesk.webscripts.users.Users"
 		  parent="webscript">
+        <property name="authorityBean" ref="authorityBean"/>
 		<property name="personService" ref="PersonService"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="authorityService" ref="AuthorityService"/>
@@ -180,7 +186,6 @@
 		<property name="searchService" ref="SearchService"/>
 		<property name="siteService" ref="SiteService"/>
 		<property name="properties"> <ref bean="global-properties"/> </property>
-		<property name="preferenceService" ref="PreferenceService"/>
 	</bean>
 
 	<bean id="webscript.cleanupandpurge.get"
@@ -211,6 +216,24 @@
 		  class="dk.opendesk.webscripts.settings.UpdateSettings"
 		  parent="webscript">
 		<property name="settingsBean" ref="settingsBean"/>
+	</bean>
+
+	<bean id="webscript.review.review.get"
+		  class="dk.opendesk.webscripts.review.GetReview"
+		  parent="webscript">
+		<property name="reviewBean" ref="reviewBean"/>
+	</bean>
+
+	<bean id="webscript.review.review.post"
+		  class="dk.opendesk.webscripts.review.CreateReview"
+		  parent="webscript">
+		<property name="reviewBean" ref="reviewBean"/>
+	</bean>
+
+	<bean id="webscript.review.review.put"
+		  class="dk.opendesk.webscripts.review.UpdateReview"
+		  parent="webscript">
+		<property name="reviewBean" ref="reviewBean"/>
 	</bean>
 
 </beans>

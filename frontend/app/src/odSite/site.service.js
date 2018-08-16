@@ -2,12 +2,10 @@
 import '../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp.site')
-  .factory('siteService', ['$q', '$http', '$rootScope', '$translate', 'alfrescoNodeService', 'sessionService',
-    'notificationsService', 'UserService', 'systemSettingsService', SiteService])
+  .factory('siteService', ['$q', '$http', '$rootScope', 'alfrescoNodeService', 'sessionService',
+    'systemSettingsService', SiteService])
 
-function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, sessionService,
-  notificationsService, UserService, systemSettingsService) {
-  var currentUser = UserService.get()
+function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService, systemSettingsService) {
   var site = {}
   var groups = {}
   var userManagedProjects = []
@@ -37,7 +35,6 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     updatePDSite: updatePDSite,
     updateSite: updateSite,
     delete: deleteSite,
-    updateNode: updateNode,
     createProjectLink: createProjectLink,
     deleteLink: deleteLink,
     createMembersPDF: createMembersPDF,
@@ -48,14 +45,13 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     getPermissions: getPermissions,
     setUserManagedProjects: setUserManagedProjects,
     getUserManagedProjects: getUserManagedProjects,
-    getGroupsAndMembers: getGroupsAndMembers,
-    getSiteOwner: getSiteOwner,
-    getSiteManager: getSiteManager,
-    createDocumentNotification: createDocumentNotification,
-    createReviewNotification: createReviewNotification,
+    getAuthorities: getAuthorities,
+    getUsers: getUsers,
     updateMemberList: updateMemberList,
     addFavourite: addFavourite,
-    removeFavourite: removeFavourite
+    removeFavourite: removeFavourite,
+    findAuthorities: findAuthorities,
+    findUsers: findUsers
   }
 
   return service
@@ -70,7 +66,7 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
 
   function getAllOwners () {
     return $http.post('/alfresco/service/groups', {
-      PARAM_METHOD: 'getGroupMembers',
+      PARAM_METHOD: 'getUsers',
       PARAM_GROUP_NAME: 'OPENDESK_ProjectOwners'
     }).then(function (response) {
       return response.data
@@ -227,17 +223,6 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
   }
 
   /**
-     * @todo this is only used for renaming in filebrowser.controller/rename.controller, and something in text_templates.controller. Perhaps it should be moved
-     * @param {*} nodeRef
-     * @param {*} props
-     */
-  function updateNode (nodeRef, props) {
-    return $http.post('/api/node/' + alfrescoNodeService.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
-      return response.data
-    })
-  }
-
-  /**
      * @todo move this into a sitelink service
      * @param {@} destination
      */
@@ -362,11 +347,19 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     return userManagedProjects
   }
 
-  function getGroupsAndMembers (siteShortName) {
-    return $http.post('/alfresco/service/groups', {
-      PARAM_METHOD: 'getGroupsAndMembers',
-      PARAM_SITE_SHORT_NAME: siteShortName,
-      PARAM_GROUP_TYPE: 'USER'
+  function getAuthorities (siteShortName) {
+    return $http.post('/alfresco/service/sites', {
+      PARAM_METHOD: 'getAuthorities',
+      PARAM_SITE_SHORT_NAME: siteShortName
+    }).then(function (response) {
+      return response.data
+    })
+  }
+
+  function getUsers (siteShortName) {
+    return $http.post('/alfresco/service/sites', {
+      PARAM_METHOD: 'getUsers',
+      PARAM_SITE_SHORT_NAME: siteShortName
     }).then(function (response) {
       groups = response.data
       groups.forEach(function (group) {
@@ -376,74 +369,6 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
       })
       return groups
     })
-  }
-
-  function getSiteOwner () {
-    return getSiteGroup('PD_PROJECTOWNER')
-  }
-
-  function getSiteManager () {
-    return getSiteGroup('PD_PROJECTMANAGER')
-  }
-
-  function getSiteGroup (shortName) {
-    return getGroupsAndMembers().then(function (groups) {
-      var members = {}
-
-      angular.forEach(groups, function (group) {
-        if (group[0].shortName === shortName)
-          members = group[1][0]
-      })
-
-      return members
-    })
-  }
-
-  function createDocumentNotification (nodeRef, fileName) {
-    var id = alfrescoNodeService.processNodeRef(nodeRef).id
-    var message = 'Et nyt dokument "' + fileName + '" er blevet uploadet af ' + currentUser.displayName
-    var link = 'dokument/' + id
-
-    // Iterating list of items.
-    angular.forEach(groups, function (group) {
-      angular.forEach(group[1], function (member) {
-        if (member.userName !== currentUser.userName) {
-          var notification = {
-            receiver: member.userName,
-            subject: $translate.instant('NOTIFICATION.LABEL.NEW_DOCUMENT'),
-            message: message,
-            link: link,
-            wtype: 'new-doc',
-            shortName: site.shortName
-          }
-          createNotification(notification)
-        }
-      })
-    })
-  }
-
-  function createReviewNotification (documentNodeRef, receiver, message) {
-    var ref = documentNodeRef.split('/')[3]
-    var link = 'dokument/' + ref + '?dtype=wf' + '&from=' + currentUser.userName
-
-    var notification = {
-      receiver: receiver,
-      subject: $translate.instant('NOTIFICATION.LABEL.REVIEW_REQUEST'),
-      message: message,
-      link: link,
-      wtype: 'review-request',
-      shortName: site.shortName
-    }
-    createNotification(notification)
-  }
-  function createNotification (notification) {
-    notificationsService.add(
-      notification.receiver,
-      notification.subject,
-      notification.message,
-      notification.link,
-      notification.wtype,
-      notification.shortName)
   }
 
   function addFavourite (nodeId) {
@@ -463,5 +388,25 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
       .then(function (response) {
         return response
       })
+  }
+
+  function findAuthorities (siteShortName, filter) {
+    return $http.post('/alfresco/service/sites', {
+      PARAM_METHOD: 'findAuthorities',
+      PARAM_SITE_SHORT_NAME: siteShortName,
+      PARAM_FILTER: filter
+    }).then(function (response) {
+      return response.data
+    })
+  }
+
+  function findUsers (siteShortName, filter) {
+    return $http.post('/alfresco/service/sites', {
+      PARAM_METHOD: 'findUsers',
+      PARAM_SITE_SHORT_NAME: siteShortName,
+      PARAM_FILTER: filter
+    }).then(function (response) {
+      return response.data
+    })
   }
 }

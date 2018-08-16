@@ -129,20 +129,18 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
      * Edit Online.
      *
      * @method editOnline
-     * @param siteNodeRef {String} nodeRef of the site
      * @param doc {object} Object literal representing file to be edited
-     * @param metadata {object} Object literal representing metadata of the filed to be edited
      */
-  function editOnline (siteNodeRef, doc, metadata) {
+  function editOnline (doc) {
     // Edit online fails for files which URL is too long
     if (doc.onlineEditUrl === undefined)
-      doc.onlineEditUrl = createOnlineEditUrl(doc, metadata)
+      doc.onlineEditUrl = createOnlineEditUrl(doc, doc.metadata)
 
     // Check if either the URL's length is greater than 256:
     if (doc.onlineEditUrl.length > 256 || encodeURI(doc.onlineEditUrl).length > 256)
     // Try to use alternate edit online URL: http://{host}:{port}/{context}/_IDX_SITE_{site_uuid}/_IDX_NODE_{document_uuid}/{document_name}
-      if (siteNodeRef !== undefined) {
-        var siteUUID = siteNodeRef.split('/').pop()
+      if (doc.siteNodeId !== undefined) {
+        var siteUUID = doc.siteNodeId.split('/').pop()
         var docUUID = doc.node.nodeRef.split('/').pop()
         doc.onlineEditUrl = doc.onlineEditUrl.split(doc.location.site.name)[0] + '_IDX_SITE_' + siteUUID + '/_IDX_NODE_' + docUUID + '/' + doc.location.file
         if (doc.onlineEditUrl.length > 256) {
@@ -161,13 +159,13 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
           var docNameReduced = docName.split('.')[0].substring(0, 5) + '.' + ext
           doc.onlineEditUrl = doc.onlineEditUrl.replace(docName, docNameReduced)
         }
-        editOnlineInternal(doc, metadata)
+        editOnlineInternal(doc, doc.metadata)
       } else {
-        editOnlineInternal(doc, metadata)
+        editOnlineInternal(doc, doc.metadata)
       }
 
     else
-      editOnlineInternal(doc, metadata)
+      editOnlineInternal(doc, doc.metadata)
   }
 
   function editOnlineInternal (doc, metadata) {
@@ -335,6 +333,6 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
             .textContent($translate.instant('EDIT_MS_OFFICE.AOS.SUPPORTED_OFFICE_VERSION_REQUIRED'))
             .hideDelay(toastDelay)
         )
-    }, 500)
+    }, 5000)
   }
 }

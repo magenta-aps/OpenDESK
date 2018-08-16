@@ -9,11 +9,11 @@ import editTitleTemplate from './view/editTitle.tmpl.html'
 angular
   .module('openDeskApp.discussion')
   .controller('DiscussionController', ['APP_CONFIG', '$scope', '$timeout', '$mdDialog', '$state', '$stateParams',
-    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'sessionService',
-    'notificationsService', 'siteService', 'UserService', DiscussionController])
+    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'siteService',
+    'UserService', DiscussionController])
 
 function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
-  $location, discussionService, nodeRefUtilsService, sessionService, notificationsService, siteService, UserService) {
+  $location, discussionService, nodeRefUtilsService, siteService, UserService) {
   var vm = this
 
   vm.discussions = []
@@ -32,7 +32,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   vm.editReplyDialog = editReplyDialog
   vm.editTitleDialog = editTitleDialog
   vm.evaluateFilter = evaluateFilter
-  vm.getAvatarUrl = getAvatarUrl
   vm.getDiscussions = getDiscussions
   vm.getReplies = getReplies
   vm.newDiscussion = newDiscussion
@@ -50,22 +49,19 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   activate()
 
   function activate () {
-    vm.getDiscussions($stateParams.projekt)
+    $scope.tab.selected = $stateParams.selectedTab
     getSiteUserPermissions()
 
-    $scope.tab.selected = $stateParams.selectedTab
-
-    if ($stateParams.path)
-      discussionService.getDiscussionFromNodeRef($stateParams.projekt, $stateParams.path)
-        .then(function () {
-          vm.selectedDiscussion = discussionService.getSelectedDiscussion()
+    if ($stateParams.discussion) {
+      var nodeId = $stateParams.discussion.split('#')[0]
+      discussionService.getDiscussionFromNodeRef($stateParams.projekt, nodeId)
+        .then(function (discussion) {
+          vm.selectedDiscussion = discussion
           vm.getReplies(vm.selectedDiscussion)
         })
-
-    siteService.getGroupsAndMembers($stateParams.projekt)
-      .then(function (groups) {
-        vm.groups = groups
-      })
+    } else {
+      vm.getDiscussions($stateParams.projekt)
+    }
   }
 
   function cancelDialog () {
@@ -89,10 +85,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
     vm.replies = ''
     discussionService.getReplies(postItem).then(function (response) {
       vm.replies = response
-
-      vm.replies.forEach(function (reply) {
-        reply.author.avatarUrl = vm.getAvatarUrl(reply.author.avatarRef)
-      })
 
       $timeout(function () {
         if ($location.hash())
@@ -132,7 +124,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   function reply (content) {
     discussionService.addReply(vm.selectedDiscussion, content).then(function (response) {
       discussionService.subscribeToDiscussion($stateParams.projekt, vm.selectedDiscussion)
-      createReplyNotification(response.item)
       vm.getReplies(vm.selectedDiscussion)
       $mdDialog.cancel()
     })
@@ -160,7 +151,6 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   function newDiscussion (title, content) {
     discussionService.addDiscussion($stateParams.projekt, title, content).then(function (response) {
       discussionService.subscribeToDiscussion($stateParams.projekt, response.item)
-      createNewDiscussionNotification(response.item)
       vm.getDiscussions($stateParams.projekt)
       $mdDialog.cancel()
     })
@@ -286,58 +276,5 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
 
   function subscriptionIcon (value) {
     return String(value) === 'true' ? 'notifications_active' : 'notifications_none'
-  }
-
-  function getAvatarUrl (avatarRef) {
-    if (avatarRef === undefined) return
-    var avatarId = avatarRef.split('/')[3]
-    return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
-  }
-
-  function createNewDiscussionNotification (postItem) {
-    var nodeRef = postItem.nodeRef.split('/')[3]
-    var subject = 'Ny samtale i et projekt'
-    var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har oprettet en ny diskussion'
-    var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef
-
-    // Iterating list of items.
-    angular.forEach(vm.groups, function (group) {
-      angular.forEach(group[1], function (member) {
-        if (member.userName !== postItem.author.username)
-          notificationsService.add(
-            member.userName,
-            subject,
-            message,
-            link,
-            'new-discussion',
-            $stateParams.projekt).then(function (val) {
-            $mdDialog.hide()
-          })
-      })
-    })
-  }
-
-  function createReplyNotification (postItem) {
-    var nodeRef = vm.selectedDiscussion.nodeRef.split('/')[3]
-    var subject = 'Ny kommentar på en samtale du følger'
-    var message = postItem.author.firstName + ' ' + postItem.author.lastName + ' har kommenteret på en samtale du følger'
-    var link = APP_CONFIG.sitesUrl + '/' + $stateParams.projekt + '/diskussioner/' + nodeRef + '#' + postItem.name
-
-    // Iterating list of items.
-    angular.forEach(vm.groups, function (group) {
-      angular.forEach(group[1], function (member) {
-        if (member.userName !== postItem.author.username)
-          notificationsService.addReplyNotice(
-            member.userName,
-            subject,
-            message,
-            link,
-            'new-reply',
-            $stateParams.projekt,
-            nodeRef).then(function (val) {
-            $mdDialog.hide()
-          })
-      })
-    })
   }
 }

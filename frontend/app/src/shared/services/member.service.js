@@ -10,7 +10,8 @@ function MemberService ($http) {
     validate: validateMember,
     get: getMember,
     remove: removeMember,
-    search: searchMember
+    findAuthorities: findAuthorities,
+    search: findUsers
   }
 
   return service
@@ -21,11 +22,11 @@ function MemberService ($http) {
     })
   }
 
-  function addMember (siteShortName, username, group) {
+  function addMember (siteShortName, authority, group) {
     var payload = {
-      PARAM_METHOD: 'addUser',
+      PARAM_METHOD: 'addMember',
       PARAM_SITE_SHORT_NAME: siteShortName,
-      PARAM_USER: username,
+      PARAM_AUTHORITY: authority,
       PARAM_GROUP: group
     }
 
@@ -35,11 +36,11 @@ function MemberService ($http) {
       })
   }
 
-  function removeMember (siteShortName, username, group) {
+  function removeMember (siteShortName, authority, group) {
     var payload = {
-      PARAM_METHOD: 'removeUser',
+      PARAM_METHOD: 'removeMember',
       PARAM_SITE_SHORT_NAME: siteShortName,
-      PARAM_USER: username,
+      PARAM_AUTHORITY: authority,
       PARAM_GROUP: group
     }
 
@@ -77,9 +78,18 @@ function MemberService ($http) {
       })
   }
 
-  function searchMember (query) {
+  function findAuthorities (query) {
     return $http.post('/alfresco/service/users', {
-      PARAM_METHOD: 'getUsers',
+      PARAM_METHOD: 'findAuthorities',
+      PARAM_FILTER: query
+    }).then(function (response) {
+      return response.data
+    })
+  }
+
+  function findUsers (query) {
+    return $http.post('/alfresco/service/users', {
+      PARAM_METHOD: 'findUsers',
       PARAM_FILTER: query
     }).then(function (response) {
       return response.data

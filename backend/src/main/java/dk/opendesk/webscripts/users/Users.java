@@ -16,25 +16,21 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.users;
 
+import dk.opendesk.repo.beans.AuthorityBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
-import org.alfresco.query.PagingRequest;
-import org.alfresco.query.PagingResults;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.ActionService;
-import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
-import org.alfresco.service.cmr.security.PersonService.PersonInfo;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -48,6 +44,7 @@ import java.io.*;
 import java.util.*;
 
 public class Users extends AbstractWebScript {
+    private AuthorityBean authorityBean;
 
     private PersonService personService;
     private NodeService nodeService;
@@ -57,8 +54,10 @@ public class Users extends AbstractWebScript {
     private SearchService searchService;
     private SiteService siteService;
     private Properties properties;
-    private PreferenceService preferenceService;
 
+    public void setAuthorityBean(AuthorityBean authorityBean) {
+        this.authorityBean = authorityBean;
+    }
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
@@ -81,9 +80,6 @@ public class Users extends AbstractWebScript {
     }
     public void setProperties (Properties properties) {
         this.properties = properties;
-    }
-    public void setPreferenceService(PreferenceService preferenceService) {
-        this.preferenceService = preferenceService;
     }
 
     @Override
@@ -124,8 +120,12 @@ public class Users extends AbstractWebScript {
                         result = sendEmail(userName, subject, body);
                         break;
 
-                    case "getUsers": // no test needed
-                        result = getUsers(filter);
+                    case "findAuthorities":
+                        result = findAuthorities(filter);
+                        break;
+
+                    case "findUsers":
+                        result = findUsers(filter);
                         break;
 
                     case "validateNewUser":
@@ -324,28 +324,18 @@ public class Users extends AbstractWebScript {
         }
     }
 
+    private JSONArray findAuthorities(String filter) throws JSONException {
+        return authorityBean.findAuthorities(filter);
+    }
+
     /**
      * Gets a list of filtered users.
-     * (method = getUsers)
+     * (method = findUsers)
      * @param filter search query to filter by. Leave this empty to get all users.
      * @return a JSONArray containing JSONObjects for each user.
      */
-    private JSONArray getUsers(String filter) throws Exception {
-
-        List<QName> filterProps = new ArrayList<>();
-        filterProps.add(ContentModel.PROP_FIRSTNAME);
-        filterProps.add(ContentModel.PROP_LASTNAME);
-
-        List<Pair<QName,Boolean>> sortProps = new ArrayList<>();
-        sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
-
-        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(100000));
-        JSONArray result = new JSONArray();
-        for (PersonInfo user : users.getPage()) {
-            JSONObject json = Utils.convertUserToJSON(nodeService, user.getNodeRef());
-            result.add(json);
-        }
-        return result;
+    private JSONArray findUsers(String filter) throws JSONException {
+        return authorityBean.findUsers(filter);
     }
 }
 

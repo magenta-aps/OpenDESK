@@ -15,7 +15,7 @@
         <md-dialog-content class="md-padding">
             <md-input-container class="md-block">
                 <label>{{'COMMON.NAME' | translate}}</label>
-                <input type="text" name="newContentName" required ng-model="vm.newContentName" ng-pattern="/^[\w -]*$/" md-autofocus md-select-on-focus>
+                <input type="text" name="newContentName" required ng-model="vm.newContentName" md-autofocus md-select-on-focus>
 
                 <div ng-messages="createTemplateForm.newContentName.$error">
                     <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>

@@ -2,8 +2,8 @@
 <model name="myc:contentModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
     <!-- Optional meta-data about the model -->
-    <description>Document Model for Repo Extension X</description>
-    <author>My Name</author>
+    <description>Document Model for OpenDesk</description>
+    <author>Magenta ApS</author>
     <version>1.0</version>
 
     <imports>
@@ -13,16 +13,15 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <!-- Import Alfresco System Model Definitions -->
         <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+        <!-- Import Alfresco Forum Model Definitions -->
+        <import uri="http://www.alfresco.org/model/forum/1.0" prefix="fm"/>
     </imports>
 
     <!-- Custom namespace for your domain -->
     <namespaces>
         <namespace uri="http://www.mycompany.com/model/content/1.0" prefix="myc"/>
         <namespace uri="http://www.magenta-aps.dk/model/content/1.0" prefix="od"/>
-
     </namespaces>
-
-
 
     <!-- ===============================================================================================================
         Constraints, Types, and Aspects go here...
@@ -32,15 +31,6 @@
             <title>Notification</title>
             <parent>cm:content</parent>
             <properties>
-                <property name="od:subject">
-                    <type>d:text</type>
-                </property>
-                <property name="od:message">
-                    <type>d:text</type>
-                </property>
-                <property name="od:type">
-                    <type>d:text</type>
-                </property>
                 <property name="od:read">
                     <type>d:boolean</type>
                     <default>false</default>
@@ -49,14 +39,23 @@
                 <type>d:boolean</type>
                 <default>false</default>
                </property>
-                <property name="od:document">
-                    <type>d:noderef</type>
-                </property>
-                <property name="od:creator">
+                <property name="od:params">
                     <type>d:text</type>
                 </property>
-                <property name="od:project">
+            </properties>
+        </type>
+
+        <type name="od:review">
+            <title>Review</title>
+            <parent>fm:forum</parent>
+            <properties>
+                <property name="od:assignee">
                     <type>d:text</type>
+                </property>
+                <property name="od:status">
+                    <type>d:text</type>
+                    <default>pending</default>
+                    <!-- pending, approved, rejected -->
                 </property>
             </properties>
         </type>
@@ -170,6 +169,18 @@
             </properties>
         </aspect>
 
+        <aspect name="od:reviewable">
+            <title>Reviewable</title>
+            <associations>
+                <child-association name="od:reviewed">
+                    <target>
+                        <class>od:review</class>
+                        <many>true</many>
+                    </target>
+                </child-association>
+            </associations>
+        </aspect>
+
         <aspect name="od:version_previewable">
             <title>Enables saving versions as live nodes for preview</title>
             <associations>
@@ -184,9 +195,5 @@
         </aspect>
 
     </aspects>
-
-
-
-
 
 </model>

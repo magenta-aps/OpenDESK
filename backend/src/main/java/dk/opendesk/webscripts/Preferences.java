@@ -4,17 +4,15 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.json.simple.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.extensions.webscripts.*;
+import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Map;
 
 public class Preferences extends AbstractWebScript {
-
-    final Logger logger = LoggerFactory.getLogger(Preferences.class);
 
     public void setPreferenceService(PreferenceService preferenceService) {
         this.preferenceService = preferenceService;
@@ -25,11 +23,12 @@ public class Preferences extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
+        webScriptResponse.setContentEncoding("UTF-8");
         JSONArray result;
         try {
             Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
 
-            String username = params.get("username");
+            String username = AuthenticationUtil.getFullyAuthenticatedUser();
             String pf = params.get("pf");
             Map<String, Serializable> preferences = Utils.getPreferences(preferenceService, username, pf);
             result = Utils.getJSONReturnArray(preferences);

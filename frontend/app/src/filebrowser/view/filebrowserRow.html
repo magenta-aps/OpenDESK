@@ -31,7 +31,7 @@
                             <span style="width: 70px; "></span> {{'COMMON.MODIFIED_BY' | translate}}
                         </md-menu-item>
                         <md-menu-item ng-repeat="h in content.history" class="menu-list">
-                            <a href="dokument/{{h.nodeRef}}?archived=true&parent={{h.parent_nodeRef}}&version={{h.version}} ">
+                            <a ui-sref="document({ doc: h.parent_nodeRef, versionId: h.nodeRef, version: h.version})">
                                 {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{h.modifier }}
                             </a>
                         </md-menu-item>
@@ -50,6 +50,6 @@
     <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg" ng-change="loadCheckboxes()">
 </td>
 <td style="width:5%">
-    <filebrowser-menu content="content"></filebrowser-menu>
+    <filebrowser-menu content="content" is-site="isSite"></filebrowser-menu>
 </td>
 </tr>

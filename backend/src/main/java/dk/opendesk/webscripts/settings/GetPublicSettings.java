@@ -21,15 +21,14 @@ public class GetPublicSettings extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
+        webScriptResponse.setContentEncoding("UTF-8");
         JSONObject result;
 
         try {
-
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
             result = settingsBean.getPublicSettings();
-
         } catch (Exception e) {
             e.printStackTrace();
             result = JSONUtils.getError(e);
