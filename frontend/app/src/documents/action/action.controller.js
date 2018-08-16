@@ -38,7 +38,6 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     vm.isLocked = vm.doc.node.isLocked
     if (vm.isLocked) {
       vm.lockType = vm.doc.node.properties['cm:lockType']
-      vm.lockOwner = vm.doc.node.properties['cm:lockOwner'].displayName
     }
     var mimeType = vm.doc.node.mimetype
 

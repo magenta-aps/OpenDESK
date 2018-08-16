@@ -7,7 +7,7 @@
 				<div>
 					<div ng-if="DC.doc.node.isLocked">
 						<md-icon md-menu-align-target>warning</md-icon>
-						{{'COMMON.LOCKED_BY' | translate:{ locked_by: DC.lockOwner } }}
+						{{'COMMON.LOCKED_BY' | translate:{ locked_by: DC.doc.node.properties['cm:lockOwner'].displayName } }}
 					</div>
                     <preview-manager ng-if="DC.plugin" plugin="DC.plugin"></preview-manager>
 				</div>
