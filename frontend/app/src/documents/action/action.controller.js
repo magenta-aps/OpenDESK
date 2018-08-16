@@ -66,6 +66,8 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
 
         else if (editor === 'only-office')
           newPage.location.href = $state.href('onlyOfficeEdit', {'nodeRef': vm.doc.parentNodeId})
+
+        cancelDialog()
       })
   }
 
@@ -121,7 +123,8 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     $mdDialog.show({
       template: confirmEditVersionDialogTemplate,
       scope: $scope,
-      preserveScope: true
+      preserveScope: true,
+      clickOutsideToClose: true
     })
   }
 
