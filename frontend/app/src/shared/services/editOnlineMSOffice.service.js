@@ -333,6 +333,6 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
             .textContent($translate.instant('EDIT_MS_OFFICE.AOS.SUPPORTED_OFFICE_VERSION_REQUIRED'))
             .hideDelay(toastDelay)
         )
-    }, 500)
+    }, 5000)
   }
 }
