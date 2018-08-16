@@ -5,7 +5,7 @@
 				<breadcrumb paths="DC.paths"></breadcrumb>
 
 				<div>
-					<div ng-if="DC.isLocked">
+					<div ng-if="DC.doc.node.isLocked">
 						<md-icon md-menu-align-target>warning</md-icon>
 						{{'COMMON.LOCKED_BY' | translate:{ locked_by: DC.lockOwner } }}
 					</div>
