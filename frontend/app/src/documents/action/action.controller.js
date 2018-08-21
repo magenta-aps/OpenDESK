@@ -20,7 +20,6 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
-  vm.getPublicSharedUrl = getPublicSharedUrl
   vm.onPublicSharedUrlClick = onPublicSharedUrlClick
   vm.reviewDocumentsDialog = reviewDocumentsDialog
   vm.sharePublic = sharePublic
@@ -49,8 +48,10 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     vm.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
 
     vm.isPublicShared = vm.doc.node.properties['qshare:sharedId']
-    if (vm.isPublicShared)
+    if (vm.isPublicShared) {
       vm.sharedId = vm.doc.node.properties['qshare:sharedId']
+      setPublicSharedUrl()
+    }
   }
 
   function acceptEditVersionDialog (editor) {
@@ -128,6 +129,7 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     publicShareService.share(vm.doc.node.nodeRef)
       .then(function (response) {
         vm.sharedId = response.sharedId
+        setPublicSharedUrl()
       })
   }
 
@@ -148,14 +150,14 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     })
   }
 
-  function getPublicSharedUrl () {
+  function setPublicSharedUrl () {
     var href = $state.href('publicSharedDocument',
       {
         'sharedId': vm.sharedId
       })
     var port = $location.port() ? ':' + $location.port() : ''
     var domain = $location.host() + port
-    return domain + href
+    vm.publicSharedUrl = domain + href
   }
 
   function onPublicSharedUrlClick ($event) {
