@@ -273,7 +273,10 @@
     "PERMISSIONS" : {
       "Editor": "Kan skrive",
       "Consumer": "Kan læse"
-    }
+    },
+    "PUBLIC_LINK": "Offentligt link",
+    "SHARE_PUBLICLY": "Del offentligt",
+    "STOP_SHARING_PUBLICLY": "Stop offentlig deling"
   },
   "FILE": {
     "FILE": "Fil",
@@ -995,7 +998,7 @@
     "CREATED_AT": "Oprettet",
     "REPLIES": "Svar",
     "NO_DISCUSSIONS": "Ingen kommentarer",
-    
+
     "SORT": {
       "SORT": "Sorter efter",
       "ALL": "Alle",

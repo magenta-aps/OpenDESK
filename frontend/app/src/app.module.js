@@ -35,6 +35,7 @@ angular
     'openDeskApp.user',
     // 'openDeskApp.chat', Not added because it has not been maintained and converse is not managed by npm
     'openDeskApp.members',
+    'openDeskApp.publicShare',
     'odEmail',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules

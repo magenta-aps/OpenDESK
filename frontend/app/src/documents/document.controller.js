@@ -134,13 +134,13 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     if (vm.docHasParent)
       documentService.createVersionThumbnail(vm.parentNodeId, vm.nodeId)
         .then(function (response) {
-          documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef)
+          documentPreviewService.getPluginByNodeRef(response.data[0].nodeRef)
             .then(function (plugin) {
               vm.plugin = plugin
             })
         })
     else
-      documentPreviewService.previewDocumentPlugin(vm.doc.store + vm.nodeId)
+      documentPreviewService.getPluginByNodeRef(vm.doc.store + vm.nodeId)
         .then(function (plugin) {
           vm.plugin = plugin
         })

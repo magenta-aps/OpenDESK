@@ -6,11 +6,11 @@ import uploadNewVersionTemplate from '../../filebrowser/view/content/document/up
 
 angular.module('openDeskApp.documents')
   .controller('DocumentActionController', ['$mdDialog', '$location', '$scope', '$state', '$stateParams', '$window',
-    'alfrescoDownloadService', 'ContentService', 'documentService', 'editOnlineMSOfficeService',
+    'alfrescoDownloadService', 'ContentService', 'documentService', 'editOnlineMSOfficeService', 'publicShareService',
     DocumentActionController])
 
 function DocumentActionController ($mdDialog, $location, $scope, $state, $stateParams, $window, alfrescoDownloadService,
-  ContentService, documentService, editOnlineMSOfficeService) {
+  ContentService, documentService, editOnlineMSOfficeService, publicShareService) {
   var vm = this
   vm.canEdit = false
   vm.uploading = false
@@ -20,7 +20,11 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
+  vm.getPublicSharedUrl = getPublicSharedUrl
+  vm.onPublicSharedUrlClick = onPublicSharedUrlClick
   vm.reviewDocumentsDialog = reviewDocumentsDialog
+  vm.sharePublic = sharePublic
+  vm.stopSharingPublic = stopSharingPublic
   vm.updatePreview = updatePreview
   vm.uploadNewVersionDialog = uploadNewVersionDialog
   vm.uploadNewVersion = uploadNewVersion
@@ -36,14 +40,17 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
       })
 
     vm.isLocked = vm.doc.node.isLocked
-    if (vm.isLocked) {
+    if (vm.isLocked)
       vm.lockType = vm.doc.node.properties['cm:lockType']
-    }
     var mimeType = vm.doc.node.mimetype
 
     vm.loolEditable = ContentService.isLibreOfficeEditable(mimeType, vm.isLocked)
     vm.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, vm.isLocked)
     vm.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
+
+    vm.isPublicShared = vm.doc.node.properties['qshare:sharedId']
+    if (vm.isPublicShared)
+      vm.sharedId = vm.doc.node.properties['qshare:sharedId']
   }
 
   function acceptEditVersionDialog (editor) {
@@ -117,6 +124,20 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     })
   }
 
+  function sharePublic () {
+    publicShareService.share(vm.doc.node.nodeRef)
+      .then(function (response) {
+        vm.sharedId = response.sharedId
+      })
+  }
+
+  function stopSharingPublic () {
+    publicShareService.stopSharing(vm.sharedId)
+      .then(function () {
+        vm.sharedId = undefined
+      })
+  }
+
   function showEditVersionDialog (editor) {
     $scope.editor = editor
     $mdDialog.show({
@@ -126,6 +147,20 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
       clickOutsideToClose: true
     })
   }
+
+  function getPublicSharedUrl () {
+    var href = $state.href('publicSharedDocument',
+      {
+        'sharedId': vm.sharedId
+      })
+    var port = $location.port() ? ':' + $location.port() : ''
+    var domain = $location.host() + port
+    return domain + href
+  }
+
+  function onPublicSharedUrlClick ($event) {
+    $event.target.select()
+  };
 
   function updatePreview () {
     $state.reload()
