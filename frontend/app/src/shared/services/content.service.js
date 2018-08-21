@@ -8,6 +8,7 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
   var service = {
     delete: deleteContent,
     get: getContent,
+    getNode: getNode,
     history: history,
     upload: uploadContent,
     uploadNewVersion: uploadNewVersion,
@@ -20,8 +21,15 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
 
   return service
 
-  function getContent (nodeRef) {
-    return $http.get(`/slingshot/doclib2/node/workspace/SpacesStore/${nodeRef}`)
+  function getContent (nodeId) {
+    return $http.get(`/slingshot/doclib2/node/workspace/SpacesStore/${nodeId}`)
+      .then(function (response) {
+        return response.data
+      })
+  }
+
+  function getNode (nodeId) {
+    return $http.get(`/alfresco/service/node/${nodeId}`)
       .then(function (response) {
         return response.data
       })

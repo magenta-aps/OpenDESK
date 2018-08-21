@@ -3,7 +3,7 @@
         <div class="md-toolbar-tools">
             <h2>{{'COMMON.SHARE' | translate}} {{'COMMON.DOCUMENT' | translate}}</h2>
             <span flex></span>
-            <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+            <md-button class="md-icon-button" ng-click="DAC.cancelDialog()">
                 <md-icon>close</md-icon>
             </md-button>
         </div>
@@ -11,7 +11,7 @@
 
     <md-dialog-content>
         <md-content class="md-padding" layout="column">
-            <div ng-repeat="(groupIndex, users) in content.permissions">
+            <div ng-repeat="(groupIndex, users) in DAC.doc.extraInfo.permissions">
                 <h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]"
                     class="group-toggle"
                     layout="row"
@@ -23,21 +23,21 @@
                 </h4>
                 <div ng-show="!showGroupList[groupIndex]">
                     <md-chips ng-model="users" md-autocomplete-snap md-require-match="true"
-                              md-on-remove="vm.stopSharingDocument($chip, groupIndex)"
-                              md-on-add="vm.shareDocument($chip, groupIndex)">
+                              md-on-remove="DAC.stopSharingDocument($chip, groupIndex)"
+                              md-on-add="DAC.shareDocument($chip, groupIndex)">
                         <md-autocomplete md-selected-item="selectedProjGrpItem"
-                                         md-search-text="vm.searchTextList[groupIndex]"
-                                         md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
+                                         md-search-text="DAC.searchTextList[groupIndex]"
+                                         md-items="pgitem in DAC.searchPeople(DAC.searchTextList[groupIndex])"
                                          md-require-match="true"
                                          md-item-text="pgitem" placeholder="{{'USER.USER' | translate}}">
-                            <img class="od-avatar od-avatar-small" ng-src="{{vm.getAvatarUrl(pgitem)}}">
-                            <span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
+                            <img class="od-avatar od-avatar-small" ng-src="{{DAC.getAvatarUrl(pgitem)}}">
+                            <span md-highlight-text="DAC.searchTextList[groupIndex]" md-highlight-flags="gi">
                                 {{ pgitem.displayName }}
                             </span>
                             <span class="od-secondary">({{ pgitem.userName }})</span>
                         </md-autocomplete>
                         <md-chip-template>
-                            <img class="od-avatar od-avatar-small" ng-src="{{vm.getAvatarUrl($chip)}}">
+                            <img class="od-avatar od-avatar-small" ng-src="{{DAC.getAvatarUrl($chip)}}">
                             <span style="display: table-caption">{{ $chip.displayName }}</span>
                         </md-chip-template>
                     </md-chips>

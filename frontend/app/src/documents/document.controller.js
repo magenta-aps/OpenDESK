@@ -120,7 +120,12 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
             })
           headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT'))
         }
-        vm.loaded = true
+
+        ContentService.getNode(vm.parentNodeId)
+          .then(function (node) {
+            vm.doc.extraInfo = node
+            vm.loaded = true
+          })
 
         browserService.setTitle(response.item.node.properties['cm:name'])
       })

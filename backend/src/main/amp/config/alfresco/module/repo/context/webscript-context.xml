@@ -121,6 +121,12 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+	<bean id="webscript.node.node.get"
+		  class="dk.opendesk.webscripts.node.GetNode"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.preprocessmove.put"
 		  class="dk.opendesk.webscripts.node.PreProcessMove"
 		  parent="webscript">

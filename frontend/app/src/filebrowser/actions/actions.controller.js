@@ -6,19 +6,16 @@ import '../../shared/services/editOnlineMSOffice.service'
 import deleteTemplate from './delete/delete.view.html'
 import genericContentDialogTemplate from '../genericDialog/genericContentDialog.view.html'
 import renameTemplate from './rename/rename.view.html'
-import shareDocumentTemplate from '../view/content/document/shareDocument.tmpl.html'
 import uploadNewVersionTemplate from '../view/content/document/uploadNewVersion.tmpl.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('ActionsController', ['$mdMenu', '$rootScope', '$scope', '$state', '$mdDialog', '$mdToast', '$window',
+  .controller('ActionsController', ['$mdMenu', '$rootScope', '$scope', '$state', '$mdDialog', '$window',
     'alfrescoDownloadService', 'alfrescoNodeService', 'ContentService', 'documentPreviewService', 'documentService',
-    'editOnlineMSOfficeService', 'filebrowserService', 'MemberService', 'notificationsService', 'sessionService',
-    'siteService', ActionsController])
+    'editOnlineMSOfficeService', ActionsController])
 
-function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdToast, $window, alfrescoDownloadService,
-  alfrescoNodeService, ContentService, documentPreviewService, documentService, editOnlineMSOfficeService,
-  filebrowserService, MemberService, notificationsService, sessionService, siteService) {
+function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $window, alfrescoDownloadService,
+  alfrescoNodeService, ContentService, documentPreviewService, documentService, editOnlineMSOfficeService) {
   var vm = this
   vm.cancelDialog = cancelDialog
   vm.copyContentDialog = copyContentDialog
@@ -26,13 +23,8 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
-  vm.getAvatarUrl = getAvatarUrl
   vm.moveContentDialog = moveContentDialog
   vm.renameContentDialog = renameContentDialog
-  vm.searchPeople = searchPeople
-  vm.shareDocument = shareDocument
-  vm.shareDocumentDialog = shareDocumentDialog
-  vm.stopSharingDocument = stopSharingDocument
   vm.uploadNewVersion = uploadNewVersion
   vm.uploadNewVersionDialog = uploadNewVersionDialog
 
@@ -108,10 +100,6 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
     })
   }
 
-  function getAvatarUrl (user) {
-    return sessionService.makeAvatarUrl(user)
-  }
-
   function hideDialogAndReloadContent () {
     vm.uploading = false
     $rootScope.$broadcast('updateFilebrowser')
@@ -146,66 +134,6 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
       template: '<md-dialog od-create-review node-id="nodeId"></md-dialog>',
       clickOutsideToClose: true
     })
-  }
-
-  function searchPeople (query) {
-    if (query)
-      return MemberService.search(query)
-  }
-
-  function shareDocumentDialog () {
-    $mdDialog.show({
-      template: shareDocumentTemplate,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
-  function shareDocument (user, permission) {
-    filebrowserService.shareNode(content.nodeRef, user.userName, permission)
-      .then(
-        function () {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet blev delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-          var nodeId = alfrescoNodeService.processNodeRef(content.nodeRef).id
-
-          // Link differs depending of type
-          var link
-          if ($scope.content.contentType === 'cmis:document')
-            link = 'dokument/' + nodeId
-          else
-            link = 'dokumenter/delte/' + nodeId
-
-          var subject = 'Nyt dokument delt'
-          var message = 'En bruger har delt et dokument med dig'
-
-          notificationsService.add(
-            user.userName,
-            subject,
-            message,
-            link,
-            'new-shared-doc',
-            ''
-          )
-        }
-      )
-  }
-
-  function stopSharingDocument (user, permission) {
-    filebrowserService.stopSharingNode(content.nodeRef, user.userName, permission)
-      .then(
-        function () {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet bliver ikke længere delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-        }
-      )
   }
 
   function uploadNewVersionDialog () {

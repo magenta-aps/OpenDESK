@@ -2,17 +2,18 @@
 
 import '../../shared/services/editOnlineMSOffice.service'
 import confirmEditVersionDialogTemplate from '../view/confirmEditVersionDialog.html'
+import shareDocumentTemplate from '../view/shareDocument.tmpl.html'
 import uploadNewVersionTemplate from '../../filebrowser/view/content/document/uploadNewVersion.tmpl.html'
 
 angular.module('openDeskApp.documents')
-  .controller('DocumentActionController', ['$mdDialog', '$location', '$scope', '$state', '$stateParams', '$window',
-    'alfrescoDownloadService', 'ContentService', 'documentService', 'editOnlineMSOfficeService', 'publicShareService',
-    DocumentActionController])
+  .controller('DocumentActionController', ['$mdDialog', '$mdToast', '$location', '$scope', '$state', '$stateParams',
+    '$window', 'alfrescoDownloadService', 'ContentService', 'editOnlineMSOfficeService',
+    'filebrowserService', 'MemberService', 'publicShareService', 'sessionService', DocumentActionController])
 
-function DocumentActionController ($mdDialog, $location, $scope, $state, $stateParams, $window, alfrescoDownloadService,
-  ContentService, documentService, editOnlineMSOfficeService, publicShareService) {
+function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $state, $stateParams, $window,
+  alfrescoDownloadService, ContentService, editOnlineMSOfficeService, filebrowserService, MemberService,
+  publicShareService, sessionService) {
   var vm = this
-  vm.canEdit = false
   vm.uploading = false
   vm.acceptEditVersionDialog = acceptEditVersionDialog
   vm.cancelDialog = cancelDialog
@@ -20,9 +21,14 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
+  vm.getAvatarUrl = getAvatarUrl
   vm.onPublicSharedUrlClick = onPublicSharedUrlClick
   vm.reviewDocumentsDialog = reviewDocumentsDialog
+  vm.searchPeople = searchPeople
+  vm.shareDocument = shareDocument
+  vm.shareDocumentDialog = shareDocumentDialog
   vm.sharePublic = sharePublic
+  vm.stopSharingDocument = stopSharingDocument
   vm.stopSharingPublic = stopSharingPublic
   vm.updatePreview = updatePreview
   vm.uploadNewVersionDialog = uploadNewVersionDialog
@@ -33,11 +39,6 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
   }
 
   function activate () {
-    documentService.getEditPermission(vm.doc.parentNodeId)
-      .then(function (val) {
-        vm.canEdit = val
-      })
-
     vm.isLocked = vm.doc.node.isLocked
     if (vm.isLocked)
       vm.lockType = vm.doc.node.properties['cm:lockType']
@@ -111,6 +112,10 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
       editOnlineMSOfficeService.editOnline(vm.doc)
   }
 
+  function getAvatarUrl (user) {
+    return sessionService.makeAvatarUrl(user)
+  }
+
   function isVersion () {
     var ref = vm.doc.nodeId
     var isFirstInHistory = ref === vm.doc.firstDocumentNode
@@ -125,12 +130,52 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     })
   }
 
+  function searchPeople (query) {
+    if (query)
+      return MemberService.search(query)
+  }
+
+  function shareDocument (user, permission) {
+    filebrowserService.shareNode(vm.doc.node.nodeRef, user.userName, permission)
+      .then(
+        function () {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Dokumentet blev delt med ' + user.displayName + '.')
+              .hideDelay(3000)
+          )
+        }
+      )
+  }
+
+  function shareDocumentDialog () {
+    $mdDialog.show({
+      template: shareDocumentTemplate,
+      scope: $scope, // use parent scope in template
+      preserveScope: true, // do not forget this if use parent scope
+      clickOutsideToClose: true
+    })
+  }
+
   function sharePublic () {
     publicShareService.share(vm.doc.node.nodeRef)
       .then(function (response) {
         vm.sharedId = response.sharedId
         setPublicSharedUrl()
       })
+  }
+
+  function stopSharingDocument (user, permission) {
+    filebrowserService.stopSharingNode(vm.doc.node.nodeRef, user.userName, permission)
+      .then(
+        function () {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Dokumentet bliver ikke længere delt med ' + user.displayName + '.')
+              .hideDelay(3000)
+          )
+        }
+      )
   }
 
   function stopSharingPublic () {

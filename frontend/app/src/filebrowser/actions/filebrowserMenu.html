@@ -39,13 +39,6 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="content.canMoveAndDelete && !isSite">
-            <md-button ng-click="vm.shareDocumentDialog()">
-                <md-icon md-menu-align-target>share</md-icon>
-                {{'COMMON.SHARE' | translate }}
-            </md-button>
-        </md-menu-item>
-
         <md-menu-item ng-if="content.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.reviewDocumentsDialog()">
                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
