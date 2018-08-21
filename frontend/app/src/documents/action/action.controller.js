@@ -200,8 +200,9 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
       {
         'sharedId': vm.sharedId
       })
-    var port = $location.port() ? ':' + $location.port() : ''
-    var domain = $location.host() + port
+    var host = $location.host()
+    var port = host === 'localhost' ? ':' + $location.port() : ''
+    var domain = $location.protocol() + '://' + host + port
     vm.publicSharedUrl = domain + href
   }
 
