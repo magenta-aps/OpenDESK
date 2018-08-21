@@ -79,11 +79,11 @@ function sessionService ($window, $state) {
   }
 
   function makeURL (url) {
-    var sessionTicket = getUserInfo().ticket
-    if (sessionTicket)
-      return url + (url.indexOf('?') === -1 ? '?' : '&') + 'alf_ticket=' + sessionTicket
-    else
+    var userInfo = getUserInfo()
+    if (userInfo === undefined || userInfo.ticket === undefined)
       return url
+    else
+      return url + (url.indexOf('?') === -1 ? '?' : '&') + 'alf_ticket=' + userInfo.ticket
   }
 
   function retainCurrentLocation () {
