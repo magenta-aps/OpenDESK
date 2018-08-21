@@ -11,7 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class SettingsBean {
@@ -39,12 +40,17 @@ public class SettingsBean {
     }
 
     public JSONObject getPublicSettings() throws FileNotFoundException, JSONException {
-        String key = OpenDeskModel.PUBLIC_SETTINGS;
+        List<String> keys = new ArrayList<>();
+        keys.add(OpenDeskModel.PUBLIC_SETTINGS);
+        // We also send editor settings to make editors work with nodes that are shared publicly
+        keys.add(OpenDeskModel.EDITOR_SETTINGS);
+
         JSONObject settings = getSettings();
         //Get properties that are public (Used before user is logged in)
         JSONObject publicSettings = new JSONObject();
-        if(settings.has(key))
-            publicSettings.put(key, settings.getJSONObject(key));
+        for(String key : keys)
+            if(settings.has(key))
+                publicSettings.put(key, settings.getJSONObject(key));
 
         return publicSettings;
     }

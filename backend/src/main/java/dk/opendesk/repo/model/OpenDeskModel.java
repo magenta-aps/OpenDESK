@@ -139,6 +139,7 @@ public interface OpenDeskModel {
      */
     QName PROP_SETTINGS = QName.createQName(OD_URI, "settings");
     String PUBLIC_SETTINGS = "public";
+    String EDITOR_SETTINGS = "editors";
 
 
     /**
