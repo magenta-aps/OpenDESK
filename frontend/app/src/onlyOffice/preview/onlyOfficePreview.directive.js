@@ -7,7 +7,8 @@ angular
     return {
       restrict: 'E',
       scope: {
-        nodeRef: '=nodeRef'
+        nodeRef: '=',
+        sharedId: '='
       },
       template: onlyOfficeTemplate,
       controller: 'OnlyOfficePreviewController',
