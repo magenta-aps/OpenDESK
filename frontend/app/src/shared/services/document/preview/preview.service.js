@@ -30,16 +30,6 @@ angular
 
 function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
   sessionService, $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
-  var plugins = [
-    audioViewer(),
-    onlyOfficeViewer(),
-    webViewer(),
-    pdfViewer(),
-    imageViewer(),
-    videoViewer(),
-    strobeMediaPlayback(),
-    cannotPreviewPlugin()
-  ]
   var service = {
     previewDocument: previewDocument,
     getPlugin: getPlugin,
@@ -79,6 +69,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   }
 
   function getPlugin (item) {
+    var plugins = getPlugins()
     for (var i in plugins) {
       var plugin = plugins[i]
       if (plugin.acceptsItem(item)) {
@@ -88,6 +79,19 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
         return plugin
       }
     }
+  }
+
+  function getPlugins () {
+    return [
+      audioViewer(),
+      onlyOfficeViewer(),
+      webViewer(),
+      pdfViewer(),
+      imageViewer(),
+      videoViewer(),
+      strobeMediaPlayback(),
+      cannotPreviewPlugin()
+    ]
   }
 
   function audioViewer () {
