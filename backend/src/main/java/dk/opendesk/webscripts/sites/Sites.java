@@ -21,6 +21,7 @@ import dk.opendesk.repo.beans.GroupBean;
 import dk.opendesk.repo.beans.NotificationBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
@@ -38,18 +39,15 @@ import org.alfresco.util.ISO9075;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Sites extends AbstractWebScript {
+public class Sites extends OpenDeskWebScript {
     private AuthorityBean authorityBean;
     private GroupBean groupBean;
     private NotificationBean notificationBean;
@@ -103,137 +101,127 @@ public class Sites extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Content c = webScriptRequest.getContent();
-        Writer webScriptWriter = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            JSONObject json = new JSONObject(c.getContent());
-
-            String method = Utils.getJSONObject(json, "PARAM_METHOD");
-            String query = Utils.getJSONObject(json, "PARAM_QUERY");
-            String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
-            String siteDisplayName = Utils.getJSONObject(json, "PARAM_SITE_DISPLAY_NAME");
-            String authority = Utils.getJSONObject(json, "PARAM_AUTHORITY");
-            String group = Utils.getJSONObject(json, "PARAM_GROUP");
-            String role = Utils.getJSONObject(json, "PARAM_ROLE");
-            String source = Utils.getJSONObject(json, "PARAM_SOURCE");
-            String destination = Utils.getJSONObject(json, "PARAM_DESTINATION");
-            String description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
-            String fileName = Utils.getJSONObject(json, "PARAM_FILENAME");
-            String siteVisibilityStr = Utils.getJSONObject(json, "PARAM_VISIBILITY");
+            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
+            String query = Utils.getJSONObject(contentParams, "PARAM_QUERY");
+            String siteShortName = Utils.getJSONObject(contentParams, "PARAM_SITE_SHORT_NAME");
+            String siteDisplayName = Utils.getJSONObject(contentParams, "PARAM_SITE_DISPLAY_NAME");
+            String authority = Utils.getJSONObject(contentParams, "PARAM_AUTHORITY");
+            String group = Utils.getJSONObject(contentParams, "PARAM_GROUP");
+            String role = Utils.getJSONObject(contentParams, "PARAM_ROLE");
+            String source = Utils.getJSONObject(contentParams, "PARAM_SOURCE");
+            String destination = Utils.getJSONObject(contentParams, "PARAM_DESTINATION");
+            String description = Utils.getJSONObject(contentParams, "PARAM_DESCRIPTION");
+            String fileName = Utils.getJSONObject(contentParams, "PARAM_FILENAME");
+            String siteVisibilityStr = Utils.getJSONObject(contentParams, "PARAM_VISIBILITY");
             SiteVisibility siteVisibility = Utils.getVisibility(siteVisibilityStr);
-            String siteType = Utils.getJSONObject(json, "PARAM_SITE_TYPE");
-            String filter = Utils.getJSONObject(json, "PARAM_FILTER");
+            String siteType = Utils.getJSONObject(contentParams, "PARAM_SITE_TYPE");
+            String filter = Utils.getJSONObject(contentParams, "PARAM_FILTER");
 
             if (method != null) {
                 switch (method) {
                     case "getSite":
-                        result = getSiteInfo(siteShortName);
+                        arrayResult = getSiteInfo(siteShortName);
                         break;
 
                     case "getAll":
-                        result = getAllSites(query);
+                        arrayResult = getAllSites(query);
                         break;
 
                     case "createSite":
-                        result = createSite(siteDisplayName, description, siteVisibility);
+                        arrayResult = createSite(siteDisplayName, description, siteVisibility);
                         break;
 
                     case "getSitesPerUser":
-                        result = getAllSitesForCurrentUser();
+                        arrayResult = getAllSitesForCurrentUser();
                         break;
 
                     case "getAuthorities":
-                        result = getAuthorities(siteShortName);
+                        arrayResult = getAuthorities(siteShortName);
                         break;
 
                     case "getUsers":
-                        result = getUsers(siteShortName);
+                        arrayResult = getUsers(siteShortName);
                         break;
 
                     case "findAuthorities":
-                        result = findAuthorities(siteShortName, filter);
+                        arrayResult = findAuthorities(siteShortName, filter);
                         break;
 
                     case "findUsers":
-                        result = findUsers(siteShortName, filter);
+                        arrayResult = findUsers(siteShortName, filter);
                         break;
 
                     case "addMember":
-                        result = addMember(siteShortName, authority, group);
+                        arrayResult = addMember(siteShortName, authority, group);
                         break;
 
                     case "removeMember":
-                        result = removeMember(siteShortName, authority, group);
+                        arrayResult = removeMember(siteShortName, authority, group);
                         break;
                     // UNUSED
                     case "addPermission":
-                        result = addPermission(siteShortName, authority, role);
+                        arrayResult = addPermission(siteShortName, authority, role);
                         break;
                     // UNUSED
                     case "removePermission":
-                        result = removePermission(siteShortName, authority, role);
+                        arrayResult = removePermission(siteShortName, authority, role);
                         break;
 
                     case "getCurrentUserSiteRole":
-                        result = getCurrentUserSiteRole(siteShortName);
+                        arrayResult = getCurrentUserSiteRole(siteShortName);
                         break;
 
                     case "addLink":
-                        result = addLink(source, destination);
+                        arrayResult = addLink(source, destination);
                         break;
 
                     case "deleteLink":
                         NodeRef source_n = new NodeRef("workspace://SpacesStore/" + source);
                         NodeRef destination_n = new NodeRef("workspace://SpacesStore/" + destination);
-
-                        result = deleteLink(source_n, destination_n);
+                        arrayResult = deleteLink(source_n, destination_n);
                         break;
 
                     case "getSiteType":
                         String type = getSiteType(siteShortName);
-                        result = Utils.getJSONReturnPair("type", type);
+                        arrayResult = Utils.getJSONReturnPair("type", type);
                         break;
 
                     case "getSiteGroups": // test not needed
-                        result = getSiteGroups(siteType);
+                        arrayResult = getSiteGroups(siteType);
                         break;
 
                     case "getTemplates":
-                        result = getTemplates();
+                        arrayResult = getTemplates();
                         break;
 
                     case "createTemplate":
-                        result = createTemplate(siteShortName, description);
+                        arrayResult = createTemplate(siteShortName, description);
                         break;
 
                     case "makeSiteATemplate":
-                        result = makeSiteATemplate(siteShortName);
+                        arrayResult = makeSiteATemplate(siteShortName);
                         break;
 
                     case "createMembersPDF": // test not needed
-                        result = createMembersPDF(siteShortName);
+                        arrayResult = createMembersPDF(siteShortName);
                         break;
 
                     case "deleteSite":
-                        result = this.deleteSite(siteShortName);
+                        arrayResult = this.deleteSite(siteShortName);
                         break;
 
                     case "returnFileName":
-                        result = returnFileName(destination, fileName);
+                        arrayResult = returnFileName(destination, fileName);
                         break;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 
     /**

@@ -25,20 +25,16 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.Writer;
 import java.util.*;
 
-public class Notifications extends AbstractWebScript {
+public class Notifications extends OpenDeskWebScript {
 
     private NodeService nodeService;
     private NotificationBean notificationBean;
@@ -55,28 +51,21 @@ public class Notifications extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Content c = webScriptRequest.getContent();
-        Writer webScriptWriter = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            JSONObject json = new JSONObject(c.getContent());
-
-            String userName = Utils.getJSONObject(json, "PARAM_USERNAME");
-            String method = Utils.getJSONObject(json, "PARAM_METHOD");
-            String nodeRefString = Utils.getJSONObject(json, "PARAM_NODE_REF");
+            String userName = Utils.getJSONObject(contentParams, "PARAM_USERNAME");
+            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
+            String nodeRefString = Utils.getJSONObject(contentParams, "PARAM_NODE_REF");
 
             NodeRef nodeRef = null;
-            if(NodeRef.isNodeRef(nodeRefString))
+            if (NodeRef.isNodeRef(nodeRefString))
                 nodeRef = new NodeRef(nodeRefString);
 
-            if(method != null) {
+            if (method != null) {
                 switch (method) {
                     case "getAll":
-                        result = this.getAllNotifications(userName);
+                        arrayResult = this.getAllNotifications(userName);
                         break;
 
                     case "remove":
@@ -84,32 +73,29 @@ public class Notifications extends AbstractWebScript {
                             throw new AlfrescoRuntimeException("Sorry, nodeRef: " + nodeRef + " doesn't exist.");
                         } else {
 
-                            result = this.removeNotification(nodeRef);
+                            arrayResult = this.removeNotification(nodeRef);
                         }
                         break;
 
                     case "setRead":
                         if (nodeRef != null)
-                            result = this.setNotificationRead(nodeRef);
+                            arrayResult = this.setNotificationRead(nodeRef);
                         break;
 
                     case "setSeen":
                         if (nodeRef != null)
-                            result = this.setNotificationSeen(nodeRef);
+                            arrayResult = this.setNotificationSeen(nodeRef);
                         break;
 
                     case "setAllNotificationsSeen":
-                        result = this.setAllNotificationsSeen(userName);
+                        arrayResult = this.setAllNotificationsSeen(userName);
                         break;
                 }
             }
+        } catch (Exception e) {
+            error(res, e);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
-        }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 
     /**

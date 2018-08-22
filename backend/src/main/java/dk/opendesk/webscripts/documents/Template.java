@@ -19,10 +19,10 @@ package dk.opendesk.webscripts.documents;
 import dk.opendesk.repo.beans.NodeBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.SearcherException;
-import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
@@ -31,20 +31,17 @@ import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class Template extends AbstractWebScript {
+public class Template extends OpenDeskWebScript {
 
     private NodeBean nodeBean;
 
@@ -68,41 +65,31 @@ public class Template extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Content c = webScriptRequest.getContent();
-        Writer webScriptWriter = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            JSONObject json = new JSONObject(c.getContent());
-            String method = Utils.getJSONObject(json, "PARAM_METHOD");
-            String nodeName = Utils.getJSONObject(json, "PARAM_NODE_NAME");
-            String templateNodeId = Utils.getJSONObject(json, "PARAM_TEMPLATE_NODE_ID");
-            String destinationNodeRefStr = Utils.getJSONObject(json, "PARAM_DESTINATION_NODEREF");
-
+            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
+            String nodeName = Utils.getJSONObject(contentParams, "PARAM_NODE_NAME");
+            String templateNodeId = Utils.getJSONObject(contentParams, "PARAM_TEMPLATE_NODE_ID");
+            String destinationNodeRefStr = Utils.getJSONObject(contentParams, "PARAM_DESTINATION_NODEREF");
             switch (method) {
 
                 case "getDocumentTemplates":
-                    result = getTemplates(OpenDeskModel.PATH_NODE_TEMPLATES);
+                    arrayResult = getTemplates(OpenDeskModel.PATH_NODE_TEMPLATES);
                     break;
 
                 case "getFolderTemplates":
-                    result = getTemplates(OpenDeskModel.PATH_SPACE_TEMPLATES);
+                    arrayResult = getTemplates(OpenDeskModel.PATH_SPACE_TEMPLATES);
                     break;
 
                 case "createContentFromTemplate":
-                    result = createContentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
+                    arrayResult = createContentFromTemplate(nodeName, templateNodeId, destinationNodeRefStr);
                     break;
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 
     /**

@@ -18,6 +18,7 @@ package dk.opendesk.webscripts.sites;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.repository.*;
@@ -34,19 +35,16 @@ import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ProjectDepartment extends AbstractWebScript {
+public class ProjectDepartment extends OpenDeskWebScript {
 
     private PermissionService permissionService;
     private SearchService searchService;
@@ -83,46 +81,36 @@ public class ProjectDepartment extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Content c = webScriptRequest.getContent();
-        Writer webScriptWriter = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            JSONObject json = new JSONObject(c.getContent());
-
-            String method = Utils.getJSONObject(json, "PARAM_METHOD");
-            String site_name = Utils.getJSONObject(json, "PARAM_NAME");
-            String site_short_name = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
-            String site_description = Utils.getJSONObject(json, "PARAM_DESCRIPTION");
-            String site_sbsys = Utils.getJSONObject(json, "PARAM_SBSYS");
-            String site_owner = Utils.getJSONObject(json, "PARAM_OWNER");
-            String site_manager = Utils.getJSONObject(json, "PARAM_MANAGER");
-            String site_state = Utils.getJSONObject(json, "PARAM_STATE");
-            String site_center_id = Utils.getJSONObject(json, "PARAM_CENTERID");
-            String site_visibility_str = Utils.getJSONObject(json, "PARAM_VISIBILITY");
-            String template = Utils.getJSONObject(json, "PARAM_TEMPLATE");
+            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
+            String site_name = Utils.getJSONObject(contentParams, "PARAM_NAME");
+            String site_short_name = Utils.getJSONObject(contentParams, "PARAM_SITE_SHORT_NAME");
+            String site_description = Utils.getJSONObject(contentParams, "PARAM_DESCRIPTION");
+            String site_sbsys = Utils.getJSONObject(contentParams, "PARAM_SBSYS");
+            String site_owner = Utils.getJSONObject(contentParams, "PARAM_OWNER");
+            String site_manager = Utils.getJSONObject(contentParams, "PARAM_MANAGER");
+            String site_state = Utils.getJSONObject(contentParams, "PARAM_STATE");
+            String site_center_id = Utils.getJSONObject(contentParams, "PARAM_CENTERID");
+            String site_visibility_str = Utils.getJSONObject(contentParams, "PARAM_VISIBILITY");
+            String template = Utils.getJSONObject(contentParams, "PARAM_TEMPLATE");
             SiteVisibility site_visibility = Utils.getVisibility(site_visibility_str);
 
             switch (method) {
                 case "createPDSITE":
-                    result = createPDSite(site_name, site_description, site_sbsys, site_center_id, site_owner,
+                    arrayResult = createPDSite(site_name, site_description, site_sbsys, site_center_id, site_owner,
                             site_manager, site_visibility, template);
                     break;
                 case "updatePDSITE":
-                    result = updatePDSite(site_short_name, site_name, site_description,
+                    arrayResult = updatePDSite(site_short_name, site_name, site_description,
                             site_sbsys, site_center_id, site_owner, site_manager, site_state, site_visibility);
                     break;
             }
+        } catch (Exception e) {
+            error(res, e);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
-        }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 
     /**

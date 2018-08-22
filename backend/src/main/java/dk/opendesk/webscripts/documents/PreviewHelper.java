@@ -18,6 +18,7 @@ package dk.opendesk.webscripts.documents;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -26,16 +27,16 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.Writer;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class PreviewHelper extends AbstractWebScript {
+public class PreviewHelper extends OpenDeskWebScript {
 
     private NodeService nodeService;
     public void setNodeService(NodeService nodeService) {
@@ -43,35 +44,28 @@ public class PreviewHelper extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Writer webScriptWriter = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
-            String parentNode = params.get("parent_node");
-            String versionNode = params.get("version_node");
-            String method = params.get("method");
+            String parentNode = urlQueryParams.get("parent_node");
+            String versionNode = urlQueryParams.get("version_node");
+            String method = urlQueryParams.get("method");
 
             if (method == null)
                 method = "createThumbnail";  //TODO: Add method name "createThumbnail".
 
             switch (method) {
                 case "cleanUp":
-                    result = cleanUp(versionNode); // TODO Use another variable than versionNode as versionNode in this case is a normal root content NodeRef
+                    arrayResult = cleanUp(versionNode); // TODO Use another variable than versionNode as versionNode in this case is a normal root content NodeRef
                     break;
                 case "createThumbnail":
-                    result = createThumbnail(parentNode, versionNode);
+                    arrayResult = createThumbnail(parentNode, versionNode);
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 
     /**

@@ -19,6 +19,7 @@ package dk.opendesk.webscripts.users;
 import dk.opendesk.repo.beans.AuthorityBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.ActionService;
@@ -34,8 +35,6 @@ import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,7 +42,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.io.*;
 import java.util.*;
 
-public class Users extends AbstractWebScript {
+public class Users extends OpenDeskWebScript {
     private AuthorityBean authorityBean;
 
     private PersonService personService;
@@ -83,62 +82,53 @@ public class Users extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Content c = webScriptRequest.getContent();
-        Writer writer = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            JSONObject json = new JSONObject(c.getContent());
-
-            String method = Utils.getJSONObject(json, "PARAM_METHOD");
-            String userName = Utils.getJSONObject(json, "PARAM_USERNAME");
-            String firstName = Utils.getJSONObject(json, "PARAM_FIRSTNAME");
-            String lastName = Utils.getJSONObject(json, "PARAM_LASTNAME");
-            String email = Utils.getJSONObject(json, "PARAM_EMAIL");
-            String telephone = Utils.getJSONObject(json, "PARAM_TELEPHONE");
-            String siteShortName = Utils.getJSONObject(json, "PARAM_SITE_SHORT_NAME");
-            String groupName = Utils.getJSONObject(json, "PARAM_GROUP_NAME");
-            String subject = Utils.getJSONObject(json, "PARAM_SUBJECT");
-            String body = Utils.getJSONObject(json, "PARAM_BODY");
-            String filter = Utils.getJSONObject(json, "PARAM_FILTER");
+            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
+            String userName = Utils.getJSONObject(contentParams, "PARAM_USERNAME");
+            String firstName = Utils.getJSONObject(contentParams, "PARAM_FIRSTNAME");
+            String lastName = Utils.getJSONObject(contentParams, "PARAM_LASTNAME");
+            String email = Utils.getJSONObject(contentParams, "PARAM_EMAIL");
+            String telephone = Utils.getJSONObject(contentParams, "PARAM_TELEPHONE");
+            String siteShortName = Utils.getJSONObject(contentParams, "PARAM_SITE_SHORT_NAME");
+            String groupName = Utils.getJSONObject(contentParams, "PARAM_GROUP_NAME");
+            String subject = Utils.getJSONObject(contentParams, "PARAM_SUBJECT");
+            String body = Utils.getJSONObject(contentParams, "PARAM_BODY");
+            String filter = Utils.getJSONObject(contentParams, "PARAM_FILTER");
 
             if(method != null) {
                 switch (method) {
                     case "createExternalUser":
                         if(userName.isEmpty())
-                            result = createExternalUserWithoutUserName(firstName, lastName, email, telephone,
+                            arrayResult = createExternalUserWithoutUserName(firstName, lastName, email, telephone,
                                     siteShortName,  groupName);
                         else
-                            result = createExternalUser(userName, firstName, lastName, email, telephone,
+                            arrayResult = createExternalUser(userName, firstName, lastName, email, telephone,
                                     siteShortName, groupName);
                         break;
 
                     case "sendEmail":
-                        result = sendEmail(userName, subject, body);
+                        arrayResult = sendEmail(userName, subject, body);
                         break;
 
                     case "findAuthorities":
-                        result = findAuthorities(filter);
+                        arrayResult = findAuthorities(filter);
                         break;
 
                     case "findUsers":
-                        result = findUsers(filter);
+                        arrayResult = findUsers(filter);
                         break;
 
                     case "validateNewUser":
-                        result = validateNewUser(userName, email);
+                        arrayResult = validateNewUser(userName, email);
                         break;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(writer, result);
+        write(res);
     }
 
     private JSONArray validateNewUser (String userName, String email) throws JSONException {

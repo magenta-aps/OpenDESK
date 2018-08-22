@@ -140,43 +140,6 @@ public class Utils {
     }
 
     /**
-     * Alfresco's (or Java's) query string parsing doesn't handle UTF-8
-     * encoded values. We parse the query string ourselves here.
-     * @param url the requested url.
-     * @return a map of parsed parameters.
-     */
-    public static Map<String, String> parseParameters(String url) {
-        // Do our own parsing to get the query string since java.net.URI can't
-        // handle some URIs
-        int queryStringStart = url.indexOf('?');
-        String queryString = "";
-        if (queryStringStart != -1) {
-            queryString = url.substring(queryStringStart+1);
-        }
-        Map<String, String> parameters = URLEncodedUtils
-                .parse(queryString, Charset.forName("UTF-8"))
-                .stream()
-                .collect(
-                        Collectors.groupingBy(
-                                NameValuePair::getName,
-                                Collectors.collectingAndThen(Collectors.toList(), Utils::paramValuesToString)));
-        return parameters;
-    }
-
-    /**
-     * Converts parameter values to a string.
-     * @param paramValues parameter values.
-     * @return a string containing parameters.
-     */
-    private static String paramValuesToString(List<NameValuePair> paramValues) {
-        if (paramValues.size() == 1) {
-            return paramValues.get(0).getValue();
-        }
-        List<String> values = paramValues.stream().map(NameValuePair::getValue).collect(Collectors.toList());
-        return "[" + StringUtils.join(values, ",") + "]";
-    }
-
-    /**
      * Gets a child JSON object from a JSON object.
      * @param json Parent JSON object.
      * @param parameter the key of the child JSON object.

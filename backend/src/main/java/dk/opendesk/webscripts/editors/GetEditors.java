@@ -1,17 +1,14 @@
 package dk.opendesk.webscripts.editors;
 
 import dk.opendesk.repo.beans.EditorBean;
-import dk.opendesk.repo.utils.Utils;
-import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.AbstractWebScript;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
 
 
-public class GetEditors extends AbstractWebScript {
+public class GetEditors extends OpenDeskWebScript {
 
     private EditorBean editorBean;
 
@@ -21,18 +18,12 @@ public class GetEditors extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-        res.setContentEncoding("UTF-8");
-        Writer webScriptWriter = res.getWriter();
-        JSONArray result = new JSONArray();
-
+        super.execute(req, res);
         try {
-            result.add(editorBean.getEditors());
+            arrayResult.add(editorBean.getEditors());
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            res.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 }

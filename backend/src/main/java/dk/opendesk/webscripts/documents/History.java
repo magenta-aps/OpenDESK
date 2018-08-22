@@ -17,6 +17,7 @@ limitations under the License.
 package dk.opendesk.webscripts.documents;
 
 import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -27,18 +28,15 @@ import org.alfresco.service.cmr.version.VersionService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Map;
 
 
-public class History extends AbstractWebScript {
+public class History extends OpenDeskWebScript {
 
 
     private NodeService nodeService;
@@ -57,44 +55,36 @@ public class History extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-        Map<String, String> params = Utils.parseParameters(webScriptRequest.getURL());
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        Writer webScriptWriter = webScriptResponse.getWriter();
-        JSONArray result = new JSONArray();
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            NodeRef nodeRef = null;
-            String storeType = params.get("STORE_TYPE");
-            String storeId = params.get("STORE_ID");
-            String nodeId = params.get("NODE_ID");
+            String version = urlQueryParams.get("versionNode");
+            String parentNode = urlQueryParams.get("parentNode");
+            String method = urlQueryParams.get("method");
+            String storeType = urlQueryParams.get("STORE_TYPE");
+            String storeId = urlQueryParams.get("STORE_ID");
+            String nodeId = urlQueryParams.get("NODE_ID");
 
+            NodeRef nodeRef = null;
             if (storeType != null && storeId != null && nodeId != null) {
                 nodeRef = new NodeRef(storeType, storeId, nodeId);
             }
 
-
-            String version = params.get("versionNode");
-            String parentNode = params.get("parentNode");
-            String method = params.get("method");
             if (method != null) {
                 switch (method) {
                     case "getAll":
-                        result = getVersions(nodeRef);
+                        arrayResult = getVersions(nodeRef);
                         break;
                     case "deleteVersion":
-                        result = deleteVersion(parentNode, version);
+                        arrayResult = deleteVersion(parentNode, version);
                         break;
                 }
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            webScriptResponse.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 
     /**
