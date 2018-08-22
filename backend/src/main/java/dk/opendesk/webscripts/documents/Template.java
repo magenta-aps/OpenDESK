@@ -68,10 +68,10 @@ public class Template extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
-            String nodeName = Utils.getJSONObject(contentParams, "PARAM_NODE_NAME");
-            String templateNodeId = Utils.getJSONObject(contentParams, "PARAM_TEMPLATE_NODE_ID");
-            String destinationNodeRefStr = Utils.getJSONObject(contentParams, "PARAM_DESTINATION_NODEREF");
+            String method = getContentParam("PARAM_METHOD");
+            String nodeName = getContentParam("PARAM_NODE_NAME");
+            String templateNodeId = getContentParam("PARAM_TEMPLATE_NODE_ID");
+            String destinationNodeRefStr = getContentParam("PARAM_DESTINATION_NODEREF");
             switch (method) {
 
                 case "getDocumentTemplates":
@@ -165,6 +165,6 @@ public class Template extends OpenDeskWebScript {
         Map<String, Serializable> response = new HashMap<>();
         response.put("nodeRef", newFile.getNodeRef());
         response.put("fileName", fileName);
-        return Utils.getJSONReturnArray(response);
+        return getJSONReturnArray(response);
     }
 }

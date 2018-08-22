@@ -25,7 +25,7 @@ public class Preferences extends OpenDeskWebScript {
             String username = AuthenticationUtil.getFullyAuthenticatedUser();
             String pf = urlQueryParams.get("pf");
             Map<String, Serializable> preferences = Utils.getPreferences(preferenceService, username, pf);
-            arrayResult = Utils.getJSONReturnArray(preferences);
+            arrayResult = getJSONReturnArray(preferences);
         } catch (Exception e) {
             error(res, e);
         }

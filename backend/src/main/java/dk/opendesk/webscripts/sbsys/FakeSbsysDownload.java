@@ -1,7 +1,5 @@
 package dk.opendesk.webscripts.sbsys;
 
-import java.io.IOException;
-
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.model.FileExistsException;
 import org.alfresco.service.cmr.model.FileFolderService;
@@ -10,6 +8,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONArray;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+
+import java.io.IOException;
 
 public class FakeSbsysDownload extends OpenDeskWebScript {
 

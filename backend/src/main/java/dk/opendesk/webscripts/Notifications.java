@@ -18,7 +18,6 @@ package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.beans.NotificationBean;
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -32,7 +31,9 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Notifications extends OpenDeskWebScript {
 
@@ -54,9 +55,9 @@ public class Notifications extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String userName = Utils.getJSONObject(contentParams, "PARAM_USERNAME");
-            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
-            String nodeRefString = Utils.getJSONObject(contentParams, "PARAM_NODE_REF");
+            String userName = getContentParam("PARAM_USERNAME");
+            String method = getContentParam("PARAM_METHOD");
+            String nodeRefString = getContentParam("PARAM_NODE_REF");
 
             NodeRef nodeRef = null;
             if (NodeRef.isNodeRef(nodeRefString))
@@ -143,7 +144,7 @@ public class Notifications extends OpenDeskWebScript {
      */
     private JSONArray removeNotification(NodeRef nodeRef) {
         nodeService.deleteNode(nodeRef);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -154,7 +155,7 @@ public class Notifications extends OpenDeskWebScript {
      */
     private JSONArray setNotificationRead (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -165,7 +166,7 @@ public class Notifications extends OpenDeskWebScript {
      */
     private JSONArray setNotificationSeen (NodeRef nodeRef) {
         nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -185,7 +186,7 @@ public class Notifications extends OpenDeskWebScript {
             NodeRef n = child.getChildRef();
             this.setNotificationSeen(n);
         }
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**

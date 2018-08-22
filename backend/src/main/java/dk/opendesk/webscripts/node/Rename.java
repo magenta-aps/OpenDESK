@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -24,8 +23,9 @@ public class Rename extends OpenDeskWebScript {
         try {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-            String name = Utils.getJSONObject(contentParams, "name");
-            arrayResult = nodeBean.rename(nodeRef, name);
+            String name = getContentParam("name");
+            nodeBean.rename(nodeRef, name);
+            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

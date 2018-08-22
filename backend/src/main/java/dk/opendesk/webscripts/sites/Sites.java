@@ -104,21 +104,21 @@ public class Sites extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
-            String query = Utils.getJSONObject(contentParams, "PARAM_QUERY");
-            String siteShortName = Utils.getJSONObject(contentParams, "PARAM_SITE_SHORT_NAME");
-            String siteDisplayName = Utils.getJSONObject(contentParams, "PARAM_SITE_DISPLAY_NAME");
-            String authority = Utils.getJSONObject(contentParams, "PARAM_AUTHORITY");
-            String group = Utils.getJSONObject(contentParams, "PARAM_GROUP");
-            String role = Utils.getJSONObject(contentParams, "PARAM_ROLE");
-            String source = Utils.getJSONObject(contentParams, "PARAM_SOURCE");
-            String destination = Utils.getJSONObject(contentParams, "PARAM_DESTINATION");
-            String description = Utils.getJSONObject(contentParams, "PARAM_DESCRIPTION");
-            String fileName = Utils.getJSONObject(contentParams, "PARAM_FILENAME");
-            String siteVisibilityStr = Utils.getJSONObject(contentParams, "PARAM_VISIBILITY");
+            String method = getContentParam("PARAM_METHOD");
+            String query = getContentParam("PARAM_QUERY");
+            String siteShortName = getContentParam("PARAM_SITE_SHORT_NAME");
+            String siteDisplayName = getContentParam("PARAM_SITE_DISPLAY_NAME");
+            String authority = getContentParam("PARAM_AUTHORITY");
+            String group = getContentParam("PARAM_GROUP");
+            String role = getContentParam("PARAM_ROLE");
+            String source = getContentParam("PARAM_SOURCE");
+            String destination = getContentParam("PARAM_DESTINATION");
+            String description = getContentParam("PARAM_DESCRIPTION");
+            String fileName = getContentParam("PARAM_FILENAME");
+            String siteVisibilityStr = getContentParam("PARAM_VISIBILITY");
             SiteVisibility siteVisibility = Utils.getVisibility(siteVisibilityStr);
-            String siteType = Utils.getJSONObject(contentParams, "PARAM_SITE_TYPE");
-            String filter = Utils.getJSONObject(contentParams, "PARAM_FILTER");
+            String siteType = getContentParam("PARAM_SITE_TYPE");
+            String filter = getContentParam("PARAM_FILTER");
 
             if (method != null) {
                 switch (method) {
@@ -186,7 +186,7 @@ public class Sites extends OpenDeskWebScript {
 
                     case "getSiteType":
                         String type = getSiteType(siteShortName);
-                        arrayResult = Utils.getJSONReturnPair("type", type);
+                        arrayResult = getJSONReturnPair("type", type);
                         break;
 
                     case "getSiteGroups": // test not needed
@@ -239,7 +239,7 @@ public class Sites extends OpenDeskWebScript {
             String siteShortName = siteInfo.getShortName();
             JSONArray JSONresult = getCurrentUserSiteRole(siteShortName);
             JSONObject jsonObject = (JSONObject) JSONresult.get(0);
-            String role = Utils.getJSONObject(jsonObject, "role");
+            String role = getJSONObject(jsonObject, "role");
             if (SiteVisibility.PUBLIC.equals(siteInfo.getVisibility()) || !OpenDeskModel.OUTSIDER.equals(role)) {
                 JSONObject json = convertSiteInfoToJSON(siteInfo);
                 if (CheckIfSiteIsSpecial(siteInfo))
@@ -363,7 +363,7 @@ public class Sites extends OpenDeskWebScript {
             notificationBean.notifySiteGroup(authority, siteShortName);
         else
             notificationBean.notifySiteMember(authority, siteShortName);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -378,7 +378,7 @@ public class Sites extends OpenDeskWebScript {
 
         String groupName = Utils.getAuthorityName(siteShortName, group);
         authorityService.removeAuthority(groupName, authority);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -393,7 +393,7 @@ public class Sites extends OpenDeskWebScript {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
         permissionService.setPermission(ref, authority, permission, true);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -408,7 +408,7 @@ public class Sites extends OpenDeskWebScript {
 
         NodeRef ref = siteService.getSite(siteShortName).getNodeRef();
         permissionService.deletePermission(ref, authority, permission);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -455,7 +455,7 @@ public class Sites extends OpenDeskWebScript {
         } else
             role = OpenDeskModel.OUTSIDER;
 
-        return Utils.getJSONReturnPair("role", role);
+        return getJSONReturnPair("role", role);
     }
 
     /**
@@ -499,7 +499,7 @@ public class Sites extends OpenDeskWebScript {
         map.put("sourceLinkRef", sourceRef);
         map.put("destinationLinkRef", destinationRef);
 
-        return Utils.getJSONReturnArray(map);
+        return getJSONReturnArray(map);
     }
 
     /**
@@ -513,7 +513,7 @@ public class Sites extends OpenDeskWebScript {
 
         nodeService.deleteNode(source);
         nodeService.deleteNode(destination);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -563,7 +563,7 @@ public class Sites extends OpenDeskWebScript {
         JSONArray JSONresult = getCurrentUserSiteRole(siteShortName);
         JSONObject jsonObject = (JSONObject) JSONresult.get(0);
         try {
-            String role = Utils.getJSONObject(jsonObject, "role");
+            String role = getJSONObject(jsonObject, "role");
             json.put("current_user_role", role);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -762,7 +762,7 @@ public class Sites extends OpenDeskWebScript {
 
         Map<QName, Serializable> aspectProps = new HashMap<>();
         nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_PD_TEMPLATE_SITES, aspectProps);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -847,7 +847,7 @@ public class Sites extends OpenDeskWebScript {
 
             nodeService.deleteNode(child.getChildRef());
 
-            return Utils.getJSONReturnPair("Noderef", pdf.getChildRef().getId());
+            return getJSONReturnPair("Noderef", pdf.getChildRef().getId());
         } finally {
             AuthenticationUtil.popAuthentication();
         }
@@ -910,7 +910,7 @@ public class Sites extends OpenDeskWebScript {
         String authority = Utils.getAuthorityName(siteShortName, "");
         authorityService.deleteAuthority(authority, true);
 
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**
@@ -923,7 +923,7 @@ public class Sites extends OpenDeskWebScript {
 
         NodeRef destinationNodeRef = new NodeRef(destination);
         String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
-        return Utils.getJSONReturnPair("fileName", fileName);
+        return getJSONReturnPair("fileName", fileName);
     }
 
     private JSONArray findAuthorities(String siteShortName, String filter) throws JSONException {

@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -23,15 +22,16 @@ public class PreProcessMove extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            ArrayList<String> nodeRefStrs = Utils.getJSONArray(contentParams, "nodeRefs");
+            ArrayList<String> nodeRefStrs = getContentParamArray("nodeRefs");
             ArrayList<NodeRef> nodeRefs = new ArrayList<>();
             for (String nodeRefStr : nodeRefStrs)
                 nodeRefs.add(new NodeRef(nodeRefStr));
 
-            String destinationRefStr = Utils.getJSONObject(contentParams, "destinationRef");
+            String destinationRefStr = getContentParam("destinationRef");
             NodeRef destinationRef = new NodeRef(destinationRefStr);
 
-            arrayResult = nodeBean.preProcessMove(nodeRefs, destinationRef);
+            nodeBean.preProcessMove(nodeRefs, destinationRef);
+            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.beans.GroupBean;
-import dk.opendesk.repo.utils.Utils;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -21,8 +20,8 @@ public class Groups extends OpenDeskWebScript {
         try {
             // Read all used parameters no matter what method is used.
             // Those parameters that are not sent are set to an empty string
-            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
-            String groupName = Utils.getJSONObject(contentParams, "PARAM_GROUP_NAME");
+            String method = getContentParam("PARAM_METHOD");
+            String groupName = getContentParam("PARAM_GROUP_NAME");
 
             if(method != null) {
                 switch (method) {

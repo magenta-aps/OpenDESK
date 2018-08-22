@@ -28,7 +28,9 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.MutableAuthenticationService;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
@@ -39,8 +41,13 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class Users extends OpenDeskWebScript {
     private AuthorityBean authorityBean;
@@ -85,17 +92,17 @@ public class Users extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
-            String userName = Utils.getJSONObject(contentParams, "PARAM_USERNAME");
-            String firstName = Utils.getJSONObject(contentParams, "PARAM_FIRSTNAME");
-            String lastName = Utils.getJSONObject(contentParams, "PARAM_LASTNAME");
-            String email = Utils.getJSONObject(contentParams, "PARAM_EMAIL");
-            String telephone = Utils.getJSONObject(contentParams, "PARAM_TELEPHONE");
-            String siteShortName = Utils.getJSONObject(contentParams, "PARAM_SITE_SHORT_NAME");
-            String groupName = Utils.getJSONObject(contentParams, "PARAM_GROUP_NAME");
-            String subject = Utils.getJSONObject(contentParams, "PARAM_SUBJECT");
-            String body = Utils.getJSONObject(contentParams, "PARAM_BODY");
-            String filter = Utils.getJSONObject(contentParams, "PARAM_FILTER");
+            String method = getContentParam("PARAM_METHOD");
+            String userName = getContentParam("PARAM_USERNAME");
+            String firstName = getContentParam("PARAM_FIRSTNAME");
+            String lastName = getContentParam("PARAM_LASTNAME");
+            String email = getContentParam("PARAM_EMAIL");
+            String telephone = getContentParam("PARAM_TELEPHONE");
+            String siteShortName = getContentParam("PARAM_SITE_SHORT_NAME");
+            String groupName = getContentParam("PARAM_GROUP_NAME");
+            String subject = getContentParam("PARAM_SUBJECT");
+            String body = getContentParam("PARAM_BODY");
+            String filter = getContentParam("PARAM_FILTER");
 
             if(method != null) {
                 switch (method) {
@@ -229,7 +236,7 @@ public class Users extends OpenDeskWebScript {
         Serializable to = nodeService.getProperty(person, ContentModel.PROP_EMAIL);
         String from = properties.getProperty("mail.from.default");
         Utils.sendEmail(actionService, searchService, subject, body, to, from);
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**

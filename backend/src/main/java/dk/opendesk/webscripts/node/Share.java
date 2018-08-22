@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -27,7 +26,7 @@ public class Share extends OpenDeskWebScript {
             String userName = urlParams.get("userName");
             String permission = urlParams.get("permission");
             nodeBean.shareNode(nodeRef, userName, permission);
-            arrayResult = Utils.getJSONSuccess();
+            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

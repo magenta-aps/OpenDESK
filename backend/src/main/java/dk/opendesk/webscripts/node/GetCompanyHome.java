@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -21,7 +20,7 @@ public class GetCompanyHome extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            arrayResult = Utils.getJSONReturnPair("nodeRef", nodeBean.getCompanyHome().toString());
+            arrayResult = getJSONReturnPair("nodeRef", nodeBean.getCompanyHome().toString());
         } catch (Exception e) {
             error(res, e);
         }

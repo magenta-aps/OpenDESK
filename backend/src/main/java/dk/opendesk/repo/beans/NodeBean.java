@@ -503,7 +503,7 @@ public class NodeBean {
         permissionService.deletePermission(nodeRef, userName, permission);
     }
 
-    public JSONArray preProcessMove(ArrayList<NodeRef> nodeRefs, NodeRef destinationRef) {
+    public void preProcessMove(ArrayList<NodeRef> nodeRefs, NodeRef destinationRef) {
 
         for (NodeRef nodeRef : nodeRefs) {
             String nodeRefParent = nodeService.getPath(nodeRef).get(2).getElementString();
@@ -516,10 +516,9 @@ public class NodeBean {
                 }
             }
         }
-        return Utils.getJSONSuccess();
     }
 
-    public JSONArray rename(NodeRef nodeRef, String name) {
+    public void rename(NodeRef nodeRef, String name) {
         QName qname = nodeService.getType(nodeRef);
         if (qname.equals(ContentModel.TYPE_CONTENT)) {
             String fileExtension = getFileExtension(nodeRef);
@@ -527,7 +526,6 @@ public class NodeBean {
                 name += fileExtension;
         }
         nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, name);
-        return Utils.getJSONSuccess();
     }
 
     public String getName(NodeRef nodeRef) {
@@ -562,7 +560,7 @@ public class NodeBean {
      * @param versionId id of version node.
      * @return a JSONArray containing a JSONObject 'nodeRef'.
      */
-    public JSONArray getThumbnail(String nodeId, String versionId) {
+    public NodeRef getThumbnail(String nodeId, String versionId) {
 
         NodeRef nodeRef = new NodeRef("workspace", "SpacesStore", nodeId);
         NodeRef versionRef = new NodeRef("versionStore", "version2Store", versionId);
@@ -572,9 +570,8 @@ public class NodeBean {
         String name =  "(v. " + versionLabel + ") " + parentName;
         NodeRef versionPreviewRef = nodeService.getChildByName(nodeRef, OpenDeskModel.ASSOC_VERSION_PREVIEW, name);
         if(versionPreviewRef != null)
-            return Utils.getJSONReturnPair("nodeRef", versionPreviewRef.toString());
+            return versionPreviewRef;
 
-        JSONArray result = new JSONArray();
         AuthenticationUtil.runAs(() -> {
             // Add version previewable aspect if it is not present
             if(!nodeService.hasAspect(nodeRef, OpenDeskModel.ASPECT_VERSION_PREVIEWABLE))
@@ -593,12 +590,12 @@ public class NodeBean {
                     ContentModel.TYPE_CONTENT,
                     properties);
             nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
-
-            JSONObject json = new JSONObject();
-            json.put("nodeRef", childAssocRef.getChildRef().toString());
-            result.add(json);
             return true;
         }, AuthenticationUtil.getSystemUserName());
-        return result;
+        versionPreviewRef = nodeService.getChildByName(nodeRef, OpenDeskModel.ASSOC_VERSION_PREVIEW, name);
+        if(versionPreviewRef != null)
+            return versionPreviewRef;
+        else
+            return null;
     }
 }

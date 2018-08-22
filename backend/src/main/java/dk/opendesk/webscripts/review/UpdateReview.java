@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts.review;
 
 import dk.opendesk.repo.beans.ReviewBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -24,11 +23,11 @@ public class UpdateReview extends OpenDeskWebScript {
         try {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-            String assignee = Utils.getJSONObject(contentParams, "assignee");
-            String status = Utils.getJSONObject(contentParams, "status");
-            String reply = Utils.getJSONObject(contentParams, "reply");
+            String assignee = getContentParam("assignee");
+            String status = getContentParam("status");
+            String reply = getContentParam("reply");
             reviewBean.updateReview(nodeRef, assignee, status, reply);
-            arrayResult = Utils.getJSONSuccess();
+            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

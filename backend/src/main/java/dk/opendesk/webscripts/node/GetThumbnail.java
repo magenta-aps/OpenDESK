@@ -18,6 +18,7 @@ package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
 import dk.opendesk.webscripts.OpenDeskWebScript;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -37,7 +38,8 @@ public class GetThumbnail extends OpenDeskWebScript {
         try {
             String nodeId = urlParams.get("nodeId");
             String versionId = urlParams.get("versionId");
-            arrayResult = nodeBean.getThumbnail(nodeId, versionId);
+            NodeRef versionPreviewRef = nodeBean.getThumbnail(nodeId, versionId);
+            arrayResult = getJSONReturnPair("nodeRef", versionPreviewRef.toString());
         } catch (Exception e) {
             error(res, e);
         }

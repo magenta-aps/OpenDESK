@@ -17,9 +17,6 @@ import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -38,12 +35,12 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static org.alfresco.model.ContentModel.*;
 import static org.alfresco.service.namespace.NamespaceService.CONTENT_MODEL_1_0_URI;
@@ -137,88 +134,6 @@ public class Utils {
             PD_GROUPS.put("PD_STEERING_GROUP", "Styregruppe");
         }
         return PD_GROUPS.get(group);
-    }
-
-    /**
-     * Gets a child JSON object from a JSON object.
-     * @param json Parent JSON object.
-     * @param parameter the key of the child JSON object.
-     * @return a child JSON Object with the specified parameter.
-     */
-    public static String getJSONObject(JSONObject json, String parameter) throws JSONException {
-        if (!json.has(parameter) || json.getString(parameter).length() == 0)
-        {
-            return "";
-        }
-        return json.getString(parameter);
-    }
-
-    public static ArrayList<String> getJSONArray(JSONObject json, String parameter) throws JSONException {
-        ArrayList<String> result = new ArrayList<>();
-        if (!json.has(parameter) || json.getJSONArray(parameter).length() == 0)
-        {
-            return result;
-        }
-        org.json.JSONArray jsonArray = json.getJSONArray(parameter);
-        for (int i=0; i < jsonArray.length(); i++) {
-            String value = jsonArray.getString(i);
-            result.add(value);
-        }
-        return result;
-    }
-
-    /**
-     * Gets the nodeRef of a JSON object.
-     * @param json JSON object containing PARAM_STORE_TYPE, PARAM_STORE_ID and PARAM_NODE_ID.
-     * @return the nodeRef contained by the JSON object.
-     */
-    public static NodeRef getNodeRef(JSONObject json) throws JSONException {
-        String storeType = getJSONObject(json, "PARAM_STORE_TYPE");
-        String storeId = getJSONObject(json, "PARAM_STORE_ID");
-        String nodeId = getJSONObject(json, "PARAM_NODE_ID");
-
-        if (storeType != null && storeId != null && nodeId != null) {
-            return new NodeRef(storeType, storeId, nodeId);
-        }
-        return null;
-    }
-
-    /**
-     * Gets a JSONArray representing succes.
-     * @return a JSONArray containing { status : "succes" }.
-     */
-    public static JSONArray getJSONSuccess () {
-        return getJSONReturnPair("status", "success");
-    }
-
-    /**
-     * Gets a JSONObject from a key-value pair.
-     * @param key key of the object.
-     * @param value value of the object.
-     * @return a JSONArray containing the JSONObject.
-     */
-    public static JSONArray getJSONReturnPair (String key, String value) {
-        Map<String, Serializable> map = new HashMap<>();
-        map.put(key, value);
-        return getJSONReturnArray(map);
-    }
-
-    /**
-     * Gets a JSONArray from a map.
-     * @param map contains mapping of pairs.
-     * @return a JSONArray containing the pairs as JSONObjects.
-     */
-    public static JSONArray getJSONReturnArray(Map<String, Serializable> map) {
-        JSONObject return_json = new JSONObject();
-        JSONArray result = new JSONArray();
-        try {
-            for (Map.Entry<String, Serializable> pair : map.entrySet())
-                return_json.put(pair.getKey(), pair.getValue().toString());
-            result.add(return_json);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
     /**

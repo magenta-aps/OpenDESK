@@ -16,7 +16,6 @@ limitations under the License.
 */
 package dk.opendesk.webscripts.documents;
 
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -134,6 +133,6 @@ public class History extends OpenDeskWebScript {
 
         versionService.deleteVersion(parentNodeRef, version);
 
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 }

@@ -84,17 +84,17 @@ public class ProjectDepartment extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String method = Utils.getJSONObject(contentParams, "PARAM_METHOD");
-            String site_name = Utils.getJSONObject(contentParams, "PARAM_NAME");
-            String site_short_name = Utils.getJSONObject(contentParams, "PARAM_SITE_SHORT_NAME");
-            String site_description = Utils.getJSONObject(contentParams, "PARAM_DESCRIPTION");
-            String site_sbsys = Utils.getJSONObject(contentParams, "PARAM_SBSYS");
-            String site_owner = Utils.getJSONObject(contentParams, "PARAM_OWNER");
-            String site_manager = Utils.getJSONObject(contentParams, "PARAM_MANAGER");
-            String site_state = Utils.getJSONObject(contentParams, "PARAM_STATE");
-            String site_center_id = Utils.getJSONObject(contentParams, "PARAM_CENTERID");
-            String site_visibility_str = Utils.getJSONObject(contentParams, "PARAM_VISIBILITY");
-            String template = Utils.getJSONObject(contentParams, "PARAM_TEMPLATE");
+            String method = getContentParam("PARAM_METHOD");
+            String site_name = getContentParam("PARAM_NAME");
+            String site_short_name = getContentParam("PARAM_SITE_SHORT_NAME");
+            String site_description = getContentParam("PARAM_DESCRIPTION");
+            String site_sbsys = getContentParam("PARAM_SBSYS");
+            String site_owner = getContentParam("PARAM_OWNER");
+            String site_manager = getContentParam("PARAM_MANAGER");
+            String site_state = getContentParam("PARAM_STATE");
+            String site_center_id = getContentParam("PARAM_CENTERID");
+            String site_visibility_str = getContentParam("PARAM_VISIBILITY");
+            String template = getContentParam("PARAM_TEMPLATE");
             SiteVisibility site_visibility = Utils.getVisibility(site_visibility_str);
 
             switch (method) {
@@ -237,7 +237,7 @@ public class ProjectDepartment extends OpenDeskWebScript {
         } finally {
             AuthenticationUtil.popAuthentication();
         }
-        return Utils.getJSONSuccess();
+        return getJSONSuccess();
     }
 
     /**

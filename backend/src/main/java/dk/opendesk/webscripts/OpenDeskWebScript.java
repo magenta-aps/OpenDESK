@@ -11,7 +11,10 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +43,10 @@ public class OpenDeskWebScript extends AbstractWebScript {
         res.setContentType("application/contentParams");
     }
 
+    protected String getContentParam(String parameter) throws JSONException {
+        return getJSONObject(contentParams, parameter);
+    }
+
     protected void error(WebScriptResponse res, Exception e) {
         e.printStackTrace();
         try {
@@ -48,6 +55,72 @@ public class OpenDeskWebScript extends AbstractWebScript {
             jsonE.printStackTrace();
         }
         res.setStatus(400);
+    }
+
+    protected ArrayList<String> getContentParamArray(String parameter) throws JSONException {
+        ArrayList<String> result = new ArrayList<>();
+        if (!contentParams.has(parameter) || contentParams.getJSONArray(parameter).length() == 0)
+        {
+            return result;
+        }
+        org.json.JSONArray jsonArray = contentParams.getJSONArray(parameter);
+        for (int i=0; i < jsonArray.length(); i++) {
+            String value = jsonArray.getString(i);
+            result.add(value);
+        }
+        return result;
+    }
+
+    /**
+     * Gets a child JSON object from a JSON object.
+     * @param json Parent JSON object.
+     * @param parameter the key of the child JSON object.
+     * @return a child JSON Object with the specified parameter.
+     */
+    protected String getJSONObject(JSONObject json, String parameter) throws JSONException {
+        if (!json.has(parameter) || json.getString(parameter).length() == 0)
+        {
+            return "";
+        }
+        return json.getString(parameter);
+    }
+
+    /**
+     * Gets a JSONArray from a map.
+     * @param map contains mapping of pairs.
+     * @return a JSONArray containing the pairs as JSONObjects.
+     */
+    protected JSONArray getJSONReturnArray(Map<String, Serializable> map) {
+        JSONObject return_json = new JSONObject();
+        JSONArray result = new JSONArray();
+        try {
+            for (Map.Entry<String, Serializable> pair : map.entrySet())
+                return_json.put(pair.getKey(), pair.getValue().toString());
+            result.add(return_json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Gets a JSONObject from a key-value pair.
+     * @param key key of the object.
+     * @param value value of the object.
+     * @return a JSONArray containing the JSONObject.
+     */
+    protected JSONArray getJSONReturnPair (String key, String value) {
+        Map<String, Serializable> map = new HashMap<>();
+        map.put(key, value);
+        return getJSONReturnArray(map);
+    }
+
+    /**
+     * Gets a JSONArray representing succes.
+     * @return a JSONArray containing { status : "succes" }.
+     */
+    protected JSONArray getJSONSuccess () {
+        return getJSONReturnPair("status", "success");
     }
 
     private String paramValuesToString(List<NameValuePair> paramValues) {
