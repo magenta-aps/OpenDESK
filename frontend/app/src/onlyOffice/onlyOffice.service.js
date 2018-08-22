@@ -77,10 +77,20 @@ function onlyOfficeService ($http, alfrescoNodeService, sessionService) {
     var height = '100%'
     if (noAuth !== true && mode === 'view')
       height = '600px'
-    var userInfo = sessionService.getUserInfo()
     var docName = object.docTitle
     var docExtension = docName.substring(docName.lastIndexOf('.') + 1).trim()
       .toLowerCase()
+    var callBackUrl = ''
+    var user = {}
+    if (!noAuth) {
+      callBackUrl = object.callbackUrl
+      var userInfo = sessionService.getUserInfo()
+      user = {
+        id: userInfo.user.userName,
+        firstname: userInfo.user.firstName,
+        lastname: userInfo.user.lastName
+      }
+    }
     var docConfig = {
       url: object.onlyofficeUrl + 'OfficeWeb/',
       type: 'desktop',
@@ -98,12 +108,8 @@ function onlyOfficeService ($http, alfrescoNodeService, sessionService) {
       },
       editorConfig: {
         mode: mode,
-        callbackUrl: object.callbackUrl,
-        user: {
-          id: userInfo.user.userName,
-          firstname: userInfo.user.firstName,
-          lastname: userInfo.user.lastName
-        }
+        callbackUrl: callBackUrl,
+        user: user
       }
     }
     if (object.lang !== undefined)
