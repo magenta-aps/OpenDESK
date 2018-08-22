@@ -32,7 +32,6 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,13 +50,7 @@ public class PreviewHelper extends OpenDeskWebScript {
             String versionNode = urlQueryParams.get("version_node");
             String method = urlQueryParams.get("method");
 
-            if (method == null)
-                method = "createThumbnail";  //TODO: Add method name "createThumbnail".
-
             switch (method) {
-                case "cleanUp":
-                    arrayResult = cleanUp(versionNode); // TODO Use another variable than versionNode as versionNode in this case is a normal root content NodeRef
-                    break;
                 case "createThumbnail":
                     arrayResult = createThumbnail(parentNode, versionNode);
                     break;
@@ -66,30 +59,6 @@ public class PreviewHelper extends OpenDeskWebScript {
             error(res, e);
         }
         write(res);
-    }
-
-    /**
-     * Deletes a node.
-     * (method = cleanUp)
-     * @param nodeId id of the node.
-     * @return JSONSuccess.
-     */
-    private JSONArray cleanUp(String nodeId) throws InterruptedException {
-        NodeRef n = new NodeRef("workspace", "SpacesStore", nodeId);
-
-        System.out.println("Deleting nodeRef: " + n + " [" + new Date() + "]");
-        // sleep a while until the preview has been loaded in the frontend
-        Thread.sleep(10000);
-
-        AuthenticationUtil.pushAuthentication();
-        try {
-            AuthenticationUtil.setRunAsUserSystem();
-            // ...code to be run as Admin...
-            nodeService.deleteNode(n);
-        } finally {
-            AuthenticationUtil.popAuthentication();
-        }
-        return Utils.getJSONSuccess();
     }
 
     /**

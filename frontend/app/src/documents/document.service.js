@@ -9,8 +9,7 @@
     var service = {
       getDocumentByPath: getDocumentByPath,
       getBreadCrumb: getBreadCrumb,
-      createVersionThumbnail: createVersionThumbnail,
-      cleanupThumbnail: cleanupThumbnail
+      createVersionThumbnail: createVersionThumbnail
     }
 
     return service
@@ -56,13 +55,6 @@
 
     function createVersionThumbnail (node, versionNode) {
       return $http.get(`/alfresco/s/previewhelper?version_node=${versionNode}&parent_node=${node}&method=createThumbnail`)
-        .then(function (response) {
-          return response
-        })
-    }
-
-    function cleanupThumbnail (node) {
-      return $http.get(`/alfresco/s/previewhelper?version_node=${node.split('/')[3]}&method=cleanUp`)
         .then(function (response) {
           return response
         })
