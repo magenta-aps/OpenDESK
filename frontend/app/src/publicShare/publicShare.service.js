@@ -1,9 +1,9 @@
 'use strict'
 
 angular.module('openDeskApp.publicShare')
-  .factory('publicShareService', ['$http', 'alfrescoNodeService', onlyOfficeService])
+  .factory('publicShareService', ['$http', '$q', 'alfrescoNodeService', onlyOfficeService])
 
-function onlyOfficeService ($http, alfrescoNodeService) {
+function onlyOfficeService ($http, $q, alfrescoNodeService) {
   var restBaseUrl = '/alfresco/s/api/internal/shared/'
 
   return {
@@ -14,12 +14,17 @@ function onlyOfficeService ($http, alfrescoNodeService) {
 
   function getShared (sharedId) {
     var url = restBaseUrl + 'node/' + sharedId + '/metadata'
-    return $http.get(url).then(function (response) {
-      var item = response.data
-      item.contentUrl = '/api/internal/shared/node/' + sharedId + '/content/' + item.name
-      item.thumbnailUrl = '/api/internal/shared/node/' + sharedId + '/content/thumbnails/pdf'
-      return item
-    })
+    return $http.get(url)
+      .then(
+        function (response) {
+          var item = response.data
+          item.contentUrl = '/api/internal/shared/node/' + sharedId + '/content/' + item.name
+          item.thumbnailUrl = '/api/internal/shared/node/' + sharedId + '/content/thumbnails/pdf'
+          return item
+        },
+        function (error) {
+          return ($q.reject(error.data))
+        })
   }
 
   function share (nodeRef) {

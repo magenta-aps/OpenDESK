@@ -18,10 +18,15 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
 
   function getDocument () {
     publicShareService.getShared(vm.sharedId)
-      .then(function (item) {
-        vm.plugin = documentPreviewService.getPlugin(item)
-        vm.plugin.height = '100%'
-        vm.plugin.sharedId = vm.sharedId
-      })
+      .then(
+        function (item) {
+          vm.plugin = documentPreviewService.getPlugin(item)
+          vm.plugin.height = '100%'
+          vm.plugin.sharedId = vm.sharedId
+        },
+        function (error) {
+          if (error.status.code === 404)
+            vm.notFound = true
+        })
   }
 }

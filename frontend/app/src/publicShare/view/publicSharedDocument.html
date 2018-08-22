@@ -1,1 +1,5 @@
 <preview-manager ng-if="PSC.plugin" plugin="PSC.plugin" style="height:100%"></preview-manager>
+<div ng-if="PSC.notFound" layout="column">
+    <md-icon class="md-icon--large">library_books</md-icon>
+    <p class="md-display-1" style="text-align:center">{{'EDITORS.PREVIEW_ERROR' | translate}}</p>
+</div>
