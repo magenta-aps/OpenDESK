@@ -9,7 +9,6 @@
     var service = {
       getDocumentByPath: getDocumentByPath,
       getBreadCrumb: getBreadCrumb,
-      getEditPermission: getEditPermission,
       createVersionThumbnail: createVersionThumbnail,
       cleanupThumbnail: cleanupThumbnail
     }
@@ -53,13 +52,6 @@
         return 'odDocuments.myDocs({nodeRef: "' + nodeId + '"})'
       else if (type === 'shared-docs')
         return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
-    }
-
-    function getEditPermission (documentNodeRef) {
-      return $http.get(`/alfresco/s/permissions?method=getEditPermission&NODE_ID=${documentNodeRef}&STORE_TYPE=workspace&STORE_ID=SpacesStore`)
-        .then(function (response) {
-          return response.data[0].edit_permission === 'ALLOWED'
-        })
     }
 
     function createVersionThumbnail (node, versionNode) {
