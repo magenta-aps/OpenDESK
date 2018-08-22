@@ -192,23 +192,6 @@ public class Utils {
     }
 
     /**
-     * Gets a JSONArray representing an error.
-     * @param e the exception.
-     * @return a JSONArray containing the error message.
-     */
-    public static JSONArray getJSONError (Exception e) {
-        Map<String, Serializable> map = new HashMap<>();
-        map.put("error", e.getStackTrace()[0].toString());
-        return getJSONReturnArray(map);
-    }
-
-    public static JSONObject getJSONErrorObj (Exception e) {
-        Map<String, Serializable> map = new HashMap<>();
-        map.put("error", e.getStackTrace()[0].toString());
-        return getJSONReturnObject(map);
-    }
-
-    /**
      * Gets a JSONObject from a key-value pair.
      * @param key key of the object.
      * @param value value of the object.
@@ -236,43 +219,6 @@ public class Utils {
             e.printStackTrace();
         }
         return result;
-    }
-
-    /**
-     * Gets a JSONObject from a map.
-     * @param map contains mapping of pairs.
-     * @return a JSONObject containing the pairs as JSONObject children.
-     */
-    public static JSONObject getJSONReturnObject(Map<String, Serializable> map) {
-        JSONObject result = new JSONObject();
-        try {
-            for (Map.Entry<String, Serializable> pair : map.entrySet())
-                result.put(pair.getKey(), pair.getValue().toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    /**
-     * Writes JSON to the webscript writer.
-     * @param writer a webscript writer.
-     * @param result a JSONArray to be written.
-     */
-    public static void writeJSONArray (Writer writer, JSONArray result) {
-        try {
-            result.writeJSONString(writer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void writeJSONObject (Writer writer, JSONObject result) {
-        try {
-            result.write(writer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
