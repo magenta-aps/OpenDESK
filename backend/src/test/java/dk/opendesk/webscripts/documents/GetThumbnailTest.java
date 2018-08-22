@@ -23,14 +23,12 @@ import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class PreviewHelperTest extends BaseWebScriptTest {
+public class GetThumbnailTest extends BaseWebScriptTest {
 
-    private static Logger log = Logger.getLogger(PreviewHelperTest.class);
+    private static Logger log = Logger.getLogger(GetThumbnailTest.class);
 
     private NodeService nodeService = (NodeService) getServer().getApplicationContext().getBean("nodeService");
     private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
@@ -45,7 +43,7 @@ public class PreviewHelperTest extends BaseWebScriptTest {
     private String docId;
     private String versionId;
 
-    public PreviewHelperTest() {
+    public GetThumbnailTest() {
         super();
     }
 
@@ -72,35 +70,14 @@ public class PreviewHelperTest extends BaseWebScriptTest {
         versionId = version.getFrozenStateNodeRef().getId();
     }
 
-    public void testCleanUp() throws IOException, JSONException {
-        log.debug("PreviewHelperTest.testCleanUp");
-
-        assertWebScriptCleanUp(docId);
-    }
     private JSONArray executeWebScript (Map<String, String> args) throws IOException, JSONException {
         TestWebScriptServer.Request request = new TestWebScriptServer.GetRequest("previewhelper").setArgs(args);
         TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, TestUtils.ADMIN);
         return new JSONArray(response.getContentAsString());
     }
 
-    private JSONArray executeWebScriptCleanUp (String versionNodeId) throws IOException, JSONException {
-        Map<String, String> args = new HashMap<String, String>() {
-            {
-                put("method", "cleanUp");
-                put("version_node", versionNodeId);
-            }
-        };
-        return executeWebScript(args);
-    }
-
-    private JSONArray assertWebScriptCleanUp(String versionNodeId) throws IOException, JSONException {
-        JSONArray returnJSON = executeWebScriptCleanUp(versionNodeId);
-        assertEquals(TestUtils.SUCCESS, returnJSON.getJSONObject(0).getString(TestUtils.STATUS));
-        return returnJSON;
-    }
-
     public void testCreateThumbnail() throws IOException, JSONException {
-        log.debug("PreviewHelperTest.testCreateThumbnail");
+        log.debug("GetThumbnailTest.testCreateThumbnail");
 
         assertWebScriptCreateThumbnail(docId, versionId);
     }

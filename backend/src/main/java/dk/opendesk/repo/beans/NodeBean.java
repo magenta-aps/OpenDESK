@@ -14,6 +14,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -553,5 +554,51 @@ public class NodeBean {
             split[0] = name;
         }
         return split;
+    }
+
+    /**
+     * Creates a thumbnail of a version
+     * @param nodeId id of parent node.
+     * @param versionId id of version node.
+     * @return a JSONArray containing a JSONObject 'nodeRef'.
+     */
+    public JSONArray getThumbnail(String nodeId, String versionId) {
+
+        NodeRef nodeRef = new NodeRef("workspace", "SpacesStore", nodeId);
+        NodeRef versionRef = new NodeRef("versionStore", "version2Store", versionId);
+
+        Serializable parentName = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+        Serializable versionLabel = nodeService.getProperty(versionRef, ContentModel.PROP_VERSION_LABEL);
+        String name =  "(v. " + versionLabel + ") " + parentName;
+        NodeRef versionPreviewRef = nodeService.getChildByName(nodeRef, OpenDeskModel.ASSOC_VERSION_PREVIEW, name);
+        if(versionPreviewRef != null)
+            return Utils.getJSONReturnPair("nodeRef", versionPreviewRef.toString());
+
+        JSONArray result = new JSONArray();
+        AuthenticationUtil.runAs(() -> {
+            // Add version previewable aspect if it is not present
+            if(!nodeService.hasAspect(nodeRef, OpenDeskModel.ASPECT_VERSION_PREVIEWABLE))
+                nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_VERSION_PREVIEWABLE, null);
+
+            // Create new preview node of earlier version
+            Map<QName, Serializable> properties = new HashMap<>();
+            properties.put(ContentModel.PROP_NAME, name);
+            Serializable content = nodeService.getProperty(versionRef, ContentModel.PROP_CONTENT);
+            properties.put(ContentModel.PROP_CONTENT, content);
+            QName cmName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+            ChildAssociationRef childAssocRef = nodeService.createNode(
+                    nodeRef,
+                    OpenDeskModel.ASSOC_VERSION_PREVIEW,
+                    cmName,
+                    ContentModel.TYPE_CONTENT,
+                    properties);
+            nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
+
+            JSONObject json = new JSONObject();
+            json.put("nodeRef", childAssocRef.getChildRef().toString());
+            result.add(json);
+            return true;
+        }, AuthenticationUtil.getSystemUserName());
+        return result;
     }
 }

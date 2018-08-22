@@ -9,7 +9,7 @@
     var service = {
       getDocumentByPath: getDocumentByPath,
       getBreadCrumb: getBreadCrumb,
-      createVersionThumbnail: createVersionThumbnail
+      getThumbnail: getThumbnail
     }
 
     return service
@@ -53,8 +53,8 @@
         return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
     }
 
-    function createVersionThumbnail (node, versionNode) {
-      return $http.get(`/alfresco/s/previewhelper?version_node=${versionNode}&parent_node=${node}&method=createThumbnail`)
+    function getThumbnail (nodeId, versionId) {
+      return $http.get(`/alfresco/s/node/${nodeId}/thumbnail/${versionId}`)
         .then(function (response) {
           return response
         })

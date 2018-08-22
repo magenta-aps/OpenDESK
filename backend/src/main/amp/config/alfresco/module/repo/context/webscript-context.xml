@@ -63,12 +63,6 @@
 		<property name="personService" ref="PersonService"/>
 	</bean>
 
-	<bean id="webscript.documents.previewhelper.get"
-		  class="dk.opendesk.webscripts.documents.PreviewHelper"
-		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-	</bean>
-
 	<bean id="webscript.documents.template.post"
 		  class="dk.opendesk.webscripts.documents.Template"
 		  parent="webscript">
@@ -150,6 +144,12 @@
           parent="webscript">
         <property name="nodeBean" ref="nodeBean"/>
     </bean>
+
+	<bean id="webscript.node.thumbnail.get"
+		  class="dk.opendesk.webscripts.node.GetThumbnail"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
 
 	<bean id="webscript.node.userhome.get"
 		  class="dk.opendesk.webscripts.node.GetUserHome"

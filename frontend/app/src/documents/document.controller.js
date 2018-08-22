@@ -137,7 +137,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
 
   function loadPreview () {
     if (vm.docHasParent)
-      documentService.createVersionThumbnail(vm.parentNodeId, vm.nodeId)
+      documentService.getThumbnail(vm.parentNodeId, vm.nodeId)
         .then(function (response) {
           documentPreviewService.getPluginByNodeRef(response.data[0].nodeRef)
             .then(function (plugin) {
