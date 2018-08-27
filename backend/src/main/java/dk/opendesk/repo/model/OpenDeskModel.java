@@ -1,10 +1,11 @@
 package dk.opendesk.repo.model;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public interface OpenDeskModel {
 
