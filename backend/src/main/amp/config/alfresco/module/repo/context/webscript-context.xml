@@ -63,15 +63,6 @@
 		<property name="personService" ref="PersonService"/>
 	</bean>
 
-	<bean id="webscript.documents.template.post"
-		  class="dk.opendesk.webscripts.documents.Template"
-		  parent="webscript">
-		<property name="nodeBean" ref="nodeBean"/>
-		<property name="nodeService" ref="NodeService"/>
-		<property name="fileFolderService" ref="fileFolderService"/>
-		<property name="repository" ref="repositoryHelper"/>
-	</bean>
-
 	<bean id="webscript.editors.editors.get"
 		  class="dk.opendesk.webscripts.editors.GetEditors"
 		  parent="webscript">
@@ -333,5 +324,23 @@
 		  parent="webscript">
 		<property name="reviewBean" ref="reviewBean"/>
 	</bean>
+
+    <bean id="webscript.template.document.get"
+          class="dk.opendesk.webscripts.template.GetDocumentTemplates"
+          parent="webscript">
+        <property name="templateBean" ref="templateBean"/>
+    </bean>
+
+    <bean id="webscript.template.folder.get"
+          class="dk.opendesk.webscripts.template.GetFolderTemplates"
+          parent="webscript">
+        <property name="templateBean" ref="templateBean"/>
+    </bean>
+
+    <bean id="webscript.template.node.post"
+          class="dk.opendesk.webscripts.template.CreateNode"
+          parent="webscript">
+        <property name="templateBean" ref="templateBean"/>
+    </bean>
 
 </beans>

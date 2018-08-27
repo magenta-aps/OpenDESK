@@ -89,4 +89,11 @@
         <property name="siteService" ref="SiteService"/>
     </bean>
 
+    <bean id="templateBean" class="dk.opendesk.repo.beans.TemplateBean">
+        <property name="nodeBean" ref="nodeBean"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="fileFolderService" ref="fileFolderService"/>
+        <property name="repository" ref="repositoryHelper"/>
+    </bean>
+
 </beans>

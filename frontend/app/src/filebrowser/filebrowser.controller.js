@@ -103,13 +103,13 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
       setFolderAndPermissionsByPath(vm.path)
     }
 
-    filebrowserService.getTemplates('Document')
+    filebrowserService.getTemplates('document')
       .then(function (documentTemplates) {
         vm.documentTemplates = documentTemplates
         if (vm.documentTemplates !== undefined) processContent(vm.documentTemplates)
       })
 
-    filebrowserService.getTemplates('Folder')
+    filebrowserService.getTemplates('folder')
       .then(function (folderTemplates) {
         vm.folderTemplates = folderTemplates
         vm.folderTemplates.unshift({
