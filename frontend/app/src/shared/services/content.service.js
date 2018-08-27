@@ -12,7 +12,6 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
     history: history,
     upload: uploadContent,
     uploadNewVersion: uploadNewVersion,
-    deleteVersion: deleteVersion,
     revertToVersion: revertToVersion,
     isLibreOfficeEditable: isLibreOfficeEditable,
     isMsOfficeEditable: isMsOfficeEditable,
@@ -39,13 +38,6 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
     return $http.delete(`/slingshot/doclib/action/file/node/${alfrescoNodeService.processNodeRef(nodeRef).uri}`)
       .then(function (result) {
         return result.data
-      })
-  }
-
-  function deleteVersion (parent, versionNode) {
-    return $http.get(`/alfresco/s/history?method=deleteVersion&parentNode=${parent}&versionNode=${versionNode}`)
-      .then(function (response) {
-        return response.data
       })
   }
 

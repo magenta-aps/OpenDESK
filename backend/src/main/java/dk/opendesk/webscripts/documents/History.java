@@ -57,8 +57,6 @@ public class History extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String version = urlQueryParams.get("versionNode");
-            String parentNode = urlQueryParams.get("parentNode");
             String method = urlQueryParams.get("method");
             String storeType = urlQueryParams.get("STORE_TYPE");
             String storeId = urlQueryParams.get("STORE_ID");
@@ -73,9 +71,6 @@ public class History extends OpenDeskWebScript {
                 switch (method) {
                     case "getAll":
                         arrayResult = getVersions(nodeRef);
-                        break;
-                    case "deleteVersion":
-                        arrayResult = deleteVersion(parentNode, version);
                         break;
                 }
             }
@@ -121,18 +116,5 @@ public class History extends OpenDeskWebScript {
         }
 
         return result;
-    }
-
-    private JSONArray deleteVersion(String parentNode, String versionNode) {
-
-        NodeRef parentNodeRef = new NodeRef(parentNode);
-
-        VersionHistory versionHistory = versionService.getVersionHistory(parentNodeRef);
-
-        Version version = versionHistory.getVersion(versionNode);
-
-        versionService.deleteVersion(parentNodeRef, version);
-
-        return getJSONSuccess();
     }
 }

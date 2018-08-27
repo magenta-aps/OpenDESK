@@ -40,19 +40,11 @@ function LoolController ($state, $stateParams, loolService, ContentService, $mdT
 
   vm.goBack = function () {
     var parentNodeId = $stateParams.nodeRef.split('/')[3]
-
-    if ($stateParams.versionLabel != null && $stateParams.parent != null) {
-      var sp = $stateParams.versionLabel.split('.')
-      var bump = (parseInt(sp[1]) + 1)
-      var newVersion = sp[0] + '.' + bump
-
-      ContentService.deleteVersion($stateParams.parent, newVersion)
-        .then(function () {
-          $state.go('document', { 'doc': parentNodeId })
-        })
-    } else {
-      $state.go('document', { 'doc': parentNodeId })
-    }
+    $state.go('document',
+      {
+        'doc': parentNodeId
+      }
+    )
   }
 
   function renderIframe (serviceUrl) {
