@@ -40,7 +40,7 @@ public class OpenDeskWebScript extends AbstractWebScript {
         urlParams = req.getServiceMatch().getTemplateVars();
         urlQueryParams = parseUrlParams(req.getURL());
         res.setContentEncoding("UTF-8");
-        res.setContentType("application/contentParams");
+        res.setContentType("application/json");
     }
 
     protected String getContentParam(String parameter) throws JSONException {
