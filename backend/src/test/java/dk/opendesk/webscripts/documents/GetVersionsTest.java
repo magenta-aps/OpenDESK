@@ -21,14 +21,12 @@ import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class HistoryTest extends BaseWebScriptTest {
+public class GetVersionsTest extends BaseWebScriptTest {
 
-    private static Logger log = Logger.getLogger(HistoryTest.class);
+    private static Logger log = Logger.getLogger(GetVersionsTest.class);
 
     private NodeArchiveService nodeArchiveService = (NodeArchiveService) getServer().getApplicationContext().getBean("nodeArchiveService");
     private SiteService siteService = (SiteService) getServer().getApplicationContext().getBean("siteService");
@@ -41,7 +39,7 @@ public class HistoryTest extends BaseWebScriptTest {
     private Map<String, SiteInfo> sites = new HashMap<>();
     private NodeRef docRef;
 
-    public HistoryTest() {
+    public GetVersionsTest() {
         super();
     }
 
@@ -63,7 +61,7 @@ public class HistoryTest extends BaseWebScriptTest {
     }
 
     public void testCreate4VersionsAndGetAllVersions() throws IOException, JSONException {
-        log.debug("HistoryTest.testCreate4VersionsAndGetAllVersions");
+        log.debug("GetVersionsTest.testCreate4VersionsAndGetAllVersions");
 
         Map<String, Serializable> versionProperties = new HashMap<>();
 
@@ -77,7 +75,7 @@ public class HistoryTest extends BaseWebScriptTest {
     }
 
     public void testCreate10VersionsAndGetAllVersions() throws IOException, JSONException {
-        log.debug("HistoryTest.testCreate10VersionsAndGetAllVersions");
+        log.debug("GetVersionsTest.testCreate10VersionsAndGetAllVersions");
 
         Map<String, Serializable> versionProperties = new HashMap<>();
 

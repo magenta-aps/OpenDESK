@@ -41,8 +41,8 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
       })
   }
 
-  function history (documentNodeRef) {
-    return $http.get(`/alfresco/s/history?method=getAll&NODE_ID=${documentNodeRef}&STORE_TYPE=workspace&STORE_ID=SpacesStore`)
+  function history (nodeId) {
+    return $http.get(`/alfresco/service/node/${nodeId}/versions`)
       .then(function (response) {
         return response.data
       })

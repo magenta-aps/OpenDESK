@@ -14,6 +14,9 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.cmr.version.VersionHistory;
+import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
@@ -21,6 +24,7 @@ import org.json.JSONObject;
 import org.json.simple.JSONArray;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class NodeBean {
@@ -32,6 +36,7 @@ public class NodeBean {
     private Repository repository;
     private SearchService searchService;
     private SiteService siteService;
+    private VersionService versionService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -54,6 +59,9 @@ public class NodeBean {
     }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
+    }
+    public void setVersionService(VersionService versionService) {
+        this.versionService = versionService;
     }
 
     /**
@@ -607,5 +615,39 @@ public class NodeBean {
             return versionPreviewRef;
         else
             return null;
+    }
+
+    /**
+     * Gets versions of a node.
+     * @param nodeId id of the node.
+     * @return a JSONArray containing all versions of the node.
+     */
+    public JSONArray getVersions(String nodeId) throws JSONException {
+        NodeRef nodeRef = new NodeRef("workspace", "SpacesStore", nodeId);
+        JSONArray result = new JSONArray();
+        VersionHistory h = versionService.getVersionHistory(nodeRef);
+
+        if (h != null) {
+            Collection<Version> versions = h.getAllVersions();
+
+            for (Version v : versions) {
+
+                JSONObject json = new JSONObject();
+                json.put("parent_nodeRef", nodeRef.getId());
+                json.put("nodeRef", v.getFrozenStateNodeRef().getId());
+
+                NodeRef modifier = this.personService.getPerson(v.getFrozenModifier());
+                json.put("modifier", nodeService.getProperty(modifier, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(modifier, ContentModel.PROP_LASTNAME));
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                json.put("created", sdf.format(v.getFrozenModifiedDate()));
+
+                json.put("version", v.getVersionLabel());
+
+                result.add(json);
+            }
+        }
+
+        return result;
     }
 }

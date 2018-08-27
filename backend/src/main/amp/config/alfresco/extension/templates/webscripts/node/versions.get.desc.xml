@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Versions</shortname>
+    <description>Gets Versions of a Node</description>
+    <url>/node/{nodeId}/versions</url>
+    <authentication>user</authentication>
+</webscript>

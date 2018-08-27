@@ -55,14 +55,6 @@
         <property name="preferenceService" ref="PreferenceService"/>
     </bean>
 
-	<bean id="webscript.documents.history.get"
-		  class="dk.opendesk.webscripts.documents.History"
-		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-		<property name="versionService" ref="VersionService"/>
-		<property name="personService" ref="PersonService"/>
-	</bean>
-
 	<bean id="webscript.editors.editors.get"
 		  class="dk.opendesk.webscripts.editors.GetEditors"
 		  parent="webscript">
@@ -153,6 +145,12 @@
 		  parent="webscript">
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
+
+    <bean id="webscript.node.versions.get"
+          class="dk.opendesk.webscripts.node.GetVersions"
+          parent="webscript">
+        <property name="nodeBean" ref="nodeBean"/>
+    </bean>
 
 	<!-- Site -->
 	<bean id="webscript.site.authorities.get"
