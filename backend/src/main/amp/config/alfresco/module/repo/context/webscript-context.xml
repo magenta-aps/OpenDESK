@@ -109,6 +109,12 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+	<bean id="webscript.node.nextAvailableName.get"
+		  class="dk.opendesk.webscripts.node.GetNextAvailableName"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.node.get"
 		  class="dk.opendesk.webscripts.node.GetNode"
 		  parent="webscript">
@@ -157,21 +163,113 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
-	<bean id="webscript.sites.post"
-		  class="dk.opendesk.webscripts.sites.Sites"
+	<!-- Site -->
+	<bean id="webscript.site.authorities.get"
+		  class="dk.opendesk.webscripts.site.GetAuthorities"
 		  parent="webscript">
-        <property name="authorityBean" ref="authorityBean"/>
-		<property name="groupBean" ref="groupBean"/>
-        <property name="notificationBean" ref="notificationBean"/>
-		<property name="nodeService" ref="NodeService"/>
-		<property name="siteService" ref="SiteService"/>
-		<property name="personService" ref="PersonService"/>
-		<property name="authenticationService" ref="authenticationService"/>
-		<property name="authorityService" ref="authorityService"/>
-		<property name="permissionService" ref="PermissionService"/>
-		<property name="contentService" ref="ContentService"/>
-		<property name="searchService" ref="SearchService"/>
-		<property name="favouritesService" ref="FavouritesService"/>
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.groups.get"
+		  class="dk.opendesk.webscripts.site.GetGroups"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.member.delete"
+		  class="dk.opendesk.webscripts.site.RemoveMember"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.member.post"
+		  class="dk.opendesk.webscripts.site.AddMember"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.membersPDF.post"
+		  class="dk.opendesk.webscripts.site.CreateMembersPDF"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.role.get"
+		  class="dk.opendesk.webscripts.site.GetRole"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.searchAuthorities.get"
+		  class="dk.opendesk.webscripts.site.SearchAuthorities"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.searchSites.get"
+		  class="dk.opendesk.webscripts.site.SearchSites"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.searchUsers.get"
+		  class="dk.opendesk.webscripts.site.SearchUsers"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.site.delete"
+		  class="dk.opendesk.webscripts.site.DeleteSite"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.site.get"
+		  class="dk.opendesk.webscripts.site.GetSite"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.site.post"
+		  class="dk.opendesk.webscripts.site.CreateSite"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.siteLink.delete"
+		  class="dk.opendesk.webscripts.site.RemoveSiteLink"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.siteLink.post"
+		  class="dk.opendesk.webscripts.site.AddSiteLink"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.sites.get"
+		  class="dk.opendesk.webscripts.site.GetSites"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.template.post"
+		  class="dk.opendesk.webscripts.site.CreateTemplate"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.templates.get"
+		  class="dk.opendesk.webscripts.site.GetTemplates"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.site.users.get"
+		  class="dk.opendesk.webscripts.site.GetUsers"
+		  parent="webscript">
+		<property name="siteBean" ref="siteBean"/>
 	</bean>
 
 	<bean id="webscript.users.post"

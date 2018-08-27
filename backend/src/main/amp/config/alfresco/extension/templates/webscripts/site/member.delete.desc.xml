@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Remove Site Member</shortname>
+    <description>Removes a Site Member</description>
+    <url>/site/{siteShortName}/member</url>
+    <authentication>user</authentication>
+</webscript>

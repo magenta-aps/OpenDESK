@@ -56,7 +56,17 @@ public class NodeBean {
         this.siteService = siteService;
     }
 
-    public JSONObject getNodeType(NodeRef nodeRef) throws JSONException {
+    /**
+     * Gets the next available file name for a new file.
+     * @param destinationNodeRef nodeRef of the destination folder.
+     * @param name original name of the new file.
+     * @return the next available file name.
+     */
+    public String getNextAvailableName (NodeRef destinationNodeRef, String name) {
+        return Utils.getFileName(nodeService, destinationNodeRef, name);
+    }
+
+    private JSONObject getNodeType(NodeRef nodeRef) throws JSONException {
         JSONObject json = new JSONObject();
         QName qname = nodeService.getType(nodeRef);
 

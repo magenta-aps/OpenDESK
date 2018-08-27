@@ -39,6 +39,8 @@ public class AuthorityBean {
     }
 
     private JSONArray findAuthorities(String filter, boolean includeGroups, List<String> ignoreList) throws JSONException {
+        if(filter == null)
+            filter = "";
 
         List<QName> filterProps = new ArrayList<>();
         filterProps.add(ContentModel.PROP_FIRSTNAME);

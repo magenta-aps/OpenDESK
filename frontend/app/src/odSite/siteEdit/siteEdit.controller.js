@@ -52,7 +52,7 @@ function SiteEditController (sitedata, $state, $mdDialog, siteService, $mdToast)
         $state.reload()
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Du har opdateret: ' + vm.newSite.siteName)
+            .textContent('Du har opdateret: ' + vm.newSite.title)
             .hideDelay(3000)
         )
       })

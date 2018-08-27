@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Site info</shortname>
+    <description>Get Site info</description>
+    <url>/site/{siteShortName}</url>
+    <authentication>user</authentication>
+</webscript>

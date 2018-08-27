@@ -57,13 +57,8 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
   }
 
   function uploadContent (file, destination) {
-    var payload = {
-      PARAM_METHOD: 'returnFileName',
-      PARAM_FILENAME: file.name,
-      PARAM_DESTINATION: destination
-    }
-
-    return $http.post('/alfresco/service/sites', payload)
+    var nodeId = alfrescoNodeService.processNodeRef(destination).id
+    return $http.get(`/alfresco/service/node/${nodeId}/next-available-name/${file.name}`)
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)

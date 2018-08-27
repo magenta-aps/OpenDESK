@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Search Site infos</shortname>
+    <description>Searches Site infos</description>
+    <url>/sites/search</url>
+    <authentication>user</authentication>
+</webscript>

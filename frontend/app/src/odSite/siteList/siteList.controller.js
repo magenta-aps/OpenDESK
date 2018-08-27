@@ -72,8 +72,8 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     var tableHeight = $(window).height() - 200 - $('header').outerHeight() - $('#table-header').outerHeight() - $('#table-actions').outerHeight()
     $('#table-container').css('max-height', tableHeight + 'px')
 
+    findSites()
     getSites()
-    getSitesPerUser()
     getAllOrganizationalCenters()
   }
 
@@ -84,17 +84,17 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     return vm.search.type === project.type
   }
 
-  function getSites () {
+  function findSites () {
     vm.isLoading = true
-    return siteService.getSites()
+    return siteService.findSites()
       .then(function (response) {
         vm.sites = response
         vm.isLoading = false
       })
   }
 
-  function getSitesPerUser () {
-    return siteService.getSitesPerUser()
+  function getSites () {
+    return siteService.getSites()
       .then(function (response) {
         vm.sitesPerUser = response
       })
@@ -145,8 +145,8 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   function deleteSite (siteName) {
     siteService.delete(siteName)
       .then(function () {
+        findSites()
         getSites()
-        getSitesPerUser()
         $mdDialog.cancel()
       })
   }

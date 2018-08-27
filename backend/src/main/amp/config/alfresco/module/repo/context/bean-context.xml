@@ -75,4 +75,18 @@
         <property name="repository" ref="repositoryHelper"/>
     </bean>
 
+    <bean id="siteBean" class="dk.opendesk.repo.beans.SiteBean">
+        <property name="authorityBean" ref="authorityBean"/>
+        <property name="groupBean" ref="groupBean"/>
+        <property name="notificationBean" ref="notificationBean"/>
+        <property name="authenticationService" ref="authenticationService"/>
+        <property name="authorityService" ref="authorityService"/>
+        <property name="contentService" ref="ContentService"/>
+        <property name="favouritesService" ref="FavouritesService"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="personService" ref="PersonService"/>
+        <property name="searchService" ref="SearchService"/>
+        <property name="siteService" ref="SiteService"/>
+    </bean>
+
 </beans>

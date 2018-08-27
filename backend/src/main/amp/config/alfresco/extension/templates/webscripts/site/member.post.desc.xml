@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Add Site Member</shortname>
+    <description>Adds a Site Member</description>
+    <url>/site/{siteShortName}/member</url>
+    <authentication>user</authentication>
+</webscript>

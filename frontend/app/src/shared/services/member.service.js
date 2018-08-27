@@ -24,13 +24,10 @@ function MemberService ($http) {
 
   function addMember (siteShortName, authority, group) {
     var payload = {
-      PARAM_METHOD: 'addMember',
-      PARAM_SITE_SHORT_NAME: siteShortName,
-      PARAM_AUTHORITY: authority,
-      PARAM_GROUP: group
+      authority: authority,
+      group: group
     }
-
-    return $http.post('/alfresco/service/sites', payload)
+    return $http.post(`/alfresco/service/site/${siteShortName}/member`, payload)
       .then(function (response) {
         return response.data
       })
@@ -38,13 +35,11 @@ function MemberService ($http) {
 
   function removeMember (siteShortName, authority, group) {
     var payload = {
-      PARAM_METHOD: 'removeMember',
-      PARAM_SITE_SHORT_NAME: siteShortName,
-      PARAM_AUTHORITY: authority,
-      PARAM_GROUP: group
+      authority: authority,
+      group: group
     }
 
-    return $http.post('/alfresco/service/sites', payload)
+    return $http.delete(`/alfresco/service/site/${siteShortName}/member`, payload)
       .then(function (response) {
         return response.data
       })
