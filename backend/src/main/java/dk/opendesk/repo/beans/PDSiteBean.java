@@ -1,24 +1,7 @@
-/*
-Licensed to the Apache Software Foundation (ASF) under one or more
-contributor license agreements.  See the NOTICE file distributed with
-this work for additional information regarding copyright ownership.
-The ASF licenses this file to You under the Apache License, Version 2.0
-(the "License"); you may not use this file except in compliance with
-the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-package dk.opendesk.webscripts.sites;
+package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
-import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.cmr.repository.*;
@@ -35,17 +18,13 @@ import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.WebScriptRequest;
-import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ProjectDepartment extends OpenDeskWebScript {
-
+public class PDSiteBean {
     private PermissionService permissionService;
     private SearchService searchService;
     private CopyService copyService;
@@ -80,39 +59,6 @@ public class ProjectDepartment extends OpenDeskWebScript {
         this.permissionService = permissionService;
     }
 
-    @Override
-    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-        super.execute(req, res);
-        try {
-            String method = getContentParam("PARAM_METHOD");
-            String site_name = getContentParam("PARAM_NAME");
-            String site_short_name = getContentParam("PARAM_SITE_SHORT_NAME");
-            String site_description = getContentParam("PARAM_DESCRIPTION");
-            String site_sbsys = getContentParam("PARAM_SBSYS");
-            String site_owner = getContentParam("PARAM_OWNER");
-            String site_manager = getContentParam("PARAM_MANAGER");
-            String site_state = getContentParam("PARAM_STATE");
-            String site_center_id = getContentParam("PARAM_CENTERID");
-            String site_visibility_str = getContentParam("PARAM_VISIBILITY");
-            String template = getContentParam("PARAM_TEMPLATE");
-            SiteVisibility site_visibility = Utils.getVisibility(site_visibility_str);
-
-            switch (method) {
-                case "createPDSITE":
-                    arrayResult = createPDSite(site_name, site_description, site_sbsys, site_center_id, site_owner,
-                            site_manager, site_visibility, template);
-                    break;
-                case "updatePDSITE":
-                    arrayResult = updatePDSite(site_short_name, site_name, site_description,
-                            site_sbsys, site_center_id, site_owner, site_manager, site_state, site_visibility);
-                    break;
-            }
-        } catch (Exception e) {
-            error(res, e);
-        }
-        write(res);
-    }
-
     /**
      * Applies a template to a site.
      * @param newSiteRef nodeRef of the site.
@@ -144,7 +90,6 @@ public class ProjectDepartment extends OpenDeskWebScript {
 
     /**
      * Creates a Project Department site aka. Project
-     * (method = createPDSITE)
      * @param site_name name of the project.
      * @param site_description description of the project.
      * @param site_sbsys sbsys id of the project.
@@ -155,7 +100,7 @@ public class ProjectDepartment extends OpenDeskWebScript {
      * @param template template to apply on the project.
      * @return a JSONArray containing nodeRef and shortName of site.
      */
-    private JSONArray createPDSite(String site_name, String site_description, String site_sbsys, String site_center_id,
+    public JSONArray createPDSite(String site_name, String site_description, String site_sbsys, String site_center_id,
                                    String site_owner, String site_manager, SiteVisibility site_visibility, String template) {
 
         if(site_visibility == null)
@@ -194,7 +139,6 @@ public class ProjectDepartment extends OpenDeskWebScript {
 
     /**
      * Updates a Project Department site aka. Project
-     * (method = updatePDSITE)
      * @param site_short_name short name of the project.
      * @param site_name name of the project.
      * @param site_description description of the project.
@@ -204,9 +148,8 @@ public class ProjectDepartment extends OpenDeskWebScript {
      * @param site_manager project manager.
      * @param site_state project state.
      * @param site_visibility project visibility.
-     * @return JSONSuccess.
      */
-    private JSONArray updatePDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
+    public void updatePDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
                                    String site_center_id, String site_owner, String site_manager, String site_state,
                                    SiteVisibility site_visibility) {
 
@@ -237,7 +180,6 @@ public class ProjectDepartment extends OpenDeskWebScript {
         } finally {
             AuthenticationUtil.popAuthentication();
         }
-        return getJSONSuccess();
     }
 
     /**

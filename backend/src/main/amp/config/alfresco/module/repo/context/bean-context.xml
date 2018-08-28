@@ -58,6 +58,17 @@
         <property name="siteService" ref="SiteService"/>
     </bean>
 
+    <bean id="pdSiteBean" class="dk.opendesk.repo.beans.PDSiteBean">
+        <property name="nodeService" ref="NodeService"/>
+        <property name="siteService" ref="SiteService"/>
+        <property name="authorityService" ref="AuthorityService"/>
+        <property name="permissionService" ref="PermissionService"/>
+        <property name="searchService" ref="SearchService"/>
+        <property name="copyService" ref="CopyService"/>
+        <property name="authenticationService" ref="authenticationService"/>
+        <property name="contentService" ref="ContentService"/>
+    </bean>
+
     <bean id="personBean" class="dk.opendesk.repo.beans.PersonBean">
         <property name="nodeService" ref="NodeService"/>
         <property name="personService" ref="PersonService"/>

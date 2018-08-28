@@ -178,36 +178,37 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   }
 
   function createPDSite (newSite) {
-    return $http.post('/alfresco/service/projectdepartment', {
-      PARAM_NAME: newSite.siteName,
-      PARAM_DESCRIPTION: newSite.description,
-      PARAM_SBSYS: newSite.sbsys,
-      PARAM_OWNER: newSite.owner.userName,
-      PARAM_MANAGER: newSite.manager.userName,
-      PARAM_VISIBILITY: newSite.visibility,
-      PARAM_CENTERID: newSite.center_id,
-      PARAM_METHOD: 'createPDSITE',
-      PARAM_TEMPLATE: newSite.template.name
-    }).then(function (response) {
-      return response
-    })
+    var payLoad = {
+      title: newSite.siteName,
+      description: newSite.description,
+      sbsys: newSite.sbsys,
+      owner: newSite.owner.userName,
+      manager: newSite.manager.userName,
+      visibility: newSite.visibility,
+      centerId: newSite.center_id,
+      templateName: newSite.template.name
+    }
+    return $http.post('/alfresco/service/pd-site', payLoad)
+      .then(function (response) {
+        return response
+      })
   }
 
   function updatePDSite (site) {
-    return $http.post('/alfresco/service/projectdepartment', {
-      PARAM_NAME: site.title,
-      PARAM_SITE_SHORT_NAME: site.shortName,
-      PARAM_DESCRIPTION: site.description,
-      PARAM_SBSYS: site.sbsys,
-      PARAM_OWNER: site.owner.userName,
-      PARAM_MANAGER: site.manager.userName,
-      PARAM_CENTERID: site.center_id,
-      PARAM_VISIBILITY: site.visibility,
-      PARAM_STATE: site.state,
-      PARAM_METHOD: 'updatePDSITE'
-    }).then(function (response) {
-      return response
-    })
+    var payLoad = {
+      title: site.title,
+      description: site.description,
+      sbsys: site.sbsys,
+      owner: site.owner.userName,
+      manager: site.manager.userName,
+      visibility: site.visibility,
+      centerId: site.center_id,
+      state: site.state
+    }
+    return $http.put(`/alfresco/service/pd-site/${site.shortName}`, payLoad)
+      .then(function (response) {
+        return response
+      })
   }
 
   function deleteSite (siteShortName) {

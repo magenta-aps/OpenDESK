@@ -61,19 +61,6 @@
 		<property name="editorBean" ref="editorBean"/>
 	</bean>
 
-	<bean id="webscript.sites.projectdepartment.post"
-		  class="dk.opendesk.webscripts.sites.ProjectDepartment"
-		  parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
-		<property name="siteService" ref="SiteService"/>
-		<property name="authorityService" ref="AuthorityService"/>
-		<property name="permissionService" ref="PermissionService"/>
-		<property name="searchService" ref="SearchService"/>
-		<property name="copyService" ref="CopyService"/>
-		<property name="authenticationService" ref="authenticationService"/>
-		<property name="contentService" ref="ContentService"/>
-	</bean>
-
 	<bean id="webscript.node.breadcrumb.get"
 		  class="dk.opendesk.webscripts.node.GetBreadCrumb"
 		  parent="webscript">
@@ -150,6 +137,20 @@
           class="dk.opendesk.webscripts.node.GetVersions"
           parent="webscript">
         <property name="nodeBean" ref="nodeBean"/>
+    </bean>
+
+
+    <!-- Project Department Site -->
+    <bean id="webscript.pdSite.site.post"
+          class="dk.opendesk.webscripts.pdSite.CreatePDSite"
+          parent="webscript">
+        <property name="PDSiteBean" ref="pdSiteBean"/>
+    </bean>
+
+    <bean id="webscript.pdSite.site.put"
+          class="dk.opendesk.webscripts.pdSite.UpdatePDSite"
+          parent="webscript">
+        <property name="PDSiteBean" ref="pdSiteBean"/>
     </bean>
 
 	<!-- Site -->
