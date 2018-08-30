@@ -33,6 +33,14 @@
         <property name="moduleService" ref="ModuleService"/>
     </bean>
 
+    <bean id="emailBean" class="dk.opendesk.repo.beans.EmailBean">
+        <property name="searchBean" ref="searchBean"/>
+        <property name="actionService" ref="ActionService"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="personService" ref="PersonService"/>
+        <property name="properties" ref="global-properties"/>
+    </bean>
+
     <bean id="groupBean" class="dk.opendesk.repo.beans.GroupBean">
         <property name="authorityService" ref="AuthorityService"/>
         <property name="nodeService" ref="NodeService"/>
@@ -70,8 +78,12 @@
     </bean>
 
     <bean id="personBean" class="dk.opendesk.repo.beans.PersonBean">
+        <property name="mutableAuthenticationService" ref="authenticationService"/>
         <property name="nodeService" ref="NodeService"/>
         <property name="personService" ref="PersonService"/>
+        <property name="properties" ref="global-properties"/>
+        <property name="searchService" ref="SearchService"/>
+        <property name="siteService" ref="SiteService"/>
     </bean>
 
     <bean id="reviewBean" class="dk.opendesk.repo.beans.ReviewBean">
@@ -79,6 +91,10 @@
         <property name="discussionService" ref="DiscussionService"/>
         <property name="nodeService" ref="NodeService"/>
         <property name="notificationBean" ref="notificationBean"/>
+    </bean>
+
+    <bean id="searchBean" class="dk.opendesk.repo.beans.SearchBean">
+        <property name="searchService" ref="SearchService"/>
     </bean>
 
     <bean id="settingsBean" class="dk.opendesk.repo.beans.SettingsBean">

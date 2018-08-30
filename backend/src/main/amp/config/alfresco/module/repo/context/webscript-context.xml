@@ -17,6 +17,18 @@
 	limitations under the License.
 -->
 <beans>
+	<bean id="webscript.authority.search.get"
+		  class="dk.opendesk.webscripts.authority.SearchAuthority"
+		  parent="webscript">
+		<property name="authorityBean" ref="authorityBean"/>
+	</bean>
+
+	<bean id="webscript.email.send.post"
+		  class="dk.opendesk.webscripts.email.SendEmail"
+		  parent="webscript">
+		<property name="emailBean" ref="emailBean"/>
+	</bean>
+
 	<bean id="webscript.notifications.post"
 		  class="dk.opendesk.webscripts.Notifications"
 		  parent="webscript">
@@ -139,6 +151,27 @@
         <property name="nodeBean" ref="nodeBean"/>
     </bean>
 
+	<!-- Person -->
+	<bean id="webscript.person.external.post"
+		  class="dk.opendesk.webscripts.person.CreateExternalPerson"
+		  parent="webscript">
+		<property name="emailBean" ref="emailBean"/>
+		<property name="personBean" ref="personBean"/>
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.person.search.get"
+		  class="dk.opendesk.webscripts.person.SearchPerson"
+		  parent="webscript">
+		<property name="authorityBean" ref="authorityBean"/>
+	</bean>
+
+	<bean id="webscript.person.validate.post"
+		  class="dk.opendesk.webscripts.person.ValidatePerson"
+		  parent="webscript">
+		<property name="personBean" ref="personBean"/>
+	</bean>
+
 
     <!-- Project Department Site -->
     <bean id="webscript.pdSite.site.post"
@@ -260,20 +293,6 @@
 		  class="dk.opendesk.webscripts.site.GetUsers"
 		  parent="webscript">
 		<property name="siteBean" ref="siteBean"/>
-	</bean>
-
-	<bean id="webscript.users.post"
-		  class="dk.opendesk.webscripts.users.Users"
-		  parent="webscript">
-        <property name="authorityBean" ref="authorityBean"/>
-		<property name="personService" ref="PersonService"/>
-		<property name="nodeService" ref="NodeService"/>
-		<property name="authorityService" ref="AuthorityService"/>
-		<property name="mutableAuthenticationService" ref="authenticationService"/>
-		<property name="actionService" ref="ActionService"/>
-		<property name="searchService" ref="SearchService"/>
-		<property name="siteService" ref="SiteService"/>
-		<property name="properties"> <ref bean="global-properties"/> </property>
 	</bean>
 
 	<bean id="webscript.cleanupandpurge.get"

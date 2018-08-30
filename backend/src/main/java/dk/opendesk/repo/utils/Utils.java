@@ -381,25 +381,6 @@ public class Utils {
     }
 
     /**
-     * Creates a person's mapping of properties.
-     * @param userName of the user.
-     * @param firstName of the user.
-     * @param lastName of the user.
-     * @param email of the user.
-     * @return a map of properties.
-     */
-    public static Map<QName, Serializable> createPersonProperties(String userName, String firstName, String lastName,
-                                                                  String email, String telephone) {
-        Map<QName, Serializable> properties = new HashMap<>();
-        properties.put(ContentModel.PROP_USERNAME, userName);
-        properties.put(ContentModel.PROP_FIRSTNAME, firstName);
-        properties.put(ContentModel.PROP_LASTNAME, lastName);
-        properties.put(ContentModel.PROP_EMAIL, email);
-        properties.put(ContentModel.PROP_TELEPHONE, telephone);
-        return properties;
-    }
-
-    /**
      * Generates a new random password.
      * @return a new random password.
      */
@@ -424,49 +405,6 @@ public class Utils {
             return null;
         else
             return SiteVisibility.valueOf(visibilityStr);
-    }
-
-    /**
-     * Sends an email to a user using a template.
-     * @param actionService alfresco standard service.
-     * @param searchService alfresco standard service.
-     * @param subject of the email.
-     * @param body of the email.
-     * @param to the username of the user that the email is sent to.
-     * @param from the username of the user that the email is sent from.
-     */
-    public static void sendEmail(ActionService actionService, SearchService searchService,
-                                 Serializable subject, String body, Serializable to, String from){
-        Action mailAction = actionService.createAction(MailActionExecuter.NAME);
-        mailAction.setParameterValue(MailActionExecuter.PARAM_SUBJECT, subject);
-        mailAction.setParameterValue(MailActionExecuter.PARAM_TO, to);
-        mailAction.setParameterValue(MailActionExecuter.PARAM_FROM, from);
-
-        // Prepare and send email from template
-        NodeRef template = queryEmailTemplate(searchService, OpenDeskModel.TEMPLATE_EMAIL_BASE);
-        if(template != null) {
-            mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE, template);
-            Map<String, Object> model = new HashMap<>();
-            model.put("body", body);
-            model.put("subject", subject);
-            mailAction.setParameterValue(MailActionExecuter.PARAM_TEMPLATE_MODEL, (Serializable) model);
-            actionService.executeAction(mailAction, null);
-        }
-    }
-
-    public static NodeRef queryEmailTemplate(SearchService searchService, String templateName) {
-        String query = "PATH:\"" + OpenDeskModel.TEMPLATE_OD_FOLDER + "cm:" + templateName + "\"";
-        return queryNode(searchService, query);
-    }
-
-    public static NodeRef queryNode(SearchService searchService, String query) {
-        ResultSet resultSet = searchService.query(new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore"),
-                SearchService.LANGUAGE_LUCENE, query);
-
-        if (resultSet.length()==0)
-            return null;
-
-        return resultSet.getNodeRef(0);
     }
 
     /**

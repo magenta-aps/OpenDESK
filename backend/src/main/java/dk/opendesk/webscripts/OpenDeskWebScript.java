@@ -1,5 +1,6 @@
 package dk.opendesk.webscripts;
 
+import dk.opendesk.repo.model.OpenDeskModel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -12,6 +13,8 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +44,25 @@ public class OpenDeskWebScript extends AbstractWebScript {
         urlQueryParams = parseUrlParams(req.getURL());
         res.setContentEncoding("UTF-8");
         res.setContentType("application/json");
+    }
+
+    /**
+     * Fills an email template
+     * @return a string containing the filled email template.
+     */
+    public String fillEmailTemplate(String emailFileName, Map<String, Object> model) {
+        String templatePath = "OpenDesk/Templates/Emails/" + emailFileName;
+        return fillTemplate(templatePath, model);
+    }
+
+    /**
+     * Fills a template
+     * @return a string containing the filled template.
+     */
+    public String fillTemplate(String templatePath, Map<String, Object> model) {
+        Writer writer = new StringWriter();
+        renderTemplate(templatePath, model, writer);
+        return writer.toString();
     }
 
     protected String getContentParam(String parameter) throws JSONException {

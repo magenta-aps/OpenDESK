@@ -46,48 +46,43 @@ function MemberService ($http) {
   }
 
   function addExternalMember (siteShortName, userName, firstName, lastName, email, telephone, groupName) {
-    return $http.post('/alfresco/service/users', {
-      PARAM_METHOD: 'createExternalUser',
-      PARAM_SITE_SHORT_NAME: siteShortName,
-      PARAM_USERNAME: userName,
-      PARAM_FIRSTNAME: firstName,
-      PARAM_LASTNAME: lastName,
-      PARAM_EMAIL: email,
-      PARAM_TELEPHONE: telephone,
-      PARAM_GROUP_NAME: groupName
-    }).then(function (response) {
-      return response.data[0]
-    })
+    var payLoad = {
+      firstName: firstName,
+      lastName: lastName,
+      userName: userName,
+      email: email,
+      telephone: telephone,
+      siteShortName: siteShortName,
+      groupName: groupName
+    }
+    return $http.post('/alfresco/service/person/external', payLoad)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function validateMember (userName, email) {
     var payload = {
-      PARAM_METHOD: 'validateNewUser',
-      PARAM_USERNAME: userName,
-      PARAM_EMAIL: email
+      userName: userName,
+      email: email
     }
-
-    return $http.post('/alfresco/service/users', payload)
+    return $http.post('/alfresco/service/person/validate', payload)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 
-  function findAuthorities (query) {
-    return $http.post('/alfresco/service/users', {
-      PARAM_METHOD: 'findAuthorities',
-      PARAM_FILTER: query
-    }).then(function (response) {
-      return response.data
-    })
+  function findAuthorities (filter) {
+    return $http.get(`/alfresco/service/authority/search?filter=${filter}`)
+      .then(function (response) {
+        return response.data
+      })
   }
 
-  function findUsers (query) {
-    return $http.post('/alfresco/service/users', {
-      PARAM_METHOD: 'findUsers',
-      PARAM_FILTER: query
-    }).then(function (response) {
-      return response.data
-    })
+  function findUsers (filter) {
+    return $http.get(`/alfresco/service/person/search?filter=${filter}`)
+      .then(function (response) {
+        return response.data
+      })
   }
 }

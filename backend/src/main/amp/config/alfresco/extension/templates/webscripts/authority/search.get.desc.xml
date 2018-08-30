@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Search Authorities</shortname>
+    <description>Searches Authorities</description>
+    <url>/authority/search</url>
+    <authentication>user</authentication>
+</webscript>
