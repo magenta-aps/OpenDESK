@@ -339,7 +339,7 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   }
 
   function getAuthorities (siteShortName) {
-    return $http.post(`/alfresco/service/site/${siteShortName}/authorities`)
+    return $http.get(`/alfresco/service/site/${siteShortName}/authorities`)
       .then(function (response) {
         return response.data
       })
