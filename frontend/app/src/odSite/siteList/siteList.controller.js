@@ -38,6 +38,11 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   vm.openMenu = openMenu
   vm.organizationalCenters = []
   vm.renameSiteDialog = renameSiteDialog
+  vm.search = {
+    center_id: '',
+    state: '',
+    type: ''
+  }
   vm.searchMembers = []
   vm.searchPeople = searchPeople
   vm.showall = false
