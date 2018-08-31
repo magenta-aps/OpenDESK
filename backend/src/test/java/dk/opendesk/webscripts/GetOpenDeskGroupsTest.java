@@ -13,7 +13,6 @@ import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.util.ajax.JSON;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,9 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GroupsTest extends BaseWebScriptTest {
+public class GetOpenDeskGroupsTest extends BaseWebScriptTest {
 
-    private static Logger log = Logger.getLogger(GroupsTest.class);
+    private static Logger log = Logger.getLogger(GetOpenDeskGroupsTest.class);
 
     private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
             "authenticationService");
@@ -42,7 +41,7 @@ public class GroupsTest extends BaseWebScriptTest {
     private List<String> users = new ArrayList<>();
     private Map<String, SiteInfo> sites = new HashMap<>();
 
-    public GroupsTest() {
+    public GetOpenDeskGroupsTest() {
         super();
     }
 

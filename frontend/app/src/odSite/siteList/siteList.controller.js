@@ -14,11 +14,11 @@ import siteInfoTemplate from './siteInfo.view.html'
 angular
   .module('openDeskApp.site')
   .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'MemberService',
-    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'headerService', 'alfrescoNodeService', 'translateService',
-    SiteListController])
+    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'groupService', 'headerService', 'alfrescoNodeService',
+    'translateService', SiteListController])
 
-function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, MemberService,
-  sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeService, translateService) {
+function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, MemberService, sessionService,
+  APP_BACKEND_CONFIG, browserService, groupService, headerService, alfrescoNodeService, translateService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -79,11 +79,11 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
     findSites()
     getSites()
-    getAllOrganizationalCenters()
+    getOrganizationalCenters()
   }
 
   function exactMatchFilter (project) {
-    if (vm.search === undefined || vm.search.type === '')
+    if (vm.search.type === '')
       return true
 
     return vm.search.type === project.type
@@ -105,10 +105,10 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
       })
   }
 
-  function getAllOrganizationalCenters () {
-    siteService.getAllOrganizationalCenters()
+  function getOrganizationalCenters () {
+    groupService.getOrganizationalCenters()
       .then(function (response) {
-        vm.organizationalCenters = response.data
+        vm.organizationalCenters = response
         vm.organizationalCenters.push({
           'shortName': '',
           'displayName': 'Alle'

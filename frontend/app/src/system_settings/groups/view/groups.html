@@ -1,4 +1,4 @@
-<md-card ng-repeat="group in vm.groups" class="od-site-members" style="display: inline-block;">
+<md-card ng-if="vm.groups" ng-repeat="group in vm.groups" class="od-site-members" style="display: inline-block;">
     <md-card-title>
         <h3 class="md-title od-title-icon">
             <md-icon>group</md-icon>

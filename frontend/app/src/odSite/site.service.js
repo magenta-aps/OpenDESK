@@ -25,8 +25,6 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   var service = {
     createPDSite: createPDSite,
     createSite: createSite,
-    getAllOrganizationalCenters: getAllOrganizationalCenters,
-    getAllOwners: getAllOwners,
     getSite: getSite,
     getTemplateNames: getTemplateNames,
     findSites: findSites,
@@ -50,8 +48,7 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
     updateMemberList: updateMemberList,
     addFavourite: addFavourite,
     removeFavourite: removeFavourite,
-    findAuthorities: findAuthorities,
-    findUsers: findUsers
+    findAuthorities: findAuthorities
   }
 
   return service
@@ -62,18 +59,6 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
 
   function updateMemberList () {
     $rootScope.$broadcast('updateMemberList')
-  }
-
-  function getAllOwners () {
-    return $http.post('/alfresco/service/groups', {
-      PARAM_METHOD: 'getUsers',
-      PARAM_GROUP_NAME: 'OPENDESK_ProjectOwners'
-    }).then(function (response) {
-      return response.data
-    },
-    function (error) {
-      return error
-    })
   }
 
   function getTemplateNames () {
@@ -89,19 +74,6 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
 
       return templates
     })
-  }
-
-  function getAllOrganizationalCenters () {
-    return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
-      .then(function (response) {
-        if (response.status && response.status !== 200)
-          return $q.reject(response)
-
-        return response.data
-      }, function (error) {
-        console.log('Error retrieving list of all organizational centers.')
-        console.log(error)
-      })
   }
 
   function findSites () {
@@ -379,13 +351,6 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
 
   function findAuthorities (siteShortName, filter) {
     return $http.get(`/alfresco/service/site/${siteShortName}/authorities/search?filter=${filter}`)
-      .then(function (response) {
-        return response.data
-      })
-  }
-
-  function findUsers (siteShortName, filter) {
-    return $http.get(`/alfresco/service/site/${siteShortName}/users/search?filter=${filter}`)
       .then(function (response) {
         return response.data
       })

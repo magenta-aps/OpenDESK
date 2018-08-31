@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get Project Owners</shortname>
+    <description>Gets Project Owners</description>
+    <url>/authority/project-owners</url>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

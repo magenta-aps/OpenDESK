@@ -4,6 +4,7 @@ import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
@@ -14,8 +15,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static dk.opendesk.repo.model.OpenDeskModel.ORGANIZATIONAL_CENTERS;
+import static dk.opendesk.repo.model.OpenDeskModel.PROJECT_OWNERS;
 
 public class AuthorityBean {
     private AuthorityService authorityService;
@@ -28,6 +31,71 @@ public class AuthorityBean {
     public void setNodeService(NodeService nodeService) { this.nodeService = nodeService; }
     public void setPersonService(PersonService personService) {
         this.personService = personService;
+    }
+
+    public JSONArray getAuthorities(String groupName) throws JSONException {
+        Set<String> authorities = getAuthorityList(groupName);
+        return getAuthorityToJSON(authorities);
+
+    }
+
+    public Set<String> getAuthorityList(String groupName) {
+        return authorityService.getContainedAuthorities(null, groupName, true);
+    }
+
+    private JSONArray getAuthorityToJSON(Set<String> authorities) throws JSONException {
+        JSONArray result = new JSONArray();
+        for (String authorityName : authorities) {
+            JSONObject json;
+            if(authorityName.startsWith("GROUP_")) {
+                json = Utils.convertGroupToJSON(authorityService, authorityName);
+            }
+            else {
+                NodeRef user = personService.getPerson(authorityName);
+                json = Utils.convertUserToJSON(nodeService, user);
+            }
+            result.add(json);
+        }
+
+        return result;
+    }
+
+    public JSONObject getOpenDeskGroup(String groupName) throws JSONException {
+        Map<String, String> odGroups = getOpenDeskGroupObjects();
+        String type = odGroups.get(groupName);
+        JSONObject json = new JSONObject();
+        json.put("shortName", groupName);
+        json.put("type", type);
+        JSONArray authorities = getAuthorities("GROUP_" + groupName);
+        json.put("members", authorities);
+        return json;
+    }
+
+    private Map<String, String> getOpenDeskGroupObjects() {
+        Map<String, String> odGroups = new HashMap<>();
+        odGroups.put(PROJECT_OWNERS, "USER");
+        odGroups.put(ORGANIZATIONAL_CENTERS, "GROUP");
+        return odGroups;
+    }
+
+    public JSONArray getOpenDeskGroups() throws JSONException {
+        Map<String, String> odGroups = getOpenDeskGroupObjects();
+        JSONArray result = new JSONArray();
+        for (Map.Entry<String, String> group : odGroups.entrySet()) {
+            JSONObject json = getOpenDeskGroup(group.getKey());
+            result.add(json);
+        }
+        return result;
+    }
+
+    public Set<String> getUserList(String groupName) {
+        return authorityService.getContainedAuthorities(AuthorityType.USER, groupName, false);
+    }
+
+    public JSONArray getUsers(String groupName) throws JSONException {
+        Set<String> userNames = getUserList(groupName);
+        return getAuthorityToJSON(userNames);
+
     }
 
     public JSONArray findAuthorities(String filter) throws JSONException {

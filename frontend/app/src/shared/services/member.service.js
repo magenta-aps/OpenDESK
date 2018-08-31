@@ -11,7 +11,7 @@ function MemberService ($http) {
     get: getMember,
     remove: removeMember,
     findAuthorities: findAuthorities,
-    search: findUsers
+    search: searchPerson
   }
 
   return service
@@ -79,7 +79,7 @@ function MemberService ($http) {
       })
   }
 
-  function findUsers (filter) {
+  function searchPerson (filter) {
     return $http.get(`/alfresco/service/person/search?filter=${filter}`)
       .then(function (response) {
         return response.data

@@ -26,7 +26,6 @@ import java.util.*;
 
 public class SiteBean {
     private AuthorityBean authorityBean;
-    private GroupBean groupBean;
     private NotificationBean notificationBean;
 
     private AuthenticationService authenticationService;
@@ -40,9 +39,6 @@ public class SiteBean {
 
     public void setAuthorityBean(AuthorityBean authorityBean) {
         this.authorityBean = authorityBean;
-    }
-    public void setGroupBean(GroupBean groupBean) {
-        this.groupBean = groupBean;
     }
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
@@ -302,11 +298,11 @@ public class SiteBean {
             JSONObject groupJSON = (JSONObject) groupObject;
             String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             if(authorities){
-                Set<String> authorityList = groupBean.getAuthorityList(groupAuthorityName);
+                Set<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName);
                 result.addAll(authorityList);
             }
             else {
-                Set<String> authorityList = groupBean.getUserList(groupAuthorityName);
+                Set<String> authorityList = authorityBean.getUserList(groupAuthorityName);
                 result.addAll(authorityList);
             }
         }
@@ -400,9 +396,9 @@ public class SiteBean {
             String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             JSONArray members;
             if(authorities)
-                members = groupBean.getAuthorities(groupAuthorityName);
+                members = authorityBean.getAuthorities(groupAuthorityName);
             else
-                members = groupBean.getUsers(groupAuthorityName);
+                members = authorityBean.getUsers(groupAuthorityName);
             json.add(members);
             result.add(json);
         }

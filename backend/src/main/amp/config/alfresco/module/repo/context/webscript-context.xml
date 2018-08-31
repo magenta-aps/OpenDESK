@@ -17,6 +17,30 @@
 	limitations under the License.
 -->
 <beans>
+	<bean id="webscript.authority.openDeskGroup.get"
+		  class="dk.opendesk.webscripts.authority.GetOpenDeskGroup"
+		  parent="webscript">
+		<property name="authorityBean" ref="authorityBean"/>
+	</bean>
+
+	<bean id="webscript.authority.openDeskGroups.get"
+		  class="dk.opendesk.webscripts.authority.GetOpenDeskGroups"
+		  parent="webscript">
+		<property name="authorityBean" ref="authorityBean"/>
+	</bean>
+
+	<bean id="webscript.authority.organizationalCenters.get"
+		  class="dk.opendesk.webscripts.authority.GetOrganizationalCenters"
+		  parent="webscript">
+		<property name="authorityBean" ref="authorityBean"/>
+	</bean>
+
+	<bean id="webscript.authority.projectOwners.get"
+		  class="dk.opendesk.webscripts.authority.GetProjectOwners"
+		  parent="webscript">
+		<property name="authorityBean" ref="authorityBean"/>
+	</bean>
+
 	<bean id="webscript.authority.search.get"
 		  class="dk.opendesk.webscripts.authority.SearchAuthority"
 		  parent="webscript">
@@ -53,12 +77,6 @@
 		  class="dk.opendesk.webscripts.nodepicker.GetRootNode"
 		  parent="webscript">
 		<property name="nodeBean" ref="nodeBean"/>
-	</bean>
-
-	<bean id="webscript.groups.post"
-		  class="dk.opendesk.webscripts.Groups"
-		  parent="webscript">
-		<property name="groupBean" ref="groupBean"/>
 	</bean>
 
     <bean id="webscript.preferences.get"

@@ -41,6 +41,7 @@ public interface OpenDeskModel {
 
     String PROJECT_OWNERS = "OPENDESK_ProjectOwners"; // a collection of all project owners
     String ORGANIZATIONAL_CENTERS = "OPENDESK_OrganizationalCenters"; // a collection of all organizational centers
+    String CENTER_TEST = "C-T"; // a collection of all organizational centers
 
     String PD_GROUP_PROJECTOWNER = "PD_PROJECTOWNER"; // projektejere
     String PD_GROUP_PROJECTMANAGER = "PD_PROJECTMANAGER"; // projektledere
