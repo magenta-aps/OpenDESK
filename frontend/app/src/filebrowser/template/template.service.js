@@ -31,10 +31,9 @@ function templateService ($rootScope, $http, alfrescoNodeService, filebrowserSer
       destinationNodeRef: destinationNodeRef,
       name: name
     }
-    return $http.post(`/alfresco/service/template/${selectedTemplate.nodeRef}`, payLoad)
-      .then(function (response) {
+    $http.post(`/alfresco/service/template/${selectedTemplate.nodeRef}`, payLoad)
+      .then(function () {
         $rootScope.$broadcast('updateFilebrowser')
-        return response
       })
   }
 
@@ -44,11 +43,10 @@ function templateService ($rootScope, $http, alfrescoNodeService, filebrowserSer
       prop_cm_title: contentName,
       alf_destination: folderNodeRef
     }
-
-    return $http.post('/api/type/cm:folder/formprocessor', props).then(function (response) {
-      $rootScope.$broadcast('updateFilebrowser')
-      return response
-    })
+    $http.post('/api/type/cm:folder/formprocessor', props)
+      .then(function () {
+        $rootScope.$broadcast('updateFilebrowser')
+      })
   }
 
   function getSelectedTemplate () {

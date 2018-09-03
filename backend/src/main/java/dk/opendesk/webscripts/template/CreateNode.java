@@ -6,8 +6,6 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Map;
 
 public class CreateNode extends OpenDeskWebScript {
 
@@ -24,8 +22,7 @@ public class CreateNode extends OpenDeskWebScript {
             String templateId = urlParams.get("templateId");
             String name = getContentString("name");
             String destinationNodeRef = getContentString("destinationNodeRef");
-            Map<String, Serializable> response = templateBean.createNode(name, templateId, destinationNodeRef);
-            arrayResult = getJSONReturnArray(response);
+            templateBean.createNode(name, templateId, destinationNodeRef);
         } catch (Exception e) {
             error(res, e);
         }

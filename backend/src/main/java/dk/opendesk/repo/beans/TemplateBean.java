@@ -4,7 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.SearcherException;
 import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.QName;
@@ -12,10 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TemplateBean {
     private NodeBean nodeBean;
@@ -44,9 +40,8 @@ public class TemplateBean {
      * @param nodeName name of node.
      * @param templateNodeId id of template node.
      * @param destinationNodeRefStr nodeRef of destination.
-     * @return a Map containing nodeRef and filename of the node.
      */
-    public Map<String, Serializable> createNode(String nodeName, String templateNodeId, String destinationNodeRefStr)
+    public void createNode(String nodeName, String templateNodeId, String destinationNodeRefStr)
             throws FileNotFoundException {
 
         NodeRef templateNodeRef = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, templateNodeId);
@@ -55,13 +50,7 @@ public class TemplateBean {
         nodeName += nodeBean.getFileExtension(templateNodeRef);
         String fileName = nodeBean.getNextAvailableName(destinationNodeRef, nodeName);
 
-        FileInfo newFile = fileFolderService.copy(templateNodeRef, destinationNodeRef, fileName);
-        // TODO apparently a file is still created on FileExistsException with noderef as name. Should be deleted.
-
-        Map<String, Serializable> response = new HashMap<>();
-        response.put("nodeRef", newFile.getNodeRef());
-        response.put("fileName", fileName);
-        return response;
+        fileFolderService.copy(templateNodeRef, destinationNodeRef, fileName);
     }
 
     /**

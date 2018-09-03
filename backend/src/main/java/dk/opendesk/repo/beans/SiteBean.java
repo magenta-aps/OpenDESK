@@ -75,7 +75,7 @@ public class SiteBean {
      * @param destinationProject short name of the destination project.
      * @return a JSONArray containing sourceLinkRef and destinationLinkRef that links to each other.
      */
-    public Map<String, Serializable> addLink(String sourceProject, String destinationProject) {
+    public void addLink(String sourceProject, String destinationProject) {
 
         SiteInfo source = siteService.getSite(sourceProject);
         SiteInfo destination = siteService.getSite(destinationProject);
@@ -104,11 +104,6 @@ public class SiteBean {
         // for easy deletion of the links, we do a save of the nodeRefs on each side
         nodeService.setProperty(sourceRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF, destinationRef);
         nodeService.setProperty(destinationRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF, sourceRef);
-
-        Map<String, Serializable> map = new HashMap<>();
-        map.put("sourceLinkRef", sourceRef);
-        map.put("destinationLinkRef", destinationRef);
-        return map;
     }
 
     /**

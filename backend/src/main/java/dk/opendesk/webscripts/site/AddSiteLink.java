@@ -22,8 +22,6 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Map;
 
 public class AddSiteLink extends OpenDeskWebScript {
     private SiteBean siteBean;
@@ -38,8 +36,7 @@ public class AddSiteLink extends OpenDeskWebScript {
         try {
             String siteShortName = urlParams.get("siteShortName");
             String destinationShortName = getContentString("destinationShortName");
-            Map<String, Serializable> map = siteBean.addLink(siteShortName, destinationShortName);
-            arrayResult = getJSONReturnArray(map);
+            siteBean.addLink(siteShortName, destinationShortName);
         } catch (Exception e) {
             error(res, e);
         }
