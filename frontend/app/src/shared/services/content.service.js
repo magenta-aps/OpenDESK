@@ -50,7 +50,7 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
 
   function uploadContent (file, destination) {
     var nodeId = alfrescoNodeService.processNodeRef(destination).id
-    return $http.get(`/alfresco/service/node/${nodeId}/next-available-name/${file.name}`)
+    return $http.get(`/alfresco/service/node/${nodeId}/next-available-name?name=${file.name}`)
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)

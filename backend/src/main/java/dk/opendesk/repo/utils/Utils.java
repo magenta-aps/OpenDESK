@@ -2,15 +2,10 @@ package dk.opendesk.repo.utils;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.action.executer.MailActionExecuter;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.site.SiteServiceException;
-import org.alfresco.service.cmr.action.Action;
-import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
@@ -39,8 +34,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.alfresco.model.ContentModel.*;
 import static org.alfresco.service.namespace.NamespaceService.CONTENT_MODEL_1_0_URI;
@@ -405,55 +398,6 @@ public class Utils {
             return null;
         else
             return SiteVisibility.valueOf(visibilityStr);
-    }
-
-    /**
-     * Gets the next available file name for a new file.
-     * @param nodeService alfresco standard service.
-     * @param nodeRef of the destination folder.
-     * @param nodeName original name of the new file.
-     * @return the next available file name.
-     */
-    public static String getFileName (NodeService nodeService, NodeRef nodeRef, String nodeName) {
-
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(nodeRef);
-
-        String dotSplit = "\\.";
-        String bracketSplit = "\\(";
-
-        int currentHighest = 0;
-        String[] nodeNameParts = nodeName.split(dotSplit);
-        String name = nodeNameParts[0];
-        String ext = "";
-        if(nodeNameParts.length > 1)
-            ext = "." + nodeNameParts[1];
-
-        boolean match = false;
-
-        for (ChildAssociationRef child : childAssociationRefs) {
-
-            String file = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-            String splitter = file.contains("(") ? bracketSplit : dotSplit;
-            String file_name = file.split(splitter)[0];
-
-            if (file_name.trim().equals(name.trim())) {
-                match = true;
-                Matcher m = Pattern.compile("\\((.d?)\\)").matcher(file);
-
-                int number = 0;
-                while (m.find())
-                    number = Integer.valueOf(m.group(1));
-
-                if (number > currentHighest)
-                    currentHighest = number;
-            }
-        }
-
-        if (match) {
-            currentHighest++;
-            return name + "(" + currentHighest + ")" + ext;
-        }
-        return nodeName;
     }
 
     /**

@@ -26,6 +26,8 @@ import org.json.simple.JSONArray;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NodeBean {
     private NotificationBean notificationBean;
@@ -66,12 +68,50 @@ public class NodeBean {
 
     /**
      * Gets the next available file name for a new file.
-     * @param destinationNodeRef nodeRef of the destination folder.
-     * @param name original name of the new file.
+     * @param folderRef of the destination folder.
+     * @param fileNameAndExt original name of the new file.
      * @return the next available file name.
      */
-    public String getNextAvailableName (NodeRef destinationNodeRef, String name) {
-        return Utils.getFileName(nodeService, destinationNodeRef, name);
+    public String getNextAvailableName(NodeRef folderRef, String fileNameAndExt) {
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(folderRef);
+
+        int currentHighest = 0;
+        String[] fileNameParts = getNameAndExtension(fileNameAndExt);
+        String fileName = fileNameParts[0];
+        String fileExt = fileNameParts[1];
+
+        boolean match = false;
+
+        for (ChildAssociationRef child : childAssociationRefs) {
+
+            String nodeNameAndExt = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+            String[] nodeNameParts = getNameAndExtension(nodeNameAndExt);
+            String nodeExt = nodeNameParts[1];
+            String nodeName;
+            if(nodeNameAndExt.contains("("))
+                nodeName = nodeNameAndExt.split("\\(")[0];
+            else
+                nodeName = nodeNameParts[0];
+
+            if (fileName.equals(nodeName) && fileExt.equals(nodeExt)) {
+                match = true;
+                Matcher m = Pattern.compile("\\((.d?)\\)").matcher(nodeNameAndExt);
+
+                int number = 0;
+                while (m.find())
+                    number = Integer.valueOf(m.group(1));
+
+                if (number > currentHighest)
+                    currentHighest = number;
+            }
+        }
+
+        if (match) {
+            currentHighest++;
+            return fileName + "(" + currentHighest + ")" + fileExt;
+        }
+        return fileNameAndExt;
     }
 
     private JSONObject getNodeType(NodeRef nodeRef) throws JSONException {
@@ -561,6 +601,10 @@ public class NodeBean {
 
     private String[] getNameAndExtension(NodeRef nodeRef) {
         String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+        return getNameAndExtension(name);
+    }
+
+    private String[] getNameAndExtension(String name) {
         int extensionIndex = name.lastIndexOf(".");
         String [] split = new String[2];
         if(extensionIndex > 0) {

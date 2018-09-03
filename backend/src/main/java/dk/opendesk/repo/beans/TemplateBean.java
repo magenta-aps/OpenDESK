@@ -1,6 +1,5 @@
 package dk.opendesk.repo.beans;
 
-import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.SearcherException;
@@ -54,7 +53,7 @@ public class TemplateBean {
         NodeRef destinationNodeRef = new NodeRef(destinationNodeRefStr);
         // Add file extension to name
         nodeName += nodeBean.getFileExtension(templateNodeRef);
-        String fileName = Utils.getFileName(nodeService, destinationNodeRef, nodeName);
+        String fileName = nodeBean.getNextAvailableName(destinationNodeRef, nodeName);
 
         FileInfo newFile = fileFolderService.copy(templateNodeRef, destinationNodeRef, fileName);
         // TODO apparently a file is still created on FileExistsException with noderef as name. Should be deleted.
