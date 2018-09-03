@@ -75,7 +75,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
     return $http
       .get(`/alfresco/service/templates/${type}`)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 

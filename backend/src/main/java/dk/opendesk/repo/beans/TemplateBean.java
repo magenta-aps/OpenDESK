@@ -98,8 +98,6 @@ public class TemplateBean {
             children.add(json);
         }
 
-        JSONArray response = new JSONArray();
-        response.add(children);
-        return response;
+        return children;
     }
 }
