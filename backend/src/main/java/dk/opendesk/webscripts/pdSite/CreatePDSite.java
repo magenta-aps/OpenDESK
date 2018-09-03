@@ -27,7 +27,7 @@ public class CreatePDSite extends OpenDeskWebScript {
             String centerId = getContentString("centerId");
             String templateName = getContentString("templateName");
             String visibility = getContentString("visibility");
-            arrayResult = pdSiteBean.createPDSite(title, description, sbsys, centerId, owner, manager, visibility,
+            objectResult = pdSiteBean.createPDSite(title, description, sbsys, centerId, owner, manager, visibility,
                     templateName);
         } catch (Exception e) {
             error(res, e);

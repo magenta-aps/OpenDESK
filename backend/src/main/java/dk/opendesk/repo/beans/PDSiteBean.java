@@ -19,7 +19,6 @@ import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.JSONArray;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -94,11 +93,11 @@ public class PDSiteBean {
      * @param manager project manager.
      * @param visibility project visibility.
      * @param template template to apply on the project.
-     * @return a JSONArray containing nodeRef and shortName of site.
+     * @return a JSONObject containing nodeRef and shortName of site.
      */
-    public JSONArray createPDSite(String name, String description, String sbsys, String centerId,
+    public JSONObject createPDSite(String name, String description, String sbsys, String centerId,
                                    String owner, String manager, String visibility, String template) {
-        JSONArray result = new JSONArray();
+        JSONObject result = new JSONObject();
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
@@ -114,11 +113,8 @@ public class PDSiteBean {
                 this.executeTemplate(newSiteRef, template);
             }
 
-            JSONObject return_json = new JSONObject();
-            return_json.put("nodeRef", newSiteRef);
-            return_json.put("shortName", siteService.getSiteShortName(newSiteRef));
-
-            result.add(return_json);
+            result.put("nodeRef", newSiteRef);
+            result.put("shortName", siteService.getSiteShortName(newSiteRef));
 
         } catch (JSONException e) {
             e.printStackTrace();

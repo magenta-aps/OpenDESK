@@ -80,7 +80,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
     siteService.createPDSite(vm.newSite).then(
       function (response) {
-        var siteShortName = response.data[0].shortName
+        var siteShortName = response.data.shortName
         var siteName = vm.newSite.siteName
 
         angular.forEach(vm.newSite.groups, function (group) {
