@@ -467,18 +467,4 @@ public class Utils {
 
         return json;
     }
-
-    /**
-     * Gets the type of a site.
-     * @param nodeService alfresco standard service.
-     * @param nodeRef of the site.
-     * @return the type of the site.
-     */
-    public static String getSiteType(NodeService nodeService, NodeRef nodeRef) {
-        String type = OpenDeskModel.project;
-        if (nodeService.hasAspect(nodeRef, OpenDeskModel.ASPECT_PD)) {
-            type = OpenDeskModel.pd_project;
-        }
-        return type;
-    }
 }

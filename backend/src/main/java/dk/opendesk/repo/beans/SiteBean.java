@@ -154,7 +154,7 @@ public class SiteBean {
 
             // Print members
             NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
-            String type = Utils.getSiteType(nodeService, nodeRef);
+            String type = getSiteType(nodeRef);
 
             for (Object groupObject :  Utils.siteGroups.get(type)) {
                 JSONObject groupJSON = (JSONObject) groupObject;
@@ -547,14 +547,27 @@ public class SiteBean {
     }
 
     /**
+     * Gets the type of a site.
+     * @param nodeRef of the site.
+     * @return the type of the site.
+     */
+    private String getSiteType(NodeRef nodeRef) {
+        String type = OpenDeskModel.project;
+        if (nodeService.hasAspect(nodeRef, OpenDeskModel.ASPECT_PD)) {
+            type = OpenDeskModel.pd_project;
+        }
+        return type;
+    }
+
+    /**
      * Gets the type of a site
      * @param siteShortName shortname of a site.
      * @return a JSONArray containing type.
      */
-    public String getSiteType(String siteShortName) {
+    private String getSiteType(String siteShortName) {
 
         NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
-        return Utils.getSiteType(nodeService, nodeRef);
+        return getSiteType(nodeRef);
     }
 
     /**
