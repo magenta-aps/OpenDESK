@@ -39,7 +39,7 @@ public class CreateSite extends OpenDeskWebScript {
             String description = getContentString("description");
             String visibility = getContentString("visibility");
             NodeRef nodeRef = siteBean.createSite(displayName, description, visibility);
-            arrayResult = siteBean.getSiteInfo(nodeRef);
+            objectResult = siteBean.getSiteInfo(nodeRef);
         } catch (Exception e) {
             error(res, e);
         }

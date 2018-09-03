@@ -297,11 +297,11 @@ public class SiteBean {
      * @param description description of the site template.
      * @return a JSONObject representing the site template.
      */
-    public JSONArray createTemplate(String displayName, String description) throws JSONException {
+    public JSONObject createTemplate(String displayName, String description) throws JSONException {
 
         NodeRef nodeRef = createSite(displayName, description, SiteVisibility.PUBLIC);
         makeSiteATemplate(nodeRef);
-        return getSiteInfo(siteService.getSiteShortName(nodeRef));
+        return getSiteInfo(nodeRef);
     }
 
     /**
@@ -504,11 +504,9 @@ public class SiteBean {
      * @param nodeRef nodeRef of the site.
      * @return a JSONObject representing the site.
      */
-    public JSONArray getSiteInfo(NodeRef nodeRef) throws JSONException {
+    public JSONObject getSiteInfo(NodeRef nodeRef) throws JSONException {
         SiteInfo siteInfo = siteService.getSite(nodeRef);
-        JSONArray json = new JSONArray();
-        json.add(getSiteInfo(siteInfo));
-        return json;
+        return getSiteInfo(siteInfo);
     }
 
     /**

@@ -113,7 +113,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
       visibility = 'PRIVATE'
 
     siteService.createSite(vm.newSite.siteName, vm.newSite.desc, visibility).then(function (response) {
-      var siteShortName = response[0].shortName
+      var siteShortName = response.shortName
       var siteName = vm.newSite.siteName
 
       angular.forEach(vm.newSite.groups, function (group) {
