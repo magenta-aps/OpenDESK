@@ -3,6 +3,9 @@ package dk.opendesk.repo.beans;
 import dk.opendesk.repo.model.OpenDeskModel;
 import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
+import org.alfresco.query.PagingRequest;
+import org.alfresco.query.PagingResults;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -10,16 +13,17 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.security.PersonService.PersonInfo;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class PersonBean {
 
@@ -108,14 +112,80 @@ public class PersonBean {
         return siteSearchResult.getNumberFound() >= 1;
     }
 
+    public String getDisplayName(NodeRef person) {
+        String firstName = (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME);
+        String lastName = (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
+        return (firstName + " " + lastName).trim();
+    }
+
+    public String getDisplayName(String userName) {
+        if (personService.personExists(userName)) {
+            NodeRef person = personService.getPerson(userName);
+            return getDisplayName(person);
+        }
+        return null;
+    }
+
+    public NodeRef getPerson(String userName) {
+        return personService.getPerson(userName);
+    }
+
+    /**
+     * Converts a person into a standard structured JSONObject.
+     * @param person the nodeRef of the user to be converted.
+     * @return a JSONObject representing the user.
+     */
+    public JSONObject getPersonInfo (NodeRef person) throws JSONException {
+        JSONObject json = new JSONObject();
+
+        String userName = (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
+        json.put("userName", userName);
+
+        String firstName = (String) nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME);
+        json.put("firstName", firstName);
+
+        String lastName = (String) nodeService.getProperty(person, ContentModel.PROP_LASTNAME);
+        json.put("lastName", lastName);
+
+        String displayName = (firstName + " " + lastName).trim();
+        json.put("displayName", displayName);
+
+        String email = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
+        json.put("email", email);
+
+        String telephone = (String) nodeService.getProperty(person, ContentModel.PROP_TELEPHONE);
+        json.put("telephone", telephone);
+
+        String mobile = (String) nodeService.getProperty(person, ContentModel.PROP_MOBILE);
+        json.put("mobile", mobile);
+
+        String jobTitle = (String) nodeService.getProperty(person, ContentModel.PROP_JOBTITLE);
+        json.put("jobTitle", jobTitle);
+
+        String organization = (String) nodeService.getProperty(person, ContentModel.PROP_ORGANIZATION);
+        json.put("organization", organization);
+
+        List<AssociationRef> assocRefs = nodeService.getTargetAssocs(person,ContentModel.ASSOC_AVATAR);
+        if(assocRefs.size() > 0) {
+            NodeRef avatarNodeRef = assocRefs.get(0).getTargetRef();
+            String avatar = "api/node/workspace/SpacesStore/" + avatarNodeRef.getId() + "/content";
+            json.put("avatar", avatar);
+        }
+
+        return json;
+    }
+
     /**
      * Converts a user into a standard structured JSONObject.
      * @param userName the name of the user to be converted.
      * @return a JSONObject representing the user.
      */
-    public JSONObject getPerson(String userName) throws JSONException {
-        NodeRef userRef = personService.getPerson(userName);
-        return Utils.convertUserToJSON(nodeService, userRef);
+    public JSONObject getPersonInfo (String userName) throws JSONException {
+        if(personService.personExists(userName)) {
+            NodeRef personRef = personService.getPerson(userName);
+            return getPersonInfo(personRef);
+        }
+        return null;
     }
 
     /**
@@ -176,6 +246,29 @@ public class PersonBean {
         String host = properties.getProperty("openDesk.host");
         model.put("login", protocol + "://" + host + "/login");
         return model;
+    }
+
+    public JSONArray searchPersons(String filter, List<String> ignoreList) throws JSONException {
+        if(filter == null)
+            filter = "";
+
+        List<QName> filterProps = new ArrayList<>();
+        filterProps.add(ContentModel.PROP_FIRSTNAME);
+        filterProps.add(ContentModel.PROP_LASTNAME);
+
+        List<Pair<QName,Boolean>> sortProps = new ArrayList<>();
+        sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
+        JSONArray result = new JSONArray();
+
+        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(100000));
+        for (PersonInfo user : users.getPage()) {
+            // Do not add users that are on the ignore list
+            if(ignoreList != null && ignoreList.contains(user.getUserName()))
+                continue;
+            JSONObject json = getPersonInfo(user.getNodeRef());
+            result.add(json);
+        }
+        return result;
     }
 
     private boolean userNameExists(String userName) {

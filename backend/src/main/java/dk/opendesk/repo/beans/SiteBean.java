@@ -27,13 +27,12 @@ import java.util.*;
 public class SiteBean {
     private AuthorityBean authorityBean;
     private NotificationBean notificationBean;
+    private PersonBean personBean;
 
-    private AuthenticationService authenticationService;
     private ContentService contentService;
     private SearchService searchService;
     private SiteService siteService;
     private NodeService nodeService;
-    private PersonService personService;
     private AuthorityService authorityService;
     private FavouritesService favouritesService;
 
@@ -43,10 +42,10 @@ public class SiteBean {
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
     }
-
-    public void setAuthenticationService(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public void setPersonBean(PersonBean personBean) {
+        this.personBean = personBean;
     }
+
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
@@ -58,9 +57,6 @@ public class SiteBean {
     }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
-    }
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
     }
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -322,13 +318,8 @@ public class SiteBean {
         groupMembers.add(groupDisplayName + ": \n");
         Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
         for (String authority : authorities) {
-            NodeRef person = personService.getPerson(authority);
-            StringJoiner name = new StringJoiner(" ");
-            String firstName = nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME).toString();
-            String lastName = nodeService.getProperty(person, ContentModel.PROP_LASTNAME).toString();
-            name.add(firstName);
-            name.add(lastName);
-            groupMembers.add(name.toString());
+            String displayName = personBean.getDisplayName(authority);
+            groupMembers.add(displayName);
         }
         return groupMembers.toString();
     }
@@ -339,7 +330,7 @@ public class SiteBean {
      * @return a JSONArray containing role.
      */
     public String getRole(String siteShortName) {
-
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
         Map<String, Boolean> authorities = new HashMap<>();
         authorities.put(OpenDeskModel.MANAGER, false);
         authorities.put(OpenDeskModel.COLLABORATOR, false);
@@ -349,7 +340,6 @@ public class SiteBean {
         for (Map.Entry<String, Boolean> authority : authorities.entrySet()) {
             String group = Utils.getAuthorityName(siteShortName, "Site" + authority.getKey());
             Set<String> tempAuthorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
-            String userName = authenticationService.getCurrentUserName();
             if (tempAuthorities.contains(userName))
                 authority.setValue(true);
         }
@@ -361,12 +351,9 @@ public class SiteBean {
             NodeRef n = siteService.getSite(siteShortName).getNodeRef();
 
             if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-
-                String currentUser = authenticationService.getCurrentUserName();
-
                 String projectOwnerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
                 Set<String> tempAuthorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
-                if (tempAuthorities.contains(currentUser))
+                if (tempAuthorities.contains(userName))
                     role = OpenDeskModel.OWNER;
             }
         } else if (authorities.get(OpenDeskModel.COLLABORATOR) || authorities.get(OpenDeskModel.CONTRIBUTOR)) {
@@ -504,22 +491,19 @@ public class SiteBean {
 
         //Get Manager
         if (!manager.isEmpty()) {
-            NodeRef managerRef = personService.getPerson(manager);
-            JSONObject managerObj = Utils.convertUserToJSON(nodeService, managerRef);
+            JSONObject managerObj = personBean.getPersonInfo(manager);
             json.put("manager", managerObj);
         }
 
         //Get Owner
         if (!owner.isEmpty()) {
-            NodeRef ownerRef = personService.getPerson(owner);
-            JSONObject ownerObj = Utils.convertUserToJSON(nodeService, ownerRef);
+            JSONObject ownerObj = personBean.getPersonInfo(owner);
             json.put("owner", ownerObj);
         }
 
         //Get Creator
         String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
-        NodeRef creatorRef = personService.getPerson(creator);
-        JSONObject creatorObj = Utils.convertUserToJSON(nodeService, creatorRef);
+        JSONObject creatorObj = personBean.getPersonInfo(creator);
         json.put("creator", creatorObj);
 
         //Get Member list

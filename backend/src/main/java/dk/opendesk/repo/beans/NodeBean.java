@@ -1,7 +1,6 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -31,26 +30,27 @@ import java.util.regex.Pattern;
 
 public class NodeBean {
     private NotificationBean notificationBean;
+    private PersonBean personBean;
 
     private NodeService nodeService;
     private PermissionService permissionService;
-    private PersonService personService;
     private Repository repository;
     private SearchService searchService;
     private SiteService siteService;
     private VersionService versionService;
 
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
     }
+    public void setPersonBean(PersonBean personBean) {
+        this.personBean = personBean;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
-    }
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
     }
     public void setRepository(Repository repository)
     {
@@ -163,9 +163,9 @@ public class NodeBean {
 
 
                 String modifier = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-                if(personService.personExists(modifier)) {
-                    NodeRef person = personService.getPerson(modifier);
-                    json.put("lastChangedBy", nodeService.getProperty(person, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(person, ContentModel.PROP_LASTNAME));
+                String displayName = personBean.getDisplayName(modifier);
+                if(displayName != null) {
+                    json.put("lastChangedBy", displayName);
                 }
                 else
                     json.put("lastChangedBy", "Administrator");
@@ -183,9 +183,8 @@ public class NodeBean {
 
                 String creator = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
                 if (creator != null) {
-                    if (personService.personExists(creator)) {
-                        NodeRef personRef = personService.getPerson(creator);
-                        JSONObject creatorObject = Utils.convertUserToJSON(nodeService, personRef);
+                    JSONObject creatorObject = personBean.getPersonInfo(creator);
+                    if(creatorObject != null) {
                         json.put("creator", creatorObject);
                     }
                 }
@@ -238,9 +237,8 @@ public class NodeBean {
                     permission.getAccessStatus() == AccessStatus.ALLOWED) {
                 //Get user object
                 String userName = permission.getAuthority();
-                if(personService.personExists(userName)) {
-                    NodeRef personRef = personService.getPerson(userName);
-                    JSONObject userObject = Utils.convertUserToJSON(nodeService, personRef);
+                JSONObject userObject = personBean.getPersonInfo(userName);
+                if(userObject != null) {
                     // Add to matching permission group
                     permissionGroups.getJSONArray(permissionKey).put(userObject);
                 }
@@ -491,7 +489,7 @@ public class NodeBean {
      */
     public NodeRef getUserHome() {
         String userName = AuthenticationUtil.getFullyAuthenticatedUser();
-        NodeRef userRef = personService.getPerson(userName);
+        NodeRef userRef = personBean.getPerson(userName);
         return repository.getUserHome(userRef);
     }
 
@@ -680,8 +678,11 @@ public class NodeBean {
                 json.put("parent_nodeRef", nodeRef.getId());
                 json.put("nodeRef", v.getFrozenStateNodeRef().getId());
 
-                NodeRef modifier = this.personService.getPerson(v.getFrozenModifier());
-                json.put("modifier", nodeService.getProperty(modifier, ContentModel.PROP_FIRSTNAME) + " " + nodeService.getProperty(modifier, ContentModel.PROP_LASTNAME));
+                String modifier = v.getFrozenModifier();
+                String displayName = personBean.getDisplayName(modifier);
+                if(displayName != null) {
+                    json.put("modifier", displayName);
+                }
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 json.put("created", sdf.format(v.getFrozenModifiedDate()));

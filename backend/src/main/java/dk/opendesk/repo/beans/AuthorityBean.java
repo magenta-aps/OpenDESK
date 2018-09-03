@@ -1,36 +1,32 @@
 package dk.opendesk.repo.beans;
 
-import dk.opendesk.repo.utils.Utils;
-import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
-import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.namespace.QName;
-import org.alfresco.util.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static dk.opendesk.repo.model.OpenDeskModel.ORGANIZATIONAL_CENTERS;
 import static dk.opendesk.repo.model.OpenDeskModel.PROJECT_OWNERS;
 
 public class AuthorityBean {
+    private PersonBean personBean;
+
     private AuthorityService authorityService;
-    private NodeService nodeService;
-    private PersonService personService;
+
+    public void setPersonBean(PersonBean personBean) {
+        this.personBean = personBean;
+    }
 
     public void setAuthorityService (AuthorityService authorityService) {
         this.authorityService = authorityService;
-    }
-    public void setNodeService(NodeService nodeService) { this.nodeService = nodeService; }
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
     }
 
     public JSONArray getAuthorities(String groupName) throws JSONException {
@@ -51,8 +47,7 @@ public class AuthorityBean {
                 json = getGroupInfo(authorityName);
             }
             else {
-                NodeRef user = personService.getPerson(authorityName);
-                json = Utils.convertUserToJSON(nodeService, user);
+                json = personBean.getPersonInfo(authorityName);
             }
             result.add(json);
         }
@@ -122,26 +117,7 @@ public class AuthorityBean {
     }
 
     private JSONArray findAuthorities(String filter, boolean includeGroups, List<String> ignoreList) throws JSONException {
-        if(filter == null)
-            filter = "";
-
-        List<QName> filterProps = new ArrayList<>();
-        filterProps.add(ContentModel.PROP_FIRSTNAME);
-        filterProps.add(ContentModel.PROP_LASTNAME);
-
-        List<Pair<QName,Boolean>> sortProps = new ArrayList<>();
-        sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
-        JSONArray result = new JSONArray();
-
-        PagingResults<PersonService.PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(100000));
-        for (PersonService.PersonInfo user : users.getPage()) {
-            // Do not add users that are on the ignore list
-            if(ignoreList != null && ignoreList.contains(user.getUserName()))
-                continue;
-            JSONObject json = Utils.convertUserToJSON(nodeService, user.getNodeRef());
-            result.add(json);
-        }
-
+        JSONArray result = personBean.searchPersons(filter, ignoreList);
         // Only add groups if they need to be included
         if(includeGroups) {
             PagingResults<String> groupResults = authorityService.getAuthorities(AuthorityType.GROUP,

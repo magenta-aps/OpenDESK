@@ -19,9 +19,8 @@
 <beans>
 
     <bean id="authorityBean" class="dk.opendesk.repo.beans.AuthorityBean">
+        <property name="personBean" ref="personBean"/>
         <property name="authorityService" ref="AuthorityService"/>
-        <property name="nodeService" ref="NodeService"/>
-        <property name="personService" ref="PersonService"/>
     </bean>
 
     <bean id="discussionBean" class="dk.opendesk.repo.beans.DiscussionBean">
@@ -43,9 +42,9 @@
 
     <bean id="nodeBean" class="dk.opendesk.repo.beans.NodeBean">
         <property name="notificationBean" ref="notificationBean"/>
+        <property name="personBean" ref="personBean"/>
         <property name="nodeService" ref="NodeService"/>
         <property name="permissionService" ref="PermissionService"/>
-        <property name="personService" ref="PersonService"/>
         <property name="repository" ref="repositoryHelper"/>
         <property name="searchService" ref="SearchService"/>
         <property name="siteService" ref="SiteService"/>
@@ -104,12 +103,11 @@
     <bean id="siteBean" class="dk.opendesk.repo.beans.SiteBean">
         <property name="authorityBean" ref="authorityBean"/>
         <property name="notificationBean" ref="notificationBean"/>
-        <property name="authenticationService" ref="authenticationService"/>
+        <property name="personBean" ref="personBean"/>
         <property name="authorityService" ref="authorityService"/>
         <property name="contentService" ref="ContentService"/>
         <property name="favouritesService" ref="FavouritesService"/>
         <property name="nodeService" ref="NodeService"/>
-        <property name="personService" ref="PersonService"/>
         <property name="searchService" ref="SearchService"/>
         <property name="siteService" ref="SiteService"/>
     </bean>
