@@ -17,7 +17,7 @@ function SystemSettingsService ($http, APP_BACKEND_CONFIG) {
 
   function getEditors () {
     return $http.get('/alfresco/service/editors').then(function (response) {
-      return response.data[0]
+      return response.data
     })
   }
 
