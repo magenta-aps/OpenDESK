@@ -22,7 +22,7 @@ function authService ($http, $window, $state, sessionService, MemberService) {
   }
 
   function ssoLogin () {
-    return $http.get('/alfresco/s/ssologin').then(function (response) {
+    return $http.get('/alfresco/s/authentication/ssologin').then(function (response) {
       var username = response.data
       return MemberService.get(username).then(function (user) {
         sessionService.login(user, true)
