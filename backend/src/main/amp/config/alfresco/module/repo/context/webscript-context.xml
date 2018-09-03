@@ -53,12 +53,34 @@
 		<property name="emailBean" ref="emailBean"/>
 	</bean>
 
-	<bean id="webscript.notifications.post"
-		  class="dk.opendesk.webscripts.Notifications"
+	<bean id="webscript.notification.notification.delete"
+		  class="dk.opendesk.webscripts.notification.DeleteNotification"
 		  parent="webscript">
-        <property name="notificationBean" ref="notificationBean"/>
-		<property name="nodeService" ref="NodeService"/>
-		<property name="personService" ref="PersonService"/>
+		<property name="notificationBean" ref="notificationBean"/>
+	</bean>
+
+	<bean id="webscript.notification.notificationRead.put"
+		  class="dk.opendesk.webscripts.notification.SetNotificationRead"
+		  parent="webscript">
+		<property name="notificationBean" ref="notificationBean"/>
+	</bean>
+
+	<bean id="webscript.notification.notifications.get"
+		  class="dk.opendesk.webscripts.notification.GetNotifications"
+		  parent="webscript">
+		<property name="notificationBean" ref="notificationBean"/>
+	</bean>
+
+	<bean id="webscript.notification.notificationSeen.put"
+		  class="dk.opendesk.webscripts.notification.SetNotificationSeen"
+		  parent="webscript">
+		<property name="notificationBean" ref="notificationBean"/>
+	</bean>
+
+	<bean id="webscript.notification.notificationsSeen.put"
+		  class="dk.opendesk.webscripts.notification.SetNotificationsSeen"
+		  parent="webscript">
+		<property name="notificationBean" ref="notificationBean"/>
 	</bean>
 
 	<bean id="webscript.nodepicker.node.get"

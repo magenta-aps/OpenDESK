@@ -42,13 +42,13 @@ function HeaderController ($scope, $state, $mdSidenav, headerService, UserServic
   }
 
   function setAllSeen () {
-    notificationsService.setAllSeen(vm.user.userName)
+    notificationsService.setAllSeen()
       .then(function () {
         updateNotifications()
       })
   }
 
   function updateNotifications () {
-    notificationsService.get(vm.user.userName)
+    notificationsService.get()
   }
 }

@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Set Notifications Seen</shortname>
+    <description>Sets the current user's notifications to seen</description>
+    <url>/notifications/seen</url>
+    <authentication>user</authentication>
+</webscript>
