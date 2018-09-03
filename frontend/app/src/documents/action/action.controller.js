@@ -137,15 +137,13 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
 
   function shareDocument (user, permission) {
     filebrowserService.shareNode(vm.doc.node.nodeRef, user.userName, permission)
-      .then(
-        function () {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet blev delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-        }
-      )
+      .then(function () {
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Dokumentet blev delt med ' + user.displayName + '.')
+            .hideDelay(3000)
+        )
+      })
   }
 
   function shareDocumentDialog () {
@@ -167,15 +165,13 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
 
   function stopSharingDocument (user, permission) {
     filebrowserService.stopSharingNode(vm.doc.node.nodeRef, user.userName, permission)
-      .then(
-        function () {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Dokumentet bliver ikke længere delt med ' + user.displayName + '.')
-              .hideDelay(3000)
-          )
-        }
-      )
+      .then(function () {
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Dokumentet bliver ikke længere delt med ' + user.displayName + '.')
+            .hideDelay(3000)
+        )
+      })
   }
 
   function stopSharingPublic () {
