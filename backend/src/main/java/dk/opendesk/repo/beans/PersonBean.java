@@ -1,7 +1,7 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.repo.utils.PasswordGenerator;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
@@ -60,9 +60,23 @@ public class PersonBean {
         // Create new person and give it a random password
         String userName = (String) props.get(ContentModel.PROP_USERNAME);
         personService.createPerson(props);
-        String password = Utils.generateNewPassword();
+        String password = createPassword();
         mutableAuthenticationService.createAuthentication(userName, password.toCharArray());
         return password;
+    }
+
+    /**
+     * Creates a new random password.
+     * @return a new random password.
+     */
+    private String createPassword()
+    {
+        PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
+                .useDigits(true)
+                .useLower(true)
+                .useUpper(true)
+                .build();
+        return passwordGenerator.generate(8); // output ex.: lrU12fmM 75iwI90o
     }
 
     /**
@@ -240,12 +254,38 @@ public class PersonBean {
         model.put("siteName", siteName);
         model.put("siteType", siteType);
 
-        model.put("group", Utils.getPDGroupTranslation(groupName));
+        String groupTranslation = getPDGroupTranslation(groupName);
+        if(groupTranslation != null)
+            model.put("group", groupTranslation);
 
         String protocol = properties.getProperty("openDesk.protocol");
         String host = properties.getProperty("openDesk.host");
         model.put("login", protocol + "://" + host + "/login");
         return model;
+    }
+
+    /**
+     * Gets the danish translation for Project Department groups.
+     * @param group the short name of the group to translate.
+     * @return the translated string.
+     */
+    private String getPDGroupTranslation(String group)
+    {
+        switch(group) {
+            case "PD_PROJECTOWNER":
+                return "Projektejere";
+            case "PD_PROJECTMANAGER":
+                return "Projektledere";
+            case "PD_PROJECTGROUP":
+                return "Projektgruppe";
+            case "PD_WORKGROUP":
+                return "Arbejdsgruppe";
+            case "PD_MONITORS":
+                return "Følgegruppe";
+            case "PD_STEERING_GROUP":
+                return "Styregruppe";
+        }
+        return null;
     }
 
     public JSONArray searchPersons(String filter, List<String> ignoreList) throws JSONException {

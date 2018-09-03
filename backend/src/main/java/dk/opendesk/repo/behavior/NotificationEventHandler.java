@@ -19,8 +19,6 @@ import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 
-import java.util.List;
-
 public class NotificationEventHandler {
     // Dependencies
     private DiscussionService discussionService;

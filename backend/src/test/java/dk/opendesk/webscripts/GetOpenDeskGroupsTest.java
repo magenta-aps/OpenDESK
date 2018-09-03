@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.web.scripts.BaseWebScriptTest;
@@ -75,7 +74,7 @@ public class GetOpenDeskGroupsTest extends BaseWebScriptTest {
 
         String group = "Site" + OpenDeskModel.CONSUMER;
 
-        String consumerGroup = Utils.getAuthorityName(TestUtils.SITE_ONE, group);
+        String consumerGroup = "GROUP_site_" + TestUtils.SITE_ONE + "_" + group;
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_ONE);
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_THREE);
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_FOUR);
@@ -90,7 +89,7 @@ public class GetOpenDeskGroupsTest extends BaseWebScriptTest {
 
         SiteInfo siteONE = sites.get(TestUtils.SITE_ONE);
 
-        String consumerGroup = Utils.getAuthorityName(TestUtils.SITE_ONE, group);
+        String consumerGroup = "GROUP_site_" + TestUtils.SITE_ONE + "_" + group;
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_ONE);
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_THREE);
         TestUtils.addToAuthority(transactionService, authorityService, consumerGroup, TestUtils.USER_FOUR);

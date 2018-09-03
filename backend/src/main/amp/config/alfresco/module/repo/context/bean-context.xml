@@ -17,10 +17,14 @@
     limitations under the License.
 -->
 <beans>
-
     <bean id="authorityBean" class="dk.opendesk.repo.beans.AuthorityBean">
         <property name="personBean" ref="personBean"/>
         <property name="authorityService" ref="AuthorityService"/>
+    </bean>
+
+    <bean id="contentBean" class="dk.opendesk.repo.beans.ContentBean">
+        <property name="contentService" ref="ContentService"/>
+        <property name="nodeService" ref="NodeService"/>
     </bean>
 
     <bean id="discussionBean" class="dk.opendesk.repo.beans.DiscussionBean">
@@ -60,6 +64,7 @@
     </bean>
 
     <bean id="pdSiteBean" class="dk.opendesk.repo.beans.PDSiteBean">
+        <property name="siteBean" ref="siteBean"/>
         <property name="nodeService" ref="NodeService"/>
         <property name="siteService" ref="SiteService"/>
         <property name="authorityService" ref="AuthorityService"/>
@@ -67,7 +72,6 @@
         <property name="searchService" ref="SearchService"/>
         <property name="copyService" ref="CopyService"/>
         <property name="authenticationService" ref="authenticationService"/>
-        <property name="contentService" ref="ContentService"/>
     </bean>
 
     <bean id="personBean" class="dk.opendesk.repo.beans.PersonBean">
@@ -102,6 +106,7 @@
 
     <bean id="siteBean" class="dk.opendesk.repo.beans.SiteBean">
         <property name="authorityBean" ref="authorityBean"/>
+        <property name="contentBean" ref="contentBean"/>
         <property name="notificationBean" ref="notificationBean"/>
         <property name="personBean" ref="personBean"/>
         <property name="authorityService" ref="authorityService"/>

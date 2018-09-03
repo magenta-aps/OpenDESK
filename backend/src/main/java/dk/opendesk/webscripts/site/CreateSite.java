@@ -17,9 +17,8 @@ limitations under the License.
 package dk.opendesk.webscripts.site;
 
 import dk.opendesk.repo.beans.SiteBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
-import org.alfresco.service.cmr.site.SiteVisibility;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -39,8 +38,8 @@ public class CreateSite extends OpenDeskWebScript {
             String displayName = getContentString("displayName");
             String description = getContentString("description");
             String visibility = getContentString("visibility");
-            SiteVisibility siteVisibility = Utils.getVisibility(visibility);
-            arrayResult = siteBean.createSite(displayName, description, siteVisibility);
+            NodeRef nodeRef = siteBean.createSite(displayName, description, visibility);
+            arrayResult = siteBean.getSiteInfo(nodeRef);
         } catch (Exception e) {
             error(res, e);
         }

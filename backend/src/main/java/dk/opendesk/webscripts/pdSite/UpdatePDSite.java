@@ -1,9 +1,7 @@
 package dk.opendesk.webscripts.pdSite;
 
 import dk.opendesk.repo.beans.PDSiteBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
-import org.alfresco.service.cmr.site.SiteVisibility;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -29,8 +27,7 @@ public class UpdatePDSite extends OpenDeskWebScript {
             String manager = getContentString("manager");
             String state = getContentString("state");
             String centerId = getContentString("centerId");
-            String visibilityStr = getContentString("visibility");
-            SiteVisibility visibility = Utils.getVisibility(visibilityStr);
+            String visibility = getContentString("visibility");
             pdSiteBean.updatePDSite(siteShortName, title, description, sbsys, centerId, owner, manager, state,
                     visibility);
         } catch (Exception e) {

@@ -1,10 +1,12 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteModel;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.CopyService;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -25,14 +27,19 @@ import java.util.Map;
 import java.util.Set;
 
 public class PDSiteBean {
+    private SiteBean siteBean;
+
     private PermissionService permissionService;
     private SearchService searchService;
     private CopyService copyService;
     private AuthenticationService authenticationService;
-    private ContentService contentService;
     private SiteService siteService;
     private NodeService nodeService;
     private AuthorityService authorityService;
+
+    public void setSiteBean(SiteBean siteBean) {
+        this.siteBean = siteBean;
+    }
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -42,9 +49,6 @@ public class PDSiteBean {
     }
     public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-    }
-    public void setContentService(ContentService contentService) {
-        this.contentService = contentService;
     }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
@@ -65,59 +69,46 @@ public class PDSiteBean {
      * @param template_name name of the template.
      */
     private void executeTemplate(NodeRef newSiteRef, String template_name) {
-
-        System.out.println(template_name);
-
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, "ASPECT:\"od:projecttype_templates\" AND @cm\\:name:\"" + template_name + "\"");
-
+        String query = "ASPECT:\"od:projecttype_templates\" AND @cm\\:name:\"" + template_name + "\"";
+        ResultSet siteSearchResult = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
         if (siteSearchResult.length() > 0) {
-
             NodeRef siteNodeRef = siteSearchResult.getNodeRef(0);
             SiteInfo templateSite = siteService.getSite(siteNodeRef);
             SiteInfo newSite = siteService.getSite(newSiteRef);
-
             // Get the documentLibrary of the template site.
             NodeRef templateDocLib = siteService.getContainer(templateSite.getShortName(), OpenDeskModel.DOC_LIBRARY);
-
             // Get the documentLibrary of the new site.
             NodeRef newSiteDocLib = siteService.getContainer(newSite.getShortName(), OpenDeskModel.DOC_LIBRARY);
-
             copyService.copy(templateDocLib, newSiteDocLib);
         }
-
     }
 
     /**
      * Creates a Project Department site aka. Project
-     * @param site_name name of the project.
-     * @param site_description description of the project.
-     * @param site_sbsys sbsys id of the project.
-     * @param site_center_id center id of the project.
-     * @param site_owner project owner.
-     * @param site_manager project manager.
-     * @param site_visibility project visibility.
+     * @param name name of the project.
+     * @param description description of the project.
+     * @param sbsys sbsys id of the project.
+     * @param centerId center id of the project.
+     * @param owner project owner.
+     * @param manager project manager.
+     * @param visibility project visibility.
      * @param template template to apply on the project.
      * @return a JSONArray containing nodeRef and shortName of site.
      */
-    public JSONArray createPDSite(String site_name, String site_description, String site_sbsys, String site_center_id,
-                                   String site_owner, String site_manager, SiteVisibility site_visibility, String template) {
-
-        if(site_visibility == null)
-            site_visibility = SiteVisibility.PUBLIC;
-
+    public JSONArray createPDSite(String name, String description, String sbsys, String centerId,
+                                   String owner, String manager, String visibility, String template) {
         JSONArray result = new JSONArray();
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-            NodeRef newSiteRef = Utils.createSite(nodeService, contentService, siteService, site_name,
-                    site_description, site_visibility);
-            updateSite(newSiteRef , site_name, site_description, site_sbsys, site_center_id, OpenDeskModel.STATE_ACTIVE);
+            NodeRef newSiteRef = siteBean.createSite(name, description, visibility);
+            updateSite(newSiteRef , name, description, sbsys, centerId, OpenDeskModel.STATE_ACTIVE);
 
             String creator = authenticationService.getCurrentUserName();
-            createGroupAddMembers(newSiteRef, site_owner, site_manager, creator);
+            createGroupAddMembers(newSiteRef, owner, manager, creator);
 
             if (!"".equals(template)) {
                 this.executeTemplate(newSiteRef, template);
@@ -139,42 +130,41 @@ public class PDSiteBean {
 
     /**
      * Updates a Project Department site aka. Project
-     * @param site_short_name short name of the project.
-     * @param site_name name of the project.
-     * @param site_description description of the project.
-     * @param site_sbsys sbsys id of the project.
-     * @param site_center_id center id of the project.
-     * @param site_owner project owner.
-     * @param site_manager project manager.
-     * @param site_state project state.
-     * @param site_visibility project visibility.
+     * @param siteShortName short name of the project.
+     * @param name name of the project.
+     * @param description description of the project.
+     * @param sbsys sbsys id of the project.
+     * @param centerId center id of the project.
+     * @param owner project owner.
+     * @param manager project manager.
+     * @param state project state.
+     * @param visibility project visibility.
      */
-    public void updatePDSite(String site_short_name, String site_name, String site_description, String site_sbsys,
-                                   String site_center_id, String site_owner, String site_manager, String site_state,
-                                   SiteVisibility site_visibility) {
-
+    public void updatePDSite(String siteShortName, String name, String description, String sbsys, String centerId,
+                             String owner, String manager, String state, String visibility) {
         AuthenticationUtil.pushAuthentication();
         try {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
-            SiteInfo site = siteService.getSite(site_short_name);
+            SiteInfo site = siteService.getSite(siteShortName);
             NodeRef nodeRef = site.getNodeRef();
 
-            if(site_visibility != null)
-                nodeService.setProperty(nodeRef, SiteModel.PROP_SITE_VISIBILITY, site_visibility);
+            SiteVisibility siteVisibility = siteBean.getVisibility(visibility);
+            if(siteVisibility != null)
+                nodeService.setProperty(nodeRef, SiteModel.PROP_SITE_VISIBILITY, siteVisibility);
 
-            updateSite(nodeRef, site_name, site_description, site_sbsys, site_center_id, site_state);
+            updateSite(nodeRef, name, description, sbsys, centerId, state);
 
 
-            if(!site_owner.isEmpty()) {
-                String ownerGroup = Utils.getAuthorityName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTOWNER);
-                updateSingleGroupMember(ownerGroup, site_owner);
+            if(!owner.isEmpty()) {
+                String ownerGroup = siteBean.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
+                updateSingleGroupMember(ownerGroup, owner);
             }
 
-            if(!site_manager.isEmpty()) {
-                String managerGroup = Utils.getAuthorityName(site_short_name, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
-                updateSingleGroupMember(managerGroup, site_manager);
+            if(!manager.isEmpty()) {
+                String managerGroup = siteBean.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
+                updateSingleGroupMember(managerGroup, manager);
             }
 
         } finally {
@@ -188,19 +178,18 @@ public class PDSiteBean {
      * @param name name of the site.
      * @param description description of the site.
      * @param sbsys sbsys id of the site.
-     * @param center_id center id of the site.
+     * @param centerId center id of the site.
      * @param state state of the site.
      */
-    private void updateSite(NodeRef nodeRef, String name, String description, String sbsys, String center_id, String state) {
-
+    private void updateSite(NodeRef nodeRef, String name, String description, String sbsys, String centerId,
+                            String state) {
         // add the projectdepartment aspect
         Map<QName, Serializable> aspectProps = new HashMap<>();
         aspectProps.put(OpenDeskModel.PROP_PD_NAME, name);
         aspectProps.put(OpenDeskModel.PROP_PD_DESCRIPTION, description);
         aspectProps.put(OpenDeskModel.PROP_PD_SBSYS, sbsys);
         aspectProps.put(OpenDeskModel.PROP_PD_STATE, state);
-        aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, center_id);
-
+        aspectProps.put(OpenDeskModel.PROP_PD_CENTERID, centerId);
         nodeService.addAspect(nodeRef, OpenDeskModel.ASPECT_PD, aspectProps);
     }
 
@@ -235,7 +224,7 @@ public class PDSiteBean {
         String groupPrefix = "site_" + siteShortName + "_";
         String authorityPrefix = "GROUP_" + groupPrefix;
 
-        for (Object groupObject :  Utils.siteGroups.get(OpenDeskModel.pd_project)) {
+        for (Object groupObject :  siteBean.getSiteGroups(OpenDeskModel.pd_project)) {
 
             JSONObject groupJSON = (JSONObject) groupObject;
             String shortName = groupJSON.getString("shortName");

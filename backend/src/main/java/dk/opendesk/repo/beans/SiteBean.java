@@ -1,16 +1,17 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.site.SiteServiceException;
 import org.alfresco.service.cmr.favourites.FavouritesService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.site.SiteVisibility;
@@ -26,6 +27,7 @@ import java.util.*;
 
 public class SiteBean {
     private AuthorityBean authorityBean;
+    private ContentBean contentBean;
     private NotificationBean notificationBean;
     private PersonBean personBean;
 
@@ -38,6 +40,9 @@ public class SiteBean {
 
     public void setAuthorityBean(AuthorityBean authorityBean) {
         this.authorityBean = authorityBean;
+    }
+    public void setContentBean(ContentBean contentBean) {
+        this.contentBean = contentBean;
     }
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
@@ -114,7 +119,7 @@ public class SiteBean {
      */
     public void addMember(String siteShortName, String authority, String group) throws JSONException {
 
-        String groupName = Utils.getAuthorityName(siteShortName, group);
+        String groupName = getAuthorityName(siteShortName, group);
         authorityService.addAuthority(groupName, authority);
         // Do not send notifications to a group
         if(authority.startsWith("GROUP"))
@@ -123,6 +128,14 @@ public class SiteBean {
             notificationBean.notifySiteMember(authority, siteShortName);
     }
 
+    /**
+     * Creates a container.
+     * @param shortName of the parent site.
+     * @param componentId component id of the container.
+     */
+    private void createContainer(String shortName, String componentId) {
+        siteService.createContainer(shortName, componentId, ContentModel.TYPE_FOLDER, null);
+    }
 
     /**
      * Creates a PDF containing information about the members of the site.
@@ -152,7 +165,7 @@ public class SiteBean {
             NodeRef nodeRef = siteService.getSite(siteShortName).getNodeRef();
             String type = getSiteType(nodeRef);
 
-            for (Object groupObject :  Utils.siteGroups.get(type)) {
+            for (Object groupObject : getSiteGroups(type)) {
                 JSONObject groupJSON = (JSONObject) groupObject;
                 String shortName = groupJSON.getString("shortName");
                 String displayName = groupNameMap.get(shortName);
@@ -212,19 +225,70 @@ public class SiteBean {
     }
 
     /**
-     * Creates a site.
-     * @param displayName display name of the site.
-     * @param description description of the site.
-     * @param site_visibility visibility of the site.
-     * @return a JSONObject representing the site.
+     * Creates a site with dashboard, document library and discussions.
+     * @param displayName of the site.
+     * @param description of the site.
+     * @param siteVisibility of the site.
+     * @return the nodeRef of the new site.
      */
-    public JSONArray createSite(String displayName, String description, SiteVisibility site_visibility)
-            throws JSONException {
+    public NodeRef createSite(String displayName, String description, SiteVisibility siteVisibility) {
+        String shortName = displayName.replaceAll(" ", "-");
+        String shortNameWithVersion = shortName;
+        SiteInfo site = null;
 
-        NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
-                description, site_visibility);
+        // Iterate through possible short names for the new site until a vacant is found
+        int i = 1;
+        do {
+            try {
+                // Create site
+                site = siteService.createSite("site-dashboard", shortNameWithVersion, displayName, description,
+                        siteVisibility);
+                NodeRef n = site.getNodeRef();
 
-        return getSiteInfo(siteService.getSiteShortName(nodeRef));
+                // Create containers like document library and discussions
+                createContainer(shortNameWithVersion, OpenDeskModel.DOC_LIBRARY);
+                createContainer(shortNameWithVersion, OpenDeskModel.DISCUSSIONS);
+
+                // Create site dashboard
+                contentBean.createSiteDashboard(n, shortNameWithVersion);
+            }
+            catch(SiteServiceException e) {
+                if(e.getMsgId().equals("site_service.unable_to_create"))
+                    shortNameWithVersion = shortName + "-" + ++i;
+            }
+        }
+        while(site == null);
+
+        return site.getNodeRef();
+    }
+
+    public NodeRef createSite(String displayName, String description, String visibility) {
+        SiteVisibility siteVisibility = getVisibility(visibility);
+        if(siteVisibility == null)
+            siteVisibility = SiteVisibility.PUBLIC;
+        return createSite(displayName, description, siteVisibility);
+    }
+
+    /**
+     * Creates a site group.
+     * @param shortName short name of the site group.
+     * @param authority of the group.
+     * @param collapsed true if the group is possible to collapse.
+     * @param multipleMembers true if the group can contain multiple members.
+     * @return a JSONObject representing the site group.
+     */
+    private static JSONObject createSiteGroup(String shortName, String authority, boolean collapsed,
+                                              boolean multipleMembers) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("shortName", shortName);
+            json.put("authority", authority);
+            json.put("collapsed", collapsed);
+            json.put("multipleMembers", multipleMembers);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 
     /**
@@ -235,8 +299,7 @@ public class SiteBean {
      */
     public JSONArray createTemplate(String displayName, String description) throws JSONException {
 
-        NodeRef nodeRef = Utils.createSite(nodeService, contentService, siteService, displayName,
-                description, SiteVisibility.PUBLIC);
+        NodeRef nodeRef = createSite(displayName, description, SiteVisibility.PUBLIC);
         makeSiteATemplate(nodeRef);
         return getSiteInfo(siteService.getSiteShortName(nodeRef));
     }
@@ -279,7 +342,7 @@ public class SiteBean {
         siteService.deleteSite(siteShortName);
 
         // Delete all groups/authorities of the site
-        String authority = Utils.getAuthorityName(siteShortName, "");
+        String authority = getAuthorityName(siteShortName, "");
         authorityService.deleteAuthority(authority, true);
     }
 
@@ -290,9 +353,9 @@ public class SiteBean {
     private List<String> getAuthorityList(String siteShortName, boolean authorities) throws JSONException {
         String siteType = getSiteType(siteShortName);
         List<String> result = new ArrayList<>();
-        for (Object groupObject : Utils.siteGroups.get(siteType)) {
+        for (Object groupObject : getSiteGroups(siteType)) {
             JSONObject groupJSON = (JSONObject) groupObject;
-            String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
+            String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             if(authorities){
                 Set<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName);
                 result.addAll(authorityList);
@@ -313,7 +376,7 @@ public class SiteBean {
      * @return group members.
      */
     private String getAuthorityMembersToString(String siteShortName, String groupShortName, String groupDisplayName) {
-        String group = Utils.getAuthorityName(siteShortName, groupShortName);
+        String group = getAuthorityName(siteShortName, groupShortName);
         StringJoiner groupMembers = new StringJoiner("\n");
         groupMembers.add(groupDisplayName + ": \n");
         Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, true);
@@ -322,6 +385,22 @@ public class SiteBean {
             groupMembers.add(displayName);
         }
         return groupMembers.toString();
+    }
+
+
+    /**
+     * Gets the authority name of a site group.
+     * @param siteShortName of the site that the group belongs to.
+     * @param groupName of the site group.
+     * @return the authority name of the site group.
+     */
+    public String getAuthorityName (String siteShortName, String groupName)
+    {
+        String siteGroup = "GROUP_site_" + siteShortName;
+        if("".equals(groupName))
+            return siteGroup;
+        else
+            return siteGroup + "_" + groupName;
     }
 
     /**
@@ -338,7 +417,7 @@ public class SiteBean {
         authorities.put(OpenDeskModel.CONSUMER, false);
 
         for (Map.Entry<String, Boolean> authority : authorities.entrySet()) {
-            String group = Utils.getAuthorityName(siteShortName, "Site" + authority.getKey());
+            String group = getAuthorityName(siteShortName, "Site" + authority.getKey());
             Set<String> tempAuthorities = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
             if (tempAuthorities.contains(userName))
                 authority.setValue(true);
@@ -351,7 +430,7 @@ public class SiteBean {
             NodeRef n = siteService.getSite(siteShortName).getNodeRef();
 
             if (nodeService.hasAspect(n, OpenDeskModel.ASPECT_PD)) {
-                String projectOwnerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
+                String projectOwnerGroup = getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
                 Set<String> tempAuthorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
                 if (tempAuthorities.contains(userName))
                     role = OpenDeskModel.OWNER;
@@ -374,13 +453,13 @@ public class SiteBean {
     private JSONArray getMembers(String siteShortName, boolean authorities) throws JSONException {
         String siteType = getSiteType(siteShortName);
         JSONArray result = new JSONArray();
-        for (Object groupObject : Utils.siteGroups.get(siteType)) {
+        for (Object groupObject : getSiteGroups(siteType)) {
 
             JSONArray json = new JSONArray();
             JSONObject groupJSON = (JSONObject) groupObject;
             json.add(groupJSON);
 
-            String groupAuthorityName = Utils.getAuthorityName(siteShortName, groupJSON.getString("shortName"));
+            String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             JSONArray members;
             if(authorities)
                 members = authorityBean.getAuthorities(groupAuthorityName);
@@ -399,14 +478,37 @@ public class SiteBean {
      * @param siteType type of site.
      * @return a JSONArray containing a JSONObject for each group.
      */
-    public JSONArray getSiteGroups(String siteType) throws JSONException {
-
+    public JSONArray getSiteGroups(String siteType) {
         JSONArray result = new JSONArray();
-        for (Object groupObject :  Utils.siteGroups.get(siteType)) {
-            JSONObject groupJSON = (JSONObject) groupObject;
-            result.add(groupJSON);
+        switch (siteType) {
+            case OpenDeskModel.pd_project:
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_PROJECTOWNER, OpenDeskModel.SITE_COLLABORATOR, false, false));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_PROJECTMANAGER, OpenDeskModel.SITE_MANAGER, false, false));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_PROJECTGROUP, OpenDeskModel.SITE_COLLABORATOR, true, true));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_WORKGROUP, OpenDeskModel.SITE_COLLABORATOR, true, true));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_MONITORS, OpenDeskModel.SITE_CONSUMER, true, true));
+                result.add(createSiteGroup(OpenDeskModel.PD_GROUP_STEERING_GROUP, OpenDeskModel.SITE_CONSUMER, true, true));
+                break;
+            case OpenDeskModel.project:
+                result.add(createSiteGroup(OpenDeskModel.SITE_MANAGER, null, false, true));
+                result.add(createSiteGroup(OpenDeskModel.SITE_COLLABORATOR, null, false, true));
+                result.add(createSiteGroup(OpenDeskModel.SITE_CONTRIBUTOR, null, false, true));
+                result.add(createSiteGroup(OpenDeskModel.SITE_CONSUMER, null, false, true));
+                break;
         }
         return result;
+    }
+
+    /**
+     * Gets information of a site.
+     * @param nodeRef nodeRef of the site.
+     * @return a JSONObject representing the site.
+     */
+    public JSONArray getSiteInfo(NodeRef nodeRef) throws JSONException {
+        SiteInfo siteInfo = siteService.getSite(nodeRef);
+        JSONArray json = new JSONArray();
+        json.add(getSiteInfo(siteInfo));
+        return json;
     }
 
     /**
@@ -456,12 +558,12 @@ public class SiteBean {
             json.put("sbsys", nodeService.getProperty(n, OpenDeskModel.PROP_PD_SBSYS));
             json.put("notTemplateSite", true); // only pd_sites can be used as templateSites
 
-            String projectManagerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
+            String projectManagerGroup = getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTMANAGER);
             Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectManagerGroup, true);
             if (authorities.iterator().hasNext())
                 manager = authorities.iterator().next();
 
-            String projectOwnerGroup = Utils.getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
+            String projectOwnerGroup = getAuthorityName(siteShortName, OpenDeskModel.PD_GROUP_PROJECTOWNER);
             authorities = authorityService.getContainedAuthorities(AuthorityType.USER, projectOwnerGroup, true);
             if (authorities.iterator().hasNext())
                 owner = authorities.iterator().next();
@@ -483,7 +585,7 @@ public class SiteBean {
             json.put("sbsys", "");
             json.put("notTemplateSite", notTemplateSite);
 
-            String SiteManager = Utils.getAuthorityName(siteShortName, "SiteManager");
+            String SiteManager = getAuthorityName(siteShortName, "SiteManager");
             Set<String> authorities = authorityService.getContainedAuthorities(AuthorityType.USER, SiteManager, true);
             if (authorities.iterator().hasNext())
                 manager = authorities.iterator().next();
@@ -508,7 +610,7 @@ public class SiteBean {
 
         //Get Member list
         JSONArray membersArray = new JSONArray();
-        String group = Utils.getAuthorityName(siteShortName, "");
+        String group = getAuthorityName(siteShortName, "");
         Set<String> members = authorityService.getContainedAuthorities(AuthorityType.USER, group, false);
 
         membersArray.addAll(members);
@@ -614,6 +716,19 @@ public class SiteBean {
         return getMembers(siteShortName, false);
     }
 
+    /**
+     * Gets the visibility enum from a string.
+     * @param visibility a string representing the visibility.
+     * @return an enum representing the visibility.
+     */
+    public SiteVisibility getVisibility(String visibility)
+    {
+        if(visibility.isEmpty())
+            return null;
+        else
+            return SiteVisibility.valueOf(visibility);
+    }
+
     public JSONArray searchAuthorities(String siteShortName, String filter) throws JSONException {
         List<String> authorities = getAuthorityList(siteShortName, true);
         List<String> users = getAuthorityList(siteShortName, false);
@@ -657,7 +772,7 @@ public class SiteBean {
      */
     public void removeMember(String siteShortName, String authority, String group) {
 
-        String groupName = Utils.getAuthorityName(siteShortName, group);
+        String groupName = getAuthorityName(siteShortName, group);
         authorityService.removeAuthority(groupName, authority);
     }
 

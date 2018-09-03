@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.model.Repository;
@@ -142,7 +141,7 @@ public class TestUtils {
             if(siteService.hasSite(siteShortName))
             siteService.deleteSite(siteShortName);
 
-            String authority = Utils.getAuthorityName(siteShortName, "");
+            String authority = "GROUP_site_" + siteShortName;
             if (authorityService.authorityExists(authority))
                 authorityService.deleteAuthority(authority, true);
             return true;
