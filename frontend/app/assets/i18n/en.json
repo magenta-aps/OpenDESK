@@ -1057,10 +1057,6 @@
       "appName": "Name of OpenDesk"
     }
   },
-  "GROUPS": {
-    "OPENDESK_OrganizationalCenters": "Org. Units",
-    "OPENDESK_ProjectOwners": "Project Owners"
-  },
   "EDIT_MS_OFFICE": {
     "ALREADY_LOCKED": "The document could not be edited because it is already being edited in MS Office by {{userName}}.",
     "AOS": {

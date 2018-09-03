@@ -1030,10 +1030,6 @@
       "appName": "Navn for OpenDesk"
     }
   },
-  "GROUPS": {
-    "OPENDESK_OrganizationalCenters": "Org. enheder",
-    "OPENDESK_ProjectOwners": "Projektejere"
-  },
   "EDIT_MS_OFFICE": {
     "ALREADY_LOCKED": "Dokumentet kunne ikke redigeres, da den allerede bliver redigeret i MS Office af {{userName}}.",
     "AOS": {
