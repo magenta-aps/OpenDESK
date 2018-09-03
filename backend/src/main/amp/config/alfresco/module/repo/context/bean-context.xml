@@ -80,6 +80,10 @@
         <property name="siteService" ref="SiteService"/>
     </bean>
 
+    <bean id="preferenceBean" class="dk.opendesk.repo.beans.PreferenceBean">
+        <property name="preferenceService" ref="PreferenceService"/>
+    </bean>
+
     <bean id="reviewBean" class="dk.opendesk.repo.beans.ReviewBean">
         <property name="discussionBean" ref="discussionBean"/>
         <property name="discussionService" ref="DiscussionService"/>

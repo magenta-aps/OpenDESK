@@ -469,17 +469,6 @@ public class Utils {
     }
 
     /**
-     * Gets the filtered preferences of a user.
-     * @param preferenceService alfresco standard service.
-     * @param userName of the user.
-     * @param filter that is used to find a set of preferences. Leave empty to get all preferences.
-     * @return a map of preferences.
-     */
-    public static Map<String, Serializable> getPreferences(PreferenceService preferenceService, String userName, String filter) {
-        return preferenceService.getPreferences(userName, filter);
-    }
-
-    /**
      * Gets the type of a site.
      * @param nodeService alfresco standard service.
      * @param nodeRef of the site.

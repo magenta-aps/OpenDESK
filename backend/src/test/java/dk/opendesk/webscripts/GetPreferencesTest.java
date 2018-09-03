@@ -18,12 +18,11 @@ package dk.opendesk.webscripts;
         import org.json.JSONObject;
         import org.springframework.extensions.webscripts.TestWebScriptServer;
         import org.json.JSONException;
-        import org.junit.Test;
         import org.springframework.extensions.webscripts.Status;
 
-public class PreferencesTest extends BaseWebScriptTest {
+public class GetPreferencesTest extends BaseWebScriptTest {
 
-    private static Logger log = Logger.getLogger(PreferencesTest.class);
+    private static Logger log = Logger.getLogger(GetPreferencesTest.class);
 
     private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
             "authenticationService");
@@ -36,7 +35,7 @@ public class PreferencesTest extends BaseWebScriptTest {
     private static final String PREFERENCE = "dk.magenta.sites.receiveNotifications";
     private static final String PREFERENCE_VALUE = "true";
 
-    public PreferencesTest() {
+    public GetPreferencesTest() {
         super();
     }
 
@@ -59,7 +58,7 @@ public class PreferencesTest extends BaseWebScriptTest {
     }
 
     public void testGetPreferenceForReceivingNotificationsForUserOne() throws JSONException, IOException {
-        log.debug("PreferencesTest.testPreferencesWebscript");
+        log.debug("GetPreferencesTest.testPreferencesWebscript");
         Map<String, String> args = new HashMap<String, String>() {
             {
                 put("username", TestUtils.USER_ONE);

@@ -1,8 +1,9 @@
-package dk.opendesk.webscripts;
+package dk.opendesk.webscripts.preference;
 
+import dk.opendesk.repo.beans.PreferenceBean;
 import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.preference.PreferenceService;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -10,12 +11,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
-public class Preferences extends OpenDeskWebScript {
+public class GetPreferences extends OpenDeskWebScript {
 
-    private PreferenceService preferenceService;
+    private PreferenceBean preferenceBean;
 
-    public void setPreferenceService(PreferenceService preferenceService) {
-        this.preferenceService = preferenceService;
+    public void setPreferenceBean(PreferenceBean preferenceBean) {
+        this.preferenceBean = preferenceBean;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class Preferences extends OpenDeskWebScript {
         try {
             String username = AuthenticationUtil.getFullyAuthenticatedUser();
             String pf = urlQueryParams.get("pf");
-            Map<String, Serializable> preferences = Utils.getPreferences(preferenceService, username, pf);
+            Map<String, Serializable> preferences = preferenceBean.getPreferences(username, pf);
             arrayResult = getJSONReturnArray(preferences);
         } catch (Exception e) {
             error(res, e);

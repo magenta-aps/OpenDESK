@@ -101,12 +101,6 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
-    <bean id="webscript.preferences.get"
-          class="dk.opendesk.webscripts.Preferences"
-          parent="webscript">
-        <property name="preferenceService" ref="PreferenceService"/>
-    </bean>
-
 	<bean id="webscript.editors.editors.get"
 		  class="dk.opendesk.webscripts.editors.GetEditors"
 		  parent="webscript">
@@ -225,6 +219,12 @@
           parent="webscript">
         <property name="PDSiteBean" ref="pdSiteBean"/>
     </bean>
+
+	<bean id="webscript.preference.preferences.get"
+		  class="dk.opendesk.webscripts.preference.GetPreferences"
+		  parent="webscript">
+		<property name="preferenceBean" ref="preferenceBean"/>
+	</bean>
 
 	<!-- Site -->
 	<bean id="webscript.site.authorities.get"
