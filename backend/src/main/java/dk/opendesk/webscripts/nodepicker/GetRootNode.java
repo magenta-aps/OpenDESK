@@ -36,7 +36,7 @@ public class GetRootNode extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String rootName = urlParams.get("rootName");
-            arrayResult.add(nodeBean.getNodePickerRootNodeInfo(rootName));
+            objectResult = nodeBean.getNodePickerRootNodeInfo(rootName);
         } catch (Exception e) {
             error(res, e);
         }

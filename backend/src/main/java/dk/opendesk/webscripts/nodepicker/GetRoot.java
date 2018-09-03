@@ -35,7 +35,7 @@ public class GetRoot extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            arrayResult.add(nodeBean.getNodePickerRootInfo());
+            objectResult = nodeBean.getNodePickerRootInfo();
         } catch (Exception e) {
             error(res, e);
         }
