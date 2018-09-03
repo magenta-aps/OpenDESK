@@ -27,7 +27,6 @@ public class UpdateReview extends OpenDeskWebScript {
             String status = getContentParam("status");
             String reply = getContentParam("reply");
             reviewBean.updateReview(nodeRef, assignee, status, reply);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

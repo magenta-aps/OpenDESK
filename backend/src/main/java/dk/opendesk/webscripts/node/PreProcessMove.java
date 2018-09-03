@@ -31,7 +31,6 @@ public class PreProcessMove extends OpenDeskWebScript {
             NodeRef destinationRef = new NodeRef(destinationRefStr);
 
             nodeBean.preProcessMove(nodeRefs, destinationRef);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

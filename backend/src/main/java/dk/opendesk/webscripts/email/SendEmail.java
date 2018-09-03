@@ -23,7 +23,6 @@ public class SendEmail extends OpenDeskWebScript {
             String subject = getContentParam("subject");
             String body = getContentParam("body");
             emailBean.sendEmail(userName, subject, body);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

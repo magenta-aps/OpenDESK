@@ -36,7 +36,7 @@ public class GetRole extends OpenDeskWebScript {
         try {
             String siteShortName = urlParams.get("siteShortName");
             String role = siteBean.getRole(siteShortName);
-            arrayResult = getJSONReturnPair("role", role);
+            objectResult.put("role", role);
         } catch (Exception e) {
             error(res, e);
         }

@@ -267,10 +267,10 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
       .then(
         function (response) {
           var userRole
-          if (response.data[0].role === undefined)
+          if (response.data.role === undefined)
             userRole = outsiderRole
           else
-            userRole = response.data[0].role
+            userRole = response.data.role
 
           permissions.userRole = userRole
           permissions.isManager = userRole === managerRole

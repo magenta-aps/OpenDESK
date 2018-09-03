@@ -39,7 +39,7 @@ public class GetThumbnail extends OpenDeskWebScript {
             String nodeId = urlParams.get("nodeId");
             String versionId = urlParams.get("versionId");
             NodeRef versionPreviewRef = nodeBean.getThumbnail(nodeId, versionId);
-            arrayResult = getJSONReturnPair("nodeRef", versionPreviewRef.toString());
+            objectResult.put("nodeRef", versionPreviewRef.toString());
         } catch (Exception e) {
             error(res, e);
         }

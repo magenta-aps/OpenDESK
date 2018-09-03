@@ -20,7 +20,7 @@ public class GetCompanyHome extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            arrayResult = getJSONReturnPair("nodeRef", nodeBean.getCompanyHome().toString());
+            objectResult.put("nodeRef", nodeBean.getCompanyHome().toString());
         } catch (Exception e) {
             error(res, e);
         }

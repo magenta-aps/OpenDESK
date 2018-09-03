@@ -54,7 +54,7 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)
-        formData.append('filename', response.data[0].fileName)
+        formData.append('filename', response.data.fileName)
         formData.append('destination', destination || null)
 
         var headers = {

@@ -38,7 +38,6 @@ public class RemoveMember extends OpenDeskWebScript {
             String authority = getContentParam("authority");
             String group = getContentParam("group");
             siteBean.removeMember(siteShortName, authority, group);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

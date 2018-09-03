@@ -25,7 +25,6 @@ public class Rename extends OpenDeskWebScript {
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
             String name = getContentParam("name");
             nodeBean.rename(nodeRef, name);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

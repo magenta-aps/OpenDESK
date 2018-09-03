@@ -33,7 +33,6 @@ public class UpdatePDSite extends OpenDeskWebScript {
             SiteVisibility visibility = Utils.getVisibility(visibilityStr);
             pdSiteBean.updatePDSite(siteShortName, title, description, sbsys, centerId, owner, manager, state,
                     visibility);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

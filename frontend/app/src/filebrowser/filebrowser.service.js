@@ -37,7 +37,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
     return $http
       .get(`/alfresco/service/node/companyHome`)
       .then(function (response) {
-        return response.data[0].nodeRef
+        return response.data.nodeRef
       })
   }
 
@@ -83,7 +83,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
     return $http
       .get(`/alfresco/service/node/userHome`)
       .then(function (response) {
-        return response.data[0].nodeRef
+        return response.data.nodeRef
       })
   }
 

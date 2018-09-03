@@ -16,7 +16,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -122,26 +121,6 @@ public class OpenDeskWebScript extends AbstractWebScript {
             e.printStackTrace();
         }
         return result;
-    }
-
-    /**
-     * Gets a JSONObject from a key-value pair.
-     * @param key key of the object.
-     * @param value value of the object.
-     * @return a JSONArray containing the JSONObject.
-     */
-    protected JSONArray getJSONReturnPair (String key, String value) {
-        Map<String, Serializable> map = new HashMap<>();
-        map.put(key, value);
-        return getJSONReturnArray(map);
-    }
-
-    /**
-     * Gets a JSONArray representing succes.
-     * @return a JSONArray containing { status : "succes" }.
-     */
-    protected JSONArray getJSONSuccess () {
-        return getJSONReturnPair("status", "success");
     }
 
     private String paramValuesToString(List<NameValuePair> paramValues) {

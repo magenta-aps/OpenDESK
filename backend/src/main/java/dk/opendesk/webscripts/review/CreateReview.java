@@ -26,7 +26,6 @@ public class CreateReview extends OpenDeskWebScript {
             String nodeId = getContentParam("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
             reviewBean.createReview(nodeRef, assignee, message);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

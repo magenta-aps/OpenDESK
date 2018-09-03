@@ -21,7 +21,6 @@ public class SetNotificationsSeen extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             notificationBean.setNotificationsSeen();
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

@@ -17,9 +17,7 @@ limitations under the License.
 package dk.opendesk.webscripts.site;
 
 import dk.opendesk.repo.beans.SiteBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
-import org.alfresco.service.cmr.site.SiteVisibility;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -40,7 +38,6 @@ public class AddMember extends OpenDeskWebScript {
             String authority = getContentParam("authority");
             String group = getContentParam("group");
             siteBean.addMember(siteShortName, authority, group);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

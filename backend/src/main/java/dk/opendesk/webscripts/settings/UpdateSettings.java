@@ -25,7 +25,6 @@ public class UpdateSettings extends OpenDeskWebScript {
             JSONObject jsonProperties = JSONUtils.getObject(contentParams, "properties");
             Map<QName, Serializable> properties = JSONUtils.getMap(jsonProperties);
             settingsBean.updateSettings(properties);
-            objectResult = JSONUtils.getSuccess();
         } catch (Exception e) {
             error(res, e);
         }

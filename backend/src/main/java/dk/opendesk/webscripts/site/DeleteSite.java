@@ -36,7 +36,6 @@ public class DeleteSite extends OpenDeskWebScript {
         try {
             String siteShortName = urlParams.get("siteShortName");
             siteBean.deleteSite(siteShortName);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

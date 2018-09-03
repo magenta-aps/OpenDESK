@@ -26,7 +26,6 @@ public class Share extends OpenDeskWebScript {
             String userName = urlParams.get("userName");
             String permission = urlParams.get("permission");
             nodeBean.shareNode(nodeRef, userName, permission);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

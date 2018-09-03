@@ -26,7 +26,6 @@ public class StopShare extends OpenDeskWebScript {
             String userName = urlParams.get("userName");
             String permission = urlParams.get("permission");
             nodeBean.stopSharingNode(nodeRef, userName, permission);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

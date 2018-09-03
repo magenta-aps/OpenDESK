@@ -23,8 +23,6 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Map;
 
 public class RemoveSiteLink extends OpenDeskWebScript {
     private SiteBean siteBean;
@@ -42,7 +40,6 @@ public class RemoveSiteLink extends OpenDeskWebScript {
             NodeRef sourceRef = new NodeRef("workspace://SpacesStore/" + sourceId);
             NodeRef destinationRef = new NodeRef("workspace://SpacesStore/" + destinationId);
             siteBean.deleteLink(sourceRef, destinationRef);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

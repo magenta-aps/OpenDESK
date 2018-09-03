@@ -24,7 +24,6 @@ public class DeleteNotification extends OpenDeskWebScript {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
             notificationBean.deleteNotification(nodeRef);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

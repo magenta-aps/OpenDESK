@@ -36,7 +36,7 @@ public class CreateMembersPDF extends OpenDeskWebScript {
         try {
             String siteShortName = urlParams.get("siteShortName");
             String nodeId = siteBean.createMembersPDF(siteShortName);
-            arrayResult = getJSONReturnPair("Noderef", nodeId);
+            objectResult.put("nodeId", nodeId);
         } catch (Exception e) {
             error(res, e);
         }

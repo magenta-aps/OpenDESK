@@ -24,7 +24,6 @@ public class SetNotificationSeen extends OpenDeskWebScript {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
             notificationBean.setNotificationSeen(nodeRef);
-            arrayResult = getJSONSuccess();
         } catch (Exception e) {
             error(res, e);
         }

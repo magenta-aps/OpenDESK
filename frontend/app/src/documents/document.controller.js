@@ -139,7 +139,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     if (vm.docHasParent)
       documentService.getThumbnail(vm.parentNodeId, vm.nodeId)
         .then(function (response) {
-          documentPreviewService.getPluginByNodeRef(response.data[0].nodeRef)
+          documentPreviewService.getPluginByNodeRef(response.data.nodeRef)
             .then(function (plugin) {
               vm.plugin = plugin
             })
