@@ -35,7 +35,7 @@ public class GetSite extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String siteShortName = urlParams.get("siteShortName");
-            arrayResult = siteBean.getSiteInfo(siteShortName);
+            objectResult = siteBean.getSiteInfo(siteShortName);
         } catch (Exception e) {
             error(res, e);
         }

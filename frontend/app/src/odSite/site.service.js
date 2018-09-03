@@ -144,7 +144,7 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   function loadSiteData (siteShortName) {
     return $http.get(`/alfresco/service/site/${siteShortName}`)
       .then(function (response) {
-        site = response.data[0]
+        site = response.data
         return site
       })
   }

@@ -617,12 +617,9 @@ public class SiteBean {
      * @param shortName short name of the site.
      * @return a JSONObject representing the site.
      */
-    public JSONArray getSiteInfo(String shortName) throws JSONException {
-
+    public JSONObject getSiteInfo(String shortName) throws JSONException {
         SiteInfo siteInfo = siteService.getSite(shortName);
-        JSONArray json = new JSONArray();
-        json.add(getSiteInfo(siteInfo));
-        return json;
+        return getSiteInfo(siteInfo);
     }
 
     /**
