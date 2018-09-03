@@ -335,14 +335,6 @@
 		<property name="siteBean" ref="siteBean"/>
 	</bean>
 
-	<bean id="webscript.cleanupandpurge.get"
-		  class="dk.opendesk.webscripts.CleanupAndPurge" parent="webscript">
-		<property name="nodeArchiveService" ref="nodeArchiveService"/>
-		<property name="siteService" ref="SiteService"/>
-		<property name="nodeService" ref="NodeService"/>
-		<property name="contentService" ref="ContentService"/>
-	</bean>
-
 	<bean id="webscript.sbsys.fakesbsys.post" class="dk.opendesk.webscripts.sbsys.FakeSbsysDownload" parent="webscript">
 		<property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
