@@ -19,8 +19,8 @@ public class ValidatePerson extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String userName = getContentParam("userName");
-            String email = getContentParam("email");
+            String userName = getContentString("userName");
+            String email = getContentString("email");
             objectResult = personBean.validatePerson(userName, email);
         } catch (Exception e) {
             error(res, e);

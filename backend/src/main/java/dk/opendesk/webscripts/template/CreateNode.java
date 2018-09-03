@@ -22,8 +22,8 @@ public class CreateNode extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String templateId = urlParams.get("templateId");
-            String name = getContentParam("name");
-            String destinationNodeRef = getContentParam("destinationNodeRef");
+            String name = getContentString("name");
+            String destinationNodeRef = getContentString("destinationNodeRef");
             Map<String, Serializable> response = templateBean.createNode(name, templateId, destinationNodeRef);
             arrayResult = getJSONReturnArray(response);
         } catch (Exception e) {

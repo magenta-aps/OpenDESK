@@ -27,7 +27,7 @@ public class PreProcessMove extends OpenDeskWebScript {
             for (String nodeRefStr : nodeRefStrs)
                 nodeRefs.add(new NodeRef(nodeRefStr));
 
-            String destinationRefStr = getContentParam("destinationRef");
+            String destinationRefStr = getContentString("destinationRef");
             NodeRef destinationRef = new NodeRef(destinationRefStr);
 
             nodeBean.preProcessMove(nodeRefs, destinationRef);

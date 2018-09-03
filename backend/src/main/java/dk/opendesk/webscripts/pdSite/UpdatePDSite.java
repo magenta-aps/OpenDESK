@@ -22,14 +22,14 @@ public class UpdatePDSite extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String siteShortName = urlParams.get("siteShortName");
-            String title = getContentParam("title");
-            String description = getContentParam("description");
-            String sbsys = getContentParam("sbsys");
-            String owner = getContentParam("owner");
-            String manager = getContentParam("manager");
-            String state = getContentParam("state");
-            String centerId = getContentParam("centerId");
-            String visibilityStr = getContentParam("visibility");
+            String title = getContentString("title");
+            String description = getContentString("description");
+            String sbsys = getContentString("sbsys");
+            String owner = getContentString("owner");
+            String manager = getContentString("manager");
+            String state = getContentString("state");
+            String centerId = getContentString("centerId");
+            String visibilityStr = getContentString("visibility");
             SiteVisibility visibility = Utils.getVisibility(visibilityStr);
             pdSiteBean.updatePDSite(siteShortName, title, description, sbsys, centerId, owner, manager, state,
                     visibility);

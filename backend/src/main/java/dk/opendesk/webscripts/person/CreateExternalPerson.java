@@ -36,13 +36,13 @@ public class CreateExternalPerson extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String firstName = getContentParam("firstName");
-            String lastName = getContentParam("lastName");
-            String userName = getContentParam("userName");
-            String email = getContentParam("email");
-            String telephone = getContentParam("telephone");
-            String siteShortName = getContentParam("siteShortName");
-            String groupName = getContentParam("groupName");
+            String firstName = getContentString("firstName");
+            String lastName = getContentString("lastName");
+            String userName = getContentString("userName");
+            String email = getContentString("email");
+            String telephone = getContentString("telephone");
+            String siteShortName = getContentString("siteShortName");
+            String groupName = getContentString("groupName");
             Map<QName, Serializable> props = personBean.createPersonProperties(userName, firstName, lastName, email,
                     telephone);
             objectResult = createExternalPerson(props, siteShortName, groupName);

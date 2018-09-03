@@ -1,5 +1,7 @@
 package dk.opendesk.webscripts;
 
+import dk.opendesk.repo.model.OpenDeskModel;
+import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -15,9 +17,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OpenDeskWebScript extends AbstractWebScript {
@@ -63,8 +63,12 @@ public class OpenDeskWebScript extends AbstractWebScript {
         return writer.toString();
     }
 
-    protected String getContentParam(String parameter) throws JSONException {
-        return getJSONObject(contentParams, parameter);
+    protected Map<QName, Serializable> getContentMap(String parameter) throws JSONException {
+        return getMap(contentParams, parameter);
+    }
+
+    protected String getContentString(String parameter) throws JSONException {
+        return getString(contentParams, parameter);
     }
 
     protected void error(WebScriptResponse res, Exception e) {
@@ -91,18 +95,12 @@ public class OpenDeskWebScript extends AbstractWebScript {
         return result;
     }
 
-    /**
-     * Gets a child JSON object from a JSON object.
-     * @param json Parent JSON object.
-     * @param parameter the key of the child JSON object.
-     * @return a child JSON Object with the specified parameter.
-     */
-    protected String getJSONObject(JSONObject json, String parameter) throws JSONException {
-        if (!json.has(parameter) || json.getString(parameter).length() == 0)
+    private JSONObject getJSONObject(JSONObject json, String parameter) throws JSONException {
+        if (!json.has(parameter) || json.getJSONObject(parameter).length() == 0)
         {
-            return "";
+            return null;
         }
-        return json.getString(parameter);
+        return json.getJSONObject(parameter);
     }
 
     /**
@@ -121,6 +119,32 @@ public class OpenDeskWebScript extends AbstractWebScript {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private Map<QName, Serializable> getMap(JSONObject json, String parameter) throws JSONException {
+        JSONObject jsonObject = getJSONObject(json, parameter);
+        Map<QName, Serializable> map = new HashMap<>();
+        Iterator keys = jsonObject.keys();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            QName qName = QName.createQName(OpenDeskModel.OD_URI, key);
+            map.put(qName, jsonObject.getString(key));
+        }
+        return map;
+    }
+
+    /**
+     * Gets a child String from a JSON object.
+     * @param json Parent JSON object.
+     * @param parameter the key of the child JSON object.
+     * @return a string.
+     */
+    private String getString(JSONObject json, String parameter) throws JSONException {
+        if (!json.has(parameter) || json.getString(parameter).length() == 0)
+        {
+            return "";
+        }
+        return json.getString(parameter);
     }
 
     private String paramValuesToString(List<NameValuePair> paramValues) {

@@ -35,7 +35,7 @@ public class CreateTemplate extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String siteShortName = urlParams.get("siteShortName");
-            String description = getContentParam("description");
+            String description = getContentString("description");
             arrayResult = siteBean.createTemplate(siteShortName, description);
         } catch (Exception e) {
             error(res, e);

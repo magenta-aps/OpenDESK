@@ -35,8 +35,8 @@ public class RemoveSiteLink extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String sourceId = getContentParam("sourceId");
-            String destinationId = getContentParam("destinationId");
+            String sourceId = getContentString("sourceId");
+            String destinationId = getContentString("destinationId");
             NodeRef sourceRef = new NodeRef("workspace://SpacesStore/" + sourceId);
             NodeRef destinationRef = new NodeRef("workspace://SpacesStore/" + destinationId);
             siteBean.deleteLink(sourceRef, destinationRef);

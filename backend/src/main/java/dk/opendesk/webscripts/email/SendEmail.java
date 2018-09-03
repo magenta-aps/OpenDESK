@@ -19,9 +19,9 @@ public class SendEmail extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String userName = getContentParam("userName");
-            String subject = getContentParam("subject");
-            String body = getContentParam("body");
+            String userName = getContentString("userName");
+            String subject = getContentString("subject");
+            String body = getContentString("body");
             emailBean.sendEmail(userName, subject, body);
         } catch (Exception e) {
             error(res, e);

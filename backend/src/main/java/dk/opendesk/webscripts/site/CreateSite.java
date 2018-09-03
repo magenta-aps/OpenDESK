@@ -36,9 +36,9 @@ public class CreateSite extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String displayName = getContentParam("displayName");
-            String description = getContentParam("description");
-            String visibility = getContentParam("visibility");
+            String displayName = getContentString("displayName");
+            String description = getContentString("description");
+            String visibility = getContentString("visibility");
             SiteVisibility siteVisibility = Utils.getVisibility(visibility);
             arrayResult = siteBean.createSite(displayName, description, siteVisibility);
         } catch (Exception e) {

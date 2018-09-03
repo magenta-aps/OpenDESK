@@ -37,7 +37,7 @@ public class AddSiteLink extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String siteShortName = urlParams.get("siteShortName");
-            String destinationShortName = getContentParam("destinationShortName");
+            String destinationShortName = getContentString("destinationShortName");
             Map<String, Serializable> map = siteBean.addLink(siteShortName, destinationShortName);
             arrayResult = getJSONReturnArray(map);
         } catch (Exception e) {

@@ -21,9 +21,9 @@ public class CreateReview extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String assignee = getContentParam("assignee");
-            String message = getContentParam("message");
-            String nodeId = getContentParam("nodeId");
+            String assignee = getContentString("assignee");
+            String message = getContentString("message");
+            String nodeId = getContentString("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
             reviewBean.createReview(nodeRef, assignee, message);
         } catch (Exception e) {

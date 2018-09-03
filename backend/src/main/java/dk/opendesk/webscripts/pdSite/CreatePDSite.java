@@ -21,14 +21,14 @@ public class CreatePDSite extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String title = getContentParam("title");
-            String description = getContentParam("description");
-            String sbsys = getContentParam("sbsys");
-            String owner = getContentParam("owner");
-            String manager = getContentParam("manager");
-            String centerId = getContentParam("centerId");
-            String templateName = getContentParam("templateName");
-            String visibilityStr = getContentParam("visibility");
+            String title = getContentString("title");
+            String description = getContentString("description");
+            String sbsys = getContentString("sbsys");
+            String owner = getContentString("owner");
+            String manager = getContentString("manager");
+            String centerId = getContentString("centerId");
+            String templateName = getContentString("templateName");
+            String visibilityStr = getContentString("visibility");
             SiteVisibility visibility = Utils.getVisibility(visibilityStr);
             arrayResult = pdSiteBean.createPDSite(title, description, sbsys, centerId, owner, manager, visibility,
                     templateName);

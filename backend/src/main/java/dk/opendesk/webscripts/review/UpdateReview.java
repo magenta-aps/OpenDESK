@@ -23,9 +23,9 @@ public class UpdateReview extends OpenDeskWebScript {
         try {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-            String assignee = getContentParam("assignee");
-            String status = getContentParam("status");
-            String reply = getContentParam("reply");
+            String assignee = getContentString("assignee");
+            String status = getContentString("status");
+            String reply = getContentString("reply");
             reviewBean.updateReview(nodeRef, assignee, status, reply);
         } catch (Exception e) {
             error(res, e);
