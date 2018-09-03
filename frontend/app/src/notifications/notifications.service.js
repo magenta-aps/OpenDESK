@@ -28,8 +28,8 @@ function notificationsService ($http, $interval) {
   function getNotifications () {
     return $http.get(`/alfresco/service/notifications`)
       .then(function (response) {
-        unseenNotifications = response.data[0].unseen
-        var notifications = response.data[1]
+        unseenNotifications = response.data.unseen
+        var notifications = response.data.notifications
         angular.forEach(notifications, function (notification) {
           prepareNotification(notification)
         })

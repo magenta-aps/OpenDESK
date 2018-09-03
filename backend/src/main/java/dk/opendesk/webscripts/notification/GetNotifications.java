@@ -20,7 +20,7 @@ public class GetNotifications extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            arrayResult = notificationBean.getNotifications();
+            objectResult = notificationBean.getNotifications();
         } catch (Exception e) {
             error(res, e);
         }

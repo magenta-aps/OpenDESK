@@ -200,9 +200,9 @@ public class NotificationBean {
     /**
      * Gets all notifications.
      * This method also returns read notifications.
-     * @return a JSONArray containing a JSONObject for each notification.
+     * @return a JSONObject containing metadata and a list of JSONObjects for each notification.
      */
-    public JSONArray getNotifications() throws Exception {
+    public JSONObject getNotifications() throws Exception {
         String userName = AuthenticationUtil.getFullyAuthenticatedUser();
         int unSeenSize = countUnSeenNotifications(userName);
         int unReadSize = countUnReadNotifications(userName);
@@ -213,21 +213,19 @@ public class NotificationBean {
         types.add(OpenDeskModel.TYPE_NOTIFICATION);
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
-        JSONArray result = new JSONArray();
+
+        JSONObject result = new JSONObject();
+        result.put("unseen", unSeenSize);
+        result.put("unread", unReadSize);
+
         JSONArray children = new JSONArray();
-
-        JSONObject stats = new JSONObject();
-        stats.put("unseen", unSeenSize);
-        stats.put("unread", unReadSize);
-        result.add(stats);
-
         for (ChildAssociationRef child : childAssociationRefs) {
             JSONObject json = getNotification(child.getChildRef());
             if(json != null)
                 children.add(json);
         }
 
-        result.add(children);
+        result.put("notifications", children);
 
         return result;
     }
