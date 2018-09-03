@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts.preference;
 
 import dk.opendesk.repo.beans.PreferenceBean;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.springframework.extensions.webscripts.WebScriptRequest;
