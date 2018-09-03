@@ -23,7 +23,7 @@ public class GetReview extends OpenDeskWebScript {
         try {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-            arrayResult.add(reviewBean.getReview(nodeRef));
+            objectResult = reviewBean.getReview(nodeRef);
         } catch (Exception e) {
             error(res, e);
         }
