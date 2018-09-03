@@ -48,7 +48,7 @@ public class AuthorityBean {
         for (String authorityName : authorities) {
             JSONObject json;
             if(authorityName.startsWith("GROUP_")) {
-                json = Utils.convertGroupToJSON(authorityService, authorityName);
+                json = getGroupInfo(authorityName);
             }
             else {
                 NodeRef user = personService.getPerson(authorityName);
@@ -58,6 +58,21 @@ public class AuthorityBean {
         }
 
         return result;
+    }
+
+    /**
+     * Converts a group into a standard structured JSONObject.
+     * @param fullName the group to be converted.
+     * @return a JSONObject representing the group.
+     */
+    private JSONObject getGroupInfo (String fullName) throws JSONException {
+        JSONObject json = new JSONObject();
+        String shortName = fullName.substring(6);
+        json.put("shortName", shortName);
+        json.put("fullName", fullName);
+        String displayName = authorityService.getAuthorityDisplayName(fullName);
+        json.put("displayName", displayName);
+        return json;
     }
 
     public JSONObject getOpenDeskGroup(String groupName) throws JSONException {
@@ -142,7 +157,7 @@ public class AuthorityBean {
                 // Do not add groups that are on the ignore list
                 if(ignoreList != null && ignoreList.contains(authorityName))
                     continue;
-                JSONObject json = Utils.convertGroupToJSON(authorityService, authorityName);
+                JSONObject json = getGroupInfo(authorityName);
                 result.add(json);
             }
         }
