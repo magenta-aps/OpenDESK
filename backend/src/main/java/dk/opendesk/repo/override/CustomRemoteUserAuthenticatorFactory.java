@@ -1,4 +1,4 @@
-package dk.opendesk.repo.beans;
+package dk.opendesk.repo.override;
 
 import org.alfresco.repo.web.auth.AuthenticationListener;
 import org.alfresco.repo.web.scripts.servlet.RemoteUserAuthenticatorFactory;
