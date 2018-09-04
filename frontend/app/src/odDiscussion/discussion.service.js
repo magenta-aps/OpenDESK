@@ -31,13 +31,6 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
   }
 
   function getDiscussionFromNodeRef (siteShortName, nodeId) {
-    // return getDiscussions(siteShortName)
-    //   .then(function (response) {
-    //     response.items.forEach(function (discussion) {
-    //       if (discussion.nodeRef.split('/')[3] === nodeId)
-    //         return discussion
-    //     })
-    //   })
     return $http.get(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + nodeId, {})
       .then(function (response) {
         return response.data.item
