@@ -1,6 +1,6 @@
 <webscript>
     <shortname>Remove Site Member</shortname>
     <description>Removes a Site Member</description>
-    <url>/site/{siteShortName}/member</url>
+    <url>/site/{siteShortName}/group/{group}/member/{authority}</url>
     <authentication>user</authentication>
 </webscript>

@@ -25,23 +25,14 @@ function MemberService ($http, personService) {
   }
 
   function addMember (siteShortName, authority, group) {
-    var payload = {
-      authority: authority,
-      group: group
-    }
-    return $http.post(`/alfresco/service/site/${siteShortName}/member`, payload)
+    return $http.post(`/alfresco/service/site/${siteShortName}/group/${group}/member/${authority}`)
       .then(function (response) {
         return response.data
       })
   }
 
   function removeMember (siteShortName, authority, group) {
-    var payload = {
-      authority: authority,
-      group: group
-    }
-
-    return $http.delete(`/alfresco/service/site/${siteShortName}/member`, payload)
+    return $http.delete(`/alfresco/service/site/${siteShortName}/group/${group}/member/${authority}`)
       .then(function (response) {
         return response.data
       })

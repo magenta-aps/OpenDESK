@@ -35,8 +35,8 @@ public class AddMember extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String siteShortName = urlParams.get("siteShortName");
-            String authority = getContentString("authority");
-            String group = getContentString("group");
+            String authority = urlParams.get("authority");
+            String group = urlParams.get("group");
             siteBean.addMember(siteShortName, authority, group);
         } catch (Exception e) {
             error(res, e);
