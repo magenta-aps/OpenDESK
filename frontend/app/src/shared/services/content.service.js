@@ -2,9 +2,9 @@
 import '../../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp')
-  .factory('ContentService', ['$http', 'alfrescoNodeService', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', ContentService])
+  .factory('contentService', ['$http', 'alfrescoNodeService', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', contentService])
 
-function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
+function contentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
   var service = {
     delete: deleteContent,
     get: getContent,

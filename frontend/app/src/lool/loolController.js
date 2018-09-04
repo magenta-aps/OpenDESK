@@ -4,13 +4,13 @@ import '../shared/services/nodeRefUtils.service'
 
 angular
   .module('openDeskApp.lool')
-  .controller('LoolController', ['$state', '$stateParams', 'loolService', 'ContentService', '$mdToast', '$translate',
+  .controller('LoolController', ['$state', '$stateParams', 'loolService', 'contentService', '$mdToast', '$translate',
     'nodeRefUtilsService', 'headerService', LoolController])
 
 /**
  * Main Controller for the LibreOffice online module module
  */
-function LoolController ($state, $stateParams, loolService, ContentService, $mdToast, $translate, nodeRefUtilsService,
+function LoolController ($state, $stateParams, loolService, contentService, $mdToast, $translate, nodeRefUtilsService,
   headerService) {
   var vm = this
 
@@ -26,7 +26,7 @@ function LoolController ($state, $stateParams, loolService, ContentService, $mdT
     vm.isDisplayed = true
     vm.nodeRef = $stateParams.nodeRef
     vm.nodeId = nodeRefUtilsService.getId($stateParams.nodeRef)
-    ContentService.get(vm.nodeId).then(function (document) {
+    contentService.get(vm.nodeId).then(function (document) {
       vm.doc = document.item
       loolService.getLoolServiceUrl().then(function (response) {
         if (response.charAt(response.length - 1) === '/')

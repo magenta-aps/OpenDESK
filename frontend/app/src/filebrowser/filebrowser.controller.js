@@ -10,12 +10,12 @@ angular
   .module('openDeskApp.filebrowser')
   .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout', 'siteService',
     'fileService', 'filebrowserService', 'documentService', 'alfrescoNodeService', 'memberService', '$translate',
-    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'ContentService',
+    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'contentService',
     FilebrowserController])
 
 function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, siteService, fileService,
   filebrowserService, documentService, alfrescoNodeService, memberService, $translate, APP_BACKEND_CONFIG,
-  sessionService, headerService, browserService, ContentService) {
+  sessionService, headerService, browserService, contentService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -202,9 +202,9 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
         lockType = item.lockType
       var mimeType = item.mimeType
 
-      item.loolEditable = ContentService.isLibreOfficeEditable(mimeType, isLocked)
-      item.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, isLocked)
-      item.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, isLocked, lockType)
+      item.loolEditable = contentService.isLibreOfficeEditable(mimeType, isLocked)
+      item.msOfficeEditable = contentService.isMsOfficeEditable(mimeType, isLocked)
+      item.onlyOfficeEditable = contentService.isOnlyOfficeEditable(mimeType, isLocked, lockType)
 
       // Set link
       item.uiRef = getUiRef(item)
@@ -239,7 +239,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
   }
 
   function getHistory (nodeId) {
-    return ContentService.history(nodeId).then(function (val) {
+    return contentService.history(nodeId).then(function (val) {
       return val
     })
   }
@@ -326,7 +326,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     vm.uploading = true
 
     angular.forEach(files, function (file) {
-      ContentService.upload(file, folderNodeRef)
+      contentService.upload(file, folderNodeRef)
         .then(function () {
           hideDialogAndReloadContent()
         })

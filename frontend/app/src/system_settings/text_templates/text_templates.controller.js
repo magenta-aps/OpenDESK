@@ -5,10 +5,10 @@ import '../../shared/services/content.service'
 angular
   .module('openDeskApp')
   .controller('EmailTemplatesController', ['$stateParams', '$mdToast', 'alfrescoDocumentService', 'alfrescoNodeService',
-    'ContentService', EmailTemplatesController])
+    'contentService', EmailTemplatesController])
 
 function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentService, alfrescoNodeService,
-  ContentService) {
+  contentService) {
   var vm = this
 
   vm.ckEditorCallback = ckEditorCallback
@@ -57,7 +57,7 @@ function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentServi
 
   function saveEmailContent () {
     var file = new Blob([vm.changedTemplate], {type: 'html/text'})
-    ContentService.uploadNewVersion(file, null, vm.nodeRef)
+    contentService.uploadNewVersion(file, null, vm.nodeRef)
       .then(function () {
         $mdToast.show(
           $mdToast.simple()

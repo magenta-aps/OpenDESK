@@ -7,11 +7,11 @@ import uploadNewVersionTemplate from '../../filebrowser/view/content/document/up
 
 angular.module('openDeskApp.documents')
   .controller('DocumentActionController', ['$mdDialog', '$mdToast', '$location', '$scope', '$state', '$stateParams',
-    '$window', 'alfrescoDownloadService', 'ContentService', 'editOnlineMSOfficeService',
+    '$window', 'alfrescoDownloadService', 'contentService', 'editOnlineMSOfficeService',
     'filebrowserService', 'memberService', 'publicShareService', DocumentActionController])
 
 function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $state, $stateParams, $window,
-  alfrescoDownloadService, ContentService, editOnlineMSOfficeService, filebrowserService, memberService,
+  alfrescoDownloadService, contentService, editOnlineMSOfficeService, filebrowserService, memberService,
   publicShareService) {
   var vm = this
   vm.uploading = false
@@ -43,9 +43,9 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
       vm.lockType = vm.doc.node.properties['cm:lockType']
     var mimeType = vm.doc.node.mimetype
 
-    vm.loolEditable = ContentService.isLibreOfficeEditable(mimeType, vm.isLocked)
-    vm.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, vm.isLocked)
-    vm.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
+    vm.loolEditable = contentService.isLibreOfficeEditable(mimeType, vm.isLocked)
+    vm.msOfficeEditable = contentService.isMsOfficeEditable(mimeType, vm.isLocked)
+    vm.onlyOfficeEditable = contentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
 
     vm.isPublicShared = vm.doc.node.properties['qshare:sharedId']
     if (vm.isPublicShared) {
@@ -59,7 +59,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
       var newPage = $window.open()
 
     var selectedVersion = $location.search().version
-    ContentService.revertToVersion('no comments', true, vm.doc.node.nodeRef, selectedVersion).then(
+    contentService.revertToVersion('no comments', true, vm.doc.node.nodeRef, selectedVersion).then(
       function (response) {
         if (editor === 'libre-office')
           $state.go('lool', {
@@ -216,7 +216,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
 
   function uploadNewVersion (file) {
     vm.uploading = true
-    ContentService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef)
+    contentService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef)
       .then(function () {
         vm.uploading = false
         $mdDialog.cancel()

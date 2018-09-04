@@ -11,11 +11,11 @@ import uploadNewVersionTemplate from '../view/content/document/uploadNewVersion.
 angular
   .module('openDeskApp.filebrowser')
   .controller('ActionsController', ['$mdMenu', '$rootScope', '$scope', '$state', '$mdDialog', '$window',
-    'alfrescoDownloadService', 'alfrescoNodeService', 'ContentService', 'documentPreviewService', 'documentService',
+    'alfrescoDownloadService', 'alfrescoNodeService', 'contentService', 'documentPreviewService', 'documentService',
     'editOnlineMSOfficeService', ActionsController])
 
 function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $window, alfrescoDownloadService,
-  alfrescoNodeService, ContentService, documentPreviewService, documentService, editOnlineMSOfficeService) {
+  alfrescoNodeService, contentService, documentPreviewService, documentService, editOnlineMSOfficeService) {
   var vm = this
   vm.cancelDialog = cancelDialog
   vm.copyContentDialog = copyContentDialog
@@ -149,7 +149,7 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $win
 
   function uploadNewVersion (file) {
     vm.uploading = true
-    ContentService.uploadNewVersion(file, null, content.nodeRef)
+    contentService.uploadNewVersion(file, null, content.nodeRef)
       .then(function () {
         hideDialogAndReloadContent()
       })
