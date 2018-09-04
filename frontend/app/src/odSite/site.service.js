@@ -22,6 +22,7 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   }
 
   var service = {
+    addMember: addMember,
     createPDSite: createPDSite,
     createSite: createSite,
     getSite: getSite,
@@ -47,10 +48,18 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
     updateMemberList: updateMemberList,
     addFavourite: addFavourite,
     removeFavourite: removeFavourite,
+    removeMember: removeMember,
     findAuthorities: findAuthorities
   }
 
   return service
+
+  function addMember (siteShortName, authority, group) {
+    return $http.post(`/alfresco/service/site/${siteShortName}/group/${group}/member/${authority}`)
+      .then(function (response) {
+        return response.data
+      })
+  }
 
   function getSite () {
     return site
@@ -339,6 +348,13 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
     return $http.delete(`/alfresco/api/-default-/public/alfresco/versions/1/people/-me-/favorites/${nodeId}`)
       .then(function (response) {
         return response
+      })
+  }
+
+  function removeMember (siteShortName, authority, group) {
+    return $http.delete(`/alfresco/service/site/${siteShortName}/group/${group}/member/${authority}`)
+      .then(function (response) {
+        return response.data
       })
   }
 

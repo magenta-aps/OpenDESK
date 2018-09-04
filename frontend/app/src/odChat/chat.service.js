@@ -1,8 +1,8 @@
 angular
   .module('openDeskApp.chat')
-  .factory('chatService', ['XMPP_DOMAIN', 'memberService', chatService])
+  .factory('chatService', ['XMPP_DOMAIN', 'personService', chatService])
 
-function chatService (XMPP_DOMAIN, memberService) {
+function chatService (XMPP_DOMAIN, personService) {
   var initialized = false
 
   return {
@@ -33,7 +33,7 @@ function chatService (XMPP_DOMAIN, memberService) {
 
     initialized = true
     var userSearchCallback = function (query, callback) {
-      memberService.searchPerson('?filter=' + encodeURIComponent(query)).then(function (data) {
+      personService.searchPerson('?filter=' + encodeURIComponent(query)).then(function (data) {
         callback(data.people.map(function (person) {
           return {
             id: person.userName + '@' + XMPP_DOMAIN,

@@ -1,21 +1,32 @@
 angular
   .module('openDeskApp')
-  .factory('personService', personService)
+  .factory('personService', ['$http', personService])
 
-function personService () {
+function personService ($http) {
   var blankImageUrl = 'assets/img/avatars/blank-profile-picture.png'
   return {
-    getAvatarUrl: getAvatarUrl,
-    getAvatarUrlFromRef: getAvatarUrlFromRef
+    addExternalPerson: addExternalPerson,
+    getAvatarUrlFromRef: getAvatarUrlFromRef,
+    getPerson: getPerson,
+    searchAuthorities: searchAuthorities,
+    searchPerson: searchPerson,
+    validatePerson: validatePerson
   }
 
-  function getAvatarUrl (user) {
-    if (user.avatar === undefined) {
-      return blankImageUrl
-    } else {
-      var avatar = user.avatar.replace('/thumbnails/avatar', '')
-      return `/alfresco/s/${avatar}`
+  function addExternalPerson (siteShortName, userName, firstName, lastName, email, telephone, groupName) {
+    var payLoad = {
+      firstName: firstName,
+      lastName: lastName,
+      userName: userName,
+      email: email,
+      telephone: telephone,
+      siteShortName: siteShortName,
+      groupName: groupName
     }
+    return $http.post('/alfresco/service/person/external', payLoad)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function getAvatarUrlFromRef (avatarRef) {
@@ -24,5 +35,37 @@ function personService () {
       return `/alfresco/s/api/node/workspace/SpacesStore/${avatarId}/content`
     }
     return blankImageUrl
+  }
+
+  function getPerson (username) {
+    return $http.get('/alfresco/s/person/' + username)
+      .then(function (response) {
+        return response.data
+      })
+  }
+
+  function searchAuthorities (filter) {
+    return $http.get(`/alfresco/service/authority/search?filter=${filter}`)
+      .then(function (response) {
+        return response.data
+      })
+  }
+
+  function searchPerson (filter) {
+    return $http.get(`/alfresco/s/person/search?filter=${filter}`)
+      .then(function (response) {
+        return response.data
+      })
+  }
+
+  function validatePerson (userName, email) {
+    var payload = {
+      userName: userName,
+      email: email
+    }
+    return $http.post('/alfresco/s/person/validate', payload)
+      .then(function (response) {
+        return response.data
+      })
   }
 }

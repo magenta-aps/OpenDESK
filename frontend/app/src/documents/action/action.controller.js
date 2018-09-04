@@ -8,10 +8,10 @@ import uploadNewVersionTemplate from '../../filebrowser/view/content/document/up
 angular.module('openDeskApp.documents')
   .controller('DocumentActionController', ['$mdDialog', '$mdToast', '$location', '$scope', '$state', '$stateParams',
     '$window', 'alfrescoDownloadService', 'contentService', 'editOnlineMSOfficeService',
-    'filebrowserService', 'memberService', 'publicShareService', DocumentActionController])
+    'filebrowserService', 'personService', 'publicShareService', DocumentActionController])
 
 function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $state, $stateParams, $window,
-  alfrescoDownloadService, contentService, editOnlineMSOfficeService, filebrowserService, memberService,
+  alfrescoDownloadService, contentService, editOnlineMSOfficeService, filebrowserService, personService,
   publicShareService) {
   var vm = this
   vm.uploading = false
@@ -127,7 +127,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
 
   function searchPeople (query) {
     if (query)
-      return memberService.searchPerson(query)
+      return personService.searchPerson(query)
   }
 
   function shareDocument (user, permission) {

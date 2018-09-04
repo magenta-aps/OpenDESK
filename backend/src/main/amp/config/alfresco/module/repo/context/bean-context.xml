@@ -75,6 +75,7 @@
     </bean>
 
     <bean id="personBean" class="dk.opendesk.repo.beans.PersonBean">
+        <property name="authorityService" ref="AuthorityService"/>
         <property name="mutableAuthenticationService" ref="authenticationService"/>
         <property name="nodeService" ref="NodeService"/>
         <property name="personService" ref="PersonService"/>

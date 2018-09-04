@@ -3,10 +3,10 @@ import '../shared/services/preference.service'
 
 angular
   .module('openDeskApp.user')
-  .controller('UserController', ['$scope', '$mdSidenav', 'userService', 'memberService', 'sessionService',
-    'preferenceService', UserController])
+  .controller('UserController', ['$scope', '$mdSidenav', 'userService', 'personService', 'preferenceService',
+    UserController])
 
-function UserController ($scope, $mdSidenav, userService, memberService, sessionService, preferenceService) {
+function UserController ($scope, $mdSidenav, userService, personService, preferenceService) {
   var vm = this
 
   vm.close = close
@@ -42,7 +42,7 @@ function UserController ($scope, $mdSidenav, userService, memberService, session
   }
 
   function loadAvatar () {
-    memberService.getMember(vm.user.userName)
+    personService.getPerson(vm.user.userName)
       .then(function (user) {
         vm.user.avatar = user.avatar
         userService.updateAvatar(user.avatar)

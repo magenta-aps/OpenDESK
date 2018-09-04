@@ -43,7 +43,7 @@ function sessionService ($window, $state) {
     if (userInfo === undefined)
       return false
 
-    return userInfo.user.capabilities.isAdmin
+    return userInfo.user.isAdmin
   }
 
   function clearRetainedLocation () {

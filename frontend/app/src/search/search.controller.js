@@ -4,10 +4,10 @@ import '../shared/services/file.service'
 angular
   .module('openDeskApp')
   .controller('SearchController', ['$scope', '$interval', '$translate', '$stateParams', 'searchService',
-    'fileService', 'memberService', SearchController])
+    'fileService', 'personService', SearchController])
 
 function SearchController ($scope, $interval, $translate, $stateParams, searchService, fileService,
-  memberService) {
+  personService) {
   $scope.searchTerm = $stateParams.searchTerm
   $scope.selectedFilters = {} // Keep track of the selected filters
   $scope.filtersQueryString = '' // the selected filters as query string
@@ -167,6 +167,6 @@ function SearchController ($scope, $interval, $translate, $stateParams, searchSe
 
   $scope.searchPeople = function (query) {
     if (query)
-      return memberService.searchPerson(query)
+      return personService.searchPerson(query)
   }
 }

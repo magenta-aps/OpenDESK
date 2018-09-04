@@ -17,7 +17,7 @@
 
             <span>
                 <md-button class="md-icon-button" ng-click="vm.toggleSystemSettings()" aria-label="{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}"
-                    ng-if="vm.user.capabilities.isAdmin">
+                    ng-if="vm.user.isAdmin">
                     <md-icon>settings</md-icon>
                     <md-tooltip md-direction="bottom" md-delay="500">{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}</md-tooltip>
                 </md-button>

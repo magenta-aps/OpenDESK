@@ -11,6 +11,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.security.PersonService.PersonInfo;
@@ -27,6 +28,7 @@ import java.util.*;
 
 public class PersonBean {
 
+    private AuthorityService authorityService;
     private MutableAuthenticationService mutableAuthenticationService;
     private NodeService nodeService;
     private PersonService personService;
@@ -34,6 +36,9 @@ public class PersonBean {
     private SearchService searchService;
     private SiteService siteService;
 
+    public void setAuthorityService (AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
     public void setMutableAuthenticationService(MutableAuthenticationService mutableAuthenticationService) {
         this.mutableAuthenticationService = mutableAuthenticationService;
     }
@@ -188,6 +193,12 @@ public class PersonBean {
         else
             avatar = "assets/img/avatars/blank-profile-picture.png";
         json.put("avatar", avatar);
+
+        boolean isAdmin = authorityService.hasAdminAuthority();
+        json.put("isAdmin", isAdmin);
+
+        boolean isEnabled = personService.isEnabled(userName);
+        json.put("isEnabled", isEnabled);
 
         return json;
     }

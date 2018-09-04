@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .factory('authService', ['$http', '$window', '$state', 'sessionService', 'memberService', authService])
+  .factory('authService', ['$http', '$window', '$state', 'personService', 'sessionService', authService])
 
-function authService ($http, $window, $state, sessionService, memberService) {
+function authService ($http, $window, $state, personService, sessionService) {
   var service = {
     login: login,
     logout: logout,
@@ -24,24 +24,26 @@ function authService ($http, $window, $state, sessionService, memberService) {
   function ssoLogin () {
     return $http.get('/alfresco/s/authentication/ssologin').then(function (response) {
       var username = response.data
-      return memberService.getMember(username).then(function (user) {
-        sessionService.login(user, true)
-        return user
-      })
+      return personService.getPerson(username)
+        .then(function (user) {
+          sessionService.login(user, true)
+          return user
+        })
     })
   }
 
   function login (credentials) {
-    return $http.post('/api/login', credentials).then(function (response) {
-      sessionService.saveTicketToSession(response.data.data.ticket)
-      return memberService.getMember(credentials.username).then(function (user) {
-        sessionService.login(user, false)
-        return user
+    return $http.post('/api/login', credentials)
+      .then(function (response) {
+        sessionService.saveTicketToSession(response.data.data.ticket)
+        return personService.getPerson(credentials.username).then(function (user) {
+          sessionService.login(user, false)
+          return user
+        })
+      }, function (reason) {
+        console.log(reason)
+        return reason
       })
-    }, function (reason) {
-      console.log(reason)
-      return reason
-    })
   }
 
   function logout () {
@@ -78,7 +80,7 @@ function authService ($http, $window, $state, sessionService, memberService) {
     if (!angular.isArray(authorizedRoles))
       authorizedRoles = [authorizedRoles]
 
-    return userInfo.user.capabilities.isAdmin ||
+    return userInfo.user.isAdmin ||
             (authorizedRoles.length > 0 && authorizedRoles.indexOf('user') > -1)
   }
 }

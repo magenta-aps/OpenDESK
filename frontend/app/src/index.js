@@ -51,7 +51,6 @@ import './components/odEmail'
 
 // Shared Services
 import './shared/services/browser.service'
-import './shared/services/member.service'
 import './shared/services/person.service'
 
 window.$ = $

@@ -3,10 +3,10 @@ import '../services/file.service'
 
 angular
   .module('openDeskApp')
-  .factory('editOnlineMSOfficeService', ['fileService', 'BROWSER_CONFIG', 'userService', 'memberService',
+  .factory('editOnlineMSOfficeService', ['fileService', 'BROWSER_CONFIG', 'userService', 'personService',
     '$window', '$mdToast', '$translate', editOnlineMSOfficeService])
 
-function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, memberService, $window, $mdToast,
+function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, personService, $window, $mdToast,
   $translate) {
   var toastDelay = 5000
   var msProtocolNames = {
@@ -183,13 +183,14 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, me
 
       // If locked for editing then display error message about who locked
       if (checkedOut && differentLockOwner)
-        memberService.getMember(lockOwner).then(function (user) {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
-              .hideDelay(toastDelay)
-          )
-        })
+        personService.getPerson(lockOwner)
+          .then(function (user) {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
+                .hideDelay(toastDelay)
+            )
+          })
 
       else
       // First try ActiveX plugin then AOS
