@@ -5,7 +5,7 @@ angular.module('openDeskApp')
 
 function memberService ($http, personService) {
   var service = {
-    add: addMember,
+    addMember: addMember,
     addExternal: addExternalMember,
     validate: validateMember,
     get: getMember,

@@ -139,7 +139,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
     // Iterating list of items sequential instead of async.
     angular.forEach(group, function (authority) {
       var authorityName = authority.userName ? authority.userName : authority.fullName
-      memberService.add(siteShortName, authorityName, groupName)
+      memberService.addMember(siteShortName, authorityName, groupName)
         .then(function () {
         },
         function (err) {

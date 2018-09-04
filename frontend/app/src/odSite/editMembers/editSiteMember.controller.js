@@ -105,7 +105,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
     var authorityName = authority.userName ? authority.userName : authority.fullName
     var siteShortName = vm.site.shortName
 
-    memberService.add(siteShortName, authorityName, groupName)
+    memberService.addMember(siteShortName, authorityName, groupName)
       .then(function () {
         for (var i = 0; i < vm.groups.length; i++)
           if (vm.groups[i][0].role === groupName) {
