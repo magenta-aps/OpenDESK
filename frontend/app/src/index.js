@@ -4,6 +4,7 @@ import 'angular-auto-height'
 import 'angular-cookies'
 import 'angular-drag-and-drop-lists'
 import 'angular-img-fallback'
+import 'angular-img-http-src'
 import 'angular-material'
 import 'angular-messages'
 import 'angular-resource'
@@ -51,6 +52,7 @@ import './components/odEmail'
 // Shared Services
 import './shared/services/browser.service'
 import './shared/services/member.service'
+import './shared/services/person.service'
 
 window.$ = $
 

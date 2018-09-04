@@ -1,9 +1,9 @@
 'use strict'
 
 angular.module('openDeskApp')
-  .factory('MemberService', ['$http', MemberService])
+  .factory('MemberService', ['$http', 'personService', MemberService])
 
-function MemberService ($http) {
+function MemberService ($http, personService) {
   var service = {
     add: addMember,
     addExternal: addExternalMember,
@@ -18,7 +18,9 @@ function MemberService ($http) {
 
   function getMember (username) {
     return $http.get('/api/people/' + username).then(function (response) {
-      return response.data
+      var person = response.data
+      person.avatar = personService.getAvatarUrl(person)
+      return person
     })
   }
 

@@ -7,7 +7,6 @@ angular.module('openDeskApp.site')
 
 function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService, systemSettingsService) {
   var site = {}
-  var groups = {}
   var userManagedProjects = []
   var currentPermissions
 
@@ -320,13 +319,7 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   function getUsers (siteShortName) {
     return $http.get(`/alfresco/service/site/${siteShortName}/users`)
       .then(function (response) {
-        groups = response.data
-        groups.forEach(function (group) {
-          group[1].forEach(function (member) {
-            member.avatar = sessionService.makeAvatarUrl(member)
-          })
-        })
-        return groups
+        return response.data
       })
   }
 

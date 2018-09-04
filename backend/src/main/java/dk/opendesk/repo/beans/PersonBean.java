@@ -179,12 +179,15 @@ public class PersonBean {
         String organization = (String) nodeService.getProperty(person, ContentModel.PROP_ORGANIZATION);
         json.put("organization", organization);
 
+        String avatar;
         List<AssociationRef> assocRefs = nodeService.getTargetAssocs(person,ContentModel.ASSOC_AVATAR);
         if(assocRefs.size() > 0) {
             NodeRef avatarNodeRef = assocRefs.get(0).getTargetRef();
-            String avatar = "api/node/workspace/SpacesStore/" + avatarNodeRef.getId() + "/content";
-            json.put("avatar", avatar);
+            avatar = "/alfresco/s/api/node/workspace/SpacesStore/" + avatarNodeRef.getId() + "/content";
         }
+        else
+            avatar = "assets/img/avatars/blank-profile-picture.png";
+        json.put("avatar", avatar);
 
         return json;
     }

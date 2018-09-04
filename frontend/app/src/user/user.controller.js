@@ -10,14 +10,12 @@ function UserController ($scope, $mdSidenav, UserService, MemberService, session
   var vm = this
 
   vm.close = close
-  vm.loadAvatar = loadAvatar
   vm.setNotificationPreferences = setNotificationPreferences
   vm.user = UserService.get()
 
   $scope.uploadAvatar = uploadAvatar
 
   loadNotificationPreferences()
-  loadAvatar()
 
   function close () {
     $mdSidenav('userpanel').close()
@@ -46,7 +44,8 @@ function UserController ($scope, $mdSidenav, UserService, MemberService, session
   function loadAvatar () {
     MemberService.get(vm.user.userName)
       .then(function (user) {
-        vm.user.avatar = sessionService.updateAvatar(user)
+        vm.user.avatar = user.avatar
+        UserService.updateAvatar(user.avatar)
       })
   }
 }

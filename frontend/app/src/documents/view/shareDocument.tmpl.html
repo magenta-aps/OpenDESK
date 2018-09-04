@@ -30,14 +30,14 @@
                                          md-items="pgitem in DAC.searchPeople(DAC.searchTextList[groupIndex])"
                                          md-require-match="true"
                                          md-item-text="pgitem" placeholder="{{'USER.USER' | translate}}">
-                            <img class="od-avatar od-avatar-small" ng-src="{{DAC.getAvatarUrl(pgitem)}}">
+                            <img class="od-avatar od-avatar-small" http-src="{{pgitem.avatar}}">
                             <span md-highlight-text="DAC.searchTextList[groupIndex]" md-highlight-flags="gi">
                                 {{ pgitem.displayName }}
                             </span>
                             <span class="od-secondary">({{ pgitem.userName }})</span>
                         </md-autocomplete>
                         <md-chip-template>
-                            <img class="od-avatar od-avatar-small" ng-src="{{DAC.getAvatarUrl($chip)}}">
+                            <img class="od-avatar od-avatar-small" http-src="{{$chip.avatar}}">
                             <span style="display: table-caption">{{ $chip.displayName }}</span>
                         </md-chip-template>
                     </md-chips>

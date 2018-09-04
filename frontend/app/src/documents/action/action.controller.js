@@ -8,11 +8,11 @@ import uploadNewVersionTemplate from '../../filebrowser/view/content/document/up
 angular.module('openDeskApp.documents')
   .controller('DocumentActionController', ['$mdDialog', '$mdToast', '$location', '$scope', '$state', '$stateParams',
     '$window', 'alfrescoDownloadService', 'ContentService', 'editOnlineMSOfficeService',
-    'filebrowserService', 'MemberService', 'publicShareService', 'sessionService', DocumentActionController])
+    'filebrowserService', 'MemberService', 'publicShareService', DocumentActionController])
 
 function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $state, $stateParams, $window,
   alfrescoDownloadService, ContentService, editOnlineMSOfficeService, filebrowserService, MemberService,
-  publicShareService, sessionService) {
+  publicShareService) {
   var vm = this
   vm.uploading = false
   vm.acceptEditVersionDialog = acceptEditVersionDialog
@@ -21,7 +21,6 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
-  vm.getAvatarUrl = getAvatarUrl
   vm.onPublicSharedUrlClick = onPublicSharedUrlClick
   vm.reviewDocumentsDialog = reviewDocumentsDialog
   vm.searchPeople = searchPeople
@@ -110,10 +109,6 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
       showEditVersionDialog('ms-office')
     else
       editOnlineMSOfficeService.editOnline(vm.doc)
-  }
-
-  function getAvatarUrl (user) {
-    return sessionService.makeAvatarUrl(user)
   }
 
   function isVersion () {

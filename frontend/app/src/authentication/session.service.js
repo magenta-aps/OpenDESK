@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .factory('sessionService', ['$window', '$state', sessionService])
+  .factory('sessionService', ['$window', '$state', 'personService', sessionService])
 
-function sessionService ($window, $state) {
+function sessionService ($window, $state, personService) {
   var service = {
     clearRetainedLocation: clearRetainedLocation,
     getRetainedLocation: getRetainedLocation,
@@ -14,9 +14,7 @@ function sessionService ($window, $state) {
     isAdmin: isAdmin,
     logout: logout,
     makeURL: makeURL,
-    retainCurrentLocation: retainCurrentLocation,
-    makeAvatarUrl: makeAvatarUrl,
-    updateAvatar: updateAvatar
+    retainCurrentLocation: retainCurrentLocation
   }
 
   return service
@@ -26,7 +24,7 @@ function sessionService ($window, $state) {
 
     if (isSSO && userInfo === undefined)
       userInfo = {}
-    user.avatar = makeAvatarUrl(user)
+    user.avatar = personService.getAvatarUrl(user)
     user.displayName = user.firstName
     if (user.lastName !== '')
       user.displayName += ' ' + user.lastName
@@ -92,24 +90,5 @@ function sessionService ($window, $state) {
     if (location === 'login') return
 
     $window.sessionStorage.setItem('retainedLocation', location)
-  }
-
-  function makeAvatarUrl (user) {
-    var avatar
-    if (user.avatar === undefined) {
-      avatar = 'assets/img/avatars/blank-profile-picture.png'
-    } else {
-      avatar = user.avatar.replace('/thumbnails/avatar', '')
-      avatar = makeURL(`/alfresco/s/${avatar}`)
-    }
-
-    return avatar
-  }
-
-  function updateAvatar (user) {
-    var userInfo = getUserInfo()
-    userInfo.user.avatar = makeAvatarUrl(user)
-    saveUserInfoToSession(userInfo)
-    return userInfo.user.avatar
   }
 }

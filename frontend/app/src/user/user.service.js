@@ -7,7 +7,8 @@ function UserService ($http, $window) {
 
   return {
     get: getUser,
-    uploadAvatar: uploadAvatar
+    uploadAvatar: uploadAvatar,
+    updateAvatar: updateAvatar
   }
 
   function getUser () {
@@ -31,5 +32,11 @@ function UserService ($http, $window) {
       .then(function (response) {
         return response
       })
+  }
+
+  function updateAvatar (avatar) {
+    var userInfo = angular.fromJson($window.localStorage.getItem('userInfo'))
+    userInfo.user.avatar = avatar
+    $window.localStorage.setItem('userInfo', angular.toJson(userInfo))
   }
 }

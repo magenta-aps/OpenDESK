@@ -3,9 +3,9 @@ import infoMemberTemplate from './groupMember/infoMember.tmpl.html'
 import editMembersTemplate from './view/editMembers.tmpl.html'
 
 angular.module('openDeskApp.group')
-  .factory('groupService', ['$http', '$mdDialog', 'sessionService', groupService])
+  .factory('groupService', ['$http', '$mdDialog', groupService])
 
-function groupService ($http, $mdDialog, sessionService) {
+function groupService ($http, $mdDialog) {
   var service = {
     getGroups: getGroups,
     getOpenDeskGroups: getOpenDeskGroups,
@@ -27,33 +27,23 @@ function groupService ($http, $mdDialog, sessionService) {
   }
 
   function getOpenDeskGroups () {
-    var openDeskGroups = []
     return $http.get('/alfresco/service/authority/openDeskGroups')
       .then(function (response) {
-        var groups = response.data
-        groups.forEach(function (group) {
-          prepareGroup(group)
-          openDeskGroups.push(group)
-        })
-        return openDeskGroups
+        return response.data
       })
   }
 
   function getOrganizationalCenters () {
     return $http.get(`/alfresco/service/authority/organizational-centers`)
       .then(function (response) {
-        var group = response.data
-        prepareGroup(group)
-        return group.members
+        return response.data.members
       })
   }
 
   function getProjectOwners () {
     return $http.get(`/alfresco/service/authority/project-owners`)
       .then(function (response) {
-        var group = response.data
-        prepareGroup(group)
-        return group.members
+        return response.data.members
       })
   }
 
@@ -82,12 +72,6 @@ function groupService ($http, $mdDialog, sessionService) {
 
   function addMember (shortName, groupName) {
     return $http.post('/alfresco/s/api/groups/' + groupName + '/children/' + shortName, {})
-  }
-
-  function prepareGroup (group) {
-    group.members.forEach(function (member) {
-      member.avatar = sessionService.makeAvatarUrl(member)
-    })
   }
 
   function removeMember (shortName, groupName) {

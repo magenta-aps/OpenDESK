@@ -3,9 +3,9 @@
 angular
   .module('openDeskApp.group')
   .controller('GroupController', ['$mdDialog', '$mdToast', '$translate', 'group', 'groupService', 'MemberService',
-    'sessionService', GroupController])
+    GroupController])
 
-function GroupController ($mdDialog, $mdToast, $translate, group, groupService, MemberService, sessionService) {
+function GroupController ($mdDialog, $mdToast, $translate, group, groupService, MemberService) {
   var vm = this
   vm.group = group
 
@@ -44,9 +44,7 @@ function GroupController ($mdDialog, $mdToast, $translate, group, groupService, 
 
   function addMember (member, groupName) {
     var shortName = getMemberShortName(member)
-    groupService.addMember(shortName, groupName).then(function () {
-      member.avatar = sessionService.makeAvatarUrl(member)
-    })
+    groupService.addMember(shortName, groupName)
   }
 
   function removeMember (member, groupName) {

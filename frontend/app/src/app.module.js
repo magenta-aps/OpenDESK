@@ -14,6 +14,7 @@ angular
     'm43nu.auto-height',
     'dcbImgFallback',
     'dndLists',
+    'angular.img',
     'openDeskApp.backendConfig',
     'openDeskApp.init',
     'openDeskApp.systemsettings',
