@@ -42,7 +42,7 @@ function UserController ($scope, $mdSidenav, userService, memberService, session
   }
 
   function loadAvatar () {
-    memberService.get(vm.user.userName)
+    memberService.getMember(vm.user.userName)
       .then(function (user) {
         vm.user.avatar = user.avatar
         userService.updateAvatar(user.avatar)

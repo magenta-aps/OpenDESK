@@ -183,7 +183,7 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, me
 
       // If locked for editing then display error message about who locked
       if (checkedOut && differentLockOwner)
-        memberService.get(lockOwner).then(function (user) {
+        memberService.getMember(lockOwner).then(function (user) {
           $mdToast.show(
             $mdToast.simple()
               .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))

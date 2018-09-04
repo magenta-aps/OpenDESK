@@ -24,7 +24,7 @@ function authService ($http, $window, $state, sessionService, memberService) {
   function ssoLogin () {
     return $http.get('/alfresco/s/authentication/ssologin').then(function (response) {
       var username = response.data
-      return memberService.get(username).then(function (user) {
+      return memberService.getMember(username).then(function (user) {
         sessionService.login(user, true)
         return user
       })
@@ -34,7 +34,7 @@ function authService ($http, $window, $state, sessionService, memberService) {
   function login (credentials) {
     return $http.post('/api/login', credentials).then(function (response) {
       sessionService.saveTicketToSession(response.data.data.ticket)
-      return memberService.get(credentials.username).then(function (user) {
+      return memberService.getMember(credentials.username).then(function (user) {
         sessionService.login(user, false)
         return user
       })

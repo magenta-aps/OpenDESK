@@ -8,7 +8,7 @@ function memberService ($http, personService) {
     addMember: addMember,
     addExternal: addExternalMember,
     validate: validateMember,
-    get: getMember,
+    getMember: getMember,
     remove: removeMember,
     findAuthorities: findAuthorities,
     search: searchPerson
