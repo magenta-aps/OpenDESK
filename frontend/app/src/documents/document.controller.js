@@ -97,7 +97,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
           var folderNodeRef = vm.doc.node.nodeRef
           var location = vm.doc.location.path
           var homeType, type
-          var user = userService.get().userName
+          var user = userService.getUser().userName
           var userHomeLocation = '/User Homes/' + user
           var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation
           var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation

@@ -9,7 +9,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
   memberService) {
   var vm = this
 
-  var currentUser = userService.get()
+  var currentUser = userService.getUser()
 
   vm.type = sitetype
 

@@ -40,7 +40,7 @@ function preferenceService ($http, $q, userService) {
   // username: ID of the user
   // preferences: JSONArray with namespace(key) and value. For example "dk.magenta.sites.<site_name>.notifications" : "true"
   function setPreferences (preferences) {
-    var username = userService.get().userName
+    var username = userService.getUser().userName
     return $http.post('/api/people/' + username + '/preferences', preferences).then(function (response) {
       return response.data
     })

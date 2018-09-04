@@ -17,7 +17,7 @@ function HeaderController ($scope, $state, $mdSidenav, headerService, userServic
   vm.toggleSystemSettings = toggleSystemSettings
   vm.toggleUserPanel = buildToggler('userpanel')
   vm.unseenNotifications = 0
-  vm.user = userService.get()
+  vm.user = userService.getUser()
 
   $scope.headerService = headerService
   $scope.notificationsService = notificationsService

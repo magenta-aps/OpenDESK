@@ -20,7 +20,7 @@ function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, 
   vm.permissions = []
   vm.replies = []
   vm.search = ''
-  vm.user = userService.get()
+  vm.user = userService.getUser()
   vm.isLoading = true
 
   vm.cancelDialog = cancelDialog

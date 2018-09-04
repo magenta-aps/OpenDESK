@@ -11,7 +11,7 @@ function UserController ($scope, $mdSidenav, userService, memberService, session
 
   vm.close = close
   vm.setNotificationPreferences = setNotificationPreferences
-  vm.user = userService.get()
+  vm.user = userService.getUser()
 
   $scope.uploadAvatar = uploadAvatar
 

@@ -6,7 +6,7 @@ function userService ($http, $window) {
   var user
 
   return {
-    get: getUser,
+    getUser: getUser,
     uploadAvatar: uploadAvatar,
     updateAvatar: updateAvatar
   }

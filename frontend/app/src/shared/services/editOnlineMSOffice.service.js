@@ -178,7 +178,7 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, me
     } else if (doc.node.isLocked) {
       var checkedOut = doc.node.aspects.indexOf('cm:checkedOut') > -1
       var lockOwner = doc.node.properties['cm:lockOwner']
-      var currentUser = userService.get().userName
+      var currentUser = userService.getUser().userName
       var differentLockOwner = lockOwner.userName !== currentUser
 
       // If locked for editing then display error message about who locked

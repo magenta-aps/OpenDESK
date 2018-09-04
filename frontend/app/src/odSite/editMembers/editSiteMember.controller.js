@@ -27,7 +27,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   vm.saveChanges = saveChanges
   vm.searchPeople = searchPeople
   vm.site = sitedata
-  vm.user = userService.get()
+  vm.user = userService.getUser()
   vm.showSendEmailDialog = showSendEmailDialog
 
   activate()
