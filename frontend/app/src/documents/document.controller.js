@@ -4,11 +4,11 @@ import '../shared/services/document/preview/preview.service'
 
 angular.module('openDeskApp.documents')
   .controller('DocumentController', ['$translate', 'documentService', '$stateParams', '$location',
-    'documentPreviewService', 'browserService', 'UserService', 'siteService', 'headerService', 'filebrowserService',
+    'documentPreviewService', 'browserService', 'userService', 'siteService', 'headerService', 'filebrowserService',
     'contentService', DocumentController])
 
 function DocumentController ($translate, documentService, $stateParams, $location, documentPreviewService,
-  browserService, UserService, siteService, headerService, filebrowserService, contentService) {
+  browserService, userService, siteService, headerService, filebrowserService, contentService) {
   var vm = this
 
   vm.doc = []
@@ -97,7 +97,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
           var folderNodeRef = vm.doc.node.nodeRef
           var location = vm.doc.location.path
           var homeType, type
-          var user = UserService.get().userName
+          var user = userService.get().userName
           var userHomeLocation = '/User Homes/' + user
           var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation
           var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation

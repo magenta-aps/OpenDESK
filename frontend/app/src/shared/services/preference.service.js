@@ -1,8 +1,8 @@
 angular
   .module('openDeskApp')
-  .factory('preferenceService', ['$http', '$q', 'UserService', preferenceService])
+  .factory('preferenceService', ['$http', '$q', 'userService', preferenceService])
 
-function preferenceService ($http, $q, UserService) {
+function preferenceService ($http, $q, userService) {
   var preferenceFilter = 'dk.magenta.sites.receiveNotifications'
 
   return {
@@ -40,7 +40,7 @@ function preferenceService ($http, $q, UserService) {
   // username: ID of the user
   // preferences: JSONArray with namespace(key) and value. For example "dk.magenta.sites.<site_name>.notifications" : "true"
   function setPreferences (preferences) {
-    var username = UserService.get().userName
+    var username = userService.get().userName
     return $http.post('/api/people/' + username + '/preferences', preferences).then(function (response) {
       return response.data
     })

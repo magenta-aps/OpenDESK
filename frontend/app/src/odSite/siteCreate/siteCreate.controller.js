@@ -3,13 +3,13 @@
 angular
   .module('openDeskApp.site')
   .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$mdDialog',
-    'UserService', 'siteService', 'memberService', SiteCreateController])
+    'userService', 'siteService', 'memberService', SiteCreateController])
 
-function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $mdDialog, UserService, siteService,
+function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $mdDialog, userService, siteService,
   memberService) {
   var vm = this
 
-  var currentUser = UserService.get()
+  var currentUser = userService.get()
 
   vm.type = sitetype
 

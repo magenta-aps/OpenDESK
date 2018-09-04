@@ -2,10 +2,10 @@
 
 angular
   .module('openDeskApp.header')
-  .controller('HeaderController', ['$scope', '$state', '$mdSidenav', 'headerService', 'UserService',
+  .controller('HeaderController', ['$scope', '$state', '$mdSidenav', 'headerService', 'userService',
     'notificationsService', HeaderController])
 
-function HeaderController ($scope, $state, $mdSidenav, headerService, UserService, notificationsService) {
+function HeaderController ($scope, $state, $mdSidenav, headerService, userService, notificationsService) {
   var vm = this
 
   vm.title = ''
@@ -17,7 +17,7 @@ function HeaderController ($scope, $state, $mdSidenav, headerService, UserServic
   vm.toggleSystemSettings = toggleSystemSettings
   vm.toggleUserPanel = buildToggler('userpanel')
   vm.unseenNotifications = 0
-  vm.user = UserService.get()
+  vm.user = userService.get()
 
   $scope.headerService = headerService
   $scope.notificationsService = notificationsService

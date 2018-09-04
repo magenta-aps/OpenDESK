@@ -10,17 +10,17 @@ angular
   .module('openDeskApp.discussion')
   .controller('DiscussionController', ['APP_CONFIG', '$scope', '$timeout', '$mdDialog', '$state', '$stateParams',
     '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'siteService',
-    'UserService', DiscussionController])
+    'userService', DiscussionController])
 
 function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
-  $location, discussionService, nodeRefUtilsService, siteService, UserService) {
+  $location, discussionService, nodeRefUtilsService, siteService, userService) {
   var vm = this
 
   vm.discussions = []
   vm.permissions = []
   vm.replies = []
   vm.search = ''
-  vm.user = UserService.get()
+  vm.user = userService.get()
   vm.isLoading = true
 
   vm.cancelDialog = cancelDialog

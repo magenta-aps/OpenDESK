@@ -3,10 +3,10 @@ import '../shared/services/nodeRefUtils.service'
 import '../shared/services/preference.service'
 
 angular.module('openDeskApp.discussion')
-  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'UserService', 'personService',
+  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'userService', 'personService',
     'preferenceService', discussionService])
 
-function discussionService ($http, nodeRefUtilsService, UserService, personService, preferenceService) {
+function discussionService ($http, nodeRefUtilsService, userService, personService, preferenceService) {
   var restBaseUrl = '/alfresco/s/api'
 
   var service = {

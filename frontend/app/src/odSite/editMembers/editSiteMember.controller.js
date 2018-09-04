@@ -3,10 +3,10 @@
 angular
   .module('openDeskApp.site')
   .controller('EditSiteMemberController', ['sitedata', '$scope', '$mdDialog', '$mdToast', 'APP_CONFIG', 'siteService',
-    'memberService', 'UserService', EditSiteMemberController])
+    'memberService', 'userService', EditSiteMemberController])
 
 function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, memberService,
-  UserService) {
+  userService) {
   var vm = this
 
   $scope.externalUser = {
@@ -27,7 +27,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   vm.saveChanges = saveChanges
   vm.searchPeople = searchPeople
   vm.site = sitedata
-  vm.user = UserService.get()
+  vm.user = userService.get()
   vm.showSendEmailDialog = showSendEmailDialog
 
   activate()
