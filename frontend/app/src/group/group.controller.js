@@ -36,7 +36,7 @@ function GroupController ($mdDialog, $mdToast, $translate, group, groupService, 
     if (query)
       switch (vm.group.type) {
         case 'USER':
-          return memberService.search(query)
+          return memberService.searchPerson(query)
         case 'GROUP':
           return groupService.getGroups(query)
       }

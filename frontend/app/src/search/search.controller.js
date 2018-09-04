@@ -167,6 +167,6 @@ function SearchController ($scope, $interval, $translate, $stateParams, searchSe
 
   $scope.searchPeople = function (query) {
     if (query)
-      return memberService.search(query)
+      return memberService.searchPerson(query)
   }
 }

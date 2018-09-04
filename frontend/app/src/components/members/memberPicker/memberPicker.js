@@ -17,6 +17,6 @@ function memberPicker (memberService) {
 
   function searchPerson (query) {
     if (query)
-      return memberService.search(query)
+      return memberService.searchPerson(query)
   }
 }

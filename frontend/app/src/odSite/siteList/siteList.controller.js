@@ -185,7 +185,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
   function searchPeople (query) {
     if (query)
-      return memberService.search(query)
+      return memberService.searchPerson(query)
   }
 
   function infoSiteDialog (site) {

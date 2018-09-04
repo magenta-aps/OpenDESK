@@ -33,7 +33,7 @@ function chatService (XMPP_DOMAIN, memberService) {
 
     initialized = true
     var userSearchCallback = function (query, callback) {
-      memberService.search('?filter=' + encodeURIComponent(query)).then(function (data) {
+      memberService.searchPerson('?filter=' + encodeURIComponent(query)).then(function (data) {
         callback(data.people.map(function (person) {
           return {
             id: person.userName + '@' + XMPP_DOMAIN,

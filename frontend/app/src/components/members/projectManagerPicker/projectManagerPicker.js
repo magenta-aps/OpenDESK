@@ -18,6 +18,6 @@ function projectManagerPicker (siteService, memberService) {
 
   function searchManagers (query) {
     if (query)
-      return memberService.search(query)
+      return memberService.searchPerson(query)
   }
 }

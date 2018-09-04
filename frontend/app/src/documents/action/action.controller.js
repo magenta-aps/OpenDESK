@@ -127,7 +127,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
 
   function searchPeople (query) {
     if (query)
-      return memberService.search(query)
+      return memberService.searchPerson(query)
   }
 
   function shareDocument (user, permission) {

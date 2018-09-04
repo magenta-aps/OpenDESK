@@ -11,7 +11,7 @@ function memberService ($http, personService) {
     getMember: getMember,
     removeMember: removeMember,
     findAuthorities: findAuthorities,
-    search: searchPerson
+    searchPerson: searchPerson
   }
 
   return service
