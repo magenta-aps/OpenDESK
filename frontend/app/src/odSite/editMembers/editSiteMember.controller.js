@@ -118,7 +118,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   function removeMemberFromSite (authority, groupName) {
     var authorityName = authority.userName ? authority.userName : authority.fullName
     var siteShortName = vm.site.shortName
-    memberService.remove(siteShortName, authorityName, groupName)
+    memberService.removeMember(siteShortName, authorityName, groupName)
   }
 
   function showSendEmailDialog (userName, subject, body) {
