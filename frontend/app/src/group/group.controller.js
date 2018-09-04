@@ -2,10 +2,10 @@
 
 angular
   .module('openDeskApp.group')
-  .controller('GroupController', ['$mdDialog', '$mdToast', '$translate', 'group', 'groupService', 'MemberService',
+  .controller('GroupController', ['$mdDialog', '$mdToast', '$translate', 'group', 'groupService', 'memberService',
     GroupController])
 
-function GroupController ($mdDialog, $mdToast, $translate, group, groupService, MemberService) {
+function GroupController ($mdDialog, $mdToast, $translate, group, groupService, memberService) {
   var vm = this
   vm.group = group
 
@@ -36,7 +36,7 @@ function GroupController ($mdDialog, $mdToast, $translate, group, groupService, 
     if (query)
       switch (vm.group.type) {
         case 'USER':
-          return MemberService.search(query)
+          return memberService.search(query)
         case 'GROUP':
           return groupService.getGroups(query)
       }

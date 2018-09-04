@@ -3,9 +3,9 @@
 angular
   .module('openDeskApp.site')
   .controller('EditSiteMemberController', ['sitedata', '$scope', '$mdDialog', '$mdToast', 'APP_CONFIG', 'siteService',
-    'MemberService', 'UserService', EditSiteMemberController])
+    'memberService', 'UserService', EditSiteMemberController])
 
-function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, MemberService,
+function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CONFIG, siteService, memberService,
   UserService) {
   var vm = this
 
@@ -54,10 +54,10 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   }
 
   function addExternalUserToGroup (userName, firstName, lastName, email, telephone, group) {
-    MemberService.validate(userName, email)
+    memberService.validate(userName, email)
       .then(function (response) {
         if (response.isValid) {
-          MemberService.addExternal(vm.site.shortName, userName, firstName, lastName, email, telephone,
+          memberService.addExternal(vm.site.shortName, userName, firstName, lastName, email, telephone,
             group[0].shortName).then(
             function (response) {
               $mdToast.show(
@@ -105,7 +105,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
     var authorityName = authority.userName ? authority.userName : authority.fullName
     var siteShortName = vm.site.shortName
 
-    MemberService.add(siteShortName, authorityName, groupName)
+    memberService.add(siteShortName, authorityName, groupName)
       .then(function () {
         for (var i = 0; i < vm.groups.length; i++)
           if (vm.groups[i][0].role === groupName) {
@@ -118,7 +118,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   function removeMemberFromSite (authority, groupName) {
     var authorityName = authority.userName ? authority.userName : authority.fullName
     var siteShortName = vm.site.shortName
-    MemberService.remove(siteShortName, authorityName, groupName)
+    memberService.remove(siteShortName, authorityName, groupName)
   }
 
   function showSendEmailDialog (userName, subject, body) {

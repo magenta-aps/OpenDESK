@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .factory('authService', ['$http', '$window', '$state', 'sessionService', 'MemberService', authService])
+  .factory('authService', ['$http', '$window', '$state', 'sessionService', 'memberService', authService])
 
-function authService ($http, $window, $state, sessionService, MemberService) {
+function authService ($http, $window, $state, sessionService, memberService) {
   var service = {
     login: login,
     logout: logout,
@@ -24,7 +24,7 @@ function authService ($http, $window, $state, sessionService, MemberService) {
   function ssoLogin () {
     return $http.get('/alfresco/s/authentication/ssologin').then(function (response) {
       var username = response.data
-      return MemberService.get(username).then(function (user) {
+      return memberService.get(username).then(function (user) {
         sessionService.login(user, true)
         return user
       })
@@ -34,7 +34,7 @@ function authService ($http, $window, $state, sessionService, MemberService) {
   function login (credentials) {
     return $http.post('/api/login', credentials).then(function (response) {
       sessionService.saveTicketToSession(response.data.data.ticket)
-      return MemberService.get(credentials.username).then(function (user) {
+      return memberService.get(credentials.username).then(function (user) {
         sessionService.login(user, false)
         return user
       })

@@ -13,11 +13,11 @@ import siteInfoTemplate from './siteInfo.view.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'MemberService',
+  .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'memberService',
     'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'groupService', 'headerService', 'alfrescoNodeService',
     'translateService', SiteListController])
 
-function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, MemberService, sessionService,
+function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, memberService, sessionService,
   APP_BACKEND_CONFIG, browserService, groupService, headerService, alfrescoNodeService, translateService) {
   var vm = this
 
@@ -185,7 +185,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
   function searchPeople (query) {
     if (query)
-      return MemberService.search(query)
+      return memberService.search(query)
   }
 
   function infoSiteDialog (site) {

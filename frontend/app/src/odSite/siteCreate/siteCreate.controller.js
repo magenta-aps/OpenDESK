@@ -3,10 +3,10 @@
 angular
   .module('openDeskApp.site')
   .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$mdDialog',
-    'UserService', 'siteService', 'MemberService', SiteCreateController])
+    'UserService', 'siteService', 'memberService', SiteCreateController])
 
 function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $mdDialog, UserService, siteService,
-  MemberService) {
+  memberService) {
   var vm = this
 
   var currentUser = UserService.get()
@@ -60,7 +60,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
   function searchPeople (query) {
     if (query)
-      return MemberService.findAuthorities(query)
+      return memberService.findAuthorities(query)
   }
 
   function loadSiteGroups () {
@@ -139,7 +139,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
     // Iterating list of items sequential instead of async.
     angular.forEach(group, function (authority) {
       var authorityName = authority.userName ? authority.userName : authority.fullName
-      MemberService.add(siteShortName, authorityName, groupName)
+      memberService.add(siteShortName, authorityName, groupName)
         .then(function () {
         },
         function (err) {
