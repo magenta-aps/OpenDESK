@@ -32,13 +32,15 @@
 												 md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
 												 md-require-match="true"
 								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
+									<img class="od-avatar od-avatar-small" http-src="{{pgitem.avatar}}">
 									<span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
 										{{ pgitem.displayName }}
 									</span>
 									<span ng-if="pgitem.userName" class="od-secondary">({{ pgitem.userName }})</span>
 								</md-autocomplete>
 								<md-chip-template>
-									<span>{{ $chip.displayName }}</span>
+									<img class="od-avatar od-avatar-small" http-src="{{$chip.avatar}}">
+									<span style="display: table-caption">{{ $chip.displayName }}</span>
 								</md-chip-template>
 							</md-chips>
 						</div>
