@@ -2,9 +2,9 @@
 
 angular
   .module('openDeskApp')
-  .factory('sessionService', ['$window', '$state', 'personService', sessionService])
+  .factory('sessionService', ['$window', '$state', sessionService])
 
-function sessionService ($window, $state, personService) {
+function sessionService ($window, $state) {
   var service = {
     clearRetainedLocation: clearRetainedLocation,
     getRetainedLocation: getRetainedLocation,
@@ -24,10 +24,6 @@ function sessionService ($window, $state, personService) {
 
     if (isSSO && userInfo === undefined)
       userInfo = {}
-    user.avatar = personService.getAvatarUrl(user)
-    user.displayName = user.firstName
-    if (user.lastName !== '')
-      user.displayName += ' ' + user.lastName
     userInfo.user = user
     saveUserInfoToSession(userInfo)
   }

@@ -14,7 +14,6 @@ function personService () {
       return blankImageUrl
     } else {
       var avatar = user.avatar.replace('/thumbnails/avatar', '')
-      console.log(avatar)
       return `/alfresco/s/${avatar}`
     }
   }

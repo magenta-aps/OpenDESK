@@ -18,9 +18,12 @@ function MemberService ($http, personService) {
 
   function getMember (username) {
     return $http.get('/api/people/' + username).then(function (response) {
-      var person = response.data
-      person.avatar = personService.getAvatarUrl(person)
-      return person
+      var user = response.data
+      user.displayName = user.firstName
+      if (user.lastName !== '')
+        user.displayName += ' ' + user.lastName
+      user.avatar = personService.getAvatarUrl(user)
+      return user
     })
   }
 
