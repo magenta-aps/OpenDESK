@@ -60,7 +60,7 @@ public class AuthorityBean {
         // Only add groups if they need to be included
         if(includeGroups) {
             PagingResults<String> groupResults = authorityService.getAuthorities(AuthorityType.GROUP,
-                    AuthorityService.ZONE_AUTH_ALFRESCO, "*" + filter, true, true,
+                    AuthorityService.ZONE_APP_DEFAULT, "*" + filter, true, true,
                     new PagingRequest(100000));
             for (String authorityName : groupResults.getPage()) {
                 if (authorityName.startsWith("GROUP_ALFRESCO") ||
