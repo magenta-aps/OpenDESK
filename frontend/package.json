@@ -58,7 +58,6 @@
     "angular": "^1.7.2",
     "angular-animate": "^1.7.2",
     "angular-aria": "^1.7.2",
-    "angular-auto-height": "https://github.com/m43nu/angular-auto-height.git",
     "angular-cookies": "^1.7.2",
     "angular-drag-and-drop-lists": "^2.1.0",
     "angular-encode-uri": "^1.0.0",

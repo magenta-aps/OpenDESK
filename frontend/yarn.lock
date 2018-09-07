@@ -372,10 +372,6 @@ angular-aria@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/angular-aria/-/angular-aria-1.7.2.tgz#68cb3d15aece7a22517b1fe3e00d9d3807ceca88"
 
-"angular-auto-height@https://github.com/m43nu/angular-auto-height.git":
-  version "0.0.5"
-  resolved "https://github.com/m43nu/angular-auto-height.git#d0b4b96ee37b52b1e0b772d9bbd15afe4b031eb7"
-
 angular-cookies@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.7.2.tgz#cba3a9181d2a48c2d8195ff7fe329055fba970ba"

@@ -1,6 +1,5 @@
 import $ from 'jquery'
 import 'angular'
-import 'angular-auto-height'
 import 'angular-cookies'
 import 'angular-drag-and-drop-lists'
 import 'angular-img-fallback'

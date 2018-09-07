@@ -9,7 +9,6 @@ angular
     'ui.router',
     'pascalprecht.translate',
     'ngResource',
-    'm43nu.auto-height',
     'dcbImgFallback',
     'dndLists',
     'angular.img',
