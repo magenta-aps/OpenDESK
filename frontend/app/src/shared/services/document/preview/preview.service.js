@@ -81,12 +81,12 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
 
   function getPlugins () {
     return [
-      audioViewer(),
       onlyOfficeViewer(),
       webViewer(),
-      imageViewer(),
-      videoViewer(),
       pdfViewer(),
+      audioViewer(),
+      videoViewer(),
+      imageViewer(),
       cannotPreviewPlugin()
     ]
   }
