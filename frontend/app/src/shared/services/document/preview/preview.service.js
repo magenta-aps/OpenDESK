@@ -5,7 +5,6 @@ import '../../document/preview/preview.controller'
 import previewDialogTemplate from './view/previewDialog.html'
 import audioTemplate from './view/audio.html'
 import videoTemplate from './view/video.html'
-import strobeMediaPlayBackTemplate from './view/strobeMediaPlayBack.html'
 import imageTemplate from './view/image.html'
 import onlyOfficeTemplate from './view/onlyOffice.html'
 import pdfTemplate from './view/pdf.html'
@@ -20,7 +19,6 @@ angular
     PreviewService])
   .component('audioPreview', {template: audioTemplate, bindings: { plugin: '=' }})
   .component('videoPreview', {template: videoTemplate, bindings: { plugin: '=' }})
-  .component('strobeMediaPlayBackPreview', {template: strobeMediaPlayBackTemplate, bindings: { plugin: '=' }})
   .component('imagePreview', {template: imageTemplate, bindings: { plugin: '=' }})
   .component('onlyOfficePreview', {template: onlyOfficeTemplate, bindings: { plugin: '=' }})
   .component('pdfPreview', {template: pdfTemplate, bindings: { plugin: '=' }})
@@ -86,10 +84,9 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
       audioViewer(),
       onlyOfficeViewer(),
       webViewer(),
-      pdfViewer(),
       imageViewer(),
       videoViewer(),
-      strobeMediaPlayback(),
+      pdfViewer(),
       cannotPreviewPlugin()
     ]
   }
@@ -113,22 +110,6 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
       ],
       name: 'video'
     }
-    var result = generalPlaybackPlugin()
-    return angular.extend(result, viewer)
-  }
-
-  function strobeMediaPlayback () {
-    var viewer = {
-      mimeTypes: [
-        'video/x-m4v',
-        'video/x-flv',
-        'video/mp4',
-        'video/quicktime',
-        'audio/mpeg'
-      ],
-      name: 'strobeMediaPlayBack'
-    }
-
     var result = generalPlaybackPlugin()
     return angular.extend(result, viewer)
   }

@@ -441,12 +441,6 @@ angular-sanitize@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.7.2.tgz#e9f6e6a3e966c479c02dbc5712bee6de031f8eef"
 
-angular-swfobject@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/angular-swfobject/-/angular-swfobject-1.2.1.tgz#2cdf07272d40a0c3d5abfc7cac377d9ed61bfa59"
-  dependencies:
-    swfobject-npm "^2.3.0-1"
-
 angular-translate-loader-static-files@^2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/angular-translate-loader-static-files/-/angular-translate-loader-static-files-2.18.1.tgz#ad0c3c883b18b089bdb8db02bbd366d903f857cc"
@@ -7138,10 +7132,6 @@ svgo@^0.7.0:
     mkdirp "~0.5.1"
     sax "~1.2.1"
     whet.extend "~0.9.9"
-
-swfobject-npm@^2.3.0-1:
-  version "2.3.0-1"
-  resolved "https://registry.yarnpkg.com/swfobject-npm/-/swfobject-npm-2.3.0-1.tgz#6940c55010a46016fd89cecbfb82505cc7a4063e"
 
 table@4.0.2:
   version "4.0.2"

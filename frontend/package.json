@@ -73,7 +73,6 @@
     "angular-resource": "^1.7.2",
     "angular-route": "^1.7.2",
     "angular-sanitize": "^1.7.2",
-    "angular-swfobject": "^1.2.1",
     "angular-translate": "^2.18.1",
     "angular-translate-loader-static-files": "^2.18.1",
     "angular-ui-router": "1.0.19",

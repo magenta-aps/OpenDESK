@@ -9,7 +9,6 @@ angular
     'ui.router',
     'pascalprecht.translate',
     'ngResource',
-    'swfobject',
     'isteven-multi-select',
     'm43nu.auto-height',
     'dcbImgFallback',
