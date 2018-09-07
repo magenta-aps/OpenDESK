@@ -12,11 +12,9 @@ import 'angular-sanitize'
 import 'angular-translate'
 import 'angular-translate-loader-static-files'
 import 'angular-ui-router'
-import 'isteven-angular-multiselect/isteven-multi-select'
 
 import 'angular-material/angular-material.css'
 import 'angular-material-data-table/dist/md-data-table.min.css'
-import 'isteven-angular-multiselect/isteven-multi-select.css'
 
 // Modules
 import './app.module'
