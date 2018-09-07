@@ -401,10 +401,6 @@ angular-i18n@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/angular-i18n/-/angular-i18n-1.7.2.tgz#34e59d0f52380e6edcb8ee10f17fb191e04af8d9"
 
-angular-img-fallback@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/angular-img-fallback/-/angular-img-fallback-0.2.0.tgz#d25d1ecf7d402caef7bb9915a1d11d701795a5ef"
-
 angular-img-http-src@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/angular-img-http-src/-/angular-img-http-src-1.0.1.tgz#6d519a5515e6be0dfc7a53728810b00832c396fb"

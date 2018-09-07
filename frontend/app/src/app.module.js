@@ -9,7 +9,6 @@ angular
     'ui.router',
     'pascalprecht.translate',
     'ngResource',
-    'dcbImgFallback',
     'dndLists',
     'angular.img',
     'openDeskApp.backendConfig',
