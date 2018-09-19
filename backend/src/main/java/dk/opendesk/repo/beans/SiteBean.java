@@ -585,19 +585,22 @@ public class SiteBean {
         //Get Manager
         if (!manager.isEmpty()) {
             JSONObject managerObj = personBean.getPersonInfo(manager);
-            json.put("manager", managerObj);
+            if(managerObj != null)
+                json.put("manager", managerObj);
         }
 
         //Get Owner
         if (!owner.isEmpty()) {
             JSONObject ownerObj = personBean.getPersonInfo(owner);
-            json.put("owner", ownerObj);
+            if(ownerObj != null)
+                json.put("owner", ownerObj);
         }
 
         //Get Creator
         String creator = nodeService.getProperty(n, ContentModel.PROP_CREATOR).toString();
         JSONObject creatorObj = personBean.getPersonInfo(creator);
-        json.put("creator", creatorObj);
+        if(creatorObj != null)
+            json.put("creator", creatorObj);
 
         //Get Member list
         JSONArray membersArray = new JSONArray();
