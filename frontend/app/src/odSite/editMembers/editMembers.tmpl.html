@@ -13,20 +13,20 @@
 		<md-dialog-content>
 			<md-content class="md-padding" layout="column">
 				<div ng-repeat="(groupIndex, group) in vm.groups">
-					<div ng-if="group[0].multipleMembers">
+					<div ng-if="group.multipleMembers">
 						<h4 ng-click="showGroupList[groupIndex] = !showGroupList[groupIndex]"
 							class="group-toggle"
 							layout="row"
 							ng-class="showGroupList[groupIndex] ? 'closed' : 'open'"
-							aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}">
-							<span>{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}</span>
+							aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}">
+							<span>{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}</span>
 							<span flex></span>
 							<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 						</h4>
 						<div ng-show="!showGroupList[groupIndex]">
-							<md-chips ng-model="group[1]" md-autocomplete-snap md-require-match="true"
-									  md-on-remove="vm.removeMemberFromSite($chip, group[0].shortName)"
-									  md-on-add="vm.addMemberToSite($chip, group[0].shortName)">
+							<md-chips ng-model="group.members" md-autocomplete-snap md-require-match="true"
+									  md-on-remove="vm.removeMemberFromSite($chip, group.shortName)"
+									  md-on-add="vm.addMemberToSite($chip, group.shortName)">
 								<md-autocomplete md-selected-item="selectedProjGrpItem"
 												 md-search-text="vm.searchTextList[groupIndex]"
 												 md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
@@ -69,7 +69,7 @@
 						<label>Rolle</label>
 						<md-select ng-model="externalUser.group">
 							<md-option ng-repeat="group in vm.groups | filter: vm.groupFilter" ng-value="group">
-								{{'SITES.' + vm.site.type + '.GROUPS.' + group[0].shortName | translate}}
+								{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}
 							</md-option>
 						</md-select>
 					</md-input-container>

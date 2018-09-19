@@ -342,7 +342,7 @@ public class SiteBean {
     }
 
     public JSONArray getAuthorities(String siteShortName) throws JSONException {
-        return getMembers(siteShortName, true);
+        return getAuthorityGroups(siteShortName, true);
     }
 
     private List<String> getAuthorityList(String siteShortName, boolean authorities) throws JSONException {
@@ -445,14 +445,12 @@ public class SiteBean {
      * @param siteShortName short name of a site.
      * @return a JSONArray containing JSONObjects for each group and each of their members.
      */
-    private JSONArray getMembers(String siteShortName, boolean authorities) throws JSONException {
+    private JSONArray getAuthorityGroups(String siteShortName, boolean authorities) throws JSONException {
         String siteType = getSiteType(siteShortName);
         JSONArray result = new JSONArray();
         for (Object groupObject : getSiteGroups(siteType)) {
 
-            JSONArray json = new JSONArray();
             JSONObject groupJSON = (JSONObject) groupObject;
-            json.add(groupJSON);
 
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             JSONArray members;
@@ -460,8 +458,8 @@ public class SiteBean {
                 members = authorityBean.getAuthorities(groupAuthorityName);
             else
                 members = authorityBean.getUsers(groupAuthorityName);
-            json.add(members);
-            result.add(json);
+            groupJSON.put("members", members);
+            result.add(groupJSON);
         }
 
         return result;
@@ -703,7 +701,7 @@ public class SiteBean {
      * @return a JSONArray containing JSONObjects for each group and each of their members.
      */
     public JSONArray getUsers(String siteShortName) throws JSONException {
-        return getMembers(siteShortName, false);
+        return getAuthorityGroups(siteShortName, false);
     }
 
     /**

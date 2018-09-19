@@ -107,11 +107,13 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
 
     siteService.addMember(siteShortName, authorityName, groupName)
       .then(function () {
-        for (var i = 0; i < vm.groups.length; i++)
-          if (vm.groups[i][0].role === groupName) {
-            vm.groups[i][1].push(authority)
+        for (var i = 0; i < vm.groups.length; i++) {
+          var group = vm.groups[i]
+          if (group.shortName === groupName) {
+            group.members.push(authority)
             break
           }
+        }
       })
   }
 
