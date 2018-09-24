@@ -5,6 +5,7 @@ import '../shared/filters/customDateFilter'
 import '../shared/directives/breadcrumb'
 import overviewTemplate from './view/overview.html'
 import conversationTemplate from './view/conversation.html'
+import newDiscussion from './view/newThread.tmpl.html'
 
 angular.module('openDeskApp.discussion', ['ckEditor'])
   .config(['$stateProvider', config])
@@ -31,8 +32,18 @@ function config ($stateProvider) {
       views: {
         'discussions': {
           template: conversationTemplate,
-          controller: 'DiscussionController',
+          controller: 'DiscussionDetailController',
           controllerAs: 'vm'
+        }
+      }
+    })
+    .state('project.new-discussion', {
+      url: '/ny',
+      views: {
+        'discussions': {
+          template: newDiscussion
+          // controller: 'DiscussionController',
+          // controllerAs: 'vm'
         }
       }
     })

@@ -9,6 +9,18 @@
   display: inline-block;
 }
 
+.discussion {
+  width: 100%;
+
+  thead {
+    text-align: left;
+  }
+}
+
+.right-align {
+  text-align: right;
+}
+
 .od-discussion {
   border-collapse: collapse;
   display: block;

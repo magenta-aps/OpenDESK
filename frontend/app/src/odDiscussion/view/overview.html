@@ -1,99 +1,106 @@
-<breadcrumb paths=""></breadcrumb>
+<!-- <breadcrumb paths=""></breadcrumb> -->
 
 <div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
-    <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+  <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
 
 <md-list class="sort-head" ng-show="vm.discussions.length > 0">
-    <table class="od-members od-members-row">
-        <col style="width:32px">
-        <col style="width:40%">
-		<col style="width:20%">
-		<col style="width:25%">
-		<col style="width:5%">
-        <col style="width:32px">
-        <col style="width:32px">
-        <thead ng-show="vm.discussions.length > 0" fix-head>
-            <tr>
-                <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'DISCUSSIONS.TITLE' | translate}}</th>
-                <th class="od-secondary" sort-table="created" title="Sortér kolonne">{{'DISCUSSIONS.CREATED_AT' | translate}}</th>
-                <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'DISCUSSIONS.LATEST_REPLY' | translate}}</th>
-                <th class="od-secondary" colspan="3">{{'DISCUSSIONS.REPLIES' | translate}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="discussion in vm.discussions | orderBy: '-lastReplyOn' 
-                        | filter:{isSubscribed: vm.searchSubscribed, author: {username: vm.searchUser}}">
-                <td class="icon">
-                    <i class="material-icons">chat_bubble_outline</i>
-                </td>
-                <td>
-                    <a class="od-filebrowser-link od-secondary overflow" ng-href="{{vm.viewThread(discussion)}}" ng-click="vm.getReplies(discussion)">
-                        <h3>{{discussion.title}}</h3>
-                        <span>{{discussion.author.firstName}} {{discussion.author.lastName}}</span>
-                    </a>
-                </td>
-                <td>
-                    <a class="od-filebrowser-link od-secondary" ng-href="{{vm.viewThread(discussion)}}">{{discussion.createdOn | customDate}}</a>
-                </td>
-                <td>
-                    <a ng-if="discussion.lastReplyBy" class="od-filebrowser-link od-secondary" ng-href="{{vm.viewThread(discussion)}}">
-                                {{discussion.lastReplyOn | customDate}} af {{discussion.lastReplyBy.firstName}} {{discussion.lastReplyBy.lastName}}
-                            </a>
-                </td>
-                <td>
-                    <a class="od-filebrowser-link od-secondary" ng-href="">{{discussion.totalReplyCount}}</a>
-                </td>
-                <td>
-                    <i ng-click='vm.changeSubscription(discussion)' class="clickable material-icons od-secondary" style="outline:0;">{{vm.subscriptionIcon(discussion.isSubscribed)}}</i>
-                </td>
-                <td>
-                    <md-menu ng-if="discussion.permissions.delete">
-                        <md-button class="md-icon-button" ng-click="$mdMenu.open()">
-                            <md-icon md-menu-origin>more_vert</md-icon>
-                        </md-button>
+  <table class="od-members od-members-row">
+    <col style="width:32px">
+    <col style="width:40%">
+    <col style="width:20%">
+    <col style="width:25%">
+    <col style="width:5%">
+    <col style="width:32px">
+    <col style="width:32px">
+    <thead fix-head>
+      <tr>
+        <th class="od-secondary" colspan="2" sort-table="name" sort-default="!reverse" title="Sortér kolonne">{{'DISCUSSIONS.TITLE'
+          | translate}}</th>
+        <th class="od-secondary" sort-table="created" title="Sortér kolonne">{{'DISCUSSIONS.CREATED_AT' | translate}}</th>
+        <th class="od-secondary" sort-table="lastChanged" title="Sortér kolonne">{{'DISCUSSIONS.LATEST_REPLY' | translate}}</th>
+        <th class="od-secondary" colspan="3">{{'DISCUSSIONS.REPLIES' | translate}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="discussion in vm.discussions | orderBy: '-lastReplyOn' | filter:{isSubscribed: vm.searchSubscribed, author: {username: vm.searchUser}}"
+        ng-click="vm.viewThread(discussion)">
+        <td class="icon">
+          <i class="material-icons">chat_bubble_outline</i>
+        </td>
+        <td>
+          <a class="od-filebrowser-link od-secondary overflow">
+            <h3>{{discussion.title}}</h3>
+            <span>{{discussion.author.firstName}} {{discussion.author.lastName}}</span>
+          </a>
+        </td>
+        <td>
+          <a class="od-filebrowser-link od-secondary">{{discussion.createdOn | customDate}}</a>
+        </td>
+        <td>
+          <a ng-if="discussion.lastReplyBy" class="od-filebrowser-link od-secondary">
+            {{discussion.lastReplyOn | customDate}} af {{discussion.lastReplyBy.firstName}} {{discussion.lastReplyBy.lastName}}
+          </a>
+        </td>
+        <td>
+          <a class="od-filebrowser-link od-secondary">{{discussion.totalReplyCount}}</a>
+        </td>
+        <td>
+          <md-icon ng-click='vm.changeSubscription(discussion); $event.stopPropagation()' class="clickable material-icons od-secondary"
+            style="outline:0;">
+            {{vm.subscriptionIcon(discussion.isSubscribed)}}
+          </md-icon>
+        </td>
+        <td>
+          <md-menu ng-if="discussion.permissions.delete">
+            <md-button class="md-icon-button" ng-click="$mdMenu.open(); $event.stopPropagation()">
+              <md-icon md-menu-origin>more_vert</md-icon>
+            </md-button>
 
-                        <md-menu-content width="3">
-                            <md-menu-item>
-                                <md-button ng-click="vm.deleteDiscussion(discussion)">
-                                    <md-icon md-menu-align-target>delete</md-icon>
-                                    {{'COMMON.DELETE' | translate }}
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="vm.editTitleDialog(discussion)">
-                                    <md-icon md-menu-align-target>edit</md-icon>
-                                    {{'COMMON.EDIT' | translate}} {{'DISCUSSIONS.TITLE' | translate | lowercase}}
-                                </md-button>
-                            </md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            <md-menu-content width="3">
+              <md-menu-item>
+                <md-button ng-click="vm.deleteDiscussion(discussion)">
+                  <md-icon md-menu-align-target>delete</md-icon>
+                  {{'COMMON.DELETE' | translate }}
+                </md-button>
+              </md-menu-item>
+              <md-menu-item>
+                <md-button ng-click="vm.editTitleDialog(discussion)">
+                  <md-icon md-menu-align-target>edit</md-icon>
+                  {{'COMMON.EDIT' | translate}} {{'DISCUSSIONS.TITLE' | translate | lowercase}}
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </md-list>
 
 <div layout="column" ng-show="vm.discussions.length === 0">
-    <md-icon class="md-icon--large">chat_bubble_outline</md-icon>
-    <p class="md-display-1" style="text-align:center">{{'DISCUSSIONS.NO_DISCUSSIONS' | translate}}</p>
+  <md-icon class="md-icon--large">chat_bubble_outline</md-icon>
+  <p class="md-display-1" style="text-align:center">{{'DISCUSSIONS.NO_DISCUSSIONS' | translate}}</p>
 </div>
 
 <md-divider></md-divider>
 
-<md-card-actions layout="row" layout-align="start center">
+<span layout="row" layout-align="start center">
 
-    <md-input-container>
-        <md-select name="type" ng-model="vm.search" md-on-close='vm.evaluateFilter()'>
-            <md-option ng-selected="true" value="all">{{'DISCUSSIONS.SORT.ALL' | translate}}</md-option>
-            <md-option value="mine">{{'DISCUSSIONS.SORT.MINE' | translate}}</md-option>
-            <md-option value="follow">{{'DISCUSSIONS.SORT.FOLLOW' | translate}}</md-option>
-        </md-select>
-    </md-input-container>
+  <md-input-container>
+    <md-select name="type" ng-model="vm.search" md-on-close='vm.evaluateFilter()'>
+      <md-option ng-selected="true" value="all">{{'DISCUSSIONS.SORT.ALL' | translate}}</md-option>
+      <md-option value="mine">{{'DISCUSSIONS.SORT.MINE' | translate}}</md-option>
+      <md-option value="follow">{{'DISCUSSIONS.SORT.FOLLOW' | translate}}</md-option>
+    </md-select>
+  </md-input-container>
 
-    <span flex></span>
+  <span flex></span>
 
-    <md-button ng-if="vm.permissions.canEdit" ng-click="vm.newDiscussionDialog()" class="md-primary" aria-label="ny diskussion">
-        <span>{{'DISCUSSIONS.NEW' | translate}}</span>
-    </md-button>
-</md-card-actions>
+  <!-- <md-button ng-if="vm.permissions.canEdit" ng-click="vm.newDiscussionDialog()" class="md-primary" aria-label="ny diskussion">
+    <span>{{'DISCUSSIONS.NEW' | translate}}</span>
+  </md-button> -->
+  <md-button ng-if="vm.permissions.canEdit" ui-sref="project.new-discussion" class="md-primary" aria-label="ny diskussion">
+    <span>{{'DISCUSSIONS.NEW' | translate}}</span>
+  </md-button>
+</span>

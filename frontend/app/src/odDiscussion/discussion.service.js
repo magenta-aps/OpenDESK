@@ -3,10 +3,9 @@ import '../shared/services/nodeRefUtils.service'
 import '../shared/services/preference.service'
 
 angular.module('openDeskApp.discussion')
-  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'UserService', 'sessionService',
-    'preferenceService', discussionService])
+  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'sessionService', 'preferenceService', discussionService])
 
-function discussionService ($http, nodeRefUtilsService, UserService, sessionService, preferenceService) {
+function discussionService ($http, nodeRefUtilsService, sessionService, preferenceService) {
   var restBaseUrl = '/alfresco/s/api'
 
   var service = {
@@ -16,8 +15,7 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
     getDiscussionFromNodeRef: getDiscussionFromNodeRef,
     getDiscussions: getDiscussions,
     getReplies: getReplies,
-    subscribeToDiscussion: subscribeToDiscussion,
-    unSubscribeToDiscussion: unSubscribeToDiscussion,
+    subscribe: subscribe,
     updatePost: updatePost
   }
 
@@ -30,22 +28,15 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
     } else { return 'assets/img/avatars/blank-profile-picture.png' }
   }
 
-  function getDiscussionFromNodeRef (siteShortName, nodeId) {
-    // return getDiscussions(siteShortName)
-    //   .then(function (response) {
-    //     response.items.forEach(function (discussion) {
-    //       if (discussion.nodeRef.split('/')[3] === nodeId)
-    //         return discussion
-    //     })
-    //   })
-    return $http.get(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + nodeId, {})
+  function getDiscussionFromNodeRef (nodeId) {
+    return $http.get(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + nodeId)
       .then(function (response) {
         return response.data.item
       })
   }
 
   function getDiscussions (siteShortName) {
-    return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {})
+    return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts')
       .then(function (response) {
         addSubscriptionFlag(siteShortName, response.data.items)
         return response.data
@@ -54,7 +45,7 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
 
   function getReplies (postItem) {
     postItem.author.avatarUrl = getAvatarUrl(postItem.author.avatarRef)
-    return $http.get(restBaseUrl + postItem.repliesUrl, {})
+    return $http.get(restBaseUrl + postItem.repliesUrl)
       .then(function (response) {
         var items = response.data.items
         items.forEach(function (reply) {
@@ -65,46 +56,44 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
   }
 
   function addDiscussion (siteShortName, title, content) {
-    return $http.post(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', {
+    var payload = {
       title: title,
       content: content
-    }).then(function (response) {
-      return response.data
-    })
+    }
+
+    return $http.post(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts', payload)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function addReply (postItem, content) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
-    return $http.post(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id + '/replies', {
-      content: content
-    }).then(function (response) {
-      return response.data
-    })
+    var payload = { content: content }
+    return $http.post(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id + '/replies', payload)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function updatePost (postItem, title, content) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
-    return $http.put(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {
+    var payload = {
       title: title,
       content: content
-    }).then(function (response) {
-      return response.data
-    })
+    }
+    return $http.put(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, payload)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function deletePost (postItem) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
-    return $http.delete(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id, {}).then(function (response) {
-      return response.data
-    })
-  }
-
-  function subscribeToDiscussion (siteShortName, postItem) {
-    setSubscribe(siteShortName, postItem, true)
-  }
-
-  function unSubscribeToDiscussion (siteShortName, postItem) {
-    setSubscribe(siteShortName, postItem, false)
+    return $http.delete(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function isSubscribedToDiscussion (siteShortName, postItem) {
@@ -120,7 +109,7 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
 
   // Private methods
 
-  function setSubscribe (siteShortName, postItem, value) {
+  function subscribe (siteShortName, postItem, value) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
     var preferenceFilter = getSubscribePreferenceFilter(siteShortName, id)
     var preferences = {}
@@ -135,9 +124,10 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
 
   function addSubscriptionFlag (siteShortName, postItems) {
     postItems.forEach(function (postItem) {
-      isSubscribedToDiscussion(siteShortName, postItem).then(function (response) {
-        postItem.isSubscribed = response
-      })
+      isSubscribedToDiscussion(siteShortName, postItem)
+        .then(function (response) {
+          postItem.isSubscribed = response
+        })
     })
   }
 }

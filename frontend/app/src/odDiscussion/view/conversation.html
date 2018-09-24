@@ -1,7 +1,6 @@
-
 <span class="discussion-back" ng-click="vm.viewDiscussions()">
-            <md-icon>arrow_back</md-icon> {{'DISCUSSIONS.DISCUSSIONS' | translate }}
-        </span>
+    <md-icon>arrow_back</md-icon> {{'DISCUSSIONS.DISCUSSIONS' | translate }}
+</span>
 <h1 class="discussion-title md-display-1">{{vm.selectedDiscussion.title}}</h1>
 
 <table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)">
@@ -40,7 +39,7 @@
             </td>
         </tr>
 
-         <tr class="seperator" ng-repeat="reply in vm.replies" id="{{reply.name}}">
+        <tr class="seperator" ng-repeat="reply in vm.replies" id="{{reply.name}}">
             <td class="avatar-container">
                 <img src="{{reply.author.avatarUrl}}" class="avatar">
                 <h3 class="md-title">{{reply.author.firstName}} {{reply.author.lastName}}</h3>
@@ -77,10 +76,14 @@
     </tbody>
 </table>
 
-<md-card-actions layout="row" layout-align="start center">
-    <span flex></span>
+<form ng-if="vm.permissions.canEdit" name="newReplyForm" ng-submit="vm.reply(changedContent)">
+    <strong>{{'COMMON.REPLY' | translate }}</strong>
+    <ck-editor value="''" callback="ckEditorCallback"></ck-editor>
 
-    <md-button ng-if="vm.permissions.canEdit" ng-click="vm.replyDialog()" class="md-primary" aria-label="{{'COMMON.REPLY' | translate }}">
-        <span>{{'COMMON.REPLY' | translate }}</span>
-    </md-button>
-</md-card-actions>
+    <span layout="row" layout-align="start center">
+        <span flex></span>
+        <md-button class="md-primary" type="submit" aria-label="{{'COMMON.REPLY' | translate }}">
+            <span>{{'COMMON.REPLY' | translate }}</span>
+        </md-button>
+    </span>
+</form>
