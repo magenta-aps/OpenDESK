@@ -10,7 +10,7 @@
     <!-- Folders -->
     <md-list-item ng-repeat="node in vm.currentNode.children" ng-show="vm.isFolder(node)" ng-class="vm.equalsSelectedNode(node) ? 'picked' : ''"
         ng-click="vm.pickNode(node)">
-        <i class="material-icons" ng-switch="node.rootName">
+        <i class="material-icons" ng-switch="node.rootName" style="padding-right: 5px">
             <span ng-switch-when="my-docs">library_books</span>
             <span ng-switch-when="shared-docs">group</span>
             <span ng-switch-when="sites">forum</span>
@@ -25,7 +25,7 @@
 
     <!-- Documents and Links -->
     <md-list-item ng-repeat="node in vm.currentNode.children" ng-show="!vm.isFolder(node)">
-        <i class="material-icons">
+        <i class="material-icons" style="padding-right: 5px">
             <img ng-show="node.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{node.thumbNailURL}}" onerror="this.src='assets/img/filetypes/generic-file-24.png'">
         </i>
         <span class='content-name document-name'>{{node.name}}</span>
