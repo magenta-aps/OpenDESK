@@ -1,41 +1,32 @@
 <!-- Parent -->
-<md-list-item
-style="background:#ccc; margin: -1rem -1rem 0"
-ng-show="vm.hasParent()" ng-class="vm.equalsSelectedNode(vm.currentNode) ? 'picked' : ''"
+<md-list-item style="background:#ccc; margin: -1rem -1rem 0" ng-show="vm.hasParent()" ng-class="vm.equalsSelectedNode(vm.currentNode) ? 'picked' : ''"
     ng-click="vm.pickNode(vm.currentNode)">
-    <md-button
-           class="md-icon-button back"
-           ng-click="vm.browseParent()">
+    <md-button class="md-icon-button back" ng-click="vm.browseParent()">
         <md-icon>navigate_before</md-icon>
     </md-button>
-   <p style="color:#333"><strong>{{ vm.currentNode.name }}</strong></p>
+    <p style="color:#333"><strong>{{ vm.currentNode.name }}</strong></p>
 </md-list-item>
 <md-list class="picker-list">
     <!-- Folders -->
-    <md-list-item ng-repeat="node in vm.currentNode.children"
-                  ng-show="vm.isFolder(node)"
-                  ng-class="vm.equalsSelectedNode(node) ? 'picked' : ''"
-                  ng-click="vm.pickNode(node)">
-
-        <i class="material-icons">folder_open</i>
+    <md-list-item ng-repeat="node in vm.currentNode.children" ng-show="vm.isFolder(node)" ng-class="vm.equalsSelectedNode(node) ? 'picked' : ''"
+        ng-click="vm.pickNode(node)">
+        <i class="material-icons" ng-switch="node.rootName">
+            <span ng-switch-when="my-docs">library_books</span>
+            <span ng-switch-when="shared-docs">group</span>
+            <span ng-switch-when="sites">forum</span>
+            <span ng-switch-default>folder_open</span>
+        </i>
         <span class='content-name'>{{node.name}}</span>
         <span flex></span>
-        <md-button class="md-icon-button"
-                   ng-click="vm.browseChild(node); $event.stopPropagation();">
+        <md-button class="md-icon-button" ng-click="vm.browseChild(node); $event.stopPropagation();">
             <md-icon>navigate_next</md-icon>
         </md-button>
     </md-list-item>
 
     <!-- Documents and Links -->
-    <md-list-item ng-repeat="node in vm.currentNode.children"
-                  ng-show="!vm.isFolder(node)">
-
+    <md-list-item ng-repeat="node in vm.currentNode.children" ng-show="!vm.isFolder(node)">
         <i class="material-icons">
-            {{node.contentType == 'cmis:link' ? 'link' : ''}}
-            <img class="md-avatar"
-                 ng-show="node.contentType === 'cmis:document'"
-                 ng-src="assets/img/filetypes/{{node.thumbNailURL}}"
-                 onerror="this.src='assets/img/filetypes/generic-file-24.png'">
+            <img ng-show="node.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{node.thumbNailURL}}" onerror="this.src='assets/img/filetypes/generic-file-24.png'">
         </i>
         <span class='content-name document-name'>{{node.name}}</span>
     </md-list-item>

@@ -38,6 +38,7 @@ function NodePickerService ($http, $translate, translateService, alfrescoNodeSer
           item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
           translateName(item)
         })
+        console.log(nodeInfo)
         translateName(nodeInfo)
         return nodeInfo
       })
