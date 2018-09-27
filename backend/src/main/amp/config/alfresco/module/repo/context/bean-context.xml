@@ -47,6 +47,10 @@
     <bean id="nodeBean" class="dk.opendesk.repo.beans.NodeBean">
         <property name="notificationBean" ref="notificationBean"/>
         <property name="personBean" ref="personBean"/>
+        <property name="contentService" ref="ContentService"/>
+        <property name="dictionaryService" ref="DictionaryService"/>
+        <property name="fileFolderService" ref="FileFolderService"/>
+        <property name="namespaceService" ref="NamespaceService"/>
         <property name="nodeService" ref="NodeService"/>
         <property name="permissionService" ref="PermissionService"/>
         <property name="repository" ref="repositoryHelper"/>

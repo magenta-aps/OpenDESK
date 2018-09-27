@@ -15,6 +15,7 @@
 		</md-card>
 
 		<div flex="25">
+			<od-view-metadata ng-if="DC.loaded" node="DC.doc"></od-view-metadata>
             <document-history selected-version="DC.docHasParent ? DC.nodeId : undefined" history="DC.history"></document-history>
             <document-actions doc="DC.doc"></document-actions>
             <document-review ng-if="DC.reviewId" review-id="DC.reviewId"></document-review>

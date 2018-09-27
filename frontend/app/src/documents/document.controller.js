@@ -58,7 +58,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
 
     paths.push({
       title: response.item.location.file,
-      link: response.item.location.path
+      link: 'document({doc: "' + vm.parentNodeId + '"})'
     })
     return paths
   }

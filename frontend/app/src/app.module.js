@@ -23,6 +23,7 @@ angular
     'openDeskApp.dashboard',
     'openDeskApp.lool',
     'openDeskApp.onlyOffice',
+    'openDeskApp.metadata',
     'openDeskApp.documents',
     'openDeskApp.odDocuments',
     'openDeskApp.search',

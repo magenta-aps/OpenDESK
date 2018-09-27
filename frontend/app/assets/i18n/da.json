@@ -1058,5 +1058,14 @@
     "SENDERFIRSTNAME" : "Afsenders fornavn",
     "SENDERLASTNAME" : "Afsenders efternavn",
     "SENDERUSERNAME" : "Afsenders brugernavn"
+  },
+  "PROPERTY": {
+    "cm:author": "Forfatter",
+    "cm:created": "Oprettet d.",
+    "cm:creator": "Oprettet af",
+    "cm:modified": "Ændret d.",
+    "cm:modifier": "Ændret af",
+    "cm:name": "Navn",
+    "cm:versionLabel": "Version"
   }
 }

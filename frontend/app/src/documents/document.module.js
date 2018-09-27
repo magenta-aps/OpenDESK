@@ -1,6 +1,7 @@
 'use strict'
 import '../shared/directives/breadcrumb'
 import documentTemplate from './view/document.html'
+import editDocumentTemplate from './view/editDocument.html'
 import documentActionsTemplate from './action/action.html'
 import documentHistoryTemplate from './history/history.html'
 import documentReviewTemplate from './review/review.html'
@@ -158,6 +159,19 @@ function config ($stateProvider, USER_ROLES) {
     views: {
       'content@': {
         template: documentTemplate,
+        controller: 'DocumentController',
+        controllerAs: 'DC'
+      }
+    },
+    params: {
+      authorizedRoles: [USER_ROLES.user]
+    }
+  }).state('editDocument', {
+    parent: 'site',
+    url: '/dokument/:doc/edit',
+    views: {
+      'content@': {
+        template: editDocumentTemplate,
         controller: 'DocumentController',
         controllerAs: 'DC'
       }

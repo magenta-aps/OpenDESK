@@ -6,6 +6,9 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteMembership;
 import org.alfresco.repo.site.SiteModel;
+import org.alfresco.service.cmr.dictionary.*;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -35,6 +38,10 @@ public class NodeBean {
     private NotificationBean notificationBean;
     private PersonBean personBean;
 
+    private DictionaryService dictionaryService;
+    private ContentService contentService;
+    private FileFolderService fileFolderService;
+    private NamespaceService namespaceService;
     private NodeService nodeService;
     private PermissionService permissionService;
     private Repository repository;
@@ -49,6 +56,18 @@ public class NodeBean {
         this.personBean = personBean;
     }
 
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -486,6 +505,26 @@ public class NodeBean {
         return repository.getCompanyHome();
     }
 
+    public JSONObject getConstraint(ConstraintDefinition constraintDefinition) throws JSONException {
+        JSONObject result = new JSONObject();
+        Constraint constraint = constraintDefinition.getConstraint();
+        String type = constraint.getType();
+        result.put("type", type);
+        Map<String, Object> parametersMap = constraint.getParameters();
+        JSONObject parameters = new JSONObject(parametersMap);
+        result.put("parameters", parameters);
+        return result;
+    }
+
+    public JSONArray getConstraints(List<ConstraintDefinition> constraints) throws JSONException {
+        JSONArray result = new JSONArray();
+        for (ConstraintDefinition constraintDefinition : constraints) {
+            JSONObject constraint = getConstraint(constraintDefinition);
+            result.add(constraint);
+        }
+        return result;
+    }
+
     /**
      * Gets the User Home.
      * @return the nodeRef of User Home.
@@ -513,6 +552,93 @@ public class NodeBean {
     public List<NodeRef> getMyDocs() {
         NodeRef userHomeRef = getUserHome();
         return getChildren(userHomeRef);
+    }
+
+    private NodeRef getNodeByPath(List<String> path) throws FileNotFoundException {
+        NodeRef companyHome = repository.getCompanyHome();
+        return fileFolderService.resolveNamePath(companyHome, path).getNodeRef();
+    }
+
+    public JSONObject getPropertyDefinition(QName propertyName) throws JSONException {
+        JSONObject result = new JSONObject();
+        PropertyDefinition propertyDef = dictionaryService.getProperty(propertyName);
+        String title = propertyDef.getTitle();
+        result.put("title", title);
+        String description = propertyDef.getDescription();
+        result.put("description", description);
+        DataTypeDefinition dataType = propertyDef.getDataType();
+        if(dataType != null) {
+            QName dataTypeQName = dataType.getName();
+            QName dataTypePrefixedQName = dataTypeQName.getPrefixedQName(namespaceService);
+            String prefixString = dataTypePrefixedQName.toPrefixString();
+            result.put("dataTypeName", prefixString);
+        }
+        String defaultValue = propertyDef.getDefaultValue();
+        result.put("defaultValue", defaultValue);
+        boolean mandatory = propertyDef.isMandatory();
+        result.put("mandatory", mandatory);
+        boolean multiValued = propertyDef.isMultiValued();
+        result.put("multiValued", multiValued);
+        List<ConstraintDefinition> constraintDefinitions = propertyDef.getConstraints();
+        JSONArray constraints = getConstraints(constraintDefinitions);
+        result.put("constraints", constraints);
+
+        return result;
+    }
+
+    public JSONObject getPropertyDefinitions(NodeRef nodeRef) throws JSONException {
+        JSONObject result = new JSONObject();
+        Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+        for(QName propertyName : properties.keySet()) {
+            JSONObject propertyDefinition = getPropertyDefinition(propertyName);
+            QName propertyNamePrefixedQName = propertyName.getPrefixedQName(namespaceService);
+            String prefixString = propertyNamePrefixedQName.toPrefixString();
+            result.put(prefixString, propertyDefinition);
+        }
+        return result;
+    }
+
+    private NodeRef getPropertyUIDefinitionsNode(QName typeName) throws FileNotFoundException {
+        List<String> path = new ArrayList<>(OpenDeskModel.PATH_OD_PROPERTY_UI_DEFINITIONS);
+        QName typeNamePrefixedQName = typeName.getPrefixedQName(namespaceService);
+        String prefixString = typeNamePrefixedQName.toPrefixString();
+        String prefixLocal[] = QName.splitPrefixedQName(prefixString);
+        path.add(prefixLocal[0]);
+        path.add(prefixLocal[1] + ".json");
+        return getNodeByPath(path);
+    }
+
+    public JSONObject getPropertyUIDefinitions(NodeRef nodeRef) throws FileNotFoundException, JSONException {
+        QName type = nodeService.getType(nodeRef);
+        return getPropertyUIDefinitions(type);
+    }
+
+    public JSONObject getPropertyUIDefinitions(QName typeName) throws FileNotFoundException, JSONException {
+        NodeRef nodeRef = getPropertyUIDefinitionsNode(typeName);
+        ContentReader reader = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+        String contentString = reader.getContentString();
+        return new JSONObject(contentString);
+    }
+
+    public JSONObject getPropertyUIDefinition(QName typeName, String property) throws FileNotFoundException, JSONException {
+        JSONObject propertyUIDefinitions = getPropertyUIDefinitions(typeName);
+        return propertyUIDefinitions.getJSONObject(property);
+    }
+
+    private NodeRef getWidgetNode() throws FileNotFoundException {
+        return getNodeByPath(OpenDeskModel.PATH_OD_PROPERTY_WIDGETS);
+    }
+
+    public JSONObject getWidgets() throws FileNotFoundException, JSONException {
+        NodeRef nodeRef = getWidgetNode();
+        ContentReader reader = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+        String contentString = reader.getContentString();
+        return new JSONObject(contentString);
+    }
+
+    public JSONObject getWidget(String property) throws FileNotFoundException, JSONException {
+        JSONObject propertyWidgets = getWidgets();
+        return propertyWidgets.getJSONObject(property);
     }
 
     /**
@@ -697,5 +823,21 @@ public class NodeBean {
         }
 
         return result;
+    }
+
+    public void updateProperties (NodeRef nodeRef, JSONObject propertiesObj) throws JSONException {
+        Map<QName, Serializable> properties = getProperties(propertiesObj);
+        nodeService.addProperties(nodeRef, properties);
+    }
+
+    private Map<QName, Serializable> getProperties(JSONObject propertiesObj) throws JSONException {
+        Map<QName, Serializable> map = new HashMap<>();
+        Iterator keys = propertiesObj.keys();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            QName qName = QName.createQName(key, namespaceService);
+            map.put(qName, propertiesObj.getString(key));
+        }
+        return map;
     }
 }

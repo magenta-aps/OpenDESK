@@ -102,6 +102,24 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+    <bean id="webscript.node.properties.put"
+          class="dk.opendesk.webscripts.node.UpdateProperties"
+          parent="webscript">
+        <property name="nodeBean" ref="nodeBean"/>
+    </bean>
+
+	<bean id="webscript.node.propertyDefinitions.get"
+		  class="dk.opendesk.webscripts.node.GetPropertyDefinitions"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+	<bean id="webscript.node.propertyUIDefinitions.get"
+		  class="dk.opendesk.webscripts.node.GetPropertyUIDefinitions"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.rename.put"
 		  class="dk.opendesk.webscripts.node.Rename"
 		  parent="webscript">

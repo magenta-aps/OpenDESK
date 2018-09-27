@@ -17,6 +17,10 @@ public interface OpenDeskModel {
     List<String> PATH_SPACE_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Space Templates"));
     List<String> PATH_OD_SETTINGS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
             "settings.xml"));
+    List<String> PATH_OD_PROPERTY_UI_DEFINITIONS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions"));
+    List<String> PATH_OD_PROPERTY_WIDGETS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions", "widgets.json"));
 
 
     // Containers
