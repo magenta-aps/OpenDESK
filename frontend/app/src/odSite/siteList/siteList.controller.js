@@ -50,9 +50,9 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   vm.sites = []
   vm.sitesPerUser = []
   vm.states = [
-    {key: 'ACTIVE', name: 'Igang'},
-    {key: 'CLOSED', name: 'Afsluttet'},
-    {key: '', name: 'Alle'}]
+    { key: 'ACTIVE', name: 'Igang' },
+    { key: 'CLOSED', name: 'Afsluttet' },
+    { key: '', name: 'Alle' }]
   vm.types = []
   vm.toggleFavourite = toggleFavourite
   vm.toggleFilters = toggleFilters
@@ -64,9 +64,9 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   activate()
 
   function activate () {
-    vm.types.push({key: 'Project', name: $translate.instant('SITES.Project.NAME')})
-    if (vm.config.enableProjects) vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')})
-    vm.types.push({key: '', name: $translate.instant('COMMON.ALL')})
+    vm.types.push({ key: 'Project', name: $translate.instant('SITES.Project.NAME') })
+    if (vm.config.enableProjects) vm.types.push({ key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME') })
+    vm.types.push({ key: '', name: $translate.instant('COMMON.ALL') })
 
     vm.sitesName = translateService.getSitesName()
     var title = $translate.instant(vm.sitesName)
@@ -166,7 +166,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
   function toggleFilters () {
     vm.showFilters = !vm.showFilters
-    $interval(function () {}, 1, 1000)
+    $interval(function () { }, 1, 1000)
   }
 
   function renameSiteDialog (event, shortName, title, description) {
