@@ -920,10 +920,6 @@ angular-aria@^1.7.2:
   resolved "https://registry.yarnpkg.com/angular-aria/-/angular-aria-1.7.2.tgz#68cb3d15aece7a22517b1fe3e00d9d3807ceca88"
   integrity sha512-tnra11eAHwwMCgWg6Uo9WKZPXF6u4NcpK8xOfYbSWKdTil4aQjUwvEJWBp6r7h312oeIF1lb6hjXOYFg0PUsYw==
 
-"angular-auto-height@https://github.com/m43nu/angular-auto-height.git":
-  version "0.0.5"
-  resolved "https://github.com/m43nu/angular-auto-height.git#d0b4b96ee37b52b1e0b772d9bbd15afe4b031eb7"
-
 angular-cookies@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.7.2.tgz#cba3a9181d2a48c2d8195ff7fe329055fba970ba"
@@ -959,6 +955,11 @@ angular-i18n@^1.7.2:
   resolved "https://registry.yarnpkg.com/angular-i18n/-/angular-i18n-1.7.2.tgz#34e59d0f52380e6edcb8ee10f17fb191e04af8d9"
   integrity sha512-KzFgiWcxb4Glj8hD26vGDcecB8re8AZMyo+eI2YZU4yyAdQHRBawiW1TeS34WF9M9lFh4qxBJLzwQ+tlpxWfTQ==
 
+angular-img-http-src@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/angular-img-http-src/-/angular-img-http-src-1.0.1.tgz#6d519a5515e6be0dfc7a53728810b00832c396fb"
+  integrity sha1-bVGaVRXmvg38elNyiBCwCDLDlvs=
+
 angular-material-data-table@^0.10.10:
   version "0.10.10"
   resolved "https://registry.yarnpkg.com/angular-material-data-table/-/angular-material-data-table-0.10.10.tgz#229b402745ec1a146f07da8d1e526be6540849ee"
@@ -988,13 +989,6 @@ angular-sanitize@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.7.2.tgz#e9f6e6a3e966c479c02dbc5712bee6de031f8eef"
   integrity sha512-8XmhwhT+TwnLzz4VMq9kIqj9b2aBt4lgYWRw9s+Q8ysx0z/glDcnoPxMrlR/dXItlww8NM/1pscgO1bGVGdiXA==
-
-angular-swfobject@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/angular-swfobject/-/angular-swfobject-1.2.1.tgz#2cdf07272d40a0c3d5abfc7cac377d9ed61bfa59"
-  integrity sha1-LN8HJy1AoMPVq/x8rDd9ntYb+lk=
-  dependencies:
-    swfobject-npm "^2.3.0-1"
 
 angular-translate-loader-static-files@^2.18.1:
   version "2.18.1"
@@ -8230,11 +8224,6 @@ svgo@^0.7.0:
     mkdirp "~0.5.1"
     sax "~1.2.1"
     whet.extend "~0.9.9"
-
-swfobject-npm@^2.3.0-1:
-  version "2.3.0-1"
-  resolved "https://registry.yarnpkg.com/swfobject-npm/-/swfobject-npm-2.3.0-1.tgz#6940c55010a46016fd89cecbfb82505cc7a4063e"
-  integrity sha1-aUDFUBCkYBb9ic7L+4JQXMekBj4=
 
 table@4.0.2:
   version "4.0.2"
