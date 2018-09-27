@@ -5,31 +5,44 @@ import newTemplateTemplate from './view/newTemplate.tmpl.html'
 
 angular
   .module('openDeskApp')
-  .controller('TemplatesController', ['siteService', '$mdDialog', '$scope', 'systemSettingsService',
+  .controller('TemplatesController', ['$mdDialog', '$scope', 'siteService', 'systemSettingsService',
     TemplatesController])
 
-function TemplatesController (siteService, $mdDialog, $scope, systemSettingsService) {
+function TemplatesController ($mdDialog, $scope, siteService, systemSettingsService) {
   var vm = this
 
   vm.createTemplate = createTemplate
   vm.newTemplate = newTemplate
   vm.deleteSite = deleteSite
   vm.deleteSiteDialog = deleteSiteDialog
+  vm.templateSites = []
+
+  activate()
+
+  function activate () {
+    loadTemplates()
+  }
 
   function createTemplate (name, description) {
     siteService.createTemplate(name, description).then(function (response) {
-      $scope.templateSites.push(response[0])
+      vm.templateSites.push(response)
       $mdDialog.hide()
     })
   }
 
-  function newTemplate (event) {
+  function loadTemplates () {
+    systemSettingsService.getTemplates()
+      .then(function (response) {
+        vm.templateSites = response
+      })
+  }
+
+  function newTemplate () {
     $mdDialog.show({
       template: newTemplateTemplate,
       parent: angular.element(document.body),
       scope: $scope,
       preserveScope: true,
-      targetEvent: event,
       clickOutsideToClose: true
     })
   }
@@ -49,7 +62,7 @@ function TemplatesController (siteService, $mdDialog, $scope, systemSettingsServ
       function () {
         vm.deleteSite(siteName).then(function () {
           systemSettingsService.getTemplates().then(function (response) {
-            $scope.templateSites = response
+            vm.templateSites = response
             $mdDialog.hide()
           })
         })

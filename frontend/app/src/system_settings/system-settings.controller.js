@@ -21,15 +21,5 @@ function SystemSettingsCtrl (sessionService, pageService, systemSettingsService,
 
   browserService.setTitle($translate.instant('ADMIN.ADMINISTRATION_PAGES'))
 
-  $scope.templateSites = []
-
-  function loadTemplates () {
-    systemSettingsService.getTemplates()
-      .then(function (response) {
-        $scope.templateSites = response
-      })
-  }
-  loadTemplates()
-
   vm.isAdmin = sessionService.isAdmin()
 }
