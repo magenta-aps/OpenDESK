@@ -5,6 +5,7 @@ angular.module('ckEditor')
   .component('ckEditor', {
     template: ckEditorTemplate,
     controller: 'ckEditorController',
+    controllerAs: 'CKEC',
     bindings: {
       value: '<',
       callback: '<'
