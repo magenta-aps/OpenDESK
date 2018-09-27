@@ -603,10 +603,10 @@
   resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-2.53.37.tgz#34f743c20e53ae7100ede90870fde554df2447f8"
   integrity sha1-NPdDwg5TrnEA7ekIcP3lVN8kR/g=
 
-"@uirouter/core@5.0.20":
-  version "5.0.20"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.20.tgz#9c27d8d14d50358040840fd00e9d38c36be1adc5"
-  integrity sha512-7MwtORbMF0UFCgMb+KcBAx+7EsYn/6sP5mEAjLNQq14AkHOJom5pPRE0N3nxduFbK3V2TXfsOX2UjtbkuXql+A==
+"@uirouter/core@5.0.21":
+  version "5.0.21"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.21.tgz#b6c4c311e9416a1e8ce76b072e042a60224d1b3a"
+  integrity sha512-QWHc0wT00qtYNkT0BXZaFNLLHZyux0qJjF8c2WklW5/Q0Z866NoJjJErEMWjQb/AR+olkR2NlfEEi8KTQU2OpA==
 
 "@webassemblyjs/ast@1.5.13":
   version "1.5.13"
@@ -959,11 +959,6 @@ angular-i18n@^1.7.2:
   resolved "https://registry.yarnpkg.com/angular-i18n/-/angular-i18n-1.7.2.tgz#34e59d0f52380e6edcb8ee10f17fb191e04af8d9"
   integrity sha512-KzFgiWcxb4Glj8hD26vGDcecB8re8AZMyo+eI2YZU4yyAdQHRBawiW1TeS34WF9M9lFh4qxBJLzwQ+tlpxWfTQ==
 
-angular-img-fallback@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/angular-img-fallback/-/angular-img-fallback-0.2.0.tgz#d25d1ecf7d402caef7bb9915a1d11d701795a5ef"
-  integrity sha1-0l0ez31ALK73u5kVodEdcBeVpe8=
-
 angular-material-data-table@^0.10.10:
   version "0.10.10"
   resolved "https://registry.yarnpkg.com/angular-material-data-table/-/angular-material-data-table-0.10.10.tgz#229b402745ec1a146f07da8d1e526be6540849ee"
@@ -1015,12 +1010,12 @@ angular-translate@^2.18.1, angular-translate@~2.18.1:
   dependencies:
     angular ">=1.2.26 <=1.7"
 
-angular-ui-router@1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-1.0.19.tgz#9c1f4a54c8a65f7c6b70a9b4d0818f5f12fb01a1"
-  integrity sha512-3d0IFjuWOc+2lE7HxmM+RYWmvd0yrW7QFHsY4uRVf/dgx7T1qUZMIS9L/Vji/HRx2lSwJ3m9YkYugvqr1LySUQ==
+angular-ui-router@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-1.0.20.tgz#86dbaaa3368df0c319f3328f4ace616a246cf394"
+  integrity sha512-D9Y+qOq6StinrlyeiHp7wbOBL5UbwaHW1dgpfQZ6fWuQ5Q5UOrJfe3S28XWDt8ybOKaUh2ds/IFXib5vCu8Opg==
   dependencies:
-    "@uirouter/core" "5.0.20"
+    "@uirouter/core" "5.0.21"
 
 angular-utf8-base64@^0.0.5:
   version "0.0.5"

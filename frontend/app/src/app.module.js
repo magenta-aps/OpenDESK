@@ -12,7 +12,6 @@ angular
     'swfobject',
     'isteven-multi-select',
     'm43nu.auto-height',
-    'dcbImgFallback',
     'dndLists',
     'openDeskApp.backendConfig',
     'openDeskApp.init',
