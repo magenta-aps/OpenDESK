@@ -6,11 +6,6 @@
   "repository": "https://github.com/magenta-aps/OpenDESK",
   "license": "MIT",
   "devDependencies": {
-    "angular-mocks": "^1.7.2",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
-    "babel-plugin-transform-es2015-template-literals": "^6.22.0",
-    "babel-preset-env": "^1.7.0",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "eslint": "^4.19.1",
@@ -54,6 +49,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-transform-template-literals": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "@ckeditor/ckeditor5-build-classic": "^11.0.1",
     "angular": "^1.7.2",
     "angular-animate": "^1.7.2",
@@ -77,6 +75,7 @@
     "angular-translate-loader-static-files": "^2.18.1",
     "angular-ui-router": "1.0.19",
     "angular-utf8-base64": "^0.0.5",
+    "babel-loader": "^8.0.2",
     "isteven-angular-multiselect": "4.0.0",
     "jasmine-core": "^3.1.0",
     "jquery": "^3.3.1",
