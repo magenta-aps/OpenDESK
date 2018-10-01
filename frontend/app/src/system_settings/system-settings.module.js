@@ -52,10 +52,9 @@ function config ($stateProvider, USER_ROLES) {
       }
     })
     .state('systemsettings.filebrowser', {
-      url: '/systemmapper{path:SlashFix}',
+      url: '/systemmapper/{nodeRef:SlashFix}',
       params: {
         authorizedRoles: [USER_ROLES.admin],
-        isSite: false,
         type: 'system-folders'
       },
       views: {

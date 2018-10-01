@@ -28,17 +28,8 @@ public class GetSystemNode extends OpenDeskWebScript {
                 case "my-docs":
                     nodeRef = nodeBean.getUserHome();
                     break;
-                case "company-home":
+                case "system-folders":
                     nodeRef = nodeBean.getCompanyHome();
-                    break;
-                case "document-templates":
-                    nodeRef = nodeBean.getNodeByPath(OpenDeskModel.PATH_NODE_TEMPLATES);
-                    break;
-                case "folder-templates":
-                    nodeRef = nodeBean.getNodeByPath(OpenDeskModel.PATH_SPACE_TEMPLATES);
-                    break;
-                case "text-templates":
-                    nodeRef = nodeBean.getNodeByPath(OpenDeskModel.PATH_TEXT_TEMPLATES);
                     break;
             }
             if (nodeRef != null)

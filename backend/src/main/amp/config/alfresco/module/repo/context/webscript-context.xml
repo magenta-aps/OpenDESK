@@ -139,6 +139,12 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+	<bean id="webscript.node.templateFolders.get"
+		  class="dk.opendesk.webscripts.node.GetTemplateFolders"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.thumbnail.get"
 		  class="dk.opendesk.webscripts.node.GetThumbnail"
 		  parent="webscript">

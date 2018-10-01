@@ -38,13 +38,14 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
   vm.error = false
   vm.folderTemplates = {}
   vm.isLoading = true
+  vm.paths = []
   vm.permissions = {}
   vm.sendAllToSbsys = false
   vm.sendToSbsys = false
   vm.uploading = false
 
   $scope.filesToFilebrowser = null
-  $scope.isSite = $stateParams.isSite
+  $scope.isSite = false
   $scope.order = 'name'
   $scope.reverse = false
   $scope.showProgress = false
@@ -71,6 +72,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     }
     var title
     if ($stateParams.type === 'site') {
+      $scope.isSite = true
       $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
         $scope.userManagedProjects = newVal
       })
@@ -97,7 +99,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
           function (document) {
             setFolderAndPermissions(document)
           })
-    else if ($stateParams.type !== 'shared-docs')
+    else
       documentService.getSystemNode($stateParams.type)
         .then(
           function (document) {
@@ -208,14 +210,13 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
     if (content.contentType === 'cmis:folder')
       if ($stateParams.type === 'system-folders')
-        return 'systemsettings.filebrowser({path: "' + vm.path + '/' + content.name + '"})'
+        return 'systemsettings.filebrowser({nodeRef: "' + content.shortRef + '"})'
       else if ($stateParams.type === 'my-docs')
         return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})'
       else if ($stateParams.type === 'shared-docs')
         return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})'
       else if ($stateParams.type === 'site')
-        return 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                    '", path: "' + vm.path + '/' + content.name + '"})'
+        return 'project.filebrowser({nodeRef: "' + content.shortRef + '"})'
 
     if (content.contentType === 'cmis:link')
       return 'project({projekt: "' + content.destination_link + '"})'
@@ -228,58 +229,29 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
   }
 
   function buildBreadCrumbPath () {
-    if ($stateParams.type === 'my-docs' || $stateParams.type === 'shared-docs') {
-      var homeType
-      switch ($stateParams.type) {
-        case 'my-docs':
-          homeType = 'user'
-          break
-        case 'shared-docs':
-          homeType = 'company'
-          break
-      }
-
-      filebrowserService.getHome(homeType)
-        .then(function (rootRef) {
-          documentService.getBreadCrumb($stateParams.type, folderNodeRef, rootRef)
-            .then(function (breadcrumb) {
-              vm.paths = breadcrumb
-            })
-        })
-    } else if (vm.path !== undefined) {
-      var homeLink
-
-      if ($stateParams.type === 'site')
-        homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})'
-      else
-        homeLink = 'systemsettings.filebrowser({path: ""})'
-
-      var paths = [{
-        title: 'Home',
-        link: homeLink
-      }]
-      var pathLink = '/'
-      createBreadCrumbs(paths, pathLink)
-      vm.paths = paths
+    var homeType
+    switch ($stateParams.type) {
+      case 'my-docs':
+        homeType = 'user'
+        break
+      case 'shared-docs':
+        homeType = 'company'
+        break
+      case 'site':
+        homeType = 'site'
+        break
+      case 'system-folders':
+        homeType = 'company'
+        break
     }
-  }
 
-  function createBreadCrumbs (paths, pathLink) {
-    var pathArr = vm.path.split('/')
-    for (var a in pathArr)
-      if (pathArr[a] !== '') {
-        var link
-        if ($stateParams.type === 'site')
-          link = 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                        '", path: "' + pathLink + pathArr[a] + '"})'
-        else
-          link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})'
-        paths.push({
-          title: pathArr[a],
-          link: link
-        })
-        pathLink = pathLink + pathArr[a] + '/'
-      }
+    filebrowserService.getHome(homeType, $stateParams.projekt)
+      .then(function (rootRef) {
+        documentService.getBreadCrumb($stateParams.type, folderNodeRef, rootRef)
+          .then(function (breadcrumb) {
+            vm.paths = breadcrumb
+          })
+      })
   }
 
   // Dialogs

@@ -11,6 +11,7 @@
       getSiteNode: getSiteNode,
       getSystemNode: getSystemNode,
       getBreadCrumb: getBreadCrumb,
+      getTemplateFolders: getTemplateFolders,
       getThumbnail: getThumbnail
     }
 
@@ -32,6 +33,13 @@
 
     function getSystemNode (shortName) {
       return $http.get(`/alfresco/s/node/system/${shortName}`)
+        .then(function (response) {
+          return response.data
+        })
+    }
+
+    function getTemplateFolders () {
+      return $http.get(`/alfresco/s/node/templateFolders`)
         .then(function (response) {
           return response.data
         })
@@ -63,10 +71,16 @@
     }
 
     function getBreadCrumbPath (type, nodeId) {
-      if (type === 'my-docs')
-        return 'odDocuments.myDocs({nodeRef: "' + nodeId + '"})'
-      else if (type === 'shared-docs')
-        return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
+      switch (type) {
+        case 'my-docs':
+          return 'odDocuments.myDocs({nodeRef: "' + nodeId + '"})'
+        case 'shared-docs':
+          return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
+        case 'site':
+          return 'project.filebrowser({nodeRef: "' + nodeId + '"})'
+        case 'system-folders':
+          return 'systemsettings.filebrowser({nodeRef: "' + nodeId + '"})'
+      }
     }
 
     function getThumbnail (nodeId, versionId) {

@@ -175,7 +175,7 @@ public class OpenDeskWebScript extends AbstractWebScript {
         try {
             if(objectResult.length() > 0)
                 objectResult.write(res.getWriter());
-            else if(arrayResult.size() > 0)
+            else
                 arrayResult.writeJSONString(res.getWriter());
         } catch (Exception e) {
             e.printStackTrace();
