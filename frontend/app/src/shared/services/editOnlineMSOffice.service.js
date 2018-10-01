@@ -3,10 +3,10 @@ import '../services/file.service'
 
 angular
   .module('openDeskApp')
-  .factory('editOnlineMSOfficeService', ['fileService', 'BROWSER_CONFIG', 'UserService', 'MemberService',
+  .factory('editOnlineMSOfficeService', ['fileService', 'BROWSER_CONFIG', 'userService', 'personService',
     '$window', '$mdToast', '$translate', editOnlineMSOfficeService])
 
-function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, MemberService, $window, $mdToast,
+function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, personService, $window, $mdToast,
   $translate) {
   var toastDelay = 5000
   var msProtocolNames = {
@@ -178,18 +178,19 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
     } else if (doc.node.isLocked) {
       var checkedOut = doc.node.aspects.indexOf('cm:checkedOut') > -1
       var lockOwner = doc.node.properties['cm:lockOwner']
-      var currentUser = UserService.get().userName
+      var currentUser = userService.getUser().userName
       var differentLockOwner = lockOwner.userName !== currentUser
 
       // If locked for editing then display error message about who locked
       if (checkedOut && differentLockOwner)
-        MemberService.get(lockOwner).then(function (user) {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
-              .hideDelay(toastDelay)
-          )
-        })
+        personService.getPerson(lockOwner)
+          .then(function (user) {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
+                .hideDelay(toastDelay)
+            )
+          })
 
       else
       // First try ActiveX plugin then AOS
@@ -333,6 +334,6 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
             .textContent($translate.instant('EDIT_MS_OFFICE.AOS.SUPPORTED_OFFICE_VERSION_REQUIRED'))
             .hideDelay(toastDelay)
         )
-    }, 500)
+    }, 5000)
   }
 }

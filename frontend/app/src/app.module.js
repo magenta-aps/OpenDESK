@@ -9,11 +9,8 @@ angular
     'ui.router',
     'pascalprecht.translate',
     'ngResource',
-    'swfobject',
-    'isteven-multi-select',
-    'm43nu.auto-height',
-    'dcbImgFallback',
     'dndLists',
+    'angular.img',
     'openDeskApp.backendConfig',
     'openDeskApp.init',
     'openDeskApp.systemsettings',
@@ -35,6 +32,7 @@ angular
     'openDeskApp.user',
     // 'openDeskApp.chat', Not added because it has not been maintained and converse is not managed by npm
     'openDeskApp.members',
+    'openDeskApp.publicShare',
     'odEmail',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules

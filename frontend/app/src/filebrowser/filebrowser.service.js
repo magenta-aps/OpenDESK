@@ -35,7 +35,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
     return $http
       .get(`/alfresco/service/node/companyHome`)
       .then(function (response) {
-        return response.data[0].nodeRef
+        return response.data.nodeRef
       })
   }
 
@@ -71,11 +71,9 @@ function fileBrowserService ($http, alfrescoNodeService) {
 
   function getTemplates (type) {
     return $http
-      .post(`/alfresco/service/template`, {
-        PARAM_METHOD: `get${type}Templates`
-      })
+      .get(`/alfresco/service/templates/${type}`)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 
@@ -83,7 +81,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
     return $http
       .get(`/alfresco/service/node/userHome`)
       .then(function (response) {
-        return response.data[0].nodeRef
+        return response.data.nodeRef
       })
   }
 
@@ -168,36 +166,25 @@ function fileBrowserService ($http, alfrescoNodeService) {
       destinationRef: destinationNodeRef,
       nodeRefs: sourceNodeRefs
     }
-
-    return $http
-      .put(`/alfresco/service/node/preprocess`, payload)
+    return $http.put(`/alfresco/service/node/preprocess`, payload)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 
   function shareNode (nodeRef, userName, permission) {
     var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
-    return $http
-      .post(
-        `/alfresco/service/node/${nodeId}/share/${userName}/${permission}`,
-        {}
-      )
+    return $http.post(`/alfresco/service/node/${nodeId}/share/${userName}/${permission}`)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 
   function stopSharingNode (nodeRef, userName, permission) {
     var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
-
-    return $http
-      .delete(
-        `/alfresco/service/node/${nodeId}/share/${userName}/${permission}`,
-        {}
-      )
+    return $http.delete(`/alfresco/service/node/${nodeId}/share/${userName}/${permission}`)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 }

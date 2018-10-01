@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get Organizational Centers</shortname>
+    <description>Gets Organizational Centers</description>
+    <url>/authority/organizational-centers</url>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

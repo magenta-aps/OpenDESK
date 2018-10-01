@@ -1,7 +1,6 @@
-<div id="placeholder" ng-switch="$ctrl.plugin.name">
+<div id="placeholder" ng-switch="$ctrl.plugin.name" style="height:100%; overflow: hidden;">
     <audio-preview ng-switch-when="audio" plugin="$ctrl.plugin"></audio-preview>
     <video-preview ng-switch-when="video" plugin="$ctrl.plugin"></video-preview>
-    <strobe-media-play-back-preview ng-switch-when="strobeMediaPlayBack" plugin="$ctrl.plugin"></strobe-media-play-back-preview>
     <image-preview ng-switch-when="image" plugin="$ctrl.plugin"></image-preview>
     <only-office-preview ng-switch-when="onlyOffice" plugin="$ctrl.plugin"></only-office-preview>
     <pdf-preview ng-switch-when="pdf" plugin="$ctrl.plugin"></pdf-preview>

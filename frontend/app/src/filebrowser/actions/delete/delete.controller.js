@@ -3,9 +3,9 @@ import '../../../shared/services/content.service'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('DeleteController', ['$rootScope', '$mdDialog', 'data', 'siteService', 'ContentService', DeleteController])
+  .controller('DeleteController', ['$rootScope', '$mdDialog', 'data', 'siteService', 'contentService', DeleteController])
 
-function DeleteController ($rootScope, $mdDialog, data, siteService, ContentService) {
+function DeleteController ($rootScope, $mdDialog, data, siteService, contentService) {
   var vm = this
 
   vm.data = data
@@ -21,7 +21,7 @@ function DeleteController ($rootScope, $mdDialog, data, siteService, ContentServ
   }
 
   function deleteFile (nodeRef) {
-    ContentService.delete(nodeRef)
+    contentService.delete(nodeRef)
       .then(function () {
         hideAndReload()
       })

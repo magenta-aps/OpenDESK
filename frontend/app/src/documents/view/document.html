@@ -1,13 +1,13 @@
-<div>
+<div ng-if="DC.loaded">
 	<div layout="row">
 		<md-card flex="75">
 			<md-card-content>
 				<breadcrumb paths="DC.paths"></breadcrumb>
 
 				<div>
-					<div ng-if="DC.isLocked">
+					<div ng-if="DC.doc.node.isLocked">
 						<md-icon md-menu-align-target>warning</md-icon>
-						{{'COMMON.LOCKED_BY' | translate:{ locked_by: DC.lockOwner } }}
+						{{'COMMON.LOCKED_BY' | translate:{ locked_by: DC.doc.node.properties['cm:lockOwner'].displayName } }}
 					</div>
                     <preview-manager ng-if="DC.plugin" plugin="DC.plugin"></preview-manager>
 				</div>
@@ -15,8 +15,8 @@
 		</md-card>
 
 		<div flex="25">
-            <document-history selected-version="DC.nodeId" history="DC.history"></document-history>
-            <document-actions ng-if="DC.loaded" doc="DC.doc"></document-actions>
+            <document-history selected-version="DC.docHasParent ? DC.nodeId : undefined" history="DC.history"></document-history>
+            <document-actions doc="DC.doc"></document-actions>
             <document-review ng-if="DC.reviewId" review-id="DC.reviewId"></document-review>
 		</div>
 	</div>

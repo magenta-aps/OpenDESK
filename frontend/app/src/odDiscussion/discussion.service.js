@@ -3,10 +3,10 @@ import '../shared/services/nodeRefUtils.service'
 import '../shared/services/preference.service'
 
 angular.module('openDeskApp.discussion')
-  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'UserService', 'sessionService',
+  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'userService', 'personService',
     'preferenceService', discussionService])
 
-function discussionService ($http, nodeRefUtilsService, UserService, sessionService, preferenceService) {
+function discussionService ($http, nodeRefUtilsService, userService, personService, preferenceService) {
   var restBaseUrl = '/alfresco/s/api'
 
   var service = {
@@ -23,21 +23,7 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
 
   return service
 
-  function getAvatarUrl (avatarRef) {
-    if (avatarRef !== undefined) {
-      var avatarId = avatarRef.split('/')[3]
-      return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
-    } else { return 'assets/img/avatars/blank-profile-picture.png' }
-  }
-
   function getDiscussionFromNodeRef (siteShortName, nodeId) {
-    // return getDiscussions(siteShortName)
-    //   .then(function (response) {
-    //     response.items.forEach(function (discussion) {
-    //       if (discussion.nodeRef.split('/')[3] === nodeId)
-    //         return discussion
-    //     })
-    //   })
     return $http.get(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + nodeId, {})
       .then(function (response) {
         return response.data.item
@@ -53,12 +39,12 @@ function discussionService ($http, nodeRefUtilsService, UserService, sessionServ
   }
 
   function getReplies (postItem) {
-    postItem.author.avatarUrl = getAvatarUrl(postItem.author.avatarRef)
+    postItem.author.avatarUrl = personService.getAvatarUrlFromRef(postItem.author.avatarRef)
     return $http.get(restBaseUrl + postItem.repliesUrl, {})
       .then(function (response) {
         var items = response.data.items
         items.forEach(function (reply) {
-          reply.author.avatarUrl = getAvatarUrl(reply.author.avatarRef)
+          reply.author.avatarUrl = personService.getAvatarUrlFromRef(reply.author.avatarRef)
         })
         return items
       })

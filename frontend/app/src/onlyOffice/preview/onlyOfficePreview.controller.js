@@ -9,9 +9,19 @@ function OnlyOfficePreviewController ($scope, onlyOfficeService) {
   activate()
 
   function activate () {
-    var nodeRef = $scope.nodeRef
-    onlyOfficeService.displayPreview(nodeRef).then(function (response) {
-      vm.isDisplayed = response
-    })
+    var sharedId = $scope.sharedId
+    if (sharedId) {
+      onlyOfficeService.displayNoAuthPreview(sharedId)
+        .then(function (response) {
+          vm.isDisplayed = response
+        })
+    }
+    else {
+      var nodeRef = $scope.nodeRef
+      onlyOfficeService.displayPreview(nodeRef)
+        .then(function (response) {
+          vm.isDisplayed = response
+        })
+    }
   }
 }

@@ -1,3 +1,4 @@
 <div style="height:80vh">
-    <only-office node-ref="$ctrl.plugin.nodeRef"></only-office>
+    <only-office ng-if="!$ctrl.plugin.sharedId" node-ref="$ctrl.plugin.nodeRef"></only-office>
+    <only-office ng-if="$ctrl.plugin.sharedId" shared-id="$ctrl.plugin.sharedId"></only-office>
 </div>

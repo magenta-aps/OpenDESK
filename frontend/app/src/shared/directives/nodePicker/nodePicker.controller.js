@@ -19,23 +19,26 @@ function NodePickerController ($scope, nodePickerService) {
 
   function activate () {
     vm.currentNode.nodeRef = $scope.currentNodeRef
-    nodePickerService.getNodeInfo(vm.currentNode).then(function (currentNode) {
-      vm.currentNode = currentNode
-    })
+    nodePickerService.getNodeInfo(vm.currentNode)
+      .then(function (currentNode) {
+        vm.currentNode = currentNode
+      })
   }
 
   function browseParent () {
     $scope.selectedNode = undefined
-    nodePickerService.getNodeInfo(vm.currentNode.parent).then(function (currentNode) {
-      vm.currentNode = currentNode
-    })
+    nodePickerService.getNodeInfo(vm.currentNode.parent)
+      .then(function (currentNode) {
+        vm.currentNode = currentNode
+      })
   }
 
   function browseChild (child) {
     $scope.selectedNode = undefined
-    nodePickerService.getNodeInfo(child).then(function (currentNode) {
-      vm.currentNode = currentNode
-    })
+    nodePickerService.getNodeInfo(child)
+      .then(function (currentNode) {
+        vm.currentNode = currentNode
+      })
   }
 
   function hasParent () {

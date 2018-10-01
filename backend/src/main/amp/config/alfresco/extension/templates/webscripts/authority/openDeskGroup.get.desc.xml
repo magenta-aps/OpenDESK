@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get OpenDesk Group</shortname>
+    <description>Gets OpenDesk Group</description>
+    <url>/authority/openDeskGroup/{groupName}</url>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

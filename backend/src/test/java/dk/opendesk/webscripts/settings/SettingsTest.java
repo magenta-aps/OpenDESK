@@ -1,6 +1,7 @@
 package dk.opendesk.webscripts.settings;
 
 import dk.opendesk.repo.model.OpenDeskModel;
+import dk.opendesk.webscripts.GetPreferencesTest;
 import dk.opendesk.webscripts.TestUtils;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -26,7 +27,7 @@ import java.util.Map;
 
 public class SettingsTest extends BaseWebScriptTest {
 
-    private static Logger log = Logger.getLogger(dk.opendesk.webscripts.PreferencesTest.class);
+    private static Logger log = Logger.getLogger(GetPreferencesTest.class);
 
     private MutableAuthenticationService authenticationService = (MutableAuthenticationService) getServer().getApplicationContext().getBean(
             "authenticationService");

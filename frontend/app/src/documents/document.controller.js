@@ -4,11 +4,11 @@ import '../shared/services/document/preview/preview.service'
 
 angular.module('openDeskApp.documents')
   .controller('DocumentController', ['$translate', 'documentService', '$stateParams', '$location',
-    'documentPreviewService', 'browserService', 'UserService', 'siteService', 'headerService', 'filebrowserService',
-    'ContentService', DocumentController])
+    'documentPreviewService', 'browserService', 'userService', 'siteService', 'headerService', 'filebrowserService',
+    'contentService', DocumentController])
 
 function DocumentController ($translate, documentService, $stateParams, $location, documentPreviewService,
-  browserService, UserService, siteService, headerService, filebrowserService, ContentService) {
+  browserService, userService, siteService, headerService, filebrowserService, contentService) {
   var vm = this
 
   vm.doc = []
@@ -21,7 +21,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     vm.parentNodeId = $stateParams.doc
     vm.nodeId = vm.docHasParent ? $location.search().versionId : $stateParams.doc
 
-    ContentService.history(vm.parentNodeId)
+    contentService.history(vm.parentNodeId)
       .then(function (val) {
         vm.history = val
         var currentNoOfHistory = vm.history.length
@@ -64,7 +64,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
   }
 
   function getDocument () {
-    ContentService.get(vm.parentNodeId)
+    contentService.get(vm.parentNodeId)
       .then(function (response) {
         vm.doc = response.item
         vm.doc.hasParent = vm.docHasParent
@@ -97,7 +97,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
           var folderNodeRef = vm.doc.node.nodeRef
           var location = vm.doc.location.path
           var homeType, type
-          var user = UserService.get().userName
+          var user = userService.getUser().userName
           var userHomeLocation = '/User Homes/' + user
           var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation
           var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation
@@ -120,7 +120,12 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
             })
           headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT'))
         }
-        vm.loaded = true
+
+        contentService.getNode(vm.parentNodeId)
+          .then(function (node) {
+            vm.doc.extraInfo = node
+            vm.loaded = true
+          })
 
         browserService.setTitle(response.item.node.properties['cm:name'])
       })
@@ -132,15 +137,15 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
 
   function loadPreview () {
     if (vm.docHasParent)
-      documentService.createVersionThumbnail(vm.parentNodeId, vm.nodeId)
+      documentService.getThumbnail(vm.parentNodeId, vm.nodeId)
         .then(function (response) {
-          documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef)
+          documentPreviewService.getPluginByNodeRef(response.data.nodeRef)
             .then(function (plugin) {
               vm.plugin = plugin
             })
         })
     else
-      documentPreviewService.previewDocumentPlugin(vm.doc.store + vm.nodeId)
+      documentPreviewService.getPluginByNodeRef(vm.doc.store + vm.nodeId)
         .then(function (plugin) {
           vm.plugin = plugin
         })

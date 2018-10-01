@@ -4,20 +4,20 @@ import projectManagerPickerTemplate from './projectManagerPicker.html'
 angular.module('openDeskApp.members')
   .component('projectManagerPicker', {
     template: projectManagerPickerTemplate,
-    controller: ['siteService', 'MemberService', projectManagerPicker],
+    controller: ['personService', projectManagerPicker],
     bindings: {
       selected: '=',
       type: '<'
     }
   })
 
-function projectManagerPicker (siteService, MemberService) {
+function projectManagerPicker (personService) {
   var vm = this
 
   vm.searchManagers = searchManagers
 
   function searchManagers (query) {
     if (query)
-      return MemberService.search(query)
+      return personService.searchPerson(query)
   }
 }

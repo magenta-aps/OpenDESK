@@ -2,16 +2,16 @@
 import '../../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp')
-  .factory('ContentService', ['$http', 'alfrescoNodeService', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', ContentService])
+  .factory('contentService', ['$http', 'alfrescoNodeService', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', contentService])
 
-function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
+function contentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
   var service = {
     delete: deleteContent,
     get: getContent,
+    getNode: getNode,
     history: history,
     upload: uploadContent,
     uploadNewVersion: uploadNewVersion,
-    deleteVersion: deleteVersion,
     revertToVersion: revertToVersion,
     isLibreOfficeEditable: isLibreOfficeEditable,
     isMsOfficeEditable: isMsOfficeEditable,
@@ -20,8 +20,15 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
 
   return service
 
-  function getContent (nodeRef) {
-    return $http.get(`/slingshot/doclib2/node/workspace/SpacesStore/${nodeRef}`)
+  function getContent (nodeId) {
+    return $http.get(`/slingshot/doclib2/node/workspace/SpacesStore/${nodeId}`)
+      .then(function (response) {
+        return response.data
+      })
+  }
+
+  function getNode (nodeId) {
+    return $http.get(`/alfresco/service/node/${nodeId}`)
       .then(function (response) {
         return response.data
       })
@@ -34,32 +41,20 @@ function ContentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
       })
   }
 
-  function deleteVersion (parent, versionNode) {
-    return $http.get(`/alfresco/s/history?method=deleteVersion&parentNode=${parent}&versionNode=${versionNode}`)
-      .then(function (response) {
-        return response.data
-      })
-  }
-
-  function history (documentNodeRef) {
-    return $http.get(`/alfresco/s/history?method=getAll&NODE_ID=${documentNodeRef}&STORE_TYPE=workspace&STORE_ID=SpacesStore`)
+  function history (nodeId) {
+    return $http.get(`/alfresco/service/node/${nodeId}/versions`)
       .then(function (response) {
         return response.data
       })
   }
 
   function uploadContent (file, destination) {
-    var payload = {
-      PARAM_METHOD: 'returnFileName',
-      PARAM_FILENAME: file.name,
-      PARAM_DESTINATION: destination
-    }
-
-    return $http.post('/alfresco/service/sites', payload)
+    var nodeId = alfrescoNodeService.processNodeRef(destination).id
+    return $http.get(`/alfresco/service/node/${nodeId}/next-available-name?name=${file.name}`)
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)
-        formData.append('filename', response.data[0].fileName)
+        formData.append('filename', response.data.fileName)
         formData.append('destination', destination || null)
 
         var headers = {

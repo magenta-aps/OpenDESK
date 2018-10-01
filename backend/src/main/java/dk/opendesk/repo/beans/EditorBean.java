@@ -1,21 +1,12 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.module.ModuleDetails;
 import org.alfresco.service.cmr.module.ModuleService;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.JSONArray;
 
-import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EditorBean {

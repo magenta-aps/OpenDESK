@@ -1,21 +1,15 @@
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.json.JSONObject;
-import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
 
 
-public class Rename extends AbstractWebScript {
+public class Rename extends OpenDeskWebScript {
 
     private NodeBean nodeBean;
 
@@ -25,26 +19,15 @@ public class Rename extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-        Map<String, String> templateArgs = req.getServiceMatch().getTemplateVars();
-        Content c = req.getContent();
-        res.setContentEncoding("UTF-8");
-        Writer webScriptWriter = res.getWriter();
-        JSONArray result;
-
+        super.execute(req, res);
         try {
-            String nodeId = templateArgs.get("nodeId");
+            String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-
-            JSONObject json = new JSONObject(c.getContent());
-            String name = Utils.getJSONObject(json, "name");
-
-            result = nodeBean.rename(nodeRef, name);
+            String name = getContentString("name");
+            nodeBean.rename(nodeRef, name);
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            res.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 }

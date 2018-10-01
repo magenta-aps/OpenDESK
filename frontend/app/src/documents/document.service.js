@@ -11,9 +11,7 @@
       getSiteNode: getSiteNode,
       getSystemNode: getSystemNode,
       getBreadCrumb: getBreadCrumb,
-      getEditPermission: getEditPermission,
-      createVersionThumbnail: createVersionThumbnail,
-      cleanupThumbnail: cleanupThumbnail
+      getThumbnail: getThumbnail
     }
 
     return service
@@ -71,22 +69,8 @@
         return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
     }
 
-    function getEditPermission (documentNodeRef) {
-      return $http.get(`/alfresco/s/permissions?method=getEditPermission&NODE_ID=${documentNodeRef}&STORE_TYPE=workspace&STORE_ID=SpacesStore`)
-        .then(function (response) {
-          return response.data[0].edit_permission === 'ALLOWED'
-        })
-    }
-
-    function createVersionThumbnail (node, versionNode) {
-      return $http.get(`/alfresco/s/previewhelper?version_node=${versionNode}&parent_node=${node}&method=createThumbnail`)
-        .then(function (response) {
-          return response
-        })
-    }
-
-    function cleanupThumbnail (node) {
-      return $http.get(`/alfresco/s/previewhelper?version_node=${node.split('/')[3]}&method=cleanUp`)
+    function getThumbnail (nodeId, versionId) {
+      return $http.get(`/alfresco/s/node/${nodeId}/thumbnail/${versionId}`)
         .then(function (response) {
           return response
         })

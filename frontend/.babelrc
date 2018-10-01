@@ -1,8 +1,8 @@
 {
   "presets": [
-    "env"
+    "@babel/preset-env"
   ],
   "plugins": [
-    "transform-es2015-template-literals"
+    "@babel/plugin-transform-template-literals"
   ]
 }

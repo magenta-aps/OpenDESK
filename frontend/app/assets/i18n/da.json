@@ -273,7 +273,11 @@
     "PERMISSIONS" : {
       "Editor": "Kan skrive",
       "Consumer": "Kan læse"
-    }
+    },
+    "PUBLIC_LINK": "Offentligt link",
+    "SHARE_PUBLICLY": "Del offentligt",
+    "SHARE_WITH_USERS": "Del med brugere",
+    "STOP_SHARING_PUBLICLY": "Stop offentlig deling"
   },
   "FILE": {
     "FILE": "Fil",
@@ -995,7 +999,7 @@
     "CREATED_AT": "Oprettet",
     "REPLIES": "Svar",
     "NO_DISCUSSIONS": "Ingen kommentarer",
-    
+
     "SORT": {
       "SORT": "Sorter efter",
       "ALL": "Alle",
@@ -1025,10 +1029,6 @@
     "public" : {
       "appName": "Navn for OpenDesk"
     }
-  },
-  "GROUPS": {
-    "OPENDESK_OrganizationalCenters": "Org. enheder",
-    "OPENDESK_ProjectOwners": "Projektejere"
   },
   "EDIT_MS_OFFICE": {
     "ALREADY_LOCKED": "Dokumentet kunne ikke redigeres, da den allerede bliver redigeret i MS Office af {{userName}}.",

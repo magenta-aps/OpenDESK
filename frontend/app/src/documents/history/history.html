@@ -1,11 +1,11 @@
-<md-card class="dropdown-card">
-    <md-card-title ng-click="showVersions = !showVersions" ng-class="showVersions ? 'open' : 'closed'">
+<md-card class="dropdown-card" ng-if="$ctrl.history">
+    <md-card-title ng-click="showVersions = !showVersions" ng-class="$ctrl.selectedVersion || showVersions ? 'open' : 'closed'">
         <h3 class="md-title od-title-icon"><md-icon>history</md-icon> {{'COMMON.HISTORY' | translate }}</h3>
         <span flex></span>
         <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
     </md-card-title>
 
-    <md-card-content ng-if="$ctrl.history" ng-class="showVersions ? 'fold-out' : 'fold-in'">
+    <md-card-content ng-class="$ctrl.selectedVersion || showVersions ? 'fold-out' : 'fold-in'">
         <div layout="row">
             <div flex="50">
                 <span class="od-secondary">{{'COMMON.LAST_MODIFIED' | translate}}</span>

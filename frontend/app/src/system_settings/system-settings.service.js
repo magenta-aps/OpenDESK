@@ -17,16 +17,15 @@ function SystemSettingsService ($http, APP_BACKEND_CONFIG) {
 
   function getEditors () {
     return $http.get('/alfresco/service/editors').then(function (response) {
-      return response.data[0]
+      return response.data
     })
   }
 
   function getTemplates () {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'getTemplates'
-    }).then(function (response) {
-      return response.data
-    })
+    return $http.get(`/alfresco/service/site/templates`)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function setSettings (newSettings) {

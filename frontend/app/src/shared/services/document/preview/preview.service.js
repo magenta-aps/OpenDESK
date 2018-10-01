@@ -5,7 +5,6 @@ import '../../document/preview/preview.controller'
 import previewDialogTemplate from './view/previewDialog.html'
 import audioTemplate from './view/audio.html'
 import videoTemplate from './view/video.html'
-import strobeMediaPlayBackTemplate from './view/strobeMediaPlayBack.html'
 import imageTemplate from './view/image.html'
 import onlyOfficeTemplate from './view/onlyOffice.html'
 import pdfTemplate from './view/pdf.html'
@@ -20,7 +19,6 @@ angular
     PreviewService])
   .component('audioPreview', {template: audioTemplate, bindings: { plugin: '=' }})
   .component('videoPreview', {template: videoTemplate, bindings: { plugin: '=' }})
-  .component('strobeMediaPlayBackPreview', {template: strobeMediaPlayBackTemplate, bindings: { plugin: '=' }})
   .component('imagePreview', {template: imageTemplate, bindings: { plugin: '=' }})
   .component('onlyOfficePreview', {template: onlyOfficeTemplate, bindings: { plugin: '=' }})
   .component('pdfPreview', {template: pdfTemplate, bindings: { plugin: '=' }})
@@ -32,23 +30,26 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   sessionService, $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
   var service = {
     previewDocument: previewDocument,
-    previewDocumentPlugin: previewDocumentPlugin,
-    _getPluginByMimeType: _getPluginByMimeType,
-    plugins: getPlugins()
+    getPlugin: getPlugin,
+    getPluginByNodeRef: getPluginByNodeRef
   }
   return service
 
   function previewDocument (nodeRef) {
-    this.previewDocumentPlugin(nodeRef).then(function (plugin) {
+    getPluginByNodeRef(nodeRef).then(function (plugin) {
       previewDialog(plugin)
     })
   }
 
-  function previewDocumentPlugin (nodeRef) {
-    var _this = this
-    return alfrescoDocumentService.retrieveSingleDocument(nodeRef).then(function (item) {
-      return _this._getPluginByMimeType(item)
-    })
+  function getPluginByNodeRef (nodeRef) {
+    return alfrescoDocumentService.retrieveSingleDocument(nodeRef)
+      .then(function (response) {
+        var item = response.node
+        item.lastThumbnailModificationData = response.node.properties['cm:lastThumbnailModification']
+        item.name = response.location.file
+        item.thumbnailDefinitions = response.thumbnailDefinitions
+        return getPlugin(item)
+      })
   }
 
   function previewDialog (plugin) {
@@ -65,23 +66,10 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
     })
   }
 
-  function getPlugins () {
-    var plugins = [
-      audioViewer(),
-      onlyOfficeViewer(),
-      webViewer(),
-      pdfViewer(),
-      imageViewer(),
-      videoViewer(),
-      strobeMediaPlayback(),
-      cannotPreviewPlugin()
-    ]
-    return plugins
-  }
-
-  function _getPluginByMimeType (item) {
-    for (var i in this.plugins) {
-      var plugin = this.plugins[i]
+  function getPlugin (item) {
+    var plugins = getPlugins()
+    for (var i in plugins) {
+      var plugin = plugins[i]
       if (plugin.acceptsItem(item)) {
         plugin.initPlugin(item)
         if (plugin.extendPlugin)
@@ -89,6 +77,18 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
         return plugin
       }
     }
+  }
+
+  function getPlugins () {
+    return [
+      onlyOfficeViewer(),
+      webViewer(),
+      pdfViewer(),
+      audioViewer(),
+      videoViewer(),
+      imageViewer(),
+      cannotPreviewPlugin()
+    ]
   }
 
   function audioViewer () {
@@ -114,23 +114,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
     return angular.extend(result, viewer)
   }
 
-  function strobeMediaPlayback () {
-    var viewer = {
-      mimeTypes: [
-        'video/x-m4v',
-        'video/x-flv',
-        'video/mp4',
-        'video/quicktime',
-        'audio/mpeg'
-      ],
-      name: 'strobeMediaPlayBack'
-    }
-
-    var result = generalPlaybackPlugin()
-    return angular.extend(result, viewer)
-  }
-
-  function imageViewer (mimeType) {
+  function imageViewer () {
     var viewer = {
       mimeTypes: [
         'image/png',
@@ -163,7 +147,8 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
       transformableMimeTypes: EDITOR_CONFIG.lool.mimeTypes,
       mimeTypes: ['application/pdf'],
       thumbnail: 'pdf',
-      name: 'pdf'
+      name: 'pdf',
+      height: '75vh'
     }
     var result = generalPreviewPlugin()
     return angular.extend(result, viewer)
@@ -222,30 +207,34 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
       },
 
       initPlugin: function (item) {
-        this.nodeRef = item.node.nodeRef
-        this.fileName = item.location.file
-        this.itemSize = item.node.size
-        this.mimeType = item.node.mimetype
-        this.thumbnailUrl = ALFRESCO_URI.webClientServiceProxy + this._getThumbnailUrl(item)
+        this.nodeRef = item.nodeRef
+        this.fileName = item.name
+        this.itemSize = item.size
+        this.mimeType = item.mimetype
+        if (item.thumbnailUrl === undefined)
+          item.thumbnailUrl = this._getThumbnailUrl(item)
+        this.thumbnailUrl = ALFRESCO_URI.webClientServiceProxy + item.thumbnailUrl
         this.thumbnailUrl = sessionService.makeURL(this.thumbnailUrl)
         if (this._acceptsMimeType(item)) {
-          this.contentUrl = ALFRESCO_URI.webClientServiceProxy + this._getContentUrl(item)
+          this.contentUrl = ALFRESCO_URI.webClientServiceProxy + item.contentURL
           this.contentUrl = sessionService.makeURL(this.contentUrl)
-        } else { this.contentUrl = this.thumbnailUrl }
+        } else {
+          this.contentUrl = this.thumbnailUrl
+        }
       },
 
       _acceptsMimeType: function (item) {
         if (this.mimeTypes === null || this.mimeTypes === undefined)
           return false
 
-        return this.mimeTypes.indexOf(item.node.mimetype) !== -1
+        return this.mimeTypes.indexOf(item.mimetype) !== -1
       },
 
       _acceptsTransformableMimeTypes: function (item) {
         if (this.transformableMimeTypes === null || this.transformableMimeTypes === undefined)
           return false
 
-        return this.transformableMimeTypes.indexOf(item.node.mimetype) !== -1
+        return this.transformableMimeTypes.indexOf(item.mimetype) !== -1
       },
 
       _acceptsThumbnail: function (item) {
@@ -256,27 +245,16 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
         return item.thumbnailDefinitions.indexOf(this.thumbnail) !== -1
       },
 
-      _getContentUrl: function (item) {
-        return item.node.contentURL
-      },
-
-      _getThumbnailUrl: function (item, fileSuffix) {
-        var nodeRefAsLink = this.nodeRef.replace(':/', ''),
-          noCache = '&noCache=' + new Date().getTime(),
-          force = 'c=force'
-
-        if (nodeRefAsLink.indexOf('versionStore') > -1)
-          return '/api/opendesk/case/document/' + nodeRefAsLink + '/thumbnail'
-
+      _getThumbnailUrl: function (item) {
+        var nodeRefAsLink = this.nodeRef.replace(':/', '')
+        var noCache = new Date().getTime()
         var lastModified = this._getLastThumbnailModification(item)
-
-        var url = '/api/node/' + nodeRefAsLink + '/content/thumbnails/' + this.thumbnail + (fileSuffix ? '/suffix' + fileSuffix : '') +
-                    '?' + force + lastModified + noCache
-        return url
+        return '/api/node/' + nodeRefAsLink + '/content/thumbnails/' + this.thumbnail +
+          '?c=force&noCache=' + noCache + lastModified
       },
 
       _getLastThumbnailModification: function (item) {
-        var thumbnailModifications = item.node.properties['cm:lastThumbnailModification']
+        var thumbnailModifications = item.lastThumbnailModificationData
         if (!thumbnailModifications)
           thumbnailModifications = []
 

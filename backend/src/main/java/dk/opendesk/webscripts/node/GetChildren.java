@@ -1,20 +1,16 @@
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
-import java.util.Map;
 
 
-public class GetChildren extends AbstractWebScript {
+public class GetChildren extends OpenDeskWebScript {
 
     private NodeBean nodeBean;
 
@@ -24,22 +20,15 @@ public class GetChildren extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-        Map<String, String> templateArgs = req.getServiceMatch().getTemplateVars();
-        res.setContentEncoding("UTF-8");
-        Writer webScriptWriter = res.getWriter();
-        JSONArray result;
-
+        super.execute(req, res);
         try {
-            String nodeId = templateArgs.get("nodeId");
+            String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
             List<NodeRef> childNodeRefs = nodeBean.getChildren(nodeRef);
-            result = nodeBean.getNodeList(childNodeRefs);
+            arrayResult = nodeBean.getNodeList(childNodeRefs);
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            res.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 }

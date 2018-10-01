@@ -5,14 +5,14 @@ import '../../../shared/services/filter.service'
 angular.module('openDeskApp.members')
   .component('projectOwnerPicker', {
     template: projectOwnerPickerTemplate,
-    controller: ['siteService', 'filterService', projectOwnerPicker],
+    controller: ['filterService', 'groupService', projectOwnerPicker],
     bindings: {
       selected: '=',
       type: '<'
     }
   })
 
-function projectOwnerPicker (siteService, filterService) {
+function projectOwnerPicker (filterService, groupService) {
   var vm = this
   var owners = []
 
@@ -21,13 +21,10 @@ function projectOwnerPicker (siteService, filterService) {
   activate()
 
   function activate () {
-    siteService.getAllOwners()
+    groupService.getProjectOwners()
       .then(function (response) {
         owners = response
-      }, function (err) {
-        console.log(err)
-      }
-      )
+      })
   }
 
   function searchOwners (query) {

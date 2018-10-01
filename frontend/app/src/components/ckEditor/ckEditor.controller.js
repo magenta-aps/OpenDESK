@@ -1,34 +1,26 @@
 'use strict'
-import CKEditor from '@ckeditor/ckeditor5-build-classic'
 
 angular
   .module('ckEditor')
-  .controller('ckEditorController', ['$scope', ckEditorController])
+  .controller('ckEditorController', ['$scope', '$window', ckEditorController])
 
-function ckEditorController ($scope) {
-  var isLoaded = false
+function ckEditorController ($scope, $window) {
+  var vm = this
 
-  function init (value) {
-    CKEditor.create(document.getElementById('ckeditor'))
-      .then(editor => {
-        // Set data
-        editor.setData(value)
-        // Send data back to parent
-        editor.model.document.on('change:data', () => {
-          $scope.$ctrl.callback(editor.getData())
-        })
-        isLoaded = true
+  activate()
+
+  function activate (value) {
+    vm.value = value
+    $window.CKEDITOR_BASEPATH = '/opendesk/assets/libs/ckeditor/'
+    // Important to load ckEditor after the basepath has been set!!
+    require('ckeditor')
+    $window.CKEDITOR.config.height = 400
+
+    $window.CKEDITOR.on('instanceCreated', function (event) {
+      event.editor.on('change', function () {
+        vm.callback(event.editor.getData())
       })
-      .catch(error => {
-        console.error(error.stack)
-      })
-  }
-
-  this.$onChanges = function (changes) {
-    if (isLoaded)
-      return
-    if (changes.value.currentValue === undefined)
-      return
-    init(changes.value.currentValue)
+    })
+    $window.CKEDITOR.replace('ckeditor')
   }
 }

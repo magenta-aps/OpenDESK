@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Sites info</shortname>
-    <description>Sites info</description>
-    <url>/sites</url>
-    <authentication>user</authentication>
-    <format default="html"></format>
-</webscript>

@@ -3,22 +3,27 @@
         <h3 class="md-title od-title-icon">
             <md-icon>tune</md-icon> {{'COMMON.ACTIONS' | translate }}</h3>
     </md-card-title>
-
     <md-card-content>
         <div>
-            <md-button ng-show="DAC.onlyOfficeEditable && DAC.canEdit" ng-click="DAC.editInOnlyOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-click="DAC.updatePreview()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>cached</md-icon>
+                {{'COMMON.UPDATE' | translate }} {{'COMMON.PREVIEW' | translate}}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-show="DAC.onlyOfficeEditable && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInOnlyOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.ONLYOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="DAC.loolEditable && DAC.canEdit" ng-click="DAC.editInLibreOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.loolEditable && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInLibreOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.LIBREOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="DAC.msOfficeEditable && DAC.canEdit" ng-click="DAC.editInMSOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.msOfficeEditable && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInMSOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.MSOFFICE' | translate }}
             </md-button>
@@ -30,22 +35,42 @@
             </md-button>
         </div>
         <div>
-            <md-button ng-show="DAC.canEdit" ng-click="DAC.uploadNewVersionDialog()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.doc.extraInfo.canEdit" ng-click="DAC.uploadNewVersionDialog()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>file_upload</md-icon>
                 {{'COMMON.NEWVERSION' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="DAC.canEdit" ng-click="DAC.reviewDocumentsDialog($event)" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.doc.extraInfo.canEdit" ng-click="DAC.reviewDocumentsDialog($event)" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>playlist_add_check</md-icon>
                 {{'COMMON.SEND' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'COMMON.REVIEW' | translate | lowercase }}
             </md-button>
         </div>
         <div>
-            <md-button ng-click="DAC.updatePreview()" class="md-text-icon-button md-primary">
-                <md-icon md-menu-align-target>cached</md-icon>
-                {{'COMMON.UPDATE' | translate }} {{'COMMON.PREVIEW' | translate}}
+            <md-button ng-if="DAC.doc.extraInfo.canMoveAndDelete && !DAC.doc.location.site" ng-click="DAC.shareDocumentDialog()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>share</md-icon>
+                {{'DOCUMENT.SHARE_WITH_USERS' | translate }}
             </md-button>
+        </div>
+        <div>
+            <md-button ng-if="DAC.doc.extraInfo.canMoveAndDelete && !DAC.sharedId" ng-click="DAC.sharePublic()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>public</md-icon>
+                {{'DOCUMENT.SHARE_PUBLICLY' | translate }}
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-if="DAC.doc.extraInfo.canMoveAndDelete && DAC.sharedId" ng-click="DAC.stopSharingPublic()" class="md-text-icon-button md-primary">
+                <md-icon md-menu-align-target>cancel</md-icon>
+                {{'DOCUMENT.STOP_SHARING_PUBLICLY' | translate }}
+            </md-button>
+        </div>
+        <br>
+        <div>
+            <md-input-container ng-if="DAC.sharedId">
+                <md-icon md-menu-align-target>link</md-icon>
+                <label>{{'DOCUMENT.PUBLIC_LINK' | translate }}</label>
+                <input type="text" ng-model="DAC.publicSharedUrl" ng-click="DAC.onPublicSharedUrlClick($event)">
+            </md-input-container>
         </div>
     </md-card-content>
 </md-card>

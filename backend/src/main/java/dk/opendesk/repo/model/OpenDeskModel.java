@@ -1,10 +1,11 @@
 package dk.opendesk.repo.model;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public interface OpenDeskModel {
 
@@ -43,6 +44,7 @@ public interface OpenDeskModel {
 
     String PROJECT_OWNERS = "OPENDESK_ProjectOwners"; // a collection of all project owners
     String ORGANIZATIONAL_CENTERS = "OPENDESK_OrganizationalCenters"; // a collection of all organizational centers
+    String CENTER_TEST = "C-T"; // a collection of all organizational centers
 
     String PD_GROUP_PROJECTOWNER = "PD_PROJECTOWNER"; // projektejere
     String PD_GROUP_PROJECTMANAGER = "PD_PROJECTMANAGER"; // projektledere
@@ -142,6 +144,7 @@ public interface OpenDeskModel {
      */
     QName PROP_SETTINGS = QName.createQName(OD_URI, "settings");
     String PUBLIC_SETTINGS = "public";
+    String EDITOR_SETTINGS = "editors";
 
 
     /**

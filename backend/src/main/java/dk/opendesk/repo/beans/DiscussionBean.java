@@ -63,7 +63,7 @@ public class DiscussionBean {
         JSONObject result = new JSONObject();
 
         String creatorUserName = post.getCreator();
-        JSONObject author = personBean.getPerson(creatorUserName);
+        JSONObject author = personBean.getPersonInfo(creatorUserName);
         result.put("author", author);
 
         String content = post.getContents();
