@@ -398,6 +398,14 @@ public class SiteBean {
             return siteGroup + "_" + groupName;
     }
 
+    public NodeRef getDocumentLibraryRef(SiteInfo siteInfo) {
+        return getDocumentLibraryRef(siteInfo.getShortName());
+    }
+
+    public NodeRef getDocumentLibraryRef(String siteShortName) {
+        return siteService.getContainer(siteShortName, OpenDeskModel.DOC_LIBRARY);
+    }
+
     /**
      * Gets the role of the current user in a site.
      * @param siteShortName short name of a site.
