@@ -44,7 +44,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   }
 
   function groupFilter (group) {
-    if (group[0].multipleMembers)
+    if (group.multipleMembers)
       return group
   }
 
@@ -58,7 +58,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
       .then(function (response) {
         if (response.isValid) {
           personService.addExternalPerson(vm.site.shortName, userName, firstName, lastName, email, telephone,
-            group[0].shortName).then(
+            group.shortName).then(
             function (response) {
               $mdToast.show(
                 $mdToast.simple()
@@ -66,7 +66,7 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
                   .hideDelay(3000)
               )
               $scope.externalUser = {}
-              group[1].push({
+              group.members.push({
                 firstName: firstName,
                 lastName: lastName,
                 displayName: firstName + ' ' + lastName,
