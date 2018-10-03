@@ -9,7 +9,7 @@ function contentService ($http, alfrescoNodeService) {
     delete: deleteContent,
     get: getContent,
     getNode: getNode,
-    history: history,
+    getVersions: getVersions,
     upload: uploadContent,
     uploadNewVersion: uploadNewVersion,
     revertToVersion: revertToVersion
@@ -38,7 +38,7 @@ function contentService ($http, alfrescoNodeService) {
       })
   }
 
-  function history (nodeId) {
+  function getVersions (nodeId) {
     return $http.get(`/alfresco/service/node/${nodeId}/versions`)
       .then(function (response) {
         return response.data

@@ -182,11 +182,6 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     angular.forEach(items, function (item) {
       // Set link
       item.uiRef = getUiRef(item)
-
-      // Set history
-      getHistory(item.shortRef).then(function (response) {
-        item.history = response
-      })
     })
   }
 
@@ -209,12 +204,6 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
     if (content.contentType === 'cmis:link')
       return 'project({projekt: "' + content.destination_link + '"})'
-  }
-
-  function getHistory (nodeId) {
-    return contentService.history(nodeId).then(function (val) {
-      return val
-    })
   }
 
   function buildBreadCrumbPath () {

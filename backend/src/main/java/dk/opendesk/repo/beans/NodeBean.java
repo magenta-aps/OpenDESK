@@ -227,13 +227,8 @@ public class NodeBean {
             Date d = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIED);
             json.put("lastChanged", d.getTime());
 
-            boolean hasHistory = false;
-            if (nodeService.hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
-                String versionLabel = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_VERSION_LABEL);
-                if (versionLabel != null && !versionLabel.equals("1.0"))
-                    hasHistory = true;
-            }
-            json.put("hasHistory", hasHistory);
+            JSONArray versions = getVersions(nodeRef);
+            json.put("versions", versions);
 
             String creator = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
             if (creator != null) {
@@ -719,11 +714,10 @@ public class NodeBean {
 
     /**
      * Gets versions of a node.
-     * @param nodeId id of the node.
+     * @param nodeRef of the node.
      * @return a JSONArray containing all versions of the node.
      */
-    public JSONArray getVersions(String nodeId) throws JSONException {
-        NodeRef nodeRef = new NodeRef("workspace", "SpacesStore", nodeId);
+    public JSONArray getVersions(NodeRef nodeRef) throws JSONException {
         JSONArray result = new JSONArray();
         VersionHistory h = versionService.getVersionHistory(nodeRef);
 
