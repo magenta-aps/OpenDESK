@@ -169,41 +169,12 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
     angular.forEach(vm.contentList, function (contentTypeList) {
       vm.contentListLength += contentTypeList.length
-      processContent(contentTypeList)
     })
     // Compile paths for breadcrumb directive
     if (folderNodeRef !== '')
       buildBreadCrumbPath()
 
     vm.isLoading = false
-  }
-
-  function processContent (items) {
-    angular.forEach(items, function (item) {
-      // Set link
-      item.uiRef = getUiRef(item)
-    })
-  }
-
-  function getUiRef (content) {
-    if (content.contentType === 'cmis:document')
-      if ($stateParams.type === 'system-folders' && content.mimeType === 'text/html')
-        return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})'
-      else
-        return 'document({doc: "' + content.shortRef + '"})'
-
-    if (content.contentType === 'cmis:folder')
-      if ($stateParams.type === 'system-folders')
-        return 'systemsettings.filebrowser({nodeRef: "' + content.shortRef + '"})'
-      else if ($stateParams.type === 'my-docs')
-        return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})'
-      else if ($stateParams.type === 'shared-docs')
-        return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})'
-      else if ($stateParams.type === 'site')
-        return 'project.filebrowser({nodeRef: "' + content.shortRef + '"})'
-
-    if (content.contentType === 'cmis:link')
-      return 'project({projekt: "' + content.destination_link + '"})'
   }
 
   function buildBreadCrumbPath () {

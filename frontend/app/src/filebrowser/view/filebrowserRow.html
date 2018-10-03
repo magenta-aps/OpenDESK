@@ -1,6 +1,6 @@
 <tr>
     <td>
-        <a class="od-filebrowser-link" ui-sref="{{content.uiRef}}" ui-sref-active="active">
+        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
             <i class="material-icons">
                 {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}} {{content.contentType == 'cmis:link' ? 'link' : ''}}
                 <img class="md-avatar" ng-show="content.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{content.fileType}}-file-24.png"
@@ -13,7 +13,7 @@
         <table style="width:100%">
             <tr>
                 <td style="border: none; margin: 0; padding: 0">
-                    <a class="od-filebrowser-link" ui-sref="{{content.uiRef}}" ui-sref-active="active">
+                    <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
                         {{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                 </td>
 
@@ -39,7 +39,7 @@
         </table>
     </td>
     <td>
-        <a class="od-filebrowser-link" ui-sref="{{content.uiRef}}" ui-sref-active="active">
+        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
             <span class='content-name'>{{content.creator.displayName}}</span>
         </a>
     </td>
