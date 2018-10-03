@@ -3,7 +3,7 @@
         <a class="od-filebrowser-link" ui-sref="{{content.uiRef}}" ui-sref-active="active">
             <i class="material-icons">
                 {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}} {{content.contentType == 'cmis:link' ? 'link' : ''}}
-                <img class="md-avatar" ng-show="content.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{content.thumbNailURL}}"
+                <img class="md-avatar" ng-show="content.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{content.fileType}}-file-24.png"
                     onerror="this.src='assets/img/filetypes/generic-file-24.png'">
             </i>
             <span class='content-name'>{{content.name}}</span>

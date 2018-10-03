@@ -146,7 +146,7 @@ public class NodeBean {
         return fileNameAndExt;
     }
 
-    private JSONObject getNodeType(NodeRef nodeRef) throws JSONException {
+    public JSONObject getNodeType(NodeRef nodeRef) throws JSONException {
         JSONObject json = new JSONObject();
         QName qname = nodeService.getType(nodeRef);
 
@@ -159,6 +159,11 @@ public class NodeBean {
         }
         else if (qname.equals(ContentModel.TYPE_CONTENT)) {
             type = "cmis:document";
+            String fileExtension = getFileExtension(nodeRef);
+            if(fileExtension != null) {
+                String fileType = fileExtension.substring(1);
+                json.put("fileType", fileType.toLowerCase());
+            }
             ContentData contentData = (ContentData) nodeService.getProperty(nodeRef, ContentModel.PROP_CONTENT);
             if(contentData != null) {
                 String mimeType = contentData.getMimetype();

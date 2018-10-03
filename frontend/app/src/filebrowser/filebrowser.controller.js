@@ -180,8 +180,6 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
   function processContent (items) {
     angular.forEach(items, function (item) {
-      item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
-
       // Set link
       item.uiRef = getUiRef(item)
 
