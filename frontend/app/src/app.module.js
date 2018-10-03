@@ -85,9 +85,12 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
 
     state.resolve = state.resolve || {}
     state.resolve.authorize = [
-      'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
-      function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
+      'authService', '$q', 'editorService', 'sessionService', '$state', 'systemSettingsService', '$stateParams',
+      'APP_CONFIG',
+      function (authService, $q, editorService, sessionService, $state, systemSettingsService, $stateParams,
+        APP_CONFIG) {
         function checkAuthorization () {
+          editorService.loadEditors()
           systemSettingsService.loadSettings()
             .then(function () {
               if (authService.isAuthorized($stateParams.authorizedRoles))

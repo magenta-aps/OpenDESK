@@ -2,12 +2,11 @@ package dk.opendesk.repo.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -207,5 +206,11 @@ public class ContentBean {
 
         Document dashboardDoc = createPageXML(docBuilder);
         createXMLFile(siteShortNameRef, "dashboard", dashboardDoc);
+    }
+
+    public JSONObject getContent(NodeRef nodeRef) throws JSONException {
+        ContentReader reader = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+        String contentString = reader.getContentString();
+        return new JSONObject(contentString);
     }
 }

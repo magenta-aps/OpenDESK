@@ -46,6 +46,7 @@ import './components/odEmail'
 
 // Shared Services
 import './shared/services/browser.service'
+import './shared/services/editor.service'
 import './shared/services/person.service'
 
 window.$ = $

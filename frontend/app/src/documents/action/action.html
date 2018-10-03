@@ -11,19 +11,19 @@
             </md-button>
         </div>
         <div>
-            <md-button ng-show="DAC.onlyOfficeEditable && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInOnlyOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.doc.extraInfo.editors.onlyOffice && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInOnlyOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.ONLYOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="DAC.loolEditable && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInLibreOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.doc.extraInfo.editors.libreOffice && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInLibreOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.LIBREOFFICE' | translate }}
             </md-button>
         </div>
         <div>
-            <md-button ng-show="DAC.msOfficeEditable && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInMSOffice()" class="md-text-icon-button md-primary">
+            <md-button ng-show="DAC.doc.extraInfo.editors.msOffice && DAC.doc.extraInfo.canEdit" ng-click="DAC.editInMSOffice()" class="md-text-icon-button md-primary">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.MSOFFICE' | translate }}
             </md-button>

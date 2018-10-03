@@ -15,8 +15,7 @@ import previewManagerTemplate from './view/previewManager.html'
 angular
   .module('openDeskApp')
   .factory('documentPreviewService', ['$mdDialog', '$timeout', 'alfrescoDocumentService',
-    'alfrescoDownloadService', 'sessionService', '$http', '$sce', 'ALFRESCO_URI', 'EDITOR_CONFIG', 'APP_BACKEND_CONFIG',
-    PreviewService])
+    'alfrescoDownloadService', 'editorService', 'sessionService', '$http', '$sce', 'ALFRESCO_URI', PreviewService])
   .component('audioPreview', {template: audioTemplate, bindings: { plugin: '=' }})
   .component('videoPreview', {template: videoTemplate, bindings: { plugin: '=' }})
   .component('imagePreview', {template: imageTemplate, bindings: { plugin: '=' }})
@@ -26,8 +25,8 @@ angular
   .component('cannotPreviewPreview', {template: cannotPreviewTemplate, bindings: { plugin: '=' }})
   .component('previewManager', {template: previewManagerTemplate, bindings: { plugin: '=', template: '=' }})
 
-function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
-  sessionService, $http, $sce, ALFRESCO_URI, EDITOR_CONFIG, APP_BACKEND_CONFIG) {
+function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService, editorService,
+  sessionService, $http, $sce, ALFRESCO_URI) {
   var service = {
     previewDocument: previewDocument,
     getPlugin: getPlugin,
@@ -133,8 +132,9 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   }
 
   function onlyOfficeViewer () {
+    var editors = editorService.getEditors()
     var viewer = {
-      mimeTypes: APP_BACKEND_CONFIG.editors.onlyOffice ? EDITOR_CONFIG.lool.mimeTypes : [],
+      mimeTypes: editors.onlyOffice ? editors.onlyOffice.mimeTypes : [],
       name: 'onlyOffice'
     }
 
@@ -143,8 +143,9 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   }
 
   function pdfViewer () {
+    var editors = editorService.getEditors()
     var viewer = {
-      transformableMimeTypes: EDITOR_CONFIG.lool.mimeTypes,
+      transformableMimeTypes: editors.libreOffice.mimeTypes,
       mimeTypes: ['application/pdf'],
       thumbnail: 'pdf',
       name: 'pdf',

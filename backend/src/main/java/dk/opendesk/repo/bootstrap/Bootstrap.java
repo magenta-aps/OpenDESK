@@ -1,5 +1,6 @@
 package dk.opendesk.repo.bootstrap;
 
+import dk.opendesk.repo.beans.EditorBean;
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.security.AuthorityService;
@@ -12,7 +13,13 @@ import java.util.List;
 
 public class Bootstrap extends AbstractLifecycleBean {
 
+    private EditorBean editorBean;
+
     private AuthorityService authorityService;
+
+    public void setEditorBean(EditorBean editorBean) {
+        this.editorBean = editorBean;
+    }
 
     public AuthorityService getAuthorityService() {
         return authorityService;
@@ -50,6 +57,9 @@ public class Bootstrap extends AbstractLifecycleBean {
                     }
                 }
             }
+
+            // Load Editors
+            editorBean.loadEditors();
             return true;
         }, AuthenticationUtil.getSystemUserName());
     }

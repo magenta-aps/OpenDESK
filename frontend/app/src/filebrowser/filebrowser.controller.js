@@ -182,16 +182,6 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     angular.forEach(items, function (item) {
       item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
 
-      var isLocked = item.isLocked
-      var lockType
-      if (isLocked)
-        lockType = item.lockType
-      var mimeType = item.mimeType
-
-      item.loolEditable = contentService.isLibreOfficeEditable(mimeType, isLocked)
-      item.msOfficeEditable = contentService.isMsOfficeEditable(mimeType, isLocked)
-      item.onlyOfficeEditable = contentService.isOnlyOfficeEditable(mimeType, isLocked, lockType)
-
       // Set link
       item.uiRef = getUiRef(item)
 

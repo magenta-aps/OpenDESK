@@ -33,6 +33,8 @@
     </bean>
 
     <bean id="editorBean" class="dk.opendesk.repo.beans.EditorBean">
+        <property name="contentBean" ref="contentBean"/>
+        <property name="nodeBean" ref="nodeBean"/>
         <property name="moduleService" ref="ModuleService"/>
     </bean>
 
@@ -45,6 +47,7 @@
     </bean>
 
     <bean id="nodeBean" class="dk.opendesk.repo.beans.NodeBean">
+        <property name="editorBean" ref="editorBean"/>
         <property name="notificationBean" ref="notificationBean"/>
         <property name="personBean" ref="personBean"/>
         <property name="fileFolderService" ref="FileFolderService"/>

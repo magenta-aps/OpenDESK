@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NodeBean {
+    private EditorBean editorBean;
     private NotificationBean notificationBean;
     private PersonBean personBean;
 
@@ -47,8 +48,8 @@ public class NodeBean {
     private SysAdminParams sysAdminParams;
     private VersionService versionService;
 
-    public void setFileFolderService(FileFolderService fileFolderService) {
-        this.fileFolderService = fileFolderService;
+    public void setEditorBean(EditorBean editorBean) {
+        this.editorBean = editorBean;
     }
     public void setNotificationBean(NotificationBean notificationBean) {
         this.notificationBean = notificationBean;
@@ -57,6 +58,9 @@ public class NodeBean {
         this.personBean = personBean;
     }
 
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -245,6 +249,12 @@ public class NodeBean {
                 json.put("isLocked", isLocked);
                 if(isLocked)
                     json.put("lockType", lockType);
+
+                String mimeType = json.getString("mimeType");
+                if(mimeType != null) {
+                    JSONObject editors = editorBean.getEditInfo(mimeType);
+                    json.put("editors", editors);
+                }
             }
 
         } else {
