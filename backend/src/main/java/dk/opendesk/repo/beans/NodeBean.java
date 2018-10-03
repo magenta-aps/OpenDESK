@@ -173,97 +173,97 @@ public class NodeBean {
     }
 
     public JSONObject getNodeInfo(NodeRef nodeRef, boolean isExtensive) throws JSONException {
-        if (!nodeService.hasAspect(nodeRef, ContentModel.ASPECT_HIDDEN)) {
+        // Return null if the node is hidden
+        if (nodeService.hasAspect(nodeRef, ContentModel.ASPECT_HIDDEN))
+            return null;
 
-            JSONObject json = getNodeType(nodeRef);
-            String name = getName(nodeRef);
-            json.put("name", name);
+        JSONObject json = getNodeType(nodeRef);
+        String name = getName(nodeRef);
+        json.put("name", name);
 
-            if(isExtensive) {
-                JSONObject metadata = getMetadata(nodeRef);
-                json.put("metadata", metadata);
-            }
-
-            AccessStatus canEdit = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
-            json.put("canEdit", canEdit == AccessStatus.ALLOWED);
-
-            AccessStatus canDelete = permissionService.hasPermission(nodeRef, PermissionService.DELETE);
-            json.put("canMoveAndDelete", canDelete == AccessStatus.ALLOWED);
-
-            if (!"cmis:link".equals(json.getString("contentType"))) {
-                json.put("nodeRef", nodeRef);
-
-                ChildAssociationRef parentChildAssocRef = nodeService.getPrimaryParent(nodeRef);
-
-                QName qName = parentChildAssocRef.getQName();
-                boolean isVersionPreviewable = qName.equals(OpenDeskModel.ASPECT_VERSION_PREVIEWABLE);
-                json.put("isVersion", isVersionPreviewable);
-
-                NodeRef parentRef = parentChildAssocRef.getParentRef();
-                json.put("parentNodeRef", parentRef);
-                json.put("parentNodeId", parentRef.getId());
-                json.put("shortRef", nodeRef.getId());
-
-
-                String modifier = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-                String displayName = personBean.getDisplayName(modifier);
-                if(displayName != null) {
-                    json.put("lastChangedBy", displayName);
-                }
-                else
-                    json.put("lastChangedBy", "Administrator");
-
-                Date d = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIED);
-                json.put("lastChanged", d.getTime());
-
-                boolean hasHistory = false;
-                if (nodeService.hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
-                    String versionLabel = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_VERSION_LABEL);
-                    if (versionLabel != null && !versionLabel.equals("1.0"))
-                        hasHistory = true;
-                }
-                json.put("hasHistory", hasHistory);
-
-                String creator = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
-                if (creator != null) {
-                    JSONObject creatorObject = personBean.getPersonInfo(creator);
-                    if(creatorObject != null) {
-                        json.put("creator", creatorObject);
-                    }
-                }
-
-                if(canDelete == AccessStatus.ALLOWED) {
-                    json.put("permissions", getNodeShareInfo(nodeRef));
-                }
-
-
-                if ("cmis:document".equals(json.getString("contentType"))) {
-                    String lockType = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_LOCK_TYPE);
-                    boolean isLocked = lockType != null;
-                    json.put("isLocked", isLocked);
-                    if(isLocked)
-                        json.put("lockType", lockType);
-                }
-
-            } else {
-                String linkSiteShortName = (String) nodeService.getProperty(nodeRef, OpenDeskModel.PROP_LINK_TARGET);
-                NodeRef linkNodeRef = (NodeRef) nodeService.getProperty(nodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
-
-                json.put("nodeid", nodeRef.getId());
-                json.put("destination_link", linkSiteShortName);
-                json.put("nodeRef", nodeRef);
-
-                if (linkNodeRef != null) {
-                    json.put("destination_nodeid", linkNodeRef.getId());
-
-                    SiteInfo linkSiteInfo = siteService.getSite(linkSiteShortName);
-                    String linkSiteDisplayName = linkSiteInfo.getTitle();
-                    json.put("name", linkSiteDisplayName);
-                }
-            }
-            return json;
+        if(isExtensive) {
+            JSONObject metadata = getMetadata(nodeRef);
+            json.put("metadata", metadata);
         }
-        return null;
+
+        AccessStatus canEdit = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
+        json.put("canEdit", canEdit == AccessStatus.ALLOWED);
+
+        AccessStatus canDelete = permissionService.hasPermission(nodeRef, PermissionService.DELETE);
+        json.put("canMoveAndDelete", canDelete == AccessStatus.ALLOWED);
+
+        if (!"cmis:link".equals(json.getString("contentType"))) {
+            json.put("nodeRef", nodeRef);
+
+            ChildAssociationRef parentChildAssocRef = nodeService.getPrimaryParent(nodeRef);
+
+            QName qName = parentChildAssocRef.getQName();
+            boolean isVersionPreviewable = qName.equals(OpenDeskModel.ASPECT_VERSION_PREVIEWABLE);
+            json.put("isVersion", isVersionPreviewable);
+
+            NodeRef parentRef = parentChildAssocRef.getParentRef();
+            json.put("parentNodeRef", parentRef);
+            json.put("parentNodeId", parentRef.getId());
+            json.put("shortRef", nodeRef.getId());
+
+
+            String modifier = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
+            String displayName = personBean.getDisplayName(modifier);
+            if(displayName != null) {
+                json.put("lastChangedBy", displayName);
+            }
+            else
+                json.put("lastChangedBy", "Administrator");
+
+            Date d = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIED);
+            json.put("lastChanged", d.getTime());
+
+            boolean hasHistory = false;
+            if (nodeService.hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
+                String versionLabel = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_VERSION_LABEL);
+                if (versionLabel != null && !versionLabel.equals("1.0"))
+                    hasHistory = true;
+            }
+            json.put("hasHistory", hasHistory);
+
+            String creator = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
+            if (creator != null) {
+                JSONObject creatorObject = personBean.getPersonInfo(creator);
+                if(creatorObject != null) {
+                    json.put("creator", creatorObject);
+                }
+            }
+
+            if(canDelete == AccessStatus.ALLOWED) {
+                json.put("permissions", getNodeShareInfo(nodeRef));
+            }
+
+
+            if ("cmis:document".equals(json.getString("contentType"))) {
+                String lockType = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_LOCK_TYPE);
+                boolean isLocked = lockType != null;
+                json.put("isLocked", isLocked);
+                if(isLocked)
+                    json.put("lockType", lockType);
+            }
+
+        } else {
+            String linkSiteShortName = (String) nodeService.getProperty(nodeRef, OpenDeskModel.PROP_LINK_TARGET);
+            NodeRef linkNodeRef = (NodeRef) nodeService.getProperty(nodeRef, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
+
+            json.put("nodeid", nodeRef.getId());
+            json.put("destination_link", linkSiteShortName);
+            json.put("nodeRef", nodeRef);
+
+            if (linkNodeRef != null) {
+                json.put("destination_nodeid", linkNodeRef.getId());
+
+                SiteInfo linkSiteInfo = siteService.getSite(linkSiteShortName);
+                String linkSiteDisplayName = linkSiteInfo.getTitle();
+                json.put("name", linkSiteDisplayName);
+            }
+        }
+        return json;
     }
 
     private JSONObject getNodeShareInfo(NodeRef nodeRef) throws JSONException {

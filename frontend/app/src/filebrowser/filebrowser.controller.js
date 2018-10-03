@@ -8,14 +8,14 @@ import uploadSbsysTemplate from './view/sbsys/uploadSbsys.tmpl.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout', 'siteService',
+  .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout',
     'fileService', 'filebrowserService', 'documentService', 'alfrescoNodeService', '$translate',
-    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'contentService',
+    'APP_BACKEND_CONFIG', 'headerService', 'browserService', 'contentService',
     FilebrowserController])
 
-function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, siteService, fileService,
+function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, fileService,
   filebrowserService, documentService, alfrescoNodeService, $translate, APP_BACKEND_CONFIG,
-  sessionService, headerService, browserService, contentService) {
+  headerService, browserService, contentService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -109,7 +109,8 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     filebrowserService.getTemplates('document')
       .then(function (documentTemplates) {
         vm.documentTemplates = documentTemplates
-        if (vm.documentTemplates !== undefined) processContent(vm.documentTemplates)
+        if (vm.documentTemplates !== undefined)
+          processContent(vm.documentTemplates)
       })
 
     filebrowserService.getTemplates('folder')

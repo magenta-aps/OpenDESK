@@ -20,6 +20,8 @@ public interface OpenDeskModel {
             "OpenDesk", "Templates"));
     List<String> PATH_OD_SETTINGS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
             "settings.xml"));
+    List<String> PATH_OD_EDITORS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Editors"));
 
 
     // Containers
