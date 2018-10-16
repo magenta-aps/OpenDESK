@@ -1,0 +1,10 @@
+<div layout="column" ng-if="!LC.isDisplayed">
+    <md-icon class="md-icon--large">library_books</md-icon>
+    <p class="md-display-1" style="text-align:center">{{'EDITORS.PREVIEW_ERROR' | translate}}</p>
+</div>
+<iframe ng-if="LC.isDisplayed"
+        ng-src="{{ LC.libreOfficeUrl }}"
+        ng-style="iframeStyle"
+        style="width:100%;height:{{ LC.height }}"
+        wmode="transparent">
+</iframe>
