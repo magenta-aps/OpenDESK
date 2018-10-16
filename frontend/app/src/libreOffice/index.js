@@ -1,4 +1,4 @@
-import './lool.module'
+import './libreOffice.module'
 
 function importAll (r) {
   r.keys().forEach(r)

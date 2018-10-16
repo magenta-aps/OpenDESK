@@ -66,11 +66,8 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $mdT
   }
 
   function editInLibreOffice () {
-    var params = {
-      'nodeRef': content.nodeRef,
-      'fileName': content.name
-    }
-    $state.go('lool', params)
+    var nodeId = alfrescoNodeService.processNodeRef(content.nodeRef).id
+    $window.open($state.href('libreOfficeEdit', { 'nodeId': nodeId }))
   }
 
   function editInMSOffice () {
