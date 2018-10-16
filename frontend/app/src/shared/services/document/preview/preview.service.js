@@ -8,6 +8,7 @@ import videoTemplate from './view/video.html'
 import strobeMediaPlayBackTemplate from './view/strobeMediaPlayBack.html'
 import imageTemplate from './view/image.html'
 import onlyOfficeTemplate from './view/onlyOffice.html'
+import libreOfficeTemplate from './view/libreOffice.html'
 import pdfTemplate from './view/pdf.html'
 import webTemplate from './view/web.html'
 import cannotPreviewTemplate from './view/cannotPreview.html'
@@ -23,6 +24,7 @@ angular
   .component('strobeMediaPlayBackPreview', {template: strobeMediaPlayBackTemplate, bindings: { plugin: '=' }})
   .component('imagePreview', {template: imageTemplate, bindings: { plugin: '=' }})
   .component('onlyOfficePreview', {template: onlyOfficeTemplate, bindings: { plugin: '=' }})
+  .component('libreOfficePreview', {template: libreOfficeTemplate, bindings: { plugin: '=' }})
   .component('pdfPreview', {template: pdfTemplate, bindings: { plugin: '=' }})
   .component('webPreview', {template: webTemplate, bindings: { plugin: '=' }})
   .component('cannotPreviewPreview', {template: cannotPreviewTemplate, bindings: { plugin: '=' }})
@@ -69,6 +71,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
     var plugins = [
       audioViewer(),
       onlyOfficeViewer(),
+      libreOfficeViewer(),
       webViewer(),
       pdfViewer(),
       imageViewer(),
@@ -152,6 +155,16 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
     var viewer = {
       mimeTypes: APP_BACKEND_CONFIG.editors.onlyOffice ? EDITOR_CONFIG.lool.mimeTypes : [],
       name: 'onlyOffice'
+    }
+
+    var result = generalPlaybackPlugin()
+    return angular.extend(result, viewer)
+  }
+
+  function libreOfficeViewer () {
+    var viewer = {
+      mimeTypes: APP_BACKEND_CONFIG.editors.libreOffice ? EDITOR_CONFIG.lool.mimeTypes : [],
+      name: 'libreOffice'
     }
 
     var result = generalPlaybackPlugin()
