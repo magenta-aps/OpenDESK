@@ -20,7 +20,7 @@ function config ($stateProvider, USER_ROLES) {
     views: {
       'body@': {
         template: libreOfficeTemplate,
-        controller: 'LibreOfficeController',
+        controller: 'LibreOfficeEditController',
         controllerAs: 'LC'
       }
     }

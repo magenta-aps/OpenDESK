@@ -1,11 +1,12 @@
 'use strict'
-import '../shared/services/nodeRefUtils.service'
+import '../../shared/services/nodeRefUtils.service'
 
 angular
   .module('openDeskApp.libreOffice')
-  .controller('LibreOfficeController', ['$stateParams', 'libreOfficeService', 'nodeRefUtilsService', LibreOfficeController])
+  .controller('LibreOfficeEditController', ['$stateParams', 'libreOfficeService', 'nodeRefUtilsService',
+    LibreOfficeEditController])
 
-function LibreOfficeController ($stateParams, libreOfficeService, nodeRefUtilsService) {
+function LibreOfficeEditController ($stateParams, libreOfficeService, nodeRefUtilsService) {
   var vm = this
 
   activate()
