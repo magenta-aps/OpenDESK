@@ -1,8 +1,8 @@
 angular
-  .module('openDeskApp.lool')
-  .factory('loolService', ['$http', '$location', '$sce', loolService])
+  .module('openDeskApp.libreOffice')
+  .factory('libreOfficeService', ['$http', '$location', '$sce', libreOfficeService])
 
-function loolService ($http, $location, $sce) {
+function libreOfficeService ($http, $location, $sce) {
   return {
     getLibreOfficeUrl: getLibreOfficeUrl
   }

@@ -1,8 +1,8 @@
 'use strict'
-import loolTemplate from './view/lool.html'
+import libreOfficeTemplate from './view/libreOffice.html'
 
 angular
-  .module('openDeskApp.lool', [])
+  .module('openDeskApp.libreOffice', [])
   .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
@@ -19,8 +19,8 @@ function config ($stateProvider, USER_ROLES) {
     },
     views: {
       'body@': {
-        template: loolTemplate,
-        controller: 'LoolController',
+        template: libreOfficeTemplate,
+        controller: 'LibreOfficeController',
         controllerAs: 'LC'
       }
     }

@@ -2,17 +2,17 @@
 import '../shared/services/nodeRefUtils.service'
 
 angular
-  .module('openDeskApp.lool')
-  .controller('LoolController', ['$stateParams', 'loolService', 'nodeRefUtilsService', LoolController])
+  .module('openDeskApp.libreOffice')
+  .controller('LibreOfficeController', ['$stateParams', 'libreOfficeService', 'nodeRefUtilsService', LibreOfficeController])
 
-function LoolController ($stateParams, loolService, nodeRefUtilsService) {
+function LibreOfficeController ($stateParams, libreOfficeService, nodeRefUtilsService) {
   var vm = this
 
   activate()
 
   function activate () {
     vm.nodeId = nodeRefUtilsService.getId($stateParams.nodeRef)
-    loolService.getLibreOfficeUrl($stateParams.nodeRef, 'edit')
+    libreOfficeService.getLibreOfficeUrl($stateParams.nodeRef, 'edit')
       .then(function (response) {
         if (response) {
           vm.libreOfficeUrl = response
