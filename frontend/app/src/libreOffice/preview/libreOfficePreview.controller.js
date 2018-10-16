@@ -2,15 +2,15 @@
 
 angular
   .module('openDeskApp.libreOffice')
-  .controller('LibreOfficePreviewController', ['$stateParams', 'libreOfficeService', LibreOfficePreviewController])
+  .controller('LibreOfficePreviewController', ['$scope', 'libreOfficeService', LibreOfficePreviewController])
 
-function LibreOfficePreviewController ($stateParams, libreOfficeService) {
+function LibreOfficePreviewController ($scope, libreOfficeService) {
   var vm = this
 
   activate()
 
   function activate () {
-    libreOfficeService.getLibreOfficeUrl($stateParams.nodeRef, 'view')
+    libreOfficeService.getLibreOfficeUrl($scope.nodeRef, 'view')
       .then(function (response) {
         if (response) {
           vm.libreOfficeUrl = response
