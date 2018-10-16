@@ -47,18 +47,14 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
   }
 
   function acceptEditVersionDialog (editor) {
-    if (editor === 'only-office')
+    if (editor === 'only-office' || editor === 'libre-office')
       var newPage = $window.open()
 
     var selectedVersion = $location.search().version
     ContentService.revertToVersion('no comments', true, vm.doc.node.nodeRef, selectedVersion).then(
-      function (response) {
+      function () {
         if (editor === 'libre-office')
-          $state.go('lool', {
-            'nodeRef': vm.doc.node.nodeRef,
-            'versionLabel': vm.doc.version,
-            'parent': response.config.data.nodeRef
-          })
+          newPage.location.href = $state.href('libreOfficeEdit', {'nodeId': vm.doc.parentNodeId})
 
         else if (editor === 'ms-office')
           editOnlineMSOfficeService.editOnline(vm.doc)
@@ -91,9 +87,7 @@ function DocumentActionController ($mdDialog, $location, $scope, $state, $stateP
     if (isVersion())
       showEditVersionDialog('libre-office')
     else
-      $state.go('lool', {
-        'nodeRef': vm.doc.node.nodeRef
-      })
+      $window.open($state.href('libreOfficeEdit', { 'nodeId': vm.doc.node.nodeRef.split('/')[3] }))
   }
 
   function editInMSOffice () {

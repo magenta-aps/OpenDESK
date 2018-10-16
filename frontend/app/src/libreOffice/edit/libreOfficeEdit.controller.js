@@ -10,7 +10,8 @@ function LibreOfficeEditController ($stateParams, libreOfficeService) {
   activate()
 
   function activate () {
-    libreOfficeService.getLibreOfficeUrl($stateParams.nodeRef, 'edit')
+    var nodeRef = 'workspace://SpacesStore/' + $stateParams.nodeId
+    libreOfficeService.getLibreOfficeUrl(nodeRef, 'edit')
       .then(function (response) {
         if (response) {
           vm.libreOfficeUrl = response

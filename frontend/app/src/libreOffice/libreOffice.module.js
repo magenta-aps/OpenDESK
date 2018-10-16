@@ -6,23 +6,18 @@ angular
   .config(['$stateProvider', 'USER_ROLES', config])
 
 function config ($stateProvider, USER_ROLES) {
-  $stateProvider.state('lool', {
+  $stateProvider.state('libreOfficeEdit', {
     parent: 'site',
-    url: '/lool/',
-    params: {
-      authorizedRoles: [USER_ROLES.user],
-      nodeRef: null,
-      versionLabel: null,
-      parent: null,
-      showArchived: null,
-      backToDocPreview: null
-    },
+    url: '/edit/libreOffice/:nodeId',
     views: {
       'body@': {
         template: libreOfficeTemplate,
         controller: 'LibreOfficeEditController',
         controllerAs: 'LC'
       }
+    },
+    params: {
+      authorizedRoles: [USER_ROLES.user]
     }
   })
 }
