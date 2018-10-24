@@ -16,6 +16,7 @@ function TemplatesController ($mdDialog, $scope, siteService, systemSettingsServ
   vm.deleteSite = deleteSite
   vm.deleteSiteDialog = deleteSiteDialog
   vm.templateSites = []
+  vm.isLoaded = false
 
   activate()
 
@@ -34,6 +35,7 @@ function TemplatesController ($mdDialog, $scope, siteService, systemSettingsServ
     systemSettingsService.getTemplates()
       .then(function (response) {
         vm.templateSites = response
+        vm.isLoaded = true
       })
   }
 
