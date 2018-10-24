@@ -1,0 +1,42 @@
+{
+  "edit": {
+    "order": [
+      "cm:name"
+    ],
+    "properties": {
+      "cm:name": {
+        "widget": "textfield"
+      }
+    }
+  },
+  "view": {
+    "order": [
+      "cm:name",
+      "cm:versionLabel",
+      "cm:creator",
+      "cm:created",
+      "cm:modifier",
+      "cm:modified"
+    ],
+    "properties": {
+      "cm:name": {
+        "widget": "textfield"
+      },
+      "cm:versionLabel": {
+        "widget": "textfield"
+      },
+      "cm:creator": {
+        "widget": "person"
+      },
+      "cm:created": {
+        "widget": "date"
+      },
+      "cm:modifier": {
+        "widget": "person"
+      },
+      "cm:modified": {
+        "widget": "date"
+      }
+    }
+  }
+}
