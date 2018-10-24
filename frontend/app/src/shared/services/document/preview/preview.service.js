@@ -161,7 +161,8 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
         'text/plain',
         'text/html',
         'text/xml',
-        'text/xhtml+xml'
+        'text/xhtml+xml',
+        'application/json'
       ],
       name: 'web',
       extendPlugin: function () {
@@ -169,6 +170,8 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
         $http.get(this.contentUrl).then(function (response) {
           if (_this.mimeType === 'text/html' || _this.mimeType === 'text/xhtml+xml')
             _this.htmlContent = $sce.trustAsHtml(response.data)
+          else if (_this.mimeType === 'application/json')
+            _this.jsonContent = response.data
           else
             _this.plainTextContent = response.data
         })

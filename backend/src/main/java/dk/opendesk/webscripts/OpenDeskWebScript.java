@@ -67,6 +67,10 @@ public class OpenDeskWebScript extends AbstractWebScript {
         return getMap(contentParams, parameter);
     }
 
+    protected JSONObject getContentObject(String parameter) throws JSONException {
+        return getJSONObject(contentParams, parameter);
+    }
+
     protected String getContentString(String parameter) throws JSONException {
         return getString(contentParams, parameter);
     }

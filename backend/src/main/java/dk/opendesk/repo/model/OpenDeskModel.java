@@ -22,6 +22,10 @@ public interface OpenDeskModel {
             "settings.xml"));
     List<String> PATH_OD_EDITORS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
             "Editors"));
+    List<String> PATH_OD_PROPERTY_UI_DEFINITIONS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions"));
+    List<String> PATH_OD_PROPERTY_WIDGETS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions", "widgets.json"));
 
 
     // Containers
