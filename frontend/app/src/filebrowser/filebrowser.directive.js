@@ -30,7 +30,9 @@ angular
         isSite: '<',
         loadCheckboxes: '='
       },
-      template: filebrowserRowTemplate
+      template: filebrowserRowTemplate,
+      controller: 'FilebrowserRowController',
+      controllerAs: 'FRC'
     }
   })
   .directive('filebrowserMenu', function () {

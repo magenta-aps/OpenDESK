@@ -18,11 +18,13 @@ package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
 import dk.opendesk.webscripts.OpenDeskWebScript;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 
+// NOT USED
 public class GetVersions extends OpenDeskWebScript {
 
     private NodeBean nodeBean;
@@ -36,7 +38,8 @@ public class GetVersions extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String nodeId = urlParams.get("nodeId");
-            arrayResult = nodeBean.getVersions(nodeId);
+            NodeRef nodeRef = new NodeRef("workspace", "SpacesStore", nodeId);
+            arrayResult = nodeBean.getVersions(nodeRef);
 
         } catch (Exception e) {
             error(res, e);

@@ -18,21 +18,21 @@
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="content.onlyOfficeEditable && content.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="content.editors.onlyOffice && content.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.editInOnlyOffice()">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.ONLYOFFICE' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="content.loolEditable && content.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="content.editors.libreOffice && content.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.editInLibreOffice()">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.LIBREOFFICE' | translate }}
             </md-button>
         </md-menu-item>
 
-        <md-menu-item ng-if="content.msOfficeEditable && content.canEdit && content.contentType == 'cmis:document'">
+        <md-menu-item ng-if="content.editors.msOffice && content.canEdit && content.contentType == 'cmis:document'">
             <md-button ng-click="vm.editInMSOffice()">
                 <md-icon md-menu-align-target>edit</md-icon>
                 {{'DOCUMENT.EDIT_IN' | translate }} {{'EDITORS.MSOFFICE' | translate }}

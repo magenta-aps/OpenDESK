@@ -1,0 +1,11 @@
+<div ng-if="DC.loaded">
+    <div layout="row">
+        <md-card flex="100">
+            <md-card-content>
+                <breadcrumb paths="DC.paths"></breadcrumb>
+
+                <od-edit-metadata ng-if="DC.loaded" node="DC.doc"></od-edit-metadata>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

@@ -3,20 +3,18 @@ import '../shared/services/alfrescoNode.service'
 
 angular
   .module('openDeskApp.filebrowser')
-  .factory('filebrowserService', ['$http', 'alfrescoNodeService', fileBrowserService])
+  .factory('filebrowserService', ['$http', 'alfrescoNodeService', 'documentService', fileBrowserService])
 
-function fileBrowserService ($http, alfrescoNodeService) {
+function fileBrowserService ($http, alfrescoNodeService, documentService) {
   var currentFolderNodeRef
 
   var service = {
     genericContentAction: genericContentAction,
-    getCompanyHome: getCompanyHome,
     getContentList: getContentList,
     getCurrentFolderNodeRef: getCurrentFolderNodeRef,
     getHome: getHome,
     getSharedNodes: getSharedNodes,
     getTemplates: getTemplates,
-    getUserHome: getUserHome,
     loadFromSbsys: loadFromSbsys,
     setCurrentFolder: setCurrentFolder,
     shareNode: shareNode,
@@ -49,7 +47,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
       })
   }
 
-  function getHome (type) {
+  function getHome (type, siteShortName) {
     switch (type) {
       case 'user':
         return getUserHome()
@@ -61,6 +59,12 @@ function fileBrowserService ($http, alfrescoNodeService) {
           .then(function (nodeRef) {
             return nodeRef
           })
+      case 'site':
+        return documentService.getSiteNode(siteShortName)
+          .then(
+            function (node) {
+              return node.nodeRef
+            })
     }
   }
 

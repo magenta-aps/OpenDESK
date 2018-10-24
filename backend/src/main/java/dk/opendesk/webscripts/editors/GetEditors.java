@@ -20,7 +20,7 @@ public class GetEditors extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            objectResult = editorBean.getEditors();
+            objectResult = editorBean.getEditorObjects();
         } catch (Exception e) {
             error(res, e);
         }

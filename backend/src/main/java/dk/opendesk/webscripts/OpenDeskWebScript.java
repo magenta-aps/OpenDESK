@@ -67,6 +67,10 @@ public class OpenDeskWebScript extends AbstractWebScript {
         return getMap(contentParams, parameter);
     }
 
+    protected JSONObject getContentObject(String parameter) throws JSONException {
+        return getJSONObject(contentParams, parameter);
+    }
+
     protected String getContentString(String parameter) throws JSONException {
         return getString(contentParams, parameter);
     }
@@ -175,7 +179,7 @@ public class OpenDeskWebScript extends AbstractWebScript {
         try {
             if(objectResult.length() > 0)
                 objectResult.write(res.getWriter());
-            else if(arrayResult.size() > 0)
+            else
                 arrayResult.writeJSONString(res.getWriter());
         } catch (Exception e) {
             e.printStackTrace();

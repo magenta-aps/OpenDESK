@@ -35,10 +35,8 @@ function NodePickerService ($http, $translate, translateService, alfrescoNodeSer
       .then(function (response) {
         var nodeInfo = response.data
         angular.forEach(nodeInfo.children, function (item) {
-          item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
           translateName(item)
         })
-        console.log(nodeInfo)
         translateName(nodeInfo)
         return nodeInfo
       })

@@ -41,11 +41,6 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
     vm.isLocked = vm.doc.node.isLocked
     if (vm.isLocked)
       vm.lockType = vm.doc.node.properties['cm:lockType']
-    var mimeType = vm.doc.node.mimetype
-
-    vm.loolEditable = contentService.isLibreOfficeEditable(mimeType, vm.isLocked)
-    vm.msOfficeEditable = contentService.isMsOfficeEditable(mimeType, vm.isLocked)
-    vm.onlyOfficeEditable = contentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
 
     vm.isPublicShared = vm.doc.node.properties['qshare:sharedId']
     if (vm.isPublicShared) {

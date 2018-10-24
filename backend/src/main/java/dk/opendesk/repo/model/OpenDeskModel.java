@@ -13,10 +13,19 @@ public interface OpenDeskModel {
     String SITE = "Site";
 
     // SPECIAL SITES
+    List<String> PATH_COMPANY_HOME = new ArrayList<>();
     List<String> PATH_NODE_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Node Templates"));
     List<String> PATH_SPACE_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Space Templates"));
+    List<String> PATH_TEXT_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Web Scripts Extensions",
+            "OpenDesk", "Templates"));
     List<String> PATH_OD_SETTINGS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
             "settings.xml"));
+    List<String> PATH_OD_EDITORS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Editors"));
+    List<String> PATH_OD_PROPERTY_UI_DEFINITIONS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions"));
+    List<String> PATH_OD_PROPERTY_WIDGETS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions", "widgets.json"));
 
 
     // Containers

@@ -102,6 +102,24 @@
 		<property name="nodeBean" ref="nodeBean"/>
 	</bean>
 
+    <bean id="webscript.node.properties.put"
+          class="dk.opendesk.webscripts.node.UpdateProperties"
+          parent="webscript">
+        <property name="nodeBean" ref="nodeBean"/>
+    </bean>
+
+	<bean id="webscript.node.propertyDefinitions.get"
+		  class="dk.opendesk.webscripts.node.GetPropertyDefinitions"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+	<bean id="webscript.node.propertyUIDefinitions.get"
+		  class="dk.opendesk.webscripts.node.GetPropertyUIDefinitions"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
 	<bean id="webscript.node.rename.put"
 		  class="dk.opendesk.webscripts.node.Rename"
 		  parent="webscript">
@@ -125,6 +143,25 @@
           parent="webscript">
         <property name="nodeBean" ref="nodeBean"/>
     </bean>
+
+	<bean id="webscript.node.site.get"
+		  class="dk.opendesk.webscripts.node.GetSiteNode"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+		<property name="siteBean" ref="siteBean"/>
+	</bean>
+
+	<bean id="webscript.node.system.get"
+		  class="dk.opendesk.webscripts.node.GetSystemNode"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
+
+	<bean id="webscript.node.templateFolders.get"
+		  class="dk.opendesk.webscripts.node.GetTemplateFolders"
+		  parent="webscript">
+		<property name="nodeBean" ref="nodeBean"/>
+	</bean>
 
 	<bean id="webscript.node.thumbnail.get"
 		  class="dk.opendesk.webscripts.node.GetThumbnail"

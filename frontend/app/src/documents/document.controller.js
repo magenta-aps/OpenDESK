@@ -20,15 +20,6 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     vm.docHasParent = $location.search().versionId !== undefined
     vm.parentNodeId = $stateParams.doc
     vm.nodeId = vm.docHasParent ? $location.search().versionId : $stateParams.doc
-
-    contentService.history(vm.parentNodeId)
-      .then(function (val) {
-        vm.history = val
-        var currentNoOfHistory = vm.history.length
-        if (currentNoOfHistory > 0)
-          vm.doc.firstDocumentNode = vm.history[0].nodeRef
-      })
-
     getDocument()
     getReview()
   }
@@ -58,7 +49,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
 
     paths.push({
       title: response.item.location.file,
-      link: response.item.location.path
+      link: 'document({doc: "' + vm.parentNodeId + '"})'
     })
     return paths
   }
@@ -124,6 +115,9 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
         contentService.getNode(vm.parentNodeId)
           .then(function (node) {
             vm.doc.extraInfo = node
+            var currentNoOfHistory = vm.doc.extraInfo.versions.length
+            if (currentNoOfHistory > 0)
+              vm.doc.firstDocumentNode = vm.doc.extraInfo.versions[0].nodeRef
             vm.loaded = true
           })
 

@@ -6,7 +6,6 @@ angular
 
 function SystemSettingsService ($http, APP_BACKEND_CONFIG) {
   var service = {
-    getEditors: getEditors,
     getTemplates: getTemplates,
     loadSettings: loadSettings,
     loadPublicSettings: loadPublicSettings,
@@ -14,12 +13,6 @@ function SystemSettingsService ($http, APP_BACKEND_CONFIG) {
   }
 
   return service
-
-  function getEditors () {
-    return $http.get('/alfresco/service/editors').then(function (response) {
-      return response.data
-    })
-  }
 
   function getTemplates () {
     return $http.get(`/alfresco/service/site/templates`)

@@ -1,12 +1,10 @@
 package dk.opendesk.repo.beans;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.SearcherException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -78,22 +76,17 @@ public class TemplateBean {
 
         JSONArray children = new JSONArray();
         for (ChildAssociationRef child : childAssociationRefs) {
-            JSONObject json = new JSONObject();
-
             NodeRef templateRef = child.getChildRef();
-            String name = nodeBean.getName(templateRef);
 
-            QName childNodeType = nodeService.getType(templateRef);
+            JSONObject json = nodeBean.getNodeType(templateRef);
 
             json.put("nodeRef", templateRef.getId());
-            json.put("name", name);
-            json.put("isFolder", childNodeType.equals(ContentModel.TYPE_FOLDER));
 
-            ContentData contentData = (ContentData) nodeService.getProperty(templateRef, ContentModel.PROP_CONTENT);
-            if(contentData != null) {
-                String originalMimeType = contentData.getMimetype();
-                json.put("mimeType", originalMimeType);
-            }
+            String name = nodeBean.getName(templateRef);
+            json.put("name", name);
+
+            boolean isFolder = "cmis:folder".equals(json.getString("contentType"));
+            json.put("isFolder", isFolder);
 
             children.add(json);
         }

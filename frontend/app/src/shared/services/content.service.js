@@ -2,20 +2,17 @@
 import '../../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp')
-  .factory('contentService', ['$http', 'alfrescoNodeService', 'APP_BACKEND_CONFIG', 'EDITOR_CONFIG', contentService])
+  .factory('contentService', ['$http', 'alfrescoNodeService', contentService])
 
-function contentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_CONFIG) {
+function contentService ($http, alfrescoNodeService) {
   var service = {
     delete: deleteContent,
     get: getContent,
     getNode: getNode,
-    history: history,
+    getVersions: getVersions,
     upload: uploadContent,
     uploadNewVersion: uploadNewVersion,
-    revertToVersion: revertToVersion,
-    isLibreOfficeEditable: isLibreOfficeEditable,
-    isMsOfficeEditable: isMsOfficeEditable,
-    isOnlyOfficeEditable: isOnlyOfficeEditable
+    revertToVersion: revertToVersion
   }
 
   return service
@@ -41,7 +38,7 @@ function contentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
       })
   }
 
-  function history (nodeId) {
+  function getVersions (nodeId) {
     return $http.get(`/alfresco/service/node/${nodeId}/versions`)
       .then(function (response) {
         return response.data
@@ -99,26 +96,5 @@ function contentService ($http, alfrescoNodeService, APP_BACKEND_CONFIG, EDITOR_
     }).then(function (response) {
       return response
     })
-  }
-
-  function isLibreOfficeEditable (mimeType, isLocked) {
-    if (!APP_BACKEND_CONFIG.editors.libreOffice)
-      return false
-    if (!isLocked)
-      return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1
-  }
-
-  function isMsOfficeEditable (mimeType, isLocked) {
-    if (!APP_BACKEND_CONFIG.editors.msOffice)
-      return false
-    if (!isLocked)
-      return EDITOR_CONFIG.msOffice.mimeTypes.indexOf(mimeType) !== -1
-  }
-
-  function isOnlyOfficeEditable (mimeType, isLocked, lockType) {
-    if (!APP_BACKEND_CONFIG.editors.onlyOffice)
-      return false
-    if (!isLocked || lockType === 'WRITE_LOCK')
-      return EDITOR_CONFIG.lool.mimeTypes.indexOf(mimeType) !== -1
   }
 }

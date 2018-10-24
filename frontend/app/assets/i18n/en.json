@@ -1085,5 +1085,14 @@
     "SENDERFIRSTNAME" : "First Name of the Sender",
     "SENDERLASTNAME" : "Last Name of the Sender",
     "SENDERUSERNAME" : "Username of the Sender"
+  },
+  "PROPERTY": {
+    "cm:author": "Author",
+    "cm:created": "Created",
+    "cm:creator": "Creator",
+    "cm:modified": "Modified",
+    "cm:modifier": "Modifier",
+    "cm:name": "Name",
+    "cm:versionLabel": "Version"
   }
 }

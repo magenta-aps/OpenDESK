@@ -1,0 +1,46 @@
+<md-card class="dropdown-card" id="details">
+    <md-card-title>
+        <h3 class="md-title od-title-icon "><md-icon>edit</md-icon> {{'COMMON.EDIT' | translate }}</h3>
+    </md-card-title>
+
+    <md-card-content>
+        <form ng-submit="MC.saveMetadata()" name="saveMetadata">
+            <div ng-repeat="key in MC.propertyUIDefinitions.edit.order">
+                <md-input-container ng-if="MC.propertyUIDefinitions.edit.properties[key].widget === 'textfield'">
+                    <h5>{{'PROPERTY.' + key | translate}}:</h5>
+                    <input ng-if="!MC.propertyDefinitions[key].multiValued"
+                           type="text"
+                           style="width:25em"
+                           ng-model="MC.modelProperties[key]"
+                           ng-required="MC.propertyDefinitions[key].mandatory">
+                    <md-select ng-if="MC.propertyDefinitions[key].multiValued"
+                               ng-model="MC.modelProperties[key]"
+                               multiple="MC.propertyDefinitions[key].multiValued">
+                        <md-option ng-value="MC.node.node.properties[key]">{{MC.modelProperties[key]}}</md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-input-container ng-if="MC.propertyUIDefinitions.edit.properties[key].widget === 'checkbox'">
+                <md-checkbox ng-model="MC.modelProperties[key]">
+                    <h5>{{'PROPERTY.' + key | translate}}:</h5>
+                </md-checkbox>
+                </md-input-container>
+
+                <md-input-container ng-if="MC.propertyUIDefinitions.edit.properties[key].widget === 'date'">
+                    <h5>{{'PROPERTY.' + key | translate}}:</h5>
+                    <md-datepicker ng-model="MC.modelProperties[key].iso8601" md-open-on-focus>
+                    </md-datepicker>
+                </md-input-container>
+            </div>
+
+            <md-card-actions layout="row" layout-align="start center">
+                <span flex></span>
+                <span flex></span>
+                <md-button type="submit" class="md-button md-raised md-primary" ng-disabled="saveMetadata.$invalid">
+                    {{'COMMON.SAVE' | translate}}
+                </md-button>
+            </md-card-actions>
+
+        </form>
+    </md-card-content>
+</md-card>

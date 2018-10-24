@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Template Folders</shortname>
+    <description>Gets a list of Template Folders</description>
+    <url>/node/templateFolders</url>
+    <authentication>user</authentication>
+</webscript>
