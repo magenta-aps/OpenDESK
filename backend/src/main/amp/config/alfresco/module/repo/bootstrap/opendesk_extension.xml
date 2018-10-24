@@ -64,7 +64,7 @@
                             <cm:author>admin</cm:author>
                             <cm:name>onlyOffice.json</cm:name>
                             <cm:title>onlyOffice.json</cm:title>
-                            <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/editors/onlyOffice.json|mimetype=application/json|size=3660|encoding=UTF-8|locale=da_DK_</cm:content>
+                            <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/editors/onlyOffice.json|mimetype=application/json|size=729|encoding=UTF-8|locale=da_DK_</cm:content>
                         </view:properties>
                         <view:associations></view:associations>
                     </cm:content>
