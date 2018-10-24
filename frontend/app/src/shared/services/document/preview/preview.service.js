@@ -146,8 +146,9 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   }
 
   function libreOfficeViewer () {
+    var editors = editorService.getEditors()
     var viewer = {
-      mimeTypes: APP_BACKEND_CONFIG.editors.libreOffice ? EDITOR_CONFIG.lool.mimeTypes : [],
+      mimeTypes: editors.libreOffice ? editors.libreOffice.mimeTypes : [],
       name: 'libreOffice'
     }
 
