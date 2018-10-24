@@ -11,6 +11,7 @@ angular
 function TemplatesController ($mdDialog, $scope, siteService, systemSettingsService) {
   var vm = this
 
+  vm.cancelDialog = cancelDialog
   vm.createTemplate = createTemplate
   vm.newTemplate = newTemplate
   vm.deleteSite = deleteSite
@@ -22,6 +23,10 @@ function TemplatesController ($mdDialog, $scope, siteService, systemSettingsServ
 
   function activate () {
     loadTemplates()
+  }
+
+  function cancelDialog () {
+    $mdDialog.cancel()
   }
 
   function createTemplate (name, description) {
@@ -68,9 +73,6 @@ function TemplatesController ($mdDialog, $scope, siteService, systemSettingsServ
             $mdDialog.hide()
           })
         })
-      },
-      function () {
-        console.log('cancelled delete')
       }
     )
   }
