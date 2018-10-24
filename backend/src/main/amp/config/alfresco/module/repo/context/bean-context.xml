@@ -50,7 +50,6 @@
         <property name="editorBean" ref="editorBean"/>
         <property name="notificationBean" ref="notificationBean"/>
         <property name="personBean" ref="personBean"/>
-        <property name="fileFolderService" ref="FileFolderService"/>
         <property name="contentService" ref="ContentService"/>
         <property name="dictionaryService" ref="DictionaryService"/>
         <property name="fileFolderService" ref="FileFolderService"/>

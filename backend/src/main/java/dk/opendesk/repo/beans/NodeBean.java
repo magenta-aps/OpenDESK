@@ -40,7 +40,6 @@ public class NodeBean {
     private NotificationBean notificationBean;
     private PersonBean personBean;
 
-    private FileFolderService fileFolderService;
     private DictionaryService dictionaryService;
     private ContentService contentService;
     private FileFolderService fileFolderService;
@@ -597,11 +596,6 @@ public class NodeBean {
     public List<NodeRef> getMyDocs() {
         NodeRef userHomeRef = getUserHome();
         return getChildren(userHomeRef);
-    }
-
-    private NodeRef getNodeByPath(List<String> path) throws FileNotFoundException {
-        NodeRef companyHome = repository.getCompanyHome();
-        return fileFolderService.resolveNamePath(companyHome, path).getNodeRef();
     }
 
     public JSONObject getPropertyDefinition(QName propertyName) throws JSONException {
