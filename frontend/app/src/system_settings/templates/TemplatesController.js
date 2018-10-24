@@ -2,6 +2,7 @@
 import '../../shared/filters/openeDateFilter'
 import '../../shared/filters/orderByObjectFilter'
 import newTemplateTemplate from './view/newTemplate.tmpl.html'
+import siteInfoTemplate from '../../odSite/siteList/siteInfo.view.html'
 
 angular
   .module('openDeskApp')
@@ -16,6 +17,7 @@ function TemplatesController ($mdDialog, $scope, siteService, systemSettingsServ
   vm.newTemplate = newTemplate
   vm.deleteSite = deleteSite
   vm.deleteSiteDialog = deleteSiteDialog
+  vm.infoSiteDialog = infoSiteDialog
   vm.templateSites = []
   vm.isLoaded = false
 
@@ -75,5 +77,16 @@ function TemplatesController ($mdDialog, $scope, siteService, systemSettingsServ
         })
       }
     )
+  }
+
+  function infoSiteDialog (site) {
+    vm.currentDialogSite = site
+    $mdDialog.show({
+      template: siteInfoTemplate,
+      parent: angular.element(document.body),
+      scope: $scope, // use parent scope in template
+      preserveScope: true, // do not forget this if use parent scope
+      clickOutsideToClose: true
+    })
   }
 }
