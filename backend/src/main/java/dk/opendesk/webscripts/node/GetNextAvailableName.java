@@ -24,7 +24,7 @@ public class GetNextAvailableName extends OpenDeskWebScript {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
             String name = urlQueryParams.get("name");
-            String nextAvailableName = nodeBean.getNextAvailableName(nodeRef, name);
+            String nextAvailableName = nodeBean.getNextAvailableName(nodeRef, name, true);
             objectResult.put("fileName", nextAvailableName);
         } catch (Exception e) {
             error(res, e);

@@ -44,9 +44,12 @@ public class TemplateBean {
 
         NodeRef templateNodeRef = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, templateNodeId);
         NodeRef destinationNodeRef = new NodeRef(destinationNodeRefStr);
-        // Add file extension to name
-        nodeName += nodeBean.getFileExtension(templateNodeRef);
-        String fileName = nodeBean.getNextAvailableName(destinationNodeRef, nodeName);
+        boolean isContent = nodeBean.isContent(templateNodeRef);
+        if(isContent) {
+            // Add file extension to name
+            nodeName += nodeBean.getFileExtension(templateNodeRef);
+        }
+        String fileName = nodeBean.getNextAvailableName(destinationNodeRef, nodeName, isContent);
 
         fileFolderService.copy(templateNodeRef, destinationNodeRef, fileName);
     }

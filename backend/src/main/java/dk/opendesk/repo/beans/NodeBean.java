@@ -115,14 +115,15 @@ public class NodeBean {
      * Gets the next available file name for a new file.
      * @param folderRef of the destination folder.
      * @param fileNameAndExt original name of the new file.
+     * @param isContent True if the node is content
      * @return the next available file name.
      */
-    public String getNextAvailableName(NodeRef folderRef, String fileNameAndExt) {
+    public String getNextAvailableName(NodeRef folderRef, String fileNameAndExt, boolean isContent) {
 
         List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(folderRef);
 
         int currentHighest = 0;
-        String[] fileNameParts = getNameAndExtension(fileNameAndExt);
+        String[] fileNameParts = getNameAndExtension(fileNameAndExt, isContent);
         String fileName = fileNameParts[0];
         String fileExt = fileNameParts[1];
 
@@ -131,7 +132,7 @@ public class NodeBean {
         for (ChildAssociationRef child : childAssociationRefs) {
 
             String nodeNameAndExt = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-            String[] nodeNameParts = getNameAndExtension(nodeNameAndExt);
+            String[] nodeNameParts = getNameAndExtension(nodeNameAndExt, isContent);
             String nodeExt = nodeNameParts[1];
             String nodeName;
             if(nodeNameAndExt.contains("("))
@@ -769,17 +770,24 @@ public class NodeBean {
 
     private String[] getNameAndExtension(NodeRef nodeRef) {
         String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
-        return getNameAndExtension(name);
+        boolean isContent = isContent(nodeRef);
+        return getNameAndExtension(name, isContent);
     }
 
-    private String[] getNameAndExtension(String name) {
-        int extensionIndex = name.lastIndexOf(".");
-        String [] split = new String[2];
-        if(extensionIndex > 0) {
-            split[0] = name.substring(0, extensionIndex);
-            split[1] = name.substring(extensionIndex);
-        } else {
+    private String[] getNameAndExtension(String name, boolean isContent) {
+        String[] split = new String[2];
+        if(isContent) {
+            int extensionIndex = name.lastIndexOf(".");
+            if (extensionIndex > 0) {
+                split[0] = name.substring(0, extensionIndex);
+                split[1] = name.substring(extensionIndex);
+            } else {
+                split[0] = name;
+            }
+        }
+        else {
             split[0] = name;
+            split[1] = "";
         }
         return split;
     }
@@ -863,6 +871,11 @@ public class NodeBean {
         }
 
         return result;
+    }
+
+    public boolean isContent(NodeRef nodeRef) {
+        QName type = nodeService.getType(nodeRef);
+        return type.equals(ContentModel.TYPE_CONTENT);
     }
 
     public void updateProperties (NodeRef nodeRef, JSONObject propertiesObj) throws JSONException {
