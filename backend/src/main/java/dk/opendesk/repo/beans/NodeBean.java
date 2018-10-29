@@ -756,6 +756,8 @@ public class NodeBean {
         QName type = nodeService.getType(nodeRef);
         if (type.equals(SiteModel.TYPE_SITE))
             return (String) nodeService.getProperty(nodeRef, ContentModel.PROP_TITLE);
+        else if (type.equals(ContentModel.TYPE_FOLDER))
+            return (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
         String[] nameAndExtension = getNameAndExtension(nodeRef);
         return nameAndExtension[0];
     }
