@@ -7,12 +7,12 @@ import uploadNewVersionTemplate from '../../filebrowser/view/content/document/up
 
 angular.module('openDeskApp.documents')
   .controller('DocumentActionController', ['$mdDialog', '$mdToast', '$location', '$scope', '$state', '$stateParams',
-    '$window', 'alfrescoDownloadService', 'contentService', 'editOnlineMSOfficeService',
+    '$window', 'APP_BACKEND_CONFIG', 'alfrescoDownloadService', 'contentService', 'editOnlineMSOfficeService',
     'filebrowserService', 'personService', 'publicShareService', DocumentActionController])
 
 function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $state, $stateParams, $window,
-  alfrescoDownloadService, contentService, editOnlineMSOfficeService, filebrowserService, personService,
-  publicShareService) {
+  APP_BACKEND_CONFIG, alfrescoDownloadService, contentService, editOnlineMSOfficeService, filebrowserService,
+  personService, publicShareService) {
   var vm = this
   vm.uploading = false
   vm.acceptEditVersionDialog = acceptEditVersionDialog
@@ -21,6 +21,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
+  vm.isEditorVisible = isEditorVisible
   vm.onPublicSharedUrlClick = onPublicSharedUrlClick
   vm.reviewDocumentsDialog = reviewDocumentsDialog
   vm.searchPeople = searchPeople
@@ -98,6 +99,16 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
       showEditVersionDialog('ms-office')
     else
       editOnlineMSOfficeService.editOnline(vm.doc)
+  }
+
+  function isEditorVisible (editor) {
+    // If the editor is enabled
+    if (APP_BACKEND_CONFIG.editors[editor])
+      // Then return whether the editor is installed and supports the mime type or not and that there are no locks
+      // preventing editing
+      return vm.doc.extraInfo.editors.onlyOffice
+    // Otherwise return false
+    return false
   }
 
   function isVersion () {

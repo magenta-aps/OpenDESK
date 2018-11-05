@@ -2,6 +2,7 @@ package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.Editor;
 import dk.opendesk.repo.model.OpenDeskModel;
+import org.alfresco.service.cmr.lock.LockType;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.module.ModuleDetails;
 import org.alfresco.service.cmr.module.ModuleService;
@@ -45,14 +46,18 @@ public class EditorBean {
         }
     }
 
-    public JSONObject getEditInfo(String mimetype) throws JSONException {
+    public JSONObject getEditInfo(String mimeType, boolean canEdit, boolean isLocked, String lockType)
+            throws JSONException {
         JSONObject result = new JSONObject();
         Map<String, Editor> editors = getEditors();
         for (Map.Entry<String, Editor> editorEntry : editors.entrySet()) {
             String key = editorEntry.getKey();
             Editor editor = editorEntry.getValue();
-            boolean isSupported = editor.isMimeTypeSupported(mimetype);
-            result.put(key, isSupported);
+            boolean canEditFile = false;
+            if(canEdit)
+                if (!isLocked || key.equals("onlyOffice") && LockType.WRITE_LOCK.toString().equals(lockType))
+                    canEditFile = editor.isMimeTypeSupported(mimeType);
+            result.put(key, canEditFile);
         }
         return result;
     }

@@ -11,11 +11,12 @@ import uploadNewVersionTemplate from '../view/content/document/uploadNewVersion.
 angular
   .module('openDeskApp.filebrowser')
   .controller('ActionsController', ['$mdMenu', '$rootScope', '$scope', '$state', '$mdDialog', '$window',
-    'alfrescoDownloadService', 'alfrescoNodeService', 'contentService', 'documentPreviewService', 'documentService',
-    'editOnlineMSOfficeService', ActionsController])
+    'APP_BACKEND_CONFIG', 'alfrescoDownloadService', 'alfrescoNodeService', 'contentService', 'documentPreviewService',
+    'documentService', 'editOnlineMSOfficeService', ActionsController])
 
-function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $window, alfrescoDownloadService,
-  alfrescoNodeService, contentService, documentPreviewService, documentService, editOnlineMSOfficeService) {
+function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $window, APP_BACKEND_CONFIG,
+  alfrescoDownloadService, alfrescoNodeService, contentService, documentPreviewService, documentService,
+  editOnlineMSOfficeService) {
   var vm = this
   vm.cancelDialog = cancelDialog
   vm.copyContentDialog = copyContentDialog
@@ -23,6 +24,7 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $win
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
+  vm.isEditorVisible = isEditorVisible
   vm.moveContentDialog = moveContentDialog
   vm.renameContentDialog = renameContentDialog
   vm.uploadNewVersion = uploadNewVersion
@@ -101,6 +103,18 @@ function ActionsController ($mdMenu, $rootScope, $scope, $state, $mdDialog, $win
     vm.uploading = false
     $rootScope.$broadcast('updateFilebrowser')
     cancelDialog()
+  }
+
+  function isEditorVisible (content, editor) {
+    // If the node is a document
+    if (content.contentType === 'cmis:document')
+      // If the editor is enabled
+      if (APP_BACKEND_CONFIG.editors[editor])
+      // Then return whether the editor is installed and supports the mime type or not and that there are no locks
+      // preventing editing
+        return content.editors.onlyOffice
+    // Otherwise return false
+    return false
   }
 
   function moveContentDialog () {

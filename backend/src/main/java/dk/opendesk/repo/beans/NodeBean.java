@@ -209,8 +209,9 @@ public class NodeBean {
             json.put("metadata", metadata);
         }
 
-        AccessStatus canEdit = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
-        json.put("canEdit", canEdit == AccessStatus.ALLOWED);
+        AccessStatus hasWritePermission = permissionService.hasPermission(nodeRef, PermissionService.WRITE);
+        boolean canEdit = hasWritePermission == AccessStatus.ALLOWED;
+        json.put("canEdit", canEdit);
 
         AccessStatus canDelete = permissionService.hasPermission(nodeRef, PermissionService.DELETE);
         json.put("canMoveAndDelete", canDelete == AccessStatus.ALLOWED);
@@ -266,7 +267,7 @@ public class NodeBean {
 
                 String mimeType = json.getString("mimeType");
                 if(mimeType != null) {
-                    JSONObject editors = editorBean.getEditInfo(mimeType);
+                    JSONObject editors = editorBean.getEditInfo(mimeType, canEdit, isLocked, lockType);
                     json.put("editors", editors);
                 }
             }
