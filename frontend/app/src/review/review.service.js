@@ -18,7 +18,7 @@ function reviewService ($http) {
   function get (nodeId) {
     return $http.get('/alfresco/service/review/' + nodeId)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 

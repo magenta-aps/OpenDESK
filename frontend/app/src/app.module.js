@@ -9,10 +9,8 @@ angular
     'ui.router',
     'pascalprecht.translate',
     'ngResource',
-    'swfobject',
-    'isteven-multi-select',
-    'm43nu.auto-height',
     'dndLists',
+    'angular.img',
     'openDeskApp.backendConfig',
     'openDeskApp.init',
     'openDeskApp.systemsettings',
@@ -25,6 +23,7 @@ angular
     'openDeskApp.dashboard',
     'openDeskApp.libreOffice',
     'openDeskApp.onlyOffice',
+    'openDeskApp.metadata',
     'openDeskApp.documents',
     'openDeskApp.odDocuments',
     'openDeskApp.search',
@@ -34,6 +33,7 @@ angular
     'openDeskApp.user',
     // 'openDeskApp.chat', Not added because it has not been maintained and converse is not managed by npm
     'openDeskApp.members',
+    'openDeskApp.publicShare',
     'odEmail',
 
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules
@@ -86,9 +86,12 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
 
     state.resolve = state.resolve || {}
     state.resolve.authorize = [
-      'authService', '$q', 'sessionService', '$state', 'systemSettingsService', '$stateParams', 'APP_CONFIG',
-      function (authService, $q, sessionService, $state, systemSettingsService, $stateParams, APP_CONFIG) {
+      'authService', '$q', 'editorService', 'sessionService', '$state', 'systemSettingsService', '$stateParams',
+      'APP_CONFIG',
+      function (authService, $q, editorService, sessionService, $state, systemSettingsService, $stateParams,
+        APP_CONFIG) {
         function checkAuthorization () {
+          editorService.loadEditors()
           systemSettingsService.loadSettings()
             .then(function () {
               if (authService.isAuthorized($stateParams.authorizedRoles))

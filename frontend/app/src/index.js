@@ -1,21 +1,18 @@
 import $ from 'jquery'
 import 'angular'
-import 'angular-auto-height'
 import 'angular-cookies'
 import 'angular-drag-and-drop-lists'
+import 'angular-img-http-src'
 import 'angular-material'
 import 'angular-messages'
 import 'angular-resource'
 import 'angular-sanitize'
-import 'angular-swfobject'
 import 'angular-translate'
 import 'angular-translate-loader-static-files'
 import 'angular-ui-router'
-import 'isteven-angular-multiselect/isteven-multi-select'
 
 import 'angular-material/angular-material.css'
 import 'angular-material-data-table/dist/md-data-table.min.css'
-import 'isteven-angular-multiselect/isteven-multi-select.css'
 
 // Modules
 import './app.module'
@@ -37,9 +34,11 @@ import './documents'
 import './onlyOffice'
 import './odDocuments'
 import './odDiscussion'
+import './publicShare'
 import './search'
 import './searchBar'
 import './review'
+import './metadata'
 // import './odChat' Not added because it has not been maintained and converse is not managed by npm
 
 // Components
@@ -48,7 +47,8 @@ import './components/odEmail'
 
 // Shared Services
 import './shared/services/browser.service'
-import './shared/services/member.service'
+import './shared/services/editor.service'
+import './shared/services/person.service'
 
 window.$ = $
 

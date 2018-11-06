@@ -1,10 +1,11 @@
 package dk.opendesk.repo.model;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.security.PermissionService;
-import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public interface OpenDeskModel {
 
@@ -12,10 +13,19 @@ public interface OpenDeskModel {
     String SITE = "Site";
 
     // SPECIAL SITES
+    List<String> PATH_COMPANY_HOME = new ArrayList<>();
     List<String> PATH_NODE_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Node Templates"));
     List<String> PATH_SPACE_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Space Templates"));
+    List<String> PATH_TEXT_TEMPLATES = new ArrayList<>(Arrays.asList("Data Dictionary", "Web Scripts Extensions",
+            "OpenDesk", "Templates"));
     List<String> PATH_OD_SETTINGS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
             "settings.xml"));
+    List<String> PATH_OD_EDITORS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Editors"));
+    List<String> PATH_OD_PROPERTY_UI_DEFINITIONS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions"));
+    List<String> PATH_OD_PROPERTY_WIDGETS = new ArrayList<>(Arrays.asList("Data Dictionary", "OpenDesk Extension",
+            "Property UI Definitions", "widgets.json"));
 
 
     // Containers
@@ -40,6 +50,7 @@ public interface OpenDeskModel {
 
     String PROJECT_OWNERS = "OPENDESK_ProjectOwners"; // a collection of all project owners
     String ORGANIZATIONAL_CENTERS = "OPENDESK_OrganizationalCenters"; // a collection of all organizational centers
+    String CENTER_TEST = "C-T"; // a collection of all organizational centers
 
     String PD_GROUP_PROJECTOWNER = "PD_PROJECTOWNER"; // projektejere
     String PD_GROUP_PROJECTMANAGER = "PD_PROJECTMANAGER"; // projektledere
@@ -139,6 +150,7 @@ public interface OpenDeskModel {
      */
     QName PROP_SETTINGS = QName.createQName(OD_URI, "settings");
     String PUBLIC_SETTINGS = "public";
+    String EDITOR_SETTINGS = "editors";
 
 
     /**

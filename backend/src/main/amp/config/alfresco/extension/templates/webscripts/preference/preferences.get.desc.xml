@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Get Preferences</shortname>
+    <description>Gets preferences for a user</description>
+    <url>/preferences</url>
+    <authentication>user</authentication>
+</webscript>

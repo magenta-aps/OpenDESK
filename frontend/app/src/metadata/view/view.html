@@ -1,0 +1,37 @@
+<md-card class="dropdown-card">
+    <md-card-title ng-click="show = !show" ng-class="show ? 'open' : 'closed'">
+        <h3 class="md-title od-title-icon">
+            <md-icon>info_outline</md-icon> {{'COMMON.DETAILS' | translate }}
+        </h3>
+        <span flex></span>
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+    </md-card-title>
+
+    <md-card-content ng-class="show ? 'fold-out' : 'fold-in'">
+        <div class="properties" ng-repeat="key in MC.propertyUIDefinitions.view.order">
+            <b>{{'PROPERTY.' + key | translate}}:</b>
+
+            <div ng-if="MC.propertyUIDefinitions.view.properties[key].widget === 'textfield'" class="value">
+                {{MC.properties[key]}}
+            </div>
+
+            <div ng-if="MC.propertyUIDefinitions.view.properties[key].widget === 'checkbox'" class="value">
+                {{'COMMON.' + MC.properties[key] ? "YES" : "NO" | translate}}
+            </div>
+
+            <div ng-if="MC.propertyUIDefinitions.view.properties[key].widget === 'date'" class="value">
+                <span>{{ MC.properties[key].iso8601 | date:'dd. MMMM yyyy' }}</span>
+            </div>
+
+            <div ng-if="MC.propertyUIDefinitions.view.properties[key].widget === 'person'" class="value">
+                {{MC.properties[key].displayName}}
+            </div>
+        </div>
+        <md-card-actions layout="row" layout-align="start center">
+            <span flex></span>
+            <md-button ng-if="MC.extraInfo.canEdit" class="md-primary md-icon-button" ng-click="MC.editMetadata()">
+                <md-icon>edit</md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card-content>
+</md-card>

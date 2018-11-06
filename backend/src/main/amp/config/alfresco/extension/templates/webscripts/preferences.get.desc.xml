@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Preferences</shortname>
-    <description>Gets all preferences for a user</description>
-    <url>/preferences</url>
-    <authentication>user</authentication>
-    <transaction>none</transaction>
-</webscript>

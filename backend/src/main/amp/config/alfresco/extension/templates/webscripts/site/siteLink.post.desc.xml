@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Create Site Link</shortname>
+    <description>Creates a Site Link</description>
+    <url>/site/{siteShortName}/siteLink</url>
+    <authentication>user</authentication>
+</webscript>

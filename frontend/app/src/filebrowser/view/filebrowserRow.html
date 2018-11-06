@@ -1,55 +1,53 @@
 <tr>
-<td>
-    <a class="od-filebrowser-link" ui-sref="{{content.uiRef}}" ui-sref-active="active">
-        <i class="material-icons">
-                                    {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}}
-                                    {{content.contentType == 'cmis:link' ? 'link' : ''}}
-                                    <img class="md-avatar"
-                                         ng-show="content.contentType === 'cmis:document'"
-                                         ng-src="assets/img/filetypes/{{content.thumbNailURL}}"
-                                         onerror="this.src='assets/img/filetypes/generic-file-24.png'">
-                                    </i>
-                                    <span class='content-name'>{{content.name}}</span>
-    </a>
-</td>
-<td style="width:40%" hide show-gt-sm>
-    <table style="width:100%">
-        <tr>
-            <td style="border: none; margin: 0; padding: 0">
-                <a class="od-filebrowser-link" ui-sref="{{content.uiRef}}" ui-sref-active="active">
-                                            {{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
-            </td>
+    <td>
+        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
+            <i class="material-icons">
+                {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}} {{content.contentType == 'cmis:link' ? 'link' : ''}}
+                <img class="md-avatar" ng-show="content.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{content.fileType}}-file-24.png"
+                    onerror="this.src='assets/img/filetypes/generic-file-24.png'">
+            </i>
+            <span class='content-name'>{{content.name}}</span>
+        </a>
+    </td>
+    <td style="width:40%" hide show-gt-sm>
+        <table style="width:100%">
+            <tr>
+                <td style="border: none; margin: 0; padding: 0">
+                    <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
+                        {{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
+                </td>
 
-            <td ng-show="content.contentType === 'cmis:document' && content.hasHistory" style="border: none; margin: 0; padding: 0">
-                <md-menu md-position-mode="left bottom">
-                    <md-button style="float: left" class="md-icon-button" aria-label="Se historik" ng-click="$mdMenu.open()">
-                        <md-icon md-menu-origin title="Se historik " style="font-size: 22px; position: relative; top: 5px">history</md-icon>
-                    </md-button>
-                    <md-menu-content>
-                        <md-menu-item class="menu-list-head ">
-                            {{'COMMON.MODIFIED' | translate}}
-                            <span style="width: 70px; "></span> {{'COMMON.MODIFIED_BY' | translate}}
-                        </md-menu-item>
-                        <md-menu-item ng-repeat="h in content.history" class="menu-list">
-                            <a ui-sref="document({ doc: h.parent_nodeRef, versionId: h.nodeRef, version: h.version})">
-                                {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{h.modifier }}
-                            </a>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </td>
-        </tr>
-    </table>
-</td>
-<td>
-    <a class="od-filebrowser-link" ui-sref="{{content.uiRef}}" ui-sref-active="active">
-        <span class='content-name'>{{content.creator.displayName}}</span>
-    </a>
-</td>
-<td hide show-gt-md ng-if="showESDH" style="width:10%">
-    <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg" ng-change="loadCheckboxes()">
-</td>
-<td style="width:5%">
-    <filebrowser-menu content="content" is-site="isSite"></filebrowser-menu>
-</td>
+                <td ng-show="content.contentType === 'cmis:document' && content.versions.length > 1" style="border: none; margin: 0; padding: 0">
+                    <md-menu md-position-mode="left bottom">
+                        <md-button style="float: left" class="md-icon-button" aria-label="Se historik" ng-click="$mdMenu.open()">
+                            <md-icon md-menu-origin title="Se historik " style="font-size: 22px; position: relative; top: 5px">history</md-icon>
+                        </md-button>
+                        <md-menu-content>
+                            <md-menu-item class="menu-list-head ">
+                                {{'COMMON.MODIFIED' | translate}}
+                                <span style="width: 70px; "></span> {{'COMMON.MODIFIED_BY' | translate}}
+                            </md-menu-item>
+                            <md-menu-item ng-repeat="h in content.versions" class="menu-list">
+                                <a ui-sref="document({ doc: h.parent_nodeRef, versionId: h.nodeRef, version: h.version})">
+                                    {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{h.modifier }}
+                                </a>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </td>
+            </tr>
+        </table>
+    </td>
+    <td>
+        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
+            <span class='content-name'>{{content.creator.displayName}}</span>
+        </a>
+    </td>
+    <td hide show-gt-md ng-if="showESDH" style="width:10%">
+        <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg"
+            ng-change="loadCheckboxes()">
+    </td>
+    <td style="width:5%">
+        <filebrowser-menu content="content" is-site="isSite"></filebrowser-menu>
+    </td>
 </tr>

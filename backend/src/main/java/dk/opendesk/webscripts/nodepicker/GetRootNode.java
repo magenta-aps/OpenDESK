@@ -17,18 +17,13 @@ limitations under the License.
 package dk.opendesk.webscripts.nodepicker;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.AbstractWebScript;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
 
-public class GetRootNode extends AbstractWebScript {
+public class GetRootNode extends OpenDeskWebScript {
 
     private NodeBean nodeBean;
 
@@ -38,20 +33,13 @@ public class GetRootNode extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-        Map<String, String> templateArgs = req.getServiceMatch().getTemplateVars();
-        res.setContentEncoding("UTF-8");
-        Writer webScriptWriter = res.getWriter();
-        JSONArray result = new JSONArray();
-
+        super.execute(req, res);
         try {
-            String rootName = templateArgs.get("rootName");
-            result.add(nodeBean.getNodePickerRootNodeInfo(rootName));
+            String rootName = urlParams.get("rootName");
+            objectResult = nodeBean.getNodePickerRootNodeInfo(rootName);
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            res.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 }

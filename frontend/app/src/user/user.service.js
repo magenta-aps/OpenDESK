@@ -1,13 +1,14 @@
 angular
   .module('openDeskApp.user')
-  .factory('UserService', ['$http', '$window', UserService])
+  .factory('userService', ['$http', '$window', userService])
 
-function UserService ($http, $window) {
+function userService ($http, $window) {
   var user
 
   return {
-    get: getUser,
-    uploadAvatar: uploadAvatar
+    getUser: getUser,
+    uploadAvatar: uploadAvatar,
+    updateAvatar: updateAvatar
   }
 
   function getUser () {
@@ -31,5 +32,11 @@ function UserService ($http, $window) {
       .then(function (response) {
         return response
       })
+  }
+
+  function updateAvatar (avatar) {
+    var userInfo = angular.fromJson($window.localStorage.getItem('userInfo'))
+    userInfo.user.avatar = avatar
+    $window.localStorage.setItem('userInfo', angular.toJson(userInfo))
   }
 }

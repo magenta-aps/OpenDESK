@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Create Site</shortname>
+    <description>Creates a Site</description>
+    <url>/site</url>
+    <authentication>user</authentication>
+</webscript>

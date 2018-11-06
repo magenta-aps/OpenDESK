@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Update Site</shortname>
+    <description>Updates a Site</description>
+    <url>/pd-site/{siteShortName}</url>
+    <authentication>user</authentication>
+</webscript>

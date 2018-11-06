@@ -1,0 +1,2391 @@
+swagger: "2.0"
+info:
+  description: This is the documentation for the REST API of OpenDesk
+  version: 1.0.0
+  title: OpenDesk REST API
+basePath: /alfresco/s
+securityDefinitions:
+  basicAuth:
+    type: basic
+security:
+- basicAuth: []
+tags:
+- name: authentication
+- name: authority
+- name: editors
+- name: email
+- name: node
+- name: nodepicker
+- name: notification
+- name: pdSite
+- name: person
+- name: preference
+- name: review
+- name: sbsys
+- name: settings
+- name: site
+- name: template
+paths:
+  /authentication/ssologin:
+    get:
+      tags:
+      - authentication
+      summary: Get Username of user logged in through SSO
+      description: Gets the Username of user logged in through SSO
+      operationId: getSSOUserName
+      produces:
+      - text/html
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: string
+            example: John Doe Jr.
+  /authority/openDeskGroup/{groupName}:
+    get:
+      tags:
+      - authority
+      summary: Get OpenDesk Group by name
+      description: Returns an OpenDesk Group
+      operationId: getOpenDeskGroup
+      produces:
+      - application/json
+      parameters:
+      - name: groupName
+        in: path
+        description: Name of the group to return
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/OpenDeskGroup"
+  /authority/openDeskGroups:
+    get:
+      tags:
+      - authority
+      summary: Get OpenDesk Groups
+      description: Gets a list of OpenDesk Groups
+      operationId: getOpenDeskGroups
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/OpenDeskGroup"
+  /authority/organizational-centers:
+    get:
+      tags:
+      - authority
+      summary: Get Organizational Centers
+      description: Gets a list of Organizational Centers
+      operationId: getOrganizationalCenters
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/OpenDeskGroup"
+  /authority/project-owners:
+    get:
+      tags:
+      - authority
+      summary: Get Project Owners
+      description: Gets a list of Project Owners
+      operationId: getProjectOwners
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/OpenDeskGroup"
+  /authority/search:
+    get:
+      tags:
+      - authority
+      summary: Search Authorities
+      description: Searches Authorities
+      operationId: searchAuthorities
+      produces:
+      - application/json
+      parameters:
+      - name: filter
+        in: query
+        description: The filter to filter the search by
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Authority"
+  /editors:
+    get:
+      tags:
+      - editors
+      summary: Get List of Editors
+      description: Gets a list of editors with info about them
+      operationId: getEditors
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              libreOffice:
+                $ref: "#/definitions/Editor"
+              msOffice:
+                $ref: "#/definitions/Editor"
+              onlyOffice:
+                $ref: "#/definitions/Editor"
+  /email:
+    post:
+      tags:
+      - email
+      summary: Send Email
+      description: Sends an Email
+      operationId: sendEmail
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/Email"
+      responses:
+        200:
+          description: successful operation
+  /node/{nodeId}:
+    get:
+      tags:
+      - node
+      summary: Get Node
+      description: Gets a node
+      operationId: getNode
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Node"
+  /node/{nodeId}/breadcrumb/{rootId}:
+    get:
+      tags:
+      - node
+      summary: Get Breadcrumb
+      description: Gets a Breadcrumb for a node relative to the root node
+      operationId: getBreadcrumb
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: rootId
+        in: path
+        description: Id of the root node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/BreadcrumbObject"
+  /node/{nodeId}/children:
+    get:
+      tags:
+      - node
+      summary: Get Node Children
+      description: Gets the children of a node
+      operationId: getChildren
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NodeList"
+  /node/{nodeId}/next-available-name:
+    get:
+      tags:
+      - node
+      summary: Get Next Available Node Name
+      description: Gets the Next Available Node Name
+      operationId: getNextAvailableName
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: name
+        in: query
+        description: The original name to check for
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              fileName:
+                type: string
+                example: Shakesspeare Notes(3).odt
+  /node/{nodeId}/properties:
+    put:
+      tags:
+      - node
+      summary: Update Properties
+      description: Update the Properties of a Node
+      operationId: updateProperties
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            properties:
+              $ref: "#/definitions/Properties"
+      responses:
+        200:
+          description: successful operation
+  /node/{nodeId}/propertyDefinitions:
+    get:
+      tags:
+      - node
+      summary: Get Property Definitions
+      description: Gets a list of Property Definitions for a given node
+      operationId: getPropertyDefinitions
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/PropertyDefinitions"
+  /node/{nodeId}/propertyUIDefinitions:
+    get:
+      tags:
+      - node
+      summary: Get Property UI Definitions
+      description: Gets a list of Property UI Definitions for a given node
+      operationId: getPropertyUIDefinitions
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/PropertyUIDefinitions"
+  /node/{nodeId}/rename:
+    put:
+      tags:
+      - node
+      summary: Rename Node
+      description: Renames a Node
+      operationId: renameNode
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            name:
+              description: New name of the node
+              type: string
+              example: A Better Name
+      responses:
+        200:
+          description: successful operation
+  /node/{nodeId}/share/{userName}/{permission}:
+    delete:
+      tags:
+      - node
+      summary: Stop Sharing Node
+      description: Stops Sharing of a Node with a user
+      operationId: stopSharingNode
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: userName
+        in: path
+        description: Username of the user
+        required: true
+        type: string
+      - name: permission
+        in: path
+        description: Permission to remove on node from the user
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+    post:
+      tags:
+      - node
+      summary: Share Node
+      description: Shares a Node with a user
+      operationId: shareNode
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: userName
+        in: path
+        description: Username of the user
+        required: true
+        type: string
+      - name: permission
+        in: path
+        description: Permission to add on node for the user
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+  /node/{nodeId}/thumbnail/{versionId}:
+    get:
+      tags:
+      - node
+      summary: Get Thumbnail
+      description: Gets or creates a thumbnail for an archived node on the fly
+      operationId: getThumbnail
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: versionId
+        in: path
+        description: Id of the version
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              nodeRef:
+                $ref: "#/definitions/NodeRef"
+  /node/{nodeId}/versions:
+    get:
+      tags:
+      - node
+      summary: Get Versions
+      description: Gets versions of a node (Not used)
+      operationId: getVersions
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Version"
+  /node/companyHome:
+    get:
+      tags:
+      - node
+      summary: Get Company Home
+      description: Gets the NodeRef of the Company Home
+      operationId: getCompanyHome
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              nodeRef:
+                $ref: "#/definitions/NodeRef"
+  /node/preprocess:
+    put:
+      tags:
+      - node
+      summary: Preprocess Move
+      description: Preprocesses Move
+      operationId: preprocessMove
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            nodeRefs:
+              type: array
+              items:
+                $ref: "#/definitions/NodeRef"
+            destinationRef:
+              $ref: "#/definitions/NodeRef"
+      responses:
+        200:
+          description: successful operation
+  /node/shared:
+    get:
+      tags:
+      - node
+      summary: Get Shared Nodes
+      description: Gets a list of Shared Nodes
+      operationId: getSharedNodes
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/NodeList"
+  /node/site/{siteShortName}:
+    get:
+      tags:
+      - node
+      summary: Get Site Node
+      description: Gets a site node
+      operationId: getSiteNode
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Node"
+  /node/system/{shortName}:
+    get:
+      tags:
+      - node
+      summary: Get System Node
+      description: Gets a system node
+      operationId: getSystemNode
+      produces:
+      - application/json
+      parameters:
+      - name: shortName
+        in: path
+        description: Shortname of the system node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Node"
+  /node/templateFolders:
+    get:
+      tags:
+      - node
+      summary: Get Template Folders
+      description: Gets a list of Template Folders
+      operationId: getTemplateFolders
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              document-templates:
+                $ref: "#/definitions/NodeRef"
+              folder-templates:
+                $ref: "#/definitions/NodeRef"
+              text-templates:
+                $ref: "#/definitions/NodeRef"
+  /node/userHome:
+    get:
+      tags:
+      - node
+      summary: Get User Home
+      description: Gets the NodeRef of the Home folder of the user
+      operationId: getUserHome
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              nodeRef:
+                $ref: "#/definitions/NodeRef"
+  /nodepicker/node/{nodeId}:
+    get:
+      tags:
+      - nodepicker
+      summary: Get Node Picker Node
+      description: Gets node info for node picker
+      operationId: getNodePickerNode
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/NodePickerNodeAbstract"
+  /nodepicker/root:
+    get:
+      tags:
+      - nodepicker
+      summary: Get Node Picker Root
+      description: Gets root info for node picker
+      operationId: getNodePickerRoot
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              children:
+                type: array
+                items:
+                  $ref: "#/definitions/NodePickerRoot"
+  /nodepicker/root/{rootName}:
+    get:
+      tags:
+      - nodepicker
+      summary: Get Node Picker Root Node
+      description: Gets root node info for node picker
+      operationId: getNodePickerRootNode
+      produces:
+      - application/json
+      parameters:
+      - name: rootName
+        in: path
+        description: Name of the root node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/NodePickerRootNode"
+  /notification/{nodeId}:
+    delete:
+      tags:
+      - notification
+      summary: Delete Notification
+      description: Deletes a Notification
+      operationId: deleteNotification
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the notification
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+  /notification/{nodeId}/read:
+    put:
+      tags:
+      - notification
+      summary: Set Notification Read
+      description: Sets a notification to read
+      operationId: setNotificationRead
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the notification
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+  /notification/{nodeId}/seen:
+    put:
+      tags:
+      - notification
+      summary: Set Notification Seen
+      description: Sets a notification to seen
+      operationId: setNotificationSeen
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the notification
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+  /notifications:
+    get:
+      tags:
+      - notification
+      summary: Get Notifications
+      description: Gets the current user's notifications
+      operationId: getNotifications
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/NotificationList"
+  /notifications/seen:
+    put:
+      tags:
+      - notification
+      summary: Set Notifications Seen
+      description: Sets the current user's notifications to seen
+      operationId: setNotificationsSeen
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+  /pd-site:
+    post:
+      tags:
+      - pdSite
+      summary: Create Project Department Site
+      description: Creates a Project Department Site
+      operationId: createPDSite
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/PDSiteCreate"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              nodeRef:
+                $ref: "#/definitions/NodeRef"
+              shortName:
+                type: string
+                example: innovation-project
+  /pd-site/{siteShortName}:
+    put:
+      tags:
+      - pdSite
+      summary: Update Project Department Site
+      description: Updates a Project Department Site
+      operationId: updatePDSite
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the PD Site
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/PDSiteUpdate"
+      responses:
+        200:
+          description: successful operation
+  /person/external:
+    post:
+      tags:
+      - person
+      summary: Create External Person
+      description: Creates an External Person
+      operationId: createExternalPerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/ExternalPerson"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Email"
+  /person/{userName}:
+    get:
+      tags:
+      - person
+      summary: Get Person
+      description: Gets a Person
+      operationId: getPerson
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: userName
+        in: path
+        description: Username of the person
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Person"
+  /person/search:
+    get:
+      tags:
+      - person
+      summary: Search Persons
+      description: Searches Persons
+      operationId: searchPersons
+      produces:
+      - application/json
+      parameters:
+      - name: filter
+        in: query
+        description: The filter to filter the search by
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Person"
+  /person/validate:
+    post:
+      tags:
+      - person
+      summary: Validate Person
+      description: Validates a Person
+      operationId: validatePerson
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            userName:
+              type: string
+              example: jackie_doe
+            email:
+              type: string
+              example: jackie_doe@jackie_doe.com
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              isValid:
+                type: boolean
+                example: true
+              userNameExists:
+                type: boolean
+                example: false
+              emailExists:
+                type: boolean
+                example: false
+  /preferences:
+    get:
+      tags:
+      - preference
+      summary: Get Preferences
+      description: Gets preferences for a user
+      operationId: getPreferences
+      produces:
+      - application/json
+      parameters:
+      - name: pf
+        in: query
+        description: The preference to filter the search by
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties:
+                type: boolean
+              example:
+                dk.magenta.sites.receiveNotifications: true
+  /review:
+    post:
+      tags:
+      - review
+      summary: Create Review
+      description: Creates a review
+      operationId: createReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          properties:
+            assignee:
+              type: string
+              example: john_doe
+            message:
+              type: string
+              example: <p>Please review this document</p>
+            nodeId:
+              $ref: "#/definitions/NodeId"
+      responses:
+        200:
+          description: successful operation
+  /review/{nodeId}:
+    get:
+      tags:
+      - review
+      summary: Get Review
+      description: Gets a review
+      operationId: getReview
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the review
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Review"
+    put:
+      tags:
+      - review
+      summary: Update Review
+      description: Updates a review
+      operationId: updateReview
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the review
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          properties:
+            assignee:
+              type: string
+              example: jane_doe
+            status:
+              $ref: "#/definitions/ReviewStatus"
+            reply:
+              type: string
+              example: <p>It still needs some work. See my comments in the document.</p>
+      responses:
+        200:
+          description: successful operation
+  /sbsys/fakedownload:
+    post:
+      tags:
+      - sbsys
+      summary: SBSYS Fake
+      description: Faking download of documents from case in SBSYS
+      operationId: sbsysFake
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            nodeRefs:
+              type: array
+              items:
+                $ref: "#/definitions/NodeRef"
+            destinationNodeRef:
+              $ref: "#/definitions/NodeRef"
+      responses:
+        200:
+          description: successful operation
+  /settings:
+    get:
+      tags:
+      - settings
+      summary: Get Settings
+      description: Gets the settings for OpenDesk frontend
+      operationId: getSettings
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties: true
+            example:
+              enableProjects: false
+              enableSites: true
+    put:
+      tags:
+      - settings
+      summary: Update Settings
+      description: Updates the settings for OpenDesk frontend
+      operationId: updateSettings
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            properties:
+              type: object
+              additionalProperties: true
+              example:
+                enableProjects: false
+                enableSites: true
+      responses:
+        200:
+          description: successful operation
+  /settings/public:
+    get:
+      tags:
+      - settings
+      summary: Get Public Settings
+      description: Gets the public settings for OpenDesk frontend
+      operationId: getPublicSettings
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            additionalProperties: true
+            example:
+              appName: OpenDesk
+  /site:
+    post:
+      tags:
+      - site
+      summary: Create Site
+      description: Creates a Site
+      operationId: createSite
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          properties:
+            displayName:
+              type: string
+              example: New Site
+            description:
+              type: string
+              example: This Site is going to be so active
+            visibility:
+              $ref: "#/definitions/Visibility"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Site"
+  /site/{siteShortName}:
+    delete:
+      tags:
+      - site
+      summary: Delete Site
+      description: Deletes a Site
+      operationId: deleteSite
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+    get:
+      tags:
+      - site
+      summary: Get Site
+      description: Gets a Site
+      operationId: getSite
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Site"
+  /site/{siteShortName}/authorities:
+    get:
+      tags:
+      - site
+      summary: Get Site authorities
+      description: Gets a list of Site authorities
+      operationId: getSiteAuthorities
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/SiteAuthorityGroup"
+  /site/{siteShortName}/authorities/search:
+    get:
+      tags:
+      - site
+      summary: Search Site authorities
+      description: Searches Site Authorities
+      operationId: searchSiteAuthorities
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      - name: filter
+        in: query
+        description: The filter to filter the search by
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Authority"
+  /site/{siteShortName}/group/{group}/member/{authority}:
+    delete:
+      tags:
+      - site
+      summary: Remove Site Member
+      description: Removes a Site Member
+      operationId: removeSiteMember
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      - name: group
+        in: path
+        description: Group to add the authority to
+        required: true
+        type: string
+      - name: authority
+        in: path
+        description: Authority to add to the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+    post:
+      tags:
+      - site
+      summary: Add Site Member
+      description: Adds a Site Member
+      operationId: addSiteMember
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      - name: group
+        in: path
+        description: Group to add the authority to
+        required: true
+        type: string
+      - name: authority
+        in: path
+        description: Authority to add to the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+  /site/{siteShortName}/members-pdf:
+    post:
+      tags:
+      - site
+      summary: Create Site Members PDF
+      description: Creates a Site Members PDF
+      operationId: createSiteMembersPDF
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              nodeId:
+                $ref: "#/definitions/NodeId"
+  /site/{siteShortName}/role:
+    get:
+      tags:
+      - site
+      summary: Get Site role
+      description: Gets the user's Site role
+      operationId: getSiteRole
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              role:
+                $ref: "#/definitions/SiteRole"
+  /site/{siteShortName}/siteLink:
+    delete:
+      tags:
+      - site
+      summary: Remove Site Link
+      description: Removes a Site Link
+      operationId: removeSiteLink
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          properties:
+            sourceId:
+              $ref: "#/definitions/NodeId"
+            destinationId:
+              $ref: "#/definitions/NodeId"
+      responses:
+        200:
+          description: successful operation
+    post:
+      tags:
+      - site
+      summary: Add Site Link
+      description: Adds a Site Link
+      operationId: addSiteLink
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          properties:
+            destinationShortName:
+              type: string
+              example: Site of Fruits
+      responses:
+        200:
+          description: successful operation
+  /site/{siteShortName}/template:
+    post:
+      tags:
+      - site
+      summary: Create Site Template
+      description: Creates a Site Template
+      operationId: createSiteTimeplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          properties:
+            description:
+              type: string
+              example: This template needs to be used - it took long time to make..
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Site"
+  /site/{siteShortName}/users:
+    get:
+      tags:
+      - site
+      summary: Get Site users
+      description: Gets a list of Site users
+      operationId: getSiteUsers
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Person"
+  /site/{siteShortName}/users/search:
+    get:
+      tags:
+      - site
+      summary: Search Site users
+      description: Searches Site users
+      operationId: searchSiteUsers
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      - name: filter
+        in: query
+        description: The filter to filter the search by
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Person"
+  /site/groups/{type}:
+    get:
+      tags:
+      - site
+      summary: Get Site Groups
+      description: Gets a list of Site Groups of a Site Type
+      operationId: getSiteGroups
+      produces:
+      - application/json
+      parameters:
+      - name: type
+        in: path
+        description: Type of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/SiteGroup"
+  /site/templates:
+    post:
+      tags:
+      - site
+      summary: Get Site Templates
+      description: Gets a list of Site Templates
+      operationId: getSiteTimeplates
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Site"
+  /sites:
+    get:
+      tags:
+      - site
+      summary: Get Sites
+      description: Gets all sites that the current user is explicitly part of
+      operationId: getSites
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Site"
+  /sites/search:
+    get:
+      tags:
+      - site
+      summary: Search Sites
+      description: Searches Sites
+      operationId: searchSites
+      produces:
+      - application/json
+      parameters:
+      - name: q
+        in: query
+        description: The filter to filter the search by
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Site"
+  /template/{templateId}:
+    post:
+      tags:
+      - template
+      summary: Create Node from Template
+      description: Creates a Node from a Template
+      operationId: createNodeFromTemplate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: templateId
+        in: path
+        description: Id of the Template
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          properties:
+            name:
+              type: string
+              example: New document
+            destinationNodeRef:
+              $ref: "#/definitions/NodeRef"
+      responses:
+        200:
+          description: successful operation
+  /templates/document:
+    get:
+      tags:
+      - template
+      summary: Get Document Templates
+      description: Gets a list of Document Templates
+      operationId: getDocumentTemplates
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Template"
+  /templates/folder:
+    get:
+      tags:
+      - template
+      summary: Get Folder Templates
+      description: Gets a list of Folder Templates
+      operationId: getFolderTemplates
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Template"
+
+definitions:
+  Authority:
+    type: object
+    properties:
+      displayName:
+        type: string
+        example: John Doe
+      avatar:
+        type: string
+        example: /alfresco/s/api/node/workspace/SpacesStore/f179a953-2067-4861-add2-4a68aebc7fad/content
+    discriminator: type
+    required:
+    - type
+  BreadcrumbObject:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Notes from 2017
+      nodeRef:
+        $ref: "#/definitions/NodeRef"
+  ConstraintDefinition:
+    type: object
+    properties:
+      type:
+        type: string
+      parameters:
+        type: object
+  Discussion:
+    type: object
+    properties:
+      title:
+        type: string
+        example: Short Discussion
+      createdOn:
+        $ref: "#/definitions/TimeStampUnix"
+      modifiedOn:
+        $ref: "#/definitions/TimeStampUnix"
+      posts:
+        type: array
+        items:
+          $ref: "#/definitions/Post"
+    discriminator: type
+    required:
+    - type
+  Editor:
+    type: object
+    properties:
+      installed:
+        type: boolean
+      mimeTypes:
+        type: array
+        items:
+          type: string
+          example: application/pdf
+  Email:
+    type: object
+    properties:
+      userName:
+        description: Username of the receiver
+        type: string
+        example: john_doe
+      subject:
+        description: Subject of the email
+        type: string
+        example: Welcome to OpenDesk
+      body:
+        description: Body of the email
+        type: string
+        example: <p>Dear John Joe, Welcome</p>
+  ExternalPerson:
+    type: object
+    properties:
+      firstName:
+        type: string
+        example: John
+      lastName:
+        type: string
+        example: Doe
+      userName:
+        type: string
+        example: johndoe
+      email:
+        type: string
+        example: john@alfresco.org
+      telephone:
+        type: string
+        example: "0234684416"
+      siteShortName:
+        type: string
+        example: department-of-sanitation
+      groupName:
+        type: string
+        example: SiteCollaborator
+  Group:
+    allOf:
+    - $ref: "#/definitions/Authority"
+    - type: object
+      properties:
+        shortName:
+          type: string
+          example: CS
+        fullName:
+          type: string
+          example: GROUP_CS
+        displayName:
+          type: string
+          example: Center for Skoler
+        avatar:
+          type: string
+          example: assets/img/avatars/blank-profile-picture.png
+  Node:
+    allOf:
+    - $ref: "#/definitions/NodeType"
+    - type: object
+      properties:
+        name:
+          type: string
+        canEdit:
+          type: boolean
+        canMoveAndDelete:
+          type: boolean
+  NodeContent:
+    allOf:
+    - $ref: "#/definitions/Node"
+    - type: object
+      properties:
+        nodeRef:
+          $ref: "#/definitions/NodeRef"
+        parentNodeRef:
+          $ref: "#/definitions/NodeRef"
+        shortRef:
+          type: string
+          example: 272db0e7-0b86-4c26-b3f0-bc560734d6ac
+        lastChangedBy:
+          type: string
+          example: Jane Doe
+        lastChanged:
+          type: integer
+          example: 1536320506858
+        creator:
+          $ref: "#/definitions/Person"
+        permissions:
+          $ref: "#/definitions/PermissionGroup"
+  NodeDocument:
+    allOf:
+    - $ref: "#/definitions/NodeContent"
+    - type: object
+      properties:
+        name:
+          type: string
+          example: Shakesspeare Notes
+        versions:
+          type: array
+          items:
+            $ref: "#/definitions/Version"
+        isLocked:
+          type: boolean
+        lockType:
+          type: string
+          example: READ_ONLY_LOCK
+  NodeFolder:
+    allOf:
+    - $ref: "#/definitions/NodeContent"
+    - type: object
+      properties:
+        contentType:
+          type: string
+          example: cmis:folder
+  NodeId:
+    type: string
+    example: 22f7bf9a-c440-4d60-894a-df0a9b5e2072
+  NodeLink:
+    allOf:
+    - $ref: "#/definitions/Node"
+    - type: object
+      properties:
+        contentType:
+          type: string
+          example: cmis:link
+        name:
+          type: string
+          example: Center of Renovation
+        nodeid:
+          $ref: "#/definitions/NodeId"
+        destination_link:
+          type: string
+          example: center-of-renovation
+        nodeRef:
+          $ref: "#/definitions/NodeRef"
+        destination_nodeid:
+          $ref: "#/definitions/NodeId"
+  NodeList:
+    type: array
+    items:
+      $ref: "#/definitions/NodeTypeList"
+  NodePickerNode:
+    allOf:
+    - $ref: "#/definitions/NodePickerNodeAbstract"
+    - type: object
+      properties:
+        parent:
+          $ref: "#/definitions/NodePickerNodeParent"
+        nodeRef:
+          $ref: "#/definitions/NodeRef"
+        name:
+          type: string
+          example: Important Folder
+  NodePickerNodeAbstract:
+    type: object
+    properties:
+      children:
+        type: array
+        items:
+          $ref: "#/definitions/NodePickerNodeChild"
+    discriminator: type
+    required:
+    - type
+  NodePickerNodeChild:
+    type: object
+    properties:
+      nodeRef:
+        $ref: "#/definitions/NodeRef"
+      name:
+        type: string
+        example: Important Folder
+      contentType:
+        type: string
+        example: cmis:document
+  NodePickerNodeParent:
+    type: object
+    properties:
+      rootName:
+        $ref: "#/definitions/NodePickerRootName"
+      nodeRef:
+        $ref: "#/definitions/NodeRef"
+      name:
+        type: string
+        example: Important Folder
+  NodePickerRoot:
+    type: object
+    properties:
+      rootName:
+        $ref: "#/definitions/NodePickerRootName"
+      nodeRef:
+        $ref: "#/definitions/NodeRef"
+  NodePickerRootName:
+    type: string
+    enum: [my-docs, shared-docs, sites]
+    example: sites
+  NodePickerRootNode:
+    allOf:
+    - $ref: "#/definitions/NodePickerNodeAbstract"
+    - type: object
+      properties:
+        rootName:
+          $ref: "#/definitions/NodePickerRootName"
+  NodeRef:
+    type: string
+    example: workspace://SpacesStore/22f7bf9a-c440-4d60-894a-df0a9b5e2072
+  NodeType:
+    type: object
+    properties:
+      contentType:
+        type: string
+        example: cmis:document
+  NodeTypeDocument:
+    allOf:
+    - $ref: "#/definitions/NodeType"
+    - type: object
+      properties:
+        fileType:
+          type: string
+          example: odt
+        mimeType:
+          type: string
+          example: application/vnd.oasis.opendocument.text
+  NodeTypeList:
+    type: array
+    items:
+      $ref: "#/definitions/Node"
+  Notification:
+    type: object
+    properties:
+      notificationId:
+        $ref: "#/definitions/NodeId"
+      read:
+        type: boolean
+        example: false
+      seen:
+        type: boolean
+        example: true
+      params:
+        $ref: "#/definitions/NotificationParams"
+      created:
+        $ref: "#/definitions/TimeStampUnix"
+  NotificationList:
+    type: object
+    properties:
+      notifications:
+        type: array
+        items:
+          $ref: "#/definitions/Notification"
+      unread:
+        type: integer
+        example: 14
+      unseen:
+        type: integer
+        example: 3
+  NotificationNodeParams:
+    allOf:
+    - $ref: "#/definitions/NotificationParams"
+    - type: object
+      properties:
+        nodeName:
+          type: string
+          example: An Excellent Name
+        nodeId:
+          $ref: "#/definitions/NodeId"
+  NotificationSiteParams:
+    allOf:
+    - $ref: "#/definitions/NotificationParams"
+    - type: object
+      properties:
+        siteName:
+          type: string
+          example: Center for Innovation
+        siteShortName:
+          type: string
+          example: center-for-innovation
+        type:
+          type: string
+          example: site-member
+  NotificationParams:
+    type: object
+    properties:
+      sender:
+        type: string
+        example: John Doe
+      type:
+        type: string
+    discriminator: type
+    required:
+    - type
+  NotificationParamsDiscussion:
+    allOf:
+    - $ref: "#/definitions/NotificationNodeParams"
+    - type: object
+      properties:
+        siteName:
+          type: string
+          example: Center for Innovation
+        siteShortName:
+          type: string
+          example: center-for-innovation
+        type:
+          type: string
+          example: discussion
+  NotificationParamsReply:
+    allOf:
+    - $ref: "#/definitions/NotificationParams"
+    - type: object
+      properties:
+        nodeName:
+          type: string
+          example: Important Discussion
+        nodeId:
+          $ref: "#/definitions/NodeId"
+        replyShortName:
+          type: string
+          example: post-154245
+        siteName:
+          type: string
+          example: Center for Innovation
+        siteShortName:
+          type: string
+          example: center-for-innovation
+        type:
+          type: string
+          example: reply
+  NotificationParamsReview:
+    allOf:
+    - $ref: "#/definitions/NotificationNodeParams"
+    - type: object
+      properties:
+        reviewId:
+          $ref: "#/definitions/NodeId"
+        type:
+          type: string
+          example: review
+  NotificationParamsReviewApproved:
+    allOf:
+    - $ref: "#/definitions/NotificationParamsReview"
+    - type: object
+      properties:
+        type:
+          type: string
+          example: review-approved
+  NotificationParamsReviewRejected:
+    allOf:
+    - $ref: "#/definitions/NotificationParamsReview"
+    - type: object
+      properties:
+        type:
+          type: string
+          example: review-rejected
+  NotificationParamsReviewReply:
+    allOf:
+    - $ref: "#/definitions/NotificationParamsReview"
+    - type: object
+      properties:
+        type:
+          type: string
+          example: review-reply
+  NotificationParamsSharedContent:
+    allOf:
+    - $ref: "#/definitions/NotificationNodeParams"
+    - type: object
+      properties:
+        type:
+          type: string
+          example: shared-content
+  NotificationParamsSharedFolder:
+    allOf:
+    - $ref: "#/definitions/NotificationNodeParams"
+    - type: object
+      properties:
+        type:
+          type: string
+          example: shared-folder
+  NotificationParamsSiteContent:
+    allOf:
+    - $ref: "#/definitions/NotificationNodeParams"
+    - type: object
+      properties:
+        siteName:
+          type: string
+          example: Center for Innovation
+        type:
+          type: string
+          example: site-content
+  NotificationParamsSiteGroup:
+    allOf:
+    - $ref: "#/definitions/NotificationSiteParams"
+  NotificationParamsSiteMember:
+    allOf:
+    - $ref: "#/definitions/NotificationSiteParams"
+  OpenDeskGroup:
+    type: object
+    properties:
+      members:
+        type: array
+        items:
+          $ref: "#/definitions/Person"
+      shortName:
+        type: string
+        example: OPENDESK_ProjectOwners
+      type:
+        type: string
+        example: USER
+  PDSiteBase:
+    type: object
+    properties:
+      title:
+        description: Title of the PD Site
+        type: string
+        example: Innovation Project
+      sbsys:
+        description: Id of the SBSYS case
+        type: string
+        example: "2654"
+      owner:
+        description: Username of the owner
+        type: string
+        example: jane_doe
+      manager:
+        description: Username of the manager
+        type: string
+        example: john_doe
+      centerId:
+        description: Id of the Center
+        type: string
+        example: cas
+      visibility:
+        $ref: "#/definitions/Visibility"
+  PDSite:
+    allOf:
+    - $ref: "#/definitions/Site"
+    - type: object
+      properties:
+        state:
+          description: State of the Project
+          type: string
+          example: template_b
+        center_id:
+          description: Id of the Center
+          type: string
+          example: cas
+        center_name:
+          description: Name of the Center Group
+          type: string
+          example: GROUP_cas
+        sbsys:
+          description: Id of the SBSYS case
+          type: string
+          example: "2654"
+  PDSiteCreate:
+    allOf:
+    - $ref: "#/definitions/PDSiteBase"
+    - type: object
+      properties:
+        templateName:
+          description: Name of the template
+          type: string
+          example: template_b
+  PDSiteUpdate:
+    allOf:
+    - $ref: "#/definitions/PDSiteBase"
+    - type: object
+      properties:
+        state:
+          description: State of the PD Site
+          type: string
+          example: CLOSED
+  PermissionGroup:
+    type: object
+    properties:
+      Editor:
+        $ref: "#/definitions/PermissionList"
+      Consumer:
+        $ref: "#/definitions/PermissionList"
+  PermissionList:
+    type: array
+    items:
+      $ref: "#/definitions/Person"
+  Person:
+    allOf:
+    - $ref: "#/definitions/Authority"
+    - type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        isEnabled:
+          type: boolean
+          example: true
+        isAdmin:
+          type: boolean
+          example: true
+        userName:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          example: john@alfresco.org
+        telephone:
+          type: string
+          example: "56486451"
+        mobile:
+          type: string
+          example: "89615318"
+        jobTitle:
+          type: string
+          example: "Software Developer"
+        organization:
+          type: string
+          example: "Magenta ApS"
+  Post:
+    type: object
+    properties:
+      author:
+        $ref: "#/definitions/Person"
+      content:
+        type: string
+        example: <p>Brilliant!</p>
+      createdOn:
+        $ref: "#/definitions/TimeStampUnix"
+      modifiedOn:
+        $ref: "#/definitions/TimeStampUnix"
+      nodeRef:
+        $ref: "#/definitions/NodeRef"
+  Properties:
+    type: object
+    properties:
+      cm:name:
+        type: string
+        example: Test.html
+      content:
+        type: object
+        example: <p>Brilliant!</p>
+      cm:created:
+        $ref: "#/definitions/TimeStampUnix"
+      cm:modified:
+        $ref: "#/definitions/TimeStampUnix"
+  PropertyDefinitions:
+    type: object
+    properties:
+      title:
+        type: string
+        example: Name
+      description:
+        type: string
+        example: The name of the node
+      dataTypeName:
+        type: string
+        example: cm
+      defaultValue:
+        type: string
+        example: File name
+      mandatory:
+        type: boolean
+        example: true
+      multiValued:
+        type: boolean
+        example: false
+      constraints:
+        type: array
+        items:
+          $ref: "#/definitions/ConstraintDefinition"
+  PropertyUIDefinitions:
+    type: object
+    properties:
+      edit:
+        type: object
+        properties:
+          order:
+            type: array
+            items:
+              type: string
+              example: cm:name
+          properties:
+            type: object
+            properties:
+              cm:name:
+                $ref: "#/definitions/UIDefinition"
+      view:
+        type: object
+        properties:
+          order:
+            type: array
+            items:
+              type: string
+              example: cm:name
+          properties:
+            type: object
+            properties:
+              cm:name:
+                $ref: "#/definitions/UIDefinition"
+  Review:
+    allOf:
+    - $ref: "#/definitions/Discussion"
+    - type: object
+      properties:
+        sender:
+          type: string
+          example: jane_doe
+        assignee:
+          type: string
+          example: john_doe
+        status:
+          $ref: "#/definitions/ReviewStatus"
+  ReviewStatus:
+    type: string
+    enum: [approved, pending, rejected]
+    example: pending
+  Site:
+    type: object
+    properties:
+      created:
+        $ref: "#/definitions/TimeStamp"
+      modified:
+        $ref: "#/definitions/TimeStamp"
+      shortName:
+        type: string
+        example: project-new-start
+      visibility:
+        $ref: "#/definitions/Visibility"
+      current_user_role:
+        $ref: "#/definitions/SiteRole"
+      nodeRef:
+        $ref: "#/definitions/NodeRef"
+      isFavourite:
+        type: boolean
+        example: false
+      title:
+        type: string
+        example: Project New Start
+      description:
+        type: string
+        example: This project will be about a new start
+      type:
+        $ref: "#/definitions/SiteType"
+      notTemplateSite:
+        type: boolean
+        example: true
+      owner:
+        $ref: "#/definitions/Person"
+      manager:
+        $ref: "#/definitions/Person"
+      creator:
+        $ref: "#/definitions/Person"
+      members:
+        type: array
+        items:
+          type: string
+          example: jack_doe
+  SiteAuthorityGroup:
+    allOf:
+    - $ref: "#/definitions/SiteGroup"
+    - type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: "#/definitions/Authority"
+  SiteGroup:
+    type: object
+    properties:
+      shortName:
+        type: string
+        example: PD_WORKGROUP
+      authority:
+        type: string
+        example: SiteCollaborator
+      collapsed:
+        type: boolean
+        example: false
+      multipleMembers:
+        type: boolean
+        example: true
+  SiteRole:
+    type: string
+    enum:
+      - Owner
+      - Manager
+      - Collaborator
+      - Consumer
+      - Outsider
+    example: Consumer
+  SiteType:
+    type: string
+    enum:
+      - Project
+      - PD-Project
+      - Template-Project
+    example: Project
+  Template:
+    allOf:
+    - $ref: "#/definitions/NodeType"
+    - type: object
+      properties:
+        nodeRef:
+          $ref: "#/definitions/NodeId"
+        name:
+          type: string
+          example: OpenDocument
+        isFolder:
+          type: boolean
+          example: false
+  TimeStamp:
+    type: string
+    example: "2018-09-07T12:59:41"
+  TimeStampUnix:
+    type: integer
+    example: 1536320506858
+  Version:
+    type: object
+    properties:
+      parent_nodeRef:
+        $ref: "#/definitions/NodeId"
+      nodeRef:
+        $ref: "#/definitions/NodeId"
+      modifier:
+        type: string
+        example: John Doe
+      created:
+        $ref: "#/definitions/TimeStamp"
+      version:
+        type: string
+        example: 1.24
+  Visibility:
+    type: string
+    enum:
+      - PUBLIC
+      - PRIVATE
+      - MODERATED
+    example: public
+  UIDefinition:
+    type: object
+    properties:
+      widget:
+        type: string
+        example: textfield

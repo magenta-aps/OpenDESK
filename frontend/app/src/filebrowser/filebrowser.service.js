@@ -3,20 +3,18 @@ import '../shared/services/alfrescoNode.service'
 
 angular
   .module('openDeskApp.filebrowser')
-  .factory('filebrowserService', ['$http', 'alfrescoNodeService', fileBrowserService])
+  .factory('filebrowserService', ['$http', 'alfrescoNodeService', 'documentService', fileBrowserService])
 
-function fileBrowserService ($http, alfrescoNodeService) {
+function fileBrowserService ($http, alfrescoNodeService, documentService) {
   var currentFolderNodeRef
 
   var service = {
     genericContentAction: genericContentAction,
-    getCompanyHome: getCompanyHome,
     getContentList: getContentList,
     getCurrentFolderNodeRef: getCurrentFolderNodeRef,
     getHome: getHome,
     getSharedNodes: getSharedNodes,
     getTemplates: getTemplates,
-    getUserHome: getUserHome,
     loadFromSbsys: loadFromSbsys,
     setCurrentFolder: setCurrentFolder,
     shareNode: shareNode,
@@ -37,7 +35,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
     return $http
       .get(`/alfresco/service/node/companyHome`)
       .then(function (response) {
-        return response.data[0].nodeRef
+        return response.data.nodeRef
       })
   }
 
@@ -49,7 +47,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
       })
   }
 
-  function getHome (type) {
+  function getHome (type, siteShortName) {
     switch (type) {
       case 'user':
         return getUserHome()
@@ -61,6 +59,12 @@ function fileBrowserService ($http, alfrescoNodeService) {
           .then(function (nodeRef) {
             return nodeRef
           })
+      case 'site':
+        return documentService.getSiteNode(siteShortName)
+          .then(
+            function (node) {
+              return node.nodeRef
+            })
     }
   }
 
@@ -73,11 +77,9 @@ function fileBrowserService ($http, alfrescoNodeService) {
 
   function getTemplates (type) {
     return $http
-      .post(`/alfresco/service/template`, {
-        PARAM_METHOD: `get${type}Templates`
-      })
+      .get(`/alfresco/service/templates/${type}`)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 
@@ -85,7 +87,7 @@ function fileBrowserService ($http, alfrescoNodeService) {
     return $http
       .get(`/alfresco/service/node/userHome`)
       .then(function (response) {
-        return response.data[0].nodeRef
+        return response.data.nodeRef
       })
   }
 
@@ -170,36 +172,25 @@ function fileBrowserService ($http, alfrescoNodeService) {
       destinationRef: destinationNodeRef,
       nodeRefs: sourceNodeRefs
     }
-
-    return $http
-      .put(`/alfresco/service/node/preprocess`, payload)
+    return $http.put(`/alfresco/service/node/preprocess`, payload)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 
   function shareNode (nodeRef, userName, permission) {
     var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
-    return $http
-      .post(
-        `/alfresco/service/node/${nodeId}/share/${userName}/${permission}`,
-        {}
-      )
+    return $http.post(`/alfresco/service/node/${nodeId}/share/${userName}/${permission}`)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 
   function stopSharingNode (nodeRef, userName, permission) {
     var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
-
-    return $http
-      .delete(
-        `/alfresco/service/node/${nodeId}/share/${userName}/${permission}`,
-        {}
-      )
+    return $http.delete(`/alfresco/service/node/${nodeId}/share/${userName}/${permission}`)
       .then(function (response) {
-        return response.data[0]
+        return response.data
       })
   }
 }

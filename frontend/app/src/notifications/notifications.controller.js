@@ -2,12 +2,10 @@
 
 angular
   .module('openDeskApp.notifications')
-  .controller('NotificationsController', ['$mdSidenav', 'notificationsService', 'UserService', NotificationsController])
+  .controller('NotificationsController', ['$mdSidenav', 'notificationsService', NotificationsController])
 
-function NotificationsController ($mdSidenav, notificationsService, UserService) {
+function NotificationsController ($mdSidenav, notificationsService) {
   var vm = this
-
-  var currentUser = UserService.get().userName
 
   vm.notifications = []
   vm.close = close
@@ -25,22 +23,22 @@ function NotificationsController ($mdSidenav, notificationsService, UserService)
     $mdSidenav('notifications').close()
   }
 
-  function setRead (noticeObj) {
-    notificationsService.setReadNotice(currentUser, noticeObj)
+  function setRead (notificationId) {
+    notificationsService.setReadNotice(notificationId)
       .then(function () {
         updateNotifications()
       })
   }
 
-  function setSeen (noticeObj) {
-    notificationsService.setSeenNotice(currentUser, noticeObj)
+  function setSeen (notificationId) {
+    notificationsService.setSeenNotice(notificationId)
       .then(function () {
         updateNotifications()
       })
   }
 
   function updateNotifications () {
-    notificationsService.get(currentUser)
+    notificationsService.get()
       .then(function (notifications) {
         vm.notifications = notifications
       },

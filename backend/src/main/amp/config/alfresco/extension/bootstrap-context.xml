@@ -4,6 +4,7 @@
     <bean id="unserializerValidatorBootstrap" abstract="true"/>
 
     <bean id="initialSetup" class="dk.opendesk.repo.bootstrap.Bootstrap">
+        <property name="editorBean" ref="editorBean"/>
         <property name="authorityService" ref="AuthorityService"/>
     </bean>
 </beans>

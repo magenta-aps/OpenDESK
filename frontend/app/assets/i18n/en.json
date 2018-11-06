@@ -51,6 +51,7 @@
     "SEND_EMAIL": "Send email",
     "VIEW_DETAILS": "View details",
     "DETAILS": "Details",
+    "DETAILS_SAVED": "The details has been saved.",
     "SHOW": "Show",
     "DELETE": "Delete",
     "EDIT": "Edit",
@@ -271,7 +272,11 @@
     "PERMISSIONS" : {
       "Editor": "Kan skrive",
       "Consumer": "Kan læse"
-    }
+    },
+    "PUBLIC_LINK": "Public link",
+    "SHARE_PUBLICLY": "Share publicly",
+    "SHARE_WITH_USERS": "Share with users",
+    "STOP_SHARING_PUBLICLY": "Stop sharing publicly"
   },
   "FILE": {
     "FILE": "File",
@@ -1022,7 +1027,7 @@
     "CREATED_AT": "Created at",
     "REPLIES": "Replies",
     "NO_DISCUSSIONS": "No comments",
-    
+
     "SORT": {
       "SORT": "Sort after",
       "ALL": "All",
@@ -1053,10 +1058,6 @@
       "appName": "Name of OpenDesk"
     }
   },
-  "GROUPS": {
-    "OPENDESK_OrganizationalCenters": "Org. Units",
-    "OPENDESK_ProjectOwners": "Project Owners"
-  },
   "EDIT_MS_OFFICE": {
     "ALREADY_LOCKED": "The document could not be edited because it is already being edited in MS Office by {{userName}}.",
     "AOS": {
@@ -1085,5 +1086,14 @@
     "SENDERFIRSTNAME" : "First Name of the Sender",
     "SENDERLASTNAME" : "Last Name of the Sender",
     "SENDERUSERNAME" : "Username of the Sender"
+  },
+  "PROPERTY": {
+    "cm:author": "Author",
+    "cm:created": "Created",
+    "cm:creator": "Creator",
+    "cm:modified": "Modified",
+    "cm:modifier": "Modifier",
+    "cm:name": "Name",
+    "cm:versionLabel": "Version"
   }
 }

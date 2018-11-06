@@ -3,21 +3,19 @@ import '../shared/services/preference.service'
 
 angular
   .module('openDeskApp.user')
-  .controller('UserController', ['$scope', '$mdSidenav', 'UserService', 'MemberService', 'sessionService',
-    'preferenceService', UserController])
+  .controller('UserController', ['$scope', '$mdSidenav', 'userService', 'personService', 'preferenceService',
+    UserController])
 
-function UserController ($scope, $mdSidenav, UserService, MemberService, sessionService, preferenceService) {
+function UserController ($scope, $mdSidenav, userService, personService, preferenceService) {
   var vm = this
 
   vm.close = close
-  vm.loadAvatar = loadAvatar
   vm.setNotificationPreferences = setNotificationPreferences
-  vm.user = UserService.get()
+  vm.user = userService.getUser()
 
   $scope.uploadAvatar = uploadAvatar
 
   loadNotificationPreferences()
-  loadAvatar()
 
   function close () {
     $mdSidenav('userpanel').close()
@@ -36,7 +34,7 @@ function UserController ($scope, $mdSidenav, UserService, MemberService, session
 
   function uploadAvatar (element) {
     var file = element.files[0]
-    UserService.uploadAvatar(file)
+    userService.uploadAvatar(file)
       .then(function (data) {
         loadAvatar()
         return data
@@ -44,9 +42,10 @@ function UserController ($scope, $mdSidenav, UserService, MemberService, session
   }
 
   function loadAvatar () {
-    MemberService.get(vm.user.userName)
+    personService.getPerson(vm.user.userName)
       .then(function (user) {
-        vm.user.avatar = sessionService.updateAvatar(user)
+        vm.user.avatar = user.avatar
+        userService.updateAvatar(user.avatar)
       })
   }
 }

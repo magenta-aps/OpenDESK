@@ -3,9 +3,9 @@ import '../../shared/directives/iconPicker'
 
 angular
   .module('openDeskApp')
-  .controller('ConfigController', ['APP_BACKEND_CONFIG', 'systemSettingsService', ConfigController])
+  .controller('ConfigController', ['APP_BACKEND_CONFIG', 'editorService', 'systemSettingsService', ConfigController])
 
-function ConfigController (APP_BACKEND_CONFIG, systemSettingsService) {
+function ConfigController (APP_BACKEND_CONFIG, editorService, systemSettingsService) {
   var vm = this
 
   vm.config = angular.copy(APP_BACKEND_CONFIG)
@@ -17,9 +17,7 @@ function ConfigController (APP_BACKEND_CONFIG, systemSettingsService) {
   activate()
 
   function activate () {
-    systemSettingsService.getEditors().then(function (response) {
-      vm.editors = response
-    })
+    vm.editors = editorService.getEditors()
   }
 
   function updateSettings () {

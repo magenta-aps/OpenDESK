@@ -4,26 +4,23 @@ import organisationUnitPickerTemplate from './organisationUnitPicker.html'
 angular.module('openDeskApp.members')
   .component('organisationUnitPicker', {
     template: organisationUnitPickerTemplate,
-    controller: ['siteService', organisationUnitPicker],
+    controller: ['groupService', organisationUnitPicker],
     bindings: {
       selected: '=',
       type: '<'
     }
   })
 
-function organisationUnitPicker (siteService) {
+function organisationUnitPicker (groupService) {
   var vm = this
-  vm.organisationUnits = []
+  vm.organizationalCenters = []
 
   activate()
 
   function activate () {
-    siteService.getAllOrganizationalCenters()
+    groupService.getOrganizationalCenters()
       .then(function (response) {
-        vm.organisationUnits = response.data
-      }, function (err) {
-        console.log(err)
-      }
-      )
+        vm.organizationalCenters = response
+      })
   }
 }

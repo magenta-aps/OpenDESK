@@ -14,10 +14,10 @@
         <ul class="od-notifylist">
             <li ng-repeat="notice in vm.notifications | orderBy:'-created'" class="od-notifylist--item" ng-class="(notice.read) ? 'od-notifylist--item--read' : ''">
                 <span class="od-notifylist--item--link">
-                    <a ui-sref="{{ notice.link }}" ng-click="vm.close();vm.setRead(notice.nodeRef)">
+                    <a ui-sref="{{ notice.link }}" ng-click="vm.close();vm.setRead(notice.notificationId)">
                         <h3 class="od-notifylist--item--notice">{{ notice.subject }}</h3>
                         <p class="od-notifylist--item--desc">{{notice.message}}</p>
-                        <p class="od-notifylist--item--desc od-notifylist--item--date">{{notice.created | customDate}}</p> 
+                        <p class="od-notifylist--item--desc od-notifylist--item--date">{{notice.created | customDate}}</p>
                     </a>
                 </span>
             </li>

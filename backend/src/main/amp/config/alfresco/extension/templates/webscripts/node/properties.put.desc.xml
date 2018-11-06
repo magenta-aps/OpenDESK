@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Update Properties</shortname>
+    <description>Update the Properties of a Node</description>
+    <url>/node/{nodeId}/properties</url>
+    <authentication>user</authentication>
+</webscript>

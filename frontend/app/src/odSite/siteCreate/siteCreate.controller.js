@@ -3,13 +3,13 @@
 angular
   .module('openDeskApp.site')
   .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$mdDialog',
-    'UserService', 'siteService', 'MemberService', SiteCreateController])
+    'userService', 'siteService', 'personService', SiteCreateController])
 
-function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $mdDialog, UserService, siteService,
-  MemberService) {
+function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $mdDialog, userService, siteService,
+  personService) {
   var vm = this
 
-  var currentUser = UserService.get()
+  var currentUser = userService.getUser()
 
   vm.type = sitetype
 
@@ -60,7 +60,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
   function searchPeople (query) {
     if (query)
-      return MemberService.findAuthorities(query)
+      return personService.searchAuthorities(query)
   }
 
   function loadSiteGroups () {
@@ -80,7 +80,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
     siteService.createPDSite(vm.newSite).then(
       function (response) {
-        var siteShortName = response.data[0].shortName
+        var siteShortName = response.data.shortName
         var siteName = vm.newSite.siteName
 
         angular.forEach(vm.newSite.groups, function (group) {
@@ -113,7 +113,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
       visibility = 'PRIVATE'
 
     siteService.createSite(vm.newSite.siteName, vm.newSite.desc, visibility).then(function (response) {
-      var siteShortName = response[0].shortName
+      var siteShortName = response.shortName
       var siteName = vm.newSite.siteName
 
       angular.forEach(vm.newSite.groups, function (group) {
@@ -139,14 +139,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
     // Iterating list of items sequential instead of async.
     angular.forEach(group, function (authority) {
       var authorityName = authority.userName ? authority.userName : authority.fullName
-      MemberService.add(siteShortName, authorityName, groupName)
-        .then(function () {
-        },
-        function (err) {
-          console.log('ERROR: Could not add ' + authorityName + ' in site group ' + groupName)
-          console.log(err)
-        }
-        )
+      siteService.addMember(siteShortName, authorityName, groupName)
     })
   }
 }

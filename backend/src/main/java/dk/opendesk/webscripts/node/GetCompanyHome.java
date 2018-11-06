@@ -1,17 +1,14 @@
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
-import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.AbstractWebScript;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
 
 
-public class GetCompanyHome extends AbstractWebScript {
+public class GetCompanyHome extends OpenDeskWebScript {
 
     private NodeBean nodeBean;
 
@@ -21,18 +18,12 @@ public class GetCompanyHome extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-        res.setContentEncoding("UTF-8");
-        Writer webScriptWriter = res.getWriter();
-        JSONArray result;
-
+        super.execute(req, res);
         try {
-            result = Utils.getJSONReturnPair("nodeRef", nodeBean.getCompanyHome().toString());
+            objectResult.put("nodeRef", nodeBean.getCompanyHome().toString());
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            res.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 }

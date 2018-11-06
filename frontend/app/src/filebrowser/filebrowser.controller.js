@@ -8,14 +8,14 @@ import uploadSbsysTemplate from './view/sbsys/uploadSbsys.tmpl.html'
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout', 'siteService',
-    'fileService', 'filebrowserService', 'documentService', 'alfrescoNodeService', 'MemberService', '$translate',
-    'APP_BACKEND_CONFIG', 'sessionService', 'headerService', 'browserService', 'ContentService',
+  .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout',
+    'fileService', 'filebrowserService', 'documentService', 'alfrescoNodeService', '$translate',
+    'APP_BACKEND_CONFIG', 'headerService', 'browserService', 'contentService',
     FilebrowserController])
 
-function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, siteService, fileService,
-  filebrowserService, documentService, alfrescoNodeService, MemberService, $translate, APP_BACKEND_CONFIG,
-  sessionService, headerService, browserService, ContentService) {
+function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, fileService,
+  filebrowserService, documentService, alfrescoNodeService, $translate, APP_BACKEND_CONFIG,
+  headerService, browserService, contentService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -38,13 +38,14 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
   vm.error = false
   vm.folderTemplates = {}
   vm.isLoading = true
+  vm.paths = []
   vm.permissions = {}
   vm.sendAllToSbsys = false
   vm.sendToSbsys = false
   vm.uploading = false
 
   $scope.filesToFilebrowser = null
-  $scope.isSite = $stateParams.isSite
+  $scope.isSite = false
   $scope.order = 'name'
   $scope.reverse = false
   $scope.showProgress = false
@@ -65,26 +66,16 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
   function activate () {
     vm.path = $stateParams.path
-    if ($stateParams.selectedTab !== undefined) $scope.tab.selected = $stateParams.selectedTab
-
-    if ($scope.isSite) {
+    if ($stateParams.selectedTab !== undefined) {
+      $scope.tab = {}
+      $scope.tab.selected = $stateParams.selectedTab
+    }
+    var title
+    if ($stateParams.type === 'site') {
+      $scope.isSite = true
       $scope.$watch('siteService.getUserManagedProjects()', function (newVal) {
         $scope.userManagedProjects = newVal
       })
-      siteService.getNode($stateParams.projekt, 'documentLibrary', vm.path)
-        .then(function (val) {
-          setFolder(val.parent.nodeRef)
-        })
-
-      vm.permissions = siteService.getPermissions()
-      var title
-      if (vm.permissions === undefined)
-        siteService.getSiteUserPermissions($stateParams.projekt)
-          .then(function (permissions) {
-            vm.permissions = permissions
-          })
-    } else if ($stateParams.nodeRef !== undefined && $stateParams.nodeRef !== '') {
-      setFolderAndPermissions($stateParams.nodeRef)
     } else if ($stateParams.type === 'shared-docs') {
       title = $translate.instant('DOCUMENT.SHARED_WITH_ME')
       browserService.setTitle(title)
@@ -94,22 +85,33 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
       title = $translate.instant('DOCUMENT.MY_DOCUMENTS')
       browserService.setTitle(title)
       headerService.setTitle(title)
-      filebrowserService.getUserHome()
-        .then(function (userHomeRef) {
-          var userHomeId = alfrescoNodeService.processNodeRef(userHomeRef).id
-          setFolderAndPermissions(userHomeId)
-        })
-    } else {
-      setFolderAndPermissionsByPath(vm.path)
     }
 
-    filebrowserService.getTemplates('Document')
+    if ($stateParams.nodeRef !== undefined && $stateParams.nodeRef !== '')
+      documentService.getNode($stateParams.nodeRef)
+        .then(
+          function (document) {
+            setFolderAndPermissions(document)
+          })
+    else if ($stateParams.type === 'site')
+      documentService.getSiteNode($stateParams.projekt)
+        .then(
+          function (document) {
+            setFolderAndPermissions(document)
+          })
+    else
+      documentService.getSystemNode($stateParams.type)
+        .then(
+          function (document) {
+            setFolderAndPermissions(document)
+          })
+
+    filebrowserService.getTemplates('document')
       .then(function (documentTemplates) {
         vm.documentTemplates = documentTemplates
-        if (vm.documentTemplates !== undefined) processContent(vm.documentTemplates)
       })
 
-    filebrowserService.getTemplates('Folder')
+    filebrowserService.getTemplates('folder')
       .then(function (folderTemplates) {
         vm.folderTemplates = folderTemplates
         vm.folderTemplates.unshift({
@@ -120,27 +122,9 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
       })
   }
 
-  function setFolderAndPermissionsByPath (path) {
-    filebrowserService.getCompanyHome()
-      .then(function (val) {
-        var companyHomeId = alfrescoNodeService.processNodeRef(val).id
-        setFolderAndPermissions(companyHomeId + path)
-      })
-  }
-
-  function setFolderAndPermissions (node) {
-    documentService.getDocumentByPath(node)
-      .then(
-        function (response) {
-          setFolder(response.metadata.parent.nodeRef)
-          vm.permissions.canEdit = response.metadata.parent.permissions.userAccess.edit
-        },
-        function (error) {
-          console.log(error)
-          vm.isLoading = false
-          vm.error = true
-        }
-      )
+  function setFolderAndPermissions (document) {
+    setFolder(document.nodeRef)
+    vm.permissions.canEdit = document.canEdit
   }
 
   function setFolder (fNodeRef) {
@@ -183,7 +167,6 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
     angular.forEach(vm.contentList, function (contentTypeList) {
       vm.contentListLength += contentTypeList.length
-      processContent(contentTypeList)
     })
     // Compile paths for breadcrumb directive
     if (folderNodeRef !== '')
@@ -192,109 +175,30 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     vm.isLoading = false
   }
 
-  function processContent (items) {
-    angular.forEach(items, function (item) {
-      item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
-
-      var isLocked = item.isLocked
-      var lockType
-      if (isLocked)
-        lockType = item.lockType
-      var mimeType = item.mimeType
-
-      item.loolEditable = ContentService.isLibreOfficeEditable(mimeType, isLocked)
-      item.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, isLocked)
-      item.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, isLocked, lockType)
-
-      // Set link
-      item.uiRef = getUiRef(item)
-
-      // Set history
-      getHistory(item.shortRef).then(function (response) {
-        item.history = response
-      })
-    })
-  }
-
-  function getUiRef (content) {
-    if (content.contentType === 'cmis:document')
-      if ($stateParams.type === 'system-folders' && content.mimeType === 'text/html')
-        return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})'
-      else
-        return 'document({doc: "' + content.shortRef + '"})'
-
-    if (content.contentType === 'cmis:folder')
-      if ($stateParams.type === 'system-folders')
-        return 'systemsettings.filebrowser({path: "' + vm.path + '/' + content.name + '"})'
-      else if ($stateParams.type === 'my-docs')
-        return 'odDocuments.myDocs({nodeRef: "' + content.shortRef + '"})'
-      else if ($stateParams.type === 'shared-docs')
-        return 'odDocuments.sharedDocs({nodeRef: "' + content.shortRef + '"})'
-      else if ($scope.isSite)
-        return 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                    '", path: "' + vm.path + '/' + content.name + '"})'
-
-    if (content.contentType === 'cmis:link')
-      return 'project({projekt: "' + content.destination_link + '"})'
-  }
-
-  function getHistory (nodeId) {
-    return ContentService.history(nodeId).then(function (val) {
-      return val
-    })
-  }
-
   function buildBreadCrumbPath () {
-    if ($stateParams.type === 'my-docs' || $stateParams.type === 'shared-docs') {
-      var homeType
-      switch ($stateParams.type) {
-        case 'my-docs':
-          homeType = 'user'
-          break
-        case 'shared-docs':
-          homeType = 'company'
-          break
-      }
-
-      filebrowserService.getHome(homeType)
-        .then(function (rootRef) {
-          documentService.getBreadCrumb($stateParams.type, folderNodeRef, rootRef)
-            .then(function (breadcrumb) {
-              vm.paths = breadcrumb
-            })
-        })
-    } else if (vm.path !== undefined) {
-      var homeLink
-
-      if ($scope.isSite) homeLink = 'project.filebrowser({projekt: "' + $stateParams.projekt + '", path: ""})'
-      else homeLink = 'systemsettings.filebrowser({path: ""})'
-
-      var paths = [{
-        title: 'Home',
-        link: homeLink
-      }]
-      var pathLink = '/'
-      createBreadCrumbs(paths, pathLink)
-      vm.paths = paths
+    var homeType
+    switch ($stateParams.type) {
+      case 'my-docs':
+        homeType = 'user'
+        break
+      case 'shared-docs':
+        homeType = 'company'
+        break
+      case 'site':
+        homeType = 'site'
+        break
+      case 'system-folders':
+        homeType = 'company'
+        break
     }
-  }
 
-  function createBreadCrumbs (paths, pathLink) {
-    var pathArr = vm.path.split('/')
-    for (var a in pathArr)
-      if (pathArr[a] !== '') {
-        var link
-        if ($scope.isSite)
-          link = 'project.filebrowser({projekt: "' + $stateParams.projekt +
-                        '", path: "' + pathLink + pathArr[a] + '"})'
-        else
-          link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})'
-        paths.push({
-          title: pathArr[a],
-          link: link
-        })
-        pathLink = pathLink + pathArr[a] + '/'
-      }
+    filebrowserService.getHome(homeType, $stateParams.projekt)
+      .then(function (rootRef) {
+        documentService.getBreadCrumb($stateParams.type, folderNodeRef, rootRef)
+          .then(function (breadcrumb) {
+            vm.paths = breadcrumb
+          })
+      })
   }
 
   // Dialogs
@@ -326,7 +230,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     vm.uploading = true
 
     angular.forEach(files, function (file) {
-      ContentService.upload(file, folderNodeRef)
+      contentService.upload(file, folderNodeRef)
         .then(function () {
           hideDialogAndReloadContent()
         })

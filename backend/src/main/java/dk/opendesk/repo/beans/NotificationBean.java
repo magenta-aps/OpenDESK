@@ -16,12 +16,10 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class NotificationBean {
 
@@ -45,6 +43,36 @@ public class NotificationBean {
     }
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
+    }
+
+    /**
+     * Counts number of child nodes of a user with a specific property value.
+     * @param userName username of the user whose notifications are requested.
+     * @param property to check.
+     * @param value to check.
+     * @return number of child nodes of a user with a specific property value.
+     */
+    private int countPropertyValue(String userName, QName property, Serializable value) {
+        NodeRef user = personService.getPerson(userName);
+        return nodeService.getChildAssocsByPropertyValue(user, property, value).size();
+    }
+
+    /**
+     * Counts number of unseen notifications of a user.
+     * @param userName username of the user whose notifications are requested.
+     * @return number of unseen notifications of a user.
+     */
+    private int countUnSeenNotifications(String userName) {
+        return countPropertyValue(userName, OpenDeskModel.PROP_NOTIFICATION_SEEN, false);
+    }
+
+    /**
+     * Counts number of unread notifications of a user.
+     * @param userName username of the user whose notifications are requested.
+     * @return number of unread notifications of a user.
+     */
+    private int countUnReadNotifications(String userName) {
+        return countPropertyValue(userName, OpenDeskModel.PROP_NOTIFICATION_READ, false);
     }
 
     /**
@@ -114,6 +142,14 @@ public class NotificationBean {
     }
 
     /**
+     * Deletes a notification.
+     * @param nodeRef of the notification.
+     */
+    public void deleteNotification(NodeRef nodeRef) {
+        nodeService.deleteNode(nodeRef);
+    }
+
+    /**
      * Gets a notification into a standard structured JSONObject.
      * @param notificationRef of the notification.
      * @return a JSONObject representing the notification.
@@ -136,6 +172,10 @@ public class NotificationBean {
         }
 
         JSONObject params = new JSONObject(paramsProp);
+
+        String notificationId = notificationRef.getId();
+        json.put("notificationId", notificationId);
+
         Boolean read = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_READ);
         Boolean seen = (Boolean) props.get(OpenDeskModel.PROP_NOTIFICATION_SEEN);
 
@@ -155,6 +195,39 @@ public class NotificationBean {
         json.put("created", d.getTime());
 
         return json;
+    }
+
+    /**
+     * Gets all notifications.
+     * This method also returns read notifications.
+     * @return a JSONObject containing metadata and a list of JSONObjects for each notification.
+     */
+    public JSONObject getNotifications() throws Exception {
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
+        int unSeenSize = countUnSeenNotifications(userName);
+        int unReadSize = countUnReadNotifications(userName);
+
+        NodeRef user = personService.getPerson(userName);
+
+        Set<QName> types = new HashSet<>();
+        types.add(OpenDeskModel.TYPE_NOTIFICATION);
+
+        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
+
+        JSONObject result = new JSONObject();
+        result.put("unseen", unSeenSize);
+        result.put("unread", unReadSize);
+
+        JSONArray children = new JSONArray();
+        for (ChildAssociationRef child : childAssociationRefs) {
+            JSONObject json = getNotification(child.getChildRef());
+            if(json != null)
+                children.add(json);
+        }
+
+        result.put("notifications", children);
+
+        return result;
     }
 
     private JSONObject getSiteParams(String siteShortName) throws JSONException {
@@ -338,6 +411,36 @@ public class NotificationBean {
 
     private Set<String> getAuthorityMembers(String authority) {
         return authorityService.getContainedAuthorities(AuthorityType.USER, authority, false);
+    }
+
+    /**
+     * Sets a notification as read.
+     * @param nodeRef of the notification.
+     */
+    public void setNotificationRead (NodeRef nodeRef) {
+        nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
+    }
+
+    /**
+     * Sets a notification as seen.
+     * @param nodeRef of the notification.
+     */
+    public void setNotificationSeen (NodeRef nodeRef) {
+        nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
+    }
+
+    /**
+     * Sets all notifications of a user as seen.
+     */
+    public void setNotificationsSeen() {
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
+        NodeRef user = personService.getPerson(userName);
+        QName property = OpenDeskModel.PROP_NOTIFICATION_SEEN;
+        List<ChildAssociationRef> childAssocRefs = nodeService.getChildAssocsByPropertyValue(user, property, false);
+        for (ChildAssociationRef child : childAssocRefs) {
+            NodeRef n = child.getChildRef();
+            this.setNotificationSeen(n);
+        }
     }
 }
 

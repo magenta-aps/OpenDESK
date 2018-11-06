@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Validate Person</shortname>
+    <description>Validates Person</description>
+    <url>/person/validate</url>
+    <authentication>user</authentication>
+</webscript>

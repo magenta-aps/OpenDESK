@@ -1,0 +1,54 @@
+{
+  "edit": {
+    "order": [
+      "od:name",
+      "od:description",
+      "od:sbsys",
+      "od:state",
+      "od:center_id"
+    ],
+    "properties": {
+      "od:name": {
+        "widget": "textfield"
+      },
+      "od:description": {
+        "widget": "textarea"
+      },
+      "od:sbsys": {
+        "widget": "textfield"
+      },
+      "od:state": {
+        "widget": "textfield"
+      },
+      "od:center_id": {
+        "widget": "textfield"
+      }
+    }
+  },
+  "view": {
+    "order": [
+      "od:name",
+      "od:description",
+      "od:sbsys",
+      "od:state",
+      "od:center_id"
+    ],
+    "properties": {
+      "od:name": {
+        "widget": "textfield"
+      },
+      "od:description": {
+        "widget": "textarea"
+      },
+      "od:sbsys": {
+        "widget": "textfield"
+      },
+      "od:state": {
+        "widget": "textfield"
+      },
+      "od:center_id": {
+        "widget": "textfield"
+      }
+    }
+  }
+}

@@ -1,7 +1,6 @@
 package dk.opendesk.webscripts.sites;
 
 import dk.opendesk.repo.model.OpenDeskModel;
-import dk.opendesk.repo.utils.Utils;
 import dk.opendesk.webscripts.TestUtils;
 import org.alfresco.repo.node.archive.NodeArchiveService;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -125,10 +124,10 @@ public class SitesTest extends BaseWebScriptTest {
 
         String group = "Site" + OpenDeskModel.CONSUMER;
 
-        String siteThreeConsumerGroup = Utils.getAuthorityName(TestUtils.SITE_THREE, group);
+        String siteThreeConsumerGroup = "GROUP_site_" + TestUtils.SITE_THREE + "_" + group;
         TestUtils.addToAuthority(transactionService, authorityService, siteThreeConsumerGroup, userName);
 
-        String siteTwoConsumerGroup = Utils.getAuthorityName(TestUtils.SITE_TWO, group);
+        String siteTwoConsumerGroup = "GROUP_site_" + TestUtils.SITE_TWO + "_" + group;
         TestUtils.addToAuthority(transactionService, authorityService, siteTwoConsumerGroup, userName);
 
         assertGetAllSitesForCurrentUser(userName, initialCount + 2);
@@ -158,7 +157,7 @@ public class SitesTest extends BaseWebScriptTest {
 
         String userName = TestUtils.USER_ONE;
         String group = "Site" + OpenDeskModel.CONSUMER;
-        String groupName = Utils.getAuthorityName(TestUtils.SITE_ONE, group);
+        String groupName = "GROUP_site_" + TestUtils.SITE_ONE + "_" + group;
         TestUtils.addToAuthority(transactionService, authorityService, groupName, userName);
         assertRemoveUser(TestUtils.SITE_ONE, userName, group);
     }
@@ -180,7 +179,7 @@ public class SitesTest extends BaseWebScriptTest {
         log.debug("SitesTest.testGetCurrentUserSiteRoleAsCollaborator");
 
         String collaboratorGroup = "Site" + OpenDeskModel.COLLABORATOR;
-        String collaboratorGroupName = Utils.getAuthorityName(TestUtils.SITE_ONE, collaboratorGroup);
+        String collaboratorGroupName = "GROUP_site_" + TestUtils.SITE_ONE + "_" + collaboratorGroup;
         TestUtils.addToAuthority(transactionService, authorityService, collaboratorGroupName, TestUtils.USER_ONE);
         assertGetCurrentUserSiteRole(TestUtils.SITE_ONE, TestUtils.USER_ONE, OpenDeskModel.COLLABORATOR);
     }
