@@ -109,8 +109,6 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
     filebrowserService.getTemplates('document')
       .then(function (documentTemplates) {
         vm.documentTemplates = documentTemplates
-        if (vm.documentTemplates !== undefined)
-          processContent(vm.documentTemplates)
       })
 
     filebrowserService.getTemplates('folder')
