@@ -15,7 +15,7 @@ import previewManagerTemplate from './view/previewManager.html'
 
 angular
   .module('openDeskApp')
-  .factory('documentPreviewService', ['$mdDialog', '$timeout', 'alfrescoDocumentService',
+  .factory('documentPreviewService', ['$mdDialog', '$timeout', 'APP_BACKEND_CONFIG', 'alfrescoDocumentService',
     'alfrescoDownloadService', 'editorService', 'sessionService', '$http', '$sce', 'ALFRESCO_URI', PreviewService])
   .component('audioPreview', {template: audioTemplate, bindings: { plugin: '=' }})
   .component('videoPreview', {template: videoTemplate, bindings: { plugin: '=' }})
@@ -27,8 +27,8 @@ angular
   .component('cannotPreviewPreview', {template: cannotPreviewTemplate, bindings: { plugin: '=' }})
   .component('previewManager', {template: previewManagerTemplate, bindings: { plugin: '=', template: '=' }})
 
-function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService, editorService,
-  sessionService, $http, $sce, ALFRESCO_URI) {
+function PreviewService ($mdDialog, $timeout, APP_BACKEND_CONFIG, alfrescoDocumentService, alfrescoDownloadService,
+  editorService, sessionService, $http, $sce, ALFRESCO_URI) {
   var service = {
     previewDocument: previewDocument,
     getPlugin: getPlugin,
@@ -82,8 +82,8 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
 
   function getPlugins () {
     return [
-      onlyOfficeViewer(),
-      libreOfficeViewer(),
+      officeViewer('onlyOffice'),
+      officeViewer('libreOffice'),
       webViewer(),
       pdfViewer(),
       audioViewer(),
@@ -134,22 +134,12 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
     return angular.extend(result, viewer)
   }
 
-  function onlyOfficeViewer () {
-    var editors = editorService.getEditors()
+  function officeViewer (name) {
+    var editor = editorService.getEditor(name)
+    var isEnabled = APP_BACKEND_CONFIG.editors[name]
     var viewer = {
-      mimeTypes: editors.onlyOffice ? editors.onlyOffice.mimeTypes : [],
-      name: 'onlyOffice'
-    }
-
-    var result = generalPlaybackPlugin()
-    return angular.extend(result, viewer)
-  }
-
-  function libreOfficeViewer () {
-    var editors = editorService.getEditors()
-    var viewer = {
-      mimeTypes: editors.libreOffice ? editors.libreOffice.mimeTypes : [],
-      name: 'libreOffice'
+      mimeTypes: isEnabled && editor ? editor.mimeTypes : [],
+      name: name
     }
 
     var result = generalPlaybackPlugin()
@@ -157,9 +147,9 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   }
 
   function pdfViewer () {
-    var editors = editorService.getEditors()
+    var editor = editorService.getEditor('onlyOffice')
     var viewer = {
-      transformableMimeTypes: editors.libreOffice.mimeTypes,
+      transformableMimeTypes: editor.mimeTypes,
       mimeTypes: ['application/pdf'],
       thumbnail: 'pdf',
       name: 'pdf',
