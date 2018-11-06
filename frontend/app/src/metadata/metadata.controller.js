@@ -1,9 +1,10 @@
 'use strict'
 
 angular.module('openDeskApp.metadata')
-  .controller('MetadataController', ['$scope', '$state', 'groupService', 'metadataService', MetadataController])
+  .controller('MetadataController', ['$mdToast', '$scope', '$state', '$translate', 'groupService', 'metadataService',
+    MetadataController])
 
-function MetadataController ($scope, $state, groupService, metadataService) {
+function MetadataController ($mdToast, $scope, $state, $translate, groupService, metadataService) {
   var vm = this
   vm.editMetadata = editMetadata
   vm.saveMetadata = saveMetadata
@@ -15,6 +16,9 @@ function MetadataController ($scope, $state, groupService, metadataService) {
     vm.extraInfo = node.extraInfo
     vm.properties = node.node.properties
     vm.nodeId = node.nodeId
+    vm.params = {
+      doc: vm.nodeId
+    }
     metadataService.getPropertyDefinitions(vm.nodeId)
       .then(function (response) {
         vm.propertyDefinitions = response
@@ -25,19 +29,31 @@ function MetadataController ($scope, $state, groupService, metadataService) {
         vm.modelProperties = {}
         for (var property in vm.propertyUIDefinitions.edit.properties)
           if (vm.propertyUIDefinitions.edit.properties.hasOwnProperty(property))
-            vm.modelProperties[property] = vm.properties[property]
+            // This is temporary and the backend should take care of sending the name without the file extension
+            if (property === 'cm:name') {
+              var name = vm.properties[property]
+              var fileExtensionIndex = name.lastIndexOf('.')
+              vm.modelProperties[property] = name.substr(0, fileExtensionIndex)
+              vm.nameExtension = name.substr(fileExtensionIndex)
+            } else { vm.modelProperties[property] = vm.properties[property] }
       })
     vm.openMemberInfo = groupService.openMemberInfo
   }
 
   function editMetadata () {
-    var params = {
-      doc: vm.nodeId
-    }
-    $state.go('editDocument', params)
+    $state.go('editDocument', vm.params)
   }
 
   function saveMetadata () {
+    // This is temporary and the backend should take care of sending the name without the file extension
+    vm.modelProperties['cm:name'] += vm.nameExtension
+
     metadataService.updateProperties(vm.nodeId, vm.modelProperties)
+    $state.go('document', vm.params)
+    $mdToast.show(
+      $mdToast.simple()
+        .textContent($translate.instant('COMMON.DETAILS_SAVED'))
+        .hideDelay(3000)
+    )
   }
 }
