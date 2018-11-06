@@ -264,6 +264,78 @@ paths:
               fileName:
                 type: string
                 example: Shakesspeare Notes(3).odt
+  /node/{nodeId}/properties:
+    put:
+      tags:
+      - node
+      summary: Update Properties
+      description: Update the Properties of a Node
+      operationId: updateProperties
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            properties:
+              $ref: "#/definitions/Properties"
+      responses:
+        200:
+          description: successful operation
+  /node/{nodeId}/propertyDefinitions:
+    get:
+      tags:
+      - node
+      summary: Get Property Definitions
+      description: Gets a list of Property Definitions for a given node
+      operationId: getPropertyDefinitions
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/PropertyDefinitions"
+  /node/{nodeId}/propertyUIDefinitions:
+    get:
+      tags:
+      - node
+      summary: Get Property UI Definitions
+      description: Gets a list of Property UI Definitions for a given node
+      operationId: getPropertyUIDefinitions
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: nodeId
+        in: path
+        description: Id of the node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: "#/definitions/PropertyUIDefinitions"
   /node/{nodeId}/rename:
     put:
       tags:
@@ -382,7 +454,7 @@ paths:
       tags:
       - node
       summary: Get Versions
-      description: Gets versions of a node
+      description: Gets versions of a node (Not used)
       operationId: getVersions
       produces:
       - application/json
@@ -457,6 +529,71 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/NodeList"
+  /node/site/{siteShortName}:
+    get:
+      tags:
+      - node
+      summary: Get Site Node
+      description: Gets a site node
+      operationId: getSiteNode
+      produces:
+      - application/json
+      parameters:
+      - name: siteShortName
+        in: path
+        description: Shortname of the Site
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Node"
+  /node/system/{shortName}:
+    get:
+      tags:
+      - node
+      summary: Get System Node
+      description: Gets a system node
+      operationId: getSystemNode
+      produces:
+      - application/json
+      parameters:
+      - name: shortName
+        in: path
+        description: Shortname of the system node
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Node"
+  /node/templateFolders:
+    get:
+      tags:
+      - node
+      summary: Get Template Folders
+      description: Gets a list of Template Folders
+      operationId: getTemplateFolders
+      produces:
+      - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              document-templates:
+                $ref: "#/definitions/NodeRef"
+              folder-templates:
+                $ref: "#/definitions/NodeRef"
+              text-templates:
+                $ref: "#/definitions/NodeRef"
   /node/userHome:
     get:
       tags:
@@ -1477,6 +1614,13 @@ definitions:
         example: Notes from 2017
       nodeRef:
         $ref: "#/definitions/NodeRef"
+  ConstraintDefinition:
+    type: object
+    properties:
+      type:
+        type: string
+      parameters:
+        type: object
   Discussion:
     type: object
     properties:
@@ -1494,28 +1638,16 @@ definitions:
     discriminator: type
     required:
     - type
-  Group:
-    allOf:
-    - $ref: "#/definitions/Authority"
-    - type: object
-      properties:
-        shortName:
-          type: string
-          example: CS
-        fullName:
-          type: string
-          example: GROUP_CS
-        displayName:
-          type: string
-          example: Center for Skoler
-        avatar:
-          type: string
-          example: assets/img/avatars/blank-profile-picture.png
   Editor:
     type: object
     properties:
       installed:
         type: boolean
+      mimeTypes:
+        type: array
+        items:
+          type: string
+          example: application/pdf
   Email:
     type: object
     properties:
@@ -1555,20 +1687,34 @@ definitions:
       groupName:
         type: string
         example: SiteCollaborator
+  Group:
+    allOf:
+    - $ref: "#/definitions/Authority"
+    - type: object
+      properties:
+        shortName:
+          type: string
+          example: CS
+        fullName:
+          type: string
+          example: GROUP_CS
+        displayName:
+          type: string
+          example: Center for Skoler
+        avatar:
+          type: string
+          example: assets/img/avatars/blank-profile-picture.png
   Node:
-    type: object
-    properties:
-      contentType:
-        type: string
-      name:
-        type: string
-      canEdit:
-        type: boolean
-      canMoveAndDelete:
-        type: boolean
-    discriminator: type
-    required:
-    - type
+    allOf:
+    - $ref: "#/definitions/NodeType"
+    - type: object
+      properties:
+        name:
+          type: string
+        canEdit:
+          type: boolean
+        canMoveAndDelete:
+          type: boolean
   NodeContent:
     allOf:
     - $ref: "#/definitions/Node"
@@ -1599,14 +1745,10 @@ definitions:
         name:
           type: string
           example: Shakesspeare Notes
-        contentType:
-          type: string
-          example: cmis:document
-        mimeType:
-          type: string
-          example: application/vnd.oasis.opendocument.text
-        hasHistory:
-          type: boolean
+        versions:
+          type: array
+          items:
+            $ref: "#/definitions/Version"
         isLocked:
           type: boolean
         lockType:
@@ -1711,6 +1853,23 @@ definitions:
   NodeRef:
     type: string
     example: workspace://SpacesStore/22f7bf9a-c440-4d60-894a-df0a9b5e2072
+  NodeType:
+    type: object
+    properties:
+      contentType:
+        type: string
+        example: cmis:document
+  NodeTypeDocument:
+    allOf:
+    - $ref: "#/definitions/NodeType"
+    - type: object
+      properties:
+        fileType:
+          type: string
+          example: odt
+        mimeType:
+          type: string
+          example: application/vnd.oasis.opendocument.text
   NodeTypeList:
     type: array
     items:
@@ -2018,6 +2177,73 @@ definitions:
         $ref: "#/definitions/TimeStampUnix"
       nodeRef:
         $ref: "#/definitions/NodeRef"
+  Properties:
+    type: object
+    properties:
+      cm:name:
+        type: string
+        example: Test.html
+      content:
+        type: object
+        example: <p>Brilliant!</p>
+      cm:created:
+        $ref: "#/definitions/TimeStampUnix"
+      cm:modified:
+        $ref: "#/definitions/TimeStampUnix"
+  PropertyDefinitions:
+    type: object
+    properties:
+      title:
+        type: string
+        example: Name
+      description:
+        type: string
+        example: The name of the node
+      dataTypeName:
+        type: string
+        example: cm
+      defaultValue:
+        type: string
+        example: File name
+      mandatory:
+        type: boolean
+        example: true
+      multiValued:
+        type: boolean
+        example: false
+      constraints:
+        type: array
+        items:
+          $ref: "#/definitions/ConstraintDefinition"
+  PropertyUIDefinitions:
+    type: object
+    properties:
+      edit:
+        type: object
+        properties:
+          order:
+            type: array
+            items:
+              type: string
+              example: cm:name
+          properties:
+            type: object
+            properties:
+              cm:name:
+                $ref: "#/definitions/UIDefinition"
+      view:
+        type: object
+        properties:
+          order:
+            type: array
+            items:
+              type: string
+              example: cm:name
+          properties:
+            type: object
+            properties:
+              cm:name:
+                $ref: "#/definitions/UIDefinition"
   Review:
     allOf:
     - $ref: "#/definitions/Discussion"
@@ -2117,19 +2343,18 @@ definitions:
       - Template-Project
     example: Project
   Template:
-    type: object
-    properties:
-      nodeRef:
-        $ref: "#/definitions/NodeId"
-      name:
-        type: string
-        example: OpenDocument
-      isFolder:
-        type: boolean
-        example: false
-      mimeType:
-        type: string
-        example: application/vnd.oasis.opendocument.text
+    allOf:
+    - $ref: "#/definitions/NodeType"
+    - type: object
+      properties:
+        nodeRef:
+          $ref: "#/definitions/NodeId"
+        name:
+          type: string
+          example: OpenDocument
+        isFolder:
+          type: boolean
+          example: false
   TimeStamp:
     type: string
     example: "2018-09-07T12:59:41"
@@ -2158,3 +2383,9 @@ definitions:
       - PRIVATE
       - MODERATED
     example: public
+  UIDefinition:
+    type: object
+    properties:
+      widget:
+        type: string
+        example: textfield
