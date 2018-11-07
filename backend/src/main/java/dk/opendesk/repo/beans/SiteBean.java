@@ -530,7 +530,10 @@ public class SiteBean {
         json.put("current_user_role", role);
 
         NodeRef n = s.getNodeRef();
+        json.put("nodeId", n.getId());
         json.put("nodeRef", n.toString());
+        NodeRef documentLibraryRef = getDocumentLibraryRef(s);
+        json.put("documentLibraryId", documentLibraryRef.getId());
 
         String userName = AuthenticationUtil.getFullyAuthenticatedUser();
         boolean isFavourite = favouritesService.isFavourite(userName, n);
