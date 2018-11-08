@@ -106,7 +106,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
     if (APP_BACKEND_CONFIG.editors[editor])
       // Then return whether the editor is installed and supports the mime type or not and that there are no locks
       // preventing editing
-      return vm.doc.extraInfo.editors.onlyOffice
+      return vm.doc.extraInfo.editors[editor]
     // Otherwise return false
     return false
   }
