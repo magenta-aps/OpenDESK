@@ -10,12 +10,12 @@ angular
   .module('openDeskApp.filebrowser')
   .controller('FilebrowserController', ['$stateParams', '$scope', '$rootScope', '$mdDialog', '$timeout',
     'fileService', 'filebrowserService', 'documentService', 'alfrescoNodeService', '$translate',
-    'APP_BACKEND_CONFIG', 'headerService', 'browserService', 'contentService',
+    'APP_BACKEND_CONFIG', 'headerService', 'browserService', 'contentService', 'siteService',
     FilebrowserController])
 
 function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $timeout, fileService,
   filebrowserService, documentService, alfrescoNodeService, $translate, APP_BACKEND_CONFIG,
-  headerService, browserService, contentService) {
+  headerService, browserService, contentService, siteService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -97,7 +97,8 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
       documentService.getSiteNode($stateParams.projekt)
         .then(
           function (document) {
-            setFolderAndPermissions(document)
+            getSiteUserPermissions()
+            setFolder(document.nodeRef)
           })
     else
       documentService.getSystemNode($stateParams.type)
@@ -120,6 +121,15 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
           isFolder: true
         })
       })
+  }
+
+  function getSiteUserPermissions () {
+    vm.permissions = siteService.getPermissions()
+    if (vm.permissions === undefined)
+      siteService.getSiteUserPermissions($stateParams.projekt)
+        .then(function (permissions) {
+          vm.permissions = permissions
+        })
   }
 
   function setFolderAndPermissions (document) {
