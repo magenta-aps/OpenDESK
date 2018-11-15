@@ -2,6 +2,7 @@
     <shortname>Get Project Owners</shortname>
     <description>Gets Project Owners</description>
     <url>/authority/project-owners</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

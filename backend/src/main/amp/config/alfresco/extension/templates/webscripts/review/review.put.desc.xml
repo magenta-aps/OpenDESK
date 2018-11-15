@@ -2,5 +2,6 @@
     <shortname>Update Review</shortname>
     <description>Updates the review of a node</description>
     <url>/review/{nodeId}</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

@@ -19,7 +19,7 @@ public class GetPerson extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String userName = req.getExtensionPath();
+            String userName = urlParams.get("userName");
             objectResult = personBean.getPersonInfo(userName);
         } catch (Exception e) {
             error(res, e);

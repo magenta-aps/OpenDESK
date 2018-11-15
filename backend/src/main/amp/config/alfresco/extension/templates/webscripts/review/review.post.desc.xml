@@ -2,5 +2,6 @@
     <shortname>Create Review</shortname>
     <description>Creates the review of a node</description>
     <url>/review</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

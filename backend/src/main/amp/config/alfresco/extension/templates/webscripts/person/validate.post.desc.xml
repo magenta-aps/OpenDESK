@@ -2,5 +2,6 @@
     <shortname>Validate Person</shortname>
     <description>Validates Person</description>
     <url>/person/validate</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

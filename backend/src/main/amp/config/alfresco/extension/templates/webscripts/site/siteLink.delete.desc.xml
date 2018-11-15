@@ -2,5 +2,6 @@
     <shortname>Remove Site Link</shortname>
     <description>Removes a Site Link</description>
     <url>/site/{siteShortName}/siteLink</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

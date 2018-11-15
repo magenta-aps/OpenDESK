@@ -2,5 +2,6 @@
     <shortname>Add Site Member</shortname>
     <description>Adds a Site Member</description>
     <url>/site/{siteShortName}/group/{group}/member/{authority}</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

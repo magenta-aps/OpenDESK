@@ -2,6 +2,7 @@
     <shortname>Get Organizational Centers</shortname>
     <description>Gets Organizational Centers</description>
     <url>/authority/organizational-centers</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
     <transaction>none</transaction>
 </webscript>

@@ -2,5 +2,6 @@
     <shortname>Remove Site Member</shortname>
     <description>Removes a Site Member</description>
     <url>/site/{siteShortName}/group/{group}/member/{authority}</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

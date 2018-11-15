@@ -2,5 +2,6 @@
     <shortname>Node Picker Root</shortname>
     <description>Gets root info for node picker</description>
     <url>/nodepicker/root</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

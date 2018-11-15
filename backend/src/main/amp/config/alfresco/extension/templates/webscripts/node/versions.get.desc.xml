@@ -2,5 +2,6 @@
     <shortname>Get Versions</shortname>
     <description>Gets Versions of a Node</description>
     <url>/node/{nodeId}/versions</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

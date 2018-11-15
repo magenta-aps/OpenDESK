@@ -2,5 +2,6 @@
     <shortname>Get Breadcrumb</shortname>
     <description>Get Breadcrumb</description>
     <url>/node/{nodeId}/breadcrumb/{rootId}</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>
