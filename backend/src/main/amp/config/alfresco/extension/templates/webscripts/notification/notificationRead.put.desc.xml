@@ -2,5 +2,6 @@
     <shortname>Set Notification Read</shortname>
     <description>Sets a notification to read</description>
     <url>/notification/{nodeId}/read</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

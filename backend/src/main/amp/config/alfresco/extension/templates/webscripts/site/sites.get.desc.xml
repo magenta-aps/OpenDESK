@@ -2,5 +2,6 @@
     <shortname>Get Site infos</shortname>
     <description>Get Site infos</description>
     <url>/sites</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

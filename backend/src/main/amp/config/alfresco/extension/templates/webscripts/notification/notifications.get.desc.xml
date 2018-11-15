@@ -2,5 +2,6 @@
     <shortname>Get Notifications</shortname>
     <description>Gets the current user's notifications</description>
     <url>/notifications</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

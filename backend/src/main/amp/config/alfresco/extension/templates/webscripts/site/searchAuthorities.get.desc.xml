@@ -2,5 +2,6 @@
     <shortname>Search Site authorities</shortname>
     <description>Searches Site authorities</description>
     <url>/site/{siteShortName}/authorities/search</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

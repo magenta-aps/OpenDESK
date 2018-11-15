@@ -2,5 +2,6 @@
     <shortname>Get Person</shortname>
     <description>Gets a Person</description>
     <url>/person/{userName}</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

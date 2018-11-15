@@ -2,5 +2,6 @@
     <shortname>Get Preferences</shortname>
     <description>Gets preferences for a user</description>
     <url>/preferences</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

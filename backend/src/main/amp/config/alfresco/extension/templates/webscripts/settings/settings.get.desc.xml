@@ -2,5 +2,6 @@
     <shortname>Get settings for OpenDesk frontend</shortname>
     <description>Gets the settings for OpenDesk frontend</description>
     <url>/settings</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>
