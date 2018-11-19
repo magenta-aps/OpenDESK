@@ -8,14 +8,12 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,12 +28,19 @@ public class OpenDeskWebScript extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         arrayResult = new JSONArray();
-        try {
-            String content = req.getContent().getContent();
-            if(content != null && !content.isEmpty())
-                contentParams = new JSONObject(content);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        String method = req.getServiceMatch().getWebScript().getDescription().getMethod();
+        if(!method.equals("GET")) {
+            Content content = req.getContent();
+            InputStream contentInputStream = content.getInputStream();
+            if (contentInputStream != null) {
+                String contentString = content.getContent();
+                if (contentString != null && !contentString.isEmpty())
+                    try {
+                        contentParams = new JSONObject(contentString);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+            }
         }
         objectResult = new JSONObject();
         urlParams = req.getServiceMatch().getTemplateVars();
