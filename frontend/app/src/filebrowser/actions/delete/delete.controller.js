@@ -17,7 +17,7 @@ function DeleteController ($rootScope, $mdDialog, data, siteService, contentServ
     if (vm.data.contentType !== 'cmis:link')
       deleteFile(vm.data.nodeRef)
     else
-      deleteLink(vm.data.nodeid, vm.data.destination_nodeid)
+      deleteLink(vm.data.destination_link)
   }
 
   function deleteFile (nodeRef) {
@@ -27,8 +27,8 @@ function DeleteController ($rootScope, $mdDialog, data, siteService, contentServ
       })
   }
 
-  function deleteLink (source, destination) {
-    siteService.deleteLink(source, destination)
+  function deleteLink (destinationShortName) {
+    siteService.deleteLink(destinationShortName)
       .then(function () {
         hideAndReload()
       })
