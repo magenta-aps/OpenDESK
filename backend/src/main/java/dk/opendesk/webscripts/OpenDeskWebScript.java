@@ -29,17 +29,19 @@ public class OpenDeskWebScript extends AbstractWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         arrayResult = new JSONArray();
         String method = req.getServiceMatch().getWebScript().getDescription().getMethod();
-        if(!method.equals("GET")) {
+        if(method.equals("PUT") || method.equals("POST")) {
             Content content = req.getContent();
-            InputStream contentInputStream = content.getInputStream();
-            if (contentInputStream != null) {
-                String contentString = content.getContent();
-                if (contentString != null && !contentString.isEmpty())
-                    try {
-                        contentParams = new JSONObject(contentString);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            BufferedReader br = new BufferedReader(new InputStreamReader(content.getInputStream()));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            try {
+                contentParams = new JSONObject(sb.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
         objectResult = new JSONObject();

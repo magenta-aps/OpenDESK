@@ -5,8 +5,6 @@ import dk.opendesk.webscripts.OpenDeskWebScriptTest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.TestWebScriptServer;
 
 import java.io.IOException;
 
@@ -17,7 +15,7 @@ public class GetOpenDeskGroupTest extends OpenDeskWebScriptTest {
     }
 
     @Override
-    protected void setUpTest() {
+    protected void AddUsersAndSites() {
         // USERS
         users.add(USER_TWO);
         users.add(USER_THREE);
@@ -62,8 +60,6 @@ public class GetOpenDeskGroupTest extends OpenDeskWebScriptTest {
 
     private JSONObject executeWebScript (String groupName) throws IOException, JSONException {
         String uri = "/authority/openDeskGroup/" + groupName;
-        TestWebScriptServer.Request request = new TestWebScriptServer.GetRequest(uri);
-        TestWebScriptServer.Response response = sendRequest(request, Status.STATUS_OK, ADMIN);
-        return new JSONObject(response.getContentAsString());
+        return executeGetObject(uri);
     }
 }
