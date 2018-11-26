@@ -24,8 +24,7 @@ public class GetChildren extends OpenDeskWebScript {
         try {
             String nodeId = urlParams.get("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-            List<NodeRef> childNodeRefs = nodeBean.getChildren(nodeRef);
-            arrayResult = nodeBean.getNodeList(childNodeRefs);
+            arrayResult = nodeBean.getChildrenInfo(nodeRef);
         } catch (Exception e) {
             error(res, e);
         }

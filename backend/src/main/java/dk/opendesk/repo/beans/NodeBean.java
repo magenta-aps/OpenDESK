@@ -595,6 +595,11 @@ public class NodeBean {
         return nodeRefs;
     }
 
+    public JSONArray getChildrenInfo(NodeRef parentNodeRef) throws JSONException {
+        List<NodeRef> childNodeRefs = getChildren(parentNodeRef);
+        return getNodeList(childNodeRefs);
+    }
+
     public List<NodeRef> getMyDocs() {
         NodeRef userHomeRef = getUserHome();
         return getChildren(userHomeRef);
