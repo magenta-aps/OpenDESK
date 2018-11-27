@@ -24,36 +24,6 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     getReview()
   }
 
-  function buildSiteBreadCrumbPath (response) {
-    var paths = [{
-      title: response.item.location.siteTitle,
-      link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
-    }]
-    var pathArr = response.item.location.path.split('/')
-    var pathLink = '/'
-    for (var a in pathArr)
-      if (pathArr[a] !== '') {
-        var link
-        if (response.item.location.site === '')
-          link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})'
-        else
-          link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
-                        '", path: "' + pathLink + pathArr[a] + '"})'
-
-        paths.push({
-          title: pathArr[a],
-          link: link
-        })
-        pathLink = pathLink + pathArr[a] + '/'
-      }
-
-    paths.push({
-      title: response.item.location.file,
-      link: 'document({doc: "' + vm.parentNodeId + '"})'
-    })
-    return paths
-  }
-
   function getDocument () {
     contentService.get(vm.parentNodeId)
       .then(function (response) {
@@ -69,48 +39,43 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
           vm.doc.store = 'workspace://SpacesStore/'
 
         loadPreview()
+        var folderNodeRef = vm.doc.node.nodeRef
+        var location = vm.doc.location.path
+        var user = userService.getUser().userName
+        var userHomesLocation = '/User Homes'
+        var userHomeLocation = userHomesLocation + '/' + user
+        var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation
+        var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation
+        var pathIsUnderUserHomes = location.substring(0, userHomesLocation.length) === userHomesLocation
 
+        var siteShortName
+        var homeType
+        var type
         if (vm.doc.location.site !== undefined) {
-          // Compile paths for breadcrumb directive
-          vm.paths = buildSiteBreadCrumbPath(response)
-
-          vm.site = vm.doc.location.site.name
-
-          siteService.loadSiteData(vm.site)
-            .then(function (response) {
-              vm.type = response.type
-              vm.title = response.title
-              vm.doc.siteNodeId = response.nodeRef
-
-              headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title)
-            })
+          siteShortName = vm.doc.location.site.name
+          homeType = 'site'
+          type = 'site'
+        } else if (pathIsUserHome || pathIsUnderUserHome) {
+          homeType = 'user'
+          type = 'my-docs'
+        } else if (pathIsUnderUserHomes) {
+          homeType = 'company'
+          type = 'shared-docs'
         } else {
-          var folderNodeRef = vm.doc.node.nodeRef
-          var location = vm.doc.location.path
-          var homeType, type
-          var user = userService.getUser().userName
-          var userHomeLocation = '/User Homes/' + user
-          var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation
-          var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation
-
-          if (pathIsUserHome || pathIsUnderUserHome) {
-            homeType = 'user'
-            type = 'my-docs'
-          } else {
-            homeType = 'company'
-            type = 'shared-docs'
-          }
-
-          filebrowserService.getHome(homeType)
-            .then(function (rootRef) {
-              documentService.getBreadCrumb(type, folderNodeRef, rootRef)
-                .then(
-                  function (breadcrumb) {
-                    vm.paths = breadcrumb
-                  })
-            })
-          headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT'))
+          homeType = 'company'
+          type = 'system-folders'
         }
+
+        filebrowserService.getHome(homeType, siteShortName)
+          .then(function (rootRef) {
+            documentService.getBreadCrumb(type, folderNodeRef, rootRef, siteShortName)
+              .then(function (breadcrumb) {
+                vm.paths = breadcrumb
+              })
+          })
+
+        var docName = response.item.node.properties['cm:name']
+        headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT') + ': ' + docName)
 
         contentService.getNode(vm.parentNodeId)
           .then(function (node) {
@@ -121,7 +86,7 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
             vm.loaded = true
           })
 
-        browserService.setTitle(response.item.node.properties['cm:name'])
+        browserService.setTitle(docName)
       })
   }
 
