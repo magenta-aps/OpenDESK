@@ -45,7 +45,7 @@
         })
     }
 
-    function getBreadCrumb (type, nodeRef, rootRef) {
+    function getBreadCrumb (type, nodeRef, rootRef, siteShortName) {
       var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
       var rootId = alfrescoNodeService.processNodeRef(rootRef).id
 
@@ -54,8 +54,13 @@
           var breadcrumb = response.data
           var paths = []
           breadcrumb.forEach(function (part) {
-            var nodeId = alfrescoNodeService.processNodeRef(part.nodeRef).id
-            var link = getBreadCrumbPath(type, nodeId)
+            var partNodeId = alfrescoNodeService.processNodeRef(part.nodeRef).id
+            var link
+            // If this is the first part then link to the same page
+            if (partNodeId === nodeId)
+              link = ''
+            else
+              link = getBreadCrumbPath(type, partNodeId, siteShortName)
             paths.push({
               title: part.name,
               link: link
@@ -63,21 +68,21 @@
           })
           paths.push({
             title: 'Home',
-            link: getBreadCrumbPath(type, '')
+            link: getBreadCrumbPath(type, '', siteShortName)
           })
           paths.reverse()
           return paths
         })
     }
 
-    function getBreadCrumbPath (type, nodeId) {
+    function getBreadCrumbPath (type, nodeId, siteShortName) {
       switch (type) {
         case 'my-docs':
           return 'odDocuments.myDocs({nodeRef: "' + nodeId + '"})'
         case 'shared-docs':
           return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
         case 'site':
-          return 'project.filebrowser({nodeRef: "' + nodeId + '"})'
+          return 'project.filebrowser({projekt: "' + siteShortName + '", nodeRef: "' + nodeId + '"})'
         case 'system-folders':
           return 'systemsettings.filebrowser({nodeRef: "' + nodeId + '"})'
       }

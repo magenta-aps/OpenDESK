@@ -204,7 +204,7 @@ function FilebrowserController ($stateParams, $scope, $rootScope, $mdDialog, $ti
 
     filebrowserService.getHome(homeType, $stateParams.projekt)
       .then(function (rootRef) {
-        documentService.getBreadCrumb($stateParams.type, folderNodeRef, rootRef)
+        documentService.getBreadCrumb($stateParams.type, folderNodeRef, rootRef, $stateParams.projekt)
           .then(function (breadcrumb) {
             vm.paths = breadcrumb
           })
