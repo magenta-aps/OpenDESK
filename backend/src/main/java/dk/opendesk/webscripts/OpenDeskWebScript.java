@@ -46,6 +46,7 @@ public class OpenDeskWebScript extends AbstractWebScript {
         }
         objectResult = new JSONObject();
         urlParams = req.getServiceMatch().getTemplateVars();
+        // There are known issues with special characters and the url query params.
         urlQueryParams = parseUrlParams(req.getURL());
         res.setContentEncoding("UTF-8");
         res.setContentType("application/json");
