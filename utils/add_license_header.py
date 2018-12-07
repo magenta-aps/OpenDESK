@@ -1,5 +1,11 @@
-# Syntax:
+# Syntax
+#
+# Add license header to a single file:
 # $ python3 add_license_header.py path/to/file.ext
+#
+# Add license header to many file with the same extension (e.g. .ext):
+# $ find path/to/files -name '*.ext' -exec python3 add_license_header.py {} \;
+#
 
 
 import os.path
