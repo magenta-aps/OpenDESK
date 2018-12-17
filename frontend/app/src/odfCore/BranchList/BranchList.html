@@ -1,0 +1,20 @@
+<md-card ng-repeat="branch in vm.branches">
+    <md-card-title ng-click="vm.openBranch(branch.nodeID)">
+        <md-card-title-text>
+            <span class="md-headline">{{branch.title}}</span>
+        </md-card-title-text>
+    </md-card-title>
+</md-card>
+
+<form ng-submit="vm.addBranch(branchTitle)">
+    <md-input-container>
+        <label>Title</label>
+        <input ng-model="branchTitle">
+    </md-input-container>
+    <div>
+        <md-button type="submit">Submit</md-button>
+    </div>
+</form>
+
+<!--{{vm.selected}}
+<branch-detail  node-id="vm.selected"/>-->
