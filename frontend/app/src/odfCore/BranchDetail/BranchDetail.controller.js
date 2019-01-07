@@ -9,16 +9,10 @@ function BranchDetailController($scope, $stateParams, odfCoreService) {
     vm.branch = {}
     
     activate()
-    
-    $scope.$watch()('nodeID', function(val) {
-        activate ()
-    })
+
 
     function activate() {
-        console.log($scope.nodeID)
-        var id = $scope.nodeID || $stateParams.nodeID
-        if(!id) return
-        
+        var id = $stateParams.nodeID
         odfCoreService.getBranch(id)
             .then(function (response) {
                 vm.branch = response

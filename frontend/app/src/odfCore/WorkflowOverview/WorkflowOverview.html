@@ -1,0 +1,33 @@
+<div>
+    <md-toolbar class="md-primary">
+        <div class="md-toolbar-tools">
+            <h2 class="md-flex">Ansøgninger</h2>
+        </div>
+    </md-toolbar>
+
+
+
+    <span>
+        <div flex="33" ng-repeat="state in vm.workflow.states">
+            <md-card>
+                <md-card-title ng-click="vm.openState(state.nodeID)">
+                    <md-card-title-text>
+                        <span class="md-headline">{{state.title}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+        </div>
+    </span>
+
+    <span>
+        <divflex="66" ng-repeat="application in vm.state.applications">
+            <md-card>
+                <md-card-title ng-click="vm.openApplication(application.nodeID)">
+                    <md-card-title-text>
+                        <span class="md-headline">{{application.nodeID}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+    </span>
+</div>
+
