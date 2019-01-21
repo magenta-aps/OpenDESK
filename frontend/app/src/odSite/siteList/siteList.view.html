@@ -96,7 +96,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser |
-							orderObjectBy:order:!reverse |
+							orderObjectBy:order:reverse |
 							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
 							isContained:vm.searchMembers |
 							filter: vm.search" id="{{project.shortName}}">
