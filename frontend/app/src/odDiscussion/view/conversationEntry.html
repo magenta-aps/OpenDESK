@@ -1,0 +1,35 @@
+<tr class="seperator" id="{{entry.name}}">
+  <td class="avatar-container">
+    <img src="{{entry.author.avatarUrl}}" class="avatar">
+    <h3 class="md-title">{{entry.author.firstName}} {{entry.author.lastName}}</h3>
+  </td>
+
+  <td class="comment">
+    <span ng-bind-html='entry.content'></span>
+    <p class="od-secondary">{{entry.createdOn | customDate}}</p>
+  </td>
+
+  <td class="comment-actions">
+    <md-menu ng-if="entry.permissions.delete || entry.permissions.edit">
+      <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+        <md-icon md-menu-origin>more_vert</md-icon>
+      </md-button>
+
+      <md-menu-content width="3">
+        <md-menu-item ng-if="entry.permissions.edit">
+          <md-button ng-click="editAction">
+            <md-icon md-menu-align-target>edit</md-icon>
+            {{'COMMON.EDIT' | translate }}
+          </md-button>
+        </md-menu-item>
+
+        <md-menu-item ng-if="entry.permissions.delete">
+          <md-button ng-click="deleteAction(entry)">
+            <md-icon md-menu-align-target>delete</md-icon>
+            {{'COMMON.DELETE' | translate }}
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </td>
+</tr>

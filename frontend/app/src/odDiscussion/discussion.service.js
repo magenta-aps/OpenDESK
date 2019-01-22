@@ -5,7 +5,7 @@ import '../shared/services/preference.service'
 angular.module('openDeskApp.discussion')
   .factory('discussionService', ['$http', 'nodeRefUtilsService', 'sessionService', 'preferenceService', discussionService])
 
-function discussionService ($http, nodeRefUtilsService, sessionService, preferenceService) {
+function discussionService($http, nodeRefUtilsService, sessionService, preferenceService) {
   var restBaseUrl = '/alfresco/s/api'
 
   var service = {
@@ -21,21 +21,21 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
 
   return service
 
-  function getAvatarUrl (avatarRef) {
+  function getAvatarUrl(avatarRef) {
     if (avatarRef !== undefined) {
       var avatarId = avatarRef.split('/')[3]
       return sessionService.makeURL('/alfresco/s/api/node/workspace/SpacesStore/' + avatarId + '/content')
     } else { return 'assets/img/avatars/blank-profile-picture.png' }
   }
 
-  function getDiscussionFromNodeRef (nodeId) {
+  function getDiscussionFromNodeRef(nodeId) {
     return $http.get(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + nodeId)
       .then(function (response) {
         return response.data.item
       })
   }
 
-  function getDiscussions (siteShortName) {
+  function getDiscussions(siteShortName) {
     return $http.get(restBaseUrl + '/forum/site/' + siteShortName + '/discussions/posts')
       .then(function (response) {
         addSubscriptionFlag(siteShortName, response.data.items)
@@ -43,7 +43,7 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
       })
   }
 
-  function getReplies (postItem) {
+  function getReplies(postItem) {
     postItem.author.avatarUrl = getAvatarUrl(postItem.author.avatarRef)
     return $http.get(restBaseUrl + postItem.repliesUrl)
       .then(function (response) {
@@ -55,7 +55,7 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
       })
   }
 
-  function addDiscussion (siteShortName, title, content) {
+  function addDiscussion(siteShortName, title, content) {
     var payload = {
       title: title,
       content: content
@@ -67,7 +67,7 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
       })
   }
 
-  function addReply (postItem, content) {
+  function addReply(postItem, content) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
     var payload = { content: content }
     return $http.post(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id + '/replies', payload)
@@ -76,7 +76,7 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
       })
   }
 
-  function updatePost (postItem, title, content) {
+  function updatePost(postItem, title, content) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
     var payload = {
       title: title,
@@ -88,7 +88,7 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
       })
   }
 
-  function deletePost (postItem) {
+  function deletePost(postItem) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
     return $http.delete(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + id)
       .then(function (response) {
@@ -96,7 +96,15 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
       })
   }
 
-  function isSubscribedToDiscussion (siteShortName, postItem) {
+  function subscribeToDiscussion(siteShortName, postItem) {
+    setSubscribe(siteShortName, postItem, true)
+  }
+
+  function unSubscribeToDiscussion(siteShortName, postItem) {
+    setSubscribe(siteShortName, postItem, false)
+  }
+
+  function isSubscribedToDiscussion(siteShortName, postItem) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
     var subscriptionsPreferenceFilter = getSubscribePreferenceFilter(siteShortName, id)
 
@@ -109,7 +117,7 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
 
   // Private methods
 
-  function subscribe (siteShortName, postItem, value) {
+  function subscribe(siteShortName, postItem, value) {
     var id = nodeRefUtilsService.getId(postItem.nodeRef)
     var preferenceFilter = getSubscribePreferenceFilter(siteShortName, id)
     var preferences = {}
@@ -118,11 +126,11 @@ function discussionService ($http, nodeRefUtilsService, sessionService, preferen
     preferenceService.setPreferences(preferences)
   }
 
-  function getSubscribePreferenceFilter (siteShortName, id) {
+  function getSubscribePreferenceFilter(siteShortName, id) {
     return 'dk.magenta.sites.' + siteShortName + '.discussions.' + id + '.subscribe'
   }
 
-  function addSubscriptionFlag (siteShortName, postItems) {
+  function addSubscriptionFlag(siteShortName, postItems) {
     postItems.forEach(function (postItem) {
       isSubscribedToDiscussion(siteShortName, postItem)
         .then(function (response) {

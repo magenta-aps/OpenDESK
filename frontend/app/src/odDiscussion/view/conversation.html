@@ -5,6 +5,13 @@
 
 <table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)">
     <tbody>
+        <tr conversation-entry entry="vm.selectedDiscussion" edit-action="vm.editFirstPostDialog(vm.selectedDiscussion)"></tr>
+        <tr ng-repeat="reply in vm.replies" conversation-entry entry="reply" edit-action="vm.editReplyDialog(reply)"></tr>
+    </tbody>
+</table>
+<!-- 
+<table class="od-discussion" style="border-top: 1px solid rgba(0,0,0,.1)">
+    <tbody>
         <tr class="seperator">
             <td class="avatar-container">
                 <img src="{{vm.selectedDiscussion.author.avatarUrl}}" class="avatar">
@@ -74,7 +81,7 @@
             </td>
         </tr>
     </tbody>
-</table>
+</table> -->
 
 <form ng-if="vm.permissions.canEdit" name="newReplyForm" ng-submit="vm.reply(changedContent)">
     <strong>{{'COMMON.REPLY' | translate }}</strong>
