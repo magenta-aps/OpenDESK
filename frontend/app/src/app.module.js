@@ -44,7 +44,7 @@ angular
     'openDeskApp.members',
     'openDeskApp.publicShare',
     'odEmail',
-
+    'openDeskApp.odf',
     /* DO NOT REMOVE MODULES PLACEHOLDER!!! */ // openDesk-modules
     /* LAST */
     'openDeskApp.translations'

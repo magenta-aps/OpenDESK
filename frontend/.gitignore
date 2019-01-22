@@ -1,6 +1,7 @@
 ### Frontend ###
 
 .idea/
+nbactions.xml
 alf_data_dev/
 alfresco.iml
 out/
@@ -10,6 +11,7 @@ target/
 .settings/
 .classpath
 alfresco.log
+package-lock.json
 
 ### Backend ###
 
