@@ -2,5 +2,6 @@
     <shortname>Get Company Home</shortname>
     <description>Get Company Home</description>
     <url>/node/companyHome</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

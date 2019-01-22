@@ -1,10 +1,18 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 
 angular
   .module('openDeskApp')
-  .factory('authService', ['$http', '$window', '$state', 'sessionService', 'MemberService', authService])
+  .factory('authService', ['$http', '$window', '$state', 'personService', 'sessionService', authService])
 
-function authService ($http, $window, $state, sessionService, MemberService) {
+function authService ($http, $window, $state, personService, sessionService) {
   var service = {
     login: login,
     logout: logout,
@@ -22,26 +30,28 @@ function authService ($http, $window, $state, sessionService, MemberService) {
   }
 
   function ssoLogin () {
-    return $http.get('/alfresco/s/ssologin').then(function (response) {
+    return $http.get('/alfresco/s/authentication/ssologin').then(function (response) {
       var username = response.data
-      return MemberService.get(username).then(function (user) {
-        sessionService.login(user, true)
-        return user
-      })
+      return personService.getPerson(username)
+        .then(function (user) {
+          sessionService.login(user, true)
+          return user
+        })
     })
   }
 
   function login (credentials) {
-    return $http.post('/api/login', credentials).then(function (response) {
-      sessionService.saveTicketToSession(response.data.data.ticket)
-      return MemberService.get(credentials.username).then(function (user) {
-        sessionService.login(user, false)
-        return user
+    return $http.post('/api/login', credentials)
+      .then(function (response) {
+        sessionService.saveTicketToSession(response.data.data.ticket)
+        return personService.getPerson(credentials.username).then(function (user) {
+          sessionService.login(user, false)
+          return user
+        })
+      }, function (reason) {
+        console.log(reason)
+        return reason
       })
-    }, function (reason) {
-      console.log(reason)
-      return reason
-    })
   }
 
   function logout () {
@@ -78,7 +88,7 @@ function authService ($http, $window, $state, sessionService, MemberService) {
     if (!angular.isArray(authorizedRoles))
       authorizedRoles = [authorizedRoles]
 
-    return userInfo.user.capabilities.isAdmin ||
+    return userInfo.user.isAdmin ||
             (authorizedRoles.length > 0 && authorizedRoles.indexOf('user') > -1)
   }
 }

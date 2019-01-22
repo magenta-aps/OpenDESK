@@ -1,348 +1,120 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../shared/services/content.service'
-import '../shared/services/editOnlineMSOffice.service'
 import '../shared/services/document/preview/preview.service'
-import uploadNewVersionTemplate from '../filebrowser/view/content/document/uploadNewVersion.tmpl.html'
-import confirmEditVersionDialogTemplate from './view/confirmEditVersionDialog.html'
 
 angular.module('openDeskApp.documents')
-  .controller('DocumentController', ['$scope', '$timeout', '$translate', 'documentService', 'MemberService',
-    '$stateParams', '$location', '$state', 'documentPreviewService', 'alfrescoDownloadService', 'browserService',
-    '$mdDialog', 'UserService', 'siteService', 'headerService', '$window', 'editOnlineMSOfficeService',
-    'filebrowserService', 'ContentService', DocumentController])
+  .controller('DocumentController', ['$translate', 'documentService', '$stateParams', '$location',
+    'documentPreviewService', 'browserService', 'userService', 'siteService', 'headerService', 'filebrowserService',
+    'contentService', DocumentController])
 
-function DocumentController ($scope, $timeout, $translate, documentService, MemberService, $stateParams,
-  $location, $state, documentPreviewService, alfrescoDownloadService, browserService, $mdDialog, UserService,
-  siteService, headerService, $window, editOnlineMSOfficeService, filebrowserService, ContentService) {
+function DocumentController ($translate, documentService, $stateParams, $location, documentPreviewService,
+  browserService, userService, siteService, headerService, filebrowserService, contentService) {
   var vm = this
 
   vm.doc = []
   vm.plugin = []
   vm.paths = []
-  vm.canEdit = false
-  vm.browser = {}
-
-  vm.showArchived = false
-
-  vm.updatePreview = loadPreview
-  vm.selectFile = selectFile
-  vm.uploadNewVersionDialog = uploadNewVersionDialog
-  vm.uploadNewVersion = uploadNewVersion
-  vm.searchUsers = searchUsers
-  vm.cancelDialog = cancelDialog
-  vm.acceptEditVersionDialog = acceptEditVersionDialog
-  vm.goBack = goBack
-  vm.highlightVersion = highlightVersion
-  vm.editInLibreOffice = editInLibreOffice
-  vm.editInMSOffice = editInMSOffice
-  vm.editInOnlyOffice = editInOnlyOffice
-  vm.downloadDocument = downloadDocument
-  vm.reviewDocumentsDialog = reviewDocumentsDialog
-  vm.selectedDocumentNode = $stateParams.doc !== undefined ? $stateParams.doc : $stateParams.nodeRef.split('/')[3]
-
-  var parentDocumentNode = $location.search().parent !== undefined ? $location.search().parent : vm.selectedDocumentNode
-  var docHasParent = $location.search().parent !== undefined
-  var firstDocumentNode = ''
-
-  angular.element($window)
-    .bind('resize', function () {
-      setPDFViewerHeight()
-      // manuall $digest required as resize event
-      // is outside of angular
-      $scope.$digest()
-    })
-
   activate()
 
   function activate () {
-    if ($location.search().archived !== undefined && $location.search().archived === 'true')
-      vm.showArchived = true
-
-    ContentService.history(parentDocumentNode)
-      .then(function (val) {
-        $scope.history = val
-        var currentNoOfHistory = $scope.history.length
-        if (currentNoOfHistory > 0)
-          firstDocumentNode = $scope.history[0].nodeRef
-      })
-
-    documentService.getEditPermission(parentDocumentNode)
-      .then(function (val) {
-        vm.canEdit = val
-      })
-
-    setPDFViewerHeight()
-    loadPreview()
+    vm.docHasParent = $location.search().versionId !== undefined
+    vm.parentNodeId = $stateParams.doc
+    vm.nodeId = vm.docHasParent ? $location.search().versionId : $stateParams.doc
     getDocument()
-    prepDocumentToReview()
-  }
-
-  function searchUsers (filter) {
-    return MemberService.search(filter)
-  }
-
-  function cancelDialog () {
-    $mdDialog.cancel()
-  }
-
-  function goBack () {
-    window.history.go(-2)
-  }
-
-  function setPDFViewerHeight () {
-    var height = $(window)
-      .height() - 150 - $('header')
-      .outerHeight()
-
-    $scope.iframeStyle = {
-      'height': height + 'px',
-      'width': '100%'
-    }
-  }
-
-  function selectFile (event) {
-    var file = event.target.value
-    var fileName = file.replace(/^C:\\fakepath\\/, '')
-    document.getElementById('uploadFile').innerHTML = fileName
-  }
-
-  function uploadNewVersionDialog (event) {
-    $mdDialog.show({
-      template: uploadNewVersionTemplate,
-      targetEvent: event,
-      scope: $scope, // use parent scope in template
-      preserveScope: true, // do not forget this if use parent scope
-      clickOutsideToClose: true
-    })
-  }
-
-  function uploadNewVersion (file) {
-    ContentService.uploadNewVersion(file, vm.doc.parent.nodeRef, vm.doc.node.nodeRef)
-      .then(function () {
-        $mdDialog.cancel()
-        $state.go('document', {
-          doc: parentDocumentNode
-        })
-      })
-  }
-
-  // prepare to handle a preview of a document to review
-
-  function prepDocumentToReview () {
-    vm.reviewId = $stateParams.reviewId
-  }
-
-  function highlightVersion () {
-    var elm = document.getElementById(vm.selectedDocumentNode)
-    if (elm === undefined) elm = document.getElementById(firstDocumentNode)
-
-    if (elm === null) {
-      $timeout(vm.highlightVersion, 100)
-    } else {
-      elm.style.backgroundColor = '#e1e1e1'
-      elm.style.lineHeight = '2'
-    }
+    getReview()
   }
 
   function getDocument () {
-    ContentService.get(parentDocumentNode)
+    contentService.get(vm.parentNodeId)
       .then(function (response) {
         vm.doc = response.item
-        vm.isLocked = vm.doc.node.isLocked
-        if (vm.isLocked) {
-          vm.lockType = vm.doc.node.properties['cm:lockType']
-          vm.lockOwner = vm.doc.node.properties['cm:lockOwner'].displayName
-        }
-        var mimeType = vm.doc.node.mimetype
+        vm.doc.hasParent = vm.docHasParent
+        vm.doc.parentNodeId = vm.parentNodeId
+        vm.doc.metadata = response.metadata
+        vm.doc.nodeId = vm.nodeId
 
-        vm.loolEditable = ContentService.isLibreOfficeEditable(mimeType, vm.isLocked)
-        vm.msOfficeEditable = ContentService.isMsOfficeEditable(mimeType, vm.isLocked)
-        vm.onlyOfficeEditable = ContentService.isOnlyOfficeEditable(mimeType, vm.isLocked, vm.lockType)
+        if (vm.docHasParent)
+          vm.doc.store = 'versionStore://version2Store/'
+        else
+          vm.doc.store = 'workspace://SpacesStore/'
 
-        vm.docMetadata = response.metadata
+        loadPreview()
+        var folderNodeRef = vm.doc.node.nodeRef
+        var location = vm.doc.location.path
+        var user = userService.getUser().userName
+        var userHomesLocation = '/User Homes'
+        var userHomeLocation = userHomesLocation + '/' + user
+        var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation
+        var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation
+        var pathIsUnderUserHomes = location.substring(0, userHomesLocation.length) === userHomesLocation
 
+        var siteShortName
+        var homeType
+        var type
         if (vm.doc.location.site !== undefined) {
-          // Compile paths for breadcrumb directive
-          vm.paths = buildSiteBreadCrumbPath(response)
-
-          vm.site = vm.doc.location.site.name
-
-          siteService.loadSiteData(vm.site)
-            .then(function (response) {
-              vm.type = response.type
-              vm.title = response.title
-              vm.siteNodeRef = response.nodeRef
-
-              headerService.setTitle($translate.instant('SITES.' + vm.type + '.NAME') + ' : ' + vm.title)
-            })
+          siteShortName = vm.doc.location.site.name
+          homeType = 'site'
+          type = 'site'
+        } else if (pathIsUserHome || pathIsUnderUserHome) {
+          homeType = 'user'
+          type = 'my-docs'
+        } else if (pathIsUnderUserHomes) {
+          homeType = 'company'
+          type = 'shared-docs'
         } else {
-          var folderNodeRef = vm.doc.node.nodeRef
-          var location = vm.doc.location.path
-          var homeType, type
-          var user = UserService.get().userName
-          var userHomeLocation = '/User Homes/' + user
-          var pathIsUserHome = location.length === userHomeLocation.length && location === userHomeLocation
-          var pathIsUnderUserHome = location.substring(0, userHomeLocation.length) === userHomeLocation
-
-          if (pathIsUserHome || pathIsUnderUserHome) {
-            homeType = 'user'
-            type = 'my-docs'
-          } else {
-            homeType = 'company'
-            type = 'shared-docs'
-          }
-
-          filebrowserService.getHome(homeType)
-            .then(function (rootRef) {
-              documentService.getBreadCrumb(type, folderNodeRef, rootRef)
-                .then(
-                  function (breadcrumb) {
-                    vm.paths = breadcrumb
-                  })
-            })
-          headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT'))
+          homeType = 'company'
+          type = 'system-folders'
         }
 
-        browserService.setTitle(response.item.node.properties['cm:name'])
+        filebrowserService.getHome(homeType, siteShortName)
+          .then(function (rootRef) {
+            documentService.getBreadCrumb(type, folderNodeRef, rootRef, siteShortName)
+              .then(function (breadcrumb) {
+                vm.paths = breadcrumb
+              })
+          })
+
+        var docName = response.item.node.properties['cm:name']
+        headerService.setTitle($translate.instant('DOCUMENT.DOCUMENT') + ': ' + docName)
+
+        contentService.getNode(vm.parentNodeId)
+          .then(function (node) {
+            vm.doc.extraInfo = node
+            var currentNoOfHistory = vm.doc.extraInfo.versions.length
+            if (currentNoOfHistory > 0)
+              vm.doc.firstDocumentNode = vm.doc.extraInfo.versions[0].nodeRef
+            vm.loaded = true
+          })
+
+        browserService.setTitle(docName)
       })
   }
 
-  function buildSiteBreadCrumbPath (response) {
-    var paths = [{
-      title: response.item.location.siteTitle,
-      link: 'project.filebrowser({projekt: "' + response.item.location.site.name + '", path: ""})'
-    }]
-    var pathArr = response.item.location.path.split('/')
-    var pathLink = '/'
-    for (var a in pathArr)
-      if (pathArr[a] !== '') {
-        var link
-        if (response.item.location.site === '')
-          link = 'systemsettings.filebrowser({path: "' + pathLink + pathArr[a] + '"})'
-        else
-          link = 'project.filebrowser({projekt: "' + response.item.location.site.name +
-                        '", path: "' + pathLink + pathArr[a] + '"})'
-
-        paths.push({
-          title: pathArr[a],
-          link: link
-        })
-        pathLink = pathLink + pathArr[a] + '/'
-      }
-
-    paths.push({
-      title: response.item.location.file,
-      link: response.item.location.path
-    })
-    return paths
+  function getReview () {
+    vm.reviewId = $stateParams.reviewId
   }
 
   function loadPreview () {
-    // todo check if not ok type like pdf, jpg and png - then skip this step
-    if (docHasParent) {
-      vm.store = 'versionStore://version2Store/'
-
-      documentService.createVersionThumbnail(parentDocumentNode, vm.selectedDocumentNode)
+    if (vm.docHasParent)
+      documentService.getThumbnail(vm.parentNodeId, vm.nodeId)
         .then(function (response) {
-          documentPreviewService.previewDocumentPlugin(response.data[0].nodeRef)
+          documentPreviewService.getPluginByNodeRef(response.data.nodeRef)
             .then(function (plugin) {
               vm.plugin = plugin
             })
         })
-    } else {
-      vm.store = 'workspace://SpacesStore/'
-      documentPreviewService.previewDocumentPlugin(vm.store + $stateParams.doc)
+    else
+      documentPreviewService.getPluginByNodeRef(vm.doc.store + vm.nodeId)
         .then(function (plugin) {
           vm.plugin = plugin
         })
-    }
   }
-
-  function isVersion () {
-    var ref = $stateParams.doc
-    var isFirstInHistory = ref === firstDocumentNode
-    return docHasParent && !isFirstInHistory
-  }
-
-  function showEditVersionDialog (editor) {
-    $scope.editor = editor
-    $mdDialog.show({
-      template: confirmEditVersionDialogTemplate,
-      scope: $scope,
-      preserveScope: true
-    })
-  }
-
-  function acceptEditVersionDialog (editor) {
-    if (editor === 'only-office')
-      var newPage = $window.open()
-
-    var selectedVersion = $location.search().version
-    ContentService.revertToVersion('no comments', true, vm.doc.node.nodeRef, selectedVersion).then(
-      function (response) {
-        cancelDialog()
-        if (editor === 'libre-office')
-          $state.go('lool', {
-            'nodeRef': vm.doc.node.nodeRef,
-            'versionLabel': vm.doc.version,
-            'parent': response.config.data.nodeRef
-          })
-
-        else if (editor === 'ms-office')
-          editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata)
-
-        else if (editor === 'only-office')
-          newPage.location.href = $state.href('onlyOfficeEdit', {'nodeRef': parentDocumentNode})
-      })
-  }
-
-  function editInOnlyOffice () {
-    if (isVersion())
-      showEditVersionDialog('only-office')
-    else
-      $window.open($state.href('onlyOfficeEdit', { 'nodeRef': vm.doc.node.nodeRef.split('/')[3] }))
-  }
-
-  // Goes to the libreOffice online edit page
-  function editInLibreOffice () {
-    if (isVersion())
-      showEditVersionDialog('libre-office')
-    else
-      $state.go('lool', {
-        'nodeRef': vm.doc.node.nodeRef
-      })
-  }
-
-  function editInMSOffice () {
-    if (isVersion())
-      showEditVersionDialog('ms-office')
-    else
-      editOnlineMSOfficeService.editOnline(vm.siteNodeRef, vm.doc, vm.docMetadata)
-  }
-
-  function downloadDocument () {
-    var versionRef = vm.store + $stateParams.doc
-    alfrescoDownloadService.downloadFile(versionRef, vm.doc.location.file)
-  }
-
-  function reviewDocumentsDialog (event) {
-    $mdDialog.show({
-      locals: {
-        nodeId: vm.selectedDocumentNode
-      },
-      controller: ['$scope', 'nodeId', function ($scope, nodeId) {
-        $scope.nodeId = nodeId
-      }],
-      template: '<md-dialog od-create-review node-id="nodeId"></md-dialog>',
-      targetEvent: event,
-      clickOutsideToClose: true
-    })
-  }
-
-  // this should be removed, do not edit dom in controller!
-  angular.element(document)
-    .ready(function () {
-      if ($window.location.href.split('/')[4] !== 'lool')
-        vm.highlightVersion()
-    })
 }

@@ -1,11 +1,20 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../shared/services/nodeRefUtils.service'
 import '../shared/services/preference.service'
 
 angular.module('openDeskApp.discussion')
-  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'sessionService', 'preferenceService', discussionService])
+  .factory('discussionService', ['$http', 'nodeRefUtilsService', 'sessionService', 'userService', 'personService', 'preferenceService', discussionService])
 
-function discussionService($http, nodeRefUtilsService, sessionService, preferenceService) {
+function discussionService($http, nodeRefUtilsService, sessionService, preferenceService, userService, personService) {
+
   var restBaseUrl = '/alfresco/s/api'
 
   var service = {
@@ -43,13 +52,13 @@ function discussionService($http, nodeRefUtilsService, sessionService, preferenc
       })
   }
 
-  function getReplies(postItem) {
-    postItem.author.avatarUrl = getAvatarUrl(postItem.author.avatarRef)
+  function getReplies (postItem) {
+    postItem.author.avatarUrl = personService.getAvatarUrlFromRef(postItem.author.avatarRef)
     return $http.get(restBaseUrl + postItem.repliesUrl)
       .then(function (response) {
         var items = response.data.items
         items.forEach(function (reply) {
-          reply.author.avatarUrl = getAvatarUrl(reply.author.avatarRef)
+          reply.author.avatarUrl = personService.getAvatarUrlFromRef(reply.author.avatarRef)
         })
         return items
       })

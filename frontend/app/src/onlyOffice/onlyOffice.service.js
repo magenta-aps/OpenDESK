@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../shared/services/alfrescoNode.service'
 
@@ -10,6 +18,7 @@ function onlyOfficeService ($http, alfrescoNodeService, sessionService) {
   return {
     key: key,
     displayEdit: displayEdit,
+    displayNoAuthPreview: displayNoAuthPreview,
     displayPreview: displayPreview
   }
 
@@ -31,6 +40,12 @@ function onlyOfficeService ($http, alfrescoNodeService, sessionService) {
     })
   }
 
+  function displayNoAuthPreview (sharedId) {
+    return display(sharedId, 'view', true).then(function (response) {
+      return response
+    })
+  }
+
   function displayPreview (nodeRef) {
     var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
     return display(nodeId, 'view').then(function (response) {
@@ -38,13 +53,13 @@ function onlyOfficeService ($http, alfrescoNodeService, sessionService) {
     })
   }
 
-  function display (nodeId, mode) {
-    return prepare(nodeId, mode).then(
+  function display (id, mode, noAuth) {
+    return prepare(id, mode, noAuth).then(
       function (response) {
         new DocsAPI.DocEditor('placeholder', response)
         // Keep Alfresco active
         setInterval(function () {
-          $http.get(restBaseUrl + '/touch')
+          $http.get('alfresco')
         }, 60000)
         return true
       },
@@ -53,45 +68,60 @@ function onlyOfficeService ($http, alfrescoNodeService, sessionService) {
       })
   }
 
-  function prepare (nodeId, mode) {
-    var url = restBaseUrl + '/parashift/onlyoffice/prepare?nodeRef=workspace://SpacesStore/' + nodeId
-    var height = '100%'
-    if (mode === 'view')
-      height = '600px'
+  function prepare (id, mode, noAuth) {
+    var url = restBaseUrl + '/parashift/onlyoffice/'
+    if (noAuth) {
+      url += 'prepare-noauth?sharedId=' + id
+      mode = 'view'
+    } else {
+      url += 'prepare?nodeRef=workspace://SpacesStore/' + id
+    }
     return $http.get(url, {}).then(function (response) {
-      response = response.data
-      var userInfo = sessionService.getUserInfo()
-      var docName = response.docTitle
-      var docType = docName.substring(docName.lastIndexOf('.') + 1).trim()
-        .toLowerCase()
-      var docConfig = {
-        url: response.onlyofficeUrl + 'OfficeWeb/',
-        type: 'desktop',
-        width: '100%',
-        height: height,
-        documentType: getDocumentType(docType),
-        document: {
-          title: docName,
-          url: response.docUrl,
-          fileType: docType,
-          key: response.key,
-          permissions: {
-            edit: true
-          }
-        },
-        editorConfig: {
-          mode: mode,
-          callbackUrl: response.callbackUrl,
-          user: {
-            id: userInfo.user.userName,
-            firstname: userInfo.user.firstName,
-            lastname: userInfo.user.lastName
-          }
-        }
-      }
-      if (response.lang !== undefined)
-        docConfig.lang = response.lang
-      return docConfig
+      return createDocConfig(mode, response.data, noAuth)
     })
+  }
+
+  function createDocConfig (mode, object, noAuth) {
+    var height = '100%'
+    if (noAuth !== true && mode === 'view')
+      height = '600px'
+    var docName = object.docTitle
+    var docExtension = docName.substring(docName.lastIndexOf('.') + 1).trim()
+      .toLowerCase()
+    var callBackUrl = ''
+    var user = {}
+    if (!noAuth) {
+      callBackUrl = object.callbackUrl
+      var userInfo = sessionService.getUserInfo()
+      user = {
+        id: userInfo.user.userName,
+        firstname: userInfo.user.firstName,
+        lastname: userInfo.user.lastName
+      }
+    }
+    var docConfig = {
+      url: object.onlyofficeUrl + 'OfficeWeb/',
+      type: 'desktop',
+      width: '100%',
+      height: height,
+      documentType: getDocumentType(docExtension),
+      document: {
+        title: docName,
+        url: object.docUrl,
+        fileType: docExtension,
+        key: object.key,
+        permissions: {
+          edit: true
+        }
+      },
+      editorConfig: {
+        mode: mode,
+        callbackUrl: callBackUrl,
+        user: user
+      }
+    }
+    if (object.lang !== undefined)
+      docConfig.lang = object.lang
+    return docConfig
   }
 }

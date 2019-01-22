@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../../shared/filters/exactMatchFilter'
 import '../../shared/filters/isContainedFilter'
@@ -13,12 +21,12 @@ import siteInfoTemplate from './siteInfo.view.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'MemberService',
-    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'headerService', 'alfrescoNodeService', 'translateService',
-    SiteListController])
+  .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'personService',
+    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'groupService', 'headerService', 'alfrescoNodeService',
+    'translateService', SiteListController])
 
-function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, MemberService,
-  sessionService, APP_BACKEND_CONFIG, browserService, headerService, alfrescoNodeService, translateService) {
+function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, personService, sessionService,
+  APP_BACKEND_CONFIG, browserService, groupService, headerService, alfrescoNodeService, translateService) {
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -38,6 +46,11 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   vm.openMenu = openMenu
   vm.organizationalCenters = []
   vm.renameSiteDialog = renameSiteDialog
+  vm.search = {
+    center_id: '',
+    state: '',
+    type: ''
+  }
   vm.searchMembers = []
   vm.searchPeople = searchPeople
   vm.showall = false
@@ -45,9 +58,9 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   vm.sites = []
   vm.sitesPerUser = []
   vm.states = [
-    {key: 'ACTIVE', name: 'Igang'},
-    {key: 'CLOSED', name: 'Afsluttet'},
-    {key: '', name: 'Alle'}]
+    { key: 'ACTIVE', name: 'Igang' },
+    { key: 'CLOSED', name: 'Afsluttet' },
+    { key: '', name: 'Alle' }]
   vm.types = []
   vm.toggleFavourite = toggleFavourite
   vm.toggleFilters = toggleFilters
@@ -59,9 +72,9 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   activate()
 
   function activate () {
-    vm.types.push({key: 'Project', name: $translate.instant('SITES.Project.NAME')})
-    if (vm.config.enableProjects) vm.types.push({key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME')})
-    vm.types.push({key: '', name: $translate.instant('COMMON.ALL')})
+    vm.types.push({ key: 'Project', name: $translate.instant('SITES.Project.NAME') })
+    if (vm.config.enableProjects) vm.types.push({ key: 'PD-Project', name: $translate.instant('SITES.PD-Project.NAME') })
+    vm.types.push({ key: '', name: $translate.instant('COMMON.ALL') })
 
     vm.sitesName = translateService.getSitesName()
     var title = $translate.instant(vm.sitesName)
@@ -72,38 +85,38 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     var tableHeight = $(window).height() - 200 - $('header').outerHeight() - $('#table-header').outerHeight() - $('#table-actions').outerHeight()
     $('#table-container').css('max-height', tableHeight + 'px')
 
+    findSites()
     getSites()
-    getSitesPerUser()
-    getAllOrganizationalCenters()
+    getOrganizationalCenters()
   }
 
   function exactMatchFilter (project) {
-    if (vm.search === undefined || vm.search.type === '')
+    if (vm.search.type === '')
       return true
 
     return vm.search.type === project.type
   }
 
-  function getSites () {
+  function findSites () {
     vm.isLoading = true
-    return siteService.getSites()
+    return siteService.findSites()
       .then(function (response) {
         vm.sites = response
         vm.isLoading = false
       })
   }
 
-  function getSitesPerUser () {
-    return siteService.getSitesPerUser()
+  function getSites () {
+    return siteService.getSites()
       .then(function (response) {
         vm.sitesPerUser = response
       })
   }
 
-  function getAllOrganizationalCenters () {
-    siteService.getAllOrganizationalCenters()
+  function getOrganizationalCenters () {
+    groupService.getOrganizationalCenters()
       .then(function (response) {
-        vm.organizationalCenters = response.data
+        vm.organizationalCenters = response
         vm.organizationalCenters.push({
           'shortName': '',
           'displayName': 'Alle'
@@ -145,8 +158,8 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   function deleteSite (siteName) {
     siteService.delete(siteName)
       .then(function () {
+        findSites()
         getSites()
-        getSitesPerUser()
         $mdDialog.cancel()
       })
   }
@@ -161,7 +174,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
   function toggleFilters () {
     vm.showFilters = !vm.showFilters
-    $interval(function () {}, 1, 1000)
+    $interval(function () { }, 1, 1000)
   }
 
   function renameSiteDialog (event, shortName, title, description) {
@@ -180,7 +193,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
 
   function searchPeople (query) {
     if (query)
-      return MemberService.search(query)
+      return personService.searchPerson(query)
   }
 
   function infoSiteDialog (site) {

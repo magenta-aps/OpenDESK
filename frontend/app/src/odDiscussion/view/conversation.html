@@ -14,7 +14,7 @@
     <tbody>
         <tr class="seperator">
             <td class="avatar-container">
-                <img src="{{vm.selectedDiscussion.author.avatarUrl}}" class="avatar">
+                <img http-src="{{vm.selectedDiscussion.author.avatarUrl}}" class="avatar">
                 <h3 class="md-title">{{vm.selectedDiscussion.author.firstName}} {{vm.selectedDiscussion.author.lastName}}</h3>
             </td>
             <td class="comment">
@@ -48,7 +48,7 @@
 
         <tr class="seperator" ng-repeat="reply in vm.replies" id="{{reply.name}}">
             <td class="avatar-container">
-                <img src="{{reply.author.avatarUrl}}" class="avatar">
+                <img http-src="{{reply.author.avatarUrl}}" class="avatar">
                 <h3 class="md-title">{{reply.author.firstName}} {{reply.author.lastName}}</h3>
             </td>
             <td class="comment">

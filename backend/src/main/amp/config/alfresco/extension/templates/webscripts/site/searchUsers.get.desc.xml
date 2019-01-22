@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Search Site users</shortname>
+    <description>Searches Site users</description>
+    <url>/site/{siteShortName}/users/search</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 package dk.opendesk.repo.behavior;
 
 import dk.opendesk.repo.beans.NotificationBean;
@@ -106,7 +114,11 @@ public class NotificationEventHandler {
                     notificationBean.notifyReply(nodeRef, primaryPostRef, topicRef, site);
                 }
                 // Content
-                else if(!OpenDeskModel.TYPE_REVIEW.equals(type)) {
+                else {
+                    // Do not send notifications when previews are made of versions.
+                    QName qName = parentChildAssocRef.getTypeQName();
+                    if(qName.equals(OpenDeskModel.ASSOC_VERSION_PREVIEW))
+                        return;
                     notificationBean.notifySiteContent(nodeRef, site);
                 }
             }

@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Search Persons</shortname>
+    <description>Searches Persons</description>
+    <url>/person/search</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

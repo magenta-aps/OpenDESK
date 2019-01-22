@@ -1,0 +1,141 @@
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+           xmlns:cm="http://www.alfresco.org/model/content/1.0"
+           xmlns:app="http://www.alfresco.org/model/application/1.0"
+           xmlns:od="http://www.magenta-aps.dk/model/content/1.0">
+
+    <cm:folder view:childName="cm:opendesk_extension">
+        <app:uifacets />
+        <cm:name>OpenDesk Extension</cm:name>
+        <app:icon>space-icon-default</app:icon>
+        <cm:title>OpenDesk Extension</cm:title>
+        <cm:description></cm:description>
+        <cm:contains>
+            <od:settings view:childName="cm:settings.xml">
+                <view:aspects>
+                    <cm:author />
+                </view:aspects>
+                <view:properties>
+                    <cm:description>This file contains the settings for OpenDesk frontend.</cm:description>
+                    <cm:author>admin</cm:author>
+                    <cm:name>settings.xml</cm:name>
+                    <od:settings>{}</od:settings>
+                </view:properties>
+                <view:associations></view:associations>
+            </od:settings>
+            <cm:folder view:childName="cm:editors">
+                <app:uifacets />
+                <cm:name>Editors</cm:name>
+                <app:icon>space-icon-default</app:icon>
+                <cm:title>Editors</cm:title>
+                <cm:description></cm:description>
+                <cm:contains>
+                    <cm:content view:childName="cm:libreOffice.json">
+                        <view:aspects>
+                            <cm:author />
+                        </view:aspects>
+                        <view:properties>
+                            <cm:description>This file contains the info for LibreOffice.</cm:description>
+                            <cm:author>admin</cm:author>
+                            <cm:name>libreOffice.json</cm:name>
+                            <cm:title>libreOffice.json</cm:title>
+                            <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/editors/libreOffice.json|mimetype=application/json|size=3660|encoding=UTF-8|locale=da_DK_</cm:content>
+                        </view:properties>
+                        <view:associations></view:associations>
+                    </cm:content>
+                    <cm:content view:childName="cm:onlyOffice.json">
+                        <view:aspects>
+                            <cm:author />
+                        </view:aspects>
+                        <view:properties>
+                            <cm:description>This file contains the info for Microsoft Office.</cm:description>
+                            <cm:author>admin</cm:author>
+                            <cm:name>msOffice.json</cm:name>
+                            <cm:title>msOffice.json</cm:title>
+                            <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/editors/msOffice.json|mimetype=application/json|size=1569|encoding=UTF-8|locale=da_DK_</cm:content>
+                        </view:properties>
+                        <view:associations></view:associations>
+                    </cm:content>
+                    <cm:content view:childName="cm:onlyOffice.json">
+                        <view:aspects>
+                            <cm:author />
+                        </view:aspects>
+                        <view:properties>
+                            <cm:description>This file contains the info for OnlyOffice.</cm:description>
+                            <cm:author>admin</cm:author>
+                            <cm:name>onlyOffice.json</cm:name>
+                            <cm:title>onlyOffice.json</cm:title>
+                            <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/editors/onlyOffice.json|mimetype=application/json|size=729|encoding=UTF-8|locale=da_DK_</cm:content>
+                        </view:properties>
+                        <view:associations></view:associations>
+                    </cm:content>
+                </cm:contains>
+            </cm:folder>
+            <cm:folder view:childName="cm:Property UI Definitions">
+                <app:uifacets />
+                <cm:name>Property UI Definitions</cm:name>
+                <app:icon>space-icon-default</app:icon>
+                <cm:title>Property UI Definitions</cm:title>
+                <cm:description></cm:description>
+                <cm:contains>
+                    <cm:content view:childName="cm:widgets.json">
+                        <view:aspects>
+                            <cm:author />
+                        </view:aspects>
+                        <view:properties>
+                            <cm:description>This file contains the possible widgets.</cm:description>
+                            <cm:author>admin</cm:author>
+                            <cm:name>widgets.json</cm:name>
+                            <cm:title>widgets.json</cm:title>
+                            <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/Property UI Definitions/widgets.json|mimetype=application/json|size=326|encoding=UTF-8|locale=da_DK_</cm:content>
+                        </view:properties>
+                        <view:associations></view:associations>
+                    </cm:content>
+                    <cm:folder view:childName="cm:cm">
+                        <app:uifacets />
+                        <cm:name>cm</cm:name>
+                        <app:icon>space-icon-default</app:icon>
+                        <cm:title>cm</cm:title>
+                        <cm:description></cm:description>
+                        <cm:contains>
+                            <cm:content view:childName="cm:content.json">
+                                <view:aspects>
+                                    <cm:author />
+                                </view:aspects>
+                                <view:properties>
+                                    <cm:description>This file contains the UI definition of cm:content.</cm:description>
+                                    <cm:author>admin</cm:author>
+                                    <cm:name>content.json</cm:name>
+                                    <cm:title>content.json</cm:title>
+                                    <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/Property UI Definitions/cm/content.json|mimetype=application/json|size=682|encoding=UTF-8|locale=da_DK_</cm:content>
+                                </view:properties>
+                                <view:associations></view:associations>
+                            </cm:content>
+                        </cm:contains>
+                    </cm:folder>
+                    <cm:folder view:childName="cm:od">
+                        <app:uifacets />
+                        <cm:name>od</cm:name>
+                        <app:icon>space-icon-default</app:icon>
+                        <cm:title>od</cm:title>
+                        <cm:description></cm:description>
+                        <cm:contains>
+                            <cm:content view:childName="cm:projecttype_projectdepartment.json">
+                                <view:aspects>
+                                    <cm:author />
+                                </view:aspects>
+                                <view:properties>
+                                    <cm:description>This file contains the UI definition of od:projecttype_projectdepartment.</cm:description>
+                                    <cm:author>admin</cm:author>
+                                    <cm:name>projecttype_projectdepartment.json</cm:name>
+                                    <cm:title>projecttype_projectdepartment.json</cm:title>
+                                    <cm:content>contentUrl=classpath:alfresco/module/repo/bootstrap/files/Property UI Definitions/od/projecttype_projectdepartment.json|mimetype=application/json|size=933|encoding=UTF-8|locale=da_DK_</cm:content>
+                                </view:properties>
+                                <view:associations></view:associations>
+                            </cm:content>
+                        </cm:contains>
+                    </cm:folder>
+                </cm:contains>
+            </cm:folder>
+        </cm:contains>
+    </cm:folder>
+</view:view>

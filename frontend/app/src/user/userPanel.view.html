@@ -13,7 +13,7 @@
         <div class="od-me od-sidenav-scroll-wrapper">
             <label for="uploadBtn">
                 <div class="container" layout="column" layout-align="center center">
-                    <img ng-src="{{vm.user.avatar}}" class="od-avatar middle" alt="{{vm.user.firstName }} {{ vm.user.lastName }}">
+                    <img http-src="{{vm.user.avatar}}" class="od-avatar middle" alt="{{vm.user.firstName }} {{ vm.user.lastName }}">
                 </div>
             </label>
 
@@ -47,7 +47,7 @@
                 </md-list-item>
             </md-list>
 
-            <md-subheader>{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-subheader>
+            <!-- md-subheader>{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-subheader>
             <md-list>
                 <md-list-item>
                     <p>{{'COMMON.RECEIVE' | translate}} {{'NOTIFICATION.NOTIFICATIONS' | translate | lowercase}}</p>
@@ -56,7 +56,7 @@
                             ng-change='vm.setNotificationPreferences()'></md-switch>
                     </md-input-container>
                 </md-list-item>
-            </md-list>
+            </md-list -->
 
             <md-button class="md-raised md-primary" id='logout' ng-controller="AuthController as ac" ng-click="ac.logout()">
                 {{ 'MENU.LOGOUT' | translate }}

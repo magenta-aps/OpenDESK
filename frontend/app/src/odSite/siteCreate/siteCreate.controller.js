@@ -1,15 +1,23 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$q', '$mdDialog',
-    'UserService', 'siteService', 'MemberService', SiteCreateController])
+  .controller('SiteCreateController', ['sitetype', '$scope', '$state', '$mdToast', '$translate', '$mdDialog',
+    'userService', 'siteService', 'personService', SiteCreateController])
 
-function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $q, $mdDialog, UserService, siteService,
-  MemberService) {
+function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $mdDialog, userService, siteService,
+  personService) {
   var vm = this
 
-  var currentUser = UserService.get()
+  var currentUser = userService.getUser()
 
   vm.type = sitetype
 
@@ -60,7 +68,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
   function searchPeople (query) {
     if (query)
-      return MemberService.search(query)
+      return personService.searchAuthorities(query)
   }
 
   function loadSiteGroups () {
@@ -80,7 +88,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
     siteService.createPDSite(vm.newSite).then(
       function (response) {
-        var siteShortName = response.data[0].shortName
+        var siteShortName = response.data.shortName
         var siteName = vm.newSite.siteName
 
         angular.forEach(vm.newSite.groups, function (group) {
@@ -113,7 +121,7 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
       visibility = 'PRIVATE'
 
     siteService.createSite(vm.newSite.siteName, vm.newSite.desc, visibility).then(function (response) {
-      var siteShortName = response[0].shortName
+      var siteShortName = response.shortName
       var siteName = vm.newSite.siteName
 
       angular.forEach(vm.newSite.groups, function (group) {
@@ -137,16 +145,9 @@ function SiteCreateController (sitetype, $scope, $state, $mdToast, $translate, $
 
   function addUserToGroup (siteShortName, siteName, group, groupName) {
     // Iterating list of items sequential instead of async.
-    angular.forEach(group, function (user) {
-      var userName = user.userName
-      MemberService.add(siteShortName, userName, groupName)
-        .then(function () {
-        },
-        function (err) {
-          console.log('ERROR: Problem creating user in project group ' + groupName)
-          console.log(err)
-        }
-        )
+    angular.forEach(group, function (authority) {
+      var authorityName = authority.userName ? authority.userName : authority.fullName
+      siteService.addMember(siteShortName, authorityName, groupName)
     })
   }
 }

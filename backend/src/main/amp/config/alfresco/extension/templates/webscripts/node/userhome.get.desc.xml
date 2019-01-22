@@ -2,5 +2,6 @@
     <shortname>Get User Home</shortname>
     <description>Get User Home</description>
     <url>/node/userHome</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

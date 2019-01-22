@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Permissions</shortname>
-    <description>Permissions for a noderef</description>
-    <url>/permissions</url>
-    <authentication>user</authentication>
-    <format default="html"></format>
-</webscript>

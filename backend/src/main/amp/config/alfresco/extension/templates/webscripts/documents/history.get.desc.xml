@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Notifications</shortname>
-    <description>Notifications for a user</description>
-    <url>/history</url>
-    <authentication>user</authentication>
-    <format default="html"></format>
-</webscript>

@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Create Site Template</shortname>
+    <description>Creates a Site Template</description>
+    <url>/site/{siteShortName}/template</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

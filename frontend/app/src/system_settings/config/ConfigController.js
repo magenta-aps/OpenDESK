@@ -1,11 +1,19 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../../shared/directives/iconPicker'
 
 angular
   .module('openDeskApp')
-  .controller('ConfigController', ['APP_BACKEND_CONFIG', 'systemSettingsService', ConfigController])
+  .controller('ConfigController', ['APP_BACKEND_CONFIG', 'editorService', 'systemSettingsService', ConfigController])
 
-function ConfigController (APP_BACKEND_CONFIG, systemSettingsService) {
+function ConfigController (APP_BACKEND_CONFIG, editorService, systemSettingsService) {
   var vm = this
 
   vm.config = angular.copy(APP_BACKEND_CONFIG)
@@ -17,9 +25,7 @@ function ConfigController (APP_BACKEND_CONFIG, systemSettingsService) {
   activate()
 
   function activate () {
-    systemSettingsService.getEditors().then(function (response) {
-      vm.editors = response
-    })
+    vm.editors = editorService.getEditors()
   }
 
   function updateSettings () {

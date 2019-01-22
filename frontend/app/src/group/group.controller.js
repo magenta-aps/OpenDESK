@@ -1,11 +1,19 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 
 angular
   .module('openDeskApp.group')
-  .controller('GroupController', ['$mdDialog', '$mdToast', '$translate', 'group', 'groupService', 'MemberService',
-    'sessionService', GroupController])
+  .controller('GroupController', ['$mdDialog', '$mdToast', '$translate', 'group', 'groupService', 'personService',
+    GroupController])
 
-function GroupController ($mdDialog, $mdToast, $translate, group, groupService, MemberService, sessionService) {
+function GroupController ($mdDialog, $mdToast, $translate, group, groupService, personService) {
   var vm = this
   vm.group = group
 
@@ -36,7 +44,7 @@ function GroupController ($mdDialog, $mdToast, $translate, group, groupService, 
     if (query)
       switch (vm.group.type) {
         case 'USER':
-          return MemberService.search(query)
+          return personService.searchPerson(query)
         case 'GROUP':
           return groupService.getGroups(query)
       }
@@ -44,9 +52,7 @@ function GroupController ($mdDialog, $mdToast, $translate, group, groupService, 
 
   function addMember (member, groupName) {
     var shortName = getMemberShortName(member)
-    groupService.addMember(shortName, groupName).then(function () {
-      member.avatar = sessionService.makeAvatarUrl(member)
-    })
+    groupService.addMember(shortName, groupName)
   }
 
   function removeMember (member, groupName) {

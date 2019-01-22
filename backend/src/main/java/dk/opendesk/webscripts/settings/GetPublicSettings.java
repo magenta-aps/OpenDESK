@@ -1,16 +1,22 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 package dk.opendesk.webscripts.settings;
 
 import dk.opendesk.repo.beans.SettingsBean;
-import dk.opendesk.repo.utils.JSONUtils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.json.JSONObject;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 
-public class GetPublicSettings extends AbstractWebScript {
+public class GetPublicSettings extends OpenDeskWebScript {
 
     private SettingsBean settingsBean;
 
@@ -19,23 +25,16 @@ public class GetPublicSettings extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        webScriptResponse.setContentEncoding("UTF-8");
-        JSONObject result;
-
+    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+        super.execute(req, res);
         try {
-            AuthenticationUtil.setRunAsUserSystem();
-            // ...code to be run as Admin...
-
-            result = settingsBean.getPublicSettings();
+            AuthenticationUtil.runAs(() -> {
+                objectResult = settingsBean.getPublicSettings();
+                return true;
+            }, AuthenticationUtil.getSystemUserName());
         } catch (Exception e) {
-            e.printStackTrace();
-            result = JSONUtils.getError(e);
-            webScriptResponse.setStatus(400);
+            error(res, e);
         }
-
-        JSONUtils.write(webScriptResponse.getWriter(), result);
-
+        write(res);
     }
 }

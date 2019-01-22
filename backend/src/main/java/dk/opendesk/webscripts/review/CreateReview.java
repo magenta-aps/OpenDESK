@@ -1,21 +1,23 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 package dk.opendesk.webscripts.review;
 
 import dk.opendesk.repo.beans.ReviewBean;
-import dk.opendesk.repo.utils.Utils;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.json.JSONObject;
-import org.json.simple.JSONArray;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
 
 
-public class CreateReview extends AbstractWebScript {
+public class CreateReview extends OpenDeskWebScript {
 
     private ReviewBean reviewBean;
 
@@ -25,26 +27,16 @@ public class CreateReview extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-        res.setContentEncoding("UTF-8");
-        Content c = req.getContent();
-        Writer webScriptWriter = res.getWriter();
-        JSONArray result;
-
+        super.execute(req, res);
         try {
-            JSONObject json = new JSONObject(c.getContent());
-            String assignee = Utils.getJSONObject(json, "assignee");
-            String message = Utils.getJSONObject(json, "message");
-            String nodeId = Utils.getJSONObject(json, "nodeId");
+            String assignee = getContentString("assignee");
+            String message = getContentString("message");
+            String nodeId = getContentString("nodeId");
             NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + nodeId);
-
             reviewBean.createReview(nodeRef, assignee, message);
-            result = Utils.getJSONSuccess();
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            res.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 }

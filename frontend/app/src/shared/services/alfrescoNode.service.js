@@ -1,10 +1,20 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 angular
   .module('openDeskApp')
-  .factory('alfrescoNodeService', alfrescoNodeService)
+  .factory('alfrescoNodeService', ['$http', alfrescoNodeService])
 
-function alfrescoNodeService () {
+function alfrescoNodeService ($http) {
   var service = {
-    processNodeRef: processNodeRef
+    processNodeRef: processNodeRef,
+    updateName: updateName,
+    updateTitle: updateTitle
   }
   return service
 
@@ -33,5 +43,25 @@ function alfrescoNodeService () {
       e.message = 'Invalid nodeRef: ' + nodeRef
       throw e
     }
+  }
+
+  function updateName (nodeRef, name) {
+    var payLoad = {
+      name: name
+    }
+    return $http.put('/alfresco/s/node/' + processNodeRef(nodeRef).id + '/rename', payLoad)
+      .then(function (response) {
+        return response.data
+      })
+  }
+
+  function updateTitle (nodeRef, title) {
+    var props = {
+      prop_cm_title: title
+    }
+    return $http.post('/api/node/' + processNodeRef(nodeRef).uri + '/formprocessor', props)
+      .then(function (response) {
+        return response.data
+      })
   }
 }

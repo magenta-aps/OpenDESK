@@ -1,13 +1,22 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../../shared/services/alfrescoDocument.service'
 import '../../shared/services/content.service'
 
 angular
   .module('openDeskApp')
-  .controller('EmailTemplatesController', ['$stateParams', '$mdToast', 'alfrescoDocumentService', 'siteService',
-    'ContentService', EmailTemplatesController])
+  .controller('EmailTemplatesController', ['$stateParams', '$mdToast', 'alfrescoDocumentService', 'alfrescoNodeService',
+    'contentService', EmailTemplatesController])
 
-function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentService, siteService, ContentService) {
+function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentService, alfrescoNodeService,
+  contentService) {
   var vm = this
 
   vm.ckEditorCallback = ckEditorCallback
@@ -48,8 +57,15 @@ function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentServi
 
   function save () {
     vm.uploading = true
-    var file = new Blob([vm.changedTemplate], { type: 'plain/text' })
-    ContentService.uploadNewVersion(file, null, vm.nodeRef)
+    if (vm.changedTemplate !== undefined)
+      saveEmailContent()
+    if (vm.subject)
+      saveEmailSubject()
+  }
+
+  function saveEmailContent () {
+    var file = new Blob([vm.changedTemplate], {type: 'html/text'})
+    contentService.uploadNewVersion(file, null, vm.nodeRef)
       .then(function () {
         $mdToast.show(
           $mdToast.simple()
@@ -57,14 +73,9 @@ function EmailTemplatesController ($stateParams, $mdToast, alfrescoDocumentServi
             .hideDelay(3000)
         )
       })
-    if (vm.subject)
-      saveEmailSubject()
   }
 
   function saveEmailSubject () {
-    var props = {
-      prop_cm_title: vm.subject
-    }
-    siteService.updateNode(vm.nodeRef, props)
+    alfrescoNodeService.updateTitle(vm.nodeRef, vm.subject)
   }
 }

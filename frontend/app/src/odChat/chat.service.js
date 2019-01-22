@@ -1,8 +1,16 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 angular
   .module('openDeskApp.chat')
-  .factory('chatService', ['XMPP_DOMAIN', 'MemberService', chatService])
+  .factory('chatService', ['XMPP_DOMAIN', 'personService', chatService])
 
-function chatService (XMPP_DOMAIN, MemberService) {
+function chatService (XMPP_DOMAIN, personService) {
   var initialized = false
 
   return {
@@ -33,7 +41,7 @@ function chatService (XMPP_DOMAIN, MemberService) {
 
     initialized = true
     var userSearchCallback = function (query, callback) {
-      MemberService.search('?filter=' + encodeURIComponent(query)).then(function (data) {
+      personService.searchPerson('?filter=' + encodeURIComponent(query)).then(function (data) {
         callback(data.people.map(function (person) {
           return {
             id: person.userName + '@' + XMPP_DOMAIN,

@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../../services/file.service'
 import '../../services/translate.service'
@@ -14,44 +22,32 @@ function NodePickerService ($http, $translate, translateService, alfrescoNodeSer
 
   function getNodeInfo (node) {
     var url
-    if (node === undefined)
-      url = getRootUrl()
-
-    else if (node.rootName !== undefined)
-      url = getRootNodeUrl(node.rootName)
-
-    else if (node.nodeRef !== undefined)
-      url = getNodeUrl(node.nodeRef)
+    if (node === undefined) {
+      url = `/alfresco/s/nodepicker/root`
+    } else if (node.rootName !== undefined) {
+      url = `/alfresco/s/nodepicker/root/${node.rootName}`
+    } else if (node.nodeRef !== undefined) {
+      var nodeId = alfrescoNodeService.processNodeRef(node.nodeRef).id
+      url = `/alfresco/s/nodepicker/node/${nodeId}`
+    }
 
     if (url !== undefined)
-      return getResponse(url).then(function (response) {
-        return response
+      return callUrl(url)
+        .then(function (response) {
+          return response
+        })
+  }
+
+  function callUrl (url) {
+    return $http.get(url)
+      .then(function (response) {
+        var nodeInfo = response.data
+        angular.forEach(nodeInfo.children, function (item) {
+          translateName(item)
+        })
+        translateName(nodeInfo)
+        return nodeInfo
       })
-  }
-
-  function getNodeUrl (nodeRef) {
-    return '/alfresco/s/nodepicker/node/' + alfrescoNodeService.processNodeRef(nodeRef).id
-  }
-
-  function getRootUrl () {
-    return '/alfresco/s/nodepicker/root'
-  }
-
-  function getRootNodeUrl (rootName) {
-    return '/alfresco/s/nodepicker/root/' + rootName
-  }
-
-  function getResponse (url) {
-    return $http.get(url).then(function (response) {
-      var nodeInfo = response.data[0]
-      angular.forEach(nodeInfo.children, function (item) {
-        item.thumbNailURL = fileService.getFileIconByMimetype(item.mimeType, 24)
-        translateName(item)
-      })
-
-      translateName(nodeInfo)
-      return nodeInfo
-    })
   }
 
   function translateName (node) {

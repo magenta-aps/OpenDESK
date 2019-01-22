@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../shared/services/nodeRefUtils.service'
 // import replyTemplate from './view/reply.tmpl.html'
@@ -8,12 +16,12 @@ import editTitleTemplate from './view/editTitle.tmpl.html'
 
 angular
   .module('openDeskApp.discussion')
-  .controller('DiscussionController', ['$scope', '$mdDialog', '$state', '$stateParams',
-    '$interval', 'discussionService', 'nodeRefUtilsService', 'siteService',
-    'UserService', DiscussionController])
+  .controller('DiscussionController', ['APP_CONFIG', '$scope', '$timeout', '$mdDialog', '$state', '$stateParams',
+    '$interval', '$anchorScroll', '$location', 'discussionService', 'nodeRefUtilsService', 'siteService',
+    'userService', DiscussionController])
 
-function DiscussionController ($scope, $mdDialog, $state, $stateParams, $interval,
-  discussionService, nodeRefUtilsService, siteService, UserService) {
+function DiscussionController (APP_CONFIG, $scope, $timeout, $mdDialog, $state, $stateParams, $interval, $anchorScroll,
+  $location, discussionService, nodeRefUtilsService, siteService, userService) {
   var vm = this
 
   $scope.ckEditorCallback = function (value) {
@@ -23,7 +31,7 @@ function DiscussionController ($scope, $mdDialog, $state, $stateParams, $interva
   vm.discussions = []
   vm.permissions = []
   vm.search = ''
-  vm.user = UserService.get()
+  vm.user = userService.getUser()
   vm.isLoading = true
 
   vm.cancelDialog = cancelDialog

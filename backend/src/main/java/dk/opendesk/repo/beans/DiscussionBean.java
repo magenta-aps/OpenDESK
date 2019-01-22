@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 package dk.opendesk.repo.beans;
 
 import org.alfresco.service.cmr.discussion.DiscussionService;
@@ -63,7 +71,7 @@ public class DiscussionBean {
         JSONObject result = new JSONObject();
 
         String creatorUserName = post.getCreator();
-        JSONObject author = personBean.getPerson(creatorUserName);
+        JSONObject author = personBean.getPersonInfo(creatorUserName);
         result.put("author", author);
 
         String content = post.getContents();

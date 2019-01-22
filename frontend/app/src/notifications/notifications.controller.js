@@ -1,20 +1,26 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 
 angular
   .module('openDeskApp.notifications')
-  .controller('NotificationsController', ['$mdSidenav', 'notificationsService', 'UserService', NotificationsController])
+  .controller('NotificationsController', ['$mdSidenav', 'notificationsService', NotificationsController])
 
-function NotificationsController ($mdSidenav, notificationsService, UserService) {
+function NotificationsController ($mdSidenav, notificationsService) {
   var vm = this
-
-  var currentUser = UserService.get().userName
 
   vm.notifications = []
   vm.close = close
   vm.setRead = setRead
   vm.setSeen = setSeen
 
-  activate()
+  // activate()
 
   function activate () {
     updateNotifications()
@@ -25,22 +31,22 @@ function NotificationsController ($mdSidenav, notificationsService, UserService)
     $mdSidenav('notifications').close()
   }
 
-  function setRead (noticeObj) {
-    notificationsService.setReadNotice(currentUser, noticeObj)
+  function setRead (notificationId) {
+    notificationsService.setReadNotice(notificationId)
       .then(function () {
         updateNotifications()
       })
   }
 
-  function setSeen (noticeObj) {
-    notificationsService.setSeenNotice(currentUser, noticeObj)
+  function setSeen (notificationId) {
+    notificationsService.setSeenNotice(notificationId)
       .then(function () {
         updateNotifications()
       })
   }
 
   function updateNotifications () {
-    notificationsService.get(currentUser)
+    notificationsService.get()
       .then(function (notifications) {
         vm.notifications = notifications
       },

@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Delete Notification</shortname>
+    <description>Deletes a notification</description>
+    <url>/notification/{nodeId}</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

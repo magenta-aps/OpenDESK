@@ -1,4 +1,4 @@
-<md-card ng-repeat="group in vm.groups" class="od-site-members" style="display: inline-block;">
+<md-card ng-if="vm.groups" ng-repeat="group in vm.groups" class="od-site-members" style="display: inline-block;">
     <md-card-title>
         <h3 class="md-title od-title-icon">
             <md-icon>group</md-icon>
@@ -10,7 +10,7 @@
         <md-list>
             <md-list-item ng-repeat="member in group.members | orderBy: 'displayName'">
                 <div layout="row" flex>
-                    <img class="od-avatar od-avatar-small" ng-src="{{member.avatar}}">
+                    <img class="od-avatar od-avatar-small" http-src="{{member.avatar}}">
 
                     <div layout="column" style="margin-left:8px" flex>
                         <a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>

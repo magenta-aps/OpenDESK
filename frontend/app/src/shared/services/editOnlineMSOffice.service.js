@@ -1,12 +1,20 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../services/file.service'
 
 angular
   .module('openDeskApp')
-  .factory('editOnlineMSOfficeService', ['fileService', 'BROWSER_CONFIG', 'UserService', 'MemberService',
+  .factory('editOnlineMSOfficeService', ['fileService', 'BROWSER_CONFIG', 'userService', 'personService',
     '$window', '$mdToast', '$translate', editOnlineMSOfficeService])
 
-function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, MemberService, $window, $mdToast,
+function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, personService, $window, $mdToast,
   $translate) {
   var toastDelay = 5000
   var msProtocolNames = {
@@ -129,20 +137,18 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
      * Edit Online.
      *
      * @method editOnline
-     * @param siteNodeRef {String} nodeRef of the site
      * @param doc {object} Object literal representing file to be edited
-     * @param metadata {object} Object literal representing metadata of the filed to be edited
      */
-  function editOnline (siteNodeRef, doc, metadata) {
+  function editOnline (doc) {
     // Edit online fails for files which URL is too long
     if (doc.onlineEditUrl === undefined)
-      doc.onlineEditUrl = createOnlineEditUrl(doc, metadata)
+      doc.onlineEditUrl = createOnlineEditUrl(doc, doc.metadata)
 
     // Check if either the URL's length is greater than 256:
     if (doc.onlineEditUrl.length > 256 || encodeURI(doc.onlineEditUrl).length > 256)
     // Try to use alternate edit online URL: http://{host}:{port}/{context}/_IDX_SITE_{site_uuid}/_IDX_NODE_{document_uuid}/{document_name}
-      if (siteNodeRef !== undefined) {
-        var siteUUID = siteNodeRef.split('/').pop()
+      if (doc.siteNodeId !== undefined) {
+        var siteUUID = doc.siteNodeId.split('/').pop()
         var docUUID = doc.node.nodeRef.split('/').pop()
         doc.onlineEditUrl = doc.onlineEditUrl.split(doc.location.site.name)[0] + '_IDX_SITE_' + siteUUID + '/_IDX_NODE_' + docUUID + '/' + doc.location.file
         if (doc.onlineEditUrl.length > 256) {
@@ -161,13 +167,13 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
           var docNameReduced = docName.split('.')[0].substring(0, 5) + '.' + ext
           doc.onlineEditUrl = doc.onlineEditUrl.replace(docName, docNameReduced)
         }
-        editOnlineInternal(doc, metadata)
+        editOnlineInternal(doc, doc.metadata)
       } else {
-        editOnlineInternal(doc, metadata)
+        editOnlineInternal(doc, doc.metadata)
       }
 
     else
-      editOnlineInternal(doc, metadata)
+      editOnlineInternal(doc, doc.metadata)
   }
 
   function editOnlineInternal (doc, metadata) {
@@ -180,18 +186,19 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
     } else if (doc.node.isLocked) {
       var checkedOut = doc.node.aspects.indexOf('cm:checkedOut') > -1
       var lockOwner = doc.node.properties['cm:lockOwner']
-      var currentUser = UserService.get().userName
+      var currentUser = userService.getUser().userName
       var differentLockOwner = lockOwner.userName !== currentUser
 
       // If locked for editing then display error message about who locked
       if (checkedOut && differentLockOwner)
-        MemberService.get(lockOwner).then(function (user) {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
-              .hideDelay(toastDelay)
-          )
-        })
+        personService.getPerson(lockOwner)
+          .then(function (user) {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent($translate.instant('EDIT_MS_OFFICE.ALREADY_LOCKED', {userName: user.userName}))
+                .hideDelay(toastDelay)
+            )
+          })
 
       else
       // First try ActiveX plugin then AOS
@@ -335,6 +342,6 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, UserService, Me
             .textContent($translate.instant('EDIT_MS_OFFICE.AOS.SUPPORTED_OFFICE_VERSION_REQUIRED'))
             .hideDelay(toastDelay)
         )
-    }, 500)
+    }, 5000)
   }
 }

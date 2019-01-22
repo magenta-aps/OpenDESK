@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Create Site</shortname>
+    <description>Creates a Site</description>
+    <url>/pd-site</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

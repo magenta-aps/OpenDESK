@@ -2,5 +2,6 @@
     <shortname>Node Picker Node</shortname>
     <description>Gets node info for node picker</description>
     <url>/nodepicker/node/{nodeId}</url>
+    <format default="json">argument</format>
     <authentication>user</authentication>
 </webscript>

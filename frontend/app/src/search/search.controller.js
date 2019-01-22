@@ -1,13 +1,21 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../shared/services/file.service'
 
 angular
   .module('openDeskApp')
   .controller('SearchController', ['$scope', '$interval', '$translate', '$stateParams', 'searchService',
-    'fileService', 'MemberService', SearchController])
+    'fileService', 'personService', SearchController])
 
 function SearchController ($scope, $interval, $translate, $stateParams, searchService, fileService,
-  MemberService) {
+  personService) {
   $scope.searchTerm = $stateParams.searchTerm
   $scope.selectedFilters = {} // Keep track of the selected filters
   $scope.filtersQueryString = '' // the selected filters as query string
@@ -167,6 +175,6 @@ function SearchController ($scope, $interval, $translate, $stateParams, searchSe
 
   $scope.searchPeople = function (query) {
     if (query)
-      return MemberService.search(query)
+      return personService.searchPerson(query)
   }
 }

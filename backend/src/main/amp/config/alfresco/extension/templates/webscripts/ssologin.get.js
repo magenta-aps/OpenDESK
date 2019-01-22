@@ -1,1 +1,0 @@
-model["username"] = person.properties.userName;

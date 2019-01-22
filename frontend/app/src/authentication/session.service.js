@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 
 angular
@@ -14,9 +22,7 @@ function sessionService ($window, $state) {
     isAdmin: isAdmin,
     logout: logout,
     makeURL: makeURL,
-    retainCurrentLocation: retainCurrentLocation,
-    makeAvatarUrl: makeAvatarUrl,
-    updateAvatar: updateAvatar
+    retainCurrentLocation: retainCurrentLocation
   }
 
   return service
@@ -26,10 +32,6 @@ function sessionService ($window, $state) {
 
     if (isSSO && userInfo === undefined)
       userInfo = {}
-    user.avatar = makeAvatarUrl(user)
-    user.displayName = user.firstName
-    if (user.lastName !== '')
-      user.displayName += ' ' + user.lastName
     userInfo.user = user
     saveUserInfoToSession(userInfo)
   }
@@ -49,7 +51,7 @@ function sessionService ($window, $state) {
     if (userInfo === undefined)
       return false
 
-    return userInfo.user.capabilities.isAdmin
+    return userInfo.user.isAdmin
   }
 
   function clearRetainedLocation () {
@@ -79,11 +81,11 @@ function sessionService ($window, $state) {
   }
 
   function makeURL (url) {
-    var sessionTicket = getUserInfo().ticket
-    if (sessionTicket)
-      return url + (url.indexOf('?') === -1 ? '?' : '&') + 'alf_ticket=' + sessionTicket
-    else
+    var userInfo = getUserInfo()
+    if (userInfo === undefined || userInfo.ticket === undefined)
       return url
+    else
+      return url + (url.indexOf('?') === -1 ? '?' : '&') + 'alf_ticket=' + userInfo.ticket
   }
 
   function retainCurrentLocation () {
@@ -92,24 +94,5 @@ function sessionService ($window, $state) {
     if (location === 'login') return
 
     $window.sessionStorage.setItem('retainedLocation', location)
-  }
-
-  function makeAvatarUrl (user) {
-    var avatar
-    if (user.avatar === undefined) {
-      avatar = 'assets/img/avatars/blank-profile-picture.png'
-    } else {
-      avatar = user.avatar.replace('/thumbnails/avatar', '')
-      avatar = makeURL(`/alfresco/s/${avatar}`)
-    }
-
-    return avatar
-  }
-
-  function updateAvatar (user) {
-    var userInfo = getUserInfo()
-    userInfo.user.avatar = makeAvatarUrl(user)
-    saveUserInfoToSession(userInfo)
-    return userInfo.user.avatar
   }
 }

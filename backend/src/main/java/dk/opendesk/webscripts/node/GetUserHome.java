@@ -1,17 +1,22 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 package dk.opendesk.webscripts.node;
 
 import dk.opendesk.repo.beans.NodeBean;
-import dk.opendesk.repo.utils.Utils;
-import org.json.simple.JSONArray;
-import org.springframework.extensions.webscripts.AbstractWebScript;
+import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.Writer;
 
 
-public class GetUserHome extends AbstractWebScript {
+public class GetUserHome extends OpenDeskWebScript {
 
     private NodeBean nodeBean;
 
@@ -21,18 +26,12 @@ public class GetUserHome extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-
-        res.setContentEncoding("UTF-8");
-        Writer webScriptWriter = res.getWriter();
-        JSONArray result;
-
+        super.execute(req, res);
         try {
-            result =  Utils.getJSONReturnPair("nodeRef", nodeBean.getUserHome().toString());
+            objectResult.put("nodeRef", nodeBean.getUserHome().toString());
         } catch (Exception e) {
-            e.printStackTrace();
-            result = Utils.getJSONError(e);
-            res.setStatus(400);
+            error(res, e);
         }
-        Utils.writeJSONArray(webScriptWriter, result);
+        write(res);
     }
 }

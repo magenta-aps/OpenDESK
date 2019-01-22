@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get Property Definitions</shortname>
+    <description>Gets a list of Property Definitions for a given node</description>
+    <url>/node/{nodeId}/propertyDefinitions</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

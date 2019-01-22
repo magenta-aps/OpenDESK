@@ -1,14 +1,20 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp.site')
-  .factory('siteService', ['$q', '$http', '$rootScope', '$translate', 'alfrescoNodeService', 'sessionService',
-    'UserService', 'systemSettingsService', SiteService])
+  .factory('siteService', ['$q', '$http', '$rootScope', 'alfrescoNodeService', 'sessionService',
+    'systemSettingsService', SiteService])
 
-function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, sessionService, UserService,
-  systemSettingsService) {
+function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService, systemSettingsService) {
   var site = {}
-  var groups = {}
   var userManagedProjects = []
   var currentPermissions
 
@@ -24,19 +30,17 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
   }
 
   var service = {
+    addMember: addMember,
     createPDSite: createPDSite,
     createSite: createSite,
-    getAllOrganizationalCenters: getAllOrganizationalCenters,
-    getAllOwners: getAllOwners,
     getSite: getSite,
     getTemplateNames: getTemplateNames,
+    findSites: findSites,
     getSites: getSites,
-    getSitesPerUser: getSitesPerUser,
     loadSiteData: loadSiteData,
     updatePDSite: updatePDSite,
     updateSite: updateSite,
     delete: deleteSite,
-    updateNode: updateNode,
     createProjectLink: createProjectLink,
     deleteLink: deleteLink,
     createMembersPDF: createMembersPDF,
@@ -47,15 +51,23 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     getPermissions: getPermissions,
     setUserManagedProjects: setUserManagedProjects,
     getUserManagedProjects: getUserManagedProjects,
-    getGroupsAndMembers: getGroupsAndMembers,
-    getSiteOwner: getSiteOwner,
-    getSiteManager: getSiteManager,
+    getAuthorities: getAuthorities,
+    getUsers: getUsers,
     updateMemberList: updateMemberList,
     addFavourite: addFavourite,
-    removeFavourite: removeFavourite
+    removeFavourite: removeFavourite,
+    removeMember: removeMember,
+    findAuthorities: findAuthorities
   }
 
   return service
+
+  function addMember (siteShortName, authority, group) {
+    return $http.post(`/alfresco/service/site/${siteShortName}/group/${group}/member/${authority}`)
+      .then(function (response) {
+        return response.data
+      })
+  }
 
   function getSite () {
     return site
@@ -63,18 +75,6 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
 
   function updateMemberList () {
     $rootScope.$broadcast('updateMemberList')
-  }
-
-  function getAllOwners () {
-    return $http.post('/alfresco/service/groups', {
-      PARAM_METHOD: 'getGroupMembers',
-      PARAM_GROUP_NAME: 'OPENDESK_ProjectOwners'
-    }).then(function (response) {
-      return response.data
-    },
-    function (error) {
-      return error
-    })
   }
 
   function getTemplateNames () {
@@ -92,60 +92,46 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     })
   }
 
-  function getAllOrganizationalCenters () {
-    return $http.get('/api/groups/OPENDESK_OrganizationalCenters/children?maxItems=500')
-      .then(function (response) {
-        if (response.status && response.status !== 200)
-          return $q.reject(response)
-
-        return response.data
-      }, function (error) {
-        console.log('Error retrieving list of all organizational centers.')
-        console.log(error)
-      })
+  function findSites () {
+    return $http.get('/alfresco/service/sites/search')
+      .then(
+        function (response) {
+          return response.data
+        },
+        function (error) {
+          console.log('Error retrieving list of all sites.')
+          console.log(error)
+        }
+      )
   }
 
   function getSites () {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'getAll'
-    }).then(
-      function (response) {
-        return response.data
-      },
-      function (error) {
-        console.log('Error retrieving list of all sites.')
-        console.log(error)
-      }
-    )
+    return $http.get('/alfresco/service/sites')
+      .then(
+        function (response) {
+          return response.data
+        },
+        function (err) {
+          console.log(err)
+        }
+      )
   }
 
-  function getSitesPerUser () {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'getSitesPerUser'
-    }).then(
-      function (response) {
-        return response.data
-      },
-      function (err) {
-        console.log(err)
-      }
-    )
-  }
-
-  function createSite (siteName, siteDescription, siteVisibility) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'createSite',
-      PARAM_SITE_DISPLAY_NAME: siteName,
-      PARAM_DESCRIPTION: siteDescription,
-      PARAM_VISIBILITY: siteVisibility
-    }).then(
-      function (response) {
-        return response.data
-      },
-      function (error) {
-        if (error.data.status.code === '400' && error.data.message === 'error.duplicateShortName') return null
-      }
-    )
+  function createSite (displayName, description, visibility) {
+    var payLoad = {
+      displayName: displayName,
+      description: description,
+      visibility: visibility
+    }
+    return $http.post('/alfresco/service/site', payLoad)
+      .then(
+        function (response) {
+          return response.data
+        },
+        function (error) {
+          if (error.data.status.code === '400' && error.data.message === 'error.duplicateShortName') return null
+        }
+      )
   }
 
   function updateSite (site) {
@@ -171,136 +157,106 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     })
   }
 
-  function loadSiteData (shortName) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'getSite',
-      PARAM_SITE_SHORT_NAME: shortName
-    }).then(function (response) {
-      site = response.data[0]
-      return site
-    })
+  function loadSiteData (siteShortName) {
+    return $http.get(`/alfresco/service/site/${siteShortName}`)
+      .then(function (response) {
+        site = response.data
+        return site
+      })
   }
 
   function createPDSite (newSite) {
-    return $http.post('/alfresco/service/projectdepartment', {
-      PARAM_NAME: newSite.siteName,
-      PARAM_DESCRIPTION: newSite.description,
-      PARAM_SBSYS: newSite.sbsys,
-      PARAM_OWNER: newSite.owner.userName,
-      PARAM_MANAGER: newSite.manager.userName,
-      PARAM_VISIBILITY: newSite.visibility,
-      PARAM_CENTERID: newSite.center_id,
-      PARAM_METHOD: 'createPDSITE',
-      PARAM_TEMPLATE: newSite.template.name
-    }).then(function (response) {
-      return response
-    })
+    var payLoad = {
+      title: newSite.siteName,
+      description: newSite.description,
+      sbsys: newSite.sbsys,
+      owner: newSite.owner.userName,
+      manager: newSite.manager.userName,
+      visibility: newSite.visibility,
+      centerId: newSite.center_id,
+      templateName: newSite.template.name
+    }
+    return $http.post('/alfresco/service/pd-site', payLoad)
+      .then(function (response) {
+        return response
+      })
   }
 
   function updatePDSite (site) {
-    return $http.post('/alfresco/service/projectdepartment', {
-      PARAM_NAME: site.title,
-      PARAM_SITE_SHORT_NAME: site.shortName,
-      PARAM_DESCRIPTION: site.description,
-      PARAM_SBSYS: site.sbsys,
-      PARAM_OWNER: site.owner.userName,
-      PARAM_MANAGER: site.manager.userName,
-      PARAM_CENTERID: site.center_id,
-      PARAM_VISIBILITY: site.visibility,
-      PARAM_STATE: site.state,
-      PARAM_METHOD: 'updatePDSITE'
-    }).then(function (response) {
-      return response
-    })
+    var payLoad = {
+      title: site.title,
+      description: site.description,
+      sbsys: site.sbsys,
+      owner: site.owner.userName,
+      manager: site.manager.userName,
+      visibility: site.visibility,
+      centerId: site.center_id,
+      state: site.state
+    }
+    return $http.put(`/alfresco/service/pd-site/${site.shortName}`, payLoad)
+      .then(function (response) {
+        return response
+      })
   }
 
-  function deleteSite (siteName) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'deleteSite',
-      PARAM_SITE_SHORT_NAME: siteName
-    }).then(function (response) {
-      return response.data
-    })
+  function deleteSite (siteShortName) {
+    return $http.delete(`/alfresco/service/site/${siteShortName}`)
+      .then(function (response) {
+        return response.data
+      })
   }
 
-  /**
-     * @todo this is only used for renaming in filebrowser.controller/rename.controller, and something in text_templates.controller. Perhaps it should be moved
-     * @param {*} nodeRef
-     * @param {*} props
-     */
-  function updateNode (nodeRef, props) {
-    return $http.post('/api/node/' + alfrescoNodeService.processNodeRef(nodeRef).uri + '/formprocessor', props).then(function (response) {
-      return response.data
-    })
+  function createProjectLink (destinationShortName) {
+    var payLoad = {
+      destinationShortName: destinationShortName
+    }
+    return $http.post(`/alfresco/service/site/${site.shortName}/siteLink`, payLoad)
+      .then(function (response) {
+        return response.data
+      })
   }
 
-  /**
-     * @todo move this into a sitelink service
-     * @param {@} destination
-     */
-  function createProjectLink (destination) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'addLink',
-      PARAM_SOURCE: site.shortName,
-      PARAM_DESTINATION: destination
-    }).then(function (response) {
-      // console.log(response.data)
-      return response.data
-    })
+  function deleteLink (destinationShortName) {
+    return $http.delete(`/alfresco/service/site/${site.shortName}/siteLink/${destinationShortName}`)
+      .then(function (response) {
+        return response.data
+      })
   }
 
-  /**
-     * @todo move this into a sitelink service
-     * @param {*} source
-     * @param {*} destination
-     */
-  function deleteLink (source, destination) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'deleteLink',
-      PARAM_SOURCE: source,
-      PARAM_DESTINATION: destination
-    }).then(function (response) {
-      return response.data
-    })
-  }
-
-  function createMembersPDF (shortName) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'createMembersPDF',
-      PARAM_SITE_SHORT_NAME: shortName
-    }).then(function (response) {
-      return response.data
-    })
+  function createMembersPDF (siteShortName) {
+    return $http.post(`/alfresco/service/site/${siteShortName}/members-pdf`)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function getSiteGroups (siteType) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'getSiteGroups',
-      PARAM_SITE_TYPE: siteType
-    }).then(function (response) {
-      angular.forEach(response.data, function (group) {
-        group.members = []
-        if (group.collapsed) group.open = false
-      })
+    return $http.get(`/alfresco/service/site/groups/${siteType}`)
+      .then(function (response) {
+        angular.forEach(response.data, function (group) {
+          group.members = []
+          if (group.collapsed) group.open = false
+        })
 
-      return response.data
-    })
+        return response.data
+      })
   }
 
-  function createTemplate (shortName, description) {
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'createTemplate',
-      PARAM_SITE_SHORT_NAME: shortName,
-      PARAM_DESCRIPTION: description
-    }).then(function (response) {
-      return response.data
-    })
+  function createTemplate (siteShortName, description) {
+    var payLoad = {
+      description: description
+    }
+    return $http.post(`/alfresco/service/site/${siteShortName}/template`, payLoad)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function getNode (siteName, container, path) {
-    return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path).then(function (response) {
-      return response.data
-    })
+    return $http.get('/slingshot/doclib/treenode/site/' + siteName + '/' + container + '/' + path)
+      .then(function (response) {
+        return response.data
+      })
   }
 
   function getSiteUserPermissions (siteShortName) {
@@ -310,34 +266,32 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     }
 
     var permissions = {}
-    return $http.post('/alfresco/service/sites', {
-      PARAM_METHOD: 'getCurrentUserSiteRole',
-      PARAM_SITE_SHORT_NAME: siteShortName
-    }).then(
-      function (response) {
-        var userRole
-        if (response.data[0].role === undefined)
-          userRole = outsiderRole
-        else
-          userRole = response.data[0].role
+    return $http.get(`/alfresco/service/site/${siteShortName}/role`)
+      .then(
+        function (response) {
+          var userRole
+          if (response.data.role === undefined)
+            userRole = outsiderRole
+          else
+            userRole = response.data.role
 
-        permissions.userRole = userRole
-        permissions.isManager = userRole === managerRole
-        switch (userRole) {
-          case editRole:
-          case ownerRole:
-          case managerRole:
-            permissions.canEdit = true
-            break
-          default:
-            permissions.canEdit = false
-            break
+          permissions.userRole = userRole
+          permissions.isManager = userRole === managerRole
+          switch (userRole) {
+            case editRole:
+            case ownerRole:
+            case managerRole:
+              permissions.canEdit = true
+              break
+            default:
+              permissions.canEdit = false
+              break
+          }
+          permissions.isMember = userRole !== outsiderRole
+          currentPermissions = permissions
+          return permissions
         }
-        permissions.isMember = userRole !== outsiderRole
-        currentPermissions = permissions
-        return permissions
-      }
-    )
+      )
   }
 
   function getPermissions () {
@@ -345,7 +299,7 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
   }
 
   function setUserManagedProjects () {
-    getSitesPerUser().then(function (response) {
+    getSites().then(function (response) {
       var projects = []
       for (var i in response)
         if (response[i].shortName !== site.shortName && response[i].current_user_role === managerRole)
@@ -359,41 +313,18 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     return userManagedProjects
   }
 
-  function getGroupsAndMembers (siteShortName) {
-    return $http.post('/alfresco/service/groups', {
-      PARAM_METHOD: 'getGroupsAndMembers',
-      PARAM_SITE_SHORT_NAME: siteShortName,
-      PARAM_GROUP_TYPE: 'USER'
-    }).then(function (response) {
-      groups = response.data
-      groups.forEach(function (group) {
-        group[1].forEach(function (member) {
-          member.avatar = sessionService.makeAvatarUrl(member)
-        })
+  function getAuthorities (siteShortName) {
+    return $http.get(`/alfresco/service/site/${siteShortName}/authorities`)
+      .then(function (response) {
+        return response.data
       })
-      return groups
-    })
   }
 
-  function getSiteOwner () {
-    return getSiteGroup('PD_PROJECTOWNER')
-  }
-
-  function getSiteManager () {
-    return getSiteGroup('PD_PROJECTMANAGER')
-  }
-
-  function getSiteGroup (shortName) {
-    return getGroupsAndMembers().then(function (groups) {
-      var members = {}
-
-      angular.forEach(groups, function (group) {
-        if (group[0].shortName === shortName)
-          members = group[1][0]
+  function getUsers (siteShortName) {
+    return $http.get(`/alfresco/service/site/${siteShortName}/users`)
+      .then(function (response) {
+        return response.data
       })
-
-      return members
-    })
   }
 
   function addFavourite (nodeId) {
@@ -412,6 +343,20 @@ function SiteService ($q, $http, $rootScope, $translate, alfrescoNodeService, se
     return $http.delete(`/alfresco/api/-default-/public/alfresco/versions/1/people/-me-/favorites/${nodeId}`)
       .then(function (response) {
         return response
+      })
+  }
+
+  function removeMember (siteShortName, authority, group) {
+    return $http.delete(`/alfresco/service/site/${siteShortName}/group/${group}/member/${authority}`)
+      .then(function (response) {
+        return response.data
+      })
+  }
+
+  function findAuthorities (siteShortName, filter) {
+    return $http.get(`/alfresco/service/site/${siteShortName}/authorities/search?filter=${filter}`)
+      .then(function (response) {
+        return response.data
       })
   }
 }

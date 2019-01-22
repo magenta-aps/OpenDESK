@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get Site Groups</shortname>
+    <description>Gets the Site Groups</description>
+    <url>/site/groups/{type}</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

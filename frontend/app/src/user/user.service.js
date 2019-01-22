@@ -1,13 +1,22 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 angular
   .module('openDeskApp.user')
-  .factory('UserService', ['$http', '$window', UserService])
+  .factory('userService', ['$http', '$window', userService])
 
-function UserService ($http, $window) {
+function userService ($http, $window) {
   var user
 
   return {
-    get: getUser,
-    uploadAvatar: uploadAvatar
+    getUser: getUser,
+    uploadAvatar: uploadAvatar,
+    updateAvatar: updateAvatar
   }
 
   function getUser () {
@@ -31,5 +40,11 @@ function UserService ($http, $window) {
       .then(function (response) {
         return response
       })
+  }
+
+  function updateAvatar (avatar) {
+    var userInfo = angular.fromJson($window.localStorage.getItem('userInfo'))
+    userInfo.user.avatar = avatar
+    $window.localStorage.setItem('userInfo', angular.toJson(userInfo))
   }
 }

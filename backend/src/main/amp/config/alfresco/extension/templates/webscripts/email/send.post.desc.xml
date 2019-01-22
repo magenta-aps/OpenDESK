@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Send Email</shortname>
+    <description>Sends Email</description>
+    <url>/email</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Search Authorities</shortname>
+    <description>Searches Authorities</description>
+    <url>/authority/search</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

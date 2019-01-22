@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 (function () {
   'use strict'
 
@@ -7,23 +15,45 @@
 
   function documentService ($http, alfrescoNodeService) {
     var service = {
-      getDocumentByPath: getDocumentByPath,
+      getNode: getNode,
+      getSiteNode: getSiteNode,
+      getSystemNode: getSystemNode,
       getBreadCrumb: getBreadCrumb,
-      getEditPermission: getEditPermission,
-      createVersionThumbnail: createVersionThumbnail,
-      cleanupThumbnail: cleanupThumbnail
+      getTemplateFolders: getTemplateFolders,
+      getThumbnail: getThumbnail
     }
 
     return service
 
-    function getDocumentByPath (node) {
-      return $http.get(`/slingshot/doclib/doclist/all/node/workspace/SpacesStore/${node}`)
+    function getNode (nodeId) {
+      return $http.get(`/alfresco/s/node/${nodeId}`)
         .then(function (response) {
           return response.data
         })
     }
 
-    function getBreadCrumb (type, nodeRef, rootRef) {
+    function getSiteNode (siteShortName) {
+      return $http.get(`/alfresco/s/node/site/${siteShortName}`)
+        .then(function (response) {
+          return response.data
+        })
+    }
+
+    function getSystemNode (shortName) {
+      return $http.get(`/alfresco/s/node/system/${shortName}`)
+        .then(function (response) {
+          return response.data
+        })
+    }
+
+    function getTemplateFolders () {
+      return $http.get(`/alfresco/s/node/templateFolders`)
+        .then(function (response) {
+          return response.data
+        })
+    }
+
+    function getBreadCrumb (type, nodeRef, rootRef, siteShortName) {
       var nodeId = alfrescoNodeService.processNodeRef(nodeRef).id
       var rootId = alfrescoNodeService.processNodeRef(rootRef).id
 
@@ -32,8 +62,13 @@
           var breadcrumb = response.data
           var paths = []
           breadcrumb.forEach(function (part) {
-            var nodeId = alfrescoNodeService.processNodeRef(part.nodeRef).id
-            var link = getBreadCrumbPath(type, nodeId)
+            var partNodeId = alfrescoNodeService.processNodeRef(part.nodeRef).id
+            var link
+            // If this is the first part then link to the same page
+            if (partNodeId === nodeId)
+              link = ''
+            else
+              link = getBreadCrumbPath(type, partNodeId, siteShortName)
             paths.push({
               title: part.name,
               link: link
@@ -41,36 +76,28 @@
           })
           paths.push({
             title: 'Home',
-            link: getBreadCrumbPath(type, '')
+            link: getBreadCrumbPath(type, '', siteShortName)
           })
           paths.reverse()
           return paths
         })
     }
 
-    function getBreadCrumbPath (type, nodeId) {
-      if (type === 'my-docs')
-        return 'odDocuments.myDocs({nodeRef: "' + nodeId + '"})'
-      else if (type === 'shared-docs')
-        return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
+    function getBreadCrumbPath (type, nodeId, siteShortName) {
+      switch (type) {
+        case 'my-docs':
+          return 'odDocuments.myDocs({nodeRef: "' + nodeId + '"})'
+        case 'shared-docs':
+          return 'odDocuments.sharedDocs({nodeRef: "' + nodeId + '"})'
+        case 'site':
+          return 'project.filebrowser({projekt: "' + siteShortName + '", nodeRef: "' + nodeId + '"})'
+        case 'system-folders':
+          return 'systemsettings.filebrowser({nodeRef: "' + nodeId + '"})'
+      }
     }
 
-    function getEditPermission (documentNodeRef) {
-      return $http.get(`/alfresco/s/permissions?method=getEditPermission&NODE_ID=${documentNodeRef}&STORE_TYPE=workspace&STORE_ID=SpacesStore`)
-        .then(function (response) {
-          return response.data[0].edit_permission === 'ALLOWED'
-        })
-    }
-
-    function createVersionThumbnail (node, versionNode) {
-      return $http.get(`/alfresco/s/previewhelper?version_node=${versionNode}&parent_node=${node}&method=createThumbnail`)
-        .then(function (response) {
-          return response
-        })
-    }
-
-    function cleanupThumbnail (node) {
-      return $http.get(`/alfresco/s/previewhelper?version_node=${node.split('/')[3]}&method=cleanUp`)
+    function getThumbnail (nodeId, versionId) {
+      return $http.get(`/alfresco/s/node/${nodeId}/thumbnail/${versionId}`)
         .then(function (response) {
           return response
         })

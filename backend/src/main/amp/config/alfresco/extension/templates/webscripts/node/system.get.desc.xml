@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get System Node</shortname>
+    <description>Gets a system node</description>
+    <url>/node/system/{shortName}</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+</webscript>

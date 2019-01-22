@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Users info</shortname>
-    <description>Users info</description>
-    <url>/users</url>
-    <authentication>user</authentication>
-</webscript>

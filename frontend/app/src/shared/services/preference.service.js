@@ -1,8 +1,16 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 angular
   .module('openDeskApp')
-  .factory('preferenceService', ['$http', '$q', 'UserService', preferenceService])
+  .factory('preferenceService', ['$http', '$q', 'userService', preferenceService])
 
-function preferenceService ($http, $q, UserService) {
+function preferenceService ($http, $q, userService) {
   var preferenceFilter = 'dk.magenta.sites.receiveNotifications'
 
   return {
@@ -40,7 +48,7 @@ function preferenceService ($http, $q, UserService) {
   // username: ID of the user
   // preferences: JSONArray with namespace(key) and value. For example "dk.magenta.sites.<site_name>.notifications" : "true"
   function setPreferences (preferences) {
-    var username = UserService.get().userName
+    var username = userService.getUser().userName
     return $http.post('/api/people/' + username + '/preferences', preferences).then(function (response) {
       return response.data
     })
