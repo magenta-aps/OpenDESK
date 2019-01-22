@@ -1,0 +1,12 @@
+<ng-template ng-if="field.layout == 'inline'">
+  <strong ng-if="field.label">{{ field.label }}</strong>
+  Discussion to appear here
+</ng-template>
+<ng-template ng-if="field.layout != 'inline'">
+  <div ng-if="field.label">
+    <strong>{{ field.label }}</strong>
+  </div>
+  <div>
+    Discussion to appear here
+  </div>
+</ng-template>

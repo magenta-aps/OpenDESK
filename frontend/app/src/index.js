@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 import $ from 'jquery'
 import 'angular'
@@ -28,6 +28,7 @@ import './init.module'
 import './backendConfig.module'
 import './translations'
 import './authentication'
+import './fund'
 import './header'
 import './dashboard'
 import './system_settings'

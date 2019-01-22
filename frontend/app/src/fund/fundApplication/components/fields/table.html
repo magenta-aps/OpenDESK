@@ -1,0 +1,10 @@
+<div ng-if="field.label">
+  <strong>{{ field.label }}</strong>
+</div>
+<table>
+  <tr ng-repeat="row in field.data">
+    <td ng-repeat="cell in row">
+      {{ cell }}
+    </td>
+  </tr>
+</table>

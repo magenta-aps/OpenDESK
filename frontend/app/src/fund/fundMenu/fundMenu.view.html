@@ -1,0 +1,10 @@
+<!-- template for fund menu -->
+<md-card>
+  <md-list flex>
+    <md-list-item class="md-1-line" ng-repeat="link in vm.links">
+      <div class="md-list-item-text" layout="column">
+        <a href="{{ link.url }}">{{ link.label }}</a>
+      </div>
+    </md-list-item>
+  </md-list>
+</md-card>

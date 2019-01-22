@@ -1,0 +1,12 @@
+<ng-template ng-if="field.layout == 'inline'">
+  <strong ng-if="field.label">{{ field.label }}</strong>
+  <md-datepicker ng-model="field.date"/>
+</ng-template>
+<ng-template ng-if="field.layout != 'inline'">
+  <div ng-if="field.label">
+    <strong>{{ field.label }}</strong>
+  </div>
+  <div>
+    <md-datepicker ng-model="field.date"/>
+  </div>
+</ng-template>

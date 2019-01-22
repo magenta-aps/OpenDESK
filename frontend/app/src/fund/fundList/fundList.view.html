@@ -1,0 +1,72 @@
+<div class="od-fund-list">
+	<div layout='row'>
+		<md-card flex>
+			<md-card-title hide show-gt-md id="table-header">
+				{{ label }}
+			</md-card-title>
+			<md-card-content>
+				<md-list id="table-container">
+					<table class="od-members od-members-row">
+						<col style="width:30%">
+						<col style="width:15%">
+						<col style="width:15%">
+						<col style="width:15%">
+						<col style="width:15%">
+						<col style="width:7%">
+						<col style="width:3%;">
+						<thead>
+							<tr>
+								<th>Titel</th>
+								<th>ID</th>
+								<th>Type</th>
+								<th>Oprettet</th>
+								<th>Ændret</th>
+								<th>Status</th>
+								<th>
+									<md-checkbox aria-label="Vælg alle"></md-checkbox>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="application in applications">
+								<td>
+									<a class="od-filebrowser-link overflow" ui-sref="fund.flow.application({id: application.id})">
+										<h3 class="">{{ application.title }}</h3>
+									</a>
+								</td>
+								<td>
+									<a class="od-filebrowser-link" ui-sref="fund.flow.application({id: application.id})">
+										{{ application.id }}
+									</a>
+								</td>
+								<td>
+									<a class="od-filebrowser-link" ui-sref="fund.flow.application({id: application.id})">
+										{{ application.type }}
+									</a>
+								</td>
+								<td>
+									<a class="od-filebrowser-link" ui-sref="fund.flow.application({id: application.id})">
+										{{ application.created }}
+									</a>
+								</td>
+								<td>
+									<a class="od-filebrowser-link" ui-sref="fund.flow.application({id: application.id})">
+										{{ application.modified }}
+									</a>
+								</td>
+								<td>
+									<a class="od-filebrowser-link" ui-sref="fund.flow.application({id: application.id})">
+										{{ application.status }}
+									</a>
+								</td>
+								<td>
+									<md-checkbox aria-label="Vælg denne ansøgning"></md-checkbox>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</md-list>
+			</md-card-content>
+		</md-card>
+	</div>
+</div>

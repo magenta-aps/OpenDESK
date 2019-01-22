@@ -1,0 +1,15 @@
+<div ng-if="field.label">
+  <strong>{{ field.label }}</strong>
+</div>
+<div>
+  <md-tabs md-dynamic-height>
+    <md-tab ng-repeat="page in field.pages">
+      <md-tab-label>
+        {{ page.label }}
+      </md-tab-label>
+      <md-tab-body>
+        <ng-include ng-repeat="field in page.fields" src="$ctrl.getTemplate(field.type)"/>
+      </md-tab-body>
+    </md-tab>
+  </md-tabs>
+</div>

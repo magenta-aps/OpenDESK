@@ -1,0 +1,17 @@
+.od-fund-app-block-field {
+  margin-bottom:1em;
+  &:last-child {
+    margin-bottom:0;
+  }
+  md-tab-content {
+    padding-top:1em;
+  }
+  table {
+    border-collapse:collapse;
+    td {
+      background-color:#eee;
+      border:2px solid #fff;
+      padding:.5em;
+    }
+  }
+}

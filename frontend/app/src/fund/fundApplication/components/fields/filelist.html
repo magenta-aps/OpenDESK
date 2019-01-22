@@ -1,0 +1,12 @@
+<ng-template ng-if="field.layout == 'inline'">
+  <strong ng-if="field.label">{{ field.label }}</strong>
+  <span ng-repeat="file in files">{{ file }}</span>
+</ng-template>
+<ng-template ng-if="field.layout != 'inline'">
+  <div ng-if="field.label">
+    <strong>{{ field.label }}</strong>
+  </div>
+  <div>
+    <span ng-repeat="file in field.files">{{ file + (!$last ? ', ' : '') }}</span>
+  </div>
+</ng-template>

@@ -1,0 +1,11 @@
+.od-fund-app-wrapper {
+  column-count:2;
+  column-gap:0;
+  margin:0 -8px;
+  application-block {
+    md-card {
+      margin-top:0;
+      margin-bottom:16px;
+    }
+  }
+}
