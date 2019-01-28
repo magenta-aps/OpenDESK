@@ -490,6 +490,7 @@ public class SiteBean {
     /**
      * Gets all groups of a site and their members.
      * @param siteShortName short name of a site.
+     * @param authorities TODO
      * @return a JSONArray containing JSONObjects for each group and each of their members.
      */
     private JSONArray getAuthorityGroups(String siteShortName, boolean authorities) throws JSONException {
@@ -519,6 +520,7 @@ public class SiteBean {
      * @return a JSONArray containing a JSONObject for each group.
      */
     public JSONArray getSiteGroups(String siteType) {
+        // TODO: use strategy pattern instead af a parametric solution for handling variability
         JSONArray result = new JSONArray();
         switch (siteType) {
             case OpenDeskModel.pd_project:
