@@ -8,14 +8,37 @@
 
 'use strict'
 
-import * as data from './application.json'
-
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', 'fundService', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams) {
-  $scope.id = $stateParams.id
-  $scope.application = data.default
+function FundApplicationController ($scope, $stateParams, fundService) {
+  var vm = this
+  vm.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application'
+
+  activate()
+
+  function activate() {
+    fundService.getApplication($stateParams.applicationID)
+    .then(function (response) {
+      vm.application = response
+      // if we have a state in store, but the currently loaded application
+      // doesn't have state information, clear both state and workflow values
+      // from the store
+      if($scope.$parent.state && !vm.application.state) {
+        $scope.$parent.state = null
+        $scope.$parent.workflow = null
+      }
+      // conversely, if we don't have a state in store, but the currently
+      // loaded application does have state information, load it to the store
+      else if(!$scope.$parent.state && vm.application.state) {
+        console.log('hej')
+        fundService.getWorkflowState(vm.application.state.nodeID)
+        .then(function (response) {
+          $scope.$parent.state = response
+        })
+      }
+    })
+  }
 }

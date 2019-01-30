@@ -1,0 +1,33 @@
+<div layout="row">
+  <span flex></span>
+  <div class="test-grid" flex="100" flex-gt-md="50" flex-offset="15">
+    <md-grid-list md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="3" md-row-height-gt-md="1:1"
+                  md-row-height="4:3" md-gutter="8px" md-gutter-gt-sm="16px">
+      <md-grid-tile ng-repeat="workflow in vm.workflows"
+      md-rowspan="1"
+      md-colspan="1"
+      md-colspan-sm="1"
+      md-colspan-xs="1"
+      class="tile-test" ng-style="{'background-color': '#747474'}">
+        <a ui-sref="fund.workflow({workflowID:workflow.nodeID})">
+          <md-grid-tile-footer>
+            <h3>{{workflow.title}}</h3>
+          </md-grid-tile-footer>
+        </a>
+      </md-grid-tile>
+      <md-grid-tile
+      md-rowspan="1"
+      md-colspan="1"
+      md-colspan-sm="1"
+      md-colspan-xs="1"
+      class="tile-test" ng-style="{'background-color': '#747474'}">
+        <a ui-sref="fund.incoming">
+          <md-grid-tile-footer>
+            <h3>Indkomne ansøgninger</h3>
+          </md-grid-tile-footer>
+        </a>
+      </md-grid-tile>
+    </md-grid-list>
+  </div>
+  <span flex></span>
+</div>

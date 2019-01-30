@@ -7,18 +7,12 @@
 //
 
 'use strict'
-import applicationBlockTemplate from './applicationBlock.html'
 
-angular.module('openDeskApp.fund')
-  .component('applicationBlock', {
-    template: applicationBlockTemplate,
-    controller: applicationBlockController,
-    bindings: {
-      block: '='
-    }
-  })
+angular
+  .module('openDeskApp.fund')
+  .controller('ApplicationBlockController', ['$scope', ApplicationBlockController])
 
-function applicationBlockController () {
+function ApplicationBlockController ($scope) {
   var vm = this
 
   vm.getTemplate = getTemplate

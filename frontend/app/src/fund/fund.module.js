@@ -8,65 +8,92 @@
 
 'use strict'
 
-import fundTemplate from './view/fund.html'
-import dashboardTemplate from '../dashboard/view/dashboard.html'
-import fundMenu from './fundMenu/fundMenu.view.html'
-import fundList from './fundList/fundList.view.html'
+import fund from './view/fund.html'
+import fundWorkflowList from './fundWorkflowList/fundWorkflowList.view.html'
+import fundWorkflowStateMenu from './fundWorkflowStateMenu/fundWorkflowStateMenu.view.html'
+import fundApplicationList from './fundApplicationList/fundApplicationList.view.html'
 import fundApplication from './fundApplication/fundApplication.view.html'
 
 angular.module('openDeskApp.fund', ['openDeskApp.discussion'])
-  .config(['$stateProvider', config])
+  .config(['$stateProvider', 'USER_ROLES', config])
 
-function config ($stateProvider) {
+function config ($stateProvider, USER_ROLES) {
   $stateProvider.state('fund', {
     parent: 'site',
     url: '/fondsansogninger',
     views: {
       'content@': {
-        template: fundTemplate,
+        template: fund,
+        controller: function ($scope) {
+          $scope.workflow = null,
+          $scope.state = null
+        }
       },
       'fundMain@fund': {
-        template: dashboardTemplate,
-        controller: 'FundController',
+        template: fundWorkflowList,
+        controller: 'FundWorkflowListController',
+        controllerAs: 'vm'
+      }
+    },
+    params: {
+      authorizedRoles: [USER_ROLES.user]
+    }
+  })
+  .state('fund.workflow', {
+    url: '/workflow/:workflowID',
+    views: {
+      'fundMain@fund': {
+        template: fundApplicationList,
+        controller: 'FundApplicationListController',
         controllerAs: 'vm'
       },
       'fundHeader@fund': {
-        template: fundMenu,
-        controller: 'FundMenuController',
+        template: fundWorkflowStateMenu,
+        controller: 'FundWorkflowStateMenuController',
         controllerAs: 'vm'
       }
-    }
+    },
+    params: {
+      stateID: null
+    },
   })
-  .state('fund.flow', {
-    url: '/:flow', // @TODO: This should match the path inside fund.config.js - we should make this generic
+  .state('fund.incoming', {
+    url: '/incoming',
     views: {
       'fundMain@fund': {
-        template: fundList,
-        controller: 'FundListController',
+        template: fundApplicationList,
+        controller: 'FundIncomingListController',
         controllerAs: 'vm'
       }
     }
   })
-  .state('fund.flow.application', {
-    url: '/:id',
+  .state('fund.application', {
+    url: '/application/:applicationID',
     views: {
       'fundMain@fund': {
         template: fundApplication,
         controller: 'FundApplicationController',
         controllerAs: 'vm'
       },
-      'application@fund.flow.application': {
-        template: '<application-block ng-repeat="block in application.blocks" block="block"/>'
+      'fundHeader@fund': {
+        template: fundWorkflowStateMenu,
+        controller: 'FundWorkflowStateMenuController',
+        controllerAs: 'vm'
+      },
+      'application@fund.application': {
+        template: '<application-block ng-repeat="block in vm.application" block="block"/>'
       }
     },
     params: {
+      workflowID: null,
+      stateID: null,
       currentAppPage: 'application'
     }
   })
-  .state('fund.flow.application.contact', {
+  .state('fund.application.contact', {
     url: '/contact',
     views: {
-      'application@fund.flow.application': {
+      'application@fund.application': {
         template: '<md-card><md-card-content><strong>Ansøger</strong> Assentofthallen<br/><strong>Kontaktperson</strong> Navn Navnsen</strong><br/><strong>E-mail</strong> navn@navnsen.dk<br/><strong>Telefon</strong> 21 22 23 24</md-card-content></md-card>'
       }
     },
@@ -74,10 +101,10 @@ function config ($stateProvider) {
       currentAppPage: 'contact'
     }
   })
-  .state('fund.flow.application.comments', {
+  .state('fund.application.comments', {
     url: '/comments',
     views: {
-      'application@fund.flow.application': {
+      'application@fund.application': {
         template: '<md-card><md-card-content>Comments</md-card-content></md-card>'
       }
     },
@@ -85,10 +112,10 @@ function config ($stateProvider) {
       currentAppPage: 'comments'
     }
   })
-  .state('fund.flow.application.history', {
+  .state('fund.application.history', {
     url: '/history',
     views: {
-      'application@fund.flow.application': {
+      'application@fund.application': {
         template: '<md-card><md-card-content>Versionshistorik</md-card-content></md-card>'
       }
     },

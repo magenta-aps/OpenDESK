@@ -1,0 +1,42 @@
+<div class="od-fund-list">
+	<div layout='row'>
+		<md-card flex>
+			<md-card-title hide show-gt-md id="table-header">
+				<md-card-title-text>
+					<span class="md-headline">{{ state.title }}</span>
+				</md-card-title-text>
+			</md-card-title>
+			<md-card-content>
+				<md-list id="table-container" ng-if="vm.applications().length > 0">
+					<table class="od-members od-members-row">
+						<thead>
+							<tr>
+								<th sort order="key" by="vm.order" reverse="vm.reverse" ng-repeat="(key, value) in vm.applications()[0]">
+									{{ key }}
+								</th>
+								<th>
+									<md-checkbox aria-label="Vælg alle"></md-checkbox>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="application in vm.applications() | orderObjectBy:vm.order:vm.reverse">
+								<td ng-repeat="(key, value) in application">
+									<a class="od-filebrowser-link overflow" ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">
+										{{ value }}
+									</a>
+								</td>
+								<td>
+									<md-checkbox aria-label="Vælg denne ansøgning"></md-checkbox>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</md-list>
+				<p ng-if="vm.applications().length <= 0">
+					<em>Der findes ingen ansøgninger i dette stadie</em>
+				</p>
+			</md-card-content>
+		</md-card>
+	</div>
+</div>

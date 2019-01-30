@@ -10,15 +10,23 @@
 
 <md-card>
   <md-nav-bar md-selected-nav-item="currentAppPage">
-    <md-nav-item md-nav-sref="fund.flow.application" name="application">Ansøgning</md-nav-item>
-    <md-nav-item md-nav-sref="fund.flow.application.contact" name="contact">Kontaktinfo</md-nav-item>
-    <md-nav-item md-nav-sref="fund.flow.application.comments" name="comments">Kommentarer</md-nav-item>
-    <md-nav-item md-nav-sref="fund.flow.application.history" name="history">Historik</md-nav-item>
+    <md-nav-item md-nav-sref="fund.application" name="application">Ansøgning</md-nav-item>
+    <md-nav-item md-nav-sref="fund.application.contact" name="contact">Kontaktinfo</md-nav-item>
+    <md-nav-item md-nav-sref="fund.application.comments" name="comments">Kommentarer</md-nav-item>
+    <md-nav-item md-nav-sref="fund.application.history" name="history">Historik</md-nav-item>
   </md-nav-bar>
   <md-card-title>
-    <h2>Ansøgnings-id: {{ id }}</h2>
+    <md-card-title-text>
+      <span class="md-headline">{{ vm.application.title }}</span>
+      <span class="md-subhead">{{ vm.application.nodeID }}</span>
+    <md-card-title-text>
   </md-card-title>
   <md-card-content class="od-fund-app-wrapper">
+    <ul>
+    <li ng-repeat="(key, value) in vm.application">
+      <strong>{{ key }}</strong>: {{ value }}
+    </li>
+    </ul>
     <ng-template ui-view="application"></ng-template>
   </md-card-content>
 </md-card>

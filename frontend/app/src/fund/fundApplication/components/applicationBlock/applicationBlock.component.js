@@ -7,12 +7,13 @@
 //
 
 'use strict'
+import applicationBlockTemplate from './applicationBlock.html'
 
-angular
-  .module('openDeskApp.fund')
-  .controller('FundMenuController', ['APP_FUND_CONFIG', FundMenuController])
-
-function FundMenuController (APP_FUND_CONFIG) {
-  var vm = this
-  vm.links = APP_FUND_CONFIG.fundLink
-}
+angular.module('openDeskApp.fund')
+  .component('applicationBlock', {
+    template: applicationBlockTemplate,
+    controller: 'ApplicationBlockController',
+    bindings: {
+      block: '='
+    }
+  })
