@@ -380,8 +380,8 @@ public class SiteBean {
         authorityService.deleteAuthority(authority, true);
     }
 
-    public JSONArray getAuthorities(String siteShortName) throws JSONException {
-        return getAuthorityGroups(siteShortName, true);
+    public JSONArray getAuthorities(String siteShortName, int maxItems, int skipCount) throws JSONException {
+        return getAuthorityGroups(siteShortName, true, maxItems, skipCount);
     }
 
     private List<String> getAuthorityList(String siteShortName, boolean authorities) throws JSONException {
@@ -391,11 +391,11 @@ public class SiteBean {
             JSONObject groupJSON = (JSONObject) groupObject;
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             if(authorities){
-                Set<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName);
+                Set<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName, Integer.MAX_VALUE, 0);
                 result.addAll(authorityList);
             }
             else {
-                Set<String> authorityList = authorityBean.getUserList(groupAuthorityName);
+                Set<String> authorityList = authorityBean.getUserList(groupAuthorityName, Integer.MAX_VALUE, 0);
                 result.addAll(authorityList);
             }
         }
@@ -490,28 +490,33 @@ public class SiteBean {
     /**
      * Gets all groups of a site and their members.
      * @param siteShortName short name of a site.
-     * @param authorities TODO
-     * @return a JSONArray containing JSONObjects for each group and each of their members.
+     * @param authorities the method returns groups if this is true and users otherwise.
+     * @param maxItems the maximum number of items to return (used for paging).
+     * @param skipCount the offset to use for returning the list of users (used for paging).
+     * @return JSONArray of JSONObjects for each group and each of their members.
      */
-    private JSONArray getAuthorityGroups(String siteShortName, boolean authorities) throws JSONException {
+    private JSONArray getAuthorityGroups(String siteShortName, boolean authorities, int maxItems,
+                                         int skipCount) throws JSONException {
+
         String siteType = getSiteType(siteShortName);
         JSONArray result = new JSONArray();
+
         for (Object groupObject : getSiteGroups(siteType)) {
 
             JSONObject groupJSON = (JSONObject) groupObject;
-
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
+
             JSONArray members;
-            if(authorities)
-                members = authorityBean.getAuthorities(groupAuthorityName);
-            else
-                members = authorityBean.getUsers(groupAuthorityName);
+            if(authorities) {
+                members = authorityBean.getAuthorities(groupAuthorityName, maxItems, skipCount);
+            } else {
+                members = authorityBean.getUsers(groupAuthorityName, maxItems, skipCount);
+            }
             groupJSON.put("members", members);
             result.add(groupJSON);
         }
 
         return result;
-
     }
 
     /**
@@ -753,10 +758,12 @@ public class SiteBean {
     /**
      * Gets all groups of a site and their members.
      * @param siteShortName short name of a site.
-     * @return a JSONArray containing JSONObjects for each group and each of their members.
+     * @param maxItems the maximum number of items to return (used for paging).
+     * @param skipCount the offset to use for returning the list of users (used for paging).
+     * @return JSONArray of JSONObjects for each group and each of their members
      */
-    public JSONArray getUsers(String siteShortName) throws JSONException {
-        return getAuthorityGroups(siteShortName, false);
+    public JSONArray getUsers(String siteShortName, int maxItems, int skipCount) throws JSONException {
+        return getAuthorityGroups(siteShortName, false, maxItems, skipCount);
     }
 
     /**

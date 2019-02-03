@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static dk.opendesk.repo.model.OpenDeskModel.ORGANIZATIONAL_CENTERS;
 import static dk.opendesk.repo.model.OpenDeskModel.PROJECT_OWNERS;
@@ -37,14 +38,17 @@ public class AuthorityBean {
         this.authorityService = authorityService;
     }
 
-    public JSONArray getAuthorities(String groupName) throws JSONException {
-        Set<String> authorities = getAuthorityList(groupName);
+    public JSONArray getAuthorities(String groupName, int maxItems, int skipCount) throws JSONException {
+        Set<String> authorities = getAuthorityList(groupName, maxItems, skipCount);
         return getAuthorityToJSON(authorities);
 
     }
 
-    public Set<String> getAuthorityList(String groupName) {
-        return authorityService.getContainedAuthorities(null, groupName, true);
+    public Set<String> getAuthorityList(String groupName, int maxItems, int skipCount) {
+        return pageResult(
+                authorityService.getContainedAuthorities(null, groupName, true),
+                maxItems,
+                skipCount);
     }
 
     private JSONArray getAuthorityToJSON(Set<String> authorities) throws JSONException {
@@ -86,7 +90,7 @@ public class AuthorityBean {
         JSONObject json = new JSONObject();
         json.put("shortName", groupName);
         json.put("type", type);
-        JSONArray authorities = getAuthorities("GROUP_" + groupName);
+        JSONArray authorities = getAuthorities("GROUP_" + groupName, Integer.MAX_VALUE, 0);
         json.put("members", authorities);
         return json;
     }
@@ -108,12 +112,15 @@ public class AuthorityBean {
         return result;
     }
 
-    public Set<String> getUserList(String groupName) {
-        return authorityService.getContainedAuthorities(AuthorityType.USER, groupName, false);
+    public Set<String> getUserList(String groupName, int maxItems, int skipCount) {
+        return pageResult(
+                authorityService.getContainedAuthorities(AuthorityType.USER, groupName, false),
+                maxItems,
+                skipCount);
     }
 
-    public JSONArray getUsers(String groupName) throws JSONException {
-        Set<String> userNames = getUserList(groupName);
+    public JSONArray getUsers(String groupName, int maxItems, int skipCount) throws JSONException {
+        Set<String> userNames = getUserList(groupName, maxItems, skipCount);
         return getAuthorityToJSON(userNames);
 
     }
@@ -158,4 +165,9 @@ public class AuthorityBean {
     public JSONArray findUsers(String filter, List<String> ignoreList) throws JSONException {
         return findAuthorities(filter, false, ignoreList);
     }
+
+    private <V> Set<V> pageResult(Set<V> set, int maxItems, int skipCount) {
+        return set.stream().skip(skipCount).limit(maxItems).collect(Collectors.toSet());
+    }
+
 }
