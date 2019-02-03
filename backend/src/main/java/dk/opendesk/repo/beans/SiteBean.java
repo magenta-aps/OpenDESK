@@ -391,11 +391,11 @@ public class SiteBean {
             JSONObject groupJSON = (JSONObject) groupObject;
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             if(authorities){
-                Set<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName, Integer.MAX_VALUE, 0);
+                List<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName, Integer.MAX_VALUE, 0);
                 result.addAll(authorityList);
             }
             else {
-                Set<String> authorityList = authorityBean.getUserList(groupAuthorityName, Integer.MAX_VALUE, 0);
+                List<String> authorityList = authorityBean.getUserList(groupAuthorityName, Integer.MAX_VALUE, 0);
                 result.addAll(authorityList);
             }
         }
