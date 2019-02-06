@@ -10,12 +10,14 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', 'fundService', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$mdDialog', 'fundService', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, fundService) {
+function FundApplicationController ($scope, $stateParams, fundService, $mdDialog) {
   var vm = this
   vm.application = null
-  $scope.currentAppPage = $stateParams.currentAppPage || 'application'
+  $scope.currentAppPage = $stateParams.currentAppPage || 'application';
+    vm.showDialog = showDialog;
+    vm.items = [1, 2, 3];
 
   activate()
 
@@ -41,4 +43,54 @@ function FundApplicationController ($scope, $stateParams, fundService) {
       }
     })
   }
+
+    vm.showAlert = function(ev) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        // Modal dialogs should fully cover application
+        // to prevent interaction outside of dialog
+        $mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('This is an alert title')
+                .textContent('You can specify some description text in here.')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+                .targetEvent(ev)
+        );
+    };
+
+    function showDialog($event) {
+        var parentEl = angular.element(document.body);
+        $mdDialog.show({
+            parent: parentEl,
+            targetEvent: $event,
+            template:
+            '<md-dialog aria-label="List dialog">' +
+            '  <md-dialog-content>' +
+            '    <md-list>' +
+            '      <md-list-item ng-repeat="item in items">' +
+            '       <p>Number {{item}}</p>' +
+            '      ' +
+            '    </md-list-item></md-list>' +
+            '  </md-dialog-content>' +
+            '  <md-dialog-actions>' +
+            '    <md-button ng-click="closeDialog()" class="md-primary">' +
+            '      Close Dialog' +
+            '    </md-button>' +
+            '  </md-dialog-actions>' +
+            '</md-dialog>',
+            locals: {
+                items: $scope.items
+            },
+            controller: DialogController
+        });
+
+        function DialogController($scope, $mdDialog, items) {
+            $scope.items = items;
+            $scope.closeDialog = function () {
+                $mdDialog.hide();
+            }
+        }
+    }
 }
