@@ -1,7 +1,7 @@
 <!-- top menu -->
 <md-nav-bar>
   <md-nav-item md-nav-sref="app.page5" name="edit">Ret ansøgning</md-nav-item>
-  <md-nav-item ng-click="vm.showAlert($event)">Flyt ansøgninger</md-nav-item>
+  <md-nav-item md-nav-click="vm.showAlert()">Flyt ansøgninger</md-nav-item>
   <md-nav-item md-nav-sref="app.page5" >Flyt ansøgning: flow </md-nav-item>
   <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: bankområde</md-nav-item>
   <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: budgetår</md-nav-item>
@@ -22,7 +22,7 @@
     <md-card-title-text>
       <span class="md-headline">{{ vm.application.title }}</span>
       <span class="md-subhead">{{ vm.application.nodeID }}</span>
-    <md-card-title-text>
+    </md-card-title-text>
   </md-card-title>
   <md-card-content class="od-fund-app-wrapper">
     <ul>

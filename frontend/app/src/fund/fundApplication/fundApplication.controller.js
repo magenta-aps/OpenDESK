@@ -10,13 +10,14 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', '$mdDialog', 'fundService', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', 'fundService', '$mdDialog', FundApplicationController])
 
 function FundApplicationController ($scope, $stateParams, fundService, $mdDialog) {
   var vm = this
   vm.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application';
     vm.showDialog = showDialog;
+    vm.showAlert = showAlert;
     vm.items = [1, 2, 3];
 
   activate()
@@ -44,21 +45,20 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
     })
   }
 
-    vm.showAlert = function(ev) {
-        // Appending dialog to document.body to cover sidenav in docs app
-        // Modal dialogs should fully cover application
-        // to prevent interaction outside of dialog
-        $mdDialog.show(
-            $mdDialog.alert()
-                .parent(angular.element(document.querySelector('#popupContainer')))
-                .clickOutsideToClose(true)
-                .title('This is an alert title')
-                .textContent('You can specify some description text in here.')
-                .ariaLabel('Alert Dialog Demo')
-                .ok('Got it!')
-                .targetEvent(ev)
-        );
-    };
+    // Internal method
+    function showAlert() {
+        alert = $mdDialog.alert({
+            title: 'Attention',
+            textContent: 'This is an example of how easy dialogs can be!',
+            ok: 'Close'
+        });
+
+        $mdDialog
+            .show( alert )
+            .finally(function() {
+                alert = undefined;
+            });
+    }
 
     function showDialog($event) {
         var parentEl = angular.element(document.body);
