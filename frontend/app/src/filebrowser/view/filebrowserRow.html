@@ -1,10 +1,9 @@
 <tr>
     <td>
-        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
+        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active" ng-click="FRC.scrollToFilebrowserTop()">
             <i class="material-icons">
                 {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}} {{content.contentType == 'cmis:link' ? 'link' : ''}}
-                <img class="md-avatar" ng-show="content.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{content.fileType}}-file-24.png"
-                    onerror="this.src='assets/img/filetypes/generic-file-24.png'">
+                <img class="md-avatar" ng-show="content.contentType === 'cmis:document'" ng-src="assets/img/filetypes/{{content.fileType}}-file-24.png" onerror="this.src='assets/img/filetypes/generic-file-24.png'">
             </i>
             <span class='content-name'>{{content.name}}</span>
         </a>
@@ -13,8 +12,7 @@
         <table style="width:100%">
             <tr>
                 <td style="border: none; margin: 0; padding: 0">
-                    <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
-                        {{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
+                    <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active" ng-click="FRC.scrollToFilebrowserTop()">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
                 </td>
 
                 <td ng-show="content.contentType === 'cmis:document' && content.versions.length > 1" style="border: none; margin: 0; padding: 0">
@@ -28,9 +26,7 @@
                                 <span style="width: 70px; "></span> {{'COMMON.MODIFIED_BY' | translate}}
                             </md-menu-item>
                             <md-menu-item ng-repeat="h in content.versions" class="menu-list">
-                                <a ui-sref="document({ doc: h.parent_nodeRef, versionId: h.nodeRef, version: h.version})">
-                                    {{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{h.modifier }}
-                                </a>
+                                <a ui-sref="document({ doc: h.parent_nodeRef, versionId: h.nodeRef, version: h.version})">{{ h.created | openeDate }}&nbsp;&nbsp;&nbsp;&nbsp;{{h.modifier }}</a>
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
@@ -39,7 +35,7 @@
         </table>
     </td>
     <td>
-        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active">
+        <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active" ng-click="FRC.scrollToFilebrowserTop()">
             <span class='content-name'>{{content.creator.displayName}}</span>
         </a>
     </td>

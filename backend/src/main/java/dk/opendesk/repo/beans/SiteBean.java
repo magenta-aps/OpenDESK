@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
@@ -76,13 +84,12 @@ public class SiteBean {
      * @return a JSONArray containing sourceLinkRef and destinationLinkRef that links to each other.
      */
     public void addLink(String sourceProject, String destinationProject) {
-
         SiteInfo source = siteService.getSite(sourceProject);
         SiteInfo destination = siteService.getSite(destinationProject);
 
         // Get the documentLibrary of the sites.
-        NodeRef sourceDocumentLib = siteService.getContainer(source.getShortName(), OpenDeskModel.DOC_LIBRARY);
-        NodeRef destDocumentLib = siteService.getContainer(destination.getShortName(), OpenDeskModel.DOC_LIBRARY);
+        NodeRef sourceDocumentLib = getDocumentLibraryRef(sourceProject);
+        NodeRef destDocumentLib = getDocumentLibraryRef(destinationProject);
 
         // create link for source
         Map<QName, Serializable> linkProperties = new HashMap<>();
@@ -310,6 +317,38 @@ public class SiteBean {
         nodeService.deleteNode(destination);
     }
 
+    public void deleteLink(String sourceSiteShortName, String destinationSiteShortName) {
+        NodeRef sourceSiteLink = getLink(sourceSiteShortName, destinationSiteShortName);
+        NodeRef destinationSiteLink = getDestinationLink(sourceSiteLink);
+
+        if(sourceSiteLink != null) {
+            nodeService.deleteNode(sourceSiteLink);
+        }
+        if(destinationSiteLink != null) {
+            nodeService.deleteNode(destinationSiteLink);
+        }
+    }
+
+    public NodeRef getLink(String sourceSiteShortName, String destinationSiteShortName) {
+        NodeRef sourceDocLibRef = getDocumentLibraryRef(sourceSiteShortName);
+        QName targetProp = OpenDeskModel.PROP_LINK_TARGET;
+        List<ChildAssociationRef> childAssocs =
+                nodeService.getChildAssocsByPropertyValue(sourceDocLibRef, targetProp, destinationSiteShortName);
+
+        if(childAssocs.size() > 0) {
+            return childAssocs.get(0).getChildRef();
+        }
+        return null;
+    }
+
+    public NodeRef getDestinationLink(NodeRef sourceSiteLink) {
+        if (sourceSiteLink != null) {
+            Serializable targetStr = nodeService.getProperty(sourceSiteLink, OpenDeskModel.PROP_LINK_TARGET_NODEREF);
+            return new NodeRef(targetStr.toString());
+        }
+        return null;
+    }
+
     /**
      * Deletes a site.
      * @param siteShortName short name of a site.
@@ -451,6 +490,7 @@ public class SiteBean {
     /**
      * Gets all groups of a site and their members.
      * @param siteShortName short name of a site.
+     * @param authorities TODO
      * @return a JSONArray containing JSONObjects for each group and each of their members.
      */
     private JSONArray getAuthorityGroups(String siteShortName, boolean authorities) throws JSONException {
@@ -480,6 +520,7 @@ public class SiteBean {
      * @return a JSONArray containing a JSONObject for each group.
      */
     public JSONArray getSiteGroups(String siteType) {
+        // TODO: use strategy pattern instead af a parametric solution for handling variability
         JSONArray result = new JSONArray();
         switch (siteType) {
             case OpenDeskModel.pd_project:

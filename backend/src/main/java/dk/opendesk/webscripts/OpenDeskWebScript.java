@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
@@ -8,14 +16,12 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,15 +36,25 @@ public class OpenDeskWebScript extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         arrayResult = new JSONArray();
-        try {
-            String content = req.getContent().getContent();
-            if(content != null && !content.isEmpty())
-                contentParams = new JSONObject(content);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        String method = req.getServiceMatch().getWebScript().getDescription().getMethod();
+        if(method.equals("PUT") || method.equals("POST")) {
+            Content content = req.getContent();
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            BufferedReader br = new BufferedReader(new InputStreamReader(content.getInputStream()));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            try {
+                contentParams = new JSONObject(sb.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         objectResult = new JSONObject();
         urlParams = req.getServiceMatch().getTemplateVars();
+        // There are known issues with special characters and the url query params.
         urlQueryParams = parseUrlParams(req.getURL());
         res.setContentEncoding("UTF-8");
         res.setContentType("application/json");

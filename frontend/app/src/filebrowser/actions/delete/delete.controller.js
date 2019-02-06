@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../../../shared/services/content.service'
 
@@ -17,7 +25,7 @@ function DeleteController ($rootScope, $mdDialog, data, siteService, contentServ
     if (vm.data.contentType !== 'cmis:link')
       deleteFile(vm.data.nodeRef)
     else
-      deleteLink(vm.data.nodeid, vm.data.destination_nodeid)
+      deleteLink(vm.data.destination_link)
   }
 
   function deleteFile (nodeRef) {
@@ -27,8 +35,8 @@ function DeleteController ($rootScope, $mdDialog, data, siteService, contentServ
       })
   }
 
-  function deleteLink (source, destination) {
-    siteService.deleteLink(source, destination)
+  function deleteLink (destinationShortName) {
+    siteService.deleteLink(destinationShortName)
       .then(function () {
         hideAndReload()
       })

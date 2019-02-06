@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 'use strict'
 import '../shared/services/alfrescoNode.service'
 
@@ -198,10 +206,6 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
       })
   }
 
-  /**
-     * @todo move this into a sitelink service
-     * @param {@} destinationShortName
-     */
   function createProjectLink (destinationShortName) {
     var payLoad = {
       destinationShortName: destinationShortName
@@ -212,17 +216,8 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
       })
   }
 
-  /**
-     * @todo move this into a sitelink service
-     * @param {*} sourceId
-     * @param {*} destinationId
-     */
-  function deleteLink (sourceId, destinationId) {
-    var payLoad = {
-      sourceId: sourceId,
-      destinationId: destinationId
-    }
-    return $http.delete(`/alfresco/service/site/${site.shortName}/siteLink`, payLoad)
+  function deleteLink (destinationShortName) {
+    return $http.delete(`/alfresco/service/site/${site.shortName}/siteLink/${destinationShortName}`)
       .then(function (response) {
         return response.data
       })

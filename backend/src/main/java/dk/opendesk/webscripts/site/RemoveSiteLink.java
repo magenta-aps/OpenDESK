@@ -1,3 +1,11 @@
+// 
+// Copyright (c) 2017-2018, Magenta ApS
+// 
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// 
+
 /*
 Licensed to the Apache Software Foundation (ASF) under one or more
 contributor license agreements.  See the NOTICE file distributed with
@@ -18,7 +26,6 @@ package dk.opendesk.webscripts.site;
 
 import dk.opendesk.repo.beans.SiteBean;
 import dk.opendesk.webscripts.OpenDeskWebScript;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -35,11 +42,9 @@ public class RemoveSiteLink extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
-            String sourceId = getContentString("sourceId");
-            String destinationId = getContentString("destinationId");
-            NodeRef sourceRef = new NodeRef("workspace://SpacesStore/" + sourceId);
-            NodeRef destinationRef = new NodeRef("workspace://SpacesStore/" + destinationId);
-            siteBean.deleteLink(sourceRef, destinationRef);
+            String siteShortName = urlParams.get("siteShortName");
+            String targetSiteShortName = urlParams.get("targetSiteShortName");
+            siteBean.deleteLink(siteShortName, targetSiteShortName);
         } catch (Exception e) {
             error(res, e);
         }
