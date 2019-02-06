@@ -15,6 +15,7 @@ import org.alfresco.service.cmr.security.AuthorityType;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,13 +36,13 @@ public class AuthorityBean {
         this.authorityService = authorityService;
     }
 
-    public JSONArray getAuthorities(String groupName, int maxItems, int skipCount) throws JSONException {
-        List<String> authorities = getAuthorityList(groupName, maxItems, skipCount);
-        return getAuthorityToJSON(authorities);
+    public Pair<JSONArray, Integer> getAuthorities(String groupName, int maxItems, int skipCount) throws JSONException {
+        Pair<List<String>, Integer> authorities = getAuthorityList(groupName, maxItems, skipCount);
+        return new Pair<>(getAuthorityToJSON(authorities.getFirst()), authorities.getSecond());
 
     }
 
-    public List<String> getAuthorityList(String groupName, int maxItems, int skipCount) {
+    public Pair<List<String>, Integer> getAuthorityList(String groupName, int maxItems, int skipCount) {
         return pageResult(
                 authorityService.getContainedAuthorities(null, groupName, true),
                 maxItems,
@@ -87,7 +88,7 @@ public class AuthorityBean {
         JSONObject json = new JSONObject();
         json.put("shortName", groupName);
         json.put("type", type);
-        JSONArray authorities = getAuthorities("GROUP_" + groupName, Integer.MAX_VALUE, 0);
+        JSONArray authorities = getAuthorities("GROUP_" + groupName, Integer.MAX_VALUE, 0).getFirst();
         json.put("members", authorities);
         return json;
     }
@@ -109,16 +110,16 @@ public class AuthorityBean {
         return result;
     }
 
-    public List<String> getUserList(String groupName, int maxItems, int skipCount) {
+    public Pair<List<String>, Integer> getUserList(String groupName, int maxItems, int skipCount) {
         return pageResult(
                 authorityService.getContainedAuthorities(AuthorityType.USER, groupName, false),
                 maxItems,
                 skipCount);
     }
 
-    public JSONArray getUsers(String groupName, int maxItems, int skipCount) throws JSONException {
-        List<String> userNames = getUserList(groupName, maxItems, skipCount);
-        return getAuthorityToJSON(userNames);
+    public Pair<JSONArray, Integer> getUsers(String groupName, int maxItems, int skipCount) throws JSONException {
+        Pair<List<String>, Integer> userNamesAndTotalCount = getUserList(groupName, maxItems, skipCount);
+        return new Pair<>(getAuthorityToJSON(userNamesAndTotalCount.getFirst()), userNamesAndTotalCount.getSecond());
 
     }
 
@@ -163,8 +164,10 @@ public class AuthorityBean {
         return findAuthorities(filter, false, ignoreList);
     }
 
-    private <V> List<V> pageResult(Set<V> set, int maxItems, int skipCount) {
-        return set.stream().sorted().skip(skipCount).limit(maxItems).collect(Collectors.toList());
+    private <V> Pair<List<V>, Integer> pageResult(Set<V> set, int maxItems, int skipCount) {
+        int totalCount = set.size();
+        List<V> pagedMembers = set.stream().sorted().skip(skipCount).limit(maxItems).collect(Collectors.toList());
+        return new Pair<>(pagedMembers, totalCount);
     }
 
 }

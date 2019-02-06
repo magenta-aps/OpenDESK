@@ -28,6 +28,7 @@ import org.alfresco.util.ISO9075;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Pair;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -391,11 +392,15 @@ public class SiteBean {
             JSONObject groupJSON = (JSONObject) groupObject;
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             if(authorities){
-                List<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName, Integer.MAX_VALUE, 0);
+                List<String> authorityList = authorityBean
+                        .getAuthorityList(groupAuthorityName, Integer.MAX_VALUE, 0)
+                        .getFirst();
                 result.addAll(authorityList);
             }
             else {
-                List<String> authorityList = authorityBean.getUserList(groupAuthorityName, Integer.MAX_VALUE, 0);
+                List<String> authorityList = authorityBean
+                        .getUserList(groupAuthorityName, Integer.MAX_VALUE, 0)
+                        .getFirst();
                 result.addAll(authorityList);
             }
         }
@@ -506,14 +511,16 @@ public class SiteBean {
             JSONObject groupJSON = (JSONObject) groupObject;
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
 
-            JSONArray members;
+            Pair<JSONArray, Integer> membersAndTotalCount;
             if(authorities) {
-                members = authorityBean.getAuthorities(groupAuthorityName, maxItems, skipCount);
+                membersAndTotalCount = authorityBean.getAuthorities(groupAuthorityName, maxItems, skipCount);
             } else {
-                members = authorityBean.getUsers(groupAuthorityName, maxItems, skipCount);
+                membersAndTotalCount = authorityBean.getUsers(groupAuthorityName, maxItems, skipCount);
             }
-            groupJSON.put("members", members);
+            groupJSON.put("members", membersAndTotalCount.getFirst());
+            groupJSON.put("totalMembersCount", membersAndTotalCount.getSecond());
             result.add(groupJSON);
+
         }
 
         return result;
