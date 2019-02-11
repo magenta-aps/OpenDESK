@@ -16,9 +16,6 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
   var vm = this
   vm.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application';
-    vm.showDialog = showDialog;
-    vm.showAlert = showAlert;
-    vm.items = [1, 2, 3];
 
   activate()
 
@@ -44,53 +41,56 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
       }
     })
   }
+    vm.status = '  ';
+    vm.customFullscreen = false;
 
-    // Internal method
-    function showAlert() {
-        alert = $mdDialog.alert({
-            title: 'Attention',
-            textContent: 'This is an example of how easy dialogs can be!',
-            ok: 'Close'
-        });
+    vm.showAlert = function(ev) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        // Modal dialogs should fully cover application
+        // to prevent interaction outside of dialog
+        $mdDialog.show(
+            $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('This is an alert title')
+                .textContent('You can specify some description text in here.')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+                .targetEvent(ev)
+        );
+    };
 
-        $mdDialog
-            .show( alert )
-            .finally(function() {
-                alert = undefined;
-            });
-    }
-
-    function showDialog($event) {
-        var parentEl = angular.element(document.body);
+    vm.showAdvanced = function(ev) {
+        console.log('showAdvanced');
         $mdDialog.show({
-            parent: parentEl,
-            targetEvent: $event,
-            template:
-            '<md-dialog aria-label="List dialog">' +
-            '  <md-dialog-content>' +
-            '    <md-list>' +
-            '      <md-list-item ng-repeat="item in items">' +
-            '       <p>Number {{item}}</p>' +
-            '      ' +
-            '    </md-list-item></md-list>' +
-            '  </md-dialog-content>' +
-            '  <md-dialog-actions>' +
-            '    <md-button ng-click="closeDialog()" class="md-primary">' +
-            '      Close Dialog' +
-            '    </md-button>' +
-            '  </md-dialog-actions>' +
-            '</md-dialog>',
-            locals: {
-                items: $scope.items
-            },
-            controller: DialogController
-        });
+            controller: DialogController,
+            template: '<md-dialog>' +
+            ' <md-dialog-content>' +
+            ' <span class="md-headline">Flyt ansøgninger</span>' +
+            ' <div layout="column" layout-align="center center" style="width:100%;">' +
+            ' <md-button class="md-primary md-raised" style="width: 90%;">Flow</md-button>' +
+            ' <md-button class="md-primary md-raised" style="width: 90%;">BANKOMRÅDE</md-button>' +
+            ' <md-button class="md-primary md-raised" style="width: 90%;">BUDGETÅR</md-button>' +
+            ' </div>' +
+            ' </md-dialog-content>' +
+            // ' <md-dialog-actions></md-dialog-actions>' +
+            ' </md-dialog>',
+            clickOutsideToClose:true,
+        })
+    };
 
-        function DialogController($scope, $mdDialog, items) {
-            $scope.items = items;
-            $scope.closeDialog = function () {
-                $mdDialog.hide();
-            }
-        }
+
+    function DialogController($scope, $mdDialog) {
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.answer = function(answer) {
+            $mdDialog.hide(answer);
+        };
     }
 }
