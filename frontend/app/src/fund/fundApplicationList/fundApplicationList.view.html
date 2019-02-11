@@ -7,11 +7,16 @@
 				</md-card-title-text>
 			</md-card-title>
 			<md-card-content>
-				<md-list id="table-container" ng-if="vm.applications().length > 0">
+				<md-select ng-model="selectedBranch" ng-change="vm.selectBranch(selectedBranch)" placeholder="Bankområde" ng-model-options="{trackBy: $value.nodeID}">
+					<md-option ng-repeat="branch in vm.branches" ng-value="branch.nodeID">
+						{{branch.title}}
+					</md-option>
+				</md-select>
+				<md-list id="table-container" ng-if="vm.applications.length > 0">
 					<table class="od-members od-members-row">
 						<thead>
 							<tr>
-								<th sort order="key" by="vm.order" reverse="vm.reverse" ng-repeat="(key, value) in vm.applications()[0]">
+								<th sort order="key" by="vm.order" reverse="vm.reverse" ng-repeat="(key, value) in vm.applications[0]">
 									{{ key }}
 								</th>
 								<th>
@@ -20,7 +25,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="application in vm.applications() | orderObjectBy:vm.order:vm.reverse">
+							<tr ng-repeat="application in vm.applications | orderObjectBy:vm.order:vm.reverse">
 								<td ng-repeat="(key, value) in application">
 									<a class="od-filebrowser-link overflow" ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">
 										{{ value }}
@@ -33,7 +38,7 @@
 						</tbody>
 					</table>
 				</md-list>
-				<p ng-if="vm.applications().length <= 0">
+				<p ng-if="vm.applications.length <= 0">
 					<em>Der findes ingen ansøgninger i dette stadie</em>
 				</p>
 			</md-card-content>
