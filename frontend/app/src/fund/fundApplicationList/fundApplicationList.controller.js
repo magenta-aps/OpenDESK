@@ -19,7 +19,16 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
   vm.reverse = false
   vm.applications = getApplications()
   vm.branches = []
-  vm.selectBranch = selectBranch
+  vm.filterList = filterList
+  vm.years = (function() {
+    const nowYear = (new Date()).getFullYear()
+    // first generate an array of n elements, counting from current year and adding 1
+    // for each element (index i; we don't care about current value, available in variable _
+    let range = Array.from(Array(17), (_, i) => nowYear + i)
+    // then map to minus/plus n/2 years, so that we can get previous years too
+    return range.map(y => y - Math.round(range.length / 2))
+  })()
+  vm.selectedYear = (new Date()).getFullYear()
 
   activate()
 
@@ -56,10 +65,10 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
     return $scope.$parent.state ? $scope.$parent.state.applications || [] : []
   }
 
-  function selectBranch(branchID) {
-    fundService.getBranch(branchID)
+  function filterList(branchID, year) {
+    fundService.getApplicationsByBranch(branchID)
     .then(function (response) {
-      console.log(response)
+      vm.applications = response
     })
   }
 }

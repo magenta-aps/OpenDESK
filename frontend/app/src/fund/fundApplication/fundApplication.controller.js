@@ -33,7 +33,6 @@ function FundApplicationController ($scope, $stateParams, fundService) {
       // conversely, if we don't have a state in store, but the currently
       // loaded application does have state information, load it to the store
       else if(!$scope.$parent.state && vm.application.state) {
-        console.log('hej')
         fundService.getWorkflowState(vm.application.state.nodeID)
         .then(function (response) {
           $scope.$parent.state = response

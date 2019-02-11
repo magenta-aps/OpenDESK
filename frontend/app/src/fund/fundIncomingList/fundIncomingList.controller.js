@@ -15,14 +15,10 @@ angular
 function FundIncomingListController (fundService) {
   var vm = this
   var _applications = []
-  vm.applications = getApplications
+  vm.applications = []
 
   fundService.getNewApplications()
   .then(function (response) {
-    _applications = response
+    vm.applications = response
   })
-
-  function getApplications () {
-    return _applications
-  }
 }
