@@ -7,10 +7,12 @@ angular
 function ApplicationDetailController($scope, $stateParams, $state, odfCoreService) {
     var vm = this
     vm.application = {}
+    vm.state = {}
     vm.returnWorkflowID = null
     vm.returnStateID = null
     
     vm.openOverview = openOverview
+    vm.setApplicationState = setApplicationState
     
     
     activate()
@@ -23,10 +25,24 @@ function ApplicationDetailController($scope, $stateParams, $state, odfCoreServic
         odfCoreService.getApplication(applicationID)
             .then(function (response) {
                 vm.application = response
-                console.log(response)
+            console.log(response)
+        })
+            .then(function (){
+                odfCoreService.getWorkflowState(vm.application.state.nodeID)
+                    .then(function (response) {
+                        vm.state = response
+                    console.log(response)
+                })
             })
+        
+        
+        
+        
+        
+        
+
     }
-    
+     
     function openOverview() {
         if(vm.returnStateID){
             console.log("Return to overview with state "+vm.returnStateID)
@@ -36,6 +52,11 @@ function ApplicationDetailController($scope, $stateParams, $state, odfCoreServic
             $state.go('odf.workflowOverview', {workflowID: vm.returnWorkflowID})
         }
         
+    }
+    
+    function setApplicationState(stateID){
+        console.log(stateID)
+        odfCoreService.setApplicationState(vm.application.nodeID, stateID);
     }
     
    
