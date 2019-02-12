@@ -10,8 +10,7 @@
 import '../shared/services/alfrescoNode.service'
 
 angular.module('openDeskApp.site')
-  .factory('siteService', ['$q', '$http', '$rootScope', 'alfrescoNodeService', 'sessionService',
-    'systemSettingsService', SiteService])
+  .factory('siteService', ['$q', '$http', '$rootScope', 'alfrescoNodeService', 'sessionService', 'systemSettingsService', SiteService])
 
 function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService, systemSettingsService) {
   var site = {}
@@ -321,10 +320,15 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   }
 
   function getUsers (siteShortName) {
-    return $http.get(`/alfresco/service/site/${siteShortName}/users`)
-      .then(function (response) {
-        return response.data
-      })
+    return $http.get(`/alfresco/service/site/${siteShortName}/users`, {
+      params: {
+        maxItems: 3,
+        skipCount: 0
+      }
+    })
+    .then(function (response) {
+      return response.data
+    })
   }
 
   function addFavourite (nodeId) {
@@ -334,7 +338,8 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
           guid: nodeId
         }
       }
-    }).then(function (response) {
+    })
+    .then(function (response) {
       return response
     })
   }

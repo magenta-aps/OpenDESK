@@ -11,8 +11,7 @@ import editMembersTemplate from '../editMembers/editMembers.tmpl.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteMemberController', ['$scope', '$stateParams', '$mdDialog', 'siteService', 'groupService',
-    'alfrescoDownloadService', SiteMemberController])
+  .controller('SiteMemberController', ['$scope', '$stateParams', '$mdDialog', 'siteService', 'groupService', 'alfrescoDownloadService', SiteMemberController])
 
 function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, groupService, alfrescoDownloadService) {
   var vm = this
@@ -20,6 +19,9 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
   vm.doPDF = doPDF
   vm.openMemberInfo = groupService.openMemberInfo
   vm.loadMembers = loadMembers
+  vm.skipCount = 0,
+  vm.maxCount = 3,
+  vm.loadMoreMembers = loadMoreMembers,
   vm.editSiteGroups = editSiteGroups
   vm.site = {}
   vm.permissions = {}
@@ -55,11 +57,19 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
       })
   }
 
-  function loadMembers () {
-    siteService.getUsers(vm.site.shortName)
-      .then(function (groups) {
-        vm.groups = groups
-      })
+  function loadMembers (skipCount) {
+    siteService.getUsers(vm.site.shortName, skipCount)
+    .then(function (groups) {
+      vm.groups = groups
+    })
+  }
+
+  function loadMoreMembers() {
+    console.log("Old skipCount: " + vm.skipCount);
+    vm.newSkipCount = vm.skipCount += vm.maxCount;
+    console.log("New skipCount: " + vm.newSkipCount);
+
+    loadMembers(vm.skipCount = vm.newSkipCount);
   }
 
   function editSiteGroups (ev) {

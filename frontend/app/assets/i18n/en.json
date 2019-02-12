@@ -778,7 +778,9 @@
     "MEMBER_CHANGED_SUCCESSFULLY": "Case member changed successfully",
     "MEMBER_REMOVED_SUCCESSFULLY": "Case member removed successfully",
     "DOWNLOAD_PDF": "Download member overview as PDF",
-    "WHO_TO_ADD": "Who do you want to add?"
+    "WHO_TO_ADD": "Who do you want to add?",
+    "PAGINATE_FORWARD": "Load more",
+    "PAGINATE_FORWARD_LABEL": "Load more members"
   },
   "NOTE": {
     "NOTES": "Notes",

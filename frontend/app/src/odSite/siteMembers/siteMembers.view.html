@@ -10,55 +10,52 @@
 		<div ng-repeat="group in vm.groups">
 
 			<div ng-if="group.collapsed" flex="100">
-				<h4 ng-click="group.open = !group.open" class="group-toggle" ng-class="group.open ? 'open' : 'closed'" layout="row"
-				    aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}">
+				<h4 ng-click="group.open = !group.open" class="group-toggle" ng-class="group.open ? 'open' : 'closed'" layout="row" aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}">
 					<span>{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}</span>
 					<span flex></span>
 					<md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
 				</h4>
 				<md-list ng-class="group.open ? 'fold-out' : 'fold-in'" aria-label="{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}} List">
-					<md-list-item ng-repeat="member in group.members | orderBy: 'displayName'">
-							<img class="od-avatar od-avatar-small" http-src="{{member.avatar}}">
-						<div layout="column" style="margin-left:8px" flex>
-								<a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
-								<p class="od-secondary od-secondary-small">
-									{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}
-								</p>
-							</div>
+
+					<md-list-item class="md-2-line" ng-repeat="member in group.members | orderBy: 'displayName'" ng-click="vm.openMemberInfo(member)">
+						<img http-src="{{member.avatar}}" class="md-avatar" alt="{{ member.displayName }}" />
+						<div class="md-list-item-text">
+							<h3>{{ member.displayName }}</h3>
+							<p>{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}</p>
+						</div>
 					</md-list-item>
+
 				</md-list>
 			</div>
 
 			<md-list ng-if="!group.collapsed">
-				<md-list-item ng-repeat="member in group.members | orderBy: 'displayName'">
-					<div layout="row" flex>
-						<img class="od-avatar od-avatar-small" http-src="{{member.avatar}}">
 
-						<div layout="column" style="margin-left:8px" flex>
-							<a class="member" ng-click="vm.openMemberInfo(member)">{{ member.displayName }}</a>
-							<p class="od-secondary od-secondary-small">
-								{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}
-							</p>
-						</div>
+				<md-list-item class="md-2-line" ng-repeat="member in group.members | orderBy: 'displayName'" ng-click="vm.openMemberInfo(member)">
+					<img http-src="{{member.avatar}}" class="md-avatar" alt="{{ member.displayName }}" />
+					<div class="md-list-item-text">
+						<h3>{{ member.displayName }}</h3>
+						<p>{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}</p>
 					</div>
 				</md-list-item>
-			</md-list>
 
+			</md-list>
 		</div>
 
 		<md-card-actions layout="row" layout-align="start center">
-			<md-button ng-if="vm.site.type == 'PD-Project'" class="md-primary md-icon-button" ng-style="vm.permissions.isManager ? 'margin-left: 30px;' : ''"
-			    ng-click="vm.doPDF()" aria-label="Download PDF med grupper">
+			<md-button ng-if="vm.site.type == 'PD-Project'" class="md-primary md-icon-button" ng-style="vm.permissions.isManager ? 'margin-left: 30px;' : ''" ng-click="vm.doPDF()" aria-label="Download PDF med grupper">
 				<md-tooltip md-direction="top">{{'MEMBER.DOWNLOAD_PDF' | translate}}</md-tooltip>
 				<md-icon>picture_as_pdf</md-icon>
 			</md-button>
 
 			<span flex></span>
 
+			<md-button ng-click="vm.loadMoreMembers()" aria-label="{{'MEMBER.PAGINATE_FORWARD_LABEL' | translate}}">{{'MEMBER.PAGINATE_FORWARD' | translate}}</md-button>
+	
 			<md-button ng-if="vm.permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">
 				<md-tooltip md-direction="top">{{vm.site.type == 'PD-Project' ? 'MEMBER.ADD_REMOVE_MEMBERS' : 'MEMBER.ADD_MEMBER'| translate}}</md-tooltip>
 				<md-icon>person_add</md-icon>
 			</md-button>
 		</md-card-actions>
+
 	</md-card-content>
 </md-card>
