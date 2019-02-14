@@ -20,8 +20,9 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
   vm.openMemberInfo = groupService.openMemberInfo
   vm.loadMembers = loadMembers
   vm.skipCount = 0,
-  vm.maxCount = 3,
-  vm.loadMoreMembers = loadMoreMembers,
+  vm.maxItems = 2, // Set to a low number for testing, but use "10" for production
+  vm.paginateMembersBackward = paginateMembersBackward,
+  vm.paginateMembersForward = paginateMembersForward,
   vm.editSiteGroups = editSiteGroups
   vm.site = {}
   vm.permissions = {}
@@ -32,7 +33,7 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
 
   $scope.$watch('siteService.getSite()', function (site) {
     vm.site = site
-    loadMembers()
+    loadMembers(vm.maxItems, vm.skipCount)
   })
 
   $scope.$on('updateMemberList', function () {
@@ -57,19 +58,21 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
       })
   }
 
-  function loadMembers (skipCount) {
-    siteService.getUsers(vm.site.shortName, skipCount)
+  function loadMembers (maxItems, skipCount) {
+    siteService.getUsers(vm.site.shortName, maxItems, skipCount)
     .then(function (groups) {
       vm.groups = groups
     })
   }
 
-  function loadMoreMembers() {
-    console.log("Old skipCount: " + vm.skipCount);
-    vm.newSkipCount = vm.skipCount += vm.maxCount;
-    console.log("New skipCount: " + vm.newSkipCount);
+  function paginateMembersBackward() {
+    vm.newSkipCount = vm.skipCount -= vm.maxItems;
+    loadMembers(vm.maxItems, vm.newSkipCount);
+  }
 
-    loadMembers(vm.skipCount = vm.newSkipCount);
+  function paginateMembersForward() {
+    vm.newSkipCount = vm.skipCount += vm.maxItems;
+    loadMembers(vm.maxItems, vm.newSkipCount);
   }
 
   function editSiteGroups (ev) {

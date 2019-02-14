@@ -49,7 +49,8 @@
 
 			<span flex></span>
 
-			<md-button ng-click="vm.loadMoreMembers()" aria-label="{{'MEMBER.PAGINATE_FORWARD_LABEL' | translate}}">{{'MEMBER.PAGINATE_FORWARD' | translate}}</md-button>
+			<md-button ng-disabled="true" ng-click="vm.paginateMembersBackward()" aria-label="{{'MEMBER.PAGINATE_BACKWARD_LABEL' | translate}}">{{'MEMBER.PAGINATE_BACKWARD' | translate}}</md-button>
+			<md-button ng-disabled="false" ng-click="vm.paginateMembersForward()" aria-label="{{'MEMBER.PAGINATE_FORWARD_LABEL' | translate}}">{{'MEMBER.PAGINATE_FORWARD' | translate}}</md-button>
 	
 			<md-button ng-if="vm.permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">
 				<md-tooltip md-direction="top">{{vm.site.type == 'PD-Project' ? 'MEMBER.ADD_REMOVE_MEMBERS' : 'MEMBER.ADD_MEMBER'| translate}}</md-tooltip>

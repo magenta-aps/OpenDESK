@@ -779,8 +779,10 @@
     "MEMBER_REMOVED_SUCCESSFULLY": "Case member removed successfully",
     "DOWNLOAD_PDF": "Download member overview as PDF",
     "WHO_TO_ADD": "Who do you want to add?",
-    "PAGINATE_FORWARD": "Load more",
-    "PAGINATE_FORWARD_LABEL": "Load more members"
+    "PAGINATE_BACKWARD": "Previous",
+    "PAGINATE_FORWARD": "Next",
+    "PAGINATE_BACKWARD_LABEL": "Members, go backwards",
+    "PAGINATE_FORWARD_LABEL": "Members, go forward"
   },
   "NOTE": {
     "NOTES": "Notes",
