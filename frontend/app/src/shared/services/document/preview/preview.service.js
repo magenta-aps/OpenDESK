@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 import '../../alfrescoDocument.service'
@@ -23,7 +23,7 @@ import previewManagerTemplate from './view/previewManager.html'
 
 angular
   .module('openDeskApp')
-  .factory('documentPreviewService', ['$mdDialog', '$timeout', 'APP_BACKEND_CONFIG', 'alfrescoDocumentService',
+  .factory('documentPreviewService', ['$mdDialog', '$timeout', 'alfrescoDocumentService',
     'alfrescoDownloadService', 'editorService', 'sessionService', '$http', '$sce', 'ALFRESCO_URI', PreviewService])
   .component('audioPreview', {template: audioTemplate, bindings: { plugin: '=' }})
   .component('videoPreview', {template: videoTemplate, bindings: { plugin: '=' }})
@@ -35,7 +35,7 @@ angular
   .component('cannotPreviewPreview', {template: cannotPreviewTemplate, bindings: { plugin: '=' }})
   .component('previewManager', {template: previewManagerTemplate, bindings: { plugin: '=', template: '=' }})
 
-function PreviewService ($mdDialog, $timeout, APP_BACKEND_CONFIG, alfrescoDocumentService, alfrescoDownloadService,
+function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoDownloadService,
   editorService, sessionService, $http, $sce, ALFRESCO_URI) {
   var service = {
     previewDocument: previewDocument,
@@ -143,10 +143,9 @@ function PreviewService ($mdDialog, $timeout, APP_BACKEND_CONFIG, alfrescoDocume
   }
 
   function officeViewer (name) {
-    var editor = editorService.getEditor(name)
-    var isEnabled = APP_BACKEND_CONFIG.editors[name]
+    var isEnabled = editorService.isEnabled(name)
     var viewer = {
-      mimeTypes: isEnabled && editor ? editor.mimeTypes : [],
+      mimeTypes: isEnabled ? editorService.getEditor(name).mimeTypes : [],
       name: name
     }
 
@@ -155,9 +154,93 @@ function PreviewService ($mdDialog, $timeout, APP_BACKEND_CONFIG, alfrescoDocume
   }
 
   function pdfViewer () {
-    var editor = editorService.getEditor('onlyOffice')
     var viewer = {
-      transformableMimeTypes: editor.mimeTypes,
+      transformableMimeTypes: [
+        'application/clarisworks',
+        'application/coreldraw',
+        'application/macwriteii',
+        'application/msword',
+        'application/prs.plucker',
+        'application/rtf',
+        'application/vnd.corel-draw',
+        'application/vnd.lotus-1-2-3',
+        'application/vnd.lotus-wordpro',
+        'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+        'application/vnd.ms-excel.sheet.macroEnabled.12',
+        'application/vnd.ms-excel.template.macroEnabled.12',
+        'application/vnd.ms-excel',
+        'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+        'application/vnd.ms-powerpoint.template.macroEnabled.12',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.ms-word.document.macroEnabled.12',
+        'application/vnd.ms-word.template.macroEnabled.12',
+        'application/vnd.ms-works',
+        'application/vnd.oasis.opendocument.chart',
+        'application/vnd.oasis.opendocument.database',
+        'application/vnd.oasis.opendocument.graphics-flat-xml',
+        'application/vnd.oasis.opendocument.graphics-template',
+        'application/vnd.oasis.opendocument.graphics',
+        'application/vnd.oasis.opendocument.presentation-flat-xml',
+        'application/vnd.oasis.opendocument.presentation-template',
+        'application/vnd.oasis.opendocument.presentation',
+        'application/vnd.oasis.opendocument.spreadsheet-flat-xml',
+        'application/vnd.oasis.opendocument.spreadsheet-template',
+        'application/vnd.oasis.opendocument.spreadsheet',
+        'application/vnd.oasis.opendocument.text-flat-xml',
+        'application/vnd.oasis.opendocument.text-master-template',
+        'application/vnd.oasis.opendocument.text-master',
+        'application/vnd.oasis.opendocument.text-template',
+        'application/vnd.oasis.opendocument.text-web',
+        'application/vnd.oasis.opendocument.text',
+        'application/vnd.openofficeorg.extension',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'application/vnd.palm',
+        'application/vnd.sun.xml.calc.template',
+        'application/vnd.sun.xml.calc',
+        'application/vnd.sun.xml.chart',
+        'application/vnd.sun.xml.draw.template',
+        'application/vnd.sun.xml.draw',
+        'application/vnd.sun.xml.impress.template',
+        'application/vnd.sun.xml.impress',
+        'application/vnd.sun.xml.report.chart',
+        'application/vnd.sun.xml.writer.global',
+        'application/vnd.sun.xml.writer.template',
+        'application/vnd.sun.xml.writer.web',
+        'application/vnd.sun.xml.writer',
+        'application/vnd.visio',
+        'application/vnd.visio2013',
+        'application/vnd.wordperfect',
+        'application/x-abiword',
+        'application/x-aportisdoc',
+        'application/x-dbase',
+        'application/x-dif-document',
+        'application/x-fictionbook+xml',
+        'application/x-gnumeric',
+        'application/x-hwp',
+        'application/x-iwork-keynote-sffkey',
+        'application/x-iwork-numbers-sffnumbers',
+        'application/x-iwork-pages-sffpages',
+        'application/x-mspublisher',
+        'application/x-mswrite',
+        'application/x-pagemaker',
+        'application/x-sony-bbeb',
+        'application/x-t602',
+        'image/cgm',
+        'image/svg+xml',
+        'image/vnd.dxf',
+        'image/x-emf',
+        'image/x-freehand',
+        'image/x-wmf',
+        'image/x-wpg',
+        'text/csv',
+        'text/spreadsheet'
+      ],
       mimeTypes: ['application/pdf'],
       thumbnail: 'pdf',
       name: 'pdf',
@@ -228,8 +311,9 @@ function PreviewService ($mdDialog, $timeout, APP_BACKEND_CONFIG, alfrescoDocume
         this.itemSize = item.size
         this.mimeType = item.mimetype
         if (item.thumbnailUrl === undefined)
-          item.thumbnailUrl = this._getThumbnailUrl(item)
+          item.thumbnailUrl = this._getThumbnailUrl()
         this.thumbnailUrl = ALFRESCO_URI.webClientServiceProxy + item.thumbnailUrl
+        this._addThumbnailUrlFlags(item)
         this.thumbnailUrl = sessionService.makeURL(this.thumbnailUrl)
         if (this._acceptsMimeType(item)) {
           this.contentUrl = ALFRESCO_URI.webClientServiceProxy + item.contentURL
@@ -261,12 +345,15 @@ function PreviewService ($mdDialog, $timeout, APP_BACKEND_CONFIG, alfrescoDocume
         return item.thumbnailDefinitions.indexOf(this.thumbnail) !== -1
       },
 
-      _getThumbnailUrl: function (item) {
+      _getThumbnailUrl: function () {
         var nodeRefAsLink = this.nodeRef.replace(':/', '')
+        return '/api/node/' + nodeRefAsLink + '/content/thumbnails/'
+      },
+
+      _addThumbnailUrlFlags: function (item) {
         var noCache = new Date().getTime()
         var lastModified = this._getLastThumbnailModification(item)
-        return '/api/node/' + nodeRefAsLink + '/content/thumbnails/' + this.thumbnail +
-          '?c=force&noCache=' + noCache + lastModified
+        this.thumbnailUrl += this.thumbnail + '?c=force&noCache=' + noCache + lastModified
       },
 
       _getLastThumbnailModification: function (item) {
