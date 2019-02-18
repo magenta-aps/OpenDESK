@@ -13,6 +13,7 @@ import fundWorkflowList from './fundWorkflowList/fundWorkflowList.view.html'
 import fundWorkflowStateMenu from './fundWorkflowStateMenu/fundWorkflowStateMenu.view.html'
 import fundApplicationList from './fundApplicationList/fundApplicationList.view.html'
 import fundApplication from './fundApplication/fundApplication.view.html'
+import fundApplicationBlocks from './fundApplication/fundApplicationBlocks.view.html'
 
 angular.module('openDeskApp.fund', ['openDeskApp.discussion'])
   .config(['$stateProvider', 'USER_ROLES', config])
@@ -26,7 +27,8 @@ function config ($stateProvider, USER_ROLES) {
         template: fund,
         controller: function ($scope) {
           $scope.workflow = null,
-          $scope.state = null
+          $scope.state = null,
+          $scope.applications = null
         }
       },
       'fundMain@fund': {
@@ -81,7 +83,7 @@ function config ($stateProvider, USER_ROLES) {
         controllerAs: 'vm'
       },
       'application@fund.application': {
-        template: '<application-block ng-repeat="block in vm.application" block="block"/>'
+        template: fundApplicationBlocks
       }
     },
     params: {

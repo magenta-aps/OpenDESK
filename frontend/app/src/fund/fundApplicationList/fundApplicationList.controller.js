@@ -17,18 +17,16 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
   var vm = this
   vm.order = 'name'
   vm.reverse = false
-  vm.applications = getApplications()
+  $scope.$parent.applications = getApplications()
   vm.branches = []
   vm.filterList = filterList
-  vm.years = (function() {
-    const nowYear = (new Date()).getFullYear()
-    // first generate an array of n elements, counting from current year and adding 1
-    // for each element (index i; we don't care about current value, available in variable _
-    let range = Array.from(Array(17), (_, i) => nowYear + i)
-    // then map to minus/plus n/2 years, so that we can get previous years too
-    return range.map(y => y - Math.round(range.length / 2))
-  })()
+  vm.years = generateYears()
   vm.selectedYear = (new Date()).getFullYear()
+
+  // logic for controlling selection of applications with checkboxes
+  vm.selectedApps = []
+  vm.toggleSelectedApp = toggleSelectedApp
+  vm.toggleAppSelection = toggleAppSelection
 
   activate()
 
@@ -51,6 +49,7 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
     })
     .then(function (response) {
       $scope.$parent.state = response
+      $scope.$parent.applications = response.applications
       $state.go('fund.workflow', { workflowID: $scope.$parent.workflow.nodeID, stateID: response.nodeID })
     })
 
@@ -65,10 +64,38 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
     return $scope.$parent.state ? $scope.$parent.state.applications || [] : []
   }
 
+  function generateYears() {
+    const nowYear = (new Date()).getFullYear()
+    // first generate an array of n elements, counting from current year and adding 1
+    // for each element (index i; we don't care about current value, available in variable _
+    let range = Array.from(Array(17), (_, i) => nowYear + i)
+    // then map to minus/plus n/2 years, so that we can get previous years too
+    return range.map(y => y - Math.round(range.length / 2))
+  }
+
+  function toggleSelectedApp (appId) {
+    if (vm.selectedApps.includes(appId)) { // if array contains the value, that means we're deselecting the item
+      vm.selectedApps = vm.selectedApps.filter(id => id !== appId)
+    }
+    else {
+      vm.selectedApps.push(appId)
+    }
+  }
+
+  function toggleAppSelection () {
+    $scope.$parent.applications.forEach(app =>  {
+      toggleSelectedApp(app.nodeID)
+    })
+  }
+
   function filterList(branchID, year) {
-    fundService.getApplicationsByBranch(branchID)
+    // fundService.getApplicationsByBranch(branchID)
+    // .then(function (response) {
+    //   $scope.$parent.applications = response
+    // })
+    fundService.getBranch(branchID)
     .then(function (response) {
-      vm.applications = response
+      $scope.$parent.applications = response.summaries
     })
   }
 }

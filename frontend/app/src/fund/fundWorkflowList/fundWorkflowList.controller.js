@@ -14,8 +14,6 @@ angular
 
 function FundWorkflowListController ($state, fundService) {
   var vm = this
-  vm.resetDemoData = resetDemoData
-  vm.openIncoming = openIncoming
   vm.workflows = []
 
   activate()
@@ -25,16 +23,5 @@ function FundWorkflowListController ($state, fundService) {
     .then(function (response) {
       vm.workflows = response
     })
-  }
-
-  function resetDemoData(){
-    fundService.resetDemoData()
-   .then(function(response){
-      activate()
-    })
-  }
-
-  function openIncoming() {
-    $state.go('odf.newApplications')
   }
 }

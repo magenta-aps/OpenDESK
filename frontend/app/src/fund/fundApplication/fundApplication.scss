@@ -9,3 +9,26 @@
     }
   }
 }
+.od-fund-board-meeting-switch {
+  margin-top:0;
+  margin-bottom:0;
+  &,
+  :first-child {
+    margin-left:0;
+  }
+  &,
+  :last-child {
+    margin-right:0;
+  }
+}
+.od-fund-edit-field {
+  md-input {
+    width:auto;
+  }
+  span {
+    padding: 2px 2px 1px;
+  }
+  .md-errors-spacer {
+    display:none;
+  }
+}

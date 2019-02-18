@@ -1,11 +1,11 @@
 <!-- top menu -->
 <md-nav-bar>
-  <md-nav-item md-nav-sref="app.page5" name="edit">Ret ansøgning</md-nav-item>
+  <md-nav-item md-nav-sref="app.page5">Ret ansøgning</md-nav-item>
   <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: flow</md-nav-item>
   <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: bankområde</md-nav-item>
   <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: budgetår</md-nav-item>
-  <md-nav-item md-nav-sref="app.page5" name="edit"><md-icon>keyboard_arrow_left</md-icon></md-nav-item>
-  <md-nav-item md-nav-sref="app.page5" name="edit"><md-icon>keyboard_arrow_right</md-icon></md-nav-item>
+  <md-nav-item md-nav-click="vm.paginateApps(vm.prevAppId)" ng-if="vm.prevAppId"><md-icon>keyboard_arrow_left</md-icon></md-nav-item>
+  <md-nav-item md-nav-click="vm.paginateApps(vm.nextAppId)" ng-if="vm.nextAppId"><md-icon>keyboard_arrow_right</md-icon></md-nav-item>
 </md-nav-bar>
 
 <md-card>
@@ -17,16 +17,11 @@
   </md-nav-bar>
   <md-card-title>
     <md-card-title-text>
-      <span class="md-headline">{{ vm.application.title }}</span>
-      <span class="md-subhead">{{ vm.application.nodeID }}</span>
+      <span class="md-headline">{{ application.title }}</span>
+      <span class="md-subhead">{{ application.nodeID }}</span>
     <md-card-title-text>
   </md-card-title>
   <md-card-content class="od-fund-app-wrapper">
-    <ul>
-    <li ng-repeat="(key, value) in vm.application">
-      <strong>{{ key }}</strong>: {{ value }}
-    </li>
-    </ul>
     <ng-template ui-view="application"></ng-template>
   </md-card-content>
 </md-card>

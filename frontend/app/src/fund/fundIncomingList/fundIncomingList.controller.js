@@ -10,15 +10,16 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundIncomingListController', ['fundService', FundIncomingListController])
+  .controller('FundIncomingListController', ['fundService', '$scope', FundIncomingListController])
 
-function FundIncomingListController (fundService) {
-  var vm = this
-  var _applications = []
-  vm.applications = []
+function FundIncomingListController (fundService, $scope) {
 
-  fundService.getNewApplications()
-  .then(function (response) {
-    vm.applications = response
-  })
+  activate()
+
+  function activate () {
+    fundService.getNewApplications()
+    .then(function (response) {
+      $scope.$parent.applications = response
+    })
+  }
 }
