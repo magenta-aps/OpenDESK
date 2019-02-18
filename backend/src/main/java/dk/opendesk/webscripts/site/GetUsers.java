@@ -45,7 +45,7 @@ public class GetUsers extends OpenDeskWebScript {
         try {
             String siteShortName = urlParams.get("siteShortName");
             arrayResult = siteBean.getUsers(siteShortName, Pager.getMaxItems(urlQueryParams),
-                    Pager.getSkipCount(urlQueryParams));
+                    Pager.getSkipCount(urlQueryParams), Pager.getFlatten(urlQueryParams));
         } catch (Exception e) {
             error(res, e);
         }

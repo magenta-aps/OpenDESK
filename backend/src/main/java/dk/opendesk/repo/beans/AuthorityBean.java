@@ -8,6 +8,7 @@
 
 package dk.opendesk.repo.beans;
 
+import dk.opendesk.repo.utils.Pager;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.service.cmr.security.AuthorityService;
@@ -18,7 +19,6 @@ import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Pair;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static dk.opendesk.repo.model.OpenDeskModel.ORGANIZATIONAL_CENTERS;
 import static dk.opendesk.repo.model.OpenDeskModel.PROJECT_OWNERS;
@@ -43,7 +43,7 @@ public class AuthorityBean {
     }
 
     public Pair<List<String>, Integer> getAuthorityList(String groupName, int maxItems, int skipCount) {
-        return pageResult(
+        return Pager.pageResult(
                 authorityService.getContainedAuthorities(null, groupName, true),
                 maxItems,
                 skipCount);
@@ -111,7 +111,7 @@ public class AuthorityBean {
     }
 
     public Pair<List<String>, Integer> getUserList(String groupName, int maxItems, int skipCount) {
-        return pageResult(
+        return Pager.pageResult(
                 authorityService.getContainedAuthorities(AuthorityType.USER, groupName, false),
                 maxItems,
                 skipCount);
@@ -163,11 +163,4 @@ public class AuthorityBean {
     public JSONArray findUsers(String filter, List<String> ignoreList) throws JSONException {
         return findAuthorities(filter, false, ignoreList);
     }
-
-    private <V> Pair<List<V>, Integer> pageResult(Set<V> set, int maxItems, int skipCount) {
-        int totalCount = set.size();
-        List<V> pagedMembers = set.stream().sorted().skip(skipCount).limit(maxItems).collect(Collectors.toList());
-        return new Pair<>(pagedMembers, totalCount);
-    }
-
 }
