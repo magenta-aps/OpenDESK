@@ -8,22 +8,13 @@ client = requests.Session()
 
 URL = 'http://localhost:8080/alfresco/s/api/people'
 # URL = 'http://alfresco.example.org:8080/alfresco/s/api/people'
-N_USERS = 1500
-#GROUP = 'JMeter'
-GROUP = 'swsdp'
-
-with open('data/names.txt', 'r') as fp:
-    lines = fp.readlines()
+N_USERS = 3
+SITE_SHORT_NAME = 'swsdp'
+GROUP = 'SiteConsumer'
 
 users = [
     (''.join(random.choice(string.ascii_lowercase) for _ in range(5)), 'lastname') for i in range(N_USERS)
 ]
-
-#users = []
-#for line in lines:
-#    s = line.split()
-#    users.append((s[0], s[1]))
-#
 
 def upload_user(user: tuple):
     payload = {
@@ -32,7 +23,7 @@ def upload_user(user: tuple):
         'lastName': user[1],
         'email': user[0].lower() + '@alfresco.example.org',
         'password': user[0].lower(),
-	'groups': ['GROUP_site_' + GROUP + '_SiteCollaborator'] if GROUP else []
+	'groups': ['GROUP_site_' + SITE_SHORT_NAME + '_' + GROUP] if SITE_SHORT_NAME else []
     }
     r = client.post(URL, json=payload, auth=HTTPBasicAuth('admin', 'admin'))
     return r
@@ -51,8 +42,6 @@ for user in users:
     if r.ok:
         users_created.append(user)
         print(r)
-#    if len(users_created) == N_USERS:
-#        break
     counter += 1
     if counter % 100 == 0:
         print(counter)
