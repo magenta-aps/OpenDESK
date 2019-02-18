@@ -767,10 +767,27 @@ public class SiteBean {
      * @param siteShortName short name of a site.
      * @param maxItems the maximum number of items to return (used for paging).
      * @param skipCount the offset to use for returning the list of users (used for paging).
+     * @param flatten list of users will be flattened (used for paging) if set to true.
      * @return JSONArray of JSONObjects for each group and each of their members
      */
-    public JSONArray getUsers(String siteShortName, int maxItems, int skipCount) throws JSONException {
-        return getAuthorityGroups(siteShortName, false, maxItems, skipCount);
+    public JSONArray getUsers(String siteShortName, int maxItems, int skipCount, boolean flatten) throws JSONException {
+        if (flatten) {
+            String groupAuthorityName = getAuthorityName(siteShortName, "");
+
+            Pair<JSONArray, Integer> membersAndTotalCount = authorityBean.getUsers(groupAuthorityName, maxItems, skipCount);
+
+            JSONObject groupJSON = new JSONObject();
+            groupJSON.put("members", membersAndTotalCount.getFirst());
+            groupJSON.put("totalMembersCount", membersAndTotalCount.getSecond());
+
+            JSONArray result = new JSONArray();  // Wrap the result in an array to be consistent with the code elsewhere
+            result.add(groupJSON);
+
+            return result;
+
+        } else {
+            return getAuthorityGroups(siteShortName, false, maxItems, skipCount);
+        }
     }
 
     /**
