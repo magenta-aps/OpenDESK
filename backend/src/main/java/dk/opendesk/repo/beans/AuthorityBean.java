@@ -9,6 +9,7 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.utils.Pager;
+import dk.opendesk.repo.utils.SiteGroup;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.service.cmr.security.AuthorityService;
@@ -24,8 +25,8 @@ import static dk.opendesk.repo.model.OpenDeskModel.ORGANIZATIONAL_CENTERS;
 import static dk.opendesk.repo.model.OpenDeskModel.PROJECT_OWNERS;
 
 public class AuthorityBean {
-    private PersonBean personBean;
 
+    private PersonBean personBean;
     private AuthorityService authorityService;
 
     public void setPersonBean(PersonBean personBean) {
@@ -162,5 +163,23 @@ public class AuthorityBean {
 
     public JSONArray findUsers(String filter, List<String> ignoreList) throws JSONException {
         return findAuthorities(filter, false, ignoreList);
+    }
+
+    /**
+     * E.g. if the user is a member of both SiteManager and SiteCollaborator then SiteManager will be returned
+     */
+    public String getTopAuthorityForUser(String userName, String siteShortName) {
+        Set<String> authorities = authorityService.getAuthoritiesForUser(userName);
+
+        return authorities.stream()
+                .filter(name -> name.contains(siteShortName) && !name.endsWith(siteShortName))
+                .map(name -> {
+                    String[] s = name.split("_");
+                    return SiteGroup.valueOf(s[s.length - 1]);
+                })
+                .reduce(SiteGroup.SiteConsumer, (siteGroup1, siteGroup2) -> {
+                    return siteGroup1.ordinal() < siteGroup2.ordinal() ? siteGroup2 : siteGroup1;
+                })
+                .toString();
     }
 }

@@ -779,7 +779,10 @@ public class SiteBean {
             JSONObject groupJSON = new JSONObject();
             groupJSON.put("members", membersAndTotalCount.getFirst());
             groupJSON.put("totalMembersCount", membersAndTotalCount.getSecond());
-
+            for (Object m : membersAndTotalCount.getFirst()) {
+                JSONObject member = (JSONObject) m;
+                member.put("topAuthority", authorityBean.getTopAuthorityForUser(member.getString("userName"), siteShortName));
+            }
             JSONArray result = new JSONArray();  // Wrap the result in an array to be consistent with the code elsewhere
             result.add(groupJSON);
 

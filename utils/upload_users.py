@@ -10,6 +10,9 @@ URL = 'http://localhost:8080/alfresco/s/api/people'
 # URL = 'http://alfresco.example.org:8080/alfresco/s/api/people'
 N_USERS = 3
 SITE_SHORT_NAME = 'swsdp'
+#GROUP = 'SiteManager'
+#GROUP = 'SiteCollaborator'
+#GROUP = 'SiteContributer'
 GROUP = 'SiteConsumer'
 
 users = [
