@@ -11,7 +11,7 @@ angular
   .factory('personService', ['$http', personService])
 
 function personService ($http) {
-  var blankImageUrl = 'assets/img/avatars/blank-profile-picture.png'
+  var blankImageUrl = 'assets/img/avatars/blank-profile-picture-50x50.png'
   return {
     addExternalPerson: addExternalPerson,
     getAvatarUrlFromRef: getAvatarUrlFromRef,

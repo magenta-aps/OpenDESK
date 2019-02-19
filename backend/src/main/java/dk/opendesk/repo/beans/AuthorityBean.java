@@ -78,7 +78,7 @@ public class AuthorityBean {
         json.put("fullName", fullName);
         String displayName = authorityService.getAuthorityDisplayName(fullName);
         json.put("displayName", displayName);
-        String avatar = "assets/img/avatars/blank-profile-picture.png";
+        String avatar = "assets/img/avatars/blank-profile-picture-50x50.png";
         json.put("avatar", avatar);
         return json;
     }

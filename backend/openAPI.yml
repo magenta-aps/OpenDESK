@@ -1703,7 +1703,7 @@ definitions:
           example: Center for Skoler
         avatar:
           type: string
-          example: assets/img/avatars/blank-profile-picture.png
+          example: assets/img/avatars/blank-profile-picture-50x50.png
   Node:
     allOf:
     - $ref: "#/definitions/NodeType"

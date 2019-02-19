@@ -199,7 +199,7 @@ public class PersonBean {
             avatar = "/alfresco/s/api/node/workspace/SpacesStore/" + avatarNodeRef.getId() + "/content";
         }
         else
-            avatar = "assets/img/avatars/blank-profile-picture.png";
+            avatar = "assets/img/avatars/blank-profile-picture-50x50.png";
         json.put("avatar", avatar);
 
         boolean isAdmin = authorityService.hasAdminAuthority();
