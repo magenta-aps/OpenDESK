@@ -17,6 +17,8 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
   vm.application = null
   vm.branches = []
   vm.selectedBranch = null
+  vm.selectedFlow = null
+  vm.selectedYear = null
 
     $scope.currentAppPage = $stateParams.currentAppPage || 'application';
 
@@ -49,24 +51,9 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
           vm.branches = response
       })
   }
+
     vm.status = '  ';
     vm.customFullscreen = false;
-
-    vm.showAlert = function(ev) {
-        // Appending dialog to document.body to cover sidenav in docs app
-        // Modal dialogs should fully cover application
-        // to prevent interaction outside of dialog
-        $mdDialog.show(
-            $mdDialog.alert()
-                .parent(angular.element(document.querySelector('#popupContainer')))
-                .clickOutsideToClose(true)
-                .title('This is an alert title')
-                .textContent('You can specify some description text in here.')
-                .ariaLabel('Alert Dialog Demo')
-                .ok('Got it!')
-                .targetEvent(ev)
-        );
-    };
 
     vm.moveApp = function() {
         $mdDialog.show({
@@ -77,25 +64,23 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
                     .then(function (response) {
                         vm.branches = response
                     })
+                vm.activeWorkflows
+                fundService.getActiveWorkflows()
+                    .then(function (response) {
+                        vm.activeWorkflows = response
+                    })
+                vm.years = []
+                vm.getYears = function() {
+                    var currentYear = (new Date()).getFullYear(), years = []
+                    for (var i=currentYear-10; i<currentYear + 11; i++) {
+                        vm.years.push(i)
+                    }
+                    return years
+                }
+                vm.getYears()
             },
             controllerAs: 'vm',
-            template:
-            '<md-dialog>' +
-            ' <md-dialog-content>' +
-            ' <span class="md-headline">Flyt ansøgninger</span>' +
-            ' <div layout="column" layout-align="center center" style="width:100%;">' +
-            ' <md-select placeholder="Flow" ng-model="vm.selectedBranch" ng-model-options="{trackBy: $value.nodeID}">' +
-            '   <md-option ng-repeat="branch in vm.branches" >\n' +
-            '{{branch.title}}\n' +
-            '</md-option>' +
-            '</md-select>' +
-            ' <md-button class="md-primary md-raised" style="width: 90%;">Flow</md-button>' +
-            ' <md-button class="md-primary md-raised" style="width: 90%;">BANKOMRÅDE</md-button>' +
-            ' <md-button class="md-primary md-raised" style="width: 90%;">BUDGETÅR</md-button>' +
-            ' </div>' +
-            ' </md-dialog-content>' +
-            // ' <md-dialog-actions></md-dialog-actions>' +
-            ' </md-dialog>',
+            template: require('./components/moveApp.html'),
             parent: angular.element(document.body),
             clickOutsideToClose:true,
         })
