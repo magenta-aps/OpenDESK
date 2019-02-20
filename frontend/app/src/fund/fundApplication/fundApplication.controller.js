@@ -15,7 +15,10 @@ angular
 function FundApplicationController ($scope, $stateParams, fundService, $mdDialog) {
   var vm = this
   vm.application = null
-  $scope.currentAppPage = $stateParams.currentAppPage || 'application';
+  vm.branches = []
+  vm.selectedBranch = null
+
+    $scope.currentAppPage = $stateParams.currentAppPage || 'application';
 
   activate()
 
@@ -40,6 +43,11 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
         })
       }
     })
+
+    fundService.getBranches()
+      .then(function (response) {
+          vm.branches = response
+      })
   }
     vm.status = '  ';
     vm.customFullscreen = false;
@@ -60,14 +68,27 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
         );
     };
 
-    vm.showAdvanced = function(ev) {
-        console.log('showAdvanced');
+    vm.moveApp = function() {
         $mdDialog.show({
-            controller: DialogController,
-            template: '<md-dialog>' +
+            controller: function () {
+                var vm = this
+                vm.branches = []
+                fundService.getBranches()
+                    .then(function (response) {
+                        vm.branches = response
+                    })
+            },
+            controllerAs: 'vm',
+            template:
+            '<md-dialog>' +
             ' <md-dialog-content>' +
             ' <span class="md-headline">Flyt ansøgninger</span>' +
             ' <div layout="column" layout-align="center center" style="width:100%;">' +
+            ' <md-select placeholder="Flow" ng-model="vm.selectedBranch" ng-model-options="{trackBy: $value.nodeID}">' +
+            '   <md-option ng-repeat="branch in vm.branches" >\n' +
+            '{{branch.title}}\n' +
+            '</md-option>' +
+            '</md-select>' +
             ' <md-button class="md-primary md-raised" style="width: 90%;">Flow</md-button>' +
             ' <md-button class="md-primary md-raised" style="width: 90%;">BANKOMRÅDE</md-button>' +
             ' <md-button class="md-primary md-raised" style="width: 90%;">BUDGETÅR</md-button>' +
@@ -75,6 +96,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
             ' </md-dialog-content>' +
             // ' <md-dialog-actions></md-dialog-actions>' +
             ' </md-dialog>',
+            parent: angular.element(document.body),
             clickOutsideToClose:true,
         })
     };
