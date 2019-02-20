@@ -20,7 +20,7 @@ function SiteMemberController ($scope, $stateParams, $mdDialog, siteService, gro
   vm.openMemberInfo = groupService.openMemberInfo
   vm.loadMembers = loadMembers
   vm.skipCount = 0,
-  vm.maxItems = 2, // Set to a low number for testing, but use "10" for production
+  vm.maxItems = 10, // Set to a low number for testing, but use "10" for production
   vm.paginateMembersBackward = paginateMembersBackward,
   vm.paginateMembersForward = paginateMembersForward,
   vm.editSiteGroups = editSiteGroups

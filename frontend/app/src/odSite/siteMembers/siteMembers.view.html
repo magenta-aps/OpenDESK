@@ -20,7 +20,7 @@
 					<md-list-item class="md-2-line" ng-repeat="member in group.members | orderBy: 'displayName'" ng-click="vm.openMemberInfo(member)">
 						<img http-src="{{member.avatar}}" class="md-avatar" alt="{{ member.displayName }}" />
 						<div class="md-list-item-text">
-							<h3>{{ member.displayName }}</h3>
+							<h3>{{ member.displayName }} <span style="color: #b7b7b7;">({{ member.userName }})</span></h3>
 							<p>{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}</p>
 						</div>
 					</md-list-item>
@@ -30,11 +30,11 @@
 
 			<md-list ng-if="!group.collapsed">
 
-				<md-list-item class="md-2-line" ng-repeat="member in group.members | orderBy: 'displayName'" ng-click="vm.openMemberInfo(member)">
+				<md-list-item class="md-2-line" ng-repeat="member in group.members | orderBy: 'topAuthority'" ng-click="vm.openMemberInfo(member)">
 					<img http-src="{{member.avatar}}" class="md-avatar" alt="{{ member.displayName }}" />
 					<div class="md-list-item-text">
-						<h3>{{ member.displayName }}</h3>
-						<p>{{'SITES.' + vm.site.type + '.GROUPS.' + group.shortName | translate}}</p>
+						<h3>{{ member.displayName }} <span style="color: #b7b7b7;">({{ member.userName }})</span></h3>
+						<p>{{ member.topAuthority }}</p>
 					</div>
 				</md-list-item>
 
@@ -49,7 +49,7 @@
 
 			<span flex></span>
 
-			<md-button ng-disabled="true" ng-click="vm.paginateMembersBackward()" aria-label="{{'MEMBER.PAGINATE_BACKWARD_LABEL' | translate}}">{{'MEMBER.PAGINATE_BACKWARD' | translate}}</md-button>
+			<md-button ng-disabled="false" ng-click="vm.paginateMembersBackward()" aria-label="{{'MEMBER.PAGINATE_BACKWARD_LABEL' | translate}}">{{'MEMBER.PAGINATE_BACKWARD' | translate}}</md-button>
 			<md-button ng-disabled="false" ng-click="vm.paginateMembersForward()" aria-label="{{'MEMBER.PAGINATE_FORWARD_LABEL' | translate}}">{{'MEMBER.PAGINATE_FORWARD' | translate}}</md-button>
 	
 			<md-button ng-if="vm.permissions.isManager" class="md-primary md-icon-button" ng-click="vm.editSiteGroups($event)" aria-label="Tilføj gruppemedlemmer">

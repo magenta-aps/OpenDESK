@@ -322,6 +322,7 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   function getUsers (siteShortName, maxItems, skipCount) {
     return $http.get(`/alfresco/service/site/${siteShortName}/users`, {
       params: {
+        flatten: true,
         maxItems: maxItems,
         skipCount: skipCount
       }
