@@ -177,9 +177,9 @@ public class AuthorityBean {
                     String[] s = name.split("_");
                     return SiteGroup.valueOf(s[s.length - 1]);
                 })
-                .reduce(SiteGroup.SiteConsumer, (siteGroup1, siteGroup2) -> {
-                    return siteGroup1.ordinal() < siteGroup2.ordinal() ? siteGroup2 : siteGroup1;
-                })
+                .reduce(SiteGroup.SiteConsumer, (siteGroup1, siteGroup2) ->
+                    siteGroup1.ordinal() < siteGroup2.ordinal() ? siteGroup2 : siteGroup1
+                )
                 .toString();
     }
 }

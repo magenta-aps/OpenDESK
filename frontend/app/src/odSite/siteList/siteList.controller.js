@@ -21,12 +21,10 @@ import siteInfoTemplate from './siteInfo.view.html'
 
 angular
   .module('openDeskApp.site')
-  .controller('SiteListController', ['$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'personService',
-    'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'groupService', 'headerService', 'alfrescoNodeService',
-    'translateService', SiteListController])
+  .controller('SiteListController', ['$window', '$scope', '$mdDialog', '$interval', '$translate', 'siteService', 'personService', 'sessionService', 'APP_BACKEND_CONFIG', 'browserService', 'groupService', 'headerService', 'alfrescoNodeService', 'translateService', SiteListController])
 
-function SiteListController ($scope, $mdDialog, $interval, $translate, siteService, personService, sessionService,
-  APP_BACKEND_CONFIG, browserService, groupService, headerService, alfrescoNodeService, translateService) {
+function SiteListController ($window, $scope, $mdDialog, $interval, $translate, siteService, personService, sessionService, APP_BACKEND_CONFIG, browserService, groupService, headerService, alfrescoNodeService, translateService) {
+
   var vm = this
 
   vm.cancelDialog = cancelDialog
@@ -37,6 +35,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   vm.currentDialogSite = ''
   vm.currentDialogTitle = ''
   vm.deleteSite = deleteSite
+  vm.saveTableOrderToStorage = saveTableOrderToStorage
   vm.deleteSiteDialog = deleteSiteDialog
   vm.exactMatchFilter = exactMatchFilter
   vm.infoSiteDialog = infoSiteDialog
@@ -65,9 +64,10 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
   vm.toggleFavourite = toggleFavourite
   vm.toggleFilters = toggleFilters
   vm.getFavouriteIcon = getFavouriteIcon
+  vm.mdOrder = "title"
 
   $scope.reverse = false
-  $scope.order = 'title'
+  $scope.order = "title"
 
   activate()
 
@@ -88,6 +88,7 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
     findSites()
     getSites()
     getOrganizationalCenters()
+    readTableOrderFromStorage()
   }
 
   function exactMatchFilter (project) {
@@ -122,6 +123,16 @@ function SiteListController ($scope, $mdDialog, $interval, $translate, siteServi
           'displayName': 'Alle'
         })
       })
+  }
+
+  function saveTableOrderToStorage(tableOrderValue) {
+    $window.localStorage.setItem('tableOrderValue', tableOrderValue);
+    // console.log("saveTableOrderToStorage: " + localStorage.getItem("tableOrderValue"));
+  }
+
+  function readTableOrderFromStorage(tableOrderValue) {
+    $scope.order = $window.localStorage.getItem("tableOrderValue");
+    // console.log("readTableOrderFromStorage: " + $scope.order);
   }
 
   function deleteSiteDialog (project, event) {
