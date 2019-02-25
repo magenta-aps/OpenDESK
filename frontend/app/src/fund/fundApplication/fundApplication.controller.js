@@ -46,10 +46,6 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
       }
     })
 
-    fundService.getBranches()
-      .then(function (response) {
-          vm.branches = response
-      })
   }
 
     vm.status = '  ';
@@ -57,28 +53,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
 
     vm.moveApp = function() {
         $mdDialog.show({
-            controller: function () {
-                var vm = this
-                vm.branches = []
-                fundService.getBranches()
-                    .then(function (response) {
-                        vm.branches = response
-                    })
-                vm.activeWorkflows
-                fundService.getActiveWorkflows()
-                    .then(function (response) {
-                        vm.activeWorkflows = response
-                    })
-                vm.years = []
-                vm.getYears = function() {
-                    var currentYear = (new Date()).getFullYear(), years = []
-                    for (var i=currentYear-10; i<currentYear + 11; i++) {
-                        vm.years.push(i)
-                    }
-                    return years
-                }
-                vm.getYears()
-            },
+            controller: DialogController,
             controllerAs: 'vm',
             template: require('./components/moveApp.html'),
             parent: angular.element(document.body),
@@ -88,6 +63,31 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
 
 
     function DialogController($scope, $mdDialog) {
+        var vm = this
+        vm.activeWorkflows = []
+        vm.branches = []
+        vm.years = []
+
+        // Fetch data for selectors:
+        fundService.getActiveWorkflows()
+            .then(function (response) {
+                vm.activeWorkflows = response
+            })
+        fundService.getBranches()
+            .then(function (response) {
+                vm.branches = response
+            })
+        // TODO: Get time range from data
+        vm.getYears = function() {
+            var currentYear = (new Date()).getFullYear(), years = []
+            for (var i=currentYear-10; i<currentYear + 11; i++) {
+                vm.years.push(i)
+            }
+            return years
+        }
+        vm.getYears()
+
+        // Methods for button actions:
         $scope.hide = function() {
             $mdDialog.hide();
         };
