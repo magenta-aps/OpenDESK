@@ -168,7 +168,7 @@ public class AuthorityBean {
     /**
      * E.g. if the user is a member of both SiteManager and SiteCollaborator then SiteManager will be returned
      */
-    public String getTopAuthorityForUser(String userName, String siteShortName) {
+    public SiteGroup getTopAuthorityForUser(String userName, String siteShortName) {
         Set<String> authorities = authorityService.getAuthoritiesForUser(userName);
 
         return authorities.stream()
@@ -179,7 +179,6 @@ public class AuthorityBean {
                 })
                 .reduce(SiteGroup.SiteConsumer, (siteGroup1, siteGroup2) ->
                     siteGroup1.ordinal() < siteGroup2.ordinal() ? siteGroup2 : siteGroup1
-                )
-                .toString();
+                );
     }
 }

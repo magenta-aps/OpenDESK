@@ -1,3 +1,11 @@
+//
+// Copyright (c) 2017-2018, Magenta ApS
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+
 package dk.opendesk.repo.utils;
 
 import org.springframework.extensions.surf.util.Pair;
@@ -25,7 +33,7 @@ public class Pager {
 
     public static boolean getFlatten(Map<String, String> urlQueryParams) {
         String flatten = urlQueryParams.get(FLATTEN);
-        return flatten != null && Boolean.parseBoolean(flatten);
+        return Boolean.parseBoolean(flatten);
     }
 
     public static <V> Pair<List<V>, Integer> pageResult(Set<V> set, int maxItems, int skipCount) {

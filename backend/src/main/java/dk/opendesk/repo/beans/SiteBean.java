@@ -9,6 +9,7 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
+import dk.opendesk.repo.utils.SiteGroup;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
@@ -781,7 +782,9 @@ public class SiteBean {
             groupJSON.put("totalMembersCount", membersAndTotalCount.getSecond());
             for (Object m : membersAndTotalCount.getFirst()) {
                 JSONObject member = (JSONObject) m;
-                member.put("topAuthority", authorityBean.getTopAuthorityForUser(member.getString("userName"), siteShortName));
+                SiteGroup siteGroup = authorityBean.getTopAuthorityForUser(member.getString("userName"), siteShortName);
+                member.put("topAuthority", siteGroup.toString());
+                member.put("authorityOrdinal", siteGroup.ordinal());
             }
             JSONArray result = new JSONArray();  // Wrap the result in an array to be consistent with the code elsewhere
             result.add(groupJSON);
