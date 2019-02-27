@@ -30,7 +30,7 @@
 
 			<md-list ng-if="!group.collapsed">
 
-				<md-list-item class="md-2-line" ng-repeat="member in group.members | orderBy: 'topAuthority'" ng-click="vm.openMemberInfo(member)">
+				<md-list-item class="md-2-line" ng-repeat="member in group.members | orderBy: '-authorityOrdinal'" ng-click="vm.openMemberInfo(member)">
 					<img http-src="{{member.avatar}}" class="md-avatar" alt="{{ member.displayName }}" />
 					<div class="md-list-item-text">
 						<h3>{{ member.displayName }} <span style="color: #b7b7b7;">({{ member.userName }})</span></h3>
