@@ -1,0 +1,7 @@
+
+<span class="discussion-back" ng-click="vm.viewDiscussions()">
+            <md-icon>arrow_back</md-icon> {{'DISCUSSIONS.DISCUSSIONS' | translate }}
+        </span>
+<h1 class="discussion-title md-display-1">{{vm.selectedDiscussion.title}}</h1>
+
+<conversation ng-if="vm.discussionId" discussion-id="vm.discussionId" site-short-name="vm.siteShortName"></conversation>

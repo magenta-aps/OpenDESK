@@ -1,5 +1,4 @@
 <breadcrumb paths=""></breadcrumb>
-
 <div ng-if="vm.isLoading" layout="row" layout-sm="column" layout-align="space-around" flex>
     <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
@@ -22,13 +21,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="discussion in vm.discussions | orderBy: '-lastReplyOn' 
+            <tr ng-repeat="discussion in vm.discussions | orderBy: '-lastReplyOn'
                         | filter:{isSubscribed: vm.searchSubscribed, author: {username: vm.searchUser}}">
                 <td class="icon">
                     <i class="material-icons">chat_bubble_outline</i>
                 </td>
                 <td>
-                    <a class="od-filebrowser-link od-secondary overflow" ng-href="{{vm.viewThread(discussion)}}" ng-click="vm.getReplies(discussion)">
+                    <!-- <a class="od-filebrowser-link od-secondary overflow" ng-href="{{vm.viewThread(discussion)}}" ng-click="vm.getReplies(discussion)"> -->
+                    <a class="od-filebrowser-link od-secondary overflow" ng-href="{{vm.viewThread(discussion)}}">
                         <h3>{{discussion.title}}</h3>
                         <span>{{discussion.author.firstName}} {{discussion.author.lastName}}</span>
                     </a>
