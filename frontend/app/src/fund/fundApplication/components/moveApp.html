@@ -1,16 +1,13 @@
 <md-dialog>
      <md-dialog-content>
-         <span class="md-headline">Flyt ansøgninger</span>
+         <span class="md-headline">Flyt ansøgninger </span>
          <div class="selection-container">
-             <!--TODO: move ng-if logic to javascript-->
-             <div ng-if="vm.selectedBranch == null && vm.selectedYear == null"
-                  layout="row"
+             <!--TODO: Set selectors' initial values to values of application-->
+             <div layout="row"
                   layout-align="space-between center">
                  <span>Flow</span>
-                 <md-select placeholder="Intet valgt"
-                            ng-model="vm.selectedFlow"
+                 <md-select ng-model="vm.selectedFlow"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-value="null">Intet valgt</md-option>
                      <md-option ng-repeat="workflow in vm.activeWorkflows"
                                 ng-value="workflow.title">
                          {{workflow.title}}
@@ -18,30 +15,14 @@
                  </md-select>
              </div>
 
-             <!--TODO: Implement selector for Central and Lokal-->
-             <div ng-if="vm.selectedFlow == 'Central'"
-                  layout="row"
-                  layout-align="space-between center">
-                 <span>Proof of concept: Central</span>
-                 <md-select placeholder="Intet valgt"
-                            ng-model="vm.selectedBranch"
-                            ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-value="null">Intet valgt</md-option>
-                     <md-option ng-repeat="branch in vm.branches"
-                                ng-value="branch.title">
-                         {{branch.title}}
-                     </md-option>
-                 </md-select>
-             </div>
-
-             <div ng-if="vm.selectedFlow == null && vm.selectedYear == null"
+             <!--TODO: Remove Central from list-->
+             <div ng-if="vm.selectedFlow == 'Lokal'"
                   layout="row"
                   layout-align="space-between center">
                  <span>Bankområde</span>
                  <md-select placeholder="Intet valgt"
                             ng-model="vm.selectedBranch"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-value="null">Intet valgt</md-option>
                      <md-option ng-repeat="branch in vm.branches"
                                 ng-value="branch.title">
                          {{branch.title}}
@@ -50,14 +31,25 @@
              </div>
 
 
-             <div ng-if="vm.selectedFlow == null && vm.selectedBranch == null"
-                  layout="row"
+             <div layout="row"
+                  layout-align="space-between center">
+                 <span>Stadie</span>
+                 <md-select placeholder="Intet valgt"
+                            ng-model="vm.selectedYear"
+                            ng-model-options="{trackBy: $value.nodeID}">
+                     <md-option ng-repeat="year in vm.years"
+                                ng-value="year">
+                         Stadie{{year}}
+                     </md-option>
+                 </md-select>
+             </div>
+
+             <div layout="row"
                   layout-align="space-between center">
                  <span>Budgetår</span>
                  <md-select placeholder="Intet valgt"
                             ng-model="vm.selectedYear"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-value="null">Intet valgt</md-option>
                      <md-option ng-repeat="year in vm.years"
                                 ng-value="year">
                          {{year}}
@@ -66,7 +58,15 @@
              </div>
          </div>
      </md-dialog-content>
-    <md-dialog-actions>
+    <md-dialog-actions layout="row">
     <!--TODO: Save and cancel buttons-->
+    <!--TODO: First update application values on submit-->
+        <md-button ng-click="vm.cancel()">
+            Annuller
+        </md-button>
+        <span flex></span>
+        <md-button ng-click="vm.apply()" class="md-primary">
+            Flyt ansøgning
+        </md-button>
     </md-dialog-actions>
 </md-dialog>

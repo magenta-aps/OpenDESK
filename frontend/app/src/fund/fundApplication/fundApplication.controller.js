@@ -13,18 +13,18 @@ angular
   .controller('FundApplicationController', ['$scope', '$stateParams', 'fundService', '$mdDialog', FundApplicationController])
 
 function FundApplicationController ($scope, $stateParams, fundService, $mdDialog) {
-  var vm = this
-  vm.application = null
-  vm.branches = []
-  vm.selectedBranch = null
-  vm.selectedFlow = null
-  vm.selectedYear = null
+    var vm = this
+    vm.application = null
+    vm.branches = []
+    vm.selectedBranch = null
+    vm.selectedFlow = null
+    vm.selectedYear = null
 
     $scope.currentAppPage = $stateParams.currentAppPage || 'application';
 
-  activate()
+    activate()
 
-  function activate() {
+    function activate() {
     fundService.getApplication($stateParams.applicationID)
     .then(function (response) {
       vm.application = response
@@ -46,7 +46,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
       }
     })
 
-  }
+    }
 
     vm.status = '  ';
     vm.customFullscreen = false;
@@ -62,11 +62,15 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
     };
 
 
-    function DialogController($scope, $mdDialog) {
+    function DialogController($scope, $mdDialog, $mdToast) {
         var vm = this
         vm.activeWorkflows = []
         vm.branches = []
         vm.years = []
+        //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
+        vm.showToast = function() {
+            $mdToast.showSimple("hej")
+        }
 
         // Fetch data for selectors:
         fundService.getActiveWorkflows()
@@ -88,16 +92,17 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
         vm.getYears()
 
         // Methods for button actions:
-        $scope.hide = function() {
-            $mdDialog.hide();
-        };
+        // $scope.hide = function() {
+        //     $mdDialog.hide();
+        // };
 
-        $scope.cancel = function() {
+        vm.cancel = function() {
             $mdDialog.cancel();
         };
 
-        $scope.answer = function(answer) {
-            $mdDialog.hide(answer);
+        vm.apply = function(answer) {
+            $mdDialog.hide(answer)
+                .then(vm.showToast())
         };
     }
 }
