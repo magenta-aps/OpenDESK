@@ -69,6 +69,23 @@ importAll(
   require.context('./', true, /.*\.scss$/)
 )
 
+// Import extra modules
+var modulesContext = require.context('./modules/', true, /^.*\.module\.js$/)
+var modules = ['openDeskApp']
+modulesContext.keys().forEach(function (key) {
+  var regex = /^(.*\/)(.*)\.module\.js$/
+  var found = key.replace(regex, '$2')
+  modules.push(found)
+})
+
+importAll(modulesContext)
+
+// Then import all other js files
+importAll(
+  // including subdirectories, find all *.js files except those matching *.module.js
+  require.context('./modules/', true, /^(?!.*\.module\.js$).*\.js$/)
+)
+
 angular.element(document).ready(function () {
-  angular.bootstrap(document, ['openDeskApp'])
+  angular.bootstrap(document, modules)
 })
