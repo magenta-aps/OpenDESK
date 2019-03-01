@@ -10,9 +10,9 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, $state, fundService) {
+function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService) {
   var vm = this
   $scope.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application'
@@ -26,6 +26,8 @@ function FundApplicationController ($scope, $stateParams, $state, fundService) {
     fundService.getApplication($stateParams.applicationID)
     .then(function (response) {
       $scope.application = response
+      browserService.setTitle(response.title)
+      headerService.setTitle(response.title)
       // if we have a state in store, but the currently loaded application
       // doesn't have state information, clear both state and workflow values
       // from the store

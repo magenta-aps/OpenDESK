@@ -10,9 +10,9 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationListController', ['fundService', '$scope', '$state', '$stateParams', FundApplicationListController])
+  .controller('FundApplicationListController', ['fundService', '$scope', '$state', '$stateParams', 'browserService', 'headerService', FundApplicationListController])
 
-function FundApplicationListController (fundService, $scope, $state, $stateParams) {
+function FundApplicationListController (fundService, $scope, $state, $stateParams, browserService, headerService) {
 
   var vm = this
   vm.order = 'name'
@@ -51,6 +51,9 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
       $scope.$parent.state = response
       $scope.$parent.applications = response.applications
       $state.go('fund.workflow', { workflowID: $scope.$parent.workflow.nodeID, stateID: response.nodeID })
+      var title = $scope.$parent.workflow.title + ' - ' + response.title
+      browserService.setTitle(title)
+      headerService.setTitle(title)
     })
 
     fundService.getBranches()
