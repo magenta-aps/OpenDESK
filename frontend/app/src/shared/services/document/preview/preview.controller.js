@@ -8,11 +8,12 @@
 
 angular
   .module('openDeskApp')
-  .controller('PreviewController', ['$scope', '$mdDialog', 'plugin', PreviewController])
+  .controller('PreviewController', ['$scope', '$mdDialog', 'plugin', 'pdfjsViewer', PreviewController])
 
-function PreviewController ($scope, $mdDialog, plugin) {
+function PreviewController ($scope, $mdDialog, plugin, pdfjsViewer) {
   var vm = this
   vm.plugin = plugin
+  vm.pdfjsViewer = pdfjsViewer
 
   $scope.cancel = function () {
     $mdDialog.cancel()
@@ -20,4 +21,5 @@ function PreviewController ($scope, $mdDialog, plugin) {
 
   if (plugin.init)
     plugin.init()
+    pdfjsViewer.init()
 }

@@ -1,7 +1,18 @@
-<iframe id="pdf"
-        name="pdf"
-        ng-src="{{ $ctrl.plugin.contentUrl }}"
-        ng-style="iframeStyle"
-        style="width:100%;height:{{ $ctrl.plugin.height }}"
-        wmode="transparent">
-</iframe>
+<div class="pdf-wrapper">
+    <pdfjs-viewer src="{{ $ctrl.plugin.contentUrl }}"></pdfjs-viewer>
+</div>
+
+<style>
+    .pdf-wrapper {
+        background-color: #eee;
+        display: block;
+        min-height: {{ $ctrl.plugin.height }};
+        width: 100%;
+    }
+
+    .pdf-wrapper pdfjs-viewer {
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+</style>
