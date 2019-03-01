@@ -23,7 +23,7 @@ function ApplicationBlockController ($scope) {
   vm.origValue = null
 
   function getTemplate (type) {
-    return '/app/src/fund/fundApplication/components/fields/' + type + '.html'
+    return '/app/src/fund/fundApplicationBlocks/components/fields/' + type + '.html'
   }
 
   function editField () {

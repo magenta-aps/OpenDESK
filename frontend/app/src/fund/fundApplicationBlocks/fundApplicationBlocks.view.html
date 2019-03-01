@@ -1,4 +1,6 @@
+<!-- loop over fields coming from the application -->
 <application-block ng-repeat="(block, idx) in application" block="application[block]"></application-block>
+<!-- manually render card for assigned amount -->
 <md-card>
   <md-card-title>
     <label for="od-fund-approved-amount"><strong>Indstil beløb</strong></label>
@@ -8,6 +10,7 @@
     {{application.approved_amount}}
   </md-card-content>
 </md-card>
+<!-- manually render card for board meeting vote -->
 <md-card>
   <md-card-title>
     <label for="od-fund-approved-amount"><strong>Udvælg til bestyrelsesmøde</strong></label>
@@ -18,3 +21,20 @@
     </div>
   </md-card-content>
 </md-card>
+<!-- manually render card for discussion -->
+<!-- <md-card>
+  <md-card-title>
+    <strong>Kommentarer</strong>
+  </md-card-title>
+  <md-card-content>
+    {{ vm.selectedDiscussion }}
+  </md-card-content>
+</md-card>
+<md-card>
+  <md-card-title>
+    <strong>Kommentarer</strong>
+  </md-card-title>
+  <md-card-content>
+    <ng-include src="'/app/src/odDiscussion/view/conversation.html'"></ng-include>
+  </md-card-content>
+</md-card> -->
