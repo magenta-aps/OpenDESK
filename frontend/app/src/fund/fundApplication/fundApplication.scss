@@ -1,14 +1,43 @@
 .od-fund-app-wrapper {
-  column-count:2;
-  column-gap:0;
-  margin:0 -8px;
+  > md-card-content {
+    column-count:2;
+    column-gap:0;
+    margin:0 -8px;
+    application-block {
+      md-card {
+        margin-top:0;
+        margin-bottom:16px;
+      }
+    }
+  }
   input {
     background-color:#f4f4f4
   }
-  application-block {
-    md-card {
-      margin-top:0;
-      margin-bottom:16px;
+  md-input-container {
+    input,
+    span {
+      padding: 2px 2px 1px;
+      margin:0 -2px;
+      display:block;
+      line-height:26px;
+      height:auto;
+    }
+    span {
+      border-bottom:1px solid transparent;
+    }
+    .md-errors-spacer {
+      display:none;
+    }
+  }
+  .application-title {
+    md-input-container {
+      input,
+      span {
+        line-height: 32px;
+      }
+    }
+    .md-subhead {
+      color:#808080;
     }
   }
 }
@@ -22,21 +51,5 @@
   &,
   :last-child {
     margin-right:0;
-  }
-}
-.od-fund-edit-field {
-  display:block;
-  md-input,
-  span {
-    width:auto;
-    padding: 2px 2px 1px;
-    display:block;
-    line-height:26px;
-  }
-  span {
-    border-bottom:1px solid transparent;
-  }
-  .md-errors-spacer {
-    display:none;
   }
 }

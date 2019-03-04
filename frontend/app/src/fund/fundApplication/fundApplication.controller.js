@@ -66,25 +66,23 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   }
 
   function editApplication() {
-    vm.origValue = $scope.application
+    vm.origValue = JSON.parse(JSON.stringify($scope.application)) // make a copy instead of passing a reference
     fundApplicationEditing.set(true)
   }
 
   function saveApplication () {
     fundApplicationEditing.set(false)
 
-    // fundService.updateApplication($scope.application.nodeID, {
-    //   'title': $scope.application.title + ' x '
-    // })
-    // .then(function (response) {
-    //   if (response.status === 'OK') {
-    //     activate()
-    //   }
-    // })
+    fundService.updateApplication($scope.application.nodeID, $scope.application)
+    .then(function (response) {
+      if (response.status === 'OK') {
+        activate()
+      }
+    })
   }
 
   function cancelEditApplication () {
-    $scope.application = vm.origValue
+    $scope.application = JSON.parse(JSON.stringify(vm.origValue))
     fundApplicationEditing.set(false)
   }
 }

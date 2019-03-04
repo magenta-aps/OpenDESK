@@ -3,19 +3,22 @@
 <!-- manually render card for assigned amount -->
 <md-card>
   <md-card-title>
-    <label for="od-fund-approved-amount"><strong>Indstil beløb</strong></label>
+    <md-card-title-text>
+      <label class="md-title" for="od-fund-approved-amount"><strong>Indstil beløb</strong></label>
+    </md-card-title-text>
   </md-card-title>
   <md-card-content>
     <md-input-container>
       <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount"/>
-      {{application.approved_amount}}
     </md-input-container>
   </md-card-content>
 </md-card>
 <!-- manually render card for board meeting vote -->
 <md-card>
   <md-card-title>
-    <label for="od-fund-approved-amount"><strong>Udvælg til bestyrelsesmøde</strong></label>
+    <md-card-title-text>
+      <label class="md-title" for="od-fund-approved-amount"><strong>Udvælg til bestyrelsesmøde</strong></label>
+    </md-card-title-text>
   </md-card-title>
   <md-card-content>
     <div class="od-fund-board-meeting-switch" flex layout="row" layout-align="start center" layout-margin>
