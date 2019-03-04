@@ -25,6 +25,7 @@ angular.module('openDeskApp.fund')
       getNewApplications : getNewApplications,
       getApplicationsByBranch: getApplicationsByBranch,
       getApplicationsByBranchAndBudget: getApplicationsByBranchAndBudget,
+      updateApplication: updateApplication,
       setApplicationState : setApplicationState,
       setApplicationBranch: setApplicationBranch,
       setApplicationBudget: setApplicationBudget,
@@ -35,7 +36,7 @@ angular.module('openDeskApp.fund')
       createBudget: createBudget,
       createBudgetYear: createBudgetYear,
       getBudget: getBudget,
-      
+
       resetDemoData : resetDemoData
     }
 
@@ -130,6 +131,14 @@ angular.module('openDeskApp.fund')
       })
     }
 
+    //Updates fields in the application depending on the fields defined in the payload
+    function updateApplication(applicationID, payload) {
+      return $http.post(`/alfresco/service/foundation/application/${applicationID}`, payload)
+      .then(function (response) {
+        return response.data
+      })
+    }
+
     //Sets the state of the specified application
     function setApplicationState(applicationID, stateID) {
       var payload = {"state": {"nodeID": "${stateID}"}}
@@ -148,7 +157,7 @@ angular.module('openDeskApp.fund')
         return response.data
       })
     }
-    
+
     //Sets the budget of the specified application
     function setApplicationBudget(applicationID, budgetID) {
       var payload = {"budget": {"nodeID": "${budgetID}"}}
