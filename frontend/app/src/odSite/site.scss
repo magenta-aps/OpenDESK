@@ -263,8 +263,6 @@ md-tooltip {
 #details {
   dl {
     margin-bottom: 0;
-    padding-left: .25 * $u;
-    padding-right: .25 * $u;
 
     dd,
     dt {
@@ -281,7 +279,19 @@ md-tooltip {
     dt {
       color: $gray-text-color;
     }
-    
+  }
+
+  md-card md-card-title {
+    padding: 16px;
+  }
+
+  .md-title {
+    margin: 0;
+  }
+
+  md-card-actions {
+    margin: 0;
+    padding: 16px;
   }
 }
 

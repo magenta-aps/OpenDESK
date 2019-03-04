@@ -1001,6 +1001,7 @@
     "PROJECTLINK": "Project link",
     "NO_ACCESS_PROJECT": "You don't have access to this project.",
     "NO_ACCESS_GROUPROOM": "You don't have access to this group room.",
+    "EDIT_DETAILS": "Edit Group Room",
 
     "STATUS": {
       "STATUS": "Status",
