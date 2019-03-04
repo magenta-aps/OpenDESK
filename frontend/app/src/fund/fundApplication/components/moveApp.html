@@ -52,7 +52,7 @@
                             ng-model-options="{trackBy: $value.nodeID}">
                      <md-option ng-repeat="year in self.years"
                                 ng-value="year">
-                         {{year}}
+                         {{year.startDate.substring(0, 4)}} til {{year.endDate.substring(0, 4)}}
                      </md-option>
                  </md-select>
              </div>

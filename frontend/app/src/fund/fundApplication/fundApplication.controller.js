@@ -85,20 +85,12 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
             .then(function (response) {
                 self.branches = response
             })
-        // TODO: Get time range from data
-        self.getYears = function() {
-            var currentYear = (new Date()).getFullYear(), years = []
-            for (var i=currentYear-10; i<currentYear + 11; i++) {
-                self.years.push(i)
-            }
-            return years
-        }
-        self.getYears()
 
-        // Methods for button actions:
-        // $scope.hide = function() {
-        //     $mdDialog.hide();
-        // };
+        fundService.getBudgetYears()
+            .then(function (response) {
+                self.years = response
+                console.log(response)
+            })
 
         self.cancel = function() {
             $mdDialog.cancel();
