@@ -23,6 +23,8 @@ angular.module('openDeskApp.fund')
       getWorkflowState : getWorkflowState,
       getApplication : getApplication,
       getNewApplications : getNewApplications,
+      getApplicationsByBranch: getApplicationsByBranch,
+      setApplicationState : setApplicationState,
       resetDemoData : resetDemoData
     }
 
@@ -87,6 +89,21 @@ angular.module('openDeskApp.fund')
 
     function getNewApplications() {
       return $http.get(`/alfresco/service/foundation/incomming`)
+      .then(function (response) {
+        return response.data
+      })
+    }
+
+    function getApplicationsByBranch(nodeID) {
+      return $http.get(`/alfresco/service/foundation/branch/${nodeID}/applications`)
+      .then(function (response) {
+        return response.data
+      })
+    }
+
+    function setApplicationState(applicationID, stateID) {
+      var payload = {state: {nodeID: stateID}}
+      return $http.post(`/alfresco/service/foundation/application/${applicationID}`, payload)
       .then(function (response) {
         return response.data
       })
