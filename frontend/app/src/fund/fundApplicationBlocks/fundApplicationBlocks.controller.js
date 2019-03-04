@@ -10,8 +10,8 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationBlocksController', ['$scope', '$controller', FundApplicationBlocksController])
+  .controller('FundApplicationBlocksController', ['$scope', FundApplicationBlocksController])
 
-function FundApplicationBlocksController ($scope, $controller) {
+function FundApplicationBlocksController ($scope) {
   // 53e8664e-e1fb-40d0-9104-019d57f06bee
 }

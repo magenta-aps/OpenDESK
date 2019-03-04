@@ -2,6 +2,9 @@
   column-count:2;
   column-gap:0;
   margin:0 -8px;
+  input {
+    background-color:#f4f4f4
+  }
   application-block {
     md-card {
       margin-top:0;
@@ -22,11 +25,16 @@
   }
 }
 .od-fund-edit-field {
-  md-input {
+  display:block;
+  md-input,
+  span {
     width:auto;
+    padding: 2px 2px 1px;
+    display:block;
+    line-height:26px;
   }
   span {
-    padding: 2px 2px 1px;
+    border-bottom:1px solid transparent;
   }
   .md-errors-spacer {
     display:none;

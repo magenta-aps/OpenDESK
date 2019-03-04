@@ -1,12 +1,15 @@
-<ng-template ng-if="field.layout == 'inline'">
-  <strong ng-if="field.label">{{ field.label }}</strong>
-  <span>{{ field.content }}</span>
-</ng-template>
-<ng-template ng-if="field.layout != 'inline'">
-  <div ng-if="field.label">
-    <strong>{{ field.label }}</strong>
-  </div>
-  <div>
+<ng-template ng-controller="ApplicationBlockController">
+  <ng-template ng-if="field.layout == 'inline'">
+    <strong ng-if="field.label">{{ field.label }}</strong>
     <span>{{ field.content }}</span>
-  </div>
+  </ng-template>
+  <ng-template ng-if="field.layout != 'inline'">
+    <div ng-if="field.label">
+      <strong>{{ field.label }}</strong>
+    </div>
+    <div>
+      <span>{{ field.value }}</span>
+    </div>
+  </ng-template>
+  editing: {{ isEditing.get() }}
 </ng-template>

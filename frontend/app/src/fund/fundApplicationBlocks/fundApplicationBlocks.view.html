@@ -1,13 +1,15 @@
 <!-- loop over fields coming from the application -->
-<application-block ng-repeat="(block, idx) in application" block="application[block]"></application-block>
+<application-block ng-repeat="(block, idx) in application.blocks" block="application.blocks[block]"></application-block>
 <!-- manually render card for assigned amount -->
 <md-card>
   <md-card-title>
     <label for="od-fund-approved-amount"><strong>Indstil beløb</strong></label>
   </md-card-title>
   <md-card-content>
-    kr. <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount"/>
-    {{application.approved_amount}}
+    <md-input-container>
+      <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount"/>
+      {{application.approved_amount}}
+    </md-input-container>
   </md-card-content>
 </md-card>
 <!-- manually render card for board meeting vote -->
