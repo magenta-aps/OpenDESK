@@ -34,6 +34,14 @@ md-icon {
   width: 100%;
 }
 
+.no-styling {
+  appearance:none;
+  border:none;
+  margin:0;
+  padding:0;
+  background:transparent;
+}
+
 md-toast {
   .md-error-toast-theme {
     .md-toast-content {

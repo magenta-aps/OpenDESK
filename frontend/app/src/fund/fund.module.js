@@ -47,9 +47,7 @@ function config ($stateProvider, USER_ROLES) {
         controllerAs: 'vm'
       },
       'fundHeader@fund': {
-        template: fundWorkflowStateMenu,
-        controller: 'FundWorkflowStateMenuController',
-        controllerAs: 'vm'
+        template: fundWorkflowStateMenu
       }
     },
     params: {
@@ -75,9 +73,7 @@ function config ($stateProvider, USER_ROLES) {
         controllerAs: 'vm'
       },
       'fundHeader@fund': {
-        template: fundWorkflowStateMenu,
-        controller: 'FundWorkflowStateMenuController',
-        controllerAs: 'vm'
+        template: fundWorkflowStateMenu
       },
       'application@fund.application': {
         template: fundApplicationBlocks,

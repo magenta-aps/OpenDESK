@@ -1,12 +1,25 @@
 .od-fund-app-wrapper {
   > md-card-content {
-    column-count:2;
+    columns:400px 2;
     column-gap:0;
     margin:0 -8px;
+    position:relative;
     application-block {
       md-card {
         margin-top:0;
         margin-bottom:16px;
+      }
+    }
+    md-card {
+      &.expanded {
+        position:absolute;
+        top:0;
+        left:16px;
+        right:16px;
+        z-index:1;
+        .rotate-arrow {
+          transform:rotate(180deg);
+        }
       }
     }
   }

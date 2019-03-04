@@ -24,4 +24,12 @@ function FundController ($scope, browserService, headerService) {
     browserService.setTitle(title)
     headerService.setTitle(title)
   }
+
+  // watch for changes to state, as we need those in FundApplicationController
+  // in order to generate pagination links
+  $scope.$watch('state', function(newVal, oldVal, scope) {
+    if (newVal != oldVal) {
+      $scope.$broadcast('workflowstatechange', newVal)
+    }
+  }, true)
 }

@@ -4,8 +4,11 @@
 <md-card>
   <md-card-title>
     <md-card-title-text>
-      <label class="md-title" for="od-fund-approved-amount"><strong>Indstil beløb</strong></label>
+      <label class="md-title" for="od-fund-approved-amount">Indstil beløb</label>
     </md-card-title-text>
+    <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
+      <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+    </button>
   </md-card-title>
   <md-card-content>
     <md-input-container>
@@ -17,8 +20,11 @@
 <md-card>
   <md-card-title>
     <md-card-title-text>
-      <label class="md-title" for="od-fund-approved-amount"><strong>Udvælg til bestyrelsesmøde</strong></label>
+      <label class="md-title" for="od-fund-approved-amount">Udvælg til bestyrelsesmøde</label>
     </md-card-title-text>
+    <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
+      <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+    </button>
   </md-card-title>
   <md-card-content>
     <div class="od-fund-board-meeting-switch" flex layout="row" layout-align="start center" layout-margin>
@@ -27,15 +33,20 @@
   </md-card-content>
 </md-card>
 <!-- manually render card for discussion -->
-<!-- <md-card>
+<md-card>
   <md-card-title>
-    <strong>Kommentarer</strong>
+    <md-card-title-text>
+      <span class="md-title">Kommentarer</span>
+    </md-card-title-text>
+    <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
+      <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+    </button>
   </md-card-title>
   <md-card-content>
-    {{ vm.selectedDiscussion }}
+    <conversation discussion-id="'53e8664e-e1fb-40d0-9104-019d57f06bee'" site-short-name="swsdp"></conversation>
   </md-card-content>
 </md-card>
-<md-card>
+<!-- <md-card>
   <md-card-title>
     <strong>Kommentarer</strong>
   </md-card-title>

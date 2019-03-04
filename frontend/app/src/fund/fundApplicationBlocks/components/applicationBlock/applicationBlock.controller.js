@@ -16,6 +16,7 @@ function ApplicationBlockController ($scope, fundApplicationEditing) {
   var vm = this
 
   vm.getTemplate = getTemplate
+  vm.toggleExpand = $scope.$parent.vm.toggleExpand
   $scope.isEditing = fundApplicationEditing
 
   function getTemplate (type) {

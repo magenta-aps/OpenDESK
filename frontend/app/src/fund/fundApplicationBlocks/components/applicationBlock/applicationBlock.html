@@ -1,9 +1,9 @@
 <md-card>
   <md-card-title ng-if="vm.block.label">
     <md-card-title-text class="md-title">{{ vm.block.label }}</md-card-title-text>
-    <ng-template ng-if="vm.block.collapsible">
+    <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
       <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
-    </ng-template>
+    </button>
   </md-card-title>
   <md-card-content>
     <div ng-repeat="field in vm.block.fields" ng-include="vm.getTemplate(field.type)" class="od-fund-app-block-field"></div>

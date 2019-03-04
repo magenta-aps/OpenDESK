@@ -13,5 +13,32 @@ angular
   .controller('FundApplicationBlocksController', ['$scope', FundApplicationBlocksController])
 
 function FundApplicationBlocksController ($scope) {
+  var vm = this
+
+  vm.toggleExpand = toggleExpand
   // 53e8664e-e1fb-40d0-9104-019d57f06bee
+
+  function toggleExpand (event) {
+    var block = $(event.target).closest('md-card')
+
+    // clean up previous expanded blocks
+    $('.od-fund-app-wrapper .fund-block-placeholder').remove()
+    $('.od-fund-app-wrapper md-card.expanded').not(block.get(0)).removeClass('expanded')
+
+    // handle newly clicked block
+    if (!block.hasClass('expanded')) {
+      var w = block.get(0).offsetWidth
+      var h = block.get(0).offsetHeight
+      var placeholder = $('<md-card/>', {
+        style: 'width:' + w + 'px;height:' + h + 'px;',
+        'class': 'fund-block-placeholder'
+      })
+      block.before(placeholder)
+      block.addClass('expanded')
+    }
+    else {
+      block.prev('.fund-block-placeholder').remove()
+      block.removeClass('expanded')
+    }
+  }
 }
