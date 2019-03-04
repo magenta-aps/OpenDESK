@@ -10,33 +10,15 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('ApplicationBlockController', ['$scope', ApplicationBlockController])
+  .controller('ApplicationBlockController', ['$scope', 'fundApplicationEditing', ApplicationBlockController])
 
-function ApplicationBlockController ($scope) {
+function ApplicationBlockController ($scope, fundApplicationEditing) {
   var vm = this
 
   vm.getTemplate = getTemplate
-  vm.editField = editField
-  vm.saveField = saveField
-  vm.cancelEdit = cancelEdit
-  vm.isEditing = false
-  vm.origValue = null
+  $scope.isEditing = fundApplicationEditing
 
   function getTemplate (type) {
     return '/app/src/fund/fundApplicationBlocks/components/fields/' + type + '.html'
-  }
-
-  function editField () {
-    vm.origValue = vm.block
-    vm.isEditing = true
-  }
-
-  function saveField () {
-    vm.isEditing = false
-  }
-
-  function cancelEdit () {
-    vm.block = vm.origValue
-    vm.isEditing = false
   }
 }

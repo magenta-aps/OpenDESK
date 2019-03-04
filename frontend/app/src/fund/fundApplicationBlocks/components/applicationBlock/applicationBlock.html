@@ -1,29 +1,18 @@
 <md-card>
-  <md-card-title ng-if="$ctrl.block.label">
-    <strong>{{ $ctrl.block.label }}</strong>
-    <ng-template ng-if="$ctrl.block.collapsible">
+  <md-card-title ng-if="vm.block.label">
+    <strong>{{ vm.block.label }}</strong>
+    <ng-template ng-if="vm.block.collapsible">
       <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
     </ng-template>
   </md-card-title>
   <md-card-content>
-    <div ng-repeat="field in $ctrl.block.fields" ng-include="$ctrl.getTemplate(field.type)" class="od-fund-app-block-field"></div>
+    <div ng-repeat="field in vm.block.fields" ng-include="vm.getTemplate(field.type)" class="od-fund-app-block-field"></div>
     <!-- @TODO: this should probably be moved inside the specific field template -->
-    <div layout="row" layout-align="start center">
-      <md-input-container class="od-fund-edit-field" flex>
-        <input ng-if="$ctrl.isEditing" ng-model="$ctrl.block" type="text">
-        <span ng-if="!$ctrl.isEditing">{{ $ctrl.block }}</span>
+    <!-- <div>
+      <md-input-container class="od-fund-edit-field">
+        <input ng-if="$parent.isEditing" ng-model="vm.block" type="text">
+        <span ng-if="!$parent.isEditing">{{ vm.block }}</span>
       </md-input-container>
-      <md-input-container layout="row" layout-align="end center" flex="shrink">
-        <md-button class="md-icon-button" aria-label="Redigér" ng-click="$ctrl.editField()" ng-if="!$ctrl.isEditing">
-          <md-icon>edit</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Gem" ng-click="$ctrl.saveField()" ng-if="$ctrl.isEditing">
-          <md-icon>done</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Gem" ng-click="$ctrl.cancelEdit()" ng-if="$ctrl.isEditing">
-          <md-icon>undo</md-icon>
-        </md-button>
-      </md-input-container>
-    </div>
+    </div> -->
   </md-card-content>
 </md-card>

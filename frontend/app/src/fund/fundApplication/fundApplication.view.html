@@ -1,9 +1,8 @@
 <!-- top menu -->
 <md-nav-bar>
-  <md-nav-item md-nav-sref="app.page5">Ret ansøgning</md-nav-item>
-  <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: flow</md-nav-item>
-  <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: bankområde</md-nav-item>
-  <md-nav-item md-nav-sref="app.page5">Flyt ansøgning: budgetår</md-nav-item>
+  <md-nav-item ng-if="!isEditing.get()" md-nav-click="vm.editApplication()">Ret ansøgning</md-nav-item>
+  <md-nav-item ng-if="isEditing.get()" md-nav-click="vm.saveApplication()">Gem ansøgning</md-nav-item>
+  <md-nav-item ng-if="isEditing.get()" md-nav-click="vm.cancelEditApplication()">Annuller redigering</md-nav-item>
   <md-nav-item md-nav-click="vm.paginateApps(vm.prevAppId)" ng-if="vm.prevAppId"><md-icon>keyboard_arrow_left</md-icon></md-nav-item>
   <md-nav-item md-nav-click="vm.paginateApps(vm.nextAppId)" ng-if="vm.nextAppId"><md-icon>keyboard_arrow_right</md-icon></md-nav-item>
 </md-nav-bar>
@@ -12,7 +11,6 @@
   <md-nav-bar md-selected-nav-item="currentAppPage">
     <md-nav-item md-nav-sref="fund.application" name="application">Ansøgning</md-nav-item>
     <md-nav-item md-nav-sref="fund.application.contact" name="contact">Kontaktinfo</md-nav-item>
-    <md-nav-item md-nav-sref="fund.application.comments" name="comments">Kommentarer</md-nav-item>
     <md-nav-item md-nav-sref="fund.application.history" name="history">Historik</md-nav-item>
   </md-nav-bar>
   <md-card-title>

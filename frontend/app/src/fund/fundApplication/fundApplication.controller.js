@@ -10,15 +10,22 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'fundApplicationEditing', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService) {
+function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, fundApplicationEditing) {
   var vm = this
+
   $scope.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application'
-  vm.paginateApps = paginateApps
+  $scope.isEditing = fundApplicationEditing
   vm.prevAppId = null
   vm.nextAppId = null
+  vm.origValue = null
+
+  vm.editApplication = editApplication
+  vm.saveApplication = saveApplication
+  vm.cancelEditApplication = cancelEditApplication
+  vm.paginateApps = paginateApps
 
   activate()
 
@@ -53,7 +60,31 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
       }
     })
   }
+
   function paginateApps(appId) {
     $state.go('fund.application', { applicationID: appId })
+  }
+
+  function editApplication() {
+    vm.origValue = $scope.application
+    fundApplicationEditing.set(true)
+  }
+
+  function saveApplication () {
+    fundApplicationEditing.set(false)
+
+    // fundService.updateApplication($scope.application.nodeID, {
+    //   'title': $scope.application.title + ' x '
+    // })
+    // .then(function (response) {
+    //   if (response.status === 'OK') {
+    //     activate()
+    //   }
+    // })
+  }
+
+  function cancelEditApplication () {
+    $scope.application = vm.origValue
+    fundApplicationEditing.set(false)
   }
 }

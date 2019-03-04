@@ -7,14 +7,19 @@
 //
 
 'use strict'
-import applicationBlockTemplate from './applicationBlock.html'
 
 angular.module('openDeskApp.fund')
-  .component('applicationBlock', {
-    template: applicationBlockTemplate,
-    controller: 'ApplicationBlockController',
-    controllerAs: 'vm',
-    bindings: {
-      block: '='
+  .service('fundApplicationEditing', [fundApplicationEditing]);
+
+function fundApplicationEditing () {
+  var isEditing = false
+
+  return {
+    get: function () {
+      return isEditing
+    },
+    set: function (value) {
+      isEditing = value
     }
-  })
+  }
+}
