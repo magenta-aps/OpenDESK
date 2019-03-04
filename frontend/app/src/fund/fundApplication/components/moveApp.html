@@ -6,9 +6,9 @@
              <div layout="row"
                   layout-align="space-between center">
                  <span>Flow</span>
-                 <md-select ng-model="vm.selectedFlow"
+                 <md-select ng-model="self.selectedFlow"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-repeat="workflow in vm.activeWorkflows"
+                     <md-option ng-repeat="workflow in self.activeWorkflows"
                                 ng-value="workflow.title">
                          {{workflow.title}}
                      </md-option>
@@ -16,14 +16,14 @@
              </div>
 
              <!--TODO: Remove Central from list-->
-             <div ng-if="vm.selectedFlow == 'Lokal'"
+             <div ng-if="self.selectedFlow == 'Lokal'"
                   layout="row"
                   layout-align="space-between center">
                  <span>Bankområde</span>
                  <md-select placeholder="Intet valgt"
-                            ng-model="vm.selectedBranch"
+                            ng-model="self.selectedBranch"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-repeat="branch in vm.branches"
+                     <md-option ng-repeat="branch in self.branches"
                                 ng-value="branch.title">
                          {{branch.title}}
                      </md-option>
@@ -35,9 +35,9 @@
                   layout-align="space-between center">
                  <span>Stadie</span>
                  <md-select placeholder="Intet valgt"
-                            ng-model="vm.selectedYear"
+                            ng-model="self.selectedState"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-repeat="year in vm.years"
+                     <md-option ng-repeat="year in self.years"
                                 ng-value="year">
                          Stadie{{year}}
                      </md-option>
@@ -48,9 +48,9 @@
                   layout-align="space-between center">
                  <span>Budgetår</span>
                  <md-select placeholder="Intet valgt"
-                            ng-model="vm.selectedYear"
+                            ng-model="self.selectedYear"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-repeat="year in vm.years"
+                     <md-option ng-repeat="year in self.years"
                                 ng-value="year">
                          {{year}}
                      </md-option>
@@ -61,11 +61,11 @@
     <md-dialog-actions layout="row">
     <!--TODO: Save and cancel buttons-->
     <!--TODO: First update application values on submit-->
-        <md-button ng-click="vm.cancel()">
+        <md-button ng-click="self.cancel()">
             Annuller
         </md-button>
         <span flex></span>
-        <md-button ng-click="vm.apply()" class="md-primary">
+        <md-button ng-click="self.apply()" class="md-primary">
             Flyt ansøgning
         </md-button>
     </md-dialog-actions>

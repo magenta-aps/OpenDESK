@@ -16,9 +16,6 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
     var vm = this
     vm.application = null
     vm.branches = []
-    vm.selectedBranch = null
-    vm.selectedFlow = null
-    vm.selectedYear = null
 
     $scope.currentAppPage = $stateParams.currentAppPage || 'application';
 
@@ -54,7 +51,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
     vm.moveApp = function() {
         $mdDialog.show({
             controller: DialogController,
-            controllerAs: 'vm',
+            controllerAs: 'self',
             template: require('./components/moveApp.html'),
             parent: angular.element(document.body),
             clickOutsideToClose:true,
@@ -63,46 +60,53 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
 
 
     function DialogController($scope, $mdDialog, $mdToast) {
-        var vm = this
-        vm.activeWorkflows = []
-        vm.branches = []
-        vm.years = []
+        var self = this
+        self.selectedBranch = null
+        self.selectedYear = null
+        self.selectedState = null
+        self.selectedFlow = vm.application.nodeID
+        self.activeWorkflows = []
+        self.branches = []
+        self.years = []
+        console.log(vm.application.nodeID)
+
+
         //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
-        vm.showToast = function() {
+        self.showToast = function() {
             $mdToast.showSimple("hej")
         }
 
         // Fetch data for selectors:
         fundService.getActiveWorkflows()
             .then(function (response) {
-                vm.activeWorkflows = response
+                self.activeWorkflows = response
             })
         fundService.getBranches()
             .then(function (response) {
-                vm.branches = response
+                self.branches = response
             })
         // TODO: Get time range from data
-        vm.getYears = function() {
+        self.getYears = function() {
             var currentYear = (new Date()).getFullYear(), years = []
             for (var i=currentYear-10; i<currentYear + 11; i++) {
-                vm.years.push(i)
+                self.years.push(i)
             }
             return years
         }
-        vm.getYears()
+        self.getYears()
 
         // Methods for button actions:
         // $scope.hide = function() {
         //     $mdDialog.hide();
         // };
 
-        vm.cancel = function() {
+        self.cancel = function() {
             $mdDialog.cancel();
         };
 
-        vm.apply = function(answer) {
+        self.apply = function(answer) {
             $mdDialog.hide(answer)
-                .then(vm.showToast())
+                .then(self.showToast())
         };
     }
 }
