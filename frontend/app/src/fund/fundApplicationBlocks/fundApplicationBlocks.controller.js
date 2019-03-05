@@ -29,7 +29,7 @@ function FundApplicationBlocksController ($scope) {
     if (!block.hasClass('expanded')) {
       var w = block.get(0).offsetWidth
       var h = block.get(0).offsetHeight
-      var placeholder = $('<md-card/>', {
+      var placeholder = $('<div/>', {
         style: 'width:' + w + 'px;height:' + h + 'px;',
         'class': 'fund-block-placeholder'
       })

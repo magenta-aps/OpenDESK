@@ -13,7 +13,7 @@
     md-card {
       &.expanded {
         position:absolute;
-        top:0;
+        top:-8px;
         left:16px;
         right:16px;
         z-index:1;
