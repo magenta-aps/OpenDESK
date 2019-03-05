@@ -7,13 +7,13 @@
   <md-nav-item md-nav-click="vm.paginateApps(vm.nextAppId)" ng-if="vm.nextAppId"><md-icon>keyboard_arrow_right</md-icon></md-nav-item>
 </md-nav-bar>
 
-<md-card class="od-fund-app-wrapper">
+<md-card class="od-fund-app-wrapper" layout="column">
   <md-nav-bar md-selected-nav-item="currentAppPage">
     <md-nav-item md-nav-sref="fund.application" name="application">Ansøgning</md-nav-item>
     <md-nav-item md-nav-sref="fund.application.contact" name="contact">Kontaktinfo</md-nav-item>
     <md-nav-item md-nav-sref="fund.application.history" name="history">Historik</md-nav-item>
   </md-nav-bar>
-  <md-card-title class="application-title">
+  <md-card-title class="application-title" flex="nogrow">
     <md-card-title-text>
       <md-input-container>
         <input class="md-headline" ng-model="application.title" ng-if="isEditing.get()">
@@ -22,7 +22,7 @@
       <span class="md-subhead">{{ application.nodeID }}</span>
     </md-card-title-text>
   </md-card-title>
-  <md-card-content>
+  <md-card-content flex>
     <ng-template ui-view="application"></ng-template>
   </md-card-content>
 </md-card>

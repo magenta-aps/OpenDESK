@@ -14,6 +14,7 @@ angular.module('openDeskApp.fund')
     template: applicationBlockTemplate,
     controller: 'ApplicationBlockController',
     controllerAs: 'vm',
+    transclude: true,
     bindings: {
       block: '='
     }
