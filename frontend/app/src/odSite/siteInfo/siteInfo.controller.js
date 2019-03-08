@@ -13,7 +13,7 @@ angular
   .module('openDeskApp.site')
   .controller('SiteInfoController', ['$scope', '$mdDialog', 'siteService', SiteInfoController])
 
-function SiteInfoController ($scope, $mdDialog, siteService) {
+function SiteInfoController($scope, $mdDialog, siteService, xeditable) {
   var vm = this
 
   vm.editSiteDialog = editSiteDialog
@@ -25,7 +25,7 @@ function SiteInfoController ($scope, $mdDialog, siteService) {
 
   activate()
 
-  function activate () {
+  function activate() {
     $scope.$watch('siteService.getSite()', function (site) {
       vm.site = site
       vm.hasDescription = vm.site.description.trim() !== ''
@@ -33,14 +33,14 @@ function SiteInfoController ($scope, $mdDialog, siteService) {
     })
   }
 
-  function getSiteUserPermissions () {
+  function getSiteUserPermissions() {
     siteService.getSiteUserPermissions(vm.site.shortName)
       .then(function (permissions) {
         vm.permissions = permissions
       })
   }
 
-  function editSiteDialog (ev) {
+  function editSiteDialog(ev) {
     $mdDialog.show({
       template: siteEditTemplate,
       controller: 'SiteEditController',

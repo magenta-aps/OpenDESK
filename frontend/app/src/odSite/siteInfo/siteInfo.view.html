@@ -10,9 +10,9 @@
 	</md-card-header>
 
 	<md-card-title>
-		<md-card-title-text>
+		<md-card-title-text ng-controller="InlineEdit">
 			<h3 class="md-title">{{'PROJECT.DESCRIPTION' | translate }}: </h3>
-			<p editable-text="vm.site.description">{{ vm.site.description }}</p>
+			<p editable-textarea="vm.site.description" e-rows="7" e-cols="40">{{ vm.site.description }}</p>
 		</md-card-title-text>
 	</md-card-title>
 
