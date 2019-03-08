@@ -7,7 +7,7 @@
 // 
 
 app.controller('InlineEdit', function($scope) {
-  $scope.user = {
-    name: 'awesome user'
+  $scope.site = {
+    description: 'awesome description'
   };
 });
