@@ -68,7 +68,6 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
         self.activeWorkflows = []
         self.branches = []
         self.years = []
-        console.log(vm.application.nodeID)
 
 
         //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
@@ -81,16 +80,23 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
             .then(function (response) {
                 self.activeWorkflows = response
             })
-        fundService.getBranches()
-            .then(function (response) {
-                self.branches = response
-            })
 
         fundService.getBudgetYears()
             .then(function (response) {
                 self.years = response
-                console.log(response)
             })
+
+        // Finds and sets self.branches according to selected workflow.
+        // Is called whenever workflow is changed
+        self.workflowChange = function(){
+            fundService.getWorkflow(self.selectedFlow.nodeID)
+                .then(function(response) {
+                    fundService.getWorkflow(response.nodeID)
+                        .then(function(response) {
+                            self.branches = response.usedByBranches
+                        })
+                })
+        }
 
         self.cancel = function() {
             $mdDialog.cancel();

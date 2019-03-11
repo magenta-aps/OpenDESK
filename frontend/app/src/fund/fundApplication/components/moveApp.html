@@ -7,16 +7,16 @@
                   layout-align="space-between center">
                  <span>Flow</span>
                  <md-select ng-model="self.selectedFlow"
+                            ng-change="self.workflowChange()"
                             ng-model-options="{trackBy: $value.nodeID}">
                      <md-option ng-repeat="workflow in self.activeWorkflows"
-                                ng-value="workflow.title">
+                                ng-value="workflow">
                          {{workflow.title}}
                      </md-option>
                  </md-select>
              </div>
 
-             <!--TODO: Remove Central from list-->
-             <div ng-if="self.selectedFlow == 'Lokal'"
+             <div ng-if="self.branches.length > 1"
                   layout="row"
                   layout-align="space-between center">
                  <span>Bankområde</span>
