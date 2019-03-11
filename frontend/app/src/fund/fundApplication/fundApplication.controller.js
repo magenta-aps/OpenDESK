@@ -67,6 +67,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
         self.selectedFlow = vm.application.nodeID
         self.activeWorkflows = []
         self.branches = []
+        self.states = []
         self.years = []
 
 
@@ -86,13 +87,14 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
                 self.years = response
             })
 
-        // Finds and sets self.branches according to selected workflow.
+        // Update branch and state drop-down according to selected workflow.
         // Is called whenever workflow is changed
         self.workflowChange = function(){
             fundService.getWorkflow(self.selectedFlow.nodeID)
                 .then(function(response) {
                     fundService.getWorkflow(response.nodeID)
                         .then(function(response) {
+                            self.states = response.states
                             self.branches = response.usedByBranches
                         })
                 })

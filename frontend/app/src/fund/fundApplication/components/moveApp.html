@@ -37,9 +37,9 @@
                  <md-select placeholder="Intet valgt"
                             ng-model="self.selectedState"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-repeat="year in self.years"
-                                ng-value="year">
-                         Stadie{{year}}
+                     <md-option ng-repeat="state in self.states"
+                                ng-value="state">
+                         {{state.title}}
                      </md-option>
                  </md-select>
              </div>
