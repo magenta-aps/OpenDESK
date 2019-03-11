@@ -8,7 +8,7 @@
             <span class='content-name'>{{content.name}}</span>
         </a>
     </td>
-    <td style="width:40%" hide show-gt-sm>
+    <td hide show-gt-sm>
         <table style="width:100%">
             <tr>
                 <td style="border: none; margin: 0; padding: 0">
@@ -39,11 +39,10 @@
             <span class='content-name'>{{content.creator.displayName}}</span>
         </a>
     </td>
-    <td hide show-gt-md ng-if="showESDH" style="width:10%">
-        <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg"
-            ng-change="loadCheckboxes()">
+    <td style="width: 120px;" hide show-gt-md ng-if="showESDH">
+        <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg" ng-change="loadCheckboxes()">
     </td>
-    <td style="width:5%">
+    <td style="width:48px;">
         <filebrowser-menu content="content" is-site="isSite"></filebrowser-menu>
     </td>
 </tr>
