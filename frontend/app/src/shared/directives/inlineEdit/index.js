@@ -6,8 +6,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // 
 
-app.controller('InlineEdit', function($scope) {
-  $scope.site = {
-    description: 'awesome description'
-  };
-});
+'use strict'
+
+console.log("kapow");
+
+
+// openDeskApp.controller('InlineEdit', function($scope) {
+//   var vm = this
+
+//   vm.description = description
+
+//   scope.site = { description: 'foo' }
+// });
