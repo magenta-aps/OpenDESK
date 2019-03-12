@@ -5,4 +5,13 @@ application-block {
     page-break-inside:avoid;
     break-inside:avoid-column;
   }
+  md-card-title {
+    display:block;
+    &-text {
+      float:left;
+    }
+    button {
+      float:right;
+    }
+  }
 }
