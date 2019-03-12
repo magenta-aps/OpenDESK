@@ -19,18 +19,18 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
   vm.reverse = false
   $scope.$parent.applications = getApplications()
   vm.branches = []
+  vm.years = []
   vm.filterList = filterList
-  vm.years = generateYears()
-  vm.selectedYear = (new Date()).getFullYear()
 
   // logic for controlling selection of applications with checkboxes
-  vm.selectedApps = []
   vm.toggleSelectedApp = toggleSelectedApp
   vm.toggleAppSelection = toggleAppSelection
+  vm.batchMoveApplications = batchMoveApplications
 
   activate()
 
   function activate() {
+    vm.selectedApps = []
     new Promise(function (resolve, reject) {
       // if we already have a workflow object in the $scope, and its ID is identical to the one we're trying to load, just reuse it
       if($scope.$parent.workflow && $scope.$parent.workflow.nodeID === $stateParams.workflowID) {
@@ -51,7 +51,7 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
       $scope.$parent.state = response
       $scope.$parent.applications = response.applications
       $state.go('fund.workflow', { workflowID: $scope.$parent.workflow.nodeID, stateID: response.nodeID })
-      
+
       var title = $scope.$parent.workflow.title + ' - ' + response.title
       browserService.setTitle(title)
       headerService.setTitle(title)
@@ -61,20 +61,16 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
     .then(function (response) {
       vm.branches = response
     })
+
+    fundService.getBudgetYears()
+    .then(function (response) {
+      vm.years = response
+    })
   }
 
   function getApplications() {
     // get applications from the selected state, or default to an empty list if no state is set in $scope, or if said state in $scope does not have an applications property
     return $scope.$parent.state ? $scope.$parent.state.applications || [] : []
-  }
-
-  function generateYears() {
-    const nowYear = (new Date()).getFullYear()
-    // first generate an array of n elements, counting from current year and adding 1
-    // for each element (index i; we don't care about current value, available in variable _
-    let range = Array.from(Array(17), (_, i) => nowYear + i)
-    // then map to minus/plus n/2 years, so that we can get previous years too
-    return range.map(y => y - Math.round(range.length / 2))
   }
 
   function toggleSelectedApp (appId) {
@@ -92,14 +88,30 @@ function FundApplicationListController (fundService, $scope, $state, $stateParam
     })
   }
 
-  function filterList(branchID, year) {
-    // fundService.getApplicationsByBranch(branchID)
-    // .then(function (response) {
-    //   $scope.$parent.applications = response
-    // })
-    fundService.getBranch(branchID)
-    .then(function (response) {
-      $scope.$parent.applications = response.summaries
-    })
+  function filterList() {
+    console.log('branch', vm.selectedBranch, 'year', vm.selectedYear)
+    if (vm.selectedBranch || vm.selectedYear) {
+      fundService.getApplicationsByBranchAndBudget(vm.selectedBranch, vm.selectedYear)
+      .then(function (response) {
+        $scope.$parent.applications = response
+      })
+    }
+    else {
+      // if parameters are reset, that means we should get the full list of applications.
+      // That's precisely what we do in activate()
+      activate()
+    }
+  }
+
+  function batchMoveApplications() {
+    var apps = []
+    if(vm.moveToBranch) {
+      Promise.all(vm.selectedApps.map(app => {
+        return fundService.setApplicationState(app, vm.moveToBranch)
+      }))
+      .then(function () {
+        activate()
+      })
+    }
   }
 }
