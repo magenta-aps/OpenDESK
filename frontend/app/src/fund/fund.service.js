@@ -60,7 +60,7 @@ angular.module('openDeskApp.fund')
 
     //Creates a new branch with the specified title
     function addBranch(branchTitle) {
-      var payload = {"title": "${branchTitle}"}
+      var payload = {"title": branchTitle}
       return $http.post(`/alfresco/service/foundation/branch`, payload)
       .then(function(response){
         return response
@@ -125,7 +125,15 @@ angular.module('openDeskApp.fund')
 
     //Retrieves all applications in the specified branch, and with the specified budget
     function getApplicationsByBranchAndBudget(branchID, budgetID) {
-      return $http.get(`/alfresco/service/foundation/branch/${branchID}/applications?budgetID=${budgetID}`)
+      var queryParams = []
+      if (branchID) {
+        queryParams.push('branchID=' + branchID)
+      }
+      if (budgetID) {
+        queryParams.push('budgetID=' + budgetID)
+      }
+      queryParams = queryParams.join('&')
+      return $http.get('/alfresco/service/foundation/application?' + queryParams)
       .then(function (response) {
         return response.data
       })
@@ -141,7 +149,7 @@ angular.module('openDeskApp.fund')
 
     //Sets the state of the specified application
     function setApplicationState(applicationID, stateID) {
-      var payload = {"state": {"nodeID": "${stateID}"}}
+      var payload = {"state": {"nodeID": stateID}}
       return $http.post(`/alfresco/service/foundation/application/${applicationID}`, payload)
       .then(function (response) {
         return response.data
@@ -151,7 +159,7 @@ angular.module('openDeskApp.fund')
     //Sets the branch of the specified application. This will also change the applications workflow, if the workflow on the new
     //branch is different than the workflow on the current branch.
     function setApplicationBranch(applicationID, branchID) {
-      var payload = {"branchSummary": {"nodeID": "${branchID}"}}
+      var payload = {"branchSummary": {"nodeID": branchID}}
       return $http.post(`/alfresco/service/foundation/application/${applicationID}`, payload)
       .then(function (response) {
         return response.data
@@ -160,7 +168,7 @@ angular.module('openDeskApp.fund')
 
     //Sets the budget of the specified application
     function setApplicationBudget(applicationID, budgetID) {
-      var payload = {"budget": {"nodeID": "${budgetID}"}}
+      var payload = {"budget": {"nodeID": budgetID}}
       return $http.post(`/alfresco/service/foundation/application/${applicationID}`, payload)
       .then(function (response) {
         return response.data
@@ -212,7 +220,7 @@ angular.module('openDeskApp.fund')
     //Creates a new BudgetYear, with the title and total amount specified.
     //Dates must be in ISO 8601 UTC format, for example: 2019-02-28T09:16:27Z
     function createBudgetYear(title, startDate, endDate) {
-      var payload = {"title": "${title}", "startDate": "${startDate}", "endDate": "${endDate}"}
+      var payload = {"title": title, "startDate": startDate, "endDate": endDate}
       return $http.post(`/alfresco/service/foundation/budgetYear`, payload)
       .then(function (response) {
         return response.data
@@ -221,7 +229,7 @@ angular.module('openDeskApp.fund')
 
     //Creates a new budget within the specified BudgetYear, with the title and total amount specified.
     function createBudget(budgetYearID, title, amountTotal) {
-      var payload = {"title": "${title}", "amountTotal": "${amountTotal}"}
+      var payload = {"title": title, "amountTotal": amountTotal}
       return $http.post(`/alfresco/service/foundation/budgetYear/${budgetYearID}/budget`, payload)
       .then(function (response) {
         return response.data
