@@ -19,10 +19,5 @@
 <beans>
     <!-- Overriding the RemoteUserAuthenticatorFactory in order to prevent login prompts on 401 - Unauthorized -->
     <!--  HTTP Remote User Authenticator (Servlet based - stateless) -->
-    <bean id="webscripts.authenticator.remoteuser" class="dk.opendesk.repo.override.CustomRemoteUserAuthenticatorFactory">
-        <property name="authenticationService" ref="AuthenticationService" />
-        <property name="authenticationComponent" ref="authenticationComponent" />
-        <property name="authenticationListener" ref="webScriptAuthenticationListener"/>
-        <property name="remoteUserMapper" ref="RemoteUserMapper" />
-    </bean>
+
 </beans>
