@@ -20,7 +20,7 @@ function NotificationsController ($mdSidenav, notificationsService) {
   vm.setRead = setRead
   vm.setSeen = setSeen
 
-  // activate()
+  activate()
 
   function activate () {
     updateNotifications()
