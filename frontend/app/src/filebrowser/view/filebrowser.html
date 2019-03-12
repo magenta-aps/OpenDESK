@@ -4,25 +4,29 @@
     <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
 
     <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
-        <table class="od-members od-members-row">
+        <table class="od-members od-members-row" style="table-layout: fixed;">
             <colgroup>
-                <col span="1" style="width: 40%;">
+                <col class="col__name">
+                <col class="col__history">
+                <col class="col__creator">
+                <col class="col__esdh" ng-if="isSite">
+                <col class="col__menu">
             </colgroup>
             <thead ng-show="vm.contentListLength > 0" fix-head>
                 <tr>
-                    <th sort order="'name'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.NAME' | translate }}</th>
-                    <th hide show-gt-sm sort order="'lastChanged'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.HISTORY' | translate }}</th>
-                    <th hide show-gt-sm sort order="'creator.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.CREATEDBY' | translate }}</th>
-                    <th hide show-gt-md ng-if="vm.enableESDH" ng-if="isSite" colspan="2">
-                        <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendAllToSbsys" ng-change="vm.setAllCheckboxes()">
-                        <img ng-src="assets/img/sbsys.png" class="od-sbsys-logo">
+                    <th class="col__name" sort order="'name'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.NAME' | translate }}</th>
+                    <th class="col__history" sort order="'lastChanged'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.HISTORY' | translate }}</th>
+                    <th class="col__creator" sort order="'creator.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.CREATEDBY' | translate }}</th>
+                    <th class="col__esdh" ng-if="isSite" colspan="2">
+                        <span style="display: inline-block; width: 100px;">
+                            <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendAllToSbsys" ng-change="vm.setAllCheckboxes()">
+                            <img ng-src="assets/img/sbsys.png" class="od-sbsys-logo">
+                        </span>
                     </th>
                 </tr>
             </thead>
             <tbody ng-repeat="contentTypeList in vm.contentList">
-                <tr filebrowser-row ng-repeat="content in contentTypeList | orderObjectBy:order:reverse"
-                    content="content" show-esdh="vm.enableESDH && isSite" is-site="isSite" load-checkboxes="vm.loadCheckboxes">
-                </tr>
+                <tr filebrowser-row ng-repeat="content in contentTypeList | orderObjectBy:order:reverse" content="content" show-esdh="vm.enableESDH && isSite" is-site="isSite" load-checkboxes="vm.loadCheckboxes"></tr>
             </tbody>
         </table>
     </div>
@@ -74,19 +78,14 @@
             od-label="{{'COMMON.CREATE' | translate}} {{'COMMON.FOLDER' | translate | lowercase}}">
         </od-template-list>
 
-        <md-button ng-if="isSite && vm.permissions.isManager" class="md-icon-button md-primary "
-            ng-click="vm.newLinkDialog()">
+        <md-button ng-if="isSite && vm.permissions.isManager" class="md-icon-button md-primary " ng-click="vm.newLinkDialog()">
             <md-tooltip md-direction="top">{{'COMMON.CREATE' | translate}} {{'PROJECT.PROJECTLINK' | translate | lowercase}}</md-tooltip>
             <md-icon>link</md-icon>
         </md-button>
 
         <span flex></span>
-        <md-button ng-show="vm.sendToSbsys" ng-if="isSite" ng-click="vm.uploadSbsysDialog($event)"
-            class="md-primary" aria-label="SBSYS">
-            <md-tooltip md-direction="top">
-                {{'COMMON.UPLOAD' | translate }} {{'COMMON.TO' | translate | lowercase }} {{'ESDH' | translate }}
-            </md-tooltip>
-            <span style="margin-left: 10px; margin-right: 20px;">
+        <md-button ng-show="vm.sendToSbsys" ng-if="isSite" ng-click="vm.uploadSbsysDialog($event)" class="md-primary md-raised" aria-label="SBSYS">
+            <span style="margin: 0 10px;">
                 {{'COMMON.UPLOAD' | translate}} {{'COMMON.TO' | translate | lowercase}} {{'ESDH' | translate }}
             </span>
         </md-button>
