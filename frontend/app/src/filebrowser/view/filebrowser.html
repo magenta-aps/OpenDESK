@@ -56,7 +56,7 @@
                         <md-button ng-click="vm.uploadDocumentsDialog($event)" aria-label="{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}">{{'COMMON.UPLOAD' | translate}} {{'COMMON.LOCAL_DOCUMENT' | translate | lowercase}}</md-button>
                     </md-menu-item>
                     <md-menu-item ng-if="vm.enableESDH" ng-if="isSite">
-                        <md-button ng-click="loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
+                        <md-button ng-click="vm.loadSbsysDialog($event)">{{'COMMON.UPLOAD' | translate}} {{'COMMON.FROM' | translate | lowercase}} {{'ESDH' | translate}}
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
