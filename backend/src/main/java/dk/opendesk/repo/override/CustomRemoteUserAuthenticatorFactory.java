@@ -20,5 +20,5 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CustomRemoteUserAuthenticatorFactory extends RemoteUserAuthenticatorFactory {
 
-   
+
 }
