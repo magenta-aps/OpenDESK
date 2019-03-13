@@ -62,13 +62,13 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
     function DialogController($scope, $mdDialog, $mdToast) {
         var self = this
         self.selectedBranch = null
-        self.selectedYear = null
+        self.selectedBudget = null
         self.selectedState = null
-        self.selectedFlow = vm.application.nodeID
+        self.selectedFlow = null
         self.activeWorkflows = []
         self.branches = []
         self.states = []
-        self.years = []
+        self.budgetYears = []
 
 
         //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
@@ -84,7 +84,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
 
         fundService.getBudgetYears()
             .then(function (response) {
-                self.years = response
+                self.budgetYears = response
             })
 
         // Update branch and state drop-down according to selected workflow.

@@ -3,6 +3,7 @@
          <span class="md-headline">Flyt ansøgninger </span>
          <div class="selection-container">
              <!--TODO: Set selectors' initial values to values of application-->
+             <!--TODO: Set width of popup according to selections-->
              <div layout="row"
                   layout-align="space-between center">
                  <span>Flow</span>
@@ -24,7 +25,7 @@
                             ng-model="self.selectedBranch"
                             ng-model-options="{trackBy: $value.nodeID}">
                      <md-option ng-repeat="branch in self.branches"
-                                ng-value="branch.title">
+                                ng-value="branch">
                          {{branch.title}}
                      </md-option>
                  </md-select>
@@ -48,18 +49,17 @@
                   layout-align="space-between center">
                  <span>Budgetår</span>
                  <md-select placeholder="Intet valgt"
-                            ng-model="self.selectedYear"
+                            ng-model="self.selectedBudget"
                             ng-model-options="{trackBy: $value.nodeID}">
-                     <md-option ng-repeat="year in self.years"
-                                ng-value="year">
-                         {{year.startDate.substring(0, 4)}} til {{year.endDate.substring(0, 4)}}
+                     <md-option ng-repeat="budgetYear in self.budgetYears"
+                                ng-value="budgetYear">
+                         {{budgetYear.startDate.substring(0, 4)}} til {{budgetYear.endDate.substring(0, 4)}}
                      </md-option>
                  </md-select>
              </div>
          </div>
      </md-dialog-content>
     <md-dialog-actions layout="row">
-    <!--TODO: Save and cancel buttons-->
     <!--TODO: First update application values on submit-->
         <md-button ng-click="self.cancel()">
             Annuller
