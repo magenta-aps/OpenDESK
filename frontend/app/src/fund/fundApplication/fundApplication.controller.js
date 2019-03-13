@@ -35,7 +35,6 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
       // conversely, if we don't have a state in store, but the currently
       // loaded application does have state information, load it to the store
       else if(!$scope.$parent.state && vm.application.state) {
-        console.log('hej')
         fundService.getWorkflowState(vm.application.state.nodeID)
         .then(function (response) {
           $scope.$parent.state = response
@@ -73,7 +72,14 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
 
         //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
         self.showToast = function() {
-            $mdToast.showSimple("hej")
+            $mdToast.show({
+                hideDelay: 9000,
+                position: 'bottom right',
+                controller: ToastCtrl,
+                controllerAs: 'ctrl',
+                bindToController: true,
+                template: require('./components/toastTemplate.html')
+            })
         }
 
         // Fetch data for selectors:
@@ -100,13 +106,47 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
                 })
         }
 
+        self.changedAttributes = function() {
+            var result = {}
+            // 'workFlow' is automatically changed according to 'branchSummary'
+            if (self.selectedBranch != null) {
+                console.log("pow");
+                result.branchSummary = {"nodeID": self.selectedBranch.nodeID}
+            }
+            if (self.selectedState != null) {
+                result.state = {"nodeID": self.selectedState.nodeID}
+            }
+            if (self.selectedBudget != null) {
+                result.budget = {"nodeID": self.selectedBudget.nodeID}
+            }
+            console.log(result)
+            return result
+        }
+
         self.cancel = function() {
             $mdDialog.cancel();
         };
 
         self.apply = function(answer) {
             $mdDialog.hide(answer)
+                .then(console.log("Application before"))
+                .then(console.log(vm.application))
+                .then(fundService.updateApplication(vm.application.nodeID, self.changedAttributes()))
+                .then(window.history.back()) //TODO: find better solution
+                .then(console.log("Application after"))
+                .then(console.log(vm.application))
                 .then(self.showToast())
         };
+    }
+
+    function ToastCtrl($mdToast, $mdDialog, $document, $scope) {
+        var ctrl = this;
+        ctrl.closeToast = function() {
+            $mdToast.hide();
+        };
+        ctrl.goToApplicaion = function() {
+            //TODO: make sure this is okay
+            window.location = "/opendesk/fondsansogninger/application/" + vm.application.nodeID;
+        }
     }
 }

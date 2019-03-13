@@ -28,6 +28,7 @@ angular.module('openDeskApp.fund')
       setApplicationState : setApplicationState,
       setApplicationBranch: setApplicationBranch,
       setApplicationBudget: setApplicationBudget,
+      updateApplication: updateApplication,
       getCurrentBudgetYear: getCurrentBudgetYear,
       getBudgetYears: getBudgetYears,
       getBudgetYear: getBudgetYear,
@@ -137,6 +138,14 @@ angular.module('openDeskApp.fund')
       .then(function (response) {
         return response.data
       })
+    }
+
+    //Change application parameters according to payload.
+    function updateApplication(applicationID, payload) {
+        return $http.post(`/alfresco/service/foundation/application/${applicationID}`, payload)
+            .then(function (response) {
+                return response.data
+            })
     }
 
     //Sets the branch of the specified application. This will also change the applications workflow, if the workflow on the new
