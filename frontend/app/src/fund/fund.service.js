@@ -244,4 +244,27 @@ angular.module('openDeskApp.fund')
         return response.data
       })
     }
+
+    //Upload content to an application
+    function uploadContent (file, application) {
+      var appId = alfrescoNodeService.processNodeRef(application).id
+      var folderId = $http.get(`/alfresco/service/foundation/application/${appId}/documentfolder`)
+      return $http.get(`/alfresco/service/node/${folderId}/next-available-name/${file.name}`)
+      .then(function (response) {
+        var formData = new FormData()
+        formData.append('filedata', file)
+        formData.append('filename', response.data.fileName)
+        formData.append('destination', folderId || null)
+
+        var headers = {
+          transformRequest: angular.identity,
+          headers: { 'Content-Type': undefined }
+        }
+
+        return $http.post('/api/upload', formData, headers)
+          .then(function (response) {
+            return response
+          })
+      })
+    }
   }
