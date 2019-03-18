@@ -9,9 +9,9 @@
 'use strict'
 
 angular.module('openDeskApp.fund')
-  .factory('fundService', ['$http', FundService]);
+  .factory('fundService', ['$http', 'alfrescoNodeService', FundService]);
 
-  function FundService ($http) {
+  function FundService ($http, alfrescoNodeService) {
 
     var service = {
       getBranches: getBranches,
@@ -247,24 +247,32 @@ angular.module('openDeskApp.fund')
 
     //Upload content to an application
     function uploadContent (file, application) {
+      var folderId = null
       var appId = alfrescoNodeService.processNodeRef(application).id
-      var folderId = $http.get(`/alfresco/service/foundation/application/${appId}/documentfolder`)
-      return $http.get(`/alfresco/service/node/${folderId}/next-available-name/${file.name}`)
+
+      return $http.get(`/alfresco/service/foundation/application/${appId}/documentfolder`)
+      .then(function (response) {
+        folderId = response
+
+        return $http.get(`/alfresco/service/node/${response}/next-available-name/${file.name}`)
+      })
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)
         formData.append('filename', response.data.fileName)
-        formData.append('destination', folderId || null)
+        formData.append('destination', folderId)
 
         var headers = {
           transformRequest: angular.identity,
-          headers: { 'Content-Type': undefined }
+          headers: {
+            'Content-Type': undefined
+          }
         }
 
         return $http.post('/api/upload', formData, headers)
-          .then(function (response) {
-            return response
-          })
+      })
+      .then(function (response) {
+        return response
       })
     }
   }
