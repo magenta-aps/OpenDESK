@@ -1,10 +1,14 @@
-<!-- template for fund menu -->
-<md-card>
-  <md-list flex>
-    <md-list-item class="md-1-line" ng-repeat="wfState in workflow.states">
-      <div class="md-list-item-text" layout="column" ng-class="{ 'fund-state-active': wfState.nodeID === state.nodeID }">
-        <a ui-sref="fund.workflow({workflowID:workflow.nodeID, stateID:wfState.nodeID})">{{wfState.title}}</a>
-      </div>
-    </md-list-item>
-  </md-list>
-</md-card>
+<md-button ui-sref="fund.workflow({workflowID:workflow.nodeID, stateID:wfState.nodeID})" ng-repeat="wfState in workflow.states">
+  <span ng-class="{ 'fund-state-active': wfState.nodeID === state.nodeID }">{{wfState.title}}</span>
+</md-button>
+
+<style>
+  md-sidenav {
+    min-height: calc(100vh - 64px);
+  }
+
+  md-sidenav .md-button {
+    display: block;
+    text-align: left;
+  }
+</style>

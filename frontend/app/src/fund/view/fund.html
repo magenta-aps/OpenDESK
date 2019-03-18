@@ -1,4 +1,8 @@
 <div layout="row" layout-sm="column" class="od-fund-view">
-  <div ng-if="workflow" ui-view="fundHeader" flex-sm="15" flex-order="2" flex-order-gt-sm="0"></div>
-  <div ui-view="fundMain" flex flex-order="1" layout="column"></div>
+
+  <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" md-whiteframe="4">
+    <md-content ui-view="fundHeader"></md-content>
+  </md-sidenav>
+
+  <div ui-view="fundMain" flex flex-order="2" layout="column"></div>
 </div>
