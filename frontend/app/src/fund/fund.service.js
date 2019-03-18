@@ -36,7 +36,6 @@ angular.module('openDeskApp.fund')
       createBudget: createBudget,
       createBudgetYear: createBudgetYear,
       getBudget: getBudget,
-      
       resetDemoData : resetDemoData
     }
 
@@ -157,7 +156,7 @@ angular.module('openDeskApp.fund')
         return response.data
       })
     }
-    
+
     //Sets the budget of the specified application
     function setApplicationBudget(applicationID, budgetID) {
       var payload = {"budget": {"nodeID": "${budgetID}"}}

@@ -10,9 +10,9 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', 'fundService', '$mdDialog', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', 'fundService', '$mdDialog', '$state', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, fundService, $mdDialog) {
+function FundApplicationController ($scope, $stateParams, fundService, $mdDialog, $state) {
     var vm = this
     vm.application = null
     vm.branches = []
@@ -60,10 +60,11 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
 
     function DialogController($scope, $mdDialog, $mdToast) {
         var self = this
-        self.selectedBranch = null
-        self.selectedBudget = null
-        self.selectedState = null
-        self.selectedFlow = null
+        //TODO: Why does selectors not initialise with application values?
+        self.selectedBranch = vm.application.branchSummary
+        self.selectedBudget = vm.application.budget
+        self.selectedState = vm.application.state
+        self.selectedFlow = vm.application.workflow
         self.activeWorkflows = []
         self.branches = []
         self.states = []
@@ -131,8 +132,8 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
             $mdDialog.hide(answer)
                 .then(console.log("Application before"))
                 .then(console.log(vm.application))
-                .then(fundService.updateApplication(vm.application.nodeID, self.changedAttributes()))
-                .then(window.history.back()) //TODO: find better solution
+                .then($state.go('fund.workflow', { workflowID: vm.application.workflow.nodeID, stateID: vm.application.state.nodeID })) //Send user back to application list
+                .then(fundService.updateApplication(vm.application.nodeID, self.changedAttributes())) //and update the application according to selections
                 .then(console.log("Application after"))
                 .then(console.log(vm.application))
                 .then(self.showToast())
@@ -145,8 +146,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
             $mdToast.hide();
         };
         ctrl.goToApplicaion = function() {
-            //TODO: make sure this is okay
-            window.location = "/opendesk/fondsansogninger/application/" + vm.application.nodeID;
+            $state.go('fund.application', {applicationID: vm.application.nodeID}) //workflowID and stateID are left out in the request.
         }
     }
 }
