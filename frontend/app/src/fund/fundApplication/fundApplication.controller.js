@@ -106,6 +106,7 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
                         })
                 })
         }
+        self.workflowChange() //Set branch and state drop-down initially
 
         self.changedAttributes = function() {
             var result = {}
