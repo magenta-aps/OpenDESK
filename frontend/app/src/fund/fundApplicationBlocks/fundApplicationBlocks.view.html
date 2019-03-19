@@ -1,17 +1,31 @@
 <!-- loop over fields coming from the application -->
 <application-block 
   ng-repeat="(block, idx) in application.blocks" 
-  block="application.blocks[block]"
-  flex="100"
-  flex-gt-xs="50" flex-gt-sm="100" flex-gt-md="50"
-  ></application-block>
+  block="application.blocks[block]"></application-block>
 
-<!-- manually render card for assigned amount -->
-<application-block flex="100" flex-gt-xs="50" flex-gt-sm="100" flex-gt-md="50">
+<!-- manually render card for discussion -->
+<application-block>
   <md-card>
     <md-card-title>
       <md-card-title-text>
-        <label class="md-title" for="od-fund-approved-amount">Indstil beløb</label>
+        <h2 class="md-title">Kommentarer</h2>
+      </md-card-title-text>
+      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+      </button>
+    </md-card-title>
+    <md-card-content>
+      <conversation discussion-id="'53e8664e-e1fb-40d0-9104-019d57f06bee'" site-short-name="swsdp"></conversation>
+    </md-card-content>
+  </md-card>
+</application-block>
+  
+<!-- manually render card for assigned amount -->
+<application-block>
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <h2 class="md-title">Indstil beløb</h2>
       </md-card-title-text>
       <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
         <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
@@ -26,11 +40,11 @@
 </application-block>
 
 <!-- manually render card for board meeting vote -->
-<application-block flex="100" flex-gt-xs="50" flex-gt-sm="100" flex-gt-md="50">
+<application-block>
   <md-card>
     <md-card-title>
       <md-card-title-text>
-        <label class="md-title" for="od-fund-approved-amount">Udvælg til bestyrelsesmøde</label>
+        <h2 class="md-title">Udvælg til bestyrelsesmøde</h2>
       </md-card-title-text>
       <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
         <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
@@ -40,23 +54,6 @@
       <div class="od-fund-board-meeting-switch" flex layout="row" layout-align="start center" layout-margin>
       <span>nej</span><md-switch ng-model="application.board_meeting_include"></md-switch><span>ja</span>
       </div>
-    </md-card-content>
-  </md-card>
-</application-block>
-
-<!-- manually render card for discussion -->
-<application-block flex="100" flex-gt-xs="50" flex-gt-sm="100" flex-gt-md="50">
-  <md-card>
-    <md-card-title>
-      <md-card-title-text>
-        <span class="md-title">Kommentarer</span>
-      </md-card-title-text>
-      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
-        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
-      </button>
-    </md-card-title>
-    <md-card-content>
-      <conversation discussion-id="'53e8664e-e1fb-40d0-9104-019d57f06bee'" site-short-name="swsdp"></conversation>
     </md-card-content>
   </md-card>
 </application-block>

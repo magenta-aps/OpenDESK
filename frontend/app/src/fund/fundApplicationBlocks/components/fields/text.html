@@ -1,5 +1,5 @@
 <div ng-controller="ApplicationBlockController" ng-class="field.layout == 'inline' ? 'layout-inline' : 'layout-block'">
-  <strong ng-if="field.label">{{ field.label }}</strong>
+  <h4 ng-if="field.label">{{ field.label }}</h4>
   <md-input-container>
     <span ng-if="!isEditing.get()">{{ field.value }}</span>
     <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}"/>
