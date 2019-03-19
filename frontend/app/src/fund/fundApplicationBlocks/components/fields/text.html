@@ -1,7 +1,7 @@
-<div ng-controller="ApplicationBlockController" ng-class="field.layout == 'inline' ? 'layout-inline' : 'layout-block'">
-  <h4 ng-if="field.label">{{ field.label }}</h4>
+<dt ng-repeat-start="field in vm.block.fields" ng-if="field.label">{{ field.label }}</dt>
+<dd ng-repeat-end>
   <md-input-container>
     <span ng-if="!isEditing.get()">{{ field.value }}</span>
-    <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}"/>
+    <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}" />
   </md-input-container>
-</div>
+</dd>

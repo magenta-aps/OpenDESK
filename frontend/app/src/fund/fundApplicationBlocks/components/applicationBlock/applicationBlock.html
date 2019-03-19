@@ -10,7 +10,7 @@
   </md-card-title>
 
   <md-card-content>
-    <div ng-repeat="field in vm.block.fields" ng-include="vm.getTemplate(field.type)" class="od-fund-app-block-field"></div>
+    <dl class="od-fund-app-block-field" ng-controller="ApplicationBlockController" ng-include="vm.getTemplate(field.type)"></dl>
   </md-card-content>
 
 </md-card>
