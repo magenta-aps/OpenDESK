@@ -10,6 +10,7 @@ package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.search.impl.lucene.analysis.DateTimeAnalyser;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -28,6 +29,7 @@ import org.json.simple.JSONArray;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NotificationBean {
 
@@ -108,6 +110,20 @@ public class NotificationBean {
         // Don't send notifications to your self.
         if(receiver.equals(sender))
             return;
+
+        // TODO: make truncation strategy
+        // Truncate list of notifications
+
+        List<ChildAssociationRef> notifications = getNotifications(receiver);
+        notifications.stream()
+                .map(ChildAssociationRef::getChildRef)
+                .sorted((NodeRef n1, NodeRef n2) -> {
+                    Date d1 = (Date) nodeService.getProperty(n1, ContentModel.PROP_CREATED);
+                    Date d2 = (Date) nodeService.getProperty(n2, ContentModel.PROP_CREATED);
+                    return d1.compareTo(d2);
+                })
+                .limit(Math.max(0, notifications.size() - 19))
+                .forEach(this::deleteNotification);
 
         // Then run as SystemUser
         AuthenticationUtil.runAs(() -> {
@@ -215,12 +231,7 @@ public class NotificationBean {
         int unSeenSize = countUnSeenNotifications(userName);
         int unReadSize = countUnReadNotifications(userName);
 
-        NodeRef user = personService.getPerson(userName);
-
-        Set<QName> types = new HashSet<>();
-        types.add(OpenDeskModel.TYPE_NOTIFICATION);
-
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
+        List<ChildAssociationRef> childAssociationRefs = getNotifications(userName);
 
         JSONObject result = new JSONObject();
         result.put("unseen", unSeenSize);
@@ -236,6 +247,20 @@ public class NotificationBean {
         result.put("notifications", children);
 
         return result;
+    }
+
+//    private List<NodeRef> getNotifications(String userName) {
+//        return getNotifications(userName).stream()
+//                .map(ref -> )
+//    }
+
+    private List<ChildAssociationRef> getNotifications(String userName) {
+        NodeRef user = personService.getPerson(userName);
+
+        Set<QName> types = new HashSet<>();
+        types.add(OpenDeskModel.TYPE_NOTIFICATION);
+
+        return nodeService.getChildAssocs(user, types);
     }
 
     private JSONObject getSiteParams(String siteShortName) throws JSONException {
