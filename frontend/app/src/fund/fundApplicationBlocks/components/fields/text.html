@@ -1,7 +1,9 @@
-<dt ng-repeat-start="field in vm.block.fields" ng-if="field.label">{{ field.label }}</dt>
-<dd ng-repeat-end>
-  <md-input-container>
-    <span ng-if="!isEditing.get()">{{ field.value }}</span>
-    <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}" />
-  </md-input-container>
-</dd>
+<div class="opendesk-dl">
+  <div class="opendesk-dl__term" ng-if="field.label">{{ field.label }}</div>
+  <div class="opendesk-dl__description">
+    <md-input-container>
+      <span ng-if="!isEditing.get()">{{ field.value }}</span>
+      <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}" />
+    </md-input-container>
+  </div>
+</div>

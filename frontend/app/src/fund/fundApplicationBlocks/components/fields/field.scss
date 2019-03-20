@@ -17,3 +17,20 @@
     }
   }
 }
+
+.opendesk-dl {
+  display: grid;
+  grid-gap: $u;
+  grid-template-columns: 180px auto;
+
+  &__term {
+    float: left;
+    font-weight: bold;
+    padding-top: 6px;
+    word-wrap: break-word;
+  }
+
+  &__definition {
+    float: left;
+  }
+}

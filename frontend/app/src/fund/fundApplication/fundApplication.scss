@@ -13,9 +13,7 @@
 .od-fund-app-wrapper [ui-view="application"] {
   application-block {
     &.expanded {
-      .rotate-arrow {
-        transform: rotate(180deg);
-      }
+      grid-column: 1 / -1;
     }
   }
 
@@ -114,8 +112,12 @@
 
 .od-fund-view {
   osflow-header {
-    background-color: $gray-90;
+    background-color: $white;
+    border-bottom: 1px solid $gray-85;
     padding: $u * 2 $u;
+    position: sticky;
+    top: 64px;
+    z-index: 1;
 
     h1,
     p {

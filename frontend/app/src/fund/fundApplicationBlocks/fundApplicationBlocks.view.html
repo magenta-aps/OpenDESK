@@ -10,9 +10,9 @@
       <md-card-title-text>
         <h2 class="md-title">Kommentarer</h2>
       </md-card-title-text>
-      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
-        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
-      </button>
+      <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
+        <md-icon>zoom_out_map</md-icon>
+      </md-button>
     </md-card-title>
     <md-card-content>
       <conversation discussion-id="'53e8664e-e1fb-40d0-9104-019d57f06bee'" site-short-name="swsdp"></conversation>
@@ -27,10 +27,10 @@
       <md-card-title-text>
         <h2 class="md-title">Indstil beløb</h2>
       </md-card-title-text>
-      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
-        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
-      </button>
-    </md-card-title>
+      <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
+          <md-icon>zoom_out_map</md-icon>
+        </md-button>
+      </md-card-title>
     <md-card-content>
       <md-input-container>
         <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount"/>
@@ -46,10 +46,10 @@
       <md-card-title-text>
         <h2 class="md-title">Udvælg til bestyrelsesmøde</h2>
       </md-card-title-text>
-      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
-        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
-      </button>
-    </md-card-title>
+      <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
+          <md-icon>zoom_out_map</md-icon>
+        </md-button>
+      </md-card-title>
     <md-card-content>
       <div class="od-fund-board-meeting-switch" flex layout="row" layout-align="start center" layout-margin>
       <span>nej</span><md-switch ng-model="application.board_meeting_include"></md-switch><span>ja</span>

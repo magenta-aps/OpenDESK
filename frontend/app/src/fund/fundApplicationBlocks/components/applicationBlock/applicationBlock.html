@@ -4,13 +4,14 @@
     <md-card-title-text class="md-title">
       <h2 class="md-title">{{ vm.block.label }}</h2>
     </md-card-title-text>
-    <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
-      <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
-    </button>
+
+    <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
+      <md-icon>zoom_out_map</md-icon>
+    </md-button>
   </md-card-title>
 
   <md-card-content>
-    <dl class="od-fund-app-block-field" ng-controller="ApplicationBlockController" ng-include="vm.getTemplate(field.type)"></dl>
+    <div ng-repeat="field in vm.block.fields" ng-include="vm.getTemplate(field.type)" class="od-fund-app-block-field"></div>
   </md-card-content>
 
 </md-card>
