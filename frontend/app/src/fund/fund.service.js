@@ -36,7 +36,7 @@ angular.module('openDeskApp.fund')
       createBudget: createBudget,
       createBudgetYear: createBudgetYear,
       getBudget: getBudget,
-
+      getHistory: getHistory,
       resetDemoData : resetDemoData
     }
 
@@ -266,5 +266,12 @@ angular.module('openDeskApp.fund')
             return response
           })
       })
+    }
+
+    function getHistory(applicationID) {
+      return $http.get(`/foundation/application/${applicationID}/history`)
+        .then(function (response) {
+          return response.data
+        })
     }
   }
