@@ -73,15 +73,38 @@ md-card {
 
 .od-sbsys-logo {
   display: inline-block;
-  max-width: 66px;
+  max-width: 63px;
+  vertical-align: middle;
+}
+
+.col__name {
+  width: 40%;
+}
+.col__history {
+  width: 150px;
+
+  @media screen and (min-width: 960px) {
+    width: auto;
+  }
+}
+.col__creator {
+  width: 100px;
+
+  @media screen and (min-width: 960px) {
+    width: auto;
+  }
+}
+.col__esdh {
+  width: 100px;
+}
+.col__menu {
+  width: 48px;
 }
 
 .od-members {
   width: 99%;
 
   td {
-    max-width: 0;
-
     .overflow {
       display: block;
       overflow: hidden;

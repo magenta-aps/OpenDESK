@@ -46,10 +46,13 @@ public class OpenDeskWebScript extends AbstractWebScript {
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-            try {
-                contentParams = new JSONObject(sb.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
+            String contentString = sb.toString();
+            if(!contentString.isEmpty()) {
+                try {
+                    contentParams = new JSONObject(contentString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
         objectResult = new JSONObject();

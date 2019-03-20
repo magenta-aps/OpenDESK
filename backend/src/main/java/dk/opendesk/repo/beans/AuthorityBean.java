@@ -8,6 +8,8 @@
 
 package dk.opendesk.repo.beans;
 
+import dk.opendesk.repo.utils.Pager;
+import dk.opendesk.repo.utils.SiteGroup;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.service.cmr.security.AuthorityService;
@@ -15,18 +17,16 @@ import org.alfresco.service.cmr.security.AuthorityType;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Pair;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static dk.opendesk.repo.model.OpenDeskModel.ORGANIZATIONAL_CENTERS;
 import static dk.opendesk.repo.model.OpenDeskModel.PROJECT_OWNERS;
 
 public class AuthorityBean {
-    private PersonBean personBean;
 
+    private PersonBean personBean;
     private AuthorityService authorityService;
 
     public void setPersonBean(PersonBean personBean) {
@@ -37,17 +37,20 @@ public class AuthorityBean {
         this.authorityService = authorityService;
     }
 
-    public JSONArray getAuthorities(String groupName) throws JSONException {
-        Set<String> authorities = getAuthorityList(groupName);
-        return getAuthorityToJSON(authorities);
+    public Pair<JSONArray, Integer> getAuthorities(String groupName, int maxItems, int skipCount) throws JSONException {
+        Pair<List<String>, Integer> authorities = getAuthorityList(groupName, maxItems, skipCount);
+        return new Pair<>(getAuthorityToJSON(authorities.getFirst()), authorities.getSecond());
 
     }
 
-    public Set<String> getAuthorityList(String groupName) {
-        return authorityService.getContainedAuthorities(null, groupName, true);
+    public Pair<List<String>, Integer> getAuthorityList(String groupName, int maxItems, int skipCount) {
+        return Pager.pageResult(
+                authorityService.getContainedAuthorities(null, groupName, true),
+                maxItems,
+                skipCount);
     }
 
-    private JSONArray getAuthorityToJSON(Set<String> authorities) throws JSONException {
+    private JSONArray getAuthorityToJSON(List<String> authorities) throws JSONException {
         JSONArray result = new JSONArray();
         for (String authorityName : authorities) {
             JSONObject json;
@@ -86,7 +89,7 @@ public class AuthorityBean {
         JSONObject json = new JSONObject();
         json.put("shortName", groupName);
         json.put("type", type);
-        JSONArray authorities = getAuthorities("GROUP_" + groupName);
+        JSONArray authorities = getAuthorities("GROUP_" + groupName, Integer.MAX_VALUE, 0).getFirst();
         json.put("members", authorities);
         return json;
     }
@@ -108,13 +111,16 @@ public class AuthorityBean {
         return result;
     }
 
-    public Set<String> getUserList(String groupName) {
-        return authorityService.getContainedAuthorities(AuthorityType.USER, groupName, false);
+    public Pair<List<String>, Integer> getUserList(String groupName, int maxItems, int skipCount) {
+        return Pager.pageResult(
+                authorityService.getContainedAuthorities(AuthorityType.USER, groupName, false),
+                maxItems,
+                skipCount);
     }
 
-    public JSONArray getUsers(String groupName) throws JSONException {
-        Set<String> userNames = getUserList(groupName);
-        return getAuthorityToJSON(userNames);
+    public Pair<JSONArray, Integer> getUsers(String groupName, int maxItems, int skipCount) throws JSONException {
+        Pair<List<String>, Integer> userNamesAndTotalCount = getUserList(groupName, maxItems, skipCount);
+        return new Pair<>(getAuthorityToJSON(userNamesAndTotalCount.getFirst()), userNamesAndTotalCount.getSecond());
 
     }
 
@@ -157,5 +163,22 @@ public class AuthorityBean {
 
     public JSONArray findUsers(String filter, List<String> ignoreList) throws JSONException {
         return findAuthorities(filter, false, ignoreList);
+    }
+
+    /**
+     * E.g. if the user is a member of both SiteManager and SiteCollaborator then SiteManager will be returned
+     */
+    public SiteGroup getTopAuthorityForUser(String userName, String siteShortName) {
+        Set<String> authorities = authorityService.getAuthoritiesForUser(userName);
+
+        return authorities.stream()
+                .filter(name -> name.contains(siteShortName) && !name.endsWith(siteShortName))
+                .map(name -> {
+                    String[] s = name.split("_");
+                    return SiteGroup.valueOf(s[s.length - 1]);
+                })
+                .reduce(SiteGroup.SiteConsumer, (siteGroup1, siteGroup2) ->
+                    siteGroup1.ordinal() < siteGroup2.ordinal() ? siteGroup2 : siteGroup1
+                );
     }
 }
