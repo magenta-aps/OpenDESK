@@ -10,14 +10,16 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('ApplicationBlockController', ['$scope', ApplicationBlockController])
+  .controller('ApplicationBlockController', ['$scope', 'fundApplicationEditing', ApplicationBlockController])
 
-function ApplicationBlockController ($scope) {
+function ApplicationBlockController ($scope, fundApplicationEditing) {
   var vm = this
 
   vm.getTemplate = getTemplate
+  vm.toggleExpand = $scope.$parent.vm.toggleExpand
+  $scope.isEditing = fundApplicationEditing
 
   function getTemplate (type) {
-    return '/app/src/fund/fundApplication/components/fields/' + type + '.html'
+    return '/app/src/fund/fundApplicationBlocks/components/fields/' + type + '.html'
   }
 }

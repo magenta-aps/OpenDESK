@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 
@@ -12,7 +12,7 @@ import '../components/ckEditor'
 import '../shared/filters/customDateFilter'
 import '../shared/directives/breadcrumb'
 import overviewTemplate from './view/overview.html'
-import conversationTemplate from './view/conversation.html'
+import discussionTemplate from './view/discussion.html'
 
 angular.module('openDeskApp.discussion', ['ckEditor'])
   .config(['$stateProvider', config])
@@ -26,7 +26,7 @@ function config ($stateProvider) {
     views: {
       'discussions': {
         template: overviewTemplate,
-        controller: 'DiscussionController',
+        controller: 'OverviewController',
         controllerAs: 'vm'
       }
     }
@@ -38,7 +38,7 @@ function config ($stateProvider) {
       },
       views: {
         'discussions': {
-          template: conversationTemplate,
+          template: discussionTemplate,
           controller: 'DiscussionController',
           controllerAs: 'vm'
         }

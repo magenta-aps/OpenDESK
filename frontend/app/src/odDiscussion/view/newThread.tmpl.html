@@ -1,12 +1,12 @@
-<md-dialog aria-label="{{'DISCUSSIONS.NEW' | translate }}" ng-cloak>
-    <form name="newDiscussionForm" ng-submit="vm.newDiscussion(newDiscussionTitle, changedContent)">
+<md-dialog aria-label="{{'DISCUSSIONS.NEW' | translate }}" ng-cloak>{{modalVm.test}}
+    <form name="newDiscussionForm" ng-submit="modalVm.newDiscussion(newDiscussionTitle, changedContent)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>{{'DISCUSSIONS.NEW' | translate }}
                 </h2>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                <md-button class="md-icon-button" ng-click="modalVm.cancelDialog()">
                     <md-icon>close</md-icon>
                 </md-button>
             </div>
@@ -24,6 +24,6 @@
         <md-dialog-actions>
             <md-button ng-disabled="newDiscussionForm.$invalid" type="submit" class="md-primary">{{'COMMON.CREATE' | translate}}</md-button>
         </md-dialog-actions>
-        
+
     </form>
 </md-dialog>

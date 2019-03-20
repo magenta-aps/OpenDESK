@@ -1,40 +1,78 @@
 <div class="od-fund-list">
 	<div layout='row'>
 		<md-card flex>
-			<md-card-title hide show-gt-md id="table-header">
-				<md-card-title-text>
+			<md-card-title id="table-header" layout="row" layout-align="end start" layout-xs="column">
+				<md-card-title-text flex>
 					<span class="md-headline">{{ state.title }}</span>
 				</md-card-title-text>
+				<div layout="row" layout-align="end center" layout-margin flex ng-if="vm.branches.length > 0 || vm.years.length > 0">
+					<div>
+						Filtrér:
+					</div>
+					<div>
+						<md-select ng-model="vm.selectedBranch" ng-change="vm.filterList()" placeholder="Bankområde" ng-model-options="{trackBy: $value.nodeID}">
+							<md-option ng-value="">
+								Vis alle
+							</md-option>
+							<md-option ng-repeat="branch in vm.branches" ng-value="branch.nodeID">
+								{{branch.title}}
+							</md-option>
+						</md-select>
+					</div>
+					<div>
+						<md-select ng-model="vm.selectedYear" ng-change="vm.filterList()" placeholder="Budget" ng-model-options="{trackBy: $value.nodeID}">
+						<md-option ng-value="">
+							Vis alle
+						</md-option>
+							<md-option ng-repeat="year in vm.years" ng-value="year.nodeID">
+								{{year.title}}
+							</md-option>
+						</md-select>
+					</div>
+				</div>
 			</md-card-title>
 			<md-card-content>
-				<md-list id="table-container" ng-if="vm.applications().length > 0">
+				<md-list id="table-container" ng-if="applications.length > 0">
 					<table class="od-members od-members-row">
 						<thead>
 							<tr>
-								<th sort order="key" by="vm.order" reverse="vm.reverse" ng-repeat="(key, value) in vm.applications()[0]">
+								<th sort order="key" by="vm.order" reverse="vm.reverse" ng-repeat="(key, value) in applications[0]">
 									{{ key }}
 								</th>
-								<th>
-									<md-checkbox aria-label="Vælg alle"></md-checkbox>
+								<th ng-if="state && state.nodeID">
+									<md-checkbox aria-label="Vælg alle" ng-click="vm.toggleAppSelection()"></md-checkbox>
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="application in vm.applications() | orderObjectBy:vm.order:vm.reverse">
+							<tr ng-repeat="application in applications | orderObjectBy:vm.order:vm.reverse">
 								<td ng-repeat="(key, value) in application">
 									<a class="od-filebrowser-link overflow" ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">
 										{{ value }}
 									</a>
 								</td>
-								<td>
-									<md-checkbox aria-label="Vælg denne ansøgning"></md-checkbox>
+								<td ng-if="state && state.nodeID">
+									<md-checkbox aria-label="Vælg denne ansøgning" ng-checked="vm.selectedApps.includes(application.nodeID)" ng-click="vm.toggleSelectedApp(application.nodeID)"></md-checkbox>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</md-list>
-				<p ng-if="vm.applications().length <= 0">
-					<em>Der findes ingen ansøgninger i dette stadie</em>
+				<div ng-if="vm.selectedApps.length && state.references.length > 0" layout="row" layout-padding layout-align="start center" class="batch-move">
+					<span>Flyt valgte ansøgning{{ vm.selectedApps.length>1?'er':'' }} til stadie</span>
+					<md-input-container>
+						<md-select ng-model="vm.moveToBranch" placeholder="Stadie" ng-model-options="{trackBy: $value.nodeID}">
+							<md-option ng-repeat="ref in state.references" ng-value="ref.nodeID">
+								{{ref.title}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+					<md-input-container>
+						<md-button class="md-raised md-primary" ng-click="vm.batchMoveApplications()">Flyt</md-button>
+					</md-input-container>
+				</div>
+				<p ng-if="applications.length <= 0">
+					<em>Der findes ingen ansøgninger i dette stadie med de angivne filtreringskriterier.</em>
 				</p>
 			</md-card-content>
 		</md-card>

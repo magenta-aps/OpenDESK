@@ -10,36 +10,52 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', 'fundService', '$mdDialog', '$state', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'fundApplicationEditing', '$mdDialog', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, fundService, $mdDialog, $state) {
-    var vm = this
-    vm.application = null
+function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, fundApplicationEditing, $mdDialog) {
+  var vm = this
+
+  $scope.application = null
+  $scope.currentAppPage = $stateParams.currentAppPage || 'application'
+  $scope.isEditing = fundApplicationEditing
+  vm.prevAppId = null
+  vm.nextAppId = null
+  vm.origValue = null
     vm.branches = []
 
-    $scope.currentAppPage = $stateParams.currentAppPage || 'application';
+  vm.editApplication = editApplication
+  vm.saveApplication = saveApplication
+  vm.cancelEditApplication = cancelEditApplication
+  vm.paginateApps = paginateApps
 
     activate()
 
     function activate() {
     fundService.getApplication($stateParams.applicationID)
     .then(function (response) {
-      vm.application = response
-      // if we have a state in store, but the currently loaded application
-      // doesn't have state information, clear both state and workflow values
-      // from the store
-      if($scope.$parent.state && !vm.application.state) {
-        $scope.$parent.state = null
-        $scope.$parent.workflow = null
+      $scope.application = response
+      browserService.setTitle(response.title)
+      headerService.setTitle(response.title)
+      // if we have a workflow in store, but it doesn't match the workflow of the
+      // application we just loaded, get new values for the store so we can
+      // populate the left-hand nav. The same applies if we have no workflow in store
+      if(!$scope.$parent.workflow || $scope.$parent.workflow && $scope.$parent.workflow.nodeID !== $scope.application.workflow.nodeID) { // need to also check that a workflow exists in the parent, otherwise we'll get an error of undefined
+        fundService.getWorkflow($scope.application.workflow.nodeID)
+        .then(function (response) {
+          $scope.$parent.workflow = response
+        })
       }
-      // conversely, if we don't have a state in store, but the currently
-      // loaded application does have state information, load it to the store
-      else if(!$scope.$parent.state && vm.application.state) {
-        fundService.getWorkflowState(vm.application.state.nodeID)
+      // similarly, if we have a state in store, but it doesn't match the state of the
+      // application we just loaded, get new values for the store. The same applies if we have
+      // no state in store
+      if(!$scope.$parent.state || $scope.$parent.state && $scope.$parent.state.nodeID !== $scope.application.state.nodeID) { // need to also check that a state exists in the parent, otherwise we'll get an error of undefined
+        fundService.getWorkflowState($scope.application.state.nodeID)
         .then(function (response) {
           $scope.$parent.state = response
         })
       }
+      // generate pagination links
+      generatePaginationLinks()
     })
 
     }
@@ -60,11 +76,10 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
 
     function DialogController($scope, $mdDialog, $mdToast) {
         var self = this
-        //TODO: Why does selectors not initialise with application values?
-        self.selectedBranch = vm.application.branchSummary
-        self.selectedBudget = vm.application.budget
-        self.selectedState = vm.application.state
-        self.selectedFlow = vm.application.workflow
+        self.selectedBranch = $scope.application.branchSummary
+        self.selectedBudget = $scope.application.budget
+        self.selectedState = $scope.application.state
+        self.selectedFlow = $scope.application.workflow
         self.activeWorkflows = []
         self.branches = []
         self.states = []
@@ -132,11 +147,11 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
         self.apply = function(answer) {
             $mdDialog.hide(answer)
                 .then(console.log("Application before"))
-                .then(console.log(vm.application))
-                .then($state.go('fund.workflow', { workflowID: vm.application.workflow.nodeID, stateID: vm.application.state.nodeID })) //Send user back to application list
-                .then(fundService.updateApplication(vm.application.nodeID, self.changedAttributes())) //and update the application according to selections
+                .then(console.log($scope.application))
+                .then($state.go('fund.workflow', { workflowID: $scope.application.workflow.nodeID, stateID: $scope.application.state.nodeID })) //Send user back to application list
+                .then(fundService.updateApplication($scope.application.nodeID, self.changedAttributes())) //and update the application according to selections
                 .then(console.log("Application after"))
-                .then(console.log(vm.application))
+                .then(console.log($scope.application))
                 .then(self.showToast())
         };
     }
@@ -147,7 +162,49 @@ function FundApplicationController ($scope, $stateParams, fundService, $mdDialog
             $mdToast.hide();
         };
         ctrl.goToApplicaion = function() {
-            $state.go('fund.application', {applicationID: vm.application.nodeID}) //workflowID and stateID are left out in the request.
+            $state.go('fund.application', {applicationID: $scope.application.nodeID}) //workflowID and stateID are left out in the request.
         }
     }
+
+  function paginateApps(appId) {
+    $state.go('fund.application', { applicationID: appId })
+  }
+
+  function editApplication() {
+    vm.origValue = JSON.parse(JSON.stringify($scope.application)) // make a copy instead of passing a reference
+    fundApplicationEditing.set(true)
+  }
+
+  function saveApplication () {
+    fundApplicationEditing.set(false)
+
+    fundService.updateApplication($scope.application.nodeID, $scope.application)
+    .then(function (response) {
+      if (response.status === 'OK') {
+        activate()
+      }
+    })
+  }
+
+  function cancelEditApplication () {
+    $scope.application = JSON.parse(JSON.stringify(vm.origValue))
+    fundApplicationEditing.set(false)
+  }
+
+  function generatePaginationLinks () {
+    // load variables for next/previous buttons, if they exist
+    if ($scope.$parent.state) {
+      var currAppIdx = $scope.$parent.state.applications.findIndex(app => app.nodeID == $scope.application.nodeID)
+      var prevAppIdx = currAppIdx - 1 < 0 ? null : currAppIdx - 1 // we can't paginate to negative indices
+      var nextAppIdx = currAppIdx + 1 >= $scope.$parent.state.applications.length ? null : currAppIdx + 1 // neither can we paginate to pages out of length
+      vm.prevAppId = prevAppIdx !== null ? $scope.$parent.state.applications[prevAppIdx].nodeID : null
+      vm.nextAppId = nextAppIdx !== null ? $scope.$parent.state.applications[nextAppIdx].nodeID : null
+    }
+  }
+
+  // asynchronously generate prev/next links, as they may not be ready when we first load the page
+  // (fundService needs to finish the requests)
+  $scope.$on('workflowstatechange', function (event, args) {
+    generatePaginationLinks()
+  })
 }

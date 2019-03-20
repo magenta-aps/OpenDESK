@@ -1,7 +1,15 @@
 .od-fund-app-block-field {
   margin-bottom:1em;
+  display:block;
   &:last-child {
     margin-bottom:0;
+  }
+  .layout-block {
+    &,
+    md-input-container,
+    span {
+      display:block;
+    }
   }
   md-tab-content {
     padding-top:1em;

@@ -7,4 +7,11 @@
             </md-card-title-text>
         </md-card-title>
     </md-card>
+    <span ng-repeat="transition in vm.state.references">
+        <md-card-title ng-click="vm.setApplicationState(transition.nodeID)">
+            <md-card-title-text>
+                <span class="md-headline">{{transition.title}}</span>
+            </md-card-title-text>
+        </md-card-title>
+    </span>
 </div>

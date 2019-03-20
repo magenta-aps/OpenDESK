@@ -1,0 +1,17 @@
+application-block {
+  &,
+  md-card,
+  md-card md-card-content {
+    page-break-inside:avoid;
+    break-inside:avoid-column;
+  }
+  md-card-title {
+    display:block;
+    &-text {
+      float:left;
+    }
+    button {
+      float:right;
+    }
+  }
+}

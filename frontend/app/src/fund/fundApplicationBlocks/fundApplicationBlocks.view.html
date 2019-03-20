@@ -1,0 +1,63 @@
+<!-- loop over fields coming from the application -->
+<application-block ng-repeat="(block, idx) in application.blocks"
+                   block="application.blocks[block]"/></application-block>
+<!-- manually render card for assigned amount -->
+<application-block>
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <label class="md-title" for="od-fund-approved-amount">Indstil beløb</label>
+      </md-card-title-text>
+      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+      </button>
+    </md-card-title>
+    <md-card-content>
+      <md-input-container>
+        <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount"/>
+      </md-input-container>
+    </md-card-content>
+  </md-card>
+</application-block>
+<!-- manually render card for board meeting vote -->
+<application-block>
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <label class="md-title" for="od-fund-approved-amount">Udvælg til bestyrelsesmøde</label>
+      </md-card-title-text>
+      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+      </button>
+    </md-card-title>
+    <md-card-content>
+      <div class="od-fund-board-meeting-switch" flex layout="row" layout-align="start center" layout-margin>
+      <span>nej</span><md-switch ng-model="application.board_meeting_include"></md-switch><span>ja</span>
+      </div>
+    </md-card-content>
+  </md-card>
+</application-block>
+<!-- manually render card for discussion -->
+<application-block>
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-title">Kommentarer</span>
+      </md-card-title-text>
+      <button type="button" ng-click="vm.toggleExpand($event)" class="no-styling">
+        <md-icon class="rotate-arrow">keyboard_arrow_down</md-icon>
+      </button>
+    </md-card-title>
+    <md-card-content>
+      <conversation discussion-id="'53e8664e-e1fb-40d0-9104-019d57f06bee'" site-short-name="swsdp"></conversation>
+    </md-card-content>
+  </md-card>
+</application-block>
+<!-- <md-card>
+  <md-card-title>
+    <strong>Kommentarer</strong>
+  </md-card-title>
+  <md-card-content>
+    <ng-include src="'/app/src/odDiscussion/view/conversation.html'"></ng-include>
+  </md-card-content>
+</md-card> -->

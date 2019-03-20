@@ -10,31 +10,21 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundWorkflowListController', ['$state', 'fundService', FundWorkflowListController])
+  .controller('FundWorkflowListController', ['$state', 'fundService', 'browserService', 'headerService', FundWorkflowListController])
 
-function FundWorkflowListController ($state, fundService) {
+function FundWorkflowListController ($state, fundService, browserService, headerService) {
   var vm = this
-  vm.resetDemoData = resetDemoData
-  vm.openIncoming = openIncoming
   vm.workflows = []
 
   activate()
 
   function activate() {
+    var title = 'Fondsansøgninger'
+    browserService.setTitle(title)
+    headerService.setTitle(title)
     fundService.getActiveWorkflows()
     .then(function (response) {
       vm.workflows = response
     })
-  }
-
-  function resetDemoData(){
-    fundService.resetDemoData()
-   .then(function(response){
-      activate()
-    })
-  }
-
-  function openIncoming() {
-    $state.go('odf.newApplications')
   }
 }

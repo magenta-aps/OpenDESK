@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 import '../shared/services/nodeRefUtils.service'
@@ -12,15 +12,16 @@ import '../shared/services/preference.service'
 
 angular.module('openDeskApp.discussion')
   .factory('discussionService', ['$http', 'nodeRefUtilsService', 'userService', 'personService',
-    'preferenceService', discussionService])
+    'preferenceService', 'siteService', discussionService])
 
-function discussionService ($http, nodeRefUtilsService, userService, personService, preferenceService) {
+function discussionService ($http, nodeRefUtilsService, userService, personService, preferenceService, siteService) {
   var restBaseUrl = '/alfresco/s/api'
 
   var service = {
     addDiscussion: addDiscussion,
     addReply: addReply,
     deletePost: deletePost,
+    getSiteUserPermissions: getSiteUserPermissions,
     getDiscussionFromNodeRef: getDiscussionFromNodeRef,
     getDiscussions: getDiscussions,
     getReplies: getReplies,
@@ -30,6 +31,23 @@ function discussionService ($http, nodeRefUtilsService, userService, personServi
   }
 
   return service
+
+  function getSiteUserPermissions (siteShortName) {
+    var perms = siteService.getPermissions()
+    return new Promise(function (resolve, reject) {
+      // if we don't yet have any permissions in cache, get them from the service
+      if(perms === undefined) {
+        resolve(siteService.getSiteUserPermissions(siteShortName))
+      }
+      // if we *do* have permissions in cache, resolve promise with those permissions as result
+      else {
+        resolve(perms)
+      }
+    })
+    .then(function (permissions) {
+      return permissions
+    })
+  }
 
   function getDiscussionFromNodeRef (siteShortName, nodeId) {
     return $http.get(restBaseUrl + '/forum/post/node/workspace/SpacesStore/' + nodeId, {})

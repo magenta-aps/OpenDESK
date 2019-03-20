@@ -13,6 +13,7 @@ import fundWorkflowList from './fundWorkflowList/fundWorkflowList.view.html'
 import fundWorkflowStateMenu from './fundWorkflowStateMenu/fundWorkflowStateMenu.view.html'
 import fundApplicationList from './fundApplicationList/fundApplicationList.view.html'
 import fundApplication from './fundApplication/fundApplication.view.html'
+import fundApplicationBlocks from './fundApplicationBlocks/fundApplicationBlocks.view.html'
 
 angular.module('openDeskApp.fund', ['openDeskApp.discussion'])
   .config(['$stateProvider', 'USER_ROLES', config])
@@ -24,10 +25,8 @@ function config ($stateProvider, USER_ROLES) {
     views: {
       'content@': {
         template: fund,
-        controller: function ($scope) {
-          $scope.workflow = null,
-          $scope.state = null
-        }
+        controller: 'FundController',
+        controllerAs: 'vm'
       },
       'fundMain@fund': {
         template: fundWorkflowList,
@@ -48,9 +47,7 @@ function config ($stateProvider, USER_ROLES) {
         controllerAs: 'vm'
       },
       'fundHeader@fund': {
-        template: fundWorkflowStateMenu,
-        controller: 'FundWorkflowStateMenuController',
-        controllerAs: 'vm'
+        template: fundWorkflowStateMenu
       }
     },
     params: {
@@ -76,12 +73,12 @@ function config ($stateProvider, USER_ROLES) {
         controllerAs: 'vm'
       },
       'fundHeader@fund': {
-        template: fundWorkflowStateMenu,
-        controller: 'FundWorkflowStateMenuController',
-        controllerAs: 'vm'
+        template: fundWorkflowStateMenu
       },
       'application@fund.application': {
-        template: '<application-block ng-repeat="block in vm.application" block="block"/>'
+        template: fundApplicationBlocks,
+        controller: 'FundApplicationBlocksController',
+        controllerAs: 'vm'
       }
     },
     params: {
@@ -99,17 +96,6 @@ function config ($stateProvider, USER_ROLES) {
     },
     params: {
       currentAppPage: 'contact'
-    }
-  })
-  .state('fund.application.comments', {
-    url: '/comments',
-    views: {
-      'application@fund.application': {
-        template: '<md-card><md-card-content>Comments</md-card-content></md-card>'
-      }
-    },
-    params: {
-      currentAppPage: 'comments'
     }
   })
   .state('fund.application.history', {

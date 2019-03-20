@@ -1,13 +1,13 @@
 
 <md-dialog aria-label="Rediger" ng-cloak>
-    <form name="editReplyForm" ng-submit="vm.editFirstPost(postItem, postItem.title, changedContent)">
+    <form name="editReplyForm" ng-submit="modalVm.editFirstPost(postItem, postItem.title, changedContent)">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>{{'COMMON.EDIT' | translate}} 
+                <h2>{{'COMMON.EDIT' | translate}}
                 </h2>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
+                <md-button class="md-icon-button" ng-click="modalVm.cancelDialog()">
                     <md-icon>close</md-icon>
                 </md-button>
             </div>
@@ -25,6 +25,6 @@
             <md-button ng-disabled="editReplyForm.$invalid" type="submit" class="md-primary">{{'COMMON.EDIT' | translate}}</md-button>
         </md-dialog-actions>
 
-        
+
     </form>
 </md-dialog>
