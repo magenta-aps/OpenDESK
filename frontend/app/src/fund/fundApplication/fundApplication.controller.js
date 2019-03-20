@@ -69,17 +69,20 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
             controllerAs: 'self',
             template: require('./components/moveApp.html'),
             parent: angular.element(document.body),
+            locals: {
+                application: $scope.application
+            },
             clickOutsideToClose:true,
         })
     };
 
 
-    function DialogController($scope, $mdDialog, $mdToast) {
+    function DialogController($mdDialog, $mdToast, application) {
         var self = this
-        self.selectedBranch = $scope.application.branchSummary
-        self.selectedBudget = $scope.application.budget
-        self.selectedState = $scope.application.state
-        self.selectedFlow = $scope.application.workflow
+        self.selectedBranch = application.branchSummary
+        self.selectedBudget = application.budget
+        self.selectedState = application.state
+        self.selectedFlow = application.workflow
         self.activeWorkflows = []
         self.branches = []
         self.states = []

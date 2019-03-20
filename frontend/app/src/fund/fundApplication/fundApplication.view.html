@@ -6,10 +6,6 @@
   <md-nav-item ng-if="isEditing.get()" md-nav-click="vm.cancelEditApplication()">Annuller redigering</md-nav-item>
   <md-nav-item md-nav-click="vm.paginateApps(vm.prevAppId)" ng-if="vm.prevAppId"><md-icon>keyboard_arrow_left</md-icon></md-nav-item>
   <md-nav-item md-nav-click="vm.paginateApps(vm.nextAppId)" ng-if="vm.nextAppId"><md-icon>keyboard_arrow_right</md-icon></md-nav-item>
-
-
-  <md-nav-item md-nav-sref="app.page5" name="edit"><md-icon>keyboard_arrow_left</md-icon></md-nav-item>
-  <md-nav-item md-nav-sref="app.page5" name="edit"><md-icon>keyboard_arrow_right</md-icon></md-nav-item>
 </md-nav-bar>
 
 <md-card class="od-fund-app-wrapper" layout="column">
