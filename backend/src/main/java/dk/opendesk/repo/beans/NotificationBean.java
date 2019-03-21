@@ -33,11 +33,15 @@ import java.util.stream.Collectors;
 
 public class NotificationBean {
 
+    private static final String TRUNCATION_LIMIT_KEY = "openDesk.notifications.truncation.limit";
+    private static final int DEFAULT_TRUNCATION_LIMIT = 15;
+
     private AuthorityService authorityService;
     private NodeService nodeService;
     private PersonService personService;
     private PreferenceService preferenceService;
     private SiteService siteService;
+    private Properties globalProperties;
 
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
@@ -54,6 +58,7 @@ public class NotificationBean {
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
+    public void setGlobalProperties(Properties properties) { globalProperties = properties; }
 
     /**
      * Counts number of child nodes of a user with a specific property value.
@@ -111,8 +116,14 @@ public class NotificationBean {
         if(receiver.equals(sender))
             return;
 
-        // TODO: make truncation strategy
+        // TODO: create TruncationStrategy and extract the code block below into its own TruncationStrategyImpl
+        // in order to avoid responsibility erosion in this class. However, we will not worry about this now,
+        // since the entire notification mechanism may be changed soon.
+
         // Truncate list of notifications
+
+        String truncationLimitStr = globalProperties.getProperty(TRUNCATION_LIMIT_KEY);
+        int truncationLimit = truncationLimitStr != null ? Integer.parseInt(truncationLimitStr) : DEFAULT_TRUNCATION_LIMIT;
 
         List<ChildAssociationRef> notifications = getNotifications(receiver);
         notifications.stream()
@@ -122,7 +133,7 @@ public class NotificationBean {
                     Date d2 = (Date) nodeService.getProperty(n2, ContentModel.PROP_CREATED);
                     return d1.compareTo(d2);
                 })
-                .limit(Math.max(0, notifications.size() - 19))
+                .limit(Math.max(0, notifications.size() - truncationLimit + 1))
                 .forEach(this::deleteNotification);
 
         // Then run as SystemUser
