@@ -26,11 +26,16 @@
   &__term {
     float: left;
     font-weight: bold;
-    padding-top: 6px;
     word-wrap: break-word;
   }
 
   &__definition {
     float: left;
   }
+}
+
+.opendesk-dl__term.ng-scope {
+  // Editable fields have input-fields and therefore taller
+  // Align the fields by adding a little padding to the top
+  padding-top: 6px;
 }

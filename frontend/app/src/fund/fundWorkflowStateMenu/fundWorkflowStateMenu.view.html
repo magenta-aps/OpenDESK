@@ -1,14 +1,8 @@
-<md-button ui-sref="fund.workflow({workflowID:workflow.nodeID, stateID:wfState.nodeID})" ng-repeat="wfState in workflow.states">
-  <span ng-class="{ 'fund-state-active': wfState.nodeID === state.nodeID }">{{wfState.title}}</span>
-</md-button>
-
-<style>
-  md-sidenav {
-    min-height: calc(100vh - 64px);
-  }
-
-  md-sidenav .md-button {
-    display: block;
-    text-align: left;
-  }
-</style>
+<div class="osflow-sidenav">
+  <md-button 
+    ui-sref="fund.workflow({workflowID:workflow.nodeID, stateID:wfState.nodeID})" 
+    ng-repeat="wfState in workflow.states" 
+    ng-class="{ 'fund-state-active': wfState.nodeID === state.nodeID }">
+    <span>{{wfState.title}}</span>
+  </md-button>
+</div>

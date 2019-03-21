@@ -14,8 +14,26 @@ angular
 
 function FundApplicationBlocksController ($scope, $rootScope) {
   var vm = this
-
+  vm.allFields = allFields
+  vm.phoneNumber = phoneNumber
+  vm.amount = amount
   vm.toggleExpand = toggleExpand
+
+  function allFields () {
+    return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : null // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+  }
+
+  function phoneNumber () {
+    return vm.allFields() ? vm.allFields().find(field => field.describes == 'phone_number') : null
+  }
+
+  function amount () {
+    return vm.allFields() ? vm.allFields().find(field => field.describes == 'amount') : null
+  }
+
+  function category () {
+    // return vm.allFields() ? vm.allFields().find(field => field.describes == 'phone_number') : null
+  }
 
   function toggleExpand (event) {
     var block = $(event.target).closest('application-block')

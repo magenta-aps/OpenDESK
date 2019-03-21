@@ -19,6 +19,7 @@ a {
 
 body {
   background: $gray-85;
+  background-color: $white;
   color: $primary-text-color;
   display: flex;
   flex-flow: column nowrap;
@@ -68,7 +69,7 @@ md-toast {
 //
 
 main {
-  background-color: $white;
+  // background-color: $white;
   margin: $u * 4 0 auto;
 }
 

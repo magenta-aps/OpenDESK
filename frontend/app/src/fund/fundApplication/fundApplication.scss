@@ -114,6 +114,7 @@
   osflow-header {
     background-color: $white;
     border-bottom: 1px solid $gray-85;
+    display: block;
     padding: $u * 2 $u;
     position: sticky;
     top: 64px;

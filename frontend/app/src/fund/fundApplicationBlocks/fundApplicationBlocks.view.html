@@ -1,7 +1,28 @@
+<!-- manually render card for basic info -->
+<application-block>
+  <md-card>
+    <md-card-content>
+      <div class="opendesk-dl">
+
+        <div class="opendesk-dl__term">{{ vm.phoneNumber().label }}:</div>
+        <div class="opendesk-dl__description">{{ vm.phoneNumber().value }}</div>
+
+        <div class="opendesk-dl__term">{{ vm.amount().label }}:</div>
+        <div class="opendesk-dl__description">{{ vm.amount().value }}</div>
+
+        <div class="opendesk-dl__term">{{ vm.phoneNumber().label }}:</div>
+        <div class="opendesk-dl__description">{{ vm.phoneNumber().value }}</div>
+
+        <div class="opendesk-dl__term">{{ vm.phoneNumber().label }}:</div>
+        <div class="opendesk-dl__description">{{ vm.phoneNumber().value }}</div>
+
+      </div>
+    </md-card-content>
+  </md-card>
+</application-block>
+
 <!-- loop over fields coming from the application -->
-<application-block 
-  ng-repeat="(block, idx) in application.blocks" 
-  block="application.blocks[block]"></application-block>
+<application-block ng-repeat="(block, idx) in application.blocks" block="application.blocks[block]"></application-block>
 
 <!-- manually render card for discussion -->
 <application-block>
@@ -19,7 +40,7 @@
     </md-card-content>
   </md-card>
 </application-block>
-  
+
 <!-- manually render card for assigned amount -->
 <application-block>
   <md-card>
@@ -28,12 +49,12 @@
         <h2 class="md-title">Indstil beløb</h2>
       </md-card-title-text>
       <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
-          <md-icon>zoom_out_map</md-icon>
-        </md-button>
-      </md-card-title>
+        <md-icon>zoom_out_map</md-icon>
+      </md-button>
+    </md-card-title>
     <md-card-content>
       <md-input-container>
-        <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount"/>
+        <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount" />
       </md-input-container>
     </md-card-content>
   </md-card>
@@ -47,12 +68,13 @@
         <h2 class="md-title">Udvælg til bestyrelsesmøde</h2>
       </md-card-title-text>
       <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
-          <md-icon>zoom_out_map</md-icon>
-        </md-button>
-      </md-card-title>
+        <md-icon>zoom_out_map</md-icon>
+      </md-button>
+    </md-card-title>
     <md-card-content>
       <div class="od-fund-board-meeting-switch" flex layout="row" layout-align="start center" layout-margin>
-      <span>nej</span><md-switch ng-model="application.board_meeting_include"></md-switch><span>ja</span>
+        <span>nej</span>
+        <md-switch ng-model="application.board_meeting_include"></md-switch><span>ja</span>
       </div>
     </md-card-content>
   </md-card>
