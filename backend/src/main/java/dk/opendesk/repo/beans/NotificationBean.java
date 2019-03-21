@@ -260,11 +260,6 @@ public class NotificationBean {
         return result;
     }
 
-//    private List<NodeRef> getNotifications(String userName) {
-//        return getNotifications(userName).stream()
-//                .map(ref -> )
-//    }
-
     private List<ChildAssociationRef> getNotifications(String userName) {
         NodeRef user = personService.getPerson(userName);
 
