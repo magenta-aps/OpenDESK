@@ -1,0 +1,53 @@
+:root {
+    --meter-background-color: rgba(0, 0, 0, 0.1);
+    --meter-border-radius: 2px;
+    --meter-color: rgba(39, 174, 96, 0.9);
+    --meter-height: 2em;
+    --meter-label-font-size: 0.8em;
+}
+
+.osflow-meter {
+    background-color: var(--meter-background-color);
+    // border-radius: var(--meter-border-radius);
+    box-sizing: border-box;
+    display: block;
+    height: var(--meter-height);
+    margin: 1em 0;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    *,
+    &::before,
+    &::after {
+        box-sizing: border-box;
+    }
+
+    &::before {
+        content: attr(aria-label);
+        font-size: var(--meter-label-font-size);
+        position: absolute;
+        text-transform: uppercase;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 1em;
+    }
+
+    &__progress {
+        background-color: var(--meter-color);
+        display: inline-block;
+        height: 100%;
+        position: relative;
+        transition: width 0.2s ease-in-out;
+
+        &::before {
+            content: attr(aria-label);
+            font-size: var(--meter-label-font-size);
+            position: absolute;
+            text-transform: uppercase;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1em;
+        }
+    }
+}
