@@ -1,9 +1,90 @@
 :root {
-    --meter-background-color: rgba(0, 0, 0, 0.1);
+    --light-gray: rgba(0, 0, 0, 0.1);
+    --lighter-gray: rgba(0, 0, 0, 0.05);
+    --bar-heading-color: rgba(0, 0, 0, 0.75);
+
+    --meter-background-color: var(--light-gray);
     --meter-border-radius: 2px;
     --meter-color: rgba(39, 174, 96, 0.9);
     --meter-height: 2em;
     --meter-label-font-size: 0.8em;
+}
+
+hidden,
+.hidden {
+    display: none;
+}
+
+.osflow-table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+
+    &__thead {}
+
+    &__tbody {}
+
+    &__tr {
+        &:hover {
+            .osflow-table__td {
+                background-color: var(--lighter-gray);
+            }
+        }
+
+        &--open {
+            .osflow-table__td,
+            + .osflow-table__tr .osflow-table__td {
+                background-color: var(--lighter-gray);
+            }
+
+            .osflow-table__td {
+                border-top: 1px solid var(--light-gray);
+            }
+
+            + .osflow-table__tr .osflow-table__td {
+                border-bottom: 1px solid var(--light-gray);
+            }
+        }
+    }
+
+    &__th {
+        background-color: var(--light-gray);
+        font-weight: normal;
+        padding: 1em;
+        text-align: left;
+
+        &--right {
+            text-align: right;
+        }
+    }
+
+    &__td {
+        padding: 1em;
+
+        &--right {
+            text-align: right;
+        }
+    }
+}
+
+.osflow-bar {
+    margin-top: 1em;
+
+    &__heading {
+        color: var(--bar-heading-color);
+        font-size: 0.8rem;
+        font-weight: normal;
+        margin: 0;
+        text-transform: uppercase;
+
+        span {
+            font-family: monospace;
+        }
+    }
+
+    &__heading-link {
+        color: inherit;
+    }
 }
 
 .osflow-meter {
@@ -12,7 +93,6 @@
     box-sizing: border-box;
     display: block;
     height: var(--meter-height);
-    margin: 1em 0;
     overflow: hidden;
     position: relative;
     width: 100%;
@@ -23,14 +103,14 @@
         box-sizing: border-box;
     }
 
-    &::before {
-        content: attr(aria-label);
+    &__label {
         font-size: var(--meter-label-font-size);
         position: absolute;
         text-transform: uppercase;
         top: 50%;
         transform: translateY(-50%);
         right: 1em;
+        white-space: nowrap;
     }
 
     &__progress {
@@ -39,15 +119,15 @@
         height: 100%;
         position: relative;
         transition: width 0.2s ease-in-out;
+    }
 
-        &::before {
-            content: attr(aria-label);
-            font-size: var(--meter-label-font-size);
-            position: absolute;
-            text-transform: uppercase;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 1em;
-        }
+    &__progress-label {
+        font-size: var(--meter-label-font-size);
+        position: absolute;
+        text-transform: uppercase;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 1em;
+        white-space: nowrap;
     }
 }

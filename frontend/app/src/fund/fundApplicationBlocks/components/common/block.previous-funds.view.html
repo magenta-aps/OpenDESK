@@ -3,29 +3,99 @@
         <md-card-content>
             <h2>Tidligere ansøgninger</h2>
 
-            <span 
-                class="osflow-meter"
-                aria-label="Ansøgt beløb (100.000)"
-                title="Ansøgt beløb (100.000)">
+            <table class="osflow-table">
+                <thead class="osflow-table__thead">
+                    <tr class="osflow-table__tr">
+                        <th class="osflow-table__th">År</th>
+                        <th class="osflow-table__th">Ansøgninger</th>
+                        <th class="osflow-table__th osflow-table__th--right">Ansøgt</th>
+                        <th class="osflow-table__th osflow-table__th--right">Tildelt</th>
+                    </tr>
+                </thead>
+                <tbody class="osflow-table__tbody">
+                    <tr class="osflow-table__tr" tabindex="1">
+                        <td class="osflow-table__td">2019</td>
+                        <td class="osflow-table__td">2</td>
+                        <td class="osflow-table__td osflow-table__td--right">115.000</td>
+                        <td class="osflow-table__td osflow-table__td--right">89.000</td>
+                    </tr>
+                    <!-- this is open, start! -->
+                    <tr class="osflow-table__tr osflow-table__tr--open" tabindex="1">
+                        <td class="osflow-table__td">2018</td>
+                        <td class="osflow-table__td">2</td>
+                        <td class="osflow-table__td osflow-table__td--right">115.000</td>
+                        <td class="osflow-table__td osflow-table__td--right">89.000</td>
+                    </tr>
+                    <tr class="osflow-table__tr">
+                        <td class="osflow-table__td" colspan="4">
+                            <div class="osflow-bar">
+                                <h4 class="osflow-bar__heading">
+                                    <a href="#" class="osflow-bar__heading-link">Ansøgning til ny legeplads
+                                    <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></a>
+                                </h4>
+                                <div class="osflow-meter">
+                                    <span class="osflow-meter__label">100.000</span>
+                                    <div class="osflow-meter__progress" style="width: 80%;">
+                                        <span class="osflow-meter__progress-label">80.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="osflow-bar">
+                                    <h4 class="osflow-bar__heading">
+                                            <a href="#" class="osflow-bar__heading-link">Ansøgning til påskefest
+                                            <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></a>
+                                        </h4>
+                                        <div class="osflow-meter">
+                                    <span class="osflow-meter__label">15.000</span>
+                                    <div class="osflow-meter__progress" style="width: 50%;">
+                                        <span class="osflow-meter__progress-label">7.500</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- this is open, stop! -->
+                    <tr class="osflow-table__tr" tabindex="1">
+                        <td class="osflow-table__td">2017</td>
+                        <td class="osflow-table__td">6</td>
+                        <td class="osflow-table__td osflow-table__td--right">1.286.000</td>
+                        <td class="osflow-table__td osflow-table__td--right">846.000</td>
+                    </tr>
+                    <tr class="osflow-table__tr" tabindex="1">
+                        <td class="osflow-table__td">2016</td>
+                        <td class="osflow-table__td">2</td>
+                        <td class="osflow-table__td osflow-table__td--right">5.000</td>
+                        <td class="osflow-table__td osflow-table__td--right">5.000</td>
+                    </tr>
+                    <tr class="osflow-table__tr" tabindex="1">
+                        <td class="osflow-table__td">2015</td>
+                        <td class="osflow-table__td">1</td>
+                        <td class="osflow-table__td osflow-table__td--right">12.000</td>
+                        <td class="osflow-table__td osflow-table__td--right">12.000</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div class="osflow-bar">
+                <h4 class="osflow-bar__heading">Ansøgning til ny legeplads
+                    <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></h4>
+                <div class="osflow-meter">
+                    <span class="osflow-meter__label">100.000</span>
+                    <div class="osflow-meter__progress" style="width: 80%;">
+                        <span class="osflow-meter__progress-label">80.000</span>
+                    </div>
+                </div>
+            </div>
 
-                <span 
-                    class="osflow-meter__progress"
-                    aria-label="Tildelt beløb (80.000)"
-                    title="Tildelt beløb (80.000)"
-                    style="width: 80%;"></span>
-            </span>
-
-            <span 
-                class="osflow-meter" 
-                aria-label="Ansøgt beløb (15.000)" 
-                title="Ansøgt beløb (15.000)">
-                
-                <span 
-                    class="osflow-meter__progress" 
-                    aria-label="Tildelt beløb (9.000)" 
-                    title="Tildelt beløb (9.000)" 
-                    style="width: 60%;"></span>
-            </span>
+            <div class="osflow-bar">
+                <h4 class="osflow-bar__heading">Ansøgning til ny legeplads
+                    <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></h4>
+                <div class="osflow-meter">
+                    <span class="osflow-meter__label">15.000</span>
+                    <div class="osflow-meter__progress" style="width: 60%;">
+                        <span class="osflow-meter__progress-label">9.000</span>
+                    </div>
+                </div>
+            </div> -->
 
         </md-card-content>
     </md-card>
