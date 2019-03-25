@@ -1,5 +1,11 @@
 <md-card>
     <md-card-content>
-        {{vm.changes}}
+        <md-list ng-controller="FundApplicationHistoryController" ng-cloak>
+            <md-subheader class="md-no-sticky">Historik</md-subheader>
+            <md-list-item ng-repeat="change in vm.changes | orderBy:'-timesStamp'">
+
+                {{change.timesStamp}}, {{change.changeType}}
+            </md-list-item>
+        </md-list>
     </md-card-content>
 </md-card>
