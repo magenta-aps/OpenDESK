@@ -15,11 +15,11 @@ angular
 function FundApplicationHistoryController ($scope, fundService, $rootScope) {
     var vm = this
     vm.changes = []
-    console.log('Found controller')
-
-    fundService.getHistory('067fa75b-4b81-48fc-a64c-429e7ab67410') //Need applicationID. Hardcoded not working either.
-        .then(function (response) {
-            console.log('Got response')
-            vm.changes = response
-        })
+    $scope.$on('applicationWasLoaded', function (event, application) {
+        fundService.getHistory(application.nodeID)
+            .then(function (response) {
+                console.log('Got response')
+                vm.changes = response
+            })
+    })
 }

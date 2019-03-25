@@ -269,7 +269,7 @@ angular.module('openDeskApp.fund')
     }
 
     function getHistory(applicationID) {
-      return $http.get(`/foundation/application/${applicationID}/history`)
+      return $http.get(`/alfresco/service/foundation/application/${applicationID}/history`)
         .then(function (response) {
           return response.data
         })
