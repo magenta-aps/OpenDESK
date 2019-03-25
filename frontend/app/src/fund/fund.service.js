@@ -37,7 +37,8 @@ angular.module('openDeskApp.fund')
       createBudgetYear: createBudgetYear,
       getBudget: getBudget,
 
-      resetDemoData : resetDemoData
+      resetDemoData : resetDemoData,
+      resetDemoDataDanva: resetDemoDataDanva
     }
 
     return service
@@ -239,6 +240,15 @@ angular.module('openDeskApp.fund')
     //Resets demo-data
     function resetDemoData() {
       return $http.post(`/alfresco/service/foundation/demodata`)
+      .then(function (response) {
+          console.log(response)
+        return response.data
+      })
+    }
+
+    //Resets demo-data for Danva
+    function resetDemoDataDanva() {
+      return $http.post(`/alfresco/service/foundation/demodata/danva`)
       .then(function (response) {
           console.log(response)
         return response.data
