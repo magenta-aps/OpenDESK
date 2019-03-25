@@ -1,4 +1,4 @@
-<div layout="row" layout-sm="column" class="od-fund-view">
-  <div ng-if="workflow" ui-view="fundHeader" flex-sm="15" flex-order="2" flex-order-gt-sm="0"></div>
-  <div ui-view="fundMain" flex flex-order="1" layout="column"></div>
+<div layout="row" layout-gt-sm="row" class="od-fund-view">
+    <div ui-view="fundHeader" flex="30" flex-gt-md="20" class="full-height"></div>
+    <div ui-view="fundMain" flex="70" flex-gt-md="80"></div>
 </div>

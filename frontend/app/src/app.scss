@@ -19,6 +19,7 @@ a {
 
 body {
   background: $gray-85;
+  background-color: $white;
   color: $primary-text-color;
   display: flex;
   flex-flow: column nowrap;
@@ -68,8 +69,8 @@ md-toast {
 //
 
 main {
+  // background-color: $white;
   margin: $u * 4 0 auto;
-  background-color: $gray-85;
 }
 
 // Icons in buttons

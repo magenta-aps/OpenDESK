@@ -36,3 +36,9 @@ $card-shadow: rgba($black, .2);
 $u: 16px;
 // Unit of measurement - usually default font size
 $br-sm-md: $u * 40;
+
+// Imported from "node_modules/angular-material/angular-material.scss"
+$layout-breakpoint-xs:     600px !default;
+$layout-breakpoint-sm:     960px !default;
+$layout-breakpoint-md:     1280px !default;
+$layout-breakpoint-lg:     1920px !default;

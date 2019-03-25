@@ -61,7 +61,6 @@
 				</md-button>
 			</md-card-title>
 			<md-card-content>
-
 				<md-list id="table-container">
 					<table class="od-members od-members-row">
 						<col style="width:2.5%;min-width:32px">
@@ -81,22 +80,17 @@
 						<col style="width:2.5%">
 						<thead fix-head>
 							<tr>
-								<th colspan="2" sort order="'title'" by="order" reverse="reverse" title="Sortér kolonne">{{vm.sitesName | translate}}</th>
-								<th hide show-gt-xs sort order="'manager.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{vm.config.enableProjects
-									? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
-								<th hide show-gt-md ng-show="vm.config.enableProjects" sort order="'center_name'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.ORG_UNIT'
-									| translate}}</th>
-								<th hide show-gt-xs ng-show="vm.config.enableProjects" sort order="'state'" by="order" reverse="reverse" title="Sortér kolonne">{{'PROJECT.STATUS.STATUS'
-									| translate}}</th>
-								<th hide show-gt-sm sort order="'modified'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.MODIFIED'
-									| translate}}</th>
-								<th hide show-gt-sm colspan="2" sort order="'isFavourite'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.FAVOURITE'
-									| translate}}</th>
+								<th colspan="2" sort order="'title'" by="order" reverse="reverse" title="Sortér kolonne" ng-click="vm.saveTableOrderToStorage('title')">{{vm.sitesName | translate}}</th>
+								<th hide show-gt-xs sort order="'manager.displayName'" by="order" reverse="reverse" title="Sortér kolonne" ng-click="vm.saveTableOrderToStorage('manager.displayName')">{{vm.config.enableProjects ? 'SITES.PD-Project.GROUPS.PD_PROJECTMANAGER' : 'SITES.Project.GROUPS.SiteManager' | translate}}</th>
+								<th hide show-gt-md ng-show="vm.config.enableProjects" sort order="'center_name'" by="order" reverse="reverse" title="Sortér kolonne" ng-click="vm.saveTableOrderToStorage('center_name')">{{'PROJECT.ORG_UNIT' | translate}}</th>
+								<th hide show-gt-xs ng-show="vm.config.enableProjects" sort order="'state'" by="order" reverse="reverse" title="Sortér kolonne" ng-click="vm.saveTableOrderToStorage('state')">{{'PROJECT.STATUS.STATUS' | translate}}</th>
+								<th hide show-gt-sm sort order="'modified'" by="order" reverse="reverse" title="Sortér kolonne" ng-click="vm.saveTableOrderToStorage('modified')">{{'COMMON.MODIFIED' | translate}}</th>
+								<th hide show-gt-sm colspan="2" sort order="'isFavourite'" by="order" reverse="reverse" title="Sortér kolonne" ng-click="vm.saveTableOrderToStorage('isFavourite')">{{'COMMON.FAVOURITE' | translate}}</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="project in vm.showall ? vm.sites : vm.sitesPerUser |
-							orderObjectBy:order:!reverse |
+							orderObjectBy:order:reverse |
 							exactMatch:['type','status']:[vm.search.type,vm.search.status] |
 							isContained:vm.searchMembers |
 							filter: vm.search" id="{{project.shortName}}">
