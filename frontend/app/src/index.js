@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 import $ from 'jquery'
 import 'angular'
@@ -16,6 +16,7 @@ import 'angular-messages'
 import 'angular-resource'
 import 'angular-sanitize'
 import 'angular-translate'
+import 'angular-translate-loader-pluggable'
 import 'angular-translate-loader-static-files'
 import 'angular-ui-router'
 
@@ -68,6 +69,23 @@ importAll(
   require.context('./', true, /.*\.scss$/)
 )
 
+// Import extra modules
+var modulesContext = require.context('./modules/', true, /^.*\.module\.js$/)
+var modules = ['openDeskApp']
+modulesContext.keys().forEach(function (key) {
+  var regex = /^(.*\/)(.*)\.module\.js$/
+  var found = key.replace(regex, '$2')
+  modules.push(found)
+})
+
+importAll(modulesContext)
+
+// Then import all other js files
+importAll(
+  // including subdirectories, find all *.js files except those matching *.module.js
+  require.context('./modules/', true, /^(?!.*\.module\.js$).*\.js$/)
+)
+
 angular.element(document).ready(function () {
-  angular.bootstrap(document, ['openDeskApp'])
+  angular.bootstrap(document, modules)
 })
