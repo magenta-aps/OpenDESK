@@ -10,6 +10,7 @@ package dk.opendesk.webscripts.person;
 
 import dk.opendesk.repo.beans.PersonBean;
 import dk.opendesk.webscripts.OpenDeskWebScript;
+import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -29,6 +30,9 @@ public class GetPerson extends OpenDeskWebScript {
         try {
             String userName = urlParams.get("userName");
             objectResult = personBean.getPersonInfo(userName);
+            if (objectResult == null) {
+                notFound(res);
+            }
         } catch (Exception e) {
             error(res, e);
         }

@@ -322,7 +322,7 @@ public class PersonBean {
         sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
         JSONArray result = new JSONArray();
 
-        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(100000));
+        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(Integer.MAX_VALUE));
         for (PersonInfo user : users.getPage()) {
             // Do not add users that are on the ignore list
             if(ignoreList != null && ignoreList.contains(user.getUserName()))
