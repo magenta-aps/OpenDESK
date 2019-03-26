@@ -26,13 +26,10 @@
         <property name="fixesFromSchema" value="0"/>
         <property name="fixesToSchema" value="${version.schema}"/>
         <property name="targetSchema" value="100000"/>
-        <property name="importerBootstrap">
-            <ref bean="spacesBootstrap" />
-        </property>
+        <property name="importerBootstrap" ref="spacesBootstrap"/>
         <!-- Can be used to check if something already exists, if it does then the patch will not be executed -->
-        <property name="checkPath">
-            <value>/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:opendesk_extension</value>
-        </property>
+        <property name="checkPath"
+                  value="/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:opendesk_extension"/>
         <property name="bootstrapView">
             <props>
                 <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}</prop>
@@ -41,6 +38,47 @@
         </property>
     </bean>
 
+    <bean id="dk.opendesk.bootstrap.patch.editorsSettingsLoader"
+          class="dk.opendesk.repo.bootstrap.OpenDeskBootstrapPatch"
+          parent="basePatch" >
+        <property name="id" value="dk.opendesk.bootstrap.patch.editorsSettingsLoader"/>
+        <property name="description" value="dk.opendesk.bootstrap.patch.editorsSettingsLoader.description"/>
+        <property name="fixesFromSchema" value="0"/>
+        <property name="fixesToSchema" value="${version.schema}"/>
+        <property name="targetSchema" value="100000"/>
+        <property name="nodeBean" ref="nodeBean"/>
+        <property name="importerBootstrap" ref="spacesBootstrap"/>
+        <!-- Can be used to check if something already exists, if it does then the patch will not be executed -->
+        <property name="checkNamePath"
+                  value="Data Dictionary/OpenDesk Extension/Editors"/>
+        <property name="bootstrapView">
+            <props>
+                <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:opendesk_extension</prop>
+                <prop key="location">alfresco/module/repo/bootstrap/editors_settings_loader.xml</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="dk.opendesk.bootstrap.patch.propertyUIDefinitionsLoader"
+          class="dk.opendesk.repo.bootstrap.OpenDeskBootstrapPatch"
+          parent="basePatch" >
+        <property name="id" value="dk.opendesk.bootstrap.patch.propertyUIDefinitionsLoader"/>
+        <property name="description" value="dk.opendesk.bootstrap.patch.propertyUIDefinitionsLoader.description"/>
+        <property name="fixesFromSchema" value="0"/>
+        <property name="fixesToSchema" value="${version.schema}"/>
+        <property name="targetSchema" value="100000"/>
+        <property name="nodeBean" ref="nodeBean"/>
+        <property name="importerBootstrap" ref="spacesBootstrap"/>
+        <!-- Can be used to check if something already exists, if it does then the patch will not be executed -->
+        <property name="checkNamePath"
+                  value="Data Dictionary/OpenDesk Extension/Property UI Definitions"/>
+        <property name="bootstrapView">
+            <props>
+                <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:opendesk_extension</prop>
+                <prop key="location">alfresco/module/repo/bootstrap/property_ui_definitions.xml</prop>
+            </props>
+        </property>
+    </bean>
 
     <bean id="dk.opendesk.bootstrap.patch.textTemplateLoader"
           class="org.alfresco.repo.admin.patch.impl.GenericBootstrapPatch"
@@ -50,13 +88,10 @@
         <property name="fixesFromSchema" value="0"/>
         <property name="fixesToSchema" value="${version.schema}"/>
         <property name="targetSchema" value="100000"/>
-        <property name="importerBootstrap">
-            <ref bean="spacesBootstrap" />
-        </property>
+        <property name="importerBootstrap" ref="spacesBootstrap"/>
         <!-- Can be used to check if something already exists, if it does then the patch will not be executed -->
-        <property name="checkPath">
-            <value>/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:extensionwebscripts/cm:OpenDesk</value>
-        </property>
+        <property name="checkPath"
+                  value="/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:extensionwebscripts/cm:OpenDesk"/>
         <property name="bootstrapView">
             <props>
                 <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:extensionwebscripts</prop>

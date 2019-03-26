@@ -1,5 +1,5 @@
 <tr>
-    <td>
+    <td class="col__name">
         <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active" ng-click="FRC.scrollToFilebrowserTop()">
             <i class="material-icons">
                 {{content.contentType == 'cmis:folder' ? 'folder_open' : ''}} {{content.contentType == 'cmis:link' ? 'link' : ''}}
@@ -8,20 +8,24 @@
             <span class='content-name'>{{content.name}}</span>
         </a>
     </td>
-    <td style="width:40%" hide show-gt-sm>
-        <table style="width:100%">
+    <td class="col__history">
+        <table style="table-layout: fixed; width: 100%;">
             <tr>
-                <td style="border: none; margin: 0; padding: 0">
-                    <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active" ng-click="FRC.scrollToFilebrowserTop()">{{content.lastChanged | openeDate}}&nbsp;-&nbsp;{{content.lastChangedBy}}</a>
+                <td style="width: calc(100% - 48px);">
+                    <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active" ng-click="FRC.scrollToFilebrowserTop()">
+                        <span style="white-space: nowrap;">
+                            {{content.lastChanged | openeDate}}
+                        </span><br>
+                        {{content.lastChangedBy}}
+                    </a>
                 </td>
-
-                <td ng-show="content.contentType === 'cmis:document' && content.versions.length > 1" style="border: none; margin: 0; padding: 0">
-                    <md-menu md-position-mode="left bottom">
+                <td style="width: 48px;" ng-show="content.contentType === 'cmis:document' && content.versions.length > 1">
+                    <md-menu md-position-mode="left bottom" style="float: right;">
                         <md-button style="float: left" class="md-icon-button" aria-label="Se historik" ng-click="$mdMenu.open()">
                             <md-icon md-menu-origin title="Se historik " style="font-size: 22px; position: relative; top: 5px">history</md-icon>
                         </md-button>
                         <md-menu-content>
-                            <md-menu-item class="menu-list-head ">
+                            <md-menu-item class="menu-list-head">
                                 {{'COMMON.MODIFIED' | translate}}
                                 <span style="width: 70px; "></span> {{'COMMON.MODIFIED_BY' | translate}}
                             </md-menu-item>
@@ -33,17 +37,17 @@
                 </td>
             </tr>
         </table>
+
     </td>
-    <td>
+    <td class="col__creator">
         <a class="od-filebrowser-link" ui-sref="{{FRC.getUiRef(content)}}" ui-sref-active="active" ng-click="FRC.scrollToFilebrowserTop()">
             <span class='content-name'>{{content.creator.displayName}}</span>
         </a>
     </td>
-    <td hide show-gt-md ng-if="showESDH" style="width:10%">
-        <input type="checkbox" name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType!='cmis:link' " aria-label="Vælg"
-            ng-change="loadCheckboxes()">
+    <td class="col__esdh">
+        <md-checkbox name="to-esdh" ng-model="content.sendToSbsys" ng-if="content.contentType != 'cmis:link' && showESDH && isSite" aria-label="Vælg" ng-change="loadCheckboxes()">
     </td>
-    <td style="width:5%">
+    <td class="col__menu">
         <filebrowser-menu content="content" is-site="isSite"></filebrowser-menu>
     </td>
 </tr>

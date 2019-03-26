@@ -9,6 +9,7 @@
 package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
+import dk.opendesk.repo.utils.SiteGroup;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
@@ -28,6 +29,7 @@ import org.alfresco.util.ISO9075;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.springframework.extensions.surf.util.Pair;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -380,8 +382,8 @@ public class SiteBean {
         authorityService.deleteAuthority(authority, true);
     }
 
-    public JSONArray getAuthorities(String siteShortName) throws JSONException {
-        return getAuthorityGroups(siteShortName, true);
+    public JSONArray getAuthorities(String siteShortName, int maxItems, int skipCount) throws JSONException {
+        return getAuthorityGroups(siteShortName, true, maxItems, skipCount);
     }
 
     private List<String> getAuthorityList(String siteShortName, boolean authorities) throws JSONException {
@@ -391,11 +393,15 @@ public class SiteBean {
             JSONObject groupJSON = (JSONObject) groupObject;
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
             if(authorities){
-                Set<String> authorityList = authorityBean.getAuthorityList(groupAuthorityName);
+                List<String> authorityList = authorityBean
+                        .getAuthorityList(groupAuthorityName, Integer.MAX_VALUE, 0)
+                        .getFirst();
                 result.addAll(authorityList);
             }
             else {
-                Set<String> authorityList = authorityBean.getUserList(groupAuthorityName);
+                List<String> authorityList = authorityBean
+                        .getUserList(groupAuthorityName, Integer.MAX_VALUE, 0)
+                        .getFirst();
                 result.addAll(authorityList);
             }
         }
@@ -490,28 +496,35 @@ public class SiteBean {
     /**
      * Gets all groups of a site and their members.
      * @param siteShortName short name of a site.
-     * @param authorities TODO
-     * @return a JSONArray containing JSONObjects for each group and each of their members.
+     * @param authorities the method returns groups if this is true and users otherwise.
+     * @param maxItems the maximum number of items to return (used for paging).
+     * @param skipCount the offset to use for returning the list of users (used for paging).
+     * @return JSONArray of JSONObjects for each group and each of their members.
      */
-    private JSONArray getAuthorityGroups(String siteShortName, boolean authorities) throws JSONException {
+    private JSONArray getAuthorityGroups(String siteShortName, boolean authorities, int maxItems,
+                                         int skipCount) throws JSONException {
+
         String siteType = getSiteType(siteShortName);
         JSONArray result = new JSONArray();
+
         for (Object groupObject : getSiteGroups(siteType)) {
 
             JSONObject groupJSON = (JSONObject) groupObject;
-
             String groupAuthorityName = getAuthorityName(siteShortName, groupJSON.getString("shortName"));
-            JSONArray members;
-            if(authorities)
-                members = authorityBean.getAuthorities(groupAuthorityName);
-            else
-                members = authorityBean.getUsers(groupAuthorityName);
-            groupJSON.put("members", members);
+
+            Pair<JSONArray, Integer> membersAndTotalCount;
+            if(authorities) {
+                membersAndTotalCount = authorityBean.getAuthorities(groupAuthorityName, maxItems, skipCount);
+            } else {
+                membersAndTotalCount = authorityBean.getUsers(groupAuthorityName, maxItems, skipCount);
+            }
+            groupJSON.put("members", membersAndTotalCount.getFirst());
+            groupJSON.put("totalMembersCount", membersAndTotalCount.getSecond());
             result.add(groupJSON);
+
         }
 
         return result;
-
     }
 
     /**
@@ -753,10 +766,34 @@ public class SiteBean {
     /**
      * Gets all groups of a site and their members.
      * @param siteShortName short name of a site.
-     * @return a JSONArray containing JSONObjects for each group and each of their members.
+     * @param maxItems the maximum number of items to return (used for paging).
+     * @param skipCount the offset to use for returning the list of users (used for paging).
+     * @param flatten list of users will be flattened (used for paging) if set to true.
+     * @return JSONArray of JSONObjects for each group and each of their members
      */
-    public JSONArray getUsers(String siteShortName) throws JSONException {
-        return getAuthorityGroups(siteShortName, false);
+    public JSONArray getUsers(String siteShortName, int maxItems, int skipCount, boolean flatten) throws JSONException {
+        if (flatten) {
+            String groupAuthorityName = getAuthorityName(siteShortName, "");
+
+            Pair<JSONArray, Integer> membersAndTotalCount = authorityBean.getUsers(groupAuthorityName, maxItems, skipCount);
+
+            JSONObject groupJSON = new JSONObject();
+            groupJSON.put("members", membersAndTotalCount.getFirst());
+            groupJSON.put("totalMembersCount", membersAndTotalCount.getSecond());
+            for (Object m : membersAndTotalCount.getFirst()) {
+                JSONObject member = (JSONObject) m;
+                SiteGroup siteGroup = authorityBean.getTopAuthorityForUser(member.getString("userName"), siteShortName);
+                member.put("topAuthority", siteGroup.toString());
+                member.put("authorityOrdinal", siteGroup.ordinal());
+            }
+            JSONArray result = new JSONArray();  // Wrap the result in an array to be consistent with the code elsewhere
+            result.add(groupJSON);
+
+            return result;
+
+        } else {
+            return getAuthorityGroups(siteShortName, false, maxItems, skipCount);
+        }
     }
 
     /**

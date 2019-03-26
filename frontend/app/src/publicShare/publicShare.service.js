@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 
@@ -27,7 +27,7 @@ function onlyOfficeService ($http, $q, alfrescoNodeService) {
         function (response) {
           var item = response.data
           item.contentUrl = '/api/internal/shared/node/' + sharedId + '/content/' + item.name
-          item.thumbnailUrl = '/api/internal/shared/node/' + sharedId + '/content/thumbnails/pdf'
+          item.thumbnailUrl = '/api/internal/shared/node/' + sharedId + '/content/thumbnails/'
           return item
         },
         function (error) {

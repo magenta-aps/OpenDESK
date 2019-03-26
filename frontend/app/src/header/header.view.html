@@ -22,11 +22,11 @@
                     <md-tooltip md-direction="bottom" md-delay="500">{{'ADMIN.SYS_SETTINGS.SETTINGS' | translate}}</md-tooltip>
                 </md-button>
 
-                <!-- md-button class="md-icon-button" ng-click="vm.toggleNotifications()" aria-label="{{ 'NOTIFICATION.NOTIFICATIONS' | translate }}">
+                <md-button class="md-icon-button" ng-click="vm.toggleNotifications()" aria-label="{{ 'NOTIFICATION.NOTIFICATIONS' | translate }}">
                     <md-icon>notifications</md-icon>
                     <span ng-if="vm.unseenNotifications > 0" class="od-notifications--counter">{{vm.unseenNotifications}}</span>
                     <md-tooltip md-direction="bottom" md-delay="500">{{'NOTIFICATION.NOTIFICATIONS' | translate}}</md-tooltip>
-                </md-button -->
+                </md-button>
 
                 <span class="clickable" ng-click="vm.toggleUserPanel()">{{vm.user.firstName}} {{vm.user.lastName}}
                 </span>
