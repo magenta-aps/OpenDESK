@@ -17,9 +17,9 @@
                     <th class="col__name" sort order="'name'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.NAME' | translate }}</th>
                     <th class="col__history" sort order="'lastChanged'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.HISTORY' | translate }}</th>
                     <th class="col__creator" sort order="'creator.displayName'" by="order" reverse="reverse" title="Sortér kolonne">{{'COMMON.CREATEDBY' | translate }}</th>
-                    <th class="col__esdh" ng-if="isSite" colspan="2">
-                        <span style="display: inline-block; width: 100px;">
-                            <input type="checkbox" name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendAllToSbsys" ng-change="vm.setAllCheckboxes()">
+                    <th class="col__esdh" colspan="2">
+                        <span style="display: inline-block; width: 100px;" ng-if="isSite && vm.enableESDH">
+                            <md-checkbox name="all-to-esdh" aria-label="Vælg alle" ng-model="vm.sendAllToSbsys" ng-change="vm.setAllCheckboxes()" style="margin-bottom: 0;">
                             <img ng-src="assets/img/sbsys.png" class="od-sbsys-logo">
                         </span>
                     </th>
