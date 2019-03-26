@@ -25,12 +25,20 @@
 
   &__term {
     float: left;
+    grid-column-start:1;
+    grid-column-end:span 1;
     font-weight: bold;
     word-wrap: break-word;
   }
 
   &__definition {
     float: left;
+    grid-column-start:2;
+    grid-column-end:span 1;
+  }
+  &__fullwidth {
+    grid-column-start:1;
+    grid-column-end:span 2;
   }
 }
 
