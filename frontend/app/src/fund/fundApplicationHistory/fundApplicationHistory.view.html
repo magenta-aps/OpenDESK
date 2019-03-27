@@ -2,12 +2,22 @@
 <md-list ng-controller="FundApplicationHistoryController" ng-cloak>
     <md-subheader class="md-no-sticky">Historik</md-subheader>
     <md-list-item ng-repeat="change in vm.changes | orderBy:'-timesStamp'">
-        {{vm.convertTimeStamp(change.timesStamp)}}
-        <div ng-if="change.changeType === 'applicationUpdate'" class="md-list-item-text" layout="column" ng-repeat="singleChange in change.changes">
-            <span>{{ vm.convertChangeToString(singleChange) }}</span>
+        <div ng-if="change.changeType === 'applicationUpdate'" class="md-list-item-text" layout="row">
+            <md-icon>update</md-icon>
+            {{vm.convertTimeStamp(change.timesStamp)}}
+            <div ng-repeat="changeUnit in change.changes">
+                {{ changeUnit.changedField }}: {{ changeUnit.oldValue }} <md-icon>arrow_right_alt</md-icon> {{changeUnit.newValue}}
+            </div>
         </div>
-        <div ng-if="change.changeType === 'applicationCreation'">
+        <div ng-if="change.changeType === 'applicationCreation'" class="md-list-item-text" layout="row">
+            <md-icon>assignment</md-icon>
+            {{vm.convertTimeStamp(change.timesStamp)}}
             <span>Ansøgning oprettet</span>
+        </div>
+        <div ng-if="change.changeType === 'applicationDeletion'" class="md-list-item-text" layout="row">
+            <md-icon>delete</md-icon>
+            {{vm.convertTimeStamp(change.timesStamp)}}
+            <span>Ansøgning slettet</span>
         </div>
     </md-list-item>
 </md-list>

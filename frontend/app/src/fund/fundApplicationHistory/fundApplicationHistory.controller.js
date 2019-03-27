@@ -37,15 +37,10 @@ function FundApplicationHistoryController ($scope, fundService, $stateParams) {
                 })
         }
     }
-    vm.convertChangeToString = function (singleChange) {
-        var result = singleChange.changedField + " ændret fra " + singleChange.oldValue + " til " + singleChange.newValue
-        return result
-    }
 
     vm.convertTimeStamp = function (ts) {
         ts = ts.split(/[-T:\.]+/)
         console.log(ts)
         return ts[2] + "-" + ts[1] + "-" + ts[0] + " " + ts[3] + ":" + ts[4]
     }
-
 }
