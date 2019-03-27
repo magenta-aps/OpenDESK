@@ -116,28 +116,29 @@ public class NotificationBean {
         if(receiver.equals(sender))
             return;
 
-        // TODO: create TruncationStrategy and extract the code block below into its own TruncationStrategyImpl
-        // in order to avoid responsibility erosion in this class. However, we will not worry about this now,
-        // since the entire notification mechanism may be changed soon.
-
-        // Truncate list of notifications
-
-        String truncationLimitStr = globalProperties.getProperty(TRUNCATION_LIMIT_KEY);
-        int truncationLimit = truncationLimitStr != null ? Integer.parseInt(truncationLimitStr) : DEFAULT_TRUNCATION_LIMIT;
-
-        List<ChildAssociationRef> notifications = getNotifications(receiver);
-        notifications.stream()
-                .map(ChildAssociationRef::getChildRef)
-                .sorted((NodeRef n1, NodeRef n2) -> {
-                    Date d1 = (Date) nodeService.getProperty(n1, ContentModel.PROP_CREATED);
-                    Date d2 = (Date) nodeService.getProperty(n2, ContentModel.PROP_CREATED);
-                    return d1.compareTo(d2);
-                })
-                .limit(Math.max(0, notifications.size() - truncationLimit + 1))
-                .forEach(this::deleteNotification);
-
         // Then run as SystemUser
         AuthenticationUtil.runAs(() -> {
+
+            // TODO: create TruncationStrategy and extract the code block below into its own TruncationStrategyImpl
+            // in order to avoid responsibility erosion in this class. However, we will not worry about this now,
+            // since the entire notification mechanism may be changed soon.
+
+            // Truncate list of notifications
+
+            String truncationLimitStr = globalProperties.getProperty(TRUNCATION_LIMIT_KEY);
+            int truncationLimit = truncationLimitStr != null ? Integer.parseInt(truncationLimitStr) : DEFAULT_TRUNCATION_LIMIT;
+
+            List<ChildAssociationRef> notifications = getNotifications(receiver);
+            notifications.stream()
+                    .map(ChildAssociationRef::getChildRef)
+                    .sorted((NodeRef n1, NodeRef n2) -> {
+                        Date d1 = (Date) nodeService.getProperty(n1, ContentModel.PROP_CREATED);
+                        Date d2 = (Date) nodeService.getProperty(n2, ContentModel.PROP_CREATED);
+                        return d1.compareTo(d2);
+                    })
+                    .limit(Math.max(0, notifications.size() - truncationLimit + 1))
+                    .forEach(this::deleteNotification);
+
             // Don't send notification if the receiver turned off notifications for this event
             if (!preferenceFilter.isEmpty()) {
                 Serializable preference = preferenceService.getPreference(receiver, preferenceFilter);
