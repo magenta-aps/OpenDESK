@@ -10,16 +10,31 @@
 
 angular
     .module('openDeskApp.fund')
-    .controller('FundApplicationHistoryController', ['$scope', 'fundService', FundApplicationHistoryController])
+    .controller('FundApplicationHistoryController', ['$scope', 'fundService', '$stateParams', FundApplicationHistoryController])
 
-function FundApplicationHistoryController ($scope, fundService, $rootScope) {
+function FundApplicationHistoryController ($scope, fundService, $stateParams) {
     var vm = this
     vm.changes = []
-    $scope.$on('applicationWasLoaded', function (event, application) {
-        fundService.getHistory(application.nodeID)
-            .then(function (response) {
-                console.log('Got response')
-                vm.changes = response
-            })
-    })
+    activate()
+    function activate() {
+        // If application is not loaded yet, load it and get its history.
+        if (!$scope.$parent.application) {
+            fundService.getApplication($stateParams.applicationID)
+                .then(function (response) {
+                    $scope.$parent.application = response
+                    return response
+                })
+                .then(function (response) {
+                    return fundService.getHistory(response.nodeID)
+                })
+                .then(function (response) {
+                    vm.changes = response
+                })
+        } else {
+            fundService.getHistory($scope.$parent.application.nodeID)
+                .then(function (response) {
+                    vm.changes = response
+                })
+        }
+    }
 }
