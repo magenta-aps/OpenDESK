@@ -337,6 +337,9 @@ public class PersonBean {
         return !userName.isEmpty() && personService.personExists(userName);
     }
 
+    /**
+     * Person invalid if either userName or email exists
+     */
     public JSONObject validatePerson(String userName, String email) throws JSONException {
         boolean userNameExists = userNameExists(userName);
         boolean emailExists = emailExists(email);
