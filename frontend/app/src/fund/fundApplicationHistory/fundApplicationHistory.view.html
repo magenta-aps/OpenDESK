@@ -1,11 +1,14 @@
-<md-card>
-    <md-card-content>
-        <md-list ng-controller="FundApplicationHistoryController" ng-cloak>
-            <md-subheader class="md-no-sticky">Historik</md-subheader>
-            <md-list-item ng-repeat="change in vm.changes | orderBy:'-timesStamp'">
 
-                {{change.timesStamp}}, {{change.changeType}}
-            </md-list-item>
-        </md-list>
-    </md-card-content>
-</md-card>
+<md-list ng-controller="FundApplicationHistoryController" ng-cloak>
+    <md-subheader class="md-no-sticky">Historik</md-subheader>
+    <md-list-item ng-repeat="change in vm.changes | orderBy:'-timesStamp'">
+        {{vm.convertTimeStamp(change.timesStamp)}}
+        <div ng-if="change.changeType === 'applicationUpdate'" class="md-list-item-text" layout="column" ng-repeat="singleChange in change.changes">
+            <span>{{ vm.convertChangeToString(singleChange) }}</span>
+        </div>
+        <div ng-if="change.changeType === 'applicationCreation'">
+            <span>Ansøgning oprettet</span>
+        </div>
+    </md-list-item>
+</md-list>
+
