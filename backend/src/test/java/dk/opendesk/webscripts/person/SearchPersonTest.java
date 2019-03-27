@@ -42,18 +42,49 @@ public class SearchPersonTest extends OpenDeskWebScriptTest {
     }
 
     public void testFindTwoUsersByFirstName() throws Exception {
+        addUser();
+
+        JSONArray users = executeGetArray(FILTER_URL + "x");
+        JSONObject user1 = (JSONObject) users.get(0);
+        JSONObject user2 = (JSONObject) users.get(1);
+
+        assertEquals(2, users.length());
+        assertEquals(USER_TWO, user1.get("userName"));
+        assertEquals(USER_FOUR, user2.get("userName"));
+    }
+
+    public void testFindTwoUsersBySubstringAndLastName() throws Exception {
+        addUser();
+
+        JSONArray users = executeGetArray(FILTER_URL + "last");
+        JSONObject user1 = (JSONObject) users.get(0);
+        JSONObject user2 = (JSONObject) users.get(1);
+
+        assertEquals(2, users.length());
+        assertEquals(USER_ONE, user1.get("userName"));
+        assertEquals(USER_FOUR, user2.get("userName"));
+    }
+
+    public void testFindThreeUsersBySubstringAndFirstNameAndLastName() throws Exception {
+        addUser();
+
+        JSONArray users = executeGetArray(FILTER_URL + "a");
+        JSONObject user1 = (JSONObject) users.get(0);
+        JSONObject user2 = (JSONObject) users.get(1);
+        JSONObject user3 = (JSONObject) users.get(2);
+
+        assertEquals(3, users.length());
+        assertEquals(ADMIN, user1.get("userName"));
+        assertEquals(USER_ONE, user2.get("userName"));
+        assertEquals(USER_FOUR, user3.get("userName"));
+    }
+
+    private void addUser() {
         AuthenticationUtil.runAs(() -> {
             createUser(USER_FOUR, "x", "lastName");
             users.add(USER_FOUR);
             return null;
         }, ADMIN);
-
-        JSONArray users = executeGetArray(FILTER_URL + "x");
-        JSONObject user1 = (JSONObject) users.get(0);
-        JSONObject user2 = (JSONObject) users.get(1);
-        assertEquals(2, users.length());
-        assertEquals(USER_FOUR, user2.get("userName"));
-        assertEquals(USER_TWO, user1.get("userName"));
     }
 
 }
