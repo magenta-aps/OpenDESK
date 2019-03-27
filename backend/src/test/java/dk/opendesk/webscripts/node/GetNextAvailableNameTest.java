@@ -29,7 +29,7 @@ public class GetNextAvailableNameTest extends OpenDeskWebScriptTest {
     }
 
     public void testGetNextAvailableNameTest() throws IOException, JSONException {
-        String uri = "/node/" + folderId + "/next-available-name?name=" + fileName;
+        String uri = "/node/" + folderId + "/next-available-name/" + fileName;
         JSONObject returnJSON = executeGetObject(uri);
         assertTrue(returnJSON.has(FILE_NAME));
         assertEquals(fileName, returnJSON.getString(FILE_NAME));
@@ -40,7 +40,7 @@ public class GetNextAvailableNameTest extends OpenDeskWebScriptTest {
             uploadFile(docLib, fileName);
             return null;
         }, ADMIN);
-        String uri = "/node/" + folderId + "/next-available-name?name=" + fileName;
+        String uri = "/node/" + folderId + "/next-available-name/" + fileName;
         JSONObject returnJSON = executeGetObject(uri);
         assertTrue(returnJSON.has(FILE_NAME));
         assertEquals(FILE_TEST_TEMPLATE1_NEXT, returnJSON.getString(FILE_NAME));
