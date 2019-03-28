@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.webscripts;
 
@@ -96,6 +96,7 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
     public static final String FILE_TEST_TEMPLATE1_WITHOUT_EXT = "Test_Template1";
     public static final String FILE_TEST_TEMPLATE1_NEXT = "Test_Template1(1).pdf";
     public static final String FOLDER_TEST = "Folder Test";
+    public static final String FOLDER_TEST2 = "Folder Test2";
 
     public ApplicationContext appContext = getServer().getApplicationContext();
 
@@ -387,8 +388,10 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
 
     public NodeRef createFolder(NodeRef parentRef, String folderName) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
+            Map<QName, Serializable> properties = new HashMap<>();
+            properties.put(ContentModel.PROP_NAME, folderName);
             ChildAssociationRef child = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS,
-                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folderName), ContentModel.TYPE_FOLDER);
+                    ContentModel.ASSOC_CONTAINS, ContentModel.TYPE_FOLDER, properties);
             return child.getChildRef();
         });
     }
