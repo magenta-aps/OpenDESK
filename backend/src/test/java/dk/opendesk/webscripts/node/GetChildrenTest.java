@@ -57,7 +57,7 @@ public class GetChildrenTest extends OpenDeskWebScriptTest {
             uploadFile(docLibRef2, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE1);
             uploadFile(docLibRef2, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE2);
             createFolder(docLibRef2, FOLDER_TEST);
-            createFolder(docLibRef2, FOLDER_TEST);
+            createFolder(docLibRef2, FOLDER_TEST2);
             return null;
         }, ADMIN);
         String nodeId = docLibRef2.getId();
