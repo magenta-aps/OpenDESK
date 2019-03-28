@@ -116,7 +116,7 @@ public class SiteBean {
     }
 
     /**
-     * Adds an authority to an site authority group.
+     * Adds an authority to a site authority group.
      * @param siteShortName short name of a site.
      * @param authority authority.
      * @param group group name.
