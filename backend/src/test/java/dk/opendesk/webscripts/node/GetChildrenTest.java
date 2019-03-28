@@ -39,9 +39,9 @@ public class GetChildrenTest extends OpenDeskWebScriptTest {
 
     public void testGet3DocumentsAnd1Folder() throws IOException, JSONException {
         AuthenticationUtil.runAs(() -> {
-            uploadFile(docLibRef, FILE_TEST_TEMPLATE1);
-            uploadFile(docLibRef, FILE_TEST_TEMPLATE2);
-            uploadFile(docLibRef, FILE_TEST_TEMPLATE3);
+            uploadFile(docLibRef, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE1);
+            uploadFile(docLibRef, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE2);
+            uploadFile(docLibRef, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE3);
             createFolder(docLibRef, FOLDER_TEST);
             return null;
         }, ADMIN);
@@ -54,8 +54,8 @@ public class GetChildrenTest extends OpenDeskWebScriptTest {
 
     public void testGet2DocumentsAnd2Folder() throws IOException, JSONException {
         AuthenticationUtil.runAs(() -> {
-            uploadFile(docLibRef2, FILE_TEST_TEMPLATE1);
-            uploadFile(docLibRef2, FILE_TEST_TEMPLATE2);
+            uploadFile(docLibRef2, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE1);
+            uploadFile(docLibRef2, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE2);
             createFolder(docLibRef2, FOLDER_TEST);
             createFolder(docLibRef2, FOLDER_TEST);
             return null;

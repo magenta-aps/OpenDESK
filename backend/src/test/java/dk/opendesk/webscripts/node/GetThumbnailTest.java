@@ -31,7 +31,7 @@ public class GetThumbnailTest extends OpenDeskWebScriptTest {
     @Override
     protected void setUpTest() {
         NodeRef nodeRef = sites.get(SITE_ONE);
-        NodeRef docRef = uploadFile(nodeRef, FILE_TEST_UPLOAD);
+        NodeRef docRef = uploadFile(nodeRef, FILE_TEST_UPLOAD, FILE_TEST_UPLOAD);
         docId = docRef.getId();
         Map<String, Serializable> versionProperties = new HashMap<>();
         Version version = createVersion(docRef, versionProperties);

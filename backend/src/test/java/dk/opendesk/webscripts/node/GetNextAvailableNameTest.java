@@ -37,7 +37,7 @@ public class GetNextAvailableNameTest extends OpenDeskWebScriptTest {
 
     public void testGetNextAvailableNameTestWithSameFileName() throws IOException, JSONException {
         AuthenticationUtil.runAs(() -> {
-            uploadFile(docLib, fileName);
+            uploadFile(docLib, FILE_TEST_UPLOAD, fileName);
             return null;
         }, ADMIN);
         String uri = "/node/" + folderId + "/next-available-name/" + fileName;

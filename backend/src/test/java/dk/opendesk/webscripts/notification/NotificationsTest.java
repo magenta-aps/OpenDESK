@@ -59,7 +59,7 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
     public void testGetTwoNotifications() throws IOException, JSONException {
         AuthenticationUtil.runAs(() -> {
             addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
-            uploadFile(sites.get(SITE_ONE), FILE_TEST_UPLOAD);
+            uploadFile(sites.get(SITE_ONE), FILE_TEST_UPLOAD, FILE_TEST_UPLOAD);
             return null;
         }, ADMIN);
         JSONObject returnJSON = executeGetNotifications();

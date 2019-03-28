@@ -30,7 +30,7 @@ public class GetVersionsTest extends OpenDeskWebScriptTest {
 
     @Override
     protected void setUpTest() {
-        docRef = uploadFile(sites.get(SITE_ONE), FILE_TEST_UPLOAD);
+        docRef = uploadFile(sites.get(SITE_ONE), FILE_TEST_UPLOAD, FILE_TEST_UPLOAD);
         createVersion(docRef, versionProperties);
         createVersion(docRef, versionProperties);
         createVersion(docRef, versionProperties);

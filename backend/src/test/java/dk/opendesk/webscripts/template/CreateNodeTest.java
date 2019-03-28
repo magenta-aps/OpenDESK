@@ -32,8 +32,8 @@ public class CreateNodeTest extends OpenDeskWebScriptTest {
     @Override
     protected void setUpTest() throws FileNotFoundException {
         NodeRef templateDocLib = getDocumentTemplateRef();
-        docTemplateRef = uploadFile(templateDocLib, FILE_TEST_FROM_TEMPLATE1);
-        docTemplateWithoutExtensionRef = uploadFile(templateDocLib, FILE_TEST_TEMPLATE1_WITHOUT_EXT);
+        docTemplateRef = uploadFile(templateDocLib, FILE_TEST_UPLOAD, FILE_TEST_FROM_TEMPLATE1);
+        docTemplateWithoutExtensionRef = uploadFile(templateDocLib, FILE_TEST_UPLOAD, FILE_TEST_TEMPLATE1_WITHOUT_EXT);
         docLibRef = siteBean.getDocumentLibraryRef(SITE_ONE);
         addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
     }

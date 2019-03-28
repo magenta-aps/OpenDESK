@@ -307,12 +307,12 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
         return siteBean.createSite(name, "Small description", siteVisibility);
     }
 
-    public NodeRef uploadFile(NodeRef parent, String filename) {
+    public NodeRef uploadFile(NodeRef parent, String resourceFilename, String alfrescoFilename) {
 
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
-            File file = new File("src/test/resources/Test_Upload.pdf");
+            File file = new File("src/test/resources/" + resourceFilename);
 
-            FileInfo fileInfo = fileFolderService.create(parent, filename, ContentModel.PROP_CONTENT);
+            FileInfo fileInfo = fileFolderService.create(parent, alfrescoFilename, ContentModel.PROP_CONTENT);
             NodeRef node = fileInfo.getNodeRef();
 
             ContentWriter writer = contentService.getWriter(node, ContentModel.PROP_CONTENT, true);
@@ -330,7 +330,7 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
 
     public NodeRef uploadTemplateFile(String filename) throws FileNotFoundException {
         NodeRef templateDocLibRef = getDocumentTemplateRef();
-        return uploadFile(templateDocLibRef, filename);
+        return uploadFile(templateDocLibRef, FILE_TEST_UPLOAD,filename);
     }
 
     public Boolean deleteNode(NodeRef nodeRef) {
