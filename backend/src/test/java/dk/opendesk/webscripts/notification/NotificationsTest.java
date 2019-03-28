@@ -22,6 +22,7 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
     private static final String UNSEEN = "unseen";
     private static final String UNREAD = "unread";
     private static final String NOTIFICATIONS = "notifications";
+    private static final String NOTIFICATIONS_URL = "/" + NOTIFICATIONS;
 
     public NotificationsTest() {
         super();
@@ -29,6 +30,10 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
 
     @Override
     protected void AddUsersAndSites() {
+        // Users
+        users.add(USER_TWO);
+        users.add(USER_THREE);
+
         // SITES
         sites.put(SITE_TWO, null);
         sites.put(SITE_THREE, null);
@@ -76,6 +81,41 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         }, ADMIN);
         JSONObject response = executeGetNotifications();
         assertGetAll(response, 3);
+    }
+
+    // This test was added due to Redmine issue #28019
+    public void testNotificationByUserOneIsAddedToOtherUsers() throws Exception {
+        AuthenticationUtil.runAs(() -> {
+            addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_ONE, USER_TWO, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_ONE, USER_THREE, OpenDeskModel.SITE_COLLABORATOR);
+            return null;
+        }, ADMIN);
+
+        JSONObject notifications_user1 = executeGetObject(NOTIFICATIONS_URL, USER_ONE);
+        JSONObject notifications_user2 = executeGetObject(NOTIFICATIONS_URL, USER_TWO);
+        JSONObject notifications_user3 = executeGetObject(NOTIFICATIONS_URL, USER_THREE);
+
+        // User should be notified that they have been added to a site
+        assertGetAll(notifications_user1, 1);
+        assertGetAll(notifications_user2, 1);
+        assertGetAll(notifications_user3, 1);
+
+        // Upload document to site as user1
+        AuthenticationUtil.runAs(() -> {
+            uploadFile(sites.get(SITE_ONE), "file1.txt", "file1.txt");
+            return null;
+        }, USER_ONE);
+
+        // Get notifications again
+        notifications_user1 = executeGetObject(NOTIFICATIONS_URL, USER_ONE);
+        notifications_user2 = executeGetObject(NOTIFICATIONS_URL, USER_TWO);
+        notifications_user3 = executeGetObject(NOTIFICATIONS_URL, USER_THREE);
+
+        // Verify that the other users got a notification - but not user1
+        assertGetAll(notifications_user1, 1);
+        assertGetAll(notifications_user2, 2);
+        assertGetAll(notifications_user3, 2);
     }
 
     public void testDeleteNotification() throws JSONException, IOException {
@@ -145,3 +185,5 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         return latestNotification.getString("notificationId");
     }
 }
+
+// TODO: write tests that verifies that the content itself in the notifications messages is correct
