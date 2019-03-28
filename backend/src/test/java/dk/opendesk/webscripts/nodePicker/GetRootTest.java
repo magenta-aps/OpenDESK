@@ -31,7 +31,7 @@ public class GetRootTest extends OpenDeskWebScriptTest {
         userHome = null;
     }
 
-    public void testGetUserHomeAsRootNode() throws IOException, JSONException {
+    public void testGetRootNodes() throws IOException, JSONException {
         JSONObject result = execute();
         JSONArray children = result.getJSONArray("children");
         assertEquals(3, children.length());
