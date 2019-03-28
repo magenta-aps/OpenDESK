@@ -83,14 +83,49 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         assertGetAll(response, 3);
     }
 
-    // This test was added due to Redmine issue #28019
-    public void testNotificationByUserOneIsAddedToOtherUsers() throws Exception {
+    public void testVerifyThatOldNotificationsAreTruncated() throws Exception {
+        addUsersToSite();
+
+        // Truncation limit is set to three in alfresco-global.properties
+
+        // Upload 3 documents to site as user1
         AuthenticationUtil.runAs(() -> {
-            addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
-            addMemberToSite(SITE_ONE, USER_TWO, OpenDeskModel.SITE_COLLABORATOR);
-            addMemberToSite(SITE_ONE, USER_THREE, OpenDeskModel.SITE_COLLABORATOR);
+            uploadFile(sites.get(SITE_ONE), "file1.txt", "file1.txt");
+            uploadFile(sites.get(SITE_ONE), "file1.txt", "file2.txt");
+            uploadFile(sites.get(SITE_ONE), "file1.txt", "file3.txt");
             return null;
-        }, ADMIN);
+        }, USER_ONE);
+
+        JSONObject notifications_user2 = executeGetObject(NOTIFICATIONS_URL, USER_TWO);
+
+        // user2 should have exactly three notifications
+        assertGetAll(notifications_user2, 3);
+
+        // Get the notification ids of the last two notifications for later comparison
+        String user2NotificationId1 = getNotificationId(notifications_user2, 1);
+        String user2NotificationId2 = getNotificationId(notifications_user2, 2);
+
+        // Upload another document
+        AuthenticationUtil.runAs(() -> {
+            uploadFile(sites.get(SITE_ONE), "file1.txt", "file4.txt");
+            return null;
+        }, USER_ONE);
+
+        // Get notifications
+        notifications_user2 = executeGetObject(NOTIFICATIONS_URL, USER_TWO);
+
+        // user2 should have exactly three notifications and the old ones should move down the list (2 -> 1 and 3 -> 2)
+        assertGetAll(notifications_user2, 3);
+        assertEquals(user2NotificationId1, getNotificationId(notifications_user2, 0));
+        assertEquals(user2NotificationId2, getNotificationId(notifications_user2, 1));
+        assertFalse(user2NotificationId1.equals(getNotificationId(notifications_user2, 2)));
+        assertFalse(user2NotificationId2.equals(getNotificationId(notifications_user2, 2)));
+
+    }
+
+    // This test was added due to Redmine issue #28052
+    public void testNotificationByUserOneIsAddedToOtherUsers() throws Exception {
+        addUsersToSite();
 
         JSONObject notifications_user1 = executeGetObject(NOTIFICATIONS_URL, USER_ONE);
         JSONObject notifications_user2 = executeGetObject(NOTIFICATIONS_URL, USER_TWO);
@@ -183,6 +218,19 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         JSONArray notifications = notificationsJSON.getJSONArray(NOTIFICATIONS);
         JSONObject latestNotification = notifications.getJSONObject(0);
         return latestNotification.getString("notificationId");
+    }
+
+    private void addUsersToSite() {
+        AuthenticationUtil.runAs(() -> {
+            addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_ONE, USER_TWO, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_ONE, USER_THREE, OpenDeskModel.SITE_COLLABORATOR);
+            return null;
+        }, ADMIN);
+    }
+
+    private String getNotificationId(JSONObject notification, int index) throws Exception {
+        return notification.getJSONArray(NOTIFICATIONS).getJSONObject(index).getString("notificationId");
     }
 }
 
