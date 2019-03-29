@@ -40,4 +40,6 @@ public class CreatePDSiteTest extends OpenDeskWebScriptTest {
         assertTrue(returnJSON.has(NODE_REF));
         assertTrue(returnJSON.has(SHORTNAME));
     }
+
+    // TODO: test that the site has been persisted correctly
 }

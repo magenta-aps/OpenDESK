@@ -106,4 +106,6 @@ public class GetUsersTest extends OpenDeskWebScriptTest {
     }
 }
 
-// TODO: siteType = PD_project
+// TODO: test the pagination feature (awaits decision regarding weather or not this feature should be implemented in the frontend)
+// TODO: test where siteType == PD_project (awaits decision concerning PD aspect/type discussion)
+// TODO: test for case where the user calling this webscript is not allowed to access the site (currently it responds 400)

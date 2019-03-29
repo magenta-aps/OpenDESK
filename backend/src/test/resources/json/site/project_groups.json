@@ -1,0 +1,22 @@
+[
+  {
+    "collapsed": false,
+    "multipleMembers": true,
+    "shortName": "SiteManager"
+  },
+  {
+    "collapsed": false,
+    "multipleMembers": true,
+    "shortName": "SiteCollaborator"
+  },
+  {
+    "collapsed": false,
+    "multipleMembers": true,
+    "shortName": "SiteContributor"
+  },
+  {
+    "collapsed": false,
+    "multipleMembers": true,
+    "shortName": "SiteConsumer"
+  }
+]
