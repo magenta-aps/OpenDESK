@@ -1,0 +1,71 @@
+[
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [
+      {
+        "firstName": "Administrator",
+        "lastName": "",
+        "displayName": "Administrator",
+        "isEnabled": true,
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": false,
+        "userName": "admin",
+        "email": "admin@alfresco.com"
+      }
+    ],
+    "totalMembersCount": 1,
+    "shortName": "SiteManager"
+  },
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [
+      {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "displayName": "firstName lastName",
+        "isEnabled": true,
+        "telephone": "12234861",
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": false,
+        "userName": "user_one",
+        "email": "email@email.com"
+      },
+      {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "displayName": "firstName lastName",
+        "isEnabled": true,
+        "telephone": "12234861",
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": false,
+        "userName": "user_two",
+        "email": "email@email.com"
+      }
+    ],
+    "totalMembersCount": 2,
+    "shortName": "SiteCollaborator"
+  },
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [
+      {
+        "displayName": "group1",
+        "fullName": "GROUP_group1",
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "shortName": "group1"
+      }
+    ],
+    "totalMembersCount": 1,
+    "shortName": "SiteContributor"
+  },
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [],
+    "totalMembersCount": 0,
+    "shortName": "SiteConsumer"
+  }
+]

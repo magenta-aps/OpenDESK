@@ -108,9 +108,8 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
     protected NodeService nodeService = (NodeService) appContext.getBean("nodeService");
     private PersonService personService = (PersonService) appContext.getBean("personService");
     protected SiteService siteService = (SiteService) appContext.getBean("siteService");
-    private TransactionService transactionService = (TransactionService) appContext.getBean("transactionService");
-    private AuthorityService authorityService = (AuthorityService) appContext.getBean("authorityService");
-
+    protected TransactionService transactionService = (TransactionService) appContext.getBean("transactionService");
+    protected AuthorityService authorityService = (AuthorityService) appContext.getBean("authorityService");
 
     private PreferenceService preferenceService = (PreferenceService) getServer().getApplicationContext().getBean("preferenceService");
     private ContentService contentService = (ContentService) getServer().getApplicationContext().getBean("contentService");
@@ -372,9 +371,9 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
         });
     }
 
-    public Boolean addToAuthority(String group, String userName) {
+    public Boolean addToAuthority(String parent, String child) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
-            authorityService.addAuthority(group, userName);
+            authorityService.addAuthority(parent, child);
             return true;
         });
     }
