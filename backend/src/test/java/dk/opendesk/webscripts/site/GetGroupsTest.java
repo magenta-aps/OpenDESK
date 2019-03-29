@@ -18,4 +18,14 @@ public class GetGroupsTest extends OpenDeskWebScriptTest {
                 JSONCompareMode.STRICT
         );
     }
+
+    public void testPDprojectGroups() throws Exception {
+        JSONArray projectGroups = executeGetArray(BASE_URL + "/PD-Project");
+
+        JSONAssert.assertEquals(
+                getJSONFromResources(JSON_RESOURCE_PATH + "/site/PD_project_groups.json"),
+                projectGroups,
+                JSONCompareMode.STRICT
+        );
+    }
 }

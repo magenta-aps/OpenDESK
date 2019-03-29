@@ -1,0 +1,38 @@
+[
+  {
+    "authority": "SiteCollaborator",
+    "collapsed": false,
+    "multipleMembers": false,
+    "shortName": "PD_PROJECTOWNER"
+  },
+  {
+    "authority": "SiteManager",
+    "collapsed": false,
+    "multipleMembers": false,
+    "shortName": "PD_PROJECTMANAGER"
+  },
+  {
+    "authority": "SiteCollaborator",
+    "collapsed": true,
+    "multipleMembers": true,
+    "shortName": "PD_PROJECTGROUP"
+  },
+  {
+    "authority": "SiteCollaborator",
+    "collapsed": true,
+    "multipleMembers": true,
+    "shortName": "PD_WORKGROUP"
+  },
+  {
+    "authority": "SiteConsumer",
+    "collapsed": true,
+    "multipleMembers": true,
+    "shortName": "PD_MONITORS"
+  },
+  {
+    "authority": "SiteConsumer",
+    "collapsed": true,
+    "multipleMembers": true,
+    "shortName": "PD_STEERING_GROUP"
+  }
+]
