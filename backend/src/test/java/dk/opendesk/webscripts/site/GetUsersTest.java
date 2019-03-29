@@ -60,7 +60,7 @@ public class GetUsersTest extends OpenDeskWebScriptTest {
 
         // Check to JSON for the user
         JSONAssert.assertEquals(
-                getJSONFromResources(JSON_RESOURCE_PATH + "/user_one.json"),
+                getJSONFromResources(JSON_RESOURCE_PATH + "/site/user_one.json"),
                 members.getJSONObject(0),
                 JSONCompareMode.STRICT
         );
@@ -101,7 +101,7 @@ public class GetUsersTest extends OpenDeskWebScriptTest {
 
         JSONArray users = executeGetArray("/site/" + SITE_ONE + "/users", ADMIN);
 
-        JSONAssert.assertEquals(getJSONFromResources(JSON_RESOURCE_PATH + "/users_in_all_groups.json"),
+        JSONAssert.assertEquals(getJSONFromResources(JSON_RESOURCE_PATH + "/site/users_in_all_groups.json"),
                 users, JSONCompareMode.STRICT);
     }
 }
