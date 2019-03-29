@@ -39,6 +39,9 @@ import org.springframework.extensions.webscripts.TestWebScriptServer;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,6 +99,8 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
     public static final String FILE_TEST_TEMPLATE1_NEXT = "Test_Template1(1).pdf";
     public static final String FOLDER_TEST = "Folder Test";
     public static final String FOLDER_TEST2 = "Folder Test2";
+
+    public static final String JSON_RESOURCE_PATH = "src/test/resources/json";
 
     public ApplicationContext appContext = getServer().getApplicationContext();
 
@@ -321,6 +326,11 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
             writer.putContent(file);
             return node;
         });
+    }
+
+    public String getJSONFromResources(String path) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 
     public NodeRef createTemplateFolder(String foldername) throws FileNotFoundException {

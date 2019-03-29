@@ -1,0 +1,88 @@
+[
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [
+      {
+        "firstName": "Administrator",
+        "lastName": "",
+        "displayName": "Administrator",
+        "isEnabled": true,
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": true,
+        "userName": "admin",
+        "email": "admin@alfresco.com"
+      }
+    ],
+    "totalMembersCount": 1,
+    "shortName": "SiteManager"
+  },
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [
+      {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "displayName": "firstName lastName",
+        "isEnabled": true,
+        "telephone": "12234861",
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": true,
+        "userName": "user_one",
+        "email": "email@email.com"
+      }
+    ],
+    "totalMembersCount": 1,
+    "shortName": "SiteCollaborator"
+  },
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [
+      {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "displayName": "firstName lastName",
+        "isEnabled": true,
+        "telephone": "12234861",
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": true,
+        "userName": "user_three",
+        "email": "email@email.com"
+      },
+      {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "displayName": "firstName lastName",
+        "isEnabled": true,
+        "telephone": "12234861",
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": true,
+        "userName": "user_two",
+        "email": "email@email.com"
+      }
+    ],
+    "totalMembersCount": 2,
+    "shortName": "SiteContributor"
+  },
+  {
+    "multipleMembers": true,
+    "collapsed": false,
+    "members": [
+      {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "displayName": "firstName lastName",
+        "isEnabled": true,
+        "telephone": "12234861",
+        "avatar": "assets/img/avatars/blank-profile-picture.png",
+        "isAdmin": true,
+        "userName": "user_four",
+        "email": "email@email.com"
+      }
+    ],
+    "totalMembersCount": 1,
+    "shortName": "SiteConsumer"
+  }
+]

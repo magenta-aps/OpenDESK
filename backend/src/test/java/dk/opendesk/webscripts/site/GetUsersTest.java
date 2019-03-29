@@ -5,6 +5,8 @@ import dk.opendesk.webscripts.OpenDeskWebScriptTest;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class GetUsersTest extends OpenDeskWebScriptTest {
 
@@ -13,6 +15,7 @@ public class GetUsersTest extends OpenDeskWebScriptTest {
         super.AddUsersAndSites();
         users.add(USER_TWO);
         users.add(USER_THREE);
+        users.add(USER_FOUR);
         sites.put(SITE_ONE, null);
     }
 
@@ -23,6 +26,8 @@ public class GetUsersTest extends OpenDeskWebScriptTest {
             addMemberToSite(SITE_ONE, USER_THREE, OpenDeskModel.SITE_CONTRIBUTOR);
             return null;
         }, ADMIN);
+
+        // TODO: use the "JSONAssert way" used in the test below instead as this is much easiler
 
         JSONArray users = executeGetArray("/site/" + SITE_ONE + "/users", ADMIN);
 
@@ -51,7 +56,14 @@ public class GetUsersTest extends OpenDeskWebScriptTest {
         assertEquals(1, members.length());
         assertEquals(1, group.getInt("totalMembersCount"));
         assertEquals(OpenDeskModel.SITE_COLLABORATOR, group.getString("shortName"));
-        assertEquals(USER_ONE, members.getJSONObject(0).getString("userName"));
+        // assertEquals(USER_ONE, members.getJSONObject(0).getString("userName"));
+
+        // Check to JSON for the user
+        JSONAssert.assertEquals(
+                getJSONFromResources(JSON_RESOURCE_PATH + "/user_one.json"),
+                members.getJSONObject(0),
+                JSONCompareMode.STRICT
+        );
 
         // SiteContributors
         group = users.getJSONObject(2);
@@ -78,13 +90,20 @@ public class GetUsersTest extends OpenDeskWebScriptTest {
         assertEquals(OpenDeskModel.SITE_CONSUMER, group.getString("shortName"));
     }
 
+    public void testSiteTypeProjectNoPaginationUsersInAllGroups() throws Exception {
+        AuthenticationUtil.runAs(() -> {
+            addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_ONE, USER_TWO, OpenDeskModel.SITE_CONTRIBUTOR);
+            addMemberToSite(SITE_ONE, USER_THREE, OpenDeskModel.SITE_CONTRIBUTOR);
+            addMemberToSite(SITE_ONE, USER_FOUR, OpenDeskModel.SITE_CONSUMER);
+            return null;
+        }, ADMIN);
+
+        JSONArray users = executeGetArray("/site/" + SITE_ONE + "/users", ADMIN);
+
+        JSONAssert.assertEquals(getJSONFromResources(JSON_RESOURCE_PATH + "/users_in_all_groups.json"),
+                users, JSONCompareMode.STRICT);
+    }
 }
 
-////// siteType = project
-// multipleMember = true
-// collapse = false
-// members = []
-// totalMembersCount
-// shortName
-
-// test member json
+// TODO: siteType = PD_project

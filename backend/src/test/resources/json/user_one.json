@@ -1,0 +1,11 @@
+{
+  "firstName":"firstName",
+  "lastName":"lastName",
+  "displayName":"firstName lastName",
+  "isEnabled":true,
+  "telephone":"12234861",
+  "avatar":"assets/img/avatars/blank-profile-picture.png",
+  "isAdmin":true,
+  "userName":"user_one",
+  "email":"email@email.com",
+}
