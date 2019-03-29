@@ -15,6 +15,8 @@ import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.ContentTransformer;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.site.SiteServiceException;
+import org.alfresco.rest.framework.core.exceptions.ApiException;
+import org.alfresco.rest.framework.core.exceptions.NotFoundException;
 import org.alfresco.service.cmr.favourites.FavouritesService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -550,6 +552,9 @@ public class SiteBean {
                 result.add(createSiteGroup(OpenDeskModel.SITE_CONTRIBUTOR, null, false, true));
                 result.add(createSiteGroup(OpenDeskModel.SITE_CONSUMER, null, false, true));
                 break;
+            default:
+                // TODO: handle this case with a checked exception instead
+                result = null;
         }
         return result;
     }

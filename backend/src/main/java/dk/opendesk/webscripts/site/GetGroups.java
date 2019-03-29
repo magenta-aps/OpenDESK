@@ -44,6 +44,12 @@ public class GetGroups extends OpenDeskWebScript {
         try {
             String type = urlParams.get("type");
             arrayResult = siteBean.getSiteGroups(type);
+
+            // TODO: handle the case below with a checked exception instead
+
+            if (arrayResult == null) {
+                notFound(res);
+            }
         } catch (Exception e) {
             error(res, e);
         }
