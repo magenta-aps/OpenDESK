@@ -3,7 +3,7 @@
   <div class="opendesk-dl__description">
     <md-input-container>
       <span ng-if="!isEditing.get()">{{ field.value }}</span>
-      <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}" />
+      <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}" data-fieldrule="toggle inverseToggle"/>
     </md-input-container>
   </div>
 </div>

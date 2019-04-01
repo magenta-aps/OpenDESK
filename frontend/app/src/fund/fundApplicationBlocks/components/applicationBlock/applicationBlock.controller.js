@@ -8,18 +8,14 @@
 
 'use strict'
 
+import text from '../fields/text.html'
+
 angular
   .module('openDeskApp.fund')
-  .controller('ApplicationBlockController', ['$scope', 'fundApplicationEditing', ApplicationBlockController])
+  .controller('ApplicationBlockController', ['$scope', '$templateRequest', ApplicationBlockController])
 
-function ApplicationBlockController ($scope, fundApplicationEditing) {
+function ApplicationBlockController ($scope, $templateRequest) {
   var vm = this
 
-  vm.getTemplate = getTemplate
   vm.toggleExpand = $scope.$parent.vm.toggleExpand
-  $scope.isEditing = fundApplicationEditing
-
-  function getTemplate (type) {
-    return '/app/src/fund/fundApplicationBlocks/components/fields/' + type + '.html'
-  }
 }

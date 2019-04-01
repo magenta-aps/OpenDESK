@@ -6,6 +6,7 @@
       ng-model="field.value[$index]"
       ng-disabled="!isEditing.get()"
       aria-label="{{ field.options[$index] }}"
+      data-fieldrule="toggle inverseToggle"
     >
       {{ field.options[$index] }}
     </md-checkbox>
@@ -18,6 +19,7 @@
       ng-model="field.value[$index]"
       ng-disabled="!isEditing.get()"
       aria-label="{{ field.options[$index] }}"
+      data-fieldrule="toggle inverseToggle"
     >
       {{ field.options[$index] }}
     </md-checkbox>

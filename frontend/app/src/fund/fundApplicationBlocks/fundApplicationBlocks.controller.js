@@ -12,7 +12,7 @@ angular
   .module('openDeskApp.fund')
   .controller('FundApplicationBlocksController', ['$scope', FundApplicationBlocksController])
 
-function FundApplicationBlocksController ($scope, $rootScope) {
+function FundApplicationBlocksController ($scope) {
   var vm = this
   vm.allFields = allFields
   vm.phoneNumber = phoneNumber

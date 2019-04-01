@@ -11,7 +11,7 @@
   </md-card-title>
 
   <md-card-content>
-    <div ng-repeat="field in vm.block.fields" ng-include="vm.getTemplate(field.type)" class="od-fund-app-block-field"></div>
+    <application-field ng-repeat="field in vm.block.fields" field="field"></application-field>
   </md-card-content>
 
 </md-card>
