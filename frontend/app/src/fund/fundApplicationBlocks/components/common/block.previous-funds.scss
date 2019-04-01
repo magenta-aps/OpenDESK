@@ -22,13 +22,20 @@ hidden,
 
     &__thead {}
 
-    &__tbody {}
+    &__tbody {
+        .osflow-table__tr {}
+    }
 
     &__tr {
         &:hover {
             .osflow-table__td {
                 background-color: var(--lighter-gray);
             }
+        }
+
+        &[ng-click] {
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
         }
 
         &--open {
@@ -44,6 +51,10 @@ hidden,
             + .osflow-table__tr .osflow-table__td {
                 border-bottom: 1px solid var(--light-gray);
             }
+        }
+
+        &:nth-child(4n+3) td {
+            background-color: var(--lighter-gray);
         }
     }
 
