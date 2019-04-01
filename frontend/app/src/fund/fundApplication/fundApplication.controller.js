@@ -30,6 +30,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   activate()
 
   function activate() {
+    fundApplicationEditing.set(false) // set editing state to false, in case we edited an application, went to the list, and opened another application
     fundService.getApplication($stateParams.applicationID)
     .then(function (response) {
       $scope.application = response

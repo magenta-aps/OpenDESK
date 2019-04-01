@@ -12,7 +12,7 @@ angular
   .module('openDeskApp.fund')
   .controller('FundApplicationBlocksController', ['$scope', FundApplicationBlocksController])
 
-function FundApplicationBlocksController ($scope, $rootScope) {
+function FundApplicationBlocksController ($scope) {
   var vm = this
   vm.allFields = allFields
   vm.phoneNumber = phoneNumber
@@ -20,15 +20,15 @@ function FundApplicationBlocksController ($scope, $rootScope) {
   vm.toggleExpand = toggleExpand
 
   function allFields () {
-    return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : null // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+    return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
   }
 
   function phoneNumber () {
-    return vm.allFields() ? vm.allFields().find(field => field.describes == 'phone_number') : null
+    return vm.allFields().length ? vm.allFields().find(field => field.describes == 'phone_number') : {}
   }
 
   function amount () {
-    return vm.allFields() ? vm.allFields().find(field => field.describes == 'amount') : null
+    return vm.allFields().length ? vm.allFields().find(field => field.describes == 'amount') : {}
   }
 
   function category () {
