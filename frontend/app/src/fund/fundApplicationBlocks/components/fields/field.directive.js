@@ -17,7 +17,7 @@ angular.module('openDeskApp.fund')
       },
       template: null,
       link: function (scope, el) {
-        $templateRequest('/app/src/fund/fundApplicationBlocks/components/fields/' + scope.field.type + '.html')
+        $templateRequest('/app/src/fund/fundApplicationBlocks/components/fields/' + scope.field.component + '.html')
         .then(function (result) {
           // if the field is not dependent on any other fields, just return the template
           if (!scope.field.controlledBy) {
@@ -65,10 +65,8 @@ angular.module('openDeskApp.fund')
             if (targetFieldValue instanceof Array) {
               // if value of target field is actually an array of values,
               // just check if one of them is true
-              console.log('array value', targetFieldValue)
               return targetFieldValue.some(field => field == true)
             }
-            console.log('flat value', targetFieldValue)
             return targetFieldValue
           }
           $compile(el.contents())(scope)
