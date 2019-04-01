@@ -23,6 +23,8 @@ import 'angular-ui-router'
 import 'angular-material/angular-material.css'
 import 'angular-material-data-table/dist/md-data-table.min.css'
 
+import 'vue'
+
 // Modules
 import './app.module'
 import './init.module'

@@ -73,6 +73,7 @@
     "angular-translate-loader-static-files": "^2.18.1",
     "angular-ui-router": "^1.0.20",
     "angular-utf8-base64": "^0.0.5",
+    "vue": "^2.6.10",
     "babel-loader": "^8.0.2",
     "ckeditor": "^4.10.1",
     "isteven-angular-multiselect": "4.0.0",
