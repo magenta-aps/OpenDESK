@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 import '../shared/services/page.service'
 
@@ -20,6 +20,7 @@ function SystemSettingsCtrl (documentService, sessionService, pageService, syste
   vm.pages = []
   pageService.addSystemPage(vm.pages, 'Konfiguration', 'systemsettings.config', true, 'settings')
   pageService.addSystemPage(vm.pages, 'Systemgrupper', 'systemsettings.groups', true, 'group')
+  pageService.addSystemPage(vm.pages, 'Systembrugere', 'systemsettings.users', true, 'account_box')
   if (APP_BACKEND_CONFIG.enableProjects)
     pageService.addSystemPage(vm.pages, 'Projektskabeloner', 'systemsettings.templateList', true)
 
