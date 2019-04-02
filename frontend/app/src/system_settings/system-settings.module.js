@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 import '../components/ckEditor'
@@ -14,6 +14,7 @@ import templateListTemplate from './templates/view/templateList.html'
 import filebrowserCardTemplate from './filebrowser/view/filebrowserCard.html'
 import configTemplate from './config/view/config.html'
 import groupsTemplate from './groups/view/groups.html'
+import usersTemplate from '../users/view/users.html'
 import editTextTemplatesTemplate from './text_templates/view/edit.html'
 angular
   .module('openDeskApp.systemsettings', ['ckEditor'])
@@ -95,6 +96,19 @@ function config ($stateProvider, USER_ROLES) {
         'systemsetting-view': {
           template: groupsTemplate,
           controller: 'SettingsGroupsController',
+          controllerAs: 'vm'
+        }
+      }
+    })
+    .state('systemsettings.users', {
+      url: '/users',
+      params: {
+        authorizedRoles: [USER_ROLES.admin]
+      },
+      views: {
+        'systemsetting-view': {
+          template: usersTemplate,
+          controller: 'UsersController',
           controllerAs: 'vm'
         }
       }
