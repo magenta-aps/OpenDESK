@@ -52,10 +52,6 @@ hidden,
                 border-bottom: 1px solid var(--light-gray);
             }
         }
-
-        &:nth-child(4n+3) td {
-            background-color: var(--lighter-gray);
-        }
     }
 
     &__th {
@@ -71,6 +67,7 @@ hidden,
 
     &__td {
         padding: 1em;
+        transition: background-color 0.2s ease-in-out;
 
         &--right {
             text-align: right;

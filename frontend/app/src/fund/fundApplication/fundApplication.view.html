@@ -1,8 +1,7 @@
-<!-- top menu -->
-<md-nav-bar>
-  <md-nav-item ng-if="!isEditing.get()" md-nav-click="vm.editApplication()">Ret ansøgning</md-nav-item>
-  <md-nav-item ng-if="isEditing.get()" md-nav-click="vm.saveApplication()">Gem ansøgning</md-nav-item>
-  <md-nav-item ng-if="isEditing.get()" md-nav-click="vm.cancelEditApplication()">Annuller redigering</md-nav-item>
+<md-nav-bar md-selected-nav-item="currentAppPage">
+  <md-nav-item md-nav-sref="fund.application" name="application">Ansøgning</md-nav-item>
+  <md-nav-item md-nav-sref="fund.application.contact" name="contact">Kontaktinfo</md-nav-item>
+  <md-nav-item md-nav-sref="fund.application.history" name="history">Historik</md-nav-item>
   <span flex></span>
   <md-nav-item md-nav-click="vm.paginateApps(vm.prevAppId)" ng-if="vm.prevAppId" aria-label="Gå til forrige ansøgning">
     <md-tooltip>Gå til forrige ansøgning</md-tooltip>
@@ -14,12 +13,6 @@
   </md-nav-item>
 </md-nav-bar>
 
-<md-nav-bar md-selected-nav-item="currentAppPage">
-  <md-nav-item md-nav-sref="fund.application" name="application">Ansøgning</md-nav-item>
-  <md-nav-item md-nav-sref="fund.application.contact" name="contact">Kontaktinfo</md-nav-item>
-  <md-nav-item md-nav-sref="fund.application.history" name="history">Historik</md-nav-item>
-</md-nav-bar>
-
 <osflow-header>
   <h1>
     <md-input-container>
@@ -27,7 +20,20 @@
       <span class="md-headline" ng-if="!isEditing.get()">{{ application.title }}</span>
     </md-input-container>
   </h1>
-  <p class="md-subhead"><code>{{ application.nodeID }}</code></p>
+
+  <div class="fund-actions" layout="row" layout-align="start end">
+
+    <div class="md-subhead" flex style="line-height: 48px;">
+      <code>{{ application.nodeID }}</code>
+    </div>
+
+    <div flex style="text-align: right;">
+      <md-button ng-if="!isEditing.get()" ng-click="vm.editApplication()" class="md-raised md-primary">Ret ansøgning 2</md-button>
+      <md-button ng-if="isEditing.get()"  ng-click="vm.saveApplication()">Gem ansøgning</md-button>
+      <md-button ng-if="isEditing.get()"  ng-click="vm.cancelEditApplication()">Annuller redigering</md-button>    
+    </div>
+
+  </div>
 </osflow-header>
 
 <md-content class="od-fund-app-wrapper">
