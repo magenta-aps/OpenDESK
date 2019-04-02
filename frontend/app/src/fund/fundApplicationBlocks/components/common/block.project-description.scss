@@ -1,0 +1,27 @@
+.osflow-filelist {
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding: 0;
+
+    &__item {
+        float: left;
+        margin: 0.25rem;
+        margin-left: 0;
+    }
+
+    &__link {
+        background-color: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 1em;
+        display: block;
+        padding: 0.5rem 1rem;
+        transition: background-color 0.2s ease-in-out;
+
+        &:focus,
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+        }
+    }
+}
