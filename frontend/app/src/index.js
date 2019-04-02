@@ -48,7 +48,6 @@ import './search'
 import './searchBar'
 import './review'
 import './metadata'
-import './odfCore'
 // import './odChat' Not added because it has not been maintained and converse is not managed by npm
 
 // Components
