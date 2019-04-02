@@ -642,6 +642,7 @@
     "LAST_NAME": "Last name",
     "USERNAME": "Username",
     "EDIT_USER": "Edit user",
+    "DISABLE_ACCOUNT": "Disable user account",
     "DELETE_USER": "Delete user",
     "DELETE_USER_SUCCESS": "User successfully deleted",
     "DELETE_USER_FAILURE": "User could not be deleted",

@@ -1,17 +1,17 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 import '../shared/services/preference.service'
 
 angular
   .module('openDeskApp.user')
-  .controller('UserController', ['$scope', '$mdSidenav', 'userService', 'personService', 'preferenceService',
+  .controller('UserController', ['$scope', '$mdSidenav', 'usersService', 'personService', 'preferenceService',
     UserController])
 
 function UserController ($scope, $mdSidenav, userService, personService, preferenceService) {
