@@ -1,8 +1,8 @@
 angular
   .module('openDeskApp.users')
-  .controller('UserDialogController', UserDialogController)
+  .controller('UserDialogController', ['$mdDialog', '$translate', '$injector', 'toastService', 'usersService', 'user', UserDialogController])
 
-function UserDialogController ($mdDialog, $translate, $injector, notificationUtilsService, usersService, user) {
+function UserDialogController ($mdDialog, $translate, $injector, toastService, usersService, user) {
   var ucd = this
 
   // Data from the user creation form
@@ -30,7 +30,7 @@ function UserDialogController ($mdDialog, $translate, $injector, notificationUti
         ucd.userForm[error.props.field].$setValidity('domainError', false)
         ucd.userForm[error.props.field].$error.code = error.code
       } else {
-        notificationUtilsService.alert(error.message)
+        toastService.alert(error.data.message)
       }
     })
   }
@@ -44,7 +44,7 @@ function UserDialogController ($mdDialog, $translate, $injector, notificationUti
       msg += $translate.instant('COMMON.CREATED').toLowerCase()
 
     $mdDialog.hide(angular.extend(user, {newUser: !ucd.userExists}))
-    notificationUtilsService.notify(msg)
+    toastService.notify(msg)
   }
 
   function clearFieldValidation (field) {

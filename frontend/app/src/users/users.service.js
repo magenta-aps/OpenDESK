@@ -1,5 +1,5 @@
 angular
-  .module('openDeskApp')
+  .module('openDeskApp.users')
   .factory('usersService', ['$http', '$window', UsersService])
 
 function UsersService ($http, $window) {

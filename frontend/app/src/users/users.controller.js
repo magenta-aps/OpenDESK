@@ -1,17 +1,19 @@
 'use strict'
-import '../shared/services/notificationUtils.service'
+
+import '../shared/services/toast.service'
+
 import userCRUDDialogTemplate from './view/userCrudDialog.html'
 
 angular
   .module('openDeskApp.users')
-  .controller('UsersController', ['$mdDialog', 'notificationUtilsService', 'usersService', '$translate', UsersController])
+  .controller('UsersController', ['$mdDialog', 'toastService', 'usersService', '$translate', UsersController])
 
 /**
  * Main Controller for the system users module
  * @param $scope
  * @constructor
  */
-function UsersController ($mdDialog, notificationUtilsService, usersService, $translate) {
+function UsersController ($mdDialog, toastService, usersService, $translate) {
   var vm = this
 
   vm.createUser = createUser
@@ -73,7 +75,7 @@ function UsersController ($mdDialog, notificationUtilsService, usersService, $tr
         usersService.deleteUser(user.userName).then(function (response) {
           var responseMessage = (Object.keys(response).length == 0) ? $translate.instant('USER.DELETE_USER_SUCCESS') : $translate.instant('USER.DELETE_USER_FAILURE')
           getAllSystemUsers()
-          notificationUtilsService.notify(responseMessage)
+          toastService.notify(responseMessage)
         })
       })
     else
@@ -140,7 +142,7 @@ function UsersController ($mdDialog, notificationUtilsService, usersService, $tr
       usersService.uploadUsersCSVFile($scope.fileToUpload).then(function (response) {
         var numOfFailedUsers = response.totalUsers - response.createdUsers
         if (response.totalUsers === 0)
-          notificationUtilsService.alert($translate.instant('USER.ERRORS.CSV_EMPTY'))
+          toastService.alert($translate.instant('USER.ERRORS.CSV_EMPTY'))
 
         if (numOfFailedUsers > 0) {
           var htmlContent = '<p>' + $translate.instant('USER.CSV_SUCCESSFULLY_IMPORTED', response) +
@@ -165,10 +167,10 @@ function UsersController ($mdDialog, notificationUtilsService, usersService, $tr
           )
           return
         }
-        notificationUtilsService.notify($translate.instant('USER.CSV_SUCCESSFULLY_IMPORTED', response))
+        toastService.notify($translate.instant('USER.CSV_SUCCESSFULLY_IMPORTED', response))
       }, function (error) {
         if (error.domain)
-          notificationUtilsService.alert(error.message)
+          toastService.alert(error.message)
       })
     }
   }

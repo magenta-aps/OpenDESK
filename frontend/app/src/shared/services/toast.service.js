@@ -1,16 +1,28 @@
+//
+// Copyright (c) 2017-2018, Magenta ApS
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+
 angular
   .module('openDeskApp')
-  .factory('notificationUtilsService', notificationUtilsService)
+  .config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('success-toast')
+    $mdThemingProvider.theme('error-toast')
+  })
+  .factory('toastService', ['$mdToast', '$translate', toastService])
 
-function notificationUtilsService ($mdToast, $translate) {
+function toastService ($mdToast, $translate) {
   var service = {
     notify: notify,
     notifyError: notifyError,
     alert: alert
   }
 
-  var defaultToastPosition = 'top right'
-  var defaultAlertToastPosition = 'top right'
+  var defaultToastPosition = 'bottom left'
+  var defaultAlertToastPosition = 'bottom left'
 
   return service
 
