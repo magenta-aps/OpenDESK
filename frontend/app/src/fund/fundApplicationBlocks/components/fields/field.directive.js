@@ -17,7 +17,7 @@ angular.module('openDeskApp.fund')
       },
       template: null,
       link: function (scope, el) {
-        $templateRequest('/app/src/fund/fundApplicationBlocks/components/fields/' + scope.field.type + '.html')
+        $templateRequest('/app/src/fund/fundApplicationBlocks/components/fields/' + scope.field.component + '.html')
         .then(function (result) {
           // if the field is not dependent on any other fields, just return the template
           if (!scope.field.controlledBy) {
