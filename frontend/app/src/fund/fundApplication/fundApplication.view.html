@@ -1,14 +1,17 @@
 <md-nav-bar md-selected-nav-item="currentAppPage">
-  <md-nav-item md-nav-sref="fund.application" name="application">Ansøgning</md-nav-item>
-  <md-nav-item md-nav-sref="fund.application.contact" name="contact">Kontaktinfo</md-nav-item>
-  <md-nav-item md-nav-sref="fund.application.history" name="history">Historik</md-nav-item>
+  <md-nav-item md-nav-sref="fund.application" name="application">{{ 'FUNDS.NAVIGATION.APPLICATION' | translate }}</md-nav-item>
+  <md-nav-item md-nav-sref="fund.application.contact" name="contact">{{ 'FUNDS.NAVIGATION.CONTACTINFO' | translate }}</md-nav-item>
+  <md-nav-item md-nav-sref="fund.application.history" name="history">{{ 'FUNDS.NAVIGATION.HISTORY' | translate }}</md-nav-item>
+
   <span flex></span>
-  <md-nav-item md-nav-click="vm.paginateApps(vm.prevAppId)" ng-if="vm.prevAppId" aria-label="Gå til forrige ansøgning">
-    <md-tooltip>Gå til forrige ansøgning</md-tooltip>
+
+  <md-nav-item md-nav-click="vm.paginateApps(vm.prevAppId)" ng-if="vm.prevAppId" aria-label="{{ 'FUNDS.NAVIGATION.GOTO_PREVIOUS_APPLICATION' | translate }}">
     <md-icon>keyboard_arrow_left</md-icon>
+    {{ 'FUNDS.NAVIGATION.GOTO_PREVIOUS_APPLICATION' | translate }}
   </md-nav-item>
-  <md-nav-item md-nav-click="vm.paginateApps(vm.nextAppId)" ng-if="vm.nextAppId" aria-label="Gå til næste ansøgning">
-    <md-tooltip>Gå til næste ansøgning</md-tooltip>
+
+  <md-nav-item md-nav-click="vm.paginateApps(vm.nextAppId)" ng-if="vm.nextAppId" aria-label="{{ 'FUNDS.NAVIGATION.GOTO_NEXT_APPLICATION' | translate }}">
+    {{ 'FUNDS.NAVIGATION.GOTO_NEXT_APPLICATION' | translate }}
     <md-icon>keyboard_arrow_right</md-icon>
   </md-nav-item>
 </md-nav-bar>
@@ -28,9 +31,9 @@
     </div>
 
     <div flex style="text-align: right;">
-      <md-button ng-if="!isEditing.get()" ng-click="vm.editApplication()" class="md-raised md-primary">Ret ansøgning 2</md-button>
-      <md-button ng-if="isEditing.get()"  ng-click="vm.saveApplication()">Gem ansøgning</md-button>
-      <md-button ng-if="isEditing.get()"  ng-click="vm.cancelEditApplication()">Annuller redigering</md-button>    
+      <md-button ng-if="!isEditing.get()" ng-click="vm.editApplication()" class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.EDIT_APPLICATION' | translate }}</md-button>
+      <md-button ng-if="isEditing.get()"  ng-click="vm.saveApplication()" class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SAVE_APPLICATION' | translate }}</md-button>
+      <md-button ng-if="isEditing.get()"  ng-click="vm.cancelEditApplication()">{{ 'FUNDS.NAVIGATION.CANCEL_EDIT_APPLICATION' | translate }}</md-button>    
     </div>
 
   </div>
@@ -38,4 +41,11 @@
 
 <md-content class="od-fund-app-wrapper">
   <ng-template ui-view="application" layout="row" layout-wrap></ng-template>
+
+  <md-card style="margin: 0; margin-top: 1rem; padding: 1rem;">
+    <md-card-actions layout="row" layout-align="end center">
+      <md-button class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SUBMIT_TO_NEXT_STEP' | translate }}</md-button>
+    </md-card-actions>
+  </md-card>
 </md-content>
+
