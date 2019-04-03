@@ -10,14 +10,15 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'fundApplicationEditing', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'alfrescoNodeService', 'fundApplicationEditing', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, fundApplicationEditing) {
+function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, alfrescoNodeService, fundApplicationEditing) {
   var vm = this
 
   $scope.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application'
   $scope.isEditing = fundApplicationEditing
+  $scope.allFields = allFields
   vm.prevAppId = null
   vm.nextAppId = null
   vm.origValue = null
@@ -59,6 +60,10 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
     })
   }
 
+  function allFields () {
+    return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+  }
+
   function paginateApps(appId) {
     $state.go('fund.application', { applicationID: appId })
   }
@@ -71,11 +76,35 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   function saveApplication () {
     fundApplicationEditing.set(false)
 
-    fundService.updateApplication($scope.application.nodeID, $scope.application)
-    .then(function (response) {
-      if (response.status === 'OK') {
-        activate()
-      }
+    // for each file field we have in the application, upload the
+    // new file, if a new file has been added.
+    // Only when all these uploads have succeeded can we update the application
+
+    Promise.all(
+      $scope.allFields()
+      .filter(function (field) {
+        if (field.component !== 'file') {
+          return false
+        }
+        return document.getElementById(field.value).files.length > 0
+      })
+      .map(function (field) {
+        // the field only allows the user to select one file, so we can just
+        // take item 0
+        var file = document.getElementById(field.value).files[0]
+        return fundService.uploadContent(file, $scope.application.nodeRef)
+        .then(function (response) {
+          field.value = alfrescoNodeService.processNodeRef(response.data.nodeRef).id
+        })
+      })
+    )
+    .then(function () {
+      fundService.updateApplication($scope.application.nodeID, $scope.application)
+      .then(function (response) {
+        if (response.status === 'OK') {
+          activate()
+        }
+      })
     })
   }
 
