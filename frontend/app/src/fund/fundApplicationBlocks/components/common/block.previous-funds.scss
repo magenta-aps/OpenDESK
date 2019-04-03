@@ -60,10 +60,24 @@ hidden,
 
     &__td {
         padding: 1em;
+        vertical-align: top;
 
         &--right {
             text-align: right;
         }
+    }
+}
+
+.osflow-content-table {
+    &__tr {
+
+    }
+    &__th {
+
+    }
+    &__td {
+        vertical-align: top;
+        padding: 0 0.7em;
     }
 }
 
