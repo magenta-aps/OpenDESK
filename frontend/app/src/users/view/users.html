@@ -21,24 +21,18 @@
                 </span>
             </div>
             <md-virtual-repeat-container flex-height style="height: 450px;">
-                <div md-virtual-repeat="user in vm.allSystemUsers | orderObjectBy:orderByAttribute:reverseOrder"
-                     class="repeat-item {{user.enabled ? 'enabled' : 'muted'}}">
-                    <a class="r-rowlink"
-                       layout="row"
-                       ng-show="user.userName != 'guest'">
+                <div md-virtual-repeat="user in vm.allSystemUsers | orderObjectBy:orderByAttribute:reverseOrder" class="repeat-item {{user.enabled ? 'enabled' : 'muted'}}">
+                    <a class="r-rowlink" layout="row" ng-show="user.userName != 'guest'">
                         <span class="r" flex="5"><i class="material-icons">account_box</i></span>
                         <span class="r" flex="15">{{user.userName}}</span>
-                        <span class="r muted" flex="20">{{user.firstName}}</span>
-                        <span class="r muted" flex="20">{{user.lastName}}</span>
-                        <span class="r muted" flex="20">{{user.email}}</span>
-                        <span class="r muted" flex="20">
-                            <md-button class="md-primary" style="margin: 0;" ng-click="vm.editUser($event, user)"
-                                       aria-label="Edit user">
+                        <span class="r" flex="20">{{user.firstName}}</span>
+                        <span class="r" flex="20">{{user.lastName}}</span>
+                        <span class="r" flex="20">{{user.email}}</span>
+                        <span class="r" flex="20">
+                            <md-button class="md-primary" style="margin: 0;" ng-click="vm.editUser($event, user)" aria-label="Edit user">
                                 {{ 'USER.EDIT_USER' | translate }}
                             </md-button>
-                            <md-button class="md-primary" style="margin: 0;" ng-if="user.userName !== 'admin'"
-                                       ng-click="vm.deleteUser($event, user)" aria-label="Delete user"
-                                       data-username="{{user.userName}}">
+                            <md-button class="md-primary" style="margin: 0;" ng-if="user.userName !== 'admin'" ng-click="vm.deleteUser($event, user)" aria-label="Delete user" data-username="{{user.userName}}">
                                 {{ 'COMMON.DELETE' | translate }}
                             </md-button>
                         </span>
