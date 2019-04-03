@@ -1,4 +1,5 @@
-<md-card ng-controller="FundApplicationHistoryController" ng-cloak style=" grid-column: 1/-1">
+<md-card ng-controller="FundApplicationHistoryController"
+         ng-cloak style=" grid-column: 1/-1">
     <md-card-title>
         <md-card-title-text>
             <span class="md-headline">Historik</span>
@@ -18,35 +19,58 @@
             </tr>
             </thead>
             <tbody class="osflow-table__tbody">
-            <tr class="osflow-table__tr" ng-repeat="change in vm.changes | orderBy:'-timesStamp'">
+            <tr class="osflow-table__tr"
+                ng-repeat="appChange in vm.appChangeList | orderBy:'-timesStamp'">
                 <td class="osflow-table__td">
-                    <md-icon ng-if="change.changeType === 'applicationUpdate'">update</md-icon>
-                    <md-icon ng-if="change.changeType === 'applicationCreation'">assignment</md-icon>
-                    <md-icon ng-if="change.changeType === 'applicationDeletion'">delete</md-icon>
+                    <md-icon ng-if="appChange.changeType === 'applicationUpdate'">
+                        update
+                    </md-icon>
+                    <md-icon ng-if="appChange.changeType === 'applicationCreation'">
+                        assignment
+                    </md-icon>
+                    <md-icon ng-if="appChange.changeType === 'applicationDeletion'">
+                        delete
+                    </md-icon>
                 </td>
                 <td class="osflow-table__td">
-                    {{vm.convertTimeStamp(change.timesStamp)}}
+                    {{vm.convertTimeStamp(appChange.timesStamp)}}
                 </td>
                 <td class="osflow-table__td">
-                    {{change.modifier}}
+                    {{appChange.modifier}}
                 </td>
                 <td class="osflow-table__td">
-                    <table class="osflow-content-table" ng-if="change.changeType === 'applicationUpdate'">
-                        <tr class="osflow-content-table__tr" ng-repeat="changeUnit in change.changes">
-                            <td class="osflow-content-table__td">{{ changeUnit.changedField }}</td>
-                            <td class="osflow-content-table__td">{{ changeUnit.oldValue}}</td>
-                            <td class="osflow-content-table__td"><md-icon>arrow_right_alt</md-icon></td>
-                            <td class="osflow-content-table__td">{{changeUnit.newValue}}</td>
+                    <table class="osflow-content-table"
+                           ng-if="appChange.changeType === 'applicationUpdate'">
+                        <tr class="osflow-content-table__tr"
+                            ng-repeat="appChangeUnit in appChange.changes">
+                            <td class="osflow-content-table__td">
+                                {{ appChangeUnit.changedField }}
+                            </td>
+                            <td class="osflow-content-table__td">
+                                {{ appChangeUnit.oldValue}}
+                            </td>
+                            <td class="osflow-content-table__td">
+                                <md-icon>arrow_right_alt</md-icon>
+                            </td>
+                            <td class="osflow-content-table__td">
+                                {{appChangeUnit.newValue}}
+                            </td>
                         </tr>
                     </table>
-                    <table class="osflow-content-table" ng-if="change.changeType === 'applicationCreation'">
+                    <table class="osflow-content-table"
+                           ng-if="appChange.changeType === 'applicationCreation'">
                         <tr class="osflow-content-table__tr">
-                            <td class="osflow-content-table__td">Ansøgning oprettet</td>
+                            <td class="osflow-content-table__td">
+                                Ansøgning oprettet
+                            </td>
                         </tr>
                     </table>
-                    <table class="osflow-content-table" ng-if="change.changeType === 'applicationDeletion'">
+                    <table class="osflow-content-table"
+                           ng-if="appChange.changeType === 'applicationDeletion'">
                         <tr class="osflow-content-table__tr">
-                            <td class="osflow-content-table__td">Ansøgning slettet</td>
+                            <td class="osflow-content-table__td">
+                                Ansøgning slettet
+                            </td>
                         </tr>
                     </table>
                 </td>

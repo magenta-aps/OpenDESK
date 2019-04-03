@@ -14,7 +14,7 @@ angular
 
 function FundApplicationHistoryController ($scope, fundService, $stateParams) {
     var vm = this
-    vm.changes = []
+    vm.appChangeList = []
     activate()
     function activate() {
         // If application is not loaded yet, load it and get its history.
@@ -28,12 +28,12 @@ function FundApplicationHistoryController ($scope, fundService, $stateParams) {
                     return fundService.getHistory(response.nodeID)
                 })
                 .then(function (response) {
-                    vm.changes = response
+                    vm.appChangeList = response
                 })
         } else {
             fundService.getHistory($scope.$parent.application.nodeID)
                 .then(function (response) {
-                    vm.changes = response
+                    vm.appChangeList = response
                 })
         }
     }
