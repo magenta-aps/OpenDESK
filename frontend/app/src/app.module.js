@@ -16,6 +16,7 @@ angular
     'ngCookies',
     'ui.router',
     'pascalprecht.translate',
+    'angular-translate-loader-pluggable',
     'ngResource',
     'dndLists',
     'angular.img',

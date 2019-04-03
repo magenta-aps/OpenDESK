@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 
@@ -14,13 +14,14 @@ import shareDocumentTemplate from '../view/shareDocument.tmpl.html'
 import uploadNewVersionTemplate from '../../filebrowser/view/content/document/uploadNewVersion.tmpl.html'
 
 angular.module('openDeskApp.documents')
-  .controller('DocumentActionController', ['$mdDialog', '$mdToast', '$location', '$scope', '$state', '$stateParams',
-    '$window', 'APP_BACKEND_CONFIG', 'alfrescoDownloadService', 'contentService', 'editOnlineMSOfficeService',
-    'filebrowserService', 'personService', 'publicShareService', DocumentActionController])
+  .controller('DocumentActionController', ['$injector', '$mdDialog', '$mdToast', '$location', '$scope', '$state',
+    '$stateParams', '$window', 'APP_BACKEND_CONFIG', 'alfrescoDownloadService', 'contentService',
+    'documentActionService', 'editOnlineMSOfficeService', 'filebrowserService', 'personService', 'publicShareService',
+    DocumentActionController])
 
-function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $state, $stateParams, $window,
-  APP_BACKEND_CONFIG, alfrescoDownloadService, contentService, editOnlineMSOfficeService, filebrowserService,
-  personService, publicShareService) {
+function DocumentActionController ($injector, $mdDialog, $mdToast, $location, $scope, $state, $stateParams, $window,
+  APP_BACKEND_CONFIG, alfrescoDownloadService, contentService, documentActionService, editOnlineMSOfficeService,
+  filebrowserService, personService, publicShareService) {
   var vm = this
   vm.uploading = false
   vm.acceptEditVersionDialog = acceptEditVersionDialog
@@ -29,6 +30,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
   vm.editInLibreOffice = editInLibreOffice
   vm.editInMSOffice = editInMSOffice
   vm.editInOnlyOffice = editInOnlyOffice
+  vm.executeAction = executeAction
   vm.isEditorVisible = isEditorVisible
   vm.onPublicSharedUrlClick = onPublicSharedUrlClick
   vm.reviewDocumentsDialog = reviewDocumentsDialog
@@ -47,6 +49,7 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
   }
 
   function activate () {
+    vm.actions = documentActionService.getActions()
     vm.isLocked = vm.doc.node.isLocked
     if (vm.isLocked)
       vm.lockType = vm.doc.node.properties['cm:lockType']
@@ -56,6 +59,11 @@ function DocumentActionController ($mdDialog, $mdToast, $location, $scope, $stat
       vm.sharedId = vm.doc.node.properties['qshare:sharedId']
       setPublicSharedUrl()
     }
+  }
+
+  function executeAction (actionItem) {
+    var service = $injector.get(actionItem.serviceName)
+    service.executeAction(vm.doc.nodeId, this)
   }
 
   function acceptEditVersionDialog (editor) {

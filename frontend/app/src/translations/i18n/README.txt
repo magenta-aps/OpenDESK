@@ -30,7 +30,7 @@ Translatable strings can also be added programmatically. See the Angular transla
 
 ** How to add translations
 
-In the /app/src/i18n directory you'll find
+In the /app/src/translations/i18n directory you'll find
 en.json
 da.json
 

@@ -138,7 +138,7 @@ public class AuthorityBean {
         if(includeGroups) {
             PagingResults<String> groupResults = authorityService.getAuthorities(AuthorityType.GROUP,
                     AuthorityService.ZONE_APP_DEFAULT, "*" + filter, true, true,
-                    new PagingRequest(100000));
+                    new PagingRequest(Integer.MAX_VALUE));
             for (String authorityName : groupResults.getPage()) {
                 if (authorityName.startsWith("GROUP_ALFRESCO") ||
                         authorityName.startsWith("GROUP_OPENDESK") ||
