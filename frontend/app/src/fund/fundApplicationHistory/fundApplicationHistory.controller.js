@@ -38,6 +38,7 @@ function FundApplicationHistoryController ($scope, fundService, $stateParams) {
         }
     }
 
+    //TODO: Should depend on language
     vm.convertTimeStamp = function (ts) {
         ts = ts.split(/[-T:\.]+/)
         console.log(ts)
