@@ -18,6 +18,7 @@ function FundApplicationBlocksController ($scope) {
   vm.phoneNumber = phoneNumber
   vm.amount = amount
   vm.toggleExpand = toggleExpand
+  vm.toggleExpandPrevious = toggleExpandPrevious
 
   function allFields () {
     return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
@@ -49,4 +50,19 @@ function FundApplicationBlocksController ($scope) {
       block.removeClass('expanded')
     }
   }
+
+  function toggleExpandPrevious (event) {
+    var row = $(event.target).closest('tr')
+
+    // handle newly clicked row
+    if (!row.hasClass('osflow-table__tr--open')) {
+      row.addClass('osflow-table__tr--open'),
+      row.next('.osflow-table__tr--details').removeAttr('hidden')
+    }
+    else {
+      row.removeClass('osflow-table__tr--open'),
+      row.next('.osflow-table__tr--details').attr('hidden', 'hidden')
+    }
+  }
+
 }

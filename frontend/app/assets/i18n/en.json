@@ -193,6 +193,19 @@
     "ASSIGN_TO": "Assign to",
     "CASE_ADDED_TO_FAVORITE": "You have now added this case to your favorite cases and will be notified whenever the case is updated"
   },
+  "FUNDS": {
+    "NAVIGATION": {
+      "APPLICATION": "Application",
+      "CONTACTINFO": "Contact information",
+      "HISTORY": "History",
+      "GOTO_PREVIOUS_APPLICATION": "Go to previous application",
+      "GOTO_NEXT_APPLICATION": "Go to next application",
+      "EDIT_APPLICATION": "Edit application",
+      "SAVE_APPLICATION": "Save application",
+      "CANCEL_EDIT_APPLICATION": "Cancel",
+      "SUBMIT_TO_NEXT_STEP": "Submit application to board"
+    }
+  },
   "DOCUMENT": {
      "DOCUMENT_TEMPLATES": "Document templates",
     "STATUS_CHANGED_SUCCESS": "Status has been changed successfully",
@@ -642,6 +655,7 @@
     "LAST_NAME": "Last name",
     "USERNAME": "Username",
     "EDIT_USER": "Edit user",
+    "DISABLE_ACCOUNT": "Disable user account",
     "DELETE_USER": "Delete user",
     "DELETE_USER_SUCCESS": "User successfully deleted",
     "DELETE_USER_FAILURE": "User could not be deleted",

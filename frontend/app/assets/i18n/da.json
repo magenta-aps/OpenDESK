@@ -195,6 +195,19 @@
     "ASSIGN_TO": "Tildel til",
     "CASE_ADDED_TO_FAVORITE": "Sagen er føjet til dine favoritter og du bliver notificeret når der sker nye hændelser på sagen"
   },
+  "FUNDS": {
+    "NAVIGATION": {
+      "APPLICATION": "Ansøgning",
+      "CONTACTINFO": "Kontaktinfo",
+      "HISTORY": "Historik",
+      "GOTO_PREVIOUS_APPLICATION": "Gå til forrige ansøgning",
+      "GOTO_NEXT_APPLICATION": "Gå til næste ansøgning",
+      "EDIT_APPLICATION": "Ret ansøgning",
+      "SAVE_APPLICATION": "Gem ansøgning",
+      "CANCEL_EDIT_APPLICATION": "Annuller redigering",
+      "SUBMIT_TO_NEXT_STEP": "Send ansøgning til møde i bankråd"
+    }
+  },
   "DOCUMENT": {
     "DOCUMENT_TEMPLATES": "Dokumentskabeloner",
     "STATUS_CHANGED_SUCCESS": "Status er ændret",
@@ -628,6 +641,7 @@
     "LAST_NAME": "Efternavn",
     "USERNAME": "Brugernavn",
     "EDIT_USER": "Redigér bruger",
+    "DISABLE_ACCOUNT": "Deaktiver brugerkonto",
     "DELETE_USER": "Slet bruger",
     "DELETE_USER_SUCCESS": "Bruger slettet",
     "DELETE_USER_FAILURE": "Bruger kunne ikke slettes",

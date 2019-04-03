@@ -1,8 +1,11 @@
 <application-block>
     <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Tidligere ansøgninger</span>
+            </md-card-title-text>
+        </md-card-title>
         <md-card-content>
-            <h2>Tidligere ansøgninger</h2>
-
             <table class="osflow-table">
                 <thead class="osflow-table__thead">
                     <tr class="osflow-table__tr">
@@ -13,20 +16,13 @@
                     </tr>
                 </thead>
                 <tbody class="osflow-table__tbody">
-                    <tr class="osflow-table__tr" tabindex="1">
+                    <tr class="osflow-table__tr" tabindex="1" ng-click="vm.toggleExpandPrevious($event)">
                         <td class="osflow-table__td">2019</td>
                         <td class="osflow-table__td">2</td>
                         <td class="osflow-table__td osflow-table__td--right">115.000</td>
                         <td class="osflow-table__td osflow-table__td--right">89.000</td>
                     </tr>
-                    <!-- this is open, start! -->
-                    <tr class="osflow-table__tr osflow-table__tr--open" tabindex="1">
-                        <td class="osflow-table__td">2018</td>
-                        <td class="osflow-table__td">2</td>
-                        <td class="osflow-table__td osflow-table__td--right">115.000</td>
-                        <td class="osflow-table__td osflow-table__td--right">89.000</td>
-                    </tr>
-                    <tr class="osflow-table__tr">
+                    <tr class="osflow-table__tr osflow-table__tr--details" hidden>
                         <td class="osflow-table__td" colspan="4">
                             <div class="osflow-bar">
                                 <h4 class="osflow-bar__heading">
@@ -54,49 +50,76 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- this is open, stop! -->
-                    <tr class="osflow-table__tr" tabindex="1">
+                    <tr class="osflow-table__tr" tabindex="1" ng-click="vm.toggleExpandPrevious($event)">
+                        <td class="osflow-table__td">2018</td>
+                        <td class="osflow-table__td">2</td>
+                        <td class="osflow-table__td osflow-table__td--right">115.000</td>
+                        <td class="osflow-table__td osflow-table__td--right">89.000</td>
+                    </tr>
+                    <tr class="osflow-table__tr osflow-table__tr--details" hidden>
+                        <td class="osflow-table__td" colspan="4">
+                            <div class="osflow-bar">
+                                <h4 class="osflow-bar__heading">
+                                    <a href="/opendesk/fondsansogninger/application/93201fd5-2107-40af-8ee6-962707c99d8e" class="osflow-bar__heading-link">Ansøgning til Fluefiskerforeningen
+                                    <span>(93201fd5-2107-40af-8ee6-962707c99d8e)</span></a>
+                                </h4>
+                                <div class="osflow-meter">
+                                    <span class="osflow-meter__label">100.000</span>
+                                    <div class="osflow-meter__progress" style="width: 80%;">
+                                        <span class="osflow-meter__progress-label">80.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="osflow-bar">
+                                    <h4 class="osflow-bar__heading">
+                                            <a href="/opendesk/fondsansogninger/application/46b63146-bdbf-4e17-9145-2d4bd99d8227" class="osflow-bar__heading-link">Ansøgning til Lones Kattehjem
+                                            <span>(46b63146-bdbf-4e17-9145-2d4bd99d8227)</span></a>
+                                        </h4>
+                                        <div class="osflow-meter">
+                                    <span class="osflow-meter__label">15.000</span>
+                                    <div class="osflow-meter__progress" style="width: 50%;">
+                                        <span class="osflow-meter__progress-label">7.500</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="osflow-table__tr" tabindex="1" ng-click="vm.toggleExpandPrevious($event)">
                         <td class="osflow-table__td">2017</td>
                         <td class="osflow-table__td">6</td>
                         <td class="osflow-table__td osflow-table__td--right">1.286.000</td>
                         <td class="osflow-table__td osflow-table__td--right">846.000</td>
                     </tr>
-                    <tr class="osflow-table__tr" tabindex="1">
-                        <td class="osflow-table__td">2016</td>
-                        <td class="osflow-table__td">2</td>
-                        <td class="osflow-table__td osflow-table__td--right">5.000</td>
-                        <td class="osflow-table__td osflow-table__td--right">5.000</td>
-                    </tr>
-                    <tr class="osflow-table__tr" tabindex="1">
-                        <td class="osflow-table__td">2015</td>
-                        <td class="osflow-table__td">1</td>
-                        <td class="osflow-table__td osflow-table__td--right">12.000</td>
-                        <td class="osflow-table__td osflow-table__td--right">12.000</td>
+                    <tr class="osflow-table__tr osflow-table__tr--details" hidden>
+                        <td class="osflow-table__td" colspan="4">
+                            <div class="osflow-bar">
+                                <h4 class="osflow-bar__heading">
+                                    <a href="#" class="osflow-bar__heading-link">Ansøgning til ny legeplads
+                                    <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></a>
+                                </h4>
+                                <div class="osflow-meter">
+                                    <span class="osflow-meter__label">100.000</span>
+                                    <div class="osflow-meter__progress" style="width: 80%;">
+                                        <span class="osflow-meter__progress-label">80.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="osflow-bar">
+                                    <h4 class="osflow-bar__heading">
+                                            <a href="#" class="osflow-bar__heading-link">Ansøgning til påskefest
+                                            <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></a>
+                                        </h4>
+                                        <div class="osflow-meter">
+                                    <span class="osflow-meter__label">15.000</span>
+                                    <div class="osflow-meter__progress" style="width: 50%;">
+                                        <span class="osflow-meter__progress-label">7.500</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
-            <!-- <div class="osflow-bar">
-                <h4 class="osflow-bar__heading">Ansøgning til ny legeplads
-                    <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></h4>
-                <div class="osflow-meter">
-                    <span class="osflow-meter__label">100.000</span>
-                    <div class="osflow-meter__progress" style="width: 80%;">
-                        <span class="osflow-meter__progress-label">80.000</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="osflow-bar">
-                <h4 class="osflow-bar__heading">Ansøgning til ny legeplads
-                    <span>(b8f658ba-304a-43ce-9be1-7d8b6477bca6)</span></h4>
-                <div class="osflow-meter">
-                    <span class="osflow-meter__label">15.000</span>
-                    <div class="osflow-meter__progress" style="width: 60%;">
-                        <span class="osflow-meter__progress-label">9.000</span>
-                    </div>
-                </div>
-            </div> -->
-
         </md-card-content>
     </md-card>
 </application-block>
