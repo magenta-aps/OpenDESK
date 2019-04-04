@@ -92,7 +92,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
         // the field only allows the user to select one file, so we can just
         // take item 0
         var file = document.getElementById(field.value).files[0]
-        return fundService.uploadContent(file, $scope.application.nodeRef)
+        return fundService.uploadContent(file, $scope.application.nodeRef, field.id)
         .then(function (response) {
           field.value = alfrescoNodeService.processNodeRef(response.data.nodeRef).id
         })

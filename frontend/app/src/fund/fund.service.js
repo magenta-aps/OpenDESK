@@ -257,7 +257,7 @@ angular.module('openDeskApp.fund')
     }
 
     //Upload content to an application
-    function uploadContent (file, applicationNodeRef) {
+    function uploadContent (file, applicationNodeRef, fieldId) {
       var folderNodeRef = null
       var appId = alfrescoNodeService.processNodeRef(applicationNodeRef).id
 
