@@ -85,14 +85,20 @@ public class AuthorityBean {
 
     public JSONObject getOpenDeskGroup(String groupName) throws JSONException {
         Map<String, String> odGroups = getOpenDeskGroupObjects();
+
+        String displayName = authorityService.getAuthorityDisplayName("GROUP_" + groupName);
+        System.out.println("displayName: " + displayName);
+
         String type = odGroups.get(groupName);
         JSONObject json = new JSONObject();
+        json.put("displayName", displayName);
         json.put("shortName", groupName);
         json.put("type", type);
         JSONArray authorities = getAuthorities("GROUP_" + groupName, Integer.MAX_VALUE, 0).getFirst();
         json.put("members", authorities);
         return json;
     }
+
 
     private Map<String, String> getOpenDeskGroupObjects() {
         Map<String, String> odGroups = new HashMap<>();
