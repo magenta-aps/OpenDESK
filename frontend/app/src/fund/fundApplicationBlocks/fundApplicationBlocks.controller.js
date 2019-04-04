@@ -14,15 +14,11 @@ angular
 
 function FundApplicationBlocksController ($scope) {
   var vm = this
-  vm.allFields = allFields
+  vm.allFields = $scope.allFields
   vm.phoneNumber = phoneNumber
   vm.amount = amount
   vm.toggleExpand = toggleExpand
   vm.toggleExpandPrevious = toggleExpandPrevious
-
-  function allFields () {
-    return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
-  }
 
   function phoneNumber () {
     return vm.allFields().length ? vm.allFields().find(field => field.describes == 'phone_number') : {}

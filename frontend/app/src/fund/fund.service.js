@@ -36,7 +36,8 @@ angular.module('openDeskApp.fund')
       createBudget: createBudget,
       createBudgetYear: createBudgetYear,
       getBudget: getBudget,
-      getHistory: getHistory,
+      uploadContent: uploadContent,
+
       resetDemoData : resetDemoData,
       resetDemoDataDanva: resetDemoDataDanva
     }
@@ -256,21 +257,21 @@ angular.module('openDeskApp.fund')
     }
 
     //Upload content to an application
-    function uploadContent (file, application) {
-      var folderId = null
-      var appId = alfrescoNodeService.processNodeRef(application).id
+    function uploadContent (file, applicationNodeRef) {
+      var folderNodeRef = null
+      var appId = alfrescoNodeService.processNodeRef(applicationNodeRef).id
 
       return $http.get(`/alfresco/service/foundation/application/${appId}/documentfolder`)
       .then(function (response) {
-        folderId = response
+        folderNodeRef = 'workspace://SpacesStore/' + response.data
 
-        return $http.get(`/alfresco/service/node/${response}/next-available-name/${file.name}`)
+        return $http.get(`/alfresco/service/node/${response.data}/next-available-name/${file.name}`) // response.data is equal to the nodeID
       })
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)
         formData.append('filename', response.data.fileName)
-        formData.append('destination', folderId)
+        formData.append('destination', folderNodeRef)
 
         var headers = {
           transformRequest: angular.identity,
@@ -284,12 +285,5 @@ angular.module('openDeskApp.fund')
       .then(function (response) {
         return response
       })
-    }
-
-    function getHistory(applicationID) {
-      return $http.get(`/alfresco/service/foundation/application/${applicationID}/history`)
-        .then(function (response) {
-          return response.data
-        })
     }
   }
