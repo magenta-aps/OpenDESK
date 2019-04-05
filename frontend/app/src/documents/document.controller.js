@@ -120,9 +120,6 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     else
       documentPreviewService.getPluginByNodeRef(vm.doc.store + vm.nodeId)
         .then(function (plugin) {
-        console.log("hvad er plugin");
-        console.log(plugin);
-
           vm.plugin = plugin
         })
   }

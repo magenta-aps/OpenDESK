@@ -29,11 +29,14 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
       .then(
         function (item) {
           console.log("hvad er item");
-          console.log(item);
+          console.log(item)
 
 
-           documentPreviewService.getPluginByNodeRef(item.nodeRef)
+           documentPreviewService.getPluginByNodeRef(response.data.nodeRef)
+
                       .then(function (plugin) {
+                      console.log("hvad er plugin");
+                       console.log(hvad er plugin);
                         vm.plugin = plugin
                       })
 
