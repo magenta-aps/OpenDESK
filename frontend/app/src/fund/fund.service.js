@@ -242,7 +242,6 @@ angular.module('openDeskApp.fund')
     function resetDemoData() {
       return $http.post(`/alfresco/service/foundation/demodata`)
       .then(function (response) {
-          console.log(response)
         return response.data
       })
     }
@@ -251,7 +250,6 @@ angular.module('openDeskApp.fund')
     function resetDemoDataDanva() {
       return $http.post(`/alfresco/service/foundation/demodata/danva`)
       .then(function (response) {
-          console.log(response)
         return response.data
       })
     }
