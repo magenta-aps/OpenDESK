@@ -32,19 +32,21 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
           console.log(item)
 
 
-           documentPreviewService.getPluginByNodeRef(item.nodeRef)
-
-                      .then(function (plugin) {
-                      console.log("hvad er plugin");
-                       console.log(plugin);
-                        vm.plugin = plugin
-                      })
-
-
-//          vm.plugin = documentPreviewService.getPlugin(item)
+//           documentPreviewService.getPluginByNodeRef(item.nodeRef)
 //
-//          vm.plugin.height = '100%'
-//          vm.plugin.sharedId = vm.sharedId
+//                      .then(function (plugin) {
+//                      console.log("hvad er plugin");
+//                       console.log(plugin);
+//                        vm.plugin = plugin
+//                        vm.plugin.name = "onlyOffice";
+//                      })
+
+
+          vm.plugin = documentPreviewService.getPlugin(item)
+          vm.plugin.name = "onlyOffice";
+          vm.plugin.height = '100%'
+
+          vm.plugin.sharedId = vm.sharedId
         },
         function (error) {
           if (error.status.code === 404)
