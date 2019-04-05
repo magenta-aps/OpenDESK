@@ -28,6 +28,8 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
     publicShareService.getShared(vm.sharedId)
       .then(
         function (item) {
+          console.log("hvad er item");
+          console.log(item)
           vm.plugin = documentPreviewService.getPlugin(item)
           vm.plugin.height = '100%'
           vm.plugin.sharedId = vm.sharedId

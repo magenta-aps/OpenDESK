@@ -103,9 +103,15 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
   }
 
   function loadPreview () {
+  console.log("hvad er response");
+
+  console.log(vm.docHasParent);
     if (vm.docHasParent)
       documentService.getThumbnail(vm.parentNodeId, vm.nodeId)
         .then(function (response) {
+
+        console.log(response);
+
           documentPreviewService.getPluginByNodeRef(response.data.nodeRef)
             .then(function (plugin) {
               vm.plugin = plugin
@@ -114,6 +120,9 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
     else
       documentPreviewService.getPluginByNodeRef(vm.doc.store + vm.nodeId)
         .then(function (plugin) {
+        console.log("hvad er plugin");
+        console.log(plugin);
+
           vm.plugin = plugin
         })
   }
