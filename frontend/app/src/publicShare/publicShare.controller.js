@@ -36,7 +36,7 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
 
                       .then(function (plugin) {
                       console.log("hvad er plugin");
-                       console.log(hvad er plugin);
+                       console.log(plugin);
                         vm.plugin = plugin
                       })
 
