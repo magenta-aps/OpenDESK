@@ -32,7 +32,7 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
           console.log(item)
 
 
-           documentPreviewService.getPluginByNodeRef(response.data.nodeRef)
+           documentPreviewService.getPluginByNodeRef(item.nodeRef)
 
                       .then(function (plugin) {
                       console.log("hvad er plugin");
