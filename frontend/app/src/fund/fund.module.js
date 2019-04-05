@@ -112,6 +112,22 @@ function config ($stateProvider, USER_ROLES) {
       currentAppPage: 'history'
     }
   })
+  .state('fund.demodata', {
+    url: '/demodata',
+    views: {
+      'fundMain@fund': {
+        controller: function (fundService) {
+          var vm = this
+          fundService.resetDemoData()
+          .then(function (response) {
+            vm.result = response
+          })
+        },
+        controllerAs: 'vm',
+        template: '<div>{{ vm.result }}</div>'
+      }
+    }
+  })
   .state('fund.demodatadanva', {
     url: '/demodatadanva',
     views: {
