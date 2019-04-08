@@ -153,6 +153,9 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
 
   function officeViewer (name) {
   console.log("setup for officeViwer med navnet:" + name)
+
+    editorService.loadEditors();
+
     var isEnabled = editorService.isEnabled(name)
     var viewer = {
       mimeTypes: isEnabled ? editorService.getEditor(name).mimeTypes : [],
