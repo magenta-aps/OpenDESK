@@ -29,9 +29,6 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
       .then(
         function (item) {
 
-          console.log("hvad er item:");
-          console.log(item.nodeRef);
-
            documentPreviewService.getPluginByNodeRef(item.nodeRef)
                       .then(function (plugin) {
                         vm.plugin = plugin

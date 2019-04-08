@@ -79,6 +79,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
     var plugins = getPlugins()
     for (var i in plugins) {
       var plugin = plugins[i]
+
       if (plugin.acceptsItem(item)) {
         plugin.initPlugin(item)
         if (plugin.extendPlugin)
