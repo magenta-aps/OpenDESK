@@ -28,20 +28,6 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
     publicShareService.getShared(vm.sharedId)
       .then(
         function (item) {
-          console.log("hvad er item");
-          console.log(item)
-
-
-//           documentPreviewService.getPluginByNodeRef(item.nodeRef)
-//
-//                      .then(function (plugin) {
-//                      console.log("hvad er plugin");
-//                       console.log(plugin);
-//                        vm.plugin = plugin
-//                        vm.plugin.name = "onlyOffice";
-//                      })
-
-
           vm.plugin = documentPreviewService.getPlugin(item)
           vm.plugin.name = "onlyOffice";
           vm.plugin.height = '100%'
