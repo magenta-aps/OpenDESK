@@ -29,17 +29,14 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
       .then(
         function (item) {
 
-           documentPreviewService.getPluginByNodeRef(item.nodeRef)
-                      .then(function (plugin) {
-                        vm.plugin = plugin
-                        vm.plugin.height = '100%'
 
-                                  vm.plugin.sharedId = vm.sharedId
-                      })
 
-//          vm.plugin = documentPreviewService.getPlugin(item)
+          vm.plugin = documentPreviewService.getPlugin(item)
+          console.log("hvad er plugin name:" + vm.plugin.name)
 //          vm.plugin.name = "onlyOffice";
+          vm.plugin.height = '100%'
 
+          vm.plugin.sharedId = vm.sharedId
         },
         function (error) {
           if (error.status.code === 404)

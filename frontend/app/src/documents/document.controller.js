@@ -108,6 +108,9 @@ function DocumentController ($translate, documentService, $stateParams, $locatio
         .then(function (response) {
           documentPreviewService.getPluginByNodeRef(response.data.nodeRef)
             .then(function (plugin) {
+
+            console.log("hvad er plugin name:" + plugin.name)
+
               vm.plugin = plugin
             })
         })
