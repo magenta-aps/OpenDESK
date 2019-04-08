@@ -152,11 +152,16 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   }
 
   function officeViewer (name) {
+  console.log("setup for officeViwer med navnet:" + name)
     var isEnabled = editorService.isEnabled(name)
     var viewer = {
       mimeTypes: isEnabled ? editorService.getEditor(name).mimeTypes : [],
       name: name
     }
+
+    console.log("her kommer mimetypes som er understøttet af det pågældende setup");
+    console.log(mimeTypes);
+    console.log("name: " + name);
 
     var result = generalPlaybackPlugin()
     return angular.extend(result, viewer)
