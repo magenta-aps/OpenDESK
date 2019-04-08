@@ -77,16 +77,24 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
 
   function getPlugin (item) {
     var plugins = getPlugins()
+
+    var plugin;
+
     for (var i in plugins) {
       var plugin = plugins[i]
+      console.log(i)
+      console.log(plugin)
+      console.log(plugin.acceptsItem(item));
+      console.log("next")
 
-      if (plugin.acceptsItem(item)) {
-        plugin.initPlugin(item)
-        if (plugin.extendPlugin)
-          plugin.extendPlugin()
-        return plugin
-      }
+//      if (plugin.acceptsItem(item)) {
+//        plugin.initPlugin(item)
+//        if (plugin.extendPlugin)
+//          plugin.extendPlugin()
+//
+//      }
     }
+      return plugin
   }
 
   function getPlugins () {
