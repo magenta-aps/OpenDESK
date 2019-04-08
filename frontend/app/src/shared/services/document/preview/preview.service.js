@@ -78,8 +78,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   function getPlugin (item) {
     var plugins = getPlugins()
 
-    var plugin;
-
+    
     for (var i in plugins) {
       var plugin = plugins[i]
       console.log(i)
@@ -91,10 +90,11 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
         plugin.initPlugin(item)
         if (plugin.extendPlugin)
           plugin.extendPlugin()
+          return plugin
 
       }
     }
-      return plugin
+
   }
 
   function getPlugins () {
