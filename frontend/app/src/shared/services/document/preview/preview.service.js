@@ -78,7 +78,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   function getPlugin (item) {
     var plugins = getPlugins()
 
-    
+
     for (var i in plugins) {
       var plugin = plugins[i]
       console.log(i)
@@ -309,6 +309,9 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
   function generalPreviewPlugin () {
     return {
       acceptsItem: function (item) {
+        console.log("her kommer det item som skal tjekkes:");
+        console.log(item);
+        console.log("slut på item.....########");
         return this._acceptsMimeType(item) ||
                     this._acceptsThumbnail(item) ||
                     this._acceptsTransformableMimeTypes(item)
