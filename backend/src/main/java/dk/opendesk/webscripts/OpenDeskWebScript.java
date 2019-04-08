@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -102,6 +103,16 @@ public class OpenDeskWebScript extends AbstractWebScript {
             jsonE.printStackTrace();
         }
         res.setStatus(400);
+    }
+
+    protected void notFound(WebScriptResponse res) {
+        try {
+            objectResult = new JSONObject();
+            objectResult.put("msg", "Not found");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        res.setStatus(Status.STATUS_NOT_FOUND);
     }
 
     protected ArrayList<String> getContentParamArray(String parameter) throws JSONException {

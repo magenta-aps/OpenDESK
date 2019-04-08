@@ -10,7 +10,7 @@
 
 angular
   .module('openDeskApp.header')
-  .controller('HeaderController', ['$scope', '$state', '$mdSidenav', 'headerService', 'usersService',
+  .controller('HeaderController', ['$scope', '$state', '$mdSidenav', 'headerService', 'userService',
     'notificationsService', HeaderController])
 
 function HeaderController ($scope, $state, $mdSidenav, headerService, userService, notificationsService) {
