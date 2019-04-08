@@ -8,11 +8,13 @@
 
 angular
   .module('openDeskApp')
-  .config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('success-toast')
-    $mdThemingProvider.theme('error-toast')
-  })
+  .config(['$mdThemingProvider', config])
   .factory('toastService', ['$mdToast', '$translate', toastService])
+
+function config ($mdThemingProvider) {
+  $mdThemingProvider.theme('success-toast')
+  $mdThemingProvider.theme('error-toast')
+}
 
 function toastService ($mdToast, $translate) {
   var service = {

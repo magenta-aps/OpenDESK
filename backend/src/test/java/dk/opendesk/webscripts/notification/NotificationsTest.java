@@ -32,6 +32,7 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         // SITES
         sites.put(SITE_TWO, null);
         sites.put(SITE_THREE, null);
+        sites.put(SITE_FOUR, null);
     }
 
     public void testGetNoUnseenNotifications() throws IOException, JSONException {
@@ -55,16 +56,26 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         assertGetAll(returnJSON, 3);
     }
 
-    // TODO: remember to enable uploading of file when notifications are working again
-
     public void testGetTwoNotifications() throws IOException, JSONException {
         AuthenticationUtil.runAs(() -> {
             addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
-            // uploadFile(sites.get(SITE_ONE), FILE_TEST_UPLOAD);
+            uploadFile(sites.get(SITE_ONE), FILE_TEST_UPLOAD);
             return null;
         }, ADMIN);
         JSONObject returnJSON = executeGetNotifications();
-        assertGetAll(returnJSON, 1);
+        assertGetAll(returnJSON, 2);
+    }
+
+    public void testTruncateNumberOfNotificationsToLimitValue() throws Exception {
+        AuthenticationUtil.runAs(() -> {
+            addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_TWO, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_THREE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_FOUR, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            return null;
+        }, ADMIN);
+        JSONObject response = executeGetNotifications();
+        assertGetAll(response, 3);
     }
 
     public void testDeleteNotification() throws JSONException, IOException {
