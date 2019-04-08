@@ -159,6 +159,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
       name: name
     }
 
+    console.log("er det her lort enabled:" + isEnabled);
     console.log("her kommer mimetypes som er understøttet af det pågældende setup");
     console.log(viewer.mimeTypes);
     console.log("name: " + name);
