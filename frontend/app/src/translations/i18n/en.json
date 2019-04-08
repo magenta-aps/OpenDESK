@@ -194,6 +194,30 @@
     "CASE_ADDED_TO_FAVORITE": "You have now added this case to your favorite cases and will be notified whenever the case is updated"
   },
   "FUNDS": {
+    "COMMON": {
+      "HISTORY": "History",
+      "TYPE": "Type",
+      "TIMESTAMP": "Timestamp",
+      "USER": "User",
+      "CONTENT": "Content",
+      "CATEGORY": "Category",
+      "RECEIVER": "Receiver",
+      "STREET_NAME": "Street name",
+      "FLOOR": "Floor",
+      "ZIP_CODE": "Zip code",
+      "FIRST_NAME": "First name",
+      "LAST_NAME": "Last name",
+      "EMAIL": "Email",
+      "PHONE_NUMBER": "Phone number",
+      "SHORT_DESCRIPTION": "Short description",
+      "START_DATE": "Start date",
+      "END_DATE": "End date",
+      "AMOUNT": "Amount",
+      "REGISTRATION_NUMBER": "Registration number",
+      "ACCOUNT_NUMBER": "Account number",
+      "APPLICATION_CREATED": "Application created",
+      "APPLICATION_DELETED": "Application deleted"
+    },
     "NAVIGATION": {
       "APPLICATION": "Application",
       "CONTACTINFO": "Contact information",

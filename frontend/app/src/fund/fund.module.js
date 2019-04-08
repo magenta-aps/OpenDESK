@@ -14,6 +14,7 @@ import fundWorkflowStateMenu from './fundWorkflowStateMenu/fundWorkflowStateMenu
 import fundApplicationList from './fundApplicationList/fundApplicationList.view.html'
 import fundApplication from './fundApplication/fundApplication.view.html'
 import fundApplicationBlocks from './fundApplicationBlocks/fundApplicationBlocks.view.html'
+import fundApplicationHistory from './fundApplicationHistory/fundApplicationHistory.view.html'
 
 angular.module('openDeskApp.fund', ['openDeskApp.discussion'])
   .config(['$stateProvider', 'USER_ROLES', config])
@@ -102,7 +103,9 @@ function config ($stateProvider, USER_ROLES) {
     url: '/history',
     views: {
       'application@fund.application': {
-        template: '<md-card><md-card-content>Versionshistorik</md-card-content></md-card>'
+        template: fundApplicationHistory,
+        controller: 'FundApplicationHistoryController',
+        controllerAs: 'vm'
       }
     },
     params: {
