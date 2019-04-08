@@ -160,7 +160,7 @@ function PreviewService ($mdDialog, $timeout, alfrescoDocumentService, alfrescoD
     }
 
     console.log("her kommer mimetypes som er understøttet af det pågældende setup");
-    console.log(mimeTypes);
+    console.log(viewer.mimeTypes);
     console.log("name: " + name);
 
     var result = generalPlaybackPlugin()
