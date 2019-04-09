@@ -40,7 +40,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env,
-      'ALLOW_OSFLOW_MOCK': process.env.ALLOW_OSFLOW_MOCK || false
+      'ALLOW_OSFLOW_MOCK': process.env.ALLOW_OSFLOW_MOCK === 'true' ? true : false // sorry, but Node command line arguments are always strings.
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
