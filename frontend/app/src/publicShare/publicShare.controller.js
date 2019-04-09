@@ -32,9 +32,12 @@ function PublicShareController ($stateParams, documentPreviewService, publicShar
 
 
           vm.plugin = documentPreviewService.getPlugin(item)
+          console.log("plugin");
+          console.log(vm.plugin);
+
           console.log("hvad er plugin name:" + vm.plugin.name)
-          vm.plugin.name = "onlyOffice";
           vm.plugin.height = '100%'
+          vm.plugin.thumbnail = "lort";
 
           vm.plugin.sharedId = vm.sharedId
         },

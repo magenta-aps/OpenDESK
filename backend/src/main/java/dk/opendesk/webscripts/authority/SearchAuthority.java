@@ -26,6 +26,9 @@ public class SearchAuthority extends OpenDeskWebScript {
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
+
+        System.out.println("sker der noget");
+
         try {
             String filter = urlQueryParams.get("filter");
             arrayResult = authorityBean.findAuthorities(filter);
