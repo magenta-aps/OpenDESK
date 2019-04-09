@@ -4,29 +4,25 @@
 
 const path = require('path')
 
-const publicPath = process.env.NODE_ENV ? '' : '/' // we need to handle a build with NODE_ENV=development *and* webpack-dev-server (npm run dev). They need two different public paths for assets
-
-const proxyTable = publicPath ? {} : {
-  '/alfresco': {
-    target: process.env.BASE_URL || 'http://localhost:8080',
-    changeOrigin: true
-  },
-  '/opendesk/assets': {
-    target: 'http://localhost:8000/app/assets',
-    changeOrigin: true,
-    pathRewrite: {
-      '^/opendesk/assets': ''
-    }
-  }
-} // similarly, we only want a proxy table if we're actually using webpack-dev-server, i.e. not building with NODE_ENV=development
-
 module.exports = {
   dev: {
 
     // Paths
     assetsSubDirectory: 'assets',
-    assetsPublicPath: publicPath,
-    proxyTable: proxyTable,
+    assetsPublicPath: '/',
+    proxyTable: {
+      '/alfresco': {
+        target: process.env.BASE_URL || 'http://localhost:8080',
+        changeOrigin: true
+      },
+      '/opendesk/assets': {
+        target: 'http://localhost:8000/app/assets',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/opendesk/assets': ''
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

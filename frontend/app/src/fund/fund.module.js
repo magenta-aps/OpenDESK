@@ -127,7 +127,7 @@ function config ($stateProvider, USER_ROLES) {
     }
   })
 
-  if(process.env.NODE_ENV === 'development') {
+  if(ALLOW_OSFLOW_MOCK === true) {
     $stateProvider.state('fund.demodata', {
       url: '/demodata',
       views: {
