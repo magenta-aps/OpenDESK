@@ -63,7 +63,7 @@
 					</thead>
 					<tr class="osflow-table__tr" ng-repeat="application in applications | orderBy:'title'">
 						<td class="osflow-table__td osflow-table__td--right">
-							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">1234</a>
+							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">{{ application.id }}</a>
 						</td>
 						<td class="osflow-table__td">
 							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">{{ application.title }}</a>
