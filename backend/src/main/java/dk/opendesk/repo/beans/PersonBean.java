@@ -325,7 +325,7 @@ public class PersonBean {
         PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(Integer.MAX_VALUE));
         for (PersonInfo user : users.getPage()) {
             // Do not add users that are on the ignore list
-            if(ignoreList != null && ignoreList.contains(user.getUserName()))
+            if(ignoreList != null && ignoreList.contains(user.getUserName()) || !personService.isEnabled(user.getUserName()))
                 continue;
             JSONObject json = getPersonInfo(user.getNodeRef());
             result.add(json);

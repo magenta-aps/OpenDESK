@@ -87,7 +87,6 @@ public class AuthorityBean {
         Map<String, String> odGroups = getOpenDeskGroupObjects();
 
         String displayName = authorityService.getAuthorityDisplayName("GROUP_" + groupName);
-        System.out.println("displayName: " + displayName);
 
         String type = odGroups.get(groupName);
         JSONObject json = new JSONObject();
