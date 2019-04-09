@@ -8,10 +8,36 @@
 
 'use strict'
 
-angular.module('openDeskApp.fund')
-  .directive('applicationField', ['$compile', '$templateRequest', 'FUND_FIELD_RULES', FieldDirectiveConfig])
+import checkboxes from './checkboxes.html'
+import datepicker from './datepicker.html'
+import discussion from './discussion.html'
+import file from './file.html'
+import filelist from './filelist.html'
+import number from './number.html'
+import paragraph from './paragraph.html'
+import slider from './slider.html'
+import table from './table.html'
+import tabs from './tabs.html'
+import text from './text.html'
 
-function FieldDirectiveConfig ($compile, $templateRequest, FUND_FIELD_RULES) {
+var templates = {
+  checkboxes: checkboxes,
+  datepicker: datepicker,
+  discussion: discussion,
+  file: file,
+  filelist: filelist,
+  number: number,
+  paragraph: paragraph,
+  slider: slider,
+  table: table,
+  tabs: tabs,
+  text: text
+}
+
+angular.module('openDeskApp.fund')
+  .directive('applicationField', ['$compile', 'FUND_FIELD_RULES', FieldDirectiveConfig])
+
+function FieldDirectiveConfig ($compile, FUND_FIELD_RULES) {
   return {
     restrict: 'E',
     scope: {
@@ -21,16 +47,13 @@ function FieldDirectiveConfig ($compile, $templateRequest, FUND_FIELD_RULES) {
     controllerAs: 'vm',
     template: null,
     link: function (scope, el) {
-      $templateRequest('/app/src/fund/fundApplicationBlocks/components/fields/' + scope.field.component + '.html')
-      .then(function (result) {
-        // if the field is not dependent on any other fields, just return the template
-        if (!scope.field.controlledBy) {
-          return result
-        }
-        // otherwise, go through each of the dependencies and modify the template
+      var template = templates[scope.field.component] || '<p><strong>{{ field.label }}:</strong> Der skete en fejl ved indlæsning af feltet</p>'
+      if (scope.field.controlledBy) {
+        // if the field is dependent on any other fields,
+        // go through each of those dependencies and modify the template
         // accordingly
         Object.entries(scope.field.controlledBy).forEach(function([fieldId, method]) {
-          var res = $(result)
+          var res = $(template)
           // find the elements we want to modify
           var targetElements = res.find('[data-fieldrule~="' + method + '"]')
           // perform the modification by looking up the appropriate method
@@ -39,17 +62,11 @@ function FieldDirectiveConfig ($compile, $templateRequest, FUND_FIELD_RULES) {
             newElements.replaceAll(targetElements)
           }
           // remember, we need to reassign a string of HTML as the value of 'result'
-          result = res[0].outerHTML
+          template = res[0].outerHTML
         })
-        return result
-      }, function (error) {
-        // there was an error loading the template; return something else
-        return '<p><strong>{{ field.label }}:</strong> Der skete en fejl ved indlæsning af feltet</p>'
-      })
-      .then(function (template) {
-        angular.element(el).html(template)
-        $compile(el.contents())(scope)
-      })
+      }
+      angular.element(el).html(template)
+      $compile(el.contents())(scope)
     }
   }
 }
