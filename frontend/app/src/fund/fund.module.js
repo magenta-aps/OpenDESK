@@ -15,6 +15,7 @@ import fundApplicationList from './fundApplicationList/fundApplicationList.view.
 import fundApplication from './fundApplication/fundApplication.view.html'
 import fundApplicationBlocks from './fundApplicationBlocks/fundApplicationBlocks.view.html'
 import fundApplicationHistory from './fundApplicationHistory/fundApplicationHistory.view.html'
+import fundApplicationBudget from './fundApplicationBudget/fundApplicationBudget.view.html'
 
 angular.module('openDeskApp.fund', ['openDeskApp.discussion'])
   .config(['$stateProvider', 'USER_ROLES', config])
@@ -63,6 +64,19 @@ function config ($stateProvider, USER_ROLES) {
         controller: 'FundIncomingListController',
         controllerAs: 'vm'
       }
+    }
+  })
+  .state('fund.budget', {
+    url: '/budget',
+    views: {
+      'fundMain@fund': {
+        template: fundApplicationBudget,
+        controller: 'FundApplicationBudgetController',
+        controllerAs: 'vm'
+      }
+    },
+    params: {
+      currentAppPage: 'budget'
     }
   })
   .state('fund.application', {
