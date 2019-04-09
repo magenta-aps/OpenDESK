@@ -38,8 +38,8 @@ angular.module('openDeskApp.fund')
       getBudget: getBudget,
       uploadContent: uploadContent,
 
-      resetDemoData : resetDemoData,
-      resetDemoDataDanva: resetDemoDataDanva
+      resetDemoData : process.env.NODE_ENV === 'development' ? resetDemoData : null,
+      resetDemoDataDanva: process.env.NODE_ENV === 'development' ? resetDemoDataDanva : null
     }
 
     return service
@@ -238,22 +238,6 @@ angular.module('openDeskApp.fund')
       })
     }
 
-    //Resets demo-data
-    function resetDemoData() {
-      return $http.post(`/alfresco/service/foundation/demodata`)
-      .then(function (response) {
-        return response.data
-      })
-    }
-
-    //Resets demo-data for Danva
-    function resetDemoDataDanva() {
-      return $http.post(`/alfresco/service/foundation/demodata/danva`)
-      .then(function (response) {
-        return response.data
-      })
-    }
-
     //Upload content to an application
     function uploadContent (file, applicationNodeRef, fieldId) {
       var folderNodeRef = null
@@ -282,6 +266,30 @@ angular.module('openDeskApp.fund')
       })
       .then(function (response) {
         return response
+      })
+    }
+
+    //Resets demo-data
+    function resetDemoData() {
+      // if we're not in development mode, we shouldn't be allowed to run this query
+      if(process.env.NODE_ENV !== 'development') {
+        return new Promise.resolve(null)
+      }
+      return $http.post(`/alfresco/service/foundation/demodata`)
+      .then(function (response) {
+        return response.data
+      })
+    }
+
+    //Resets demo-data for Danva
+    function resetDemoDataDanva() {
+      // if we're not in development mode, we shouldn't be allowed to run this query
+      if(process.env.NODE_ENV !== 'development') {
+        return new Promise.resolve(null)
+      }
+      return $http.post(`/alfresco/service/foundation/demodata/danva`)
+      .then(function (response) {
+        return response.data
       })
     }
   }

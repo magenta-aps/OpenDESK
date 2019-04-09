@@ -112,36 +112,27 @@ function config ($stateProvider, USER_ROLES) {
       currentAppPage: 'history'
     }
   })
-  .state('fund.demodata', {
-    url: '/demodata',
-    views: {
-      'fundMain@fund': {
-        controller: function (fundService) {
-          var vm = this
-          fundService.resetDemoData()
-          .then(function (response) {
-            vm.result = response
-          })
-        },
-        controllerAs: 'vm',
-        template: '<div>{{ vm.result }}</div>'
+
+  if(process.env.NODE_ENV === 'development') {
+    $stateProvider.state('fund.demodata', {
+      url: '/demodata',
+      views: {
+        'fundMain@fund': {
+          controller: 'FundDemoController',
+          controllerAs: 'vm',
+          template: '<div>{{ vm.result }}</div>'
+        }
       }
-    }
-  })
-  .state('fund.demodatadanva', {
-    url: '/demodatadanva',
-    views: {
-      'fundMain@fund': {
-        controller: function (fundService) {
-          var vm = this
-          fundService.resetDemoDataDanva()
-          .then(function (response) {
-            vm.result = response
-          })
-        },
-        controllerAs: 'vm',
-        template: '<div>{{ vm.result }}</div>'
+    })
+    .state('fund.demodatadanva', {
+      url: '/demodatadanva',
+      views: {
+        'fundMain@fund': {
+          controller: 'FundDemoDanvaController',
+          controllerAs: 'vm',
+          template: '<div>{{ vm.result }}</div>'
+        }
       }
-    }
-  })
+    })
+  }
 }
