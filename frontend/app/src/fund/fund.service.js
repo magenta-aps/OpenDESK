@@ -272,8 +272,8 @@ angular.module('openDeskApp.fund')
     //Resets demo-data
     function resetDemoData() {
       // if we're not in development mode, we shouldn't be allowed to run this query
-      if(ALLOW_OSFLOW_MOCK === true) {
-        return new Promise.resolve(null)
+      if(ALLOW_OSFLOW_MOCK !== true) {
+        return Promise.resolve(null)
       }
       return $http.post(`/alfresco/service/foundation/demodata`)
       .then(function (response) {
@@ -284,8 +284,8 @@ angular.module('openDeskApp.fund')
     //Resets demo-data for Danva
     function resetDemoDataDanva() {
       // if we're not in development mode, we shouldn't be allowed to run this query
-      if(ALLOW_OSFLOW_MOCK === true) {
-        return new Promise.resolve(null)
+      if(ALLOW_OSFLOW_MOCK !== true) {
+        return Promise.resolve(null)
       }
       return $http.post(`/alfresco/service/foundation/demodata/danva`)
       .then(function (response) {
