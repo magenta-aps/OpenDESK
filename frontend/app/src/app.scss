@@ -301,3 +301,17 @@ main {
       white-space: nowrap;
   }
 }
+
+.dummydata {
+  background-color: #c00;
+  color: #fff;
+  display: inline-block;
+  font-size: 0.8em;
+  letter-spacing: 0.01em;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  right: 0;
+  text-transform: uppercase;
+  top: 0;
+  user-select: none;
+}
