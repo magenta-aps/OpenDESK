@@ -8,32 +8,6 @@
 
 'use strict'
 
-import checkboxes from './checkboxes.html'
-import datepicker from './datepicker.html'
-import discussion from './discussion.html'
-import file from './file.html'
-import filelist from './filelist.html'
-import number from './number.html'
-import paragraph from './paragraph.html'
-import slider from './slider.html'
-import table from './table.html'
-import tabs from './tabs.html'
-import text from './text.html'
-
-var templates = {
-  checkboxes: checkboxes,
-  datepicker: datepicker,
-  discussion: discussion,
-  file: file,
-  filelist: filelist,
-  number: number,
-  paragraph: paragraph,
-  slider: slider,
-  table: table,
-  tabs: tabs,
-  text: text
-}
-
 angular.module('openDeskApp.fund')
   .directive('applicationField', ['$compile', 'FUND_FIELD_RULES', FieldDirectiveConfig])
 
@@ -47,7 +21,7 @@ function FieldDirectiveConfig ($compile, FUND_FIELD_RULES) {
     controllerAs: 'vm',
     template: null,
     link: function (scope, el) {
-      var template = templates[scope.field.component] || '<p><strong>{{ field.label }}:</strong> Der skete en fejl ved indlæsning af feltet</p>'
+      var template = require('./' + scope.field.component + '.html') || '<p><strong>{{ field.label }}:</strong> Der skete en fejl ved indlæsning af feltet</p>'
       if (scope.field.controlledBy) {
         // if the field is dependent on any other fields,
         // go through each of those dependencies and modify the template

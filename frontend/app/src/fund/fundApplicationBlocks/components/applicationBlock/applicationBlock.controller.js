@@ -8,14 +8,18 @@
 
 'use strict'
 
-import text from '../fields/text.html'
-
 angular
   .module('openDeskApp.fund')
-  .controller('ApplicationBlockController', ['$scope', '$templateRequest', ApplicationBlockController])
+  .controller('ApplicationBlockController', ['$scope', ApplicationBlockController])
 
-function ApplicationBlockController ($scope, $templateRequest) {
+function ApplicationBlockController ($scope) {
   var vm = this
 
-  vm.toggleExpand = $scope.$parent.vm.toggleExpand
+  vm.phoneNumber = null
+  vm.amount = null
+
+  $scope.$on('applicationWasLoaded', function () {
+    vm.phoneNumber = $scope.$parent.allFields().length ? $scope.$parent.allFields().find(field => field.describes == 'phone_number') : {}
+    vm.amount = $scope.$parent.allFields().length ? $scope.$parent.allFields().find(field => field.describes == 'amount') : {}
+  })
 }
