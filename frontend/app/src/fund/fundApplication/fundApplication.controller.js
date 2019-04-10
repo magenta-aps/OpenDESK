@@ -10,18 +10,19 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'fundApplicationEditing', '$mdDialog', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'alfrescoNodeService', 'fundApplicationEditing', '$mdDialog', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, fundApplicationEditing, $mdDialog) {
+function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, alfrescoNodeService, fundApplicationEditing, $mdDialog) {
   var vm = this
 
   $scope.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application'
   $scope.isEditing = fundApplicationEditing
+  $scope.allFields = allFields
   vm.prevAppId = null
   vm.nextAppId = null
   vm.origValue = null
-    vm.branches = []
+  vm.branches = []
 
   vm.editApplication = editApplication
   vm.saveApplication = saveApplication
@@ -30,10 +31,12 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
 
     activate()
 
-    function activate() {
+  function activate() {
+    fundApplicationEditing.set(false) // set editing state to false, in case we edited an application, went to the list, and opened another application
     fundService.getApplication($stateParams.applicationID)
     .then(function (response) {
       $scope.application = response
+      $scope.$broadcast('applicationWasLoaded', response)
       browserService.setTitle(response.title)
       headerService.setTitle(response.title)
       // if we have a workflow in store, but it doesn't match the workflow of the
@@ -58,7 +61,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
       generatePaginationLinks()
     })
 
-    }
+  }
 
     vm.status = '  ';
     vm.customFullscreen = false;
@@ -169,6 +172,10 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
         }
     }
 
+  function allFields () {
+    return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+  }
+
   function paginateApps(appId) {
     $state.go('fund.application', { applicationID: appId })
   }
@@ -181,11 +188,35 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   function saveApplication () {
     fundApplicationEditing.set(false)
 
-    fundService.updateApplication($scope.application.nodeID, $scope.application)
-    .then(function (response) {
-      if (response.status === 'OK') {
-        activate()
-      }
+    // for each file field we have in the application, upload the
+    // new file, if a new file has been added.
+    // Only when all these uploads have succeeded can we update the application
+
+    Promise.all(
+      $scope.allFields()
+      .filter(function (field) {
+        if (field.component !== 'file') {
+          return false
+        }
+        return document.getElementById(field.value).files.length > 0
+      })
+      .map(function (field) {
+        // the field only allows the user to select one file, so we can just
+        // take item 0
+        var file = document.getElementById(field.value).files[0]
+        return fundService.uploadContent(file, $scope.application.nodeRef, field.id)
+        .then(function (response) {
+          field.value = alfrescoNodeService.processNodeRef(response.data.nodeRef).id
+        })
+      })
+    )
+    .then(function () {
+      fundService.updateApplication($scope.application.nodeID, $scope.application)
+      .then(function (response) {
+        if (response.status === 'OK') {
+          activate()
+        }
+      })
     })
   }
 

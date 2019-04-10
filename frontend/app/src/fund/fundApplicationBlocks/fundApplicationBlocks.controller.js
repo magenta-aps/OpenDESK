@@ -12,10 +12,25 @@ angular
   .module('openDeskApp.fund')
   .controller('FundApplicationBlocksController', ['$scope', FundApplicationBlocksController])
 
-function FundApplicationBlocksController ($scope, $rootScope) {
+function FundApplicationBlocksController ($scope) {
   var vm = this
-
+  vm.allFields = $scope.allFields
+  vm.phoneNumber = phoneNumber
+  vm.amount = amount
   vm.toggleExpand = toggleExpand
+  vm.toggleExpandPrevious = toggleExpandPrevious
+
+  function phoneNumber () {
+    return vm.allFields().length ? vm.allFields().find(field => field.describes == 'phone_number') : {}
+  }
+
+  function amount () {
+    return vm.allFields().length ? vm.allFields().find(field => field.describes == 'amount') : {}
+  }
+
+  function category () {
+    // return vm.allFields() ? vm.allFields().find(field => field.describes == 'phone_number') : null
+  }
 
   function toggleExpand (event) {
     var block = $(event.target).closest('application-block')
@@ -31,4 +46,19 @@ function FundApplicationBlocksController ($scope, $rootScope) {
       block.removeClass('expanded')
     }
   }
+
+  function toggleExpandPrevious (event) {
+    var row = $(event.target).closest('tr')
+
+    // handle newly clicked row
+    if (!row.hasClass('osflow-table__tr--open')) {
+      row.addClass('osflow-table__tr--open'),
+      row.next('.osflow-table__tr--details').removeAttr('hidden')
+    }
+    else {
+      row.removeClass('osflow-table__tr--open'),
+      row.next('.osflow-table__tr--details').attr('hidden', 'hidden')
+    }
+  }
+
 }

@@ -32,6 +32,7 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         // SITES
         sites.put(SITE_TWO, null);
         sites.put(SITE_THREE, null);
+        sites.put(SITE_FOUR, null);
     }
 
     public void testGetNoUnseenNotifications() throws IOException, JSONException {
@@ -63,6 +64,18 @@ public class NotificationsTest extends OpenDeskWebScriptTest {
         }, ADMIN);
         JSONObject returnJSON = executeGetNotifications();
         assertGetAll(returnJSON, 2);
+    }
+
+    public void testTruncateNumberOfNotificationsToLimitValue() throws Exception {
+        AuthenticationUtil.runAs(() -> {
+            addMemberToSite(SITE_ONE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_TWO, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_THREE, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            addMemberToSite(SITE_FOUR, USER_ONE, OpenDeskModel.SITE_COLLABORATOR);
+            return null;
+        }, ADMIN);
+        JSONObject response = executeGetNotifications();
+        assertGetAll(response, 3);
     }
 
     public void testDeleteNotification() throws JSONException, IOException {

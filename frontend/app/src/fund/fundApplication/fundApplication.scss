@@ -1,52 +1,53 @@
 .od-fund-app-wrapper {
-  [ui-view="application"] {
-    display:grid;
-    grid-column-gap:16px;
-    grid-row-gap:16px;
-    grid-template-columns:repeat(auto-fill, minmax(32em, 1fr));
-    grid-auto-flow:dense;
-    grid-auto-rows:minmax(8em, 25vh); // roughly one block heading
-    md-card {
-      overflow:auto;
-      margin:0;
-      height:100%;
-      &-title {
-        flex-grow:0;
-      }
-    }
-    application-block {
-      &.expanded {
-        grid-column-start: 1;
-        grid-column-end:-1;
-        grid-row-start:1;
-        grid-row-end:span 2;
-        md-card {
-          .rotate-arrow {
-            transform:rotate(180deg);
-          }
-        }
-      }
+  .layout-wrap {
+    display: grid;
+    grid-gap: $u;
+    grid-template-columns: 1fr;
+
+    @media (min-width: $layout-breakpoint-md) {
+      grid-template-columns: 1fr 1fr;
     }
   }
+}
+
+.od-fund-app-wrapper [ui-view="application"] {
+  application-block {
+    &.expanded {
+      grid-column: 1 / -1;
+    }
+  }
+
+  md-card {
+    margin: 0;
+  }
+
+  .md-title {
+    margin: 0;
+  }
+
   input {
-    background-color:#f4f4f4
+    background-color: #f4f4f4
   }
+
   md-input-container {
     input,
     span {
       padding: 2px 2px 1px;
-      margin:0 -2px;
-      display:block;
-      line-height:26px;
-      height:auto;
+      margin: 0 -2px;
+      display: block;
+      line-height: 26px;
+      height: auto;
     }
+
     span {
-      border-bottom:1px solid transparent;
+      border-bottom: 1px solid transparent;
     }
+
     .md-errors-spacer {
-      display:none;
+      display: none;
     }
   }
+
   .application-title {
     md-input-container {
       input,
@@ -54,41 +55,51 @@
         line-height: 32px;
       }
     }
+
     .md-subhead {
-      color:#808080;
+      color: #808080;
     }
   }
+
   .od-discussion {
-    overflow-y:visible;
-    max-height:none;
+    overflow-y: visible;
+    max-height: none;
+
     .avatar-container {
-      padding-right:2em;
-      text-align:center;
+      padding-right: 2em;
+      text-align: center;
+
       .avatar {
-        width:4em;
+        width: 4em;
       }
+
       h3 {
-        font-size:1em;
+        font-size: 1em;
       }
     }
+
     .comment {
-      padding-right:0;
+      padding-right: 0;
+
       > .ng-binding {
-        :first-child {
-          margin-top:0;
-          padding-top:0;
+        &:first-child {
+          margin-top: 0;
+          padding-top: 0;
         }
       }
     }
   }
 }
+
 .od-fund-board-meeting-switch {
   margin-top:0;
   margin-bottom:0;
+
   &,
   :first-child {
     margin-left:0;
   }
+
   &,
   :last-child {
     margin-right:0;
@@ -107,3 +118,24 @@ md-dialog-content {
 }
 
 
+
+.od-fund-app-wrapper {
+  padding: $u;
+}
+
+.od-fund-view {
+  osflow-header {
+    background-color: $white;
+    border-bottom: 1px solid $gray-85;
+    display: block;
+    padding: $u * 2 $u;
+    position: sticky;
+    top: 64px;
+    z-index: 1;
+
+    h1,
+    p {
+      margin: 0;
+    }
+  }
+}

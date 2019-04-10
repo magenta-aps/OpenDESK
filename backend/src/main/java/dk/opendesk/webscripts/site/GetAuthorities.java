@@ -25,6 +25,7 @@ limitations under the License.
 package dk.opendesk.webscripts.site;
 
 import dk.opendesk.repo.beans.SiteBean;
+import dk.opendesk.repo.utils.Pager;
 import dk.opendesk.webscripts.OpenDeskWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -43,7 +44,8 @@ public class GetAuthorities extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String siteShortName = urlParams.get("siteShortName");
-            arrayResult = siteBean.getAuthorities(siteShortName);
+            arrayResult = siteBean.getAuthorities(siteShortName, Pager.getMaxItems(urlQueryParams),
+                    Pager.getSkipCount(urlQueryParams));
         } catch (Exception e) {
             error(res, e);
         }

@@ -1,3 +1,22 @@
 .fund-state-active {
+  background-color: $gray-85;
   font-weight:bold;
+}
+
+.full-height {
+  background-color: $white;
+  border-right: 1px solid $gray-85;
+  min-height: calc(100vh - 64px);
+  position: relative;
+}
+
+.osflow-sidenav {
+  position: sticky;
+  top: $u * 5;
+  width: 100%;
+}
+
+.osflow-sidenav .md-button {
+  display: block;
+  text-align: left;
 }

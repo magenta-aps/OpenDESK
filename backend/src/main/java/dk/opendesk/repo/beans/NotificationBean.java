@@ -10,6 +10,7 @@ package dk.opendesk.repo.beans;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.search.impl.lucene.analysis.DateTimeAnalyser;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -28,14 +29,19 @@ import org.json.simple.JSONArray;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NotificationBean {
+
+    private static final String TRUNCATION_LIMIT_KEY = "openDesk.notifications.truncation.limit";
+    private static final int DEFAULT_TRUNCATION_LIMIT = 15;
 
     private AuthorityService authorityService;
     private NodeService nodeService;
     private PersonService personService;
     private PreferenceService preferenceService;
     private SiteService siteService;
+    private Properties globalProperties;
 
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
@@ -52,6 +58,7 @@ public class NotificationBean {
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
     }
+    public void setGlobalProperties(Properties properties) { globalProperties = properties; }
 
     /**
      * Counts number of child nodes of a user with a specific property value.
@@ -111,6 +118,27 @@ public class NotificationBean {
 
         // Then run as SystemUser
         AuthenticationUtil.runAs(() -> {
+
+            // TODO: create TruncationStrategy and extract the code block below into its own TruncationStrategyImpl
+            // in order to avoid responsibility erosion in this class. However, we will not worry about this now,
+            // since the entire notification mechanism may be changed soon.
+
+            // Truncate list of notifications
+
+            String truncationLimitStr = globalProperties.getProperty(TRUNCATION_LIMIT_KEY);
+            int truncationLimit = truncationLimitStr != null ? Integer.parseInt(truncationLimitStr) : DEFAULT_TRUNCATION_LIMIT;
+
+            List<ChildAssociationRef> notifications = getNotifications(receiver);
+            notifications.stream()
+                    .map(ChildAssociationRef::getChildRef)
+                    .sorted((NodeRef n1, NodeRef n2) -> {
+                        Date d1 = (Date) nodeService.getProperty(n1, ContentModel.PROP_CREATED);
+                        Date d2 = (Date) nodeService.getProperty(n2, ContentModel.PROP_CREATED);
+                        return d1.compareTo(d2);
+                    })
+                    .limit(Math.max(0, notifications.size() - truncationLimit + 1))
+                    .forEach(this::deleteNotification);
+
             // Don't send notification if the receiver turned off notifications for this event
             if (!preferenceFilter.isEmpty()) {
                 Serializable preference = preferenceService.getPreference(receiver, preferenceFilter);
@@ -215,12 +243,7 @@ public class NotificationBean {
         int unSeenSize = countUnSeenNotifications(userName);
         int unReadSize = countUnReadNotifications(userName);
 
-        NodeRef user = personService.getPerson(userName);
-
-        Set<QName> types = new HashSet<>();
-        types.add(OpenDeskModel.TYPE_NOTIFICATION);
-
-        List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(user, types);
+        List<ChildAssociationRef> childAssociationRefs = getNotifications(userName);
 
         JSONObject result = new JSONObject();
         result.put("unseen", unSeenSize);
@@ -236,6 +259,15 @@ public class NotificationBean {
         result.put("notifications", children);
 
         return result;
+    }
+
+    private List<ChildAssociationRef> getNotifications(String userName) {
+        NodeRef user = personService.getPerson(userName);
+
+        Set<QName> types = new HashSet<>();
+        types.add(OpenDeskModel.TYPE_NOTIFICATION);
+
+        return nodeService.getChildAssocs(user, types);
     }
 
     private JSONObject getSiteParams(String siteShortName) throws JSONException {

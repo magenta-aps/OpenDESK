@@ -263,10 +263,13 @@ public abstract class OpenDeskWebScriptTest extends BaseWebScriptTest {
     }
 
     public boolean createUser(String userName) {
+        return createUser(userName, "firstName", "lastName");
+    }
 
+    public boolean createUser(String userName, String firstName, String lastName) {
         return transactionService.getRetryingTransactionHelper().doInTransaction(() -> {
             Map<QName, Serializable> personProperties = personBean.createPersonProperties(userName,
-                    "firstName", "lastName","email@email.com", "12234861");
+                    firstName, lastName,"email@email.com", "12234861");
             personBean.createPerson(personProperties);
             return true;
         });

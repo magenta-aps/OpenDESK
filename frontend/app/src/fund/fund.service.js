@@ -9,9 +9,9 @@
 'use strict'
 
 angular.module('openDeskApp.fund')
-  .factory('fundService', ['$http', FundService]);
+  .factory('fundService', ['$http', 'alfrescoNodeService', FundService]);
 
-  function FundService ($http) {
+  function FundService ($http, alfrescoNodeService) {
 
     var service = {
       getBranches: getBranches,
@@ -25,10 +25,10 @@ angular.module('openDeskApp.fund')
       getNewApplications : getNewApplications,
       getApplicationsByBranch: getApplicationsByBranch,
       getApplicationsByBranchAndBudget: getApplicationsByBranchAndBudget,
+      updateApplication: updateApplication,
       setApplicationState : setApplicationState,
       setApplicationBranch: setApplicationBranch,
       setApplicationBudget: setApplicationBudget,
-      updateApplication: updateApplication,
       getCurrentBudgetYear: getCurrentBudgetYear,
       getBudgetYears: getBudgetYears,
       getBudgetYear: getBudgetYear,
@@ -36,7 +36,10 @@ angular.module('openDeskApp.fund')
       createBudget: createBudget,
       createBudgetYear: createBudgetYear,
       getBudget: getBudget,
-      resetDemoData : resetDemoData
+      uploadContent: uploadContent,
+
+      resetDemoData : ALLOW_OSFLOW_MOCK === true ? resetDemoData : null,
+      resetDemoDataDanva: ALLOW_OSFLOW_MOCK === true ? resetDemoDataDanva : null
     }
 
     return service
@@ -235,35 +238,58 @@ angular.module('openDeskApp.fund')
       })
     }
 
-    //Resets demo-data
-    function resetDemoData() {
-      return $http.post(`/alfresco/service/foundation/demodata`)
-      .then(function (response) {
-          console.log(response)
-        return response.data
-      })
-    }
-
     //Upload content to an application
-    function uploadContent (file, application) {
-      var appId = alfrescoNodeService.processNodeRef(application).id
-      var folderId = $http.get(`/alfresco/service/foundation/application/${appId}/documentfolder`)
-      return $http.get(`/alfresco/service/node/${folderId}/next-available-name/${file.name}`)
+    function uploadContent (file, applicationNodeRef, fieldId) {
+      var folderNodeRef = null
+      var appId = alfrescoNodeService.processNodeRef(applicationNodeRef).id
+
+      return $http.get(`/alfresco/service/foundation/application/${appId}/documentfolder`)
+      .then(function (response) {
+        folderNodeRef = 'workspace://SpacesStore/' + response.data
+
+        return $http.get(`/alfresco/service/node/${response.data}/next-available-name/${file.name}`) // response.data is equal to the nodeID
+      })
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)
         formData.append('filename', response.data.fileName)
-        formData.append('destination', folderId || null)
+        formData.append('destination', folderNodeRef)
 
         var headers = {
           transformRequest: angular.identity,
-          headers: { 'Content-Type': undefined }
+          headers: {
+            'Content-Type': undefined
+          }
         }
 
         return $http.post('/api/upload', formData, headers)
-          .then(function (response) {
-            return response
-          })
+      })
+      .then(function (response) {
+        return response
+      })
+    }
+
+    //Resets demo-data
+    function resetDemoData() {
+      // if we're not in development mode, we shouldn't be allowed to run this query
+      if(ALLOW_OSFLOW_MOCK !== true) {
+        return Promise.resolve(null)
+      }
+      return $http.post(`/alfresco/service/foundation/demodata`)
+      .then(function (response) {
+        return response.data
+      })
+    }
+
+    //Resets demo-data for Danva
+    function resetDemoDataDanva() {
+      // if we're not in development mode, we shouldn't be allowed to run this query
+      if(ALLOW_OSFLOW_MOCK !== true) {
+        return Promise.resolve(null)
+      }
+      return $http.post(`/alfresco/service/foundation/demodata/danva`)
+      .then(function (response) {
+        return response.data
       })
     }
   }

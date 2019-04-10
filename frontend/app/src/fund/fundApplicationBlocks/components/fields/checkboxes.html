@@ -1,0 +1,27 @@
+<div class="opendesk-dl" ng-if="field.label">
+  <div class="opendesk-dl__term">{{ field.label }}</div>
+  <div class="opendesk-dl__description">
+    <md-checkbox
+      ng-repeat="value in field.value track by $index"
+      ng-model="field.value[$index]"
+      ng-disabled="!isEditing.get()"
+      aria-label="{{ field.options[$index] }}"
+      data-fieldrule="toggle inverseToggle"
+    >
+      {{ field.options[$index] }}
+    </md-checkbox>
+  </div>
+</div>
+<div class="opendesk-dl" ng-if="!field.label">
+  <div class="opendesk-dl__fullwidth">
+    <md-checkbox
+      ng-repeat="value in field.value track by $index"
+      ng-model="field.value[$index]"
+      ng-disabled="!isEditing.get()"
+      aria-label="{{ field.options[$index] }}"
+      data-fieldrule="toggle inverseToggle"
+    >
+      {{ field.options[$index] }}
+    </md-checkbox>
+  </div>
+</div>

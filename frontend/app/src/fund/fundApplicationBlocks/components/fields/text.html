@@ -1,7 +1,9 @@
-<div ng-controller="ApplicationBlockController" ng-class="field.layout == 'inline' ? 'layout-inline' : 'layout-block'">
-  <strong ng-if="field.label">{{ field.label }}</strong>
-  <md-input-container>
-    <span ng-if="!isEditing.get()">{{ field.value }}</span>
-    <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}"/>
-  </md-input-container>
+<div class="opendesk-dl">
+  <div class="opendesk-dl__term" ng-if="field.label">{{ field.label }}</div>
+  <div class="opendesk-dl__description">
+    <md-input-container>
+      <span ng-if="!isEditing.get()">{{ field.value }}</span>
+      <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}" data-fieldrule="toggle inverseToggle"/>
+    </md-input-container>
+  </div>
 </div>
