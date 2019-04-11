@@ -13,7 +13,7 @@ angular.module('openDeskApp.fund')
 
 function ApplicationFieldController ($scope, fundApplicationEditing, contentService, alfrescoDownloadService) {
   var vm = this
-  var parentScope = $scope.$parent.$parent.$parent.$parent // TODO: this creates a tight coupling
+  var parentScope = $scope.$parent.$parent.$parent.$parent.$parent // TODO: this creates a tight coupling
 
   $scope.isEditing = fundApplicationEditing
   $scope.fieldHasValue = fieldHasValue
@@ -41,10 +41,10 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
   // methods that are needed by dynamically compiled templates, in the event that
   // the field depends on other field(s)
   function fieldHasValue(fieldId) {
-    if (!parentScope.vm.allFields()) {
+    if (!parentScope.allFields()) {
       return true
     }
-    var targetField = parentScope.vm.allFields().find(field => field.id == fieldId)
+    var targetField = parentScope.allFields().find(field => field.id == fieldId)
     if (!targetField) {
       return true
     }
