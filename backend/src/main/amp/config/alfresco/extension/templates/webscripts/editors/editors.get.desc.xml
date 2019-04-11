@@ -3,5 +3,5 @@
     <description>Gets a list of editors with info about them</description>
     <url>/editors</url>
     <format default="json">argument</format>
-    <authentication>user</authentication>
+    <authentication>none</authentication>
 </webscript>

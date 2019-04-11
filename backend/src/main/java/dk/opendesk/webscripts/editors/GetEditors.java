@@ -10,6 +10,7 @@ package dk.opendesk.webscripts.editors;
 
 import dk.opendesk.repo.beans.EditorBean;
 import dk.opendesk.webscripts.OpenDeskWebScript;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
@@ -28,7 +29,16 @@ public class GetEditors extends OpenDeskWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         super.execute(req, res);
         try {
+
+            AuthenticationUtil.pushAuthentication();
+            AuthenticationUtil.setRunAsUserSystem();
+            // ...code to be run as Admin...
+
             objectResult = editorBean.getEditorObjects();
+
+            AuthenticationUtil.popAuthentication();
+
+
         } catch (Exception e) {
             error(res, e);
         }
