@@ -1,18 +1,15 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.webscripts;
 
 import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -23,9 +20,12 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class OpenDeskWebScript extends AbstractWebScript {
     protected JSONObject contentParams;
@@ -58,8 +58,7 @@ public class OpenDeskWebScript extends AbstractWebScript {
         }
         objectResult = new JSONObject();
         urlParams = req.getServiceMatch().getTemplateVars();
-        // There are known issues with special characters and the url query params.
-        urlQueryParams = parseUrlParams(req.getURL());
+        urlQueryParams = parseUrlParams(req);
         res.setContentEncoding("UTF-8");
         res.setContentType("application/json");
     }
@@ -181,27 +180,14 @@ public class OpenDeskWebScript extends AbstractWebScript {
         return json.getString(parameter);
     }
 
-    private String paramValuesToString(List<NameValuePair> paramValues) {
-        if (paramValues.size() == 1) {
-            return paramValues.get(0).getValue();
+    private Map<String, String> parseUrlParams(WebScriptRequest req) throws UnsupportedEncodingException {
+        Map<String, String> parameters = new HashMap<>();
+        for (String paramName : req.getParameterNames()) {
+            String param = req.getParameter(paramName);
+            String paramISO = URLEncoder.encode(param, "ISO-8859-1");
+            String paramUTF = URLDecoder.decode(paramISO, "UTF-8");
+            parameters.put(paramName, paramUTF);
         }
-        List<String> values = paramValues.stream().map(NameValuePair::getValue).collect(Collectors.toList());
-        return "[" + StringUtils.join(values, ",") + "]";
-    }
-
-    private Map<String, String> parseUrlParams(String url) {
-        int queryStringStart = url.indexOf('?');
-        String queryString = "";
-        if (queryStringStart != -1) {
-            queryString = url.substring(queryStringStart+1);
-        }
-        Map<String, String> parameters = URLEncodedUtils
-                .parse(queryString, Charset.forName("UTF-8"))
-                .stream()
-                .collect(
-                        Collectors.groupingBy(
-                                NameValuePair::getName,
-                                Collectors.collectingAndThen(Collectors.toList(), this::paramValuesToString)));
         return parameters;
     }
 
