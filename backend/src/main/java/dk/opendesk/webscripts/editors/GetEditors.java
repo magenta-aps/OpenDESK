@@ -34,6 +34,7 @@ public class GetEditors extends OpenDeskWebScript {
             AuthenticationUtil.setRunAsUserSystem();
             // ...code to be run as Admin...
 
+            System.out.println("hey, der ledes efter editors");
             objectResult = editorBean.getEditorObjects();
 
             AuthenticationUtil.popAuthentication();
