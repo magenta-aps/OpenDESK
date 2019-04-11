@@ -1,19 +1,29 @@
 <application-block>
     <md-card>
+
         <md-card-title>
             <md-card-title-text>
                 <span class="md-headline">Indstil beløb</span>
             </md-card-title-text>
-            <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
-                <md-icon>zoom_out_map</md-icon>
-            </md-button>
         </md-card-title>
+
         <md-card-content>
-            <div class="opendesk-dl__term">{{ vm.amount().label }}:</div>
-            <div class="opendesk-dl__description">{{ vm.amount().value }}</div>
-            <md-input-container>
-                <input type="number" id="od-fund-approved-amount" ng-model="application.approved_amount" />
-            </md-input-container>
+            <div class="opendesk-dl">
+                <div class="opendesk-dl__term">{{ vm.amount().label }}:</div>
+                <div class="opendesk-dl__description">{{ vm.amount().value }}</div>
+            </div>
+
+            <div class="osflow-assign">
+                <md-input-container class="md-icon-float md-block">
+                    <label for="">Something</label>
+                    <input 
+                        type="number"
+                        id="od-fund-approved-amount"
+                        class="osflow-input"
+                        ng-model="application.approved_amount" />
+                </md-input-container>
+            </div>
         </md-card-content>
+
     </md-card>
 </application-block>
