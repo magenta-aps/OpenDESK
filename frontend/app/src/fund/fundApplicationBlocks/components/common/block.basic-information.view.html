@@ -1,19 +1,26 @@
 <application-block>
     <md-card>
+
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Basic Info</span>
+            </md-card-title-text>
+        </md-card-title>
+
         <md-card-content>
             <div class="opendesk-dl">
 
-                <div class="opendesk-dl__term">{{ vm.phoneNumber.label }}:</div>
-                <div class="opendesk-dl__description">{{ vm.phoneNumber.value }}</div>
+                <span class="opendesk-dl__term">{{ vm.applicantName.label }}:</span>
+                <span class="opendesk-dl__description">{{ vm.applicantName.value }}</span>
 
-                <div class="opendesk-dl__term">{{ vm.amount.label }}:</div>
-                <div class="opendesk-dl__description">{{ vm.amount.value }}</div>
+                <span class="opendesk-dl__term">{{ vm.applicationAmount.label }}:</span>
+                <span class="opendesk-dl__description">{{ vm.applicationAmount.value }}</span>
 
-                <div class="opendesk-dl__term">{{ vm.phoneNumber.label }}:</div>
-                <div class="opendesk-dl__description">{{ vm.phoneNumber.value }}</div>
+                <span class="opendesk-dl__term">{{ vm.applicationTotalBudget.label }}:</span>
+                <span class="opendesk-dl__description">{{ vm.applicationTotalBudget.value }}</span>
 
-                <div class="opendesk-dl__term">{{ vm.phoneNumber.label }}:</div>
-                <div class="opendesk-dl__description">{{ vm.phoneNumber.value }}</div>
+                <span class="opendesk-dl__term">{{ vm.projectTitle.label }}:</span>
+                <span class="opendesk-dl__description">{{ vm.projectTitle.value }}</span>
 
             </div>
         </md-card-content>

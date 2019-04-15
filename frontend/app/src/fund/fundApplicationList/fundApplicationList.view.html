@@ -42,7 +42,7 @@
 						<col style="width: 150px;"></col>
 						<col style="width: 150px;"></col>
 						<col style="width: 100px;"></col>
-						<col style="width: 90px;"></col>
+						<col style="width: 90px;" ng-if="state && state.nodeID"></col>
 					</colgroup>
 					<thead>
 						<tr class="osflow-table__tr">
@@ -52,7 +52,7 @@
 							<th class="osflow-table__th" style="text-align: right;">Ansøgt beløb</th>
 							<th class="osflow-table__th" style="text-align: right;">Indstillet beløb</th> <!-- v. møde i bestyrelse -->
 							<th class="osflow-table__th" style="text-align: right;">Stemmer</th> <!-- v. møde i bestyrelse -->
-							<th class="osflow-table__th" style="text-align: right;">
+							<th class="osflow-table__th" style="text-align: right;" ng-if="state && state.nodeID">
 								<md-icon>arrow_drop_down</md-icon>
 								<md-checkbox 
 									aria-label="Vælg alle" 
