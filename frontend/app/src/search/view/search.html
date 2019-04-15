@@ -16,7 +16,7 @@
             <label>{{facet.title}}</label>
             <md-select ng-model="search[facet.shortname]">
               <md-option ng-repeat="param in facet.array" value="{{ param }}">
-                {{ param }} test ({{ (fullSearchResults.results | filter: search | filter:count(facet.shortname, param)).length }})
+                {{ param }} ({{ (fullSearchResults.results | filter: search | filter:count(facet.shortname, param)).length }})
               </md-option>
             </md-select>
           </md-input-container>
