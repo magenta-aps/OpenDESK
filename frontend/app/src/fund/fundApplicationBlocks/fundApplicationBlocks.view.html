@@ -1,10 +1,10 @@
-<div ng-include="'/app/src/fund/fundApplicationBlocks/components/common/block.basic-information.view.html'"></div>
-<div ng-include="'/app/src/fund/fundApplicationBlocks/components/common/block.previous-funds.view.html'"></div>
-<div ng-include="'/app/src/fund/fundApplicationBlocks/components/common/block.project-description.view.html'"></div>
+<application-block-basic-information></application-block-basic-information>
+<application-block-project-partners></application-block-project-partners>
+<application-block-project-description></application-block-project-description>
 
 <!-- loop over fields coming from the application -->
-<application-block ng-repeat="(block, idx) in application.blocks" block="application.blocks[block]"></application-block>
+<!-- <application-block ng-repeat="(block, idx) in application.blocks" block="application.blocks[block]"></application-block> -->
 
-<div ng-include="'/app/src/fund/fundApplicationBlocks/components/common/block.discussion.view.html'"></div>
-<div ng-include="'/app/src/fund/fundApplicationBlocks/components/common/block.assigned-amount.view.html'"></div>
-<div ng-include="'/app/src/fund/fundApplicationBlocks/components/common/block.meeting-vote.view.html'"></div>
+<application-block-discussion></application-block-discussion>
+<application-block-assigned-amount></application-block-assigned-amount>
+<application-block-meeting-vote></application-block-meeting-vote>

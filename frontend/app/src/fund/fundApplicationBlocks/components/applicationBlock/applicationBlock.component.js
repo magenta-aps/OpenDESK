@@ -7,15 +7,58 @@
 //
 
 'use strict'
+
 import applicationBlockTemplate from './applicationBlock.html'
+import assignedAmount from '../common/block.assigned-amount.view.html'
+import discussion from '../common/block.discussion.view.html'
+import meetingVote from '../common/block.meeting-vote.view.html'
+import previousFunds from '../common/block.previous-funds.view.html'
+
+import basicInformation from '../common/block.basic-information.view.html'
+import projectPartners from '../common/block.project-partners.view.html'
+import projectDescription from '../common/block.project-description.view.html'
 
 angular.module('openDeskApp.fund')
   .component('applicationBlock', {
     template: applicationBlockTemplate,
-    controller: 'ApplicationBlockController',
     controllerAs: 'vm',
     transclude: true,
     bindings: {
       block: '='
     }
+  })
+  .component('applicationBlockAssignedAmount', {
+    template: assignedAmount,
+    controller: 'ApplicationBlockController',
+    controllerAs: 'vm'
+  })
+  .component('applicationBlockDiscussion', {
+    template: discussion,
+    controller: 'ApplicationBlockController',
+    controllerAs: 'vm'
+  })
+  .component('applicationBlockMeetingVote', {
+    template: meetingVote,
+    controller: 'ApplicationBlockController',
+    controllerAs: 'vm'
+  })
+  .component('applicationBlockPreviousFunds', {
+    template: previousFunds,
+    controller: 'ApplicationBlockController',
+    controllerAs: 'vm'
+  })
+  .component('applicationBlockBasicInformation', {
+    template: basicInformation,
+    controller: 'ApplicationBlockController',
+    controllerAs: 'vm'
+  })
+  .component('applicationBlockProjectPartners', {
+    template: projectPartners,
+    controller: 'ApplicationBlockController',
+    controllerAs: 'vm'
+  })
+  .component('applicationBlockProjectDescription', {
+    template: projectDescription,
+    controller: 'ApplicationBlockController',
+    controllerAs: 'vm'
   })
