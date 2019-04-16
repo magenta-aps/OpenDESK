@@ -306,6 +306,12 @@ main {
   margin-top: 1rem;
 }
 
+.opendesk-dl {
+  md-divider {
+    grid-column: 1 / -1;
+  }
+}
+
 .dummydata {
   background-color: #c00;
   color: #fff;

@@ -24,15 +24,13 @@
   grid-template-columns: 180px auto;
 
   &__term {
-    float: left;
     grid-column-start:1;
     grid-column-end:span 1;
     font-weight: bold;
     word-wrap: break-word;
   }
 
-  &__definition {
-    float: left;
+  &__description {
     grid-column-start:2;
     grid-column-end:span 1;
   }
