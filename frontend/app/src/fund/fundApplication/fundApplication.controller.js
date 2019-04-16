@@ -29,7 +29,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   vm.cancelEditApplication = cancelEditApplication
   vm.paginateApps = paginateApps
 
-    activate()
+  activate()
 
   function activate() {
     fundApplicationEditing.set(false) // set editing state to false, in case we edited an application, went to the list, and opened another application
@@ -63,114 +63,22 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
 
   }
 
-    vm.status = '  ';
-    vm.customFullscreen = false;
-
     vm.moveApp = function() {
         $mdDialog.show({
-            controller: DialogController,
+            controller: 'DialogController',
             controllerAs: 'self',
-            template: require('./components/moveApp.html'),
+            scope: $scope.$new(),
+            template: require('./view/moveApp.html'),
             parent: angular.element(document.body),
             locals: {
                 application: $scope.application
             },
-            clickOutsideToClose:true,
+            clickOutsideToClose: true,
         })
-    };
-
-
-    function DialogController($mdDialog, $mdToast, application) {
-        var self = this
-        self.selectedBranch = application.branchSummary
-        self.selectedBudget = application.budget
-        self.selectedState = application.state
-        self.selectedFlow = application.workflow
-        self.activeWorkflows = []
-        self.branches = []
-        self.states = []
-        self.budgetYears = []
-
-
-        //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
-        self.showToast = function() {
-            $mdToast.show({
-                hideDelay: 9000,
-                position: 'bottom right',
-                controller: ToastCtrl,
-                controllerAs: 'ctrl',
-                bindToController: true,
-                template: require('./components/toastTemplate.html')
-            })
-        }
-
-        // Fetch data for selectors:
-        fundService.getActiveWorkflows()
-            .then(function (response) {
-                self.activeWorkflows = response
-            })
-
-        fundService.getBudgetYears()
-            .then(function (response) {
-                self.budgetYears = response
-            })
-
-        // Update branch and state drop-down according to selected workflow.
-        // Is called whenever workflow is changed
-        self.workflowChange = function(){
-            fundService.getWorkflow(self.selectedFlow.nodeID)
-                .then(function(response) {
-                    fundService.getWorkflow(response.nodeID)
-                        .then(function(response) {
-                            self.states = response.states
-                            self.branches = response.usedByBranches
-                        })
-                })
-        }
-        self.workflowChange() //Set branch and state drop-down initially
-
-        self.changedAttributes = function() {
-            var result = {}
-            // 'workFlow' is automatically changed according to 'branchSummary'
-            if (self.selectedBranch != null) {
-                console.log("pow");
-                result.branchSummary = {"nodeID": self.selectedBranch.nodeID}
-            }
-            if (self.selectedState != null) {
-                result.state = {"nodeID": self.selectedState.nodeID}
-            }
-            if (self.selectedBudget != null) {
-                result.budget = {"nodeID": self.selectedBudget.nodeID}
-            }
-            console.log(result)
-            return result
-        }
-
-        self.cancel = function() {
-            $mdDialog.cancel();
-        };
-
-        self.apply = function(answer) {
-            $mdDialog.hide(answer)
-                .then(console.log("Application before"))
-                .then(console.log($scope.application))
-                .then($state.go('fund.workflow', { workflowID: $scope.application.workflow.nodeID, stateID: $scope.application.state.nodeID })) //Send user back to application list
-                .then(fundService.updateApplication($scope.application.nodeID, self.changedAttributes())) //and update the application according to selections
-                .then(console.log("Application after"))
-                .then(console.log($scope.application))
-                .then(self.showToast())
-        };
     }
 
-    function ToastCtrl($mdToast, $mdDialog, $document, $scope) {
-        var ctrl = this;
-        ctrl.closeToast = function() {
-            $mdToast.hide();
-        };
-        ctrl.goToApplicaion = function() {
-            $state.go('fund.application', {applicationID: $scope.application.nodeID}) //workflowID and stateID are left out in the request.
-        }
-    }
+  vm.status = '  ';
+  vm.customFullscreen = false;
 
   function allFields () {
     return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
