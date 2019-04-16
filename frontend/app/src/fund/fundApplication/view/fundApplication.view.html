@@ -1,32 +1,4 @@
 <!-- top menu -->
-<md-nav-bar>
-  <md-nav-item md-nav-click="vm.moveApp()">Flyt ansøgninger</md-nav-item>
-  <md-nav-item ng-if="!isEditing.get()" md-nav-click="vm.editApplication()">Ret ansøgning</md-nav-item>
-  <md-nav-item ng-if="isEditing.get()" md-nav-click="vm.saveApplication()">Gem ansøgning</md-nav-item>
-  <md-nav-item ng-if="isEditing.get()" md-nav-click="vm.cancelEditApplication()">Annuller redigering</md-nav-item>
-  <md-nav-item md-nav-click="vm.paginateApps(vm.prevAppId)" ng-if="vm.prevAppId"><md-icon>keyboard_arrow_left</md-icon></md-nav-item>
-  <md-nav-item md-nav-click="vm.paginateApps(vm.nextAppId)" ng-if="vm.nextAppId"><md-icon>keyboard_arrow_right</md-icon></md-nav-item>
-</md-nav-bar>
-
-<md-card class="od-fund-app-wrapper" layout="column">
-  <md-nav-bar md-selected-nav-item="currentAppPage">
-    <md-nav-item md-nav-sref="fund.application" name="application">Ansøgning</md-nav-item>
-    <md-nav-item md-nav-sref="fund.application.contact" name="contact">Kontaktinfo</md-nav-item>
-    <md-nav-item md-nav-sref="fund.application.history" name="history">Historik</md-nav-item>
-  </md-nav-bar>
-  <md-card-title class="application-title" flex="nogrow">
-    <md-card-title-text>
-      <md-input-container>
-        <input class="md-headline" ng-model="application.title" ng-if="isEditing.get()">
-        <span class="md-headline" ng-if="!isEditing.get()">{{ application.title }}</span>
-      </md-input-container>
-      <span class="md-subhead">{{ application.nodeID }}</span>
-    </md-card-title-text>
-  </md-card-title>
-  <md-card-content flex>
-    <ng-template ui-view="application"></ng-template>
-  </md-card-content>
-</md-card>
 <md-nav-bar md-selected-nav-item="currentAppPage">
   <md-nav-item md-nav-sref="fund.application" name="application">{{ 'FUNDS.NAVIGATION.APPLICATION' | translate }}</md-nav-item>
   <md-nav-item md-nav-sref="fund.application.contact" name="contact">{{ 'FUNDS.NAVIGATION.CONTACTINFO' | translate }}</md-nav-item>
@@ -60,6 +32,7 @@
     </div>
 
     <div flex style="text-align: right;">
+      <md-button ng-if="!isEditing.get()" ng-click="vm.moveApp()"               class="md-raised md-primary">Flyt ansøgninger</md-button>
       <md-button ng-if="!isEditing.get()" ng-click="vm.editApplication()"       class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.EDIT_APPLICATION' | translate }}</md-button>
       <md-button ng-if="isEditing.get()"  ng-click="vm.saveApplication()"       class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SAVE_APPLICATION' | translate }}</md-button>
       <md-button ng-if="isEditing.get()"  ng-click="vm.cancelEditApplication()" class="md-raised">{{ 'FUNDS.NAVIGATION.CANCEL_EDIT_APPLICATION' | translate }}</md-button>
