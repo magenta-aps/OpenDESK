@@ -14,10 +14,10 @@
                 <span class="opendesk-dl__description">{{ vm.applicantName.value }}</span>
 
                 <span class="opendesk-dl__term">{{ vm.applicationAmount.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicationAmount.value | number: fractionSize }}</span>
+                <span class="opendesk-dl__description">{{ vm.applicationAmount.value | currency:'DKK':0 }}</span>
 
                 <span class="opendesk-dl__term">{{ vm.applicationTotalBudget.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicationTotalBudget.value | number: fractionSize }}</span>
+                <span class="opendesk-dl__description">{{ vm.applicationTotalBudget.value | currency:'DKK':0 }}</span>
 
                 <span class="opendesk-dl__term">{{ vm.projectTitle.label }}:</span>
                 <span class="opendesk-dl__description" ng-bind-html="vm.projectTitle.value"></span>
