@@ -2,7 +2,7 @@
     <md-card>
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">Udvælg til bestyrelsesmøde</span>
+                <span class="md-headline">Udvælg til bestyrelsesmøde?</span>
             </md-card-title-text>
             <md-button class="md-icon-button" aria-label="Udvid" ng-click="vm.toggleExpand($event)">
                 <md-icon>zoom_out_map</md-icon>
@@ -11,7 +11,7 @@
         <md-card-content>
             <div class="od-fund-board-meeting-switch" flex layout="row" layout-align="start center" layout-margin>
                 <span>nej</span>
-                <md-switch ng-model="application.board_meeting_include"></md-switch><span>ja</span>
+                <md-switch ng-model="application.board_meeting_include" aria-label="Udvælg til bestyrelsesmøde?"></md-switch><span>ja</span>
             </div>
         </md-card-content>
     </md-card>
