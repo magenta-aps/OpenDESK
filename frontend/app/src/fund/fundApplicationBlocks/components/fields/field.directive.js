@@ -9,46 +9,38 @@
 'use strict'
 
 angular.module('openDeskApp.fund')
-  .directive('applicationField', function ($compile, $templateRequest, FUND_FIELD_RULES) {
-    return {
-      restrict: 'E',
-      scope: {
-        field: '='
-      },
-      controller: 'ApplicationFieldController',
-      controllerAs: 'vm',
-      template: null,
-      link: function (scope, el) {
-        $templateRequest('/app/src/fund/fundApplicationBlocks/components/fields/' + scope.field.component + '.html')
-        .then(function (result) {
-          // if the field is not dependent on any other fields, just return the template
-          if (!scope.field.controlledBy) {
-            return result
+  .directive('applicationField', ['$compile', 'FUND_FIELD_RULES', FieldDirectiveConfig])
+
+function FieldDirectiveConfig ($compile, FUND_FIELD_RULES) {
+  return {
+    restrict: 'E',
+    scope: {
+      field: '='
+    },
+    controller: 'ApplicationFieldController',
+    controllerAs: 'vm',
+    template: null,
+    link: function (scope, el) {
+      var template = require('./' + scope.field.component + '.html') || '<p><strong>{{ field.label }}:</strong> Der skete en fejl ved indlæsning af feltet</p>'
+      if (scope.field.controlledBy) {
+        // if the field is dependent on any other fields,
+        // go through each of those dependencies and modify the template
+        // accordingly
+        Object.entries(scope.field.controlledBy).forEach(function([fieldId, method]) {
+          var res = $(template)
+          // find the elements we want to modify
+          var targetElements = res.find('[data-fieldrule~="' + method + '"]')
+          // perform the modification by looking up the appropriate method
+          if (FUND_FIELD_RULES.hasOwnProperty(method)) {
+            var newElements = FUND_FIELD_RULES[method](targetElements, fieldId)
+            newElements.replaceAll(targetElements)
           }
-          // otherwise, go through each of the dependencies and modify the template
-          // accordingly
-          Object.entries(scope.field.controlledBy).forEach(function([fieldId, method]) {
-            var res = $(result)
-            // find the elements we want to modify
-            var targetElements = res.find('[data-fieldrule~="' + method + '"]')
-            // perform the modification by looking up the appropriate method
-            if (FUND_FIELD_RULES.hasOwnProperty(method)) {
-              var newElements = FUND_FIELD_RULES[method](targetElements, fieldId)
-              newElements.replaceAll(targetElements)
-            }
-            // remember, we need to reassign a string of HTML as the value of 'result'
-            result = res[0].outerHTML
-          })
-          return result
-        }, function (error) {
-          // there was an error loading the template; return something else
-          return '<p><strong>{{ field.label }}:</strong> Der skete en fejl ved indlæsning af feltet</p>'
+          // remember, we need to reassign a string of HTML as the value of 'result'
+          template = res[0].outerHTML
         })
-        .then(function (template) {
-          angular.element(el).html(template)
-          $compile(el.contents())(scope)
-        })
-        // $compile(angular.element(el).html(scope.template))(scope)
       }
+      angular.element(el).html(template)
+      $compile(el.contents())(scope)
     }
-  })
+  }
+}

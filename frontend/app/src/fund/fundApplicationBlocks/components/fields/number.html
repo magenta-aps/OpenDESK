@@ -1,0 +1,9 @@
+<div class="opendesk-dl">
+  <div class="opendesk-dl__term" ng-if="field.label">{{ field.label }}</div>
+  <div class="opendesk-dl__description">
+    <md-input-container>
+      <span ng-if="!isEditing.get()">{{ field.value }}</span>
+      <input ng-if="isEditing.get()" type="number" ng-model="field.value" aria-label="{{ field.label }}" data-fieldrule="toggle inverseToggle"/>
+    </md-input-container>
+  </div>
+</div>

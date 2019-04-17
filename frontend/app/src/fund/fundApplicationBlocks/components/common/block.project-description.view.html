@@ -8,53 +8,35 @@
         </md-card-title>
 
         <md-card-content>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam voluptate tenetur neque, ullam porro ratione, laudantium debitis suscipit soluta, excepturi aliquid fugiat obcaecati laborum est sit modi beatae placeat culpa.</p>
+            <div class="opendesk-dl">
 
-            <h3 class="md-headline">Uddybende projektbeskrivelse</h3>
+                <span class="opendesk-dl__term">{{ vm.applicationDateStart.label }}:</span>
+                <span class="opendesk-dl__description">{{ vm.applicationDateStart.value | date:'yyyy' }}</span>
 
-            <ul class="osflow-filelist">
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">Filnavn #1</a>
-                </li>
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">LængereFilnavn #2</a>
-                </li>
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">Filnavn #4</a>
-                </li>
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">Filnavn #5</a>
-                </li>
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">Filnavn #6</a>
-                </li>
-            </ul>
+                <span class="opendesk-dl__term">{{ vm.applicationDateEnd.label }}:</span>
+                <span class="opendesk-dl__description">{{ vm.applicationDateEnd.value | date:'yyyy' }}</span>
 
-            <h3 class="md-headline">CV for centrale personer</h3>
+                <span class="opendesk-dl__term">{{ vm.applicationTitle.label }}:</span>
+                <span class="opendesk-dl__description" ng-bind-html="vm.applicationTitle.value"></span>
 
-            <ul class="osflow-filelist">
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">Filnavn #1</a>
-                </li>
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">Filnavn #2</a>
-                </li>
-                <li class="osflow-filelist__item">
-                    <a href="#" class="osflow-filelist__link">Filnavn #3</a>
-                </li>
-            </ul>
-    
-            <div layout="row">
-                <div flex>
-                    <h3>Projektstart</h3>
-                    <md-icon>access_time</md-icon>
-                    <time style="display: inline-block; line-height: 24px; vertical-align: middle;">03/10-2019</time>
-                </div>
-                <div flex>
-                    <h3>Projektslut</h3>
-                    <md-icon>access_time</md-icon>
-                    <time style="display: inline-block; line-height: 24px; vertical-align: middle;">03/10-2021</time>
-                </div>
+                <span class="opendesk-dl__term">{{ vm.applicationProjectDescription.label }}:</span>
+                <span class="opendesk-dl__description" ng-bind-html="vm.applicationProjectDescription.value"></span>
+
+                <span class="opendesk-dl__term">{{ vm.applicationProjectArgument.label }}:</span>
+                <span class="opendesk-dl__description" ng-bind-html="vm.applicationProjectArgument.value"></span>
+
+                <span class="opendesk-dl__term">{{ vm.applicationProjectOutput.label }}:</span>
+                <span class="opendesk-dl__description" ng-bind-html="vm.applicationProjectOutput.value"></span>
+
+                <span class="opendesk-dl__term">{{ vm.applicationProjectNewsworthy.label }}:</span>
+                <span class="opendesk-dl__description" ng-bind-html="vm.applicationProjectNewsworthy.value"></span>
+
+                <span class="opendesk-dl__term">{{ vm.applicationProjectBenefit.label }}:</span>
+                <span class="opendesk-dl__description" ng-bind-html="vm.applicationProjectBenefit.value"></span>
+
+                <span class="opendesk-dl__term">{{ vm.applicationProjectSustainability.label }}:</span>
+                <span class="opendesk-dl__description" ng-bind-html="vm.applicationProjectSustainability.value"></span>
+
             </div>
         </md-card-content>
 

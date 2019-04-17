@@ -196,6 +196,30 @@
     "CASE_ADDED_TO_FAVORITE": "Sagen er føjet til dine favoritter og du bliver notificeret når der sker nye hændelser på sagen"
   },
   "FUNDS": {
+    "COMMON": {
+      "HISTORY": "Historik",
+      "TYPE": "Type",
+      "TIMESTAMP": "Tidspunkt",
+      "USER": "Bruger",
+      "CONTENT": "Indhold",
+      "CATEGORY": "Kategori",
+      "RECEIVER": "Modtager",
+      "STREET_NAME": "Vejnavn",
+      "FLOOR": "Etage",
+      "ZIP_CODE": "Postnr",
+      "FIRST_NAME": "Fornavn",
+      "LAST_NAME": "Efternavn",
+      "EMAIL": "Email",
+      "PHONE_NUMBER": "Telefonnummer",
+      "SHORT_DESCRIPTION": "Kort beskrivelse",
+      "START_DATE": "Startdato",
+      "END_DATE": "Slutdato",
+      "AMOUNT": "Beløb",
+      "REGISTRATION_NUMBER": "Registreringsnummer",
+      "ACCOUNT_NUMBER": "Kontonummer",
+      "APPLICATION_CREATED": "Ansøgning oprettet",
+      "APPLICATION_DELETED": "Ansøgning slettet"
+    },
     "NAVIGATION": {
       "APPLICATION": "Ansøgning",
       "CONTACTINFO": "Kontaktinfo",

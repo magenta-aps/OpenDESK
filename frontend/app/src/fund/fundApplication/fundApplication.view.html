@@ -27,7 +27,7 @@
   <div class="fund-actions" layout="row" layout-align="start end">
 
     <div class="md-subhead" flex style="line-height: 48px;">
-      <code>{{ application.nodeID }}</code>
+      <code>id-{{ application.id }}</code>
     </div>
 
     <div flex style="text-align: right;">
@@ -43,6 +43,7 @@
   <ng-template ui-view="application" layout="row" layout-wrap></ng-template>
 
   <md-card style="margin: 0; margin-top: 1rem; padding: 1rem;">
+    <div class="dummydata">Static element!</div>
     <md-card-actions layout="row" layout-align="end center">
       <md-button class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SUBMIT_TO_NEXT_STEP' | translate }}</md-button>
     </md-card-actions>

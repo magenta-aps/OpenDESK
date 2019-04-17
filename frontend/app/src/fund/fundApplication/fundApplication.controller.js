@@ -35,6 +35,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
     fundService.getApplication($stateParams.applicationID)
     .then(function (response) {
       $scope.application = response
+      $scope.$broadcast('applicationWasLoaded', null)
       browserService.setTitle(response.title)
       headerService.setTitle(response.title)
       // if we have a workflow in store, but it doesn't match the workflow of the

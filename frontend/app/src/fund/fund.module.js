@@ -14,6 +14,8 @@ import fundWorkflowStateMenu from './fundWorkflowStateMenu/fundWorkflowStateMenu
 import fundApplicationList from './fundApplicationList/fundApplicationList.view.html'
 import fundApplication from './fundApplication/fundApplication.view.html'
 import fundApplicationBlocks from './fundApplicationBlocks/fundApplicationBlocks.view.html'
+import fundApplicationHistory from './fundApplicationHistory/fundApplicationHistory.view.html'
+import fundApplicationBudget from './fundApplicationBudget/fundApplicationBudget.view.html'
 
 angular.module('openDeskApp.fund', ['openDeskApp.discussion'])
   .config(['$stateProvider', 'USER_ROLES', config])
@@ -64,6 +66,19 @@ function config ($stateProvider, USER_ROLES) {
       }
     }
   })
+  .state('fund.budget', {
+    url: '/budget',
+    views: {
+      'fundMain@fund': {
+        template: fundApplicationBudget,
+        controller: 'FundApplicationBudgetController',
+        controllerAs: 'vm'
+      }
+    },
+    params: {
+      currentAppPage: 'budget'
+    }
+  })
   .state('fund.application', {
     url: '/application/:applicationID',
     views: {
@@ -102,27 +117,36 @@ function config ($stateProvider, USER_ROLES) {
     url: '/history',
     views: {
       'application@fund.application': {
-        template: '<md-card><md-card-content>Versionshistorik</md-card-content></md-card>'
+        template: fundApplicationHistory,
+        controller: 'FundApplicationHistoryController',
+        controllerAs: 'vm'
       }
     },
     params: {
       currentAppPage: 'history'
     }
   })
-  .state('fund.demodatadanva', {
-    url: '/demodatadanva',
-    views: {
-      'fundMain@fund': {
-        controller: function (fundService) {
-          var vm = this
-          fundService.resetDemoDataDanva()
-          .then(function (response) {
-            vm.result = response
-          })
-        },
-        controllerAs: 'vm',
-        template: '<div>{{ vm.result }}</div>'
+
+  if(ALLOW_OSFLOW_MOCK === true) {
+    $stateProvider.state('fund.demodata', {
+      url: '/demodata',
+      views: {
+        'fundMain@fund': {
+          controller: 'FundDemoController',
+          controllerAs: 'vm',
+          template: '<div>{{ vm.result }}</div>'
+        }
       }
-    }
-  })
+    })
+    .state('fund.demodatadanva', {
+      url: '/demodatadanva',
+      views: {
+        'fundMain@fund': {
+          controller: 'FundDemoDanvaController',
+          controllerAs: 'vm',
+          template: '<div>{{ vm.result }}</div>'
+        }
+      }
+    })
+  }
 }

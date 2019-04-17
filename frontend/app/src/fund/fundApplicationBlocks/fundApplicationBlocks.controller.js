@@ -14,23 +14,9 @@ angular
 
 function FundApplicationBlocksController ($scope) {
   var vm = this
-  vm.allFields = $scope.allFields
-  vm.phoneNumber = phoneNumber
-  vm.amount = amount
+  
   vm.toggleExpand = toggleExpand
   vm.toggleExpandPrevious = toggleExpandPrevious
-
-  function phoneNumber () {
-    return vm.allFields().length ? vm.allFields().find(field => field.describes == 'phone_number') : {}
-  }
-
-  function amount () {
-    return vm.allFields().length ? vm.allFields().find(field => field.describes == 'amount') : {}
-  }
-
-  function category () {
-    // return vm.allFields() ? vm.allFields().find(field => field.describes == 'phone_number') : null
-  }
 
   function toggleExpand (event) {
     var block = $(event.target).closest('application-block')

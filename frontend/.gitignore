@@ -29,6 +29,7 @@ dist
 app/src/.sass-cache
 app/src/**/.sass-cache
 app/src/modules/*
+!app/src/modules/README.md
 web.config
 /bin/
 ._*

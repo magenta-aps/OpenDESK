@@ -31,50 +31,106 @@
 					</div>
 				</div>
 			</md-card-title>
+
 			<md-card-content>
-				<md-list id="table-container" ng-if="applications.length > 0">
-					<table class="od-members od-members-row">
-						<thead>
-							<tr>
-								<th sort order="key" by="vm.order" reverse="vm.reverse" ng-repeat="(key, value) in applications[0]">
-									{{ key }}
-								</th>
-								<th ng-if="state && state.nodeID">
-									<md-checkbox aria-label="Vælg alle" ng-click="vm.toggleAppSelection()"></md-checkbox>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="application in applications | orderObjectBy:vm.order:vm.reverse">
-								<td ng-repeat="(key, value) in application">
-									<a class="od-filebrowser-link overflow" ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">
-										{{ value }}
-									</a>
-								</td>
-								<td ng-if="state && state.nodeID">
-									<md-checkbox aria-label="Vælg denne ansøgning" ng-checked="vm.selectedApps.includes(application.nodeID)" ng-click="vm.toggleSelectedApp(application.nodeID)"></md-checkbox>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</md-list>
-				<div ng-if="vm.selectedApps.length && state.references.length > 0" layout="row" layout-padding layout-align="start center" class="batch-move">
-					<span>Flyt valgte ansøgning{{ vm.selectedApps.length>1?'er':'' }} til stadie</span>
-					<md-input-container>
-						<md-select ng-model="vm.moveToBranch" placeholder="Stadie" ng-model-options="{trackBy: $value.nodeID}">
-							<md-option ng-repeat="ref in state.references" ng-value="ref.nodeID">
-								{{ref.title}}
-							</md-option>
-						</md-select>
-					</md-input-container>
-					<md-input-container>
-						<md-button class="md-raised md-primary" ng-click="vm.batchMoveApplications()">Flyt</md-button>
-					</md-input-container>
-				</div>
+
+				<table class="osflow-table" ng-if="applications.length > 0">
+					<colgroup>
+						<col style="width: 80px;">
+						<col></col>
+						<col></col>
+						<col style="width: 150px;"></col>
+						<col style="width: 150px;"></col>
+						<col style="width: 100px;"></col>
+						<col style="width: 90px;" ng-if="state && state.nodeID"></col>
+					</colgroup>
+					<thead>
+						<tr class="osflow-table__tr">
+							<th class="osflow-table__th osflow-table__th--right">ID</th>
+							<th class="osflow-table__th">Ansøger</th>
+							<th class="osflow-table__th">Projekttitel</th>
+							<th class="osflow-table__th" style="text-align: right;">Ansøgt beløb</th>
+							<th class="osflow-table__th" style="text-align: right;">Indstillet beløb</th> <!-- v. møde i bestyrelse -->
+							<th class="osflow-table__th" style="text-align: right;">Stemmer</th> <!-- v. møde i bestyrelse -->
+							<th class="osflow-table__th" style="text-align: right;" ng-if="state && state.nodeID">
+								<md-icon>arrow_drop_down</md-icon>
+								<md-checkbox 
+									aria-label="Vælg alle" 
+									ng-click="vm.toggleAppSelection()">
+								</md-checkbox>
+							</th>
+						</tr>
+					</thead>
+					<tr class="osflow-table__tr" ng-repeat="application in applications | orderBy:'title'">
+						<td class="osflow-table__td osflow-table__td--right">
+							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">{{ application.id }}</a>
+						</td>
+						<td class="osflow-table__td">
+							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">{{ application.title }}</a>
+						</td>
+						<td class="osflow-table__td">
+							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">{{ application.title }}</a>
+						</td>
+						<td class="osflow-table__td" style="text-align: right;">
+							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">234.567</a>
+						</td>
+						<td class="osflow-table__td" style="text-align: right;">
+							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">123.456</a>
+						</td> <!-- v. møde i bestyrelse -->
+						<td class="osflow-table__td" style="text-align: right;">
+							<a ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">123</a>
+						</td> <!-- v. møde i bestyrelse -->
+						<td class="osflow-table__td" style="text-align: right;" ng-if="state && state.nodeID">
+							<md-checkbox 
+								aria-label="Vælg denne ansøgning" 
+								ng-checked="vm.selectedApps.includes(application.nodeID)" 
+								ng-click="vm.toggleSelectedApp(application.nodeID)">
+							</md-checkbox>
+						</td>
+					</tr>
+
+					<tr class="osflow-table__tr" ng-if="vm.selectedApps.length && state.references.length > 0">
+						<td class="osflow-table__td" colspan="7" style="text-align: right;">
+							<span>Flyt valgte ansøgning{{ vm.selectedApps.length>1?'er':'' }} til stadie</span>
+							<md-input-container>
+								<md-select ng-model="vm.moveToBranch" placeholder="Stadie" ng-model-options="{trackBy: $value.nodeID}">
+									<md-option ng-repeat="ref in state.references" ng-value="ref.nodeID">{{ref.title}}</md-option>
+								</md-select>
+							</md-input-container>
+							<md-input-container>
+								<md-button class="md-raised md-primary" ng-click="vm.batchMoveApplications()">Flyt</md-button>
+							</md-input-container>
+						</td>
+					</tr>
+				</table>
+
+				<!-- <table ng-if="applications.length > 0">
+					<thead>
+						<tr>
+							<th sort order="key" by="vm.order" reverse="vm.reverse" ng-repeat="(key, value) in applications[0]">{{ key }}</th>
+							<th ng-if="state && state.nodeID">
+								<md-checkbox aria-label="Vælg alle" ng-click="vm.toggleAppSelection()"></md-checkbox>
+							</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr ng-repeat="application in applications | orderObjectBy:vm.order:vm.reverse">
+							<td ng-repeat="(key, value) in application">
+								<a class="od-filebrowser-link overflow" ui-sref="fund.application({applicationID: application.nodeID,workflowID:workflow.nodeID,stateID:state.nodeID})">{{ value }}</a>
+							</td>
+							<td ng-if="state && state.nodeID">
+								<md-checkbox aria-label="Vælg denne ansøgning" ng-checked="vm.selectedApps.includes(application.nodeID)" ng-click="vm.toggleSelectedApp(application.nodeID)"></md-checkbox>
+							</td>
+						</tr>
+					</tbody>
+				</table> -->
+
 				<p ng-if="applications.length <= 0">
 					<em>Der findes ingen ansøgninger i dette stadie med de angivne filtreringskriterier.</em>
 				</p>
 			</md-card-content>
+
 		</md-card>
 	</div>
 </div>

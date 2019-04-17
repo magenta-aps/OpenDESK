@@ -38,8 +38,8 @@ angular.module('openDeskApp.fund')
       getBudget: getBudget,
       uploadContent: uploadContent,
 
-      resetDemoData : resetDemoData,
-      resetDemoDataDanva: resetDemoDataDanva
+      resetDemoData : ALLOW_OSFLOW_MOCK === true ? resetDemoData : null,
+      resetDemoDataDanva: ALLOW_OSFLOW_MOCK === true ? resetDemoDataDanva : null
     }
 
     return service
@@ -238,24 +238,6 @@ angular.module('openDeskApp.fund')
       })
     }
 
-    //Resets demo-data
-    function resetDemoData() {
-      return $http.post(`/alfresco/service/foundation/demodata`)
-      .then(function (response) {
-          console.log(response)
-        return response.data
-      })
-    }
-
-    //Resets demo-data for Danva
-    function resetDemoDataDanva() {
-      return $http.post(`/alfresco/service/foundation/demodata/danva`)
-      .then(function (response) {
-          console.log(response)
-        return response.data
-      })
-    }
-
     //Upload content to an application
     function uploadContent (file, applicationNodeRef, fieldId) {
       var folderNodeRef = null
@@ -284,6 +266,30 @@ angular.module('openDeskApp.fund')
       })
       .then(function (response) {
         return response
+      })
+    }
+
+    //Resets demo-data
+    function resetDemoData() {
+      // if we're not in development mode, we shouldn't be allowed to run this query
+      if(ALLOW_OSFLOW_MOCK !== true) {
+        return Promise.resolve(null)
+      }
+      return $http.post(`/alfresco/service/foundation/demodata`)
+      .then(function (response) {
+        return response.data
+      })
+    }
+
+    //Resets demo-data for Danva
+    function resetDemoDataDanva() {
+      // if we're not in development mode, we shouldn't be allowed to run this query
+      if(ALLOW_OSFLOW_MOCK !== true) {
+        return Promise.resolve(null)
+      }
+      return $http.post(`/alfresco/service/foundation/demodata/danva`)
+      .then(function (response) {
+        return response.data
       })
     }
   }
