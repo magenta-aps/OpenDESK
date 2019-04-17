@@ -22,7 +22,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   vm.prevAppId = null
   vm.nextAppId = null
   vm.origValue = null
-
+  vm.moveToBranch = null
   vm.editApplication = editApplication
   vm.saveApplication = saveApplication
   vm.cancelEditApplication = cancelEditApplication
@@ -130,4 +130,13 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   $scope.$on('workflowstatechange', function (event, args) {
     generatePaginationLinks()
   })
+
+  vm.moveApplication = function () {
+      if(vm.moveToBranch) {
+          fundService.setApplicationState($scope.application.nodeID, vm.moveToBranch)
+              .then(function () {
+                  activate()
+              })
+      }
+  }
 }

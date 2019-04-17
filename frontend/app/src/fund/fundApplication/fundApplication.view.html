@@ -33,7 +33,7 @@
     <div flex style="text-align: right;">
       <md-button ng-if="!isEditing.get()" ng-click="vm.editApplication()"       class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.EDIT_APPLICATION' | translate }}</md-button>
       <md-button ng-if="isEditing.get()"  ng-click="vm.saveApplication()"       class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SAVE_APPLICATION' | translate }}</md-button>
-      <md-button ng-if="isEditing.get()"  ng-click="vm.cancelEditApplication()" class="md-raised">{{ 'FUNDS.NAVIGATION.CANCEL_EDIT_APPLICATION' | translate }}</md-button>    
+      <md-button ng-if="isEditing.get()"  ng-click="vm.cancelEditApplication()" class="md-raised">{{ 'FUNDS.NAVIGATION.CANCEL_EDIT_APPLICATION' | translate }}</md-button>
     </div>
 
   </div>
@@ -42,11 +42,19 @@
 <md-content class="od-fund-app-wrapper">
   <ng-template ui-view="application" layout="row" layout-wrap></ng-template>
 
-  <md-card style="margin: 0; margin-top: 1rem; padding: 1rem;">
-    <div class="dummydata">Static element!</div>
+  <md-card ng-if="state.references.length > 0" style="margin: 0; margin-top: 1rem; padding: 1rem;">
     <md-card-actions layout="row" layout-align="end center">
-      <md-button class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SUBMIT_TO_NEXT_STEP' | translate }}</md-button>
+      <span style="margin-right: 1em">Flyt ansøgning til stadie</span>
+      <md-input-container style="margin-right: 1em">
+        <md-select ng-model="vm.moveToBranch" placeholder="Stadie" ng-model-options="{trackBy: $value.nodeID}">
+          <md-option ng-repeat="ref in state.references" ng-value="ref.nodeID">{{ref.title}}</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container>
+        <md-button class="md-raised md-primary" ng-click="vm.moveApplication()">Flyt</md-button>
+      </md-input-container>
+
+      <!--<md-button class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SUBMIT_TO_NEXT_STEP' | translate }}</md-button>-->
     </md-card-actions>
   </md-card>
 </md-content>
-
