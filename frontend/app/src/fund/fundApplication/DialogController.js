@@ -8,6 +8,8 @@
 
 'use strict'
 
+import toastTemplate from './view/toastTemplate.html'
+
 angular
     .module('openDeskApp.fund')
     .controller('DialogController', ['$scope', '$state', '$mdDialog', 'fundService', '$mdToast', 'application', DialogController])
@@ -30,7 +32,7 @@ function DialogController($scope, $state, $mdDialog, fundService, $mdToast, appl
             controller: 'ToastController',
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./view/toastTemplate.html'),
+            template: toastTemplate,
             locals: {
                 application: $scope.application
             }

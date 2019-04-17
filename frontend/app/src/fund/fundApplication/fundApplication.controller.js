@@ -8,6 +8,8 @@
 
 'use strict'
 
+import moveApp from './view/moveApp.html'
+
 angular
   .module('openDeskApp.fund')
   .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'alfrescoNodeService', 'fundApplicationEditing', '$mdDialog', FundApplicationController])
@@ -68,7 +70,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
             controller: 'DialogController',
             controllerAs: 'self',
             scope: $scope.$new(),
-            template: require('./view/moveApp.html'),
+            template: moveApp,
             parent: angular.element(document.body),
             locals: {
                 application: $scope.application
