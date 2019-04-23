@@ -19,6 +19,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   $scope.currentAppPage = $stateParams.currentAppPage || 'application'
   $scope.isEditing = fundApplicationEditing
   $scope.allFields = allFields
+  $scope.findField = findField
   vm.prevAppId = null
   vm.nextAppId = null
   vm.origValue = null
@@ -42,19 +43,23 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
       // application we just loaded, get new values for the store so we can
       // populate the left-hand nav. The same applies if we have no workflow in store
       if(!$scope.$parent.workflow || $scope.$parent.workflow && $scope.$parent.workflow.nodeID !== $scope.application.workflow.nodeID) { // need to also check that a workflow exists in the parent, otherwise we'll get an error of undefined
-        fundService.getWorkflow($scope.application.workflow.nodeID)
-        .then(function (response) {
-          $scope.$parent.workflow = response
-        })
+        if($scope.application.workflow) {
+          fundService.getWorkflow($scope.application.workflow.nodeID)
+          .then(function (response) {
+            $scope.$parent.workflow = response
+          })
+        }
       }
       // similarly, if we have a state in store, but it doesn't match the state of the
       // application we just loaded, get new values for the store. The same applies if we have
       // no state in store
       if(!$scope.$parent.state || $scope.$parent.state && $scope.$parent.state.nodeID !== $scope.application.state.nodeID) { // need to also check that a state exists in the parent, otherwise we'll get an error of undefined
-        fundService.getWorkflowState($scope.application.state.nodeID)
-        .then(function (response) {
-          $scope.$parent.state = response
-        })
+        if($scope.application.state) {
+          fundService.getWorkflowState($scope.application.state.nodeID)
+          .then(function (response) {
+            $scope.$parent.state = response
+          })
+        }
       }
       // generate pagination links
       generatePaginationLinks()
@@ -63,6 +68,10 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
 
   function allFields () {
     return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+  }
+
+  function findField (fieldKey, fieldVal) {
+    return $scope.allFields().length ? $scope.allFields().find(field => field[fieldKey] == fieldVal) : {}
   }
 
   function paginateApps(appId) {
@@ -80,6 +89,9 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
     // for each file field we have in the application, upload the
     // new file, if a new file has been added.
     // Only when all these uploads have succeeded can we update the application
+
+    // TODO: CLEAN UP 'hidden' PROPERTIES ON FIELDS, OR ALLOW PRESENCE OF
+    // 'hidden' PROPERTY IN BACKEND
 
     Promise.all(
       $scope.allFields()

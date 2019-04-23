@@ -1,4 +1,4 @@
-<application-block>
+<application-block class="osflow-partners">
     <md-card>
         <md-card-title>
             <md-card-title-text>
@@ -7,20 +7,8 @@
         </md-card-title>
 
         <md-card-content>
-            <div class="opendesk-dl">
-
-                <span class="opendesk-dl__term">{{ vm.applicationProjectPartnerName.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicationProjectPartnerName.value }}</span>
-
-                <span class="opendesk-dl__term">{{ vm.applicantProjectPartnerCvr.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicantProjectPartnerCvr.value }}</span>
-
-                <span class="opendesk-dl__term">{{ vm.applicantProjectPartnerContactPerson.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicantProjectPartnerContactPerson.value }}</span>
-
-                <span class="opendesk-dl__term">{{ vm.applicantProjectPartnerRoll.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicantProjectPartnerRoll.value }}</span>
-
+            <div ng-repeat="partner in vm.applicationProjectPartners">
+                <application-field ng-repeat="field in partner.fields" field="field"></application-field>
             </div>
         </md-card-content>
     </md-card>

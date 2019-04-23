@@ -1,0 +1,12 @@
+.osflow-partners {
+  md-card-content > div {
+    border-top:1px solid #eee;
+    padding-top:1em;
+    margin-top:1em;
+    &:first-child {
+      border-top:none;
+      padding-top:0;
+      margin-top:0;
+    }
+  }
+}

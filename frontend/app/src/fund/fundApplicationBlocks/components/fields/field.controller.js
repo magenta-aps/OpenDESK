@@ -44,7 +44,7 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
     if (!parentScope.allFields()) {
       return true
     }
-    var targetField = parentScope.allFields().find(field => field.id == fieldId)
+    var targetField = parentScope.findField('id', fieldId)
     if (!targetField) {
       return true
     }
