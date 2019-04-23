@@ -20,7 +20,7 @@ function FilebrowserRowController ($stateParams, $window) {
 
   function getUiRef (content) {
     if (content.contentType === 'cmis:document')
-      if ($stateParams.type === 'system-folders' && content.mimeType === 'text/html')
+      if ($stateParams.type === 'system-folders' && content.mimeType && content.mimeType === 'text/html')
         return 'systemsettings.text_template_edit({doc: "' + content.shortRef + '"})'
       else
         return 'document({doc: "' + content.shortRef + '"})'
