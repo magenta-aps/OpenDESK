@@ -39,6 +39,12 @@ function ApplicationBlockController ($scope) {
   vm.applicationProjectBenefit = null
   vm.applicationProjectSustainability = null
 
+  // Block: Project Partners
+  vm.applicationProjectPartnersCompanyName = null
+  vm.applicationProjectPartnersCVR = null
+  vm.applicationProjectPartnersContactPerson = null
+  vm.applicationProjectPartnersContactPersonRole = null
+
   $scope.$on('applicationWasLoaded', function () {
     // Block: Basic Information
     vm.applicantName          = $scope.$parent.findField('describes', 'applicant_name')
@@ -63,5 +69,11 @@ function ApplicationBlockController ($scope) {
     vm.applicationProjectNewsworthy     = $scope.$parent.findField('id', 'project_newsworthy')
     vm.applicationProjectBenefit        = $scope.$parent.findField('id', 'project_benefit')
     vm.applicationProjectSustainability = $scope.$parent.findField('id', 'project_sustainability')
+
+    // Block: Project Partners
+    vm.applicationProjectPartnersCompanyName       = $scope.$parent.findField('id', 'company_name')
+    vm.applicationProjectPartnersCVR               = $scope.$parent.findField('id', 'cvr_no')
+    vm.applicationProjectPartnersContactPerson     = $scope.$parent.findField('id', 'contact_person')
+    vm.applicationProjectPartnersContactPersonRole = $scope.$parent.findField('id', 'project_role')
   })
 }

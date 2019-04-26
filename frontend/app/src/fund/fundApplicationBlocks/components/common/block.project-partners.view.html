@@ -8,7 +8,23 @@
 
         <md-card-content>
             <div ng-repeat="partner in vm.applicationProjectPartners">
-                <application-field ng-repeat="field in partner.fields" field="field"></application-field>
+                <article ng-repeat="field in partner.fields" field="field" class="project-partner">
+
+                    <div class="opendesk-dl">
+                        <span class="opendesk-dl__term">{{ vm.applicationProjectPartnersCompanyName.label }}:</span>
+                        <span class="opendesk-dl__description">{{ vm.applicationProjectPartnersCompanyName.value }}</span>
+
+                        <span class="opendesk-dl__term">{{ vm.applicationProjectPartnersCVR.label }}:</span>
+                        <span class="opendesk-dl__description">{{ vm.applicationProjectPartnersCVR.value }}</span>
+
+                        <span class="opendesk-dl__term">{{ vm.applicationProjectPartnersContactPerson.label }}:</span>
+                        <span class="opendesk-dl__description">{{ vm.applicationProjectPartnersContactPerson.value }}</span>
+
+                        <span class="opendesk-dl__term">{{ vm.applicationProjectPartnersContactPersonRole.label }}:</span>
+                        <span class="opendesk-dl__description">{{ vm.applicationProjectPartnersContactPersonRole.value }}</span>
+                    </div>
+
+                </article>
             </div>
         </md-card-content>
     </md-card>
