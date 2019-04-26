@@ -6,7 +6,8 @@
 
   --meter-background-color: var(--light-gray);
   --meter-border-radius: 3px;
-  --meter-color: rgba(39, 174, 96, 0.9);
+  --meter-color1: rgba(39, 174, 96, 0.9);
+  --meter-color2: rgba(230, 126, 34, 0.9);
   --meter-height: 2em;
   --meter-label-font-size: 0.8em;
 }
@@ -39,7 +40,6 @@ body {
   justify-content: space-between;
 }
 
-
 md-icon {
   color: $primary-text-color;
 }
@@ -49,11 +49,11 @@ md-icon {
 }
 
 .no-styling {
-  appearance:none;
-  border:none;
-  margin:0;
-  padding:0;
-  background:transparent;
+  appearance: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
 }
 
 md-toast {
@@ -68,14 +68,13 @@ md-toast {
 // Muted (greyed) text
 .muted {
   // font-size: .9em;
-  opacity: .66;
+  opacity: 0.66;
 }
 
 .clickable {
   cursor: pointer;
   outline: none;
 }
-
 
 //
 // Molecule level styles
@@ -89,7 +88,7 @@ main {
 // Icons in buttons
 .md-button {
   .material-icons {
-    margin-top: -($u * .25);
+    margin-top: -($u * 0.25);
     vertical-align: middle;
   }
 }
@@ -111,7 +110,6 @@ main {
     display: none;
   }
 }
-
 
 .drop-box {
   border: 5px dashed $gray-85;
@@ -163,7 +161,7 @@ main {
   .show-all {
     color: $gray-text-color;
     height: auto;
-    padding-left: $u * .2;
+    padding-left: $u * 0.2;
     text-overflow: ellipsis;
 
     md-checkbox {
@@ -178,57 +176,58 @@ main {
   width: 100%;
 
   &__tbody {
-      .osflow-table__tr {}
+    .osflow-table__tr {
+    }
   }
 
   &__tr {
-      &:hover {
-          .osflow-table__td {
-              background-color: var(--lighter-gray);
-          }
+    &:hover {
+      .osflow-table__td {
+        background-color: var(--lighter-gray);
+      }
+    }
+
+    &[ng-click] {
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    &--open {
+      .osflow-table__td,
+      + .osflow-table__tr .osflow-table__td {
+        background-color: var(--lighter-gray);
       }
 
-      &[ng-click] {
-          cursor: pointer;
-          transition: background-color 0.2s ease-in-out;
+      .osflow-table__td {
+        border-top: 1px solid var(--light-gray);
+        font-weight: bold;
       }
 
-      &--open {
-          .osflow-table__td,
-          + .osflow-table__tr .osflow-table__td {
-              background-color: var(--lighter-gray);
-          }
-
-          .osflow-table__td {
-              border-top: 1px solid var(--light-gray);
-              font-weight: bold;
-          }
-
-          + .osflow-table__tr .osflow-table__td {
-              border-bottom: 1px solid var(--light-gray);
-          }
+      + .osflow-table__tr .osflow-table__td {
+        border-bottom: 1px solid var(--light-gray);
       }
+    }
   }
 
   &__th {
-      background-color: var(--light-gray);
-      font-weight: bold;
-      padding: 1em;
-      text-align: left;
+    background-color: var(--light-gray);
+    font-weight: bold;
+    padding: 1em;
+    text-align: left;
 
-      &--right {
-          text-align: right;
-      }
+    &--right {
+      text-align: right;
+    }
   }
 
   &__td {
-      padding: 1em;
-      vertical-align: top;
-      transition: background-color 0.2s ease-in-out;
+    padding: 1em;
+    vertical-align: top;
+    transition: background-color 0.2s ease-in-out;
 
-      &--right {
-          text-align: right;
-      }
+    &--right {
+      text-align: right;
+    }
   }
 }
 
@@ -238,19 +237,19 @@ main {
   margin-top: 1em;
 
   &__heading {
-      color: var(--bar-heading-color);
-      font-size: 0.8rem;
-      font-weight: normal;
-      margin: 0;
-      text-transform: uppercase;
+    color: var(--bar-heading-color);
+    font-size: 0.8rem;
+    font-weight: normal;
+    margin: 0;
+    text-transform: uppercase;
 
-      span {
-          font-family: monospace;
-      }
+    span {
+      font-family: monospace;
+    }
   }
 
   &__heading-link {
-      color: inherit;
+    color: inherit;
   }
 }
 
@@ -263,42 +262,55 @@ main {
   height: var(--meter-height);
   overflow: hidden;
   position: relative;
+  transition: height 0.2s ease-in-out;
   width: 100%;
 
   *,
   &::before,
   &::after {
-      box-sizing: border-box;
+    box-sizing: border-box;
   }
 
   &__label {
-      font-size: var(--meter-label-font-size);
-      position: absolute;
-      text-transform: uppercase;
-      top: 50%;
-      transform: translateY(-50%);
-      right: 1em;
-      white-space: nowrap;
+    font-size: var(--meter-label-font-size);
+    opacity: 0.25;
+    position: absolute;
+    text-transform: uppercase;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1em;
+    white-space: nowrap;
   }
 
   &__progress {
-      background-color: var(--meter-color);
-      border-top-right-radius: var(--meter-border-radius);
-      border-bottom-right-radius: var(--meter-border-radius);
-      display: inline-block;
-      height: 100%;
-      position: relative;
-      transition: width 0.2s ease-in-out;
+    background-color: var(--meter-color1);
+    float: left;
+    height: 100%;
+    position: relative;
+    transition: width 0.2s ease-in-out;
+
+    &:hover {
+      .osflow-meter__progress-label {
+        opacity: 1;
+      }
+    }
+
+    +.osflow-meter__progress {
+      background-color: var(--meter-color2);
+    }
   }
 
   &__progress-label {
-      font-size: var(--meter-label-font-size);
-      position: absolute;
-      text-transform: uppercase;
-      top: 50%;
-      transform: translateY(-50%);
-      left: 1em;
-      white-space: nowrap;
+    font-size: var(--meter-label-font-size);
+    left: 1em;
+    left: 0.5em;
+    opacity: 0.25;
+    position: absolute;
+    text-transform: uppercase;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.1s ease-in-out;
+    white-space: nowrap;
   }
 }
 
