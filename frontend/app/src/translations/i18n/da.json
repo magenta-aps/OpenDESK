@@ -220,6 +220,9 @@
       "APPLICATION_CREATED": "Ansøgning oprettet",
       "APPLICATION_DELETED": "Ansøgning slettet"
     },
+    "FIELDS": {
+      "FILEUPLOAD": "Ingen fil fundet. Klik 'Ret ansøgning' for at uploade en fil"
+    },
     "NAVIGATION": {
       "APPLICATION": "Ansøgning",
       "CONTACTINFO": "Kontaktinfo",

@@ -2,7 +2,8 @@
   <div class="opendesk-dl__term" ng-if="field.label">{{ field.label }}</div>
   <div class="opendesk-dl__description">
     <md-input-container>
-      <a href="#" ng-if="!isEditing.get()" ng-click="vm.downloadFile()">{{ vm.file.item.location.file }}</a>
+      <a href="#" ng-if="!isEditing.get() && vm.file" ng-click="vm.downloadFile()">{{ vm.file.item.location.file }}</a>
+      <span ng-if="!isEditing.get && !vm.file">{{ 'FUNDS.FIELDS.FILEUPLOAD' | translate }}</span>
       <input ng-if="isEditing.get()" id="{{ field.value }}" type="file" aria-label="{{ field.label }}" data-fieldrule="toggle inverseToggle"/>
     </md-input-container>
   </div>

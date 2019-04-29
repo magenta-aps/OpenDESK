@@ -218,6 +218,9 @@
       "APPLICATION_CREATED": "Application created",
       "APPLICATION_DELETED": "Application deleted"
     },
+    "FIELDS": {
+      "FILEUPLOAD": "No file found. Click 'Edit application' to upload a file"
+    },
     "NAVIGATION": {
       "APPLICATION": "Application",
       "CONTACTINFO": "Contact information",
