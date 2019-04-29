@@ -41,9 +41,6 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
   // methods that are needed by dynamically compiled templates, in the event that
   // the field depends on other field(s)
   function fieldHasValue(fieldId) {
-    if (!parentScope.allFields()) {
-      return true
-    }
     var targetField = parentScope.findField('id', fieldId)
     if (!targetField) {
       return true

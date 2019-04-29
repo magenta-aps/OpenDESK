@@ -10,17 +10,37 @@
         <md-card-content>
             <div class="opendesk-dl">
 
-                <span class="opendesk-dl__term">{{ vm.applicantName.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicantName.value }}</span>
+                <div class="opendesk-dl__term" ng-if="vm.applicantName.label">{{ vm.applicantName.label }}</div>
+                <div class="opendesk-dl__description">
+                  <md-input-container>
+                    <span ng-if="!isEditing.get()" ng-bind-html="vm.applicantName.value"></span>
+                    <input ng-if="isEditing.get()" type="text" ng-model="vm.applicantName.value" aria-label="{{ vm.applicantName.label }}" data-fieldrule="toggle inverseToggle"/>
+                  </md-input-container>
+                </div>
 
-                <span class="opendesk-dl__term">{{ vm.applicationAmount.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicationAmount.value | currency:'DKK':0 }}</span>
+                <div class="opendesk-dl__term" ng-if="vm.applicationAmount.label">{{ vm.applicationAmount.label }}</div>
+                <div class="opendesk-dl__description">
+                  <md-input-container>
+                    <span ng-if="!isEditing.get()" ng-bind-html="vm.applicationAmount.value"></span>
+                    <input ng-if="isEditing.get()" type="text" ng-model="vm.applicationAmount.value" aria-label="{{ vm.applicationAmount.label }}" data-fieldrule="toggle inverseToggle"/>
+                  </md-input-container>
+                </div>
 
-                <span class="opendesk-dl__term">{{ vm.applicationTotalBudget.label }}:</span>
-                <span class="opendesk-dl__description">{{ vm.applicationTotalBudget.value | currency:'DKK':0 }}</span>
+                <div class="opendesk-dl__term" ng-if="vm.applicationTotalBudget.label">{{ vm.applicationTotalBudget.label }}</div>
+                <div class="opendesk-dl__description">
+                  <md-input-container>
+                    <span ng-if="!isEditing.get()" ng-bind-html="vm.applicationTotalBudget.value"></span>
+                    <input ng-if="isEditing.get()" type="text" ng-model="vm.applicationTotalBudget.value" aria-label="{{ vm.applicationTotalBudget.label }}" data-fieldrule="toggle inverseToggle"/>
+                  </md-input-container>
+                </div>
 
-                <span class="opendesk-dl__term">{{ vm.projectTitle.label }}:</span>
-                <span class="opendesk-dl__description" ng-bind-html="vm.projectTitle.value"></span>
+                <div class="opendesk-dl__term" ng-if="vm.projectTitle.label">{{ vm.projectTitle.label }}</div>
+                <div class="opendesk-dl__description">
+                  <md-input-container>
+                    <span ng-if="!isEditing.get()" ng-bind-html="vm.projectTitle.value"></span>
+                    <input ng-if="isEditing.get()" type="text" ng-model="vm.projectTitle.value" aria-label="{{ vm.projectTitle.label }}" data-fieldrule="toggle inverseToggle"/>
+                  </md-input-container>
+                </div>
 
             </div>
         </md-card-content>
