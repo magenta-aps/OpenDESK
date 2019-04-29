@@ -10,6 +10,7 @@
     >
       {{ field.options[$index] }}
     </md-checkbox>
+    <div class="od-field-hint" ng-if="field.hint && isEditing.get()" ng-bind-html="field.hint"></div>
   </div>
 </div>
 <div class="opendesk-dl" ng-if="!field.label">
@@ -23,5 +24,6 @@
     >
       {{ field.options[$index] }}
     </md-checkbox>
+    <div class="od-field-hint" ng-if="field.hint && isEditing.get()" ng-bind-html="field.hint"></div>
   </div>
 </div>

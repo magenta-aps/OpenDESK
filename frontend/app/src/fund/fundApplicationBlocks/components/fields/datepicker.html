@@ -1,6 +1,7 @@
 <ng-template ng-if="field.layout == 'inline'">
   <strong ng-if="field.label">{{ field.label }}</strong>
   <md-datepicker ng-disabled="!isEditing.get()" ng-model="field.value" data-fieldrule="toggle inverseToggle"/>
+  <div class="od-field-hint" ng-if="field.hint && isEditing.get()" ng-bind-html="field.hint"></div>
 </ng-template>
 <ng-template ng-if="field.layout != 'inline'">
   <div ng-if="field.label">
@@ -8,5 +9,6 @@
   </div>
   <div>
     <md-datepicker ng-disabled="!isEditing.get()" ng-model="field.value" data-fieldrule="toggle inverseToggle"/>
+    <div class="od-field-hint" ng-if="field.hint && isEditing.get()" ng-bind-html="field.hint"></div>
   </div>
 </ng-template>
