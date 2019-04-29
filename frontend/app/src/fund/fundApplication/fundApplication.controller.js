@@ -118,7 +118,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
           // take item 0
           var file = document.getElementById(field.value).files[0]
           if (file) {
-            var upload = fundService.uploadContent(file, $scope.application.nodeRef, field.id)
+            var upload = fundService.uploadContent(file, $scope.application.nodeRef, field.nodeRef)
             .then(function (response) {
               field.value = alfrescoNodeService.processNodeRef(response.data.nodeRef).id
             })

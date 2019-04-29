@@ -239,21 +239,17 @@ angular.module('openDeskApp.fund')
     }
 
     //Upload content to an application
-    function uploadContent (file, applicationNodeRef, fieldId) {
-      var folderNodeRef = null
+    function uploadContent (file, applicationNodeRef, fieldNodeRef) {
       var appId = alfrescoNodeService.processNodeRef(applicationNodeRef).id
+      var fieldId = alfrescoNodeService.processNodeRef(fieldNodeRef).id
 
-      return $http.get(`/alfresco/service/foundation/application/${appId}/documentfolder`)
-      .then(function (response) {
-        folderNodeRef = 'workspace://SpacesStore/' + response.data
-
-        return $http.get(`/alfresco/service/node/${response.data}/next-available-name/${file.name}`) // response.data is equal to the nodeID
-      })
+      return $http.get(`/alfresco/service/node/${appId}/next-available-name/${file.name}`)
       .then(function (response) {
         var formData = new FormData()
         formData.append('filedata', file)
         formData.append('filename', response.data.fileName)
-        formData.append('destination', folderNodeRef)
+        formData.append('destination', applicationNodeRef)
+        formData.append('fieldID', fieldId)
 
         var headers = {
           transformRequest: angular.identity,
