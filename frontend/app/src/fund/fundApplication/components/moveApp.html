@@ -1,0 +1,77 @@
+<md-dialog>
+     <md-dialog-content>
+         <span class="md-headline">Flyt ansøgninger</span>
+         <div class="selection-container">
+             <!--TODO: Set selectors' initial values to values of application-->
+             <!--TODO: Set width of popup according to selections-->
+             <div layout="row"
+                  layout-align="space-between center">
+                 <span>Flow</span>
+                 <span title="{{self.selectedFlow.title}}">
+                     <md-select ng-model="self.selectedFlow"
+                                ng-change="self.workflowChange()"
+                                ng-model-options="{trackBy: '$value.nodeID'}">
+                         <md-option ng-repeat="workflow in self.activeWorkflows"
+                                    ng-value="workflow">
+                             {{workflow.title}}
+                         </md-option>
+                     </md-select>
+                 </span>
+             </div>
+
+             <div ng-if="self.branches.length > 1"
+                  layout="row"
+                  layout-align="space-between center">
+                 <span>Bankområde</span>
+                 <span title="{{self.selectedBranch.title}}">
+                     <md-select placeholder="Intet valgt"
+                                ng-model="self.selectedBranch"
+                                ng-model-options="{trackBy: '$value.nodeID'}">
+                         <md-option ng-repeat="branch in self.branches"
+                                    ng-value="branch">
+                             {{branch.title}}
+                         </md-option>
+                    </md-select>
+                 </span>
+             </div>
+
+
+             <div layout="row"
+                  layout-align="space-between center">
+                 <span>Stadie</span>
+                 <span title="{{self.selectedState.title}}">
+                     <md-select placeholder="Intet valgt"
+                                ng-model="self.selectedState"
+                                ng-model-options="{trackBy: '$value.nodeID'}">
+                         <md-option ng-repeat="state in self.states"
+                                    ng-value="state">
+                             {{state.title}}
+                         </md-option>
+                     </md-select>
+                 </span>
+             </div>
+
+             <div layout="row"
+                  layout-align="space-between center">
+                 <span>Budgetår</span>
+                 <md-select placeholder="Intet valgt"
+                            ng-model="self.selectedBudget"
+                            ng-model-options="{trackBy: '$value.nodeID'}">
+                     <md-option ng-repeat="budgetYear in self.budgetYears"
+                                ng-value="budgetYear">
+                         {{budgetYear.startDate.substring(0, 4)}} til {{budgetYear.endDate.substring(0, 4)}}
+                     </md-option>
+                 </md-select>
+             </div>
+         </div>
+     </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-click="self.cancel()">
+            Annuller
+        </md-button>
+        <span flex></span>
+        <md-button ng-click="self.apply()" class="md-primary">
+            Flyt ansøgning
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

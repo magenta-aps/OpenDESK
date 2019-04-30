@@ -10,9 +10,9 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'alfrescoNodeService', 'fundApplicationEditing', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'alfrescoNodeService', 'fundApplicationEditing', '$mdDialog', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, alfrescoNodeService, fundApplicationEditing) {
+function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, alfrescoNodeService, fundApplicationEditing, $mdDialog) {
   var vm = this
 
   $scope.application = null
@@ -23,6 +23,9 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   vm.nextAppId = null
   vm.origValue = null
   vm.moveToBranch = null
+  vm.branches = []
+  vm.customFullscreen = false
+
   vm.editApplication = editApplication
   vm.saveApplication = saveApplication
   vm.cancelEditApplication = cancelEditApplication
@@ -63,6 +66,111 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
       // generate pagination links
       generatePaginationLinks()
     })
+  }
+
+  vm.moveApp = function() {
+    $mdDialog.show({
+      controller: DialogController,
+      controllerAs: 'self',
+      template: require('./components/moveApp.html'),
+      parent: angular.element(document.body),
+      locals: {
+        application: $scope.application
+      },
+      clickOutsideToClose:true,
+    })
+  }
+
+  function DialogController($mdDialog, $mdToast, application) {
+    var self = this
+    self.selectedBranch = application.branchSummary
+    self.selectedBudget = application.budget
+    self.selectedState = application.state
+    self.selectedFlow = application.workflow
+    self.activeWorkflows = []
+    self.branches = []
+    self.states = []
+    self.budgetYears = []
+
+
+    //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
+    self.showToast = function() {
+      $mdToast.show({
+        hideDelay: 9000,
+        position: 'bottom right',
+        controller: ToastCtrl,
+        controllerAs: 'ctrl',
+        bindToController: true,
+        template: require('./components/toastTemplate.html')
+      })
+    }
+
+    // Fetch data for selectors:
+    fundService.getActiveWorkflows()
+    .then(function (response) {
+      self.activeWorkflows = response
+    })
+
+    fundService.getBudgetYears()
+    .then(function (response) {
+      self.budgetYears = response
+    })
+
+    // Update branch and state drop-down according to selected workflow.
+    // Is called whenever workflow is changed
+    self.workflowChange = function(){
+      fundService.getWorkflow(self.selectedFlow.nodeID)
+      .then(function(response) {
+        fundService.getWorkflow(response.nodeID)
+        .then(function(response) {
+          self.states = response.states
+          self.branches = response.usedByBranches
+        })
+      })
+    }
+    self.workflowChange() //Set branch and state drop-down initially
+
+    self.changedAttributes = function() {
+      var result = {}
+      // 'workFlow' is automatically changed according to 'branchSummary'
+      if (self.selectedBranch != null) {
+        console.log("pow")
+        result.branchSummary = {"nodeID": self.selectedBranch.nodeID}
+      }
+      if (self.selectedState != null) {
+        result.state = {"nodeID": self.selectedState.nodeID}
+      }
+      if (self.selectedBudget != null) {
+        result.budget = {"nodeID": self.selectedBudget.nodeID}
+      }
+      console.log(result)
+      return result
+    }
+
+    self.cancel = function() {
+      $mdDialog.cancel()
+    }
+
+    self.apply = function(answer) {
+      $mdDialog.hide(answer)
+      .then(console.log("Application before"))
+      .then(console.log($scope.application))
+      .then($state.go('fund.workflow', { workflowID: $scope.application.workflow.nodeID, stateID: $scope.application.state.nodeID })) //Send user back to application list
+      .then(fundService.updateApplication($scope.application.nodeID, self.changedAttributes())) //and update the application according to selections
+      .then(console.log("Application after"))
+      .then(console.log($scope.application))
+      .then(self.showToast())
+    }
+  }
+
+  function ToastCtrl($mdToast, $mdDialog, $document, $scope) {
+      var ctrl = this
+      ctrl.closeToast = function() {
+          $mdToast.hide()
+      }
+      ctrl.goToApplicaion = function() {
+          $state.go('fund.application', {applicationID: $scope.application.nodeID}) //workflowID and stateID are left out in the request.
+      }
   }
 
   function findField(fieldKey, fieldVal) {
@@ -118,7 +226,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
           // take item 0
           var file = document.getElementById(field.value).files[0]
           if (file) {
-            var upload = fundService.uploadContent(file, $scope.application.nodeRef, field.nodeRef)
+            var upload = fundService.uploadContent(file, $scope.application.nodeID, field.nodeRef)
             .then(function (response) {
               field.value = alfrescoNodeService.processNodeRef(response.data.nodeRef).id
             })
@@ -162,11 +270,11 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   })
 
   vm.moveApplication = function () {
-      if(vm.moveToBranch) {
-          fundService.setApplicationState($scope.application.nodeID, vm.moveToBranch)
-              .then(function () {
-                  activate()
-              })
-      }
+    if(vm.moveToBranch) {
+      fundService.setApplicationState($scope.application.nodeID, vm.moveToBranch)
+      .then(function () {
+        activate()
+      })
+    }
   }
 }

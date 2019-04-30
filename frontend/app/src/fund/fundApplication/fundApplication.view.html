@@ -31,20 +31,21 @@
     </div>
 
     <div flex="80" style="text-align: right;">
-      <md-button ng-if="!isEditing.get()" ng-click="vm.editApplication()"       class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.EDIT_APPLICATION' | translate }}</md-button>
-      <md-button ng-if="isEditing.get()"  ng-click="vm.saveApplication()"       class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SAVE_APPLICATION' | translate }}</md-button>
-      <md-button ng-if="isEditing.get()"  ng-click="vm.cancelEditApplication()" class="md-raised">{{ 'FUNDS.NAVIGATION.CANCEL_EDIT_APPLICATION' | translate }}</md-button>
+      <md-button ng-if="!isEditing.get()" ng-click="vm.editApplication()" class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.EDIT_APPLICATION' | translate }}</md-button>
+      <md-button ng-if="isEditing.get()" ng-click="vm.saveApplication()" class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SAVE_APPLICATION' | translate }}</md-button>
+      <md-button ng-if="isEditing.get()" ng-click="vm.cancelEditApplication()" class="md-raised">{{ 'FUNDS.NAVIGATION.CANCEL_EDIT_APPLICATION' | translate }}</md-button>
+      <md-button ng-click="vm.moveApp()">{{ 'FUNDS.NAVIGATION.MOVE_APPLICATION' | translate }}</md-button>
     </div>
 
     <div flex="100" style="text-align: right;">
-      <span style="margin-right: 1em">Flyt ansøgning til stadie</span>
+      <span style="margin-right: 1em">{{ 'FUNDS.NAVIGATION.MOVE_APPLICATION_STAGE' | translate }}</span>
       <md-input-container style="margin-right: 1em">
-        <md-select ng-model="vm.moveToBranch" placeholder="Stadie" ng-model-options="{trackBy: $value.nodeID}">
+        <md-select ng-model="vm.moveToBranch" placeholder="{{ 'FUNDS.NAVIGATION.STAGE' | translate }}" ng-model-options="{trackBy: $value.nodeID}">
           <md-option ng-repeat="ref in state.references" ng-value="ref.nodeID">{{ref.title}}</md-option>
         </md-select>
       </md-input-container>
       <md-input-container>
-        <md-button class="md-raised md-primary" ng-click="vm.moveApplication()">Flyt</md-button>
+        <md-button class="md-raised md-primary" ng-click="vm.moveApplication()">{{ 'FUNDS.NAVIGATION.MOVE' | translate }}</md-button>
       </md-input-container>
     </div>
 
