@@ -239,8 +239,7 @@ angular.module('openDeskApp.fund')
     }
 
     //Upload content to an application
-    function uploadContent (file, applicationNodeRef, fieldNodeRef) {
-      var appId = alfrescoNodeService.processNodeRef(applicationNodeRef).id
+    function uploadContent (file, appId, fieldNodeRef) {
       var fieldId = alfrescoNodeService.processNodeRef(fieldNodeRef).id
 
       return $http.get(`/alfresco/service/node/${appId}/next-available-name/${file.name}`)
@@ -248,7 +247,7 @@ angular.module('openDeskApp.fund')
         var formData = new FormData()
         formData.append('filedata', file)
         formData.append('filename', response.data.fileName)
-        formData.append('destination', applicationNodeRef)
+        formData.append('destination', appId)
         formData.append('fieldId', fieldId)
 
         var headers = {
