@@ -10,10 +10,12 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('ApplicationBlockController', ['$scope', ApplicationBlockController])
+  .controller('ApplicationBlockController', ['$scope', 'fundApplicationEditing', ApplicationBlockController])
 
-function ApplicationBlockController ($scope) {
+function ApplicationBlockController ($scope, fundApplicationEditing) {
   var vm = this
+
+  $scope.isEditing = fundApplicationEditing
 
   // Block: Basic Information
   vm.applicantName = null
@@ -39,41 +41,27 @@ function ApplicationBlockController ($scope) {
   vm.applicationProjectBenefit = null
   vm.applicationProjectSustainability = null
 
-  // Block: Project Partners
-  vm.applicationProjectPartnersCompanyName = null
-  vm.applicationProjectPartnersCVR = null
-  vm.applicationProjectPartnersContactPerson = null
-  vm.applicationProjectPartnersContactPersonRole = null
+  $scope.$parent.$watch('application', function (app) {
+    if (app) {
+      // Block: Basic Information
+      vm.applicantName          = $scope.$parent.findField('describes', 'applicant_name')
+      vm.projectTitle           = $scope.$parent.findField('id', 'project_title')
+      vm.applicationTotalBudget = $scope.$parent.findField('id', 'total_budget')
+      vm.applicationAmount      = $scope.$parent.findField('describes', 'applied_amount')
 
-  $scope.$on('applicationWasLoaded', function () {
-    // Block: Basic Information
-    vm.applicantName          = $scope.$parent.findField('describes', 'applicant_name')
-    vm.projectTitle           = $scope.$parent.findField('id', 'project_title')
-    vm.applicationTotalBudget = $scope.$parent.findField('id', 'total_budget')
-    vm.applicationAmount      = $scope.$parent.findField('describes', 'applied_amount')
+      // Block: Project Partners
+      vm.applicationProjectPartners = $scope.$parent.application.blocks.filter(block => /^partners_/.test(block.id))
 
-    // Block: Project Partners
-    // vm.applicationProjectPartnerName        = $scope.$parent.findField('id', 'company_name')
-    // vm.applicantProjectPartnerCvr           = $scope.$parent.findField('id', 'cvr_no')
-    // vm.applicantProjectPartnerContactPerson = $scope.$parent.findField('id', 'contact_person')
-    // vm.applicantProjectPartnerRoll          = $scope.$parent.findField('id', 'project_role')
-    vm.applicationProjectPartners = $scope.$parent.application.blocks.filter(block => /^partners_/.test(block.id))
-
-    // Block: Project Description
-    vm.applicationDateStart             = $scope.$parent.findField('id', 'start_date')
-    vm.applicationDateEnd               = $scope.$parent.findField('id', 'end_date')
-    vm.applicationTitle                 = $scope.$parent.findField('id', 'project_title')
-    vm.applicationProjectDescription    = $scope.$parent.findField('id', 'project_description')
-    vm.applicationProjectArgument       = $scope.$parent.findField('id', 'project_argument')
-    vm.applicationProjectOutput         = $scope.$parent.findField('id', 'project_output')
-    vm.applicationProjectNewsworthy     = $scope.$parent.findField('id', 'project_newsworthy')
-    vm.applicationProjectBenefit        = $scope.$parent.findField('id', 'project_benefit')
-    vm.applicationProjectSustainability = $scope.$parent.findField('id', 'project_sustainability')
-
-    // Block: Project Partners
-    vm.applicationProjectPartnersCompanyName       = $scope.$parent.findField('id', 'company_name')
-    vm.applicationProjectPartnersCVR               = $scope.$parent.findField('id', 'cvr_no')
-    vm.applicationProjectPartnersContactPerson     = $scope.$parent.findField('id', 'contact_person')
-    vm.applicationProjectPartnersContactPersonRole = $scope.$parent.findField('id', 'project_role')
+      // Block: Project Description
+      vm.applicationDateStart             = $scope.$parent.findField('id', 'start_date')
+      vm.applicationDateEnd               = $scope.$parent.findField('id', 'end_date')
+      vm.applicationTitle                 = $scope.$parent.findField('id', 'project_title')
+      vm.applicationProjectDescription    = $scope.$parent.findField('id', 'project_description')
+      vm.applicationProjectArgument       = $scope.$parent.findField('id', 'project_argument')
+      vm.applicationProjectOutput         = $scope.$parent.findField('id', 'project_output')
+      vm.applicationProjectNewsworthy     = $scope.$parent.findField('id', 'project_newsworthy')
+      vm.applicationProjectBenefit        = $scope.$parent.findField('id', 'project_benefit')
+      vm.applicationProjectSustainability = $scope.$parent.findField('id', 'project_sustainability')
+    }
   })
 }

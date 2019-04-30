@@ -18,7 +18,6 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   $scope.application = null
   $scope.currentAppPage = $stateParams.currentAppPage || 'application'
   $scope.isEditing = fundApplicationEditing
-  $scope.allFields = allFields
   $scope.findField = findField
   vm.prevAppId = null
   vm.nextAppId = null
@@ -66,12 +65,34 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
     })
   }
 
-  function allFields () {
-    return $scope.application ? [].concat.apply([], $scope.application.blocks.map(block => block.fields)) : [] // flatten all fields into one array, https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
-  }
+  function findField(fieldKey, fieldVal) {
+    // We need a method that passes fields as references, not as values.
+    // Two-way binding only works for references.
 
-  function findField (fieldKey, fieldVal) {
-    return $scope.allFields().length ? $scope.allFields().find(field => field[fieldKey] == fieldVal) : {}
+    // if no application, just return an empty object
+    if (!$scope.application) {
+      return {}
+    }
+
+    // in order to pass a reference, we need the index of the block and
+    // the index of the field
+    var blockIdx = -1
+    var fieldIdx = -1
+    $scope.application.blocks.forEach(function (block, i) {
+      block.fields.forEach(function (field, j) {
+        if (field[fieldKey] == fieldVal) {
+          fieldIdx = j
+          blockIdx = i
+        }
+      })
+    })
+
+    // if the field in question was not found, just return an empty object
+    if (blockIdx < 0 && fieldIdx < 0) {
+      return {}
+    }
+
+    return $scope.application.blocks[blockIdx].fields[fieldIdx]
   }
 
   function paginateApps(appId) {
@@ -89,28 +110,25 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
     // for each file field we have in the application, upload the
     // new file, if a new file has been added.
     // Only when all these uploads have succeeded can we update the application
-
-    // TODO: CLEAN UP 'hidden' PROPERTIES ON FIELDS, OR ALLOW PRESENCE OF
-    // 'hidden' PROPERTY IN BACKEND
-
-    Promise.all(
-      $scope.allFields()
-      .filter(function (field) {
-        if (field.component !== 'file') {
-          return false
+    var files = []
+    $scope.application.blocks.forEach(function (block) {
+      block.fields.forEach(function (field) {
+        if (field.component === 'file') {
+          // the field only allows the user to select one file, so we can just
+          // take item 0
+          var file = document.getElementById(field.value).files[0]
+          if (file) {
+            var upload = fundService.uploadContent(file, $scope.application.nodeRef, field.nodeRef)
+            .then(function (response) {
+              field.value = alfrescoNodeService.processNodeRef(response.data.nodeRef).id
+            })
+            files.push(upload)
+          }
         }
-        return document.getElementById(field.value).files.length > 0
       })
-      .map(function (field) {
-        // the field only allows the user to select one file, so we can just
-        // take item 0
-        var file = document.getElementById(field.value).files[0]
-        return fundService.uploadContent(file, $scope.application.nodeRef, field.id)
-        .then(function (response) {
-          field.value = alfrescoNodeService.processNodeRef(response.data.nodeRef).id
-        })
-      })
-    )
+    })
+
+    Promise.all(files)
     .then(function () {
       fundService.updateApplication($scope.application.nodeID, $scope.application)
       .then(function (response) {

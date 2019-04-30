@@ -8,5 +8,6 @@
         <input ng-if="isEditing.get()" type="number" ng-model="field.value" aria-label="{{ field.label }}" />
       </md-input-container>
     </md-slider-container>
+    <div class="od-field-hint" ng-if="field.hint && isEditing.get()" ng-bind-html="field.hint"></div>
   </div>
 </div>
