@@ -221,7 +221,8 @@
       "APPLICATION_DELETED": "Ansøgning slettet"
     },
     "FIELDS": {
-      "FILEUPLOAD": "Ingen fil fundet. Klik 'Ret ansøgning' for at uploade en fil"
+      "FILEUPLOAD": "Ingen fil fundet. Klik 'Ret ansøgning' for at uploade en fil",
+      "NO_VALUE": "Feltet har ingen værdi"
     },
     "NAVIGATION": {
       "APPLICATION": "Ansøgning",
