@@ -3,7 +3,14 @@
   <div class="opendesk-dl__description">
     <md-input-container>
       <span ng-if="!isEditing.get()">{{ field.value }}</span>
-      <input ng-if="isEditing.get()" type="text" ng-model="field.value" aria-label="{{ field.label }}" data-fieldrule="toggle inverseToggle"/>
+      <input 
+        type="text" 
+        maximum-words-validation="3"
+        ng-if="isEditing.get()" 
+        ng-model="field.value" 
+        aria-label="{{ field.label }}" 
+        data-fieldrule="toggle inverseToggle"/>
     </md-input-container>
+    <span>{{field_value_words_count}} / 100 words</span>
   </div>
 </div>
