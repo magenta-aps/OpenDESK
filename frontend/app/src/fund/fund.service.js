@@ -249,7 +249,7 @@ angular.module('openDeskApp.fund')
         formData.append('filedata', file)
         formData.append('filename', response.data.fileName)
         formData.append('destination', applicationNodeRef)
-        formData.append('fieldID', fieldId)
+        formData.append('fieldId', fieldId)
 
         var headers = {
           transformRequest: angular.identity,
@@ -258,7 +258,7 @@ angular.module('openDeskApp.fund')
           }
         }
 
-        return $http.post('/api/upload', formData, headers)
+        return $http.post('/alfresco/service/foundation/app-file-upload', formData, headers)
       })
       .then(function (response) {
         return response
