@@ -25,8 +25,29 @@ function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService,
   self.states = []
   self.budgetYears = []
 
-  //TODO: Maybe separate Application, Dialog, and Toast to lower coupling
-  self.showToast = function() {
+  self.showToast = showToast
+  self.workflowChange = workflowChange
+  self.changedAttributes = changedAttributes
+  self.cancel = cancel
+  self.apply = apply
+
+  activate()
+
+  function activate () {
+    // Fetch data for selectors:
+    fundService.getActiveWorkflows()
+    .then(function (response) {
+      self.activeWorkflows = response
+      self.workflowChange() //Set branch and state drop-down initially
+    })
+
+    fundService.getBudgetYears()
+    .then(function (response) {
+      self.budgetYears = response
+    })
+  }
+
+  function showToast () {
     $mdToast.show({
       hideDelay: 9000,
       position: 'bottom right',
@@ -37,36 +58,38 @@ function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService,
     })
   }
 
-  // Fetch data for selectors:
-  fundService.getActiveWorkflows()
-  .then(function (response) {
-    self.activeWorkflows = response
-  })
-
-  fundService.getBudgetYears()
-  .then(function (response) {
-    self.budgetYears = response
-  })
-
   // Update branch and state drop-down according to selected workflow.
-  // Is called whenever workflow is changed
-  self.workflowChange = function(){
-    fundService.getWorkflow(self.selectedFlow.nodeID)
-    .then(function(response) {
-      fundService.getWorkflow(response.nodeID)
+  // Is called whenever workflow dropdown is changed
+  function workflowChange () {
+    // If the application already belongs to the workflow we've selected,
+    // we are only allowed to move it to the state(s) listed as allowed
+    // transitions for the current workflow state.
+    if (application.workflow && application.workflow.nodeID == self.selectedFlow.nodeID) {
+      if (application.state) {
+        fundService.getWorkflowState(application.state.nodeID)
+        .then(function (response) {
+          self.states = response.references
+        })
+      }
+    }
+    else {
+      fundService.getWorkflow(self.selectedFlow ? self.selectedFlow.nodeID : self.activeWorkflows[0].nodeID)
       .then(function(response) {
+        if (!self.selectedFlow || self.selectedFlow && self.selectedFlow.title != response.title) {
+          self.selectedFlow = response // update the actual binding
+        }
         self.states = response.states
         self.branches = response.usedByBranches
       })
-    })
+    }
   }
-  self.workflowChange() //Set branch and state drop-down initially
 
-  self.changedAttributes = function() {
+  function changedAttributes () {
     var result = {}
-    // 'workFlow' is automatically changed according to 'branchSummary'
+    if (self.selectedFlow != null) {
+      result.workflow = {"nodeID": self.selectedFlow.nodeID}
+    }
     if (self.selectedBranch != null) {
-      console.log("pow")
       result.branchSummary = {"nodeID": self.selectedBranch.nodeID}
     }
     if (self.selectedState != null) {
@@ -75,22 +98,31 @@ function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService,
     if (self.selectedBudget != null) {
       result.budget = {"nodeID": self.selectedBudget.nodeID}
     }
-    console.log(result)
     return result
   }
 
-  self.cancel = function() {
+  function cancel () {
     $mdDialog.cancel()
   }
 
-  self.apply = function(answer) {
+  function apply (answer) {
     $mdDialog.hide(answer)
-    .then(console.log("Application before"))
-    .then(console.log($scope.application))
-    .then($state.go('fund.workflow', { workflowID: $scope.application.workflow.nodeID, stateID: $scope.application.state.nodeID })) //Send user back to application list
-    .then(fundService.updateApplication($scope.application.nodeID, self.changedAttributes())) //and update the application according to selections
-    .then(console.log("Application after"))
-    .then(console.log($scope.application))
-    .then(self.showToast())
+    .then(function () {
+      return fundService.updateApplication(application.nodeID, self.changedAttributes())
+    })
+    .then(function () {
+      if (self.selectedFlow) {
+        $state.go('fund.workflow', { workflowID: self.selectedFlow.nodeID, stateID: self.selectedState ? self.selectedState.nodeID : null }) //Send user back to application list
+        self.showToast()
+      }
+    })
+    .catch(function () {
+      $mdToast.show(
+        $mdToast.simple()
+        .textContent('Der skete en fejl. Ansøgningen blev ikke flyttet.')
+        .position('bottom right')
+        .hideDelay(5000)
+      )
+    })
   }
 }

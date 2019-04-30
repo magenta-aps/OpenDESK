@@ -9,9 +9,9 @@
 'use strict'
 
 angular.module('openDeskApp.fund')
-  .controller('ApplicationFieldController', ['$scope', 'fundApplicationEditing', 'contentService', 'alfrescoDownloadService', ApplicationFieldController])
+  .controller('ApplicationFieldController', ['$scope', 'fundApplicationEditing', 'contentService', 'alfrescoDownloadService', 'alfrescoNodeService', ApplicationFieldController])
 
-function ApplicationFieldController ($scope, fundApplicationEditing, contentService, alfrescoDownloadService) {
+function ApplicationFieldController ($scope, fundApplicationEditing, contentService, alfrescoDownloadService, alfrescoNodeService) {
   var vm = this
   var parentScope = $scope.$parent.$parent.$parent.$parent.$parent // TODO: this creates a tight coupling
 
@@ -19,6 +19,7 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
   $scope.fieldHasValue = fieldHasValue
 
   vm.downloadFile = downloadFile
+  vm.nodeID = nodeID
   vm.file = null
 
   activate()
@@ -55,5 +56,9 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
       return targetFieldValue.some(field => field == true)
     }
     return targetFieldValue
+  }
+
+  function nodeID () {
+    return alfrescoNodeService.processNodeRef($scope.field.nodeRef).id
   }
 }

@@ -28,6 +28,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
   vm.branches = []
   vm.customFullscreen = false
 
+  vm.moveApp = moveApp
   vm.editApplication = editApplication
   vm.saveApplication = saveApplication
   vm.cancelEditApplication = cancelEditApplication
@@ -46,8 +47,9 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
       // if we have a workflow in store, but it doesn't match the workflow of the
       // application we just loaded, get new values for the store so we can
       // populate the left-hand nav. The same applies if we have no workflow in store
-      if(!$scope.$parent.workflow || $scope.$parent.workflow && $scope.$parent.workflow.nodeID !== $scope.application.workflow.nodeID) { // need to also check that a workflow exists in the parent, otherwise we'll get an error of undefined
-        if($scope.application.workflow) {
+      // If we already have a matching workflow in store, don't do anything (reuse it)
+      if ($scope.application.workflow) {
+        if(!$scope.$parent.workflow || $scope.$parent.workflow && $scope.$parent.workflow.nodeID !== $scope.application.workflow.nodeID) { // need to also check that a workflow exists in the parent, otherwise we'll get an error of undefined
           fundService.getWorkflow($scope.application.workflow.nodeID)
           .then(function (response) {
             $scope.$parent.workflow = response
@@ -56,9 +58,9 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
       }
       // similarly, if we have a state in store, but it doesn't match the state of the
       // application we just loaded, get new values for the store. The same applies if we have
-      // no state in store
-      if(!$scope.$parent.state || $scope.$parent.state && $scope.$parent.state.nodeID !== $scope.application.state.nodeID) { // need to also check that a state exists in the parent, otherwise we'll get an error of undefined
-        if($scope.application.state) {
+      // no state in store. If we already have a matching state in store, don't do anything (reuse it)
+      if ($scope.application.state) {
+        if(!$scope.$parent.state || $scope.$parent.state && $scope.$parent.state.nodeID !== $scope.application.state.nodeID) { // need to also check that a state exists in the parent, otherwise we'll get an error of undefined
           fundService.getWorkflowState($scope.application.state.nodeID)
           .then(function (response) {
             $scope.$parent.state = response
@@ -70,7 +72,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
     })
   }
 
-  vm.moveApp = function() {
+  function moveApp () {
     $mdDialog.show({
       controller: 'MoveDialogController',
       controllerAs: 'self',
@@ -134,7 +136,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
         if (field.component === 'file') {
           // the field only allows the user to select one file, so we can just
           // take item 0
-          var file = document.getElementById(field.value).files[0]
+          var file = document.getElementById(alfrescoNodeService.processNodeRef(field.nodeRef).id).files[0]
           if (file) {
             var upload = fundService.uploadContent(file, $scope.application.nodeID, field.nodeRef)
             .then(function (response) {
@@ -164,7 +166,7 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
 
   function generatePaginationLinks () {
     // load variables for next/previous buttons, if they exist
-    if ($scope.$parent.state) {
+    if ($scope.$parent.state && $scope.$parent.state.applications) {
       var currAppIdx = $scope.$parent.state.applications.findIndex(app => app.nodeID == $scope.application.nodeID)
       var prevAppIdx = currAppIdx - 1 < 0 ? null : currAppIdx - 1 // we can't paginate to negative indices
       var nextAppIdx = currAppIdx + 1 >= $scope.$parent.state.applications.length ? null : currAppIdx + 1 // neither can we paginate to pages out of length

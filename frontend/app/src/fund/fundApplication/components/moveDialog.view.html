@@ -6,11 +6,12 @@
              <!--TODO: Set width of popup according to selections-->
              <div layout="row"
                   layout-align="space-between center">
-                 <span>Flow</span>
+                 <span>Workflow</span>
                  <span title="{{self.selectedFlow.title}}">
                      <md-select ng-model="self.selectedFlow"
                                 ng-change="self.workflowChange()"
-                                ng-model-options="{trackBy: '$value.nodeID'}">
+                                ng-model-options="{trackBy: '$value.nodeID'}"
+                                aria-label="Vælg workflow">
                          <md-option ng-repeat="workflow in self.activeWorkflows"
                                     ng-value="workflow">
                              {{workflow.title}}
@@ -19,14 +20,14 @@
                  </span>
              </div>
 
-             <div ng-if="self.branches.length > 1"
-                  layout="row"
+             <div layout="row"
                   layout-align="space-between center">
                  <span>Bankområde</span>
                  <span title="{{self.selectedBranch.title}}">
                      <md-select placeholder="Intet valgt"
                                 ng-model="self.selectedBranch"
-                                ng-model-options="{trackBy: '$value.nodeID'}">
+                                ng-model-options="{trackBy: '$value.nodeID'}"
+                                aria-label="Vælg bankområde">
                          <md-option ng-repeat="branch in self.branches"
                                     ng-value="branch">
                              {{branch.title}}
@@ -36,13 +37,15 @@
              </div>
 
 
-             <div layout="row"
+             <div ng-if="self.selectedFlow"
+                  layout="row"
                   layout-align="space-between center">
                  <span>Stadie</span>
                  <span title="{{self.selectedState.title}}">
                      <md-select placeholder="Intet valgt"
                                 ng-model="self.selectedState"
-                                ng-model-options="{trackBy: '$value.nodeID'}">
+                                ng-model-options="{trackBy: '$value.nodeID'}"
+                                aria-label="Vælg stadie">
                          <md-option ng-repeat="state in self.states"
                                     ng-value="state">
                              {{state.title}}
@@ -51,12 +54,14 @@
                  </span>
              </div>
 
-             <div layout="row"
+             <div ng-if="self.budgetYears.length > 1"
+                  layout="row"
                   layout-align="space-between center">
                  <span>Budgetår</span>
                  <md-select placeholder="Intet valgt"
                             ng-model="self.selectedBudget"
-                            ng-model-options="{trackBy: '$value.nodeID'}">
+                            ng-model-options="{trackBy: '$value.nodeID'}"
+                            aria-label="Vælg budgetår">
                      <md-option ng-repeat="budgetYear in self.budgetYears"
                                 ng-value="budgetYear">
                          {{budgetYear.startDate.substring(0, 4)}} til {{budgetYear.endDate.substring(0, 4)}}
@@ -70,7 +75,7 @@
             Annuller
         </md-button>
         <span flex></span>
-        <md-button ng-click="self.apply()" class="md-primary">
+        <md-button ng-click="self.apply()" class="md-primary" ng-disabled="!self.selectedFlow || !self.selectedBranch || !self.selectedState">
             Flyt ansøgning
         </md-button>
     </md-dialog-actions>

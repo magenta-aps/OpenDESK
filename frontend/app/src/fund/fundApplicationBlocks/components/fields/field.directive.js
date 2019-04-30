@@ -21,7 +21,7 @@ function FieldDirectiveConfig ($compile, FUND_FIELD_RULES) {
     controllerAs: 'vm',
     template: null,
     link: function (scope, el) {
-      var template = require('./' + scope.field.component + '.html') || '<p><strong>{{ field.label }}:</strong> Der skete en fejl ved indlæsning af feltet</p>'
+      var template = require('./' + (scope.field.component || 'default') + '.html')
       if (scope.field.controlledBy) {
         // if the field is dependent on any other fields,
         // go through each of those dependencies and modify the template

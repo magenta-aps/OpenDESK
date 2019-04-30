@@ -14,10 +14,14 @@ angular
 
 function ToastController($mdToast, $scope, $state) {
     var ctrl = this
-    ctrl.closeToast = function() {
+    ctrl.closeToast = closeToast
+    ctrl.goToApplication = goToApplication
+
+    function closeToast () {
       $mdToast.hide()
     }
-    ctrl.goToApplicaion = function() {
+
+    function goToApplication () {
       $state.go('fund.application', {applicationID: $scope.application.nodeID}) //workflowID and stateID are left out in the request.
     }
 }

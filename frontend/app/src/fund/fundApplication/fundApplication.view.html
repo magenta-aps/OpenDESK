@@ -1,6 +1,6 @@
 <md-nav-bar md-selected-nav-item="currentAppPage" aria-label="nav">
   <md-nav-item md-nav-sref="fund.application" name="application">{{ 'FUNDS.NAVIGATION.APPLICATION' | translate }}</md-nav-item>
-  <md-nav-item md-nav-sref="fund.application.contact" name="contact">{{ 'FUNDS.NAVIGATION.CONTACTINFO' | translate }}</md-nav-item>
+  <!-- <md-nav-item md-nav-sref="fund.application.contact" name="contact">{{ 'FUNDS.NAVIGATION.CONTACTINFO' | translate }}</md-nav-item> -->
   <md-nav-item md-nav-sref="fund.application.history" name="history">{{ 'FUNDS.NAVIGATION.HISTORY' | translate }}</md-nav-item>
 
   <span flex></span>
@@ -37,7 +37,17 @@
       <md-button ng-click="vm.moveApp()" class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.MOVE_APPLICATION' | translate }}</md-button>
     </div>
 
-    <div flex="100" style="text-align: right;">
+  </div>
+</osflow-header>
+
+<md-content class="od-fund-app-wrapper">
+  <ng-template ui-view="application" layout="row" layout-wrap></ng-template>
+</md-content>
+
+<md-content>
+
+  <md-card ng-if="state.references.length > 0" style="margin: 0; margin-top: 1rem; padding: 1rem;">
+    <md-card-actions layout="row" layout-align="end center">
       <span style="margin-right: 1em">{{ 'FUNDS.NAVIGATION.MOVE_APPLICATION_STAGE' | translate }}</span>
       <md-input-container style="margin-right: 1em">
         <md-select ng-model="vm.moveToBranch" placeholder="{{ 'FUNDS.NAVIGATION.STAGE' | translate }}" ng-model-options="{trackBy: $value.nodeID}">
@@ -47,11 +57,8 @@
       <md-input-container>
         <md-button class="md-raised md-primary" ng-click="vm.moveApplication()">{{ 'FUNDS.NAVIGATION.MOVE' | translate }}</md-button>
       </md-input-container>
-    </div>
 
-  </div>
-</osflow-header>
-
-<md-content class="od-fund-app-wrapper">
-  <ng-template ui-view="application" layout="row" layout-wrap></ng-template>
+      <!--<md-button class="md-raised md-primary">{{ 'FUNDS.NAVIGATION.SUBMIT_TO_NEXT_STEP' | translate }}</md-button>-->
+    </md-card-actions>
+  </md-card>
 </md-content>

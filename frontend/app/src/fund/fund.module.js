@@ -102,17 +102,17 @@ function config ($stateProvider, USER_ROLES) {
       currentAppPage: 'application'
     }
   })
-  .state('fund.application.contact', {
-    url: '/contact',
-    views: {
-      'application@fund.application': {
-        template: '<md-card><md-card-content><strong>Ansøger</strong> Assentofthallen<br/><strong>Kontaktperson</strong> Navn Navnsen</strong><br/><strong>E-mail</strong> navn@navnsen.dk<br/><strong>Telefon</strong> 21 22 23 24</md-card-content></md-card>'
-      }
-    },
-    params: {
-      currentAppPage: 'contact'
-    }
-  })
+  // .state('fund.application.contact', {
+  //   url: '/contact',
+  //   views: {
+  //     'application@fund.application': {
+  //       template: '<md-card><md-card-content><strong>Ansøger</strong> Assentofthallen<br/><strong>Kontaktperson</strong> Navn Navnsen</strong><br/><strong>E-mail</strong> navn@navnsen.dk<br/><strong>Telefon</strong> 21 22 23 24</md-card-content></md-card>'
+  //     }
+  //   },
+  //   params: {
+  //     currentAppPage: 'contact'
+  //   }
+  // })
   .state('fund.application.history', {
     url: '/history',
     views: {
