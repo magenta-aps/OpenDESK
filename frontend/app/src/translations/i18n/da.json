@@ -233,7 +233,11 @@
       "EDIT_APPLICATION": "Ret ansøgning",
       "SAVE_APPLICATION": "Gem ansøgning",
       "CANCEL_EDIT_APPLICATION": "Annuller redigering",
-      "SUBMIT_TO_NEXT_STEP": "Send ansøgning til møde i bankråd"
+      "MOVE_APPLICATION": "Flyt ansøgning",
+      "MOVE_APPLICATION_STAGE": "Flyt ansøgning til stadie",
+      "STAGE": "Stadie",
+      "MOVE": "Flyt",
+      "SUBMIT_TO_NEXT_STEP": "Send ansøgning til næste stadie"
     }
   },
   "DOCUMENT": {

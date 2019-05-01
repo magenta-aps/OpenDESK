@@ -231,7 +231,11 @@
       "EDIT_APPLICATION": "Edit application",
       "SAVE_APPLICATION": "Save application",
       "CANCEL_EDIT_APPLICATION": "Cancel",
-      "SUBMIT_TO_NEXT_STEP": "Submit application to board"
+      "MOVE_APPLICATION": "Move application",
+      "MOVE_APPLICATION_STAGE": "Move application to stage",
+      "STAGE": "Stage",
+      "MOVE": "Move",
+      "SUBMIT_TO_NEXT_STEP": "Submit application to next stage"
     }
   },
   "DOCUMENT": {

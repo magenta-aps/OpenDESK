@@ -4,7 +4,7 @@
     <md-checkbox
       ng-repeat="value in field.value track by $index"
       ng-model="field.value[$index]"
-      ng-disabled="!isEditing.get()"
+      ng-disabled="!isEditing.get() || field.readOnly"
       aria-label="{{ field.options[$index] }}"
       data-fieldrule="toggle inverseToggle"
     >
@@ -18,7 +18,7 @@
     <md-checkbox
       ng-repeat="value in field.value track by $index"
       ng-model="field.value[$index]"
-      ng-disabled="!isEditing.get()"
+      ng-disabled="!isEditing.get() || field.readOnly"
       aria-label="{{ field.options[$index] }}"
       data-fieldrule="toggle inverseToggle"
     >

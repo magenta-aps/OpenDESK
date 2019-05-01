@@ -1,7 +1,7 @@
 <div class="opendesk-dl">
   <div class="opendesk-dl__term" ng-if="field.label">{{ field.label }}</div>
   <div class="opendesk-dl__description">
-    <md-slider-container ng-disabled="!isEditing.get()" data-fieldrule="toggle inverseToggle">
+    <md-slider-container ng-disabled="!isEditing.get() || field.readOnly" data-fieldrule="toggle inverseToggle">
       <md-slider min="1" max="5" md-discrete step="1" ng-model="field.value"></md-slider>
       <md-input-container>
         <span ng-if="!isEditing.get()">{{ field.value }}</span>
