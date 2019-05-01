@@ -16,9 +16,9 @@ angular
 
 function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService, application) {
   var self = this
-  self.selectedBranch = application.branchSummary
+  self.selectedBranch = null
   self.selectedBudget = application.budget
-  self.selectedState = application.state
+  self.selectedState = null
   self.selectedFlow = application.workflow
   self.activeWorkflows = []
   self.branches = []
@@ -66,6 +66,14 @@ function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService,
     // transitions for the current workflow state.
     if (application.workflow && application.workflow.nodeID == self.selectedFlow.nodeID) {
       if (application.state) {
+        // irritatingly, although we already have a workflow, we need
+        // to get it again in order to get the branches of it
+        fundService.getWorkflow(application.workflow.nodeID)
+        .then(function (response) {
+          console.log(response)
+          self.branches = response.usedByBranches
+          self.selectedBranch = application.branchSummary || self.branches[0]
+        })
         fundService.getWorkflowState(application.state.nodeID)
         .then(function (response) {
           self.states = response.references
@@ -80,6 +88,7 @@ function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService,
         }
         self.states = response.states
         self.branches = response.usedByBranches
+        self.selectedBranch = application.branchSummary || self.branches[0]
       })
     }
   }
