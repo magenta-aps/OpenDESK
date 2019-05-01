@@ -2,8 +2,15 @@
   <div class="opendesk-dl__term" ng-if="field.label">{{ field.label }}</div>
   <div class="opendesk-dl__description">
     <md-input-container>
-      <span ng-if="!isEditing.get() || field.readOnly" ng-bind-html="field.value || 'FUNDS.FIELDS.NO_VALUE' | translate"></span>
-      <input ng-if="isEditing.get() && !field.readOnly" type="text" ng-model="field.value" aria-label="{{ field.label }}" data-fieldrule="toggle inverseToggle"/>
+      <span ng-if="!isEditing.get()" ng-bind-html="field.value || 'FUNDS.FIELDS.NO_VALUE' | translate"></span>
+      <input ng-if="isEditing.get()"
+             type="text"
+             ng-required="fieldIsRequired"
+             ng-model="field.value"
+             id="{{ vm.nodeID() }}"
+             aria-label="{{ field.label }}"
+             ng-pattern="pattern"
+             data-fieldrule="toggle inverseToggle"/>
     </md-input-container>
     <div class="od-field-hint" ng-if="field.hint && isEditing.get()" ng-bind-html="field.hint"></div>
   </div>

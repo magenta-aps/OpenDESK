@@ -17,6 +17,8 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
 
   $scope.isEditing = fundApplicationEditing
   $scope.fieldHasValue = fieldHasValue
+  $scope.fieldIsRequired = null
+  $scope.pattern = null
 
   vm.downloadFile = downloadFile
   vm.nodeID = nodeID
@@ -33,6 +35,8 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
         vm.file = response
       })
     }
+    $scope.fieldIsRequired = fieldIsRequired()
+    $scope.pattern = pattern()
   }
 
   function downloadFile() {
@@ -56,6 +60,22 @@ function ApplicationFieldController ($scope, fundApplicationEditing, contentServ
       return targetFieldValue.some(field => field == true)
     }
     return targetFieldValue
+  }
+
+  function fieldIsRequired() {
+    if ($scope.field.hasOwnProperty('validation')) {
+      let validation = JSON.parse($scope.field.validation)
+      return (validation.hasOwnProperty('required') && validation.required)
+    }
+  }
+
+  function pattern() {
+    if ($scope.field.hasOwnProperty('validation')) {
+      let validation = JSON.parse($scope.field.validation)
+      if (validation.hasOwnProperty('max_words')){
+        return new RegExp("^(?:\\S+[\\s\\r\\n]*){1," + validation.max_words + "}$")
+      }
+    }
   }
 
   function nodeID () {

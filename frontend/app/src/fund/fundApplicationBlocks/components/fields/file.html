@@ -4,7 +4,12 @@
     <md-input-container>
       <a href="#" ng-if="!isEditing.get() && vm.file" ng-click="vm.downloadFile()">{{ vm.file.item.location.file }}</a>
       <span ng-if="(!isEditing.get() && !vm.file)">{{ 'FUNDS.FIELDS.FILEUPLOAD' | translate }}</span>
-      <input ng-if="isEditing.get()" id="{{ vm.nodeID() }}" type="file" aria-label="{{ field.label }}" data-fieldrule="toggle inverseToggle"/>
+      <input ng-if="isEditing.get()"
+             type="file"
+             ng-required="fieldIsRequired"
+             id="{{ vm.nodeID() }}"
+             aria-label="{{ field.label }}"
+             data-fieldrule="toggle inverseToggle"/>
     </md-input-container>
     <div class="od-field-hint" ng-if="field.hint && isEditing.get()" ng-bind-html="field.hint"></div>
   </div>
