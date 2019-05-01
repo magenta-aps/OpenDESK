@@ -10,9 +10,9 @@
 
 angular
   .module('openDeskApp.fund')
-  .controller('ToastController', ['$mdToast', '$scope', '$state', ToastController])
+  .controller('ToastController', ['$mdToast', '$scope', '$state', 'appId', ToastController])
 
-function ToastController($mdToast, $scope, $state) {
+function ToastController($mdToast, $scope, $state, appId) {
     var ctrl = this
     ctrl.closeToast = closeToast
     ctrl.goToApplication = goToApplication
@@ -22,6 +22,6 @@ function ToastController($mdToast, $scope, $state) {
     }
 
     function goToApplication () {
-      $state.go('fund.application', {applicationID: $scope.application.nodeID}) //workflowID and stateID are left out in the request.
+      $state.go('fund.application', {applicationID: appId}) //workflowID and stateID are left out in the request.
     }
 }

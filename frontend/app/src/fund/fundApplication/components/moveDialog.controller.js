@@ -54,6 +54,9 @@ function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService,
       controller: 'ToastController',
       controllerAs: 'ctrl',
       bindToController: true,
+      locals: {
+        appId: application.nodeID
+      },
       template: toastTemplate
     })
   }
