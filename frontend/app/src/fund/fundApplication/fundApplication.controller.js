@@ -12,9 +12,9 @@ import moveDialog from './components/moveDialog.view.html'
 
 angular
   .module('openDeskApp.fund')
-  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'alfrescoNodeService', 'fundApplicationEditing', '$mdDialog', FundApplicationController])
+  .controller('FundApplicationController', ['$scope', '$stateParams', '$state', 'fundService', 'browserService', 'headerService', 'alfrescoNodeService', 'fundApplicationEditing', '$mdDialog', '$mdToast', FundApplicationController])
 
-function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, alfrescoNodeService, fundApplicationEditing, $mdDialog) {
+function FundApplicationController ($scope, $stateParams, $state, fundService, browserService, headerService, alfrescoNodeService, fundApplicationEditing, $mdDialog, $mdToast) {
   var vm = this
 
   $scope.application = null
@@ -150,12 +150,26 @@ function FundApplicationController ($scope, $stateParams, $state, fundService, b
 
     Promise.all(files)
     .then(function () {
-      fundService.updateApplication($scope.application.nodeID, $scope.application)
-      .then(function (response) {
-        if (response.status === 'OK') {
-          activate()
-        }
-      })
+      return fundService.updateApplication($scope.application.nodeID, $scope.application)
+    })
+    .then(function (response) {
+      if (response.status === 'OK') {
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Ansøgning opdateret')
+          .position('bottom right')
+          .hideDelay(5000)
+        )
+        activate()
+      }
+    })
+    .catch(function () {
+      $mdToast.show(
+        $mdToast.simple()
+        .textContent('Der skete en fejl. Ansøgningen blev ikke opdateret.')
+        .position('bottom right')
+        .hideDelay(5000)
+      )
     })
   }
 
