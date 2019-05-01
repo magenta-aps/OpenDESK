@@ -70,7 +70,6 @@ function MoveDialogController ($state, $scope, $mdDialog, $mdToast, fundService,
         // to get it again in order to get the branches of it
         fundService.getWorkflow(application.workflow.nodeID)
         .then(function (response) {
-          console.log(response)
           self.branches = response.usedByBranches
           self.selectedBranch = application.branchSummary || self.branches[0]
         })
