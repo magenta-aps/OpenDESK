@@ -184,8 +184,7 @@ public class OpenDeskWebScript extends AbstractWebScript {
         Map<String, String> parameters = new HashMap<>();
         for (String paramName : req.getParameterNames()) {
             String param = req.getParameter(paramName);
-            String paramISO = URLEncoder.encode(param, "ISO-8859-1");
-            String paramUTF = URLDecoder.decode(paramISO, "UTF-8");
+            String paramUTF = URLDecoder.decode(param, "UTF-8");
             parameters.put(paramName, paramUTF);
         }
         return parameters;

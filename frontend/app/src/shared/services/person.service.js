@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 angular
   .module('openDeskApp')
@@ -53,14 +53,20 @@ function personService ($http) {
   }
 
   function searchAuthorities (filter) {
-    return $http.get(`/alfresco/service/authority/search?filter=${filter}`)
+    var data = {
+      params: { filter: encodeURIComponent(filter) }
+    }
+    return $http.get(`/alfresco/service/authority/search`, data)
       .then(function (response) {
         return response.data
       })
   }
 
   function searchPerson (filter) {
-    return $http.get(`/alfresco/s/person/search?filter=${filter}`)
+    var data = {
+      params: { filter: encodeURIComponent(filter) }
+    }
+    return $http.get(`/alfresco/s/person/search`, data)
       .then(function (response) {
         return response.data
       })
