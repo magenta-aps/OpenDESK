@@ -9,7 +9,7 @@
 						<md-icon md-menu-align-target>warning</md-icon>
 						{{'COMMON.LOCKED_BY' | translate:{ locked_by: DC.doc.node.properties['cm:lockOwner'].displayName } }}
 					</div>
-                    <preview-manager ng-if="DC.plugin" plugin="DC.plugin"></preview-manager>
+                    <preview-manager ng-if="DC.plugin" plugin="DC.plugin" style="display: block; min-height: calc(100vh - 185px); position: relative;"></preview-manager>
 				</div>
 			</md-card-content>
 		</md-card>
