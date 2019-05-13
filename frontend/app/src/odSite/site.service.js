@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 'use strict'
 import '../shared/services/alfrescoNode.service'
@@ -354,7 +354,10 @@ function SiteService ($q, $http, $rootScope, alfrescoNodeService, sessionService
   }
 
   function findAuthorities (siteShortName, filter) {
-    return $http.get(`/alfresco/service/site/${siteShortName}/authorities/search?filter=${filter}`)
+    var data = {
+      params: { filter: encodeURIComponent(filter) }
+    }
+    return $http.get(`/alfresco/service/site/${siteShortName}/authorities/search`, data)
       .then(function (response) {
         return response.data
       })

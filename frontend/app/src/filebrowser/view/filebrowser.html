@@ -3,7 +3,7 @@
 
     <md-progress-linear md-mode="indeterminate" ng-show="uploading"></md-progress-linear>
 
-    <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true">
+    <div ngf-drop ng-model="filesToFilebrowser" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" style="max-height: calc(100vh - 325px); overflow-y: scroll;">
         <table class="od-members od-members-row" style="table-layout: fixed;">
             <colgroup>
                 <col class="col__name">

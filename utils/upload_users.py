@@ -6,17 +6,20 @@ from requests.auth import HTTPBasicAuth
 
 client = requests.Session()
 
-URL = 'http://localhost:8080/alfresco/s/api/people'
-# URL = 'http://alfresco.example.org:8080/alfresco/s/api/people'
-N_USERS = 3
+URL = 'http://alfresco.example.org:8080/alfresco/s/api/people'
+N_USERS = 50
 SITE_SHORT_NAME = 'swsdp'
 #GROUP = 'SiteManager'
-#GROUP = 'SiteCollaborator'
+GROUP = 'SiteCollaborator'
 #GROUP = 'SiteContributer'
-GROUP = 'SiteConsumer'
+#GROUP = 'SiteConsumer'
+
+#users = [
+#    (''.join(random.choice(string.ascii_lowercase) for _ in range(5)), 'lastname') for i in range(N_USERS)
+#]
 
 users = [
-    (''.join(random.choice(string.ascii_lowercase) for _ in range(5)), 'lastname') for i in range(N_USERS)
+    ('user{}'.format(str(i)), 'lastname') for i in range(N_USERS)
 ]
 
 def upload_user(user: tuple):

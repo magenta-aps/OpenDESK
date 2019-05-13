@@ -87,5 +87,7 @@ importAll(
 )
 
 angular.element(document).ready(function () {
-  angular.bootstrap(document, modules)
+  angular.bootstrap(document, modules, {
+    strictDi: true
+  })
 })

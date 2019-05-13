@@ -535,6 +535,7 @@
         iframe.frameBorder = 0;
         iframe.name = "frameEditor";
         iframe.allowFullscreen = true;
+        iframe.style = "position: absolute; top: 0; left: 0; width: 100%; height: 100%;";
         iframe.setAttribute("allowfullscreen",""); // for IE11
         iframe.setAttribute("onmousewheel",""); // for Safari on Mac
         return iframe;
