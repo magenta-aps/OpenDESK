@@ -819,6 +819,8 @@ public class SiteBean {
     public JSONArray searchUsers(String siteShortName, String filter) throws JSONException {
         List<String> authorities = getAuthorityList(siteShortName, true);
         List<String> users = getAuthorityList(siteShortName, false);
+
+
         authorities.addAll(users);
         return authorityBean.findUsers(filter, authorities);
     }

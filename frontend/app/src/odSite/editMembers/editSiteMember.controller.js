@@ -57,8 +57,11 @@ function EditSiteMemberController (sitedata, $scope, $mdDialog, $mdToast, APP_CO
   }
 
   function searchPeople (query) {
-    if (query)
-      return siteService.findAuthorities(vm.site.shortName, query)
+  console.log(query && query.length >= 3);
+      if (query && query.length >= 3) {
+        return siteService.findAuthorities(vm.site.shortName, query)
+      }
+
   }
 
   function addExternalUserToGroup (userName, firstName, lastName, email, telephone, group) {

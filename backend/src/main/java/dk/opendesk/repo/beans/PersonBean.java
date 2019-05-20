@@ -17,8 +17,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.cmr.search.*;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.MutableAuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -26,6 +25,7 @@ import org.alfresco.service.cmr.security.PersonService.PersonInfo;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Content;
 import org.alfresco.util.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -322,14 +322,60 @@ public class PersonBean {
         sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
         JSONArray result = new JSONArray();
 
-        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(Integer.MAX_VALUE));
-        for (PersonInfo user : users.getPage()) {
-            // Do not add users that are on the ignore list
-            if(ignoreList != null && ignoreList.contains(user.getUserName()) || !personService.isEnabled(user.getUserName()))
-                continue;
-            JSONObject json = getPersonInfo(user.getNodeRef());
-            result.add(json);
+        Set<QName> r = new HashSet<QName>();
+        r.add(ContentModel.ASPECT_PERSON_DISABLED);
+
+//        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(Integer.MAX_VALUE));
+
+//
+
+
+
+
+        String query = "TYPE:\"cm:person\" AND !ASPECT:\"cm:personDisabled\" AND (";
+                query += "@cm\\:firstName:" + "*" + filter +"*" + " OR ";
+                query += "@cm\\:lastName:" + "*" + filter +"*)";
+        System.out.println(query);
+        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+        // ResultSet persons = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+
+        sp.setLanguage("lucene");
+        sp.setQuery(query);
+        sp.addSort("@cm:firstName", true);
+
+        ResultSet persons = searchService.query(sp);
+
+        Iterator i = persons.iterator();
+
+        while (i.hasNext()) {
+            PersonInfo p = personService.getPerson(((ResultSetRow) i.next()).getNodeRef());
+
+            System.out.println(ignoreList.contains(p.getUserName()) + ": " + p.getUserName());
+
+            if (ignoreList != null && !ignoreList.contains(p.getUserName())) {
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("firstName", p.getFirstName());
+                jsonObject.put("lastName", p.getLastName());
+                jsonObject.put("userName", p.getUserName());
+                jsonObject.put("displayName", p.getFirstName() + " " + p.getLastName());
+                result.add(jsonObject);
+            }
         }
+
+//
+//        for (PersonInfo user : users.getPage()) {
+//            // Do not add users that are on the ignore list
+//            if(ignoreList != null && ignoreList.contains(user.getUserName()) || !personService.isEnabled(user.getUserName()))
+//                continue;
+//            JSONObject json = getPersonInfo(user.getNodeRef());
+//            result.add(json);
+//        }
+
+        System.out.println("hvad er result:" + result.size());
         return result;
     }
 
