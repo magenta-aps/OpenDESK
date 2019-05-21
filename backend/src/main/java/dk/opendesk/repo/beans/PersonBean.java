@@ -319,7 +319,7 @@ public class PersonBean {
         filterProps.add(ContentModel.PROP_LASTNAME);
 
         List<Pair<QName,Boolean>> sortProps = new ArrayList<>();
-        sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
+//        sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
         JSONArray result = new JSONArray();
 
         Set<QName> r = new HashSet<QName>();
