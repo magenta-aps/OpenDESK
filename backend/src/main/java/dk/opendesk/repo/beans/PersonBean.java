@@ -332,9 +332,32 @@ public class PersonBean {
 
 
 
-        String query = "TYPE:\"cm:person\" AND !ASPECT:\"cm:personDisabled\" AND (";
-                query += "@cm\\:firstName:" + "*" + filter +"*" + " OR ";
-                query += "@cm\\:lastName:" + "*" + filter +"*)";
+        String query = "TYPE:\"cm:person\" AND !ASPECT:\"cm:personDisabled\" ";
+
+
+        // separate search filter into tokens and check agains the firstName and lastName
+
+        query += " AND ( ";
+
+        String filterQuery = "";
+
+        String[] filterTokens = filter.split(" ");
+        System.out.println(filterTokens.length);
+
+        for (int i=0; i <= filterTokens.length-1; i++) {
+
+            String token = filterTokens[i];
+
+            if (filterQuery.length()> 0) {
+                filterQuery += " OR ";
+            }
+
+            filterQuery += " (" + "@cm\\:firstName:" + "*" + token +"*" + " OR ";
+            filterQuery += "@cm\\:lastName:" + "*" + token +"*)";
+        }
+
+        query += filterQuery + " )";
+
         System.out.println(query);
         StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
         // ResultSet persons = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
