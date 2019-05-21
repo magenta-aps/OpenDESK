@@ -325,69 +325,75 @@ public class PersonBean {
         Set<QName> r = new HashSet<QName>();
         r.add(ContentModel.ASPECT_PERSON_DISABLED);
 
-//        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(Integer.MAX_VALUE));
-
-//
-
-
-
-
-        String query = "TYPE:\"cm:person\" AND !ASPECT:\"cm:personDisabled\" ";
+//        String query = "TYPE:\"cm:person\" AND !ASPECT:\"cm:personDisabled\" ";
 
 
         // separate search filter into tokens and check agains the firstName and lastName
 
-        query += " AND ( ";
+//        query += " AND ( ";
+//
+//        String filterQuery = "";
+//
+//        String[] filterTokens = filter.split(" ");
+//        System.out.println(filterTokens.length);
+//
+//        for (int i=0; i <= filterTokens.length-1; i++) {
+//
+//            String token = filterTokens[i];
+//
+//            if (filterQuery.length()> 0) {
+//                filterQuery += " AND ";
+//            }
+//
+//            filterQuery += " (" + "@cm\\:firstName:" + "*" + token +"*" + " OR ";
+//            filterQuery += "@cm\\:lastName:" + "*" + token +"*)";
+//        }
+//
+//        query += filterQuery + " )";
+//
+//        System.out.println(query);
+//        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
+//        // ResultSet persons = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
+//
+//        SearchParameters sp = new SearchParameters();
+//        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+//
+//        sp.setLanguage("lucene");
+//        sp.setQuery(query);
+//        sp.addSort("@cm:firstName", true);
+//
+//        ResultSet persons = searchService.query(sp);
 
-        String filterQuery = "";
+        PagingResults<PersonInfo> users = personService.getPeople(filter, filterProps, sortProps, new PagingRequest(Integer.MAX_VALUE));
+        for (PersonInfo user : users.getPage()) {
+            // Do not add users that are on the ignore list
+            if (ignoreList != null && ignoreList.contains(user.getUserName()) || !personService.isEnabled(user.getUserName()))
+                continue;
 
-        String[] filterTokens = filter.split(" ");
-        System.out.println(filterTokens.length);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("firstName", user.getFirstName());
+            jsonObject.put("lastName", user.getLastName());
+            jsonObject.put("userName", user.getUserName());
+            jsonObject.put("displayName", user.getFirstName() + " " + user.getLastName());
+            result.add(jsonObject);
 
-        for (int i=0; i <= filterTokens.length-1; i++) {
-
-            String token = filterTokens[i];
-
-            if (filterQuery.length()> 0) {
-                filterQuery += " AND ";
-            }
-
-            filterQuery += " (" + "@cm\\:firstName:" + "*" + token +"*" + " OR ";
-            filterQuery += "@cm\\:lastName:" + "*" + token +"*)";
         }
 
-        query += filterQuery + " )";
-
-        System.out.println(query);
-        StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
-        // ResultSet persons = searchService.query(storeRef, SearchService.LANGUAGE_LUCENE, query);
-
-        SearchParameters sp = new SearchParameters();
-        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-
-        sp.setLanguage("lucene");
-        sp.setQuery(query);
-        sp.addSort("@cm:firstName", true);
-
-        ResultSet persons = searchService.query(sp);
-
-        Iterator i = persons.iterator();
-
-        while (i.hasNext()) {
-            PersonInfo p = personService.getPerson(((ResultSetRow) i.next()).getNodeRef());
-
-            System.out.println(ignoreList.contains(p.getUserName()) + ": " + p.getUserName());
-
-            if (ignoreList != null && !ignoreList.contains(p.getUserName())) {
-
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("firstName", p.getFirstName());
-                jsonObject.put("lastName", p.getLastName());
-                jsonObject.put("userName", p.getUserName());
-                jsonObject.put("displayName", p.getFirstName() + " " + p.getLastName());
-                result.add(jsonObject);
-            }
-        }
+//        while (users.hasNext()) {
+//            PersonInfo p = personService.getPerson(((ResultSetRow) i.next()).getNodeRef());
+//
+//            System.out.println(ignoreList.contains(p.getUserName()) + ": " + p.getUserName());
+//
+//            if (ignoreList != null && !ignoreList.contains(p.getUserName())) {
+//
+//                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("firstName", p.getFirstName());
+//                jsonObject.put("lastName", p.getLastName());
+//                jsonObject.put("userName", p.getUserName());
+//                jsonObject.put("displayName", p.getFirstName() + " " + p.getLastName());
+//                result.add(jsonObject);
+//            }
+//        }
 
 //
 //        for (PersonInfo user : users.getPage()) {
