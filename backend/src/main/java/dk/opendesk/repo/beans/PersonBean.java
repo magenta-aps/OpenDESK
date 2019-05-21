@@ -349,7 +349,7 @@ public class PersonBean {
             String token = filterTokens[i];
 
             if (filterQuery.length()> 0) {
-                filterQuery += " OR ";
+                filterQuery += " AND ";
             }
 
             filterQuery += " (" + "@cm\\:firstName:" + "*" + token +"*" + " OR ";
