@@ -150,3 +150,9 @@ main {
     }
   }
 }
+
+// Extra padding in dialogs:
+md-dialog md-dialog-content,
+md-dialog md-dialog-content.md-padding {
+  padding: 24px 16px 16px;
+}

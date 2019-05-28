@@ -20,7 +20,7 @@ angular
     webClientServiceProxy: '/alfresco/service'
   })
   .constant('PATTERNS', {
-    fileName: /^[a-zA-Z0-9_\-,!@#$%^&()=+ ]+$/,
+    fileName: /^[a-zA-Z0-9_\-,.!@#$%^&()=+ ]+$/,
     phone: /^[+]?[0-9\- ]+$/
   })
   .constant('APP_CONFIG', {
