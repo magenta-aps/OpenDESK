@@ -3,8 +3,7 @@
 
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>{{'COMMON.CREATE' | translate}} {{'COMMON.NEW' | translate | lowercase}} {{'COMMON.' + vm.contentType | translate
-                    | lowercase}}</h2>
+                <h2>{{'COMMON.CREATE' | translate}} {{'COMMON.NEW' | translate | lowercase}} {{'COMMON.' + vm.contentType | translate | lowercase}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.cancelDialog()">
                     <md-icon>close</md-icon>
@@ -12,10 +11,10 @@
             </div>
         </md-toolbar>
 
-        <md-dialog-content class="md-padding">
+        <md-dialog-content class="md-padding" style="padding: 16px;">
             <md-input-container class="md-block">
                 <label>{{'COMMON.NAME' | translate}}</label>
-                <input type="text" name="newContentName" required ng-model="vm.newContentName" md-autofocus md-select-on-focus>
+                <input type="text" name="newContentName" required ng-model="vm.newContentName" md-autofocus md-select-on-focus ng-pattern="filename">
 
                 <div ng-messages="createTemplateForm.newContentName.$error">
                     <div ng-message="required">{{'ERROR.REQUIRED' | translate}}</div>

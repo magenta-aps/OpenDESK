@@ -10,9 +10,9 @@
 
 angular
   .module('openDeskApp.filebrowser')
-  .controller('CreateFromTemplateController', ['$scope', '$mdDialog', 'templateService', CreateFromTemplateController])
+  .controller('CreateFromTemplateController', ['$scope', '$mdDialog', 'templateService', 'PATTERNS', CreateFromTemplateController])
 
-function CreateFromTemplateController ($scope, $mdDialog, templateService) {
+function CreateFromTemplateController ($scope, $mdDialog, templateService, PATTERNS) {
   var vm = this
   var template = templateService.getSelectedTemplate()
 
@@ -20,6 +20,8 @@ function CreateFromTemplateController ($scope, $mdDialog, templateService) {
   vm.contentType = templateService.getSelectedContentType()
   vm.newContentName = ''
   vm.createContent = createContent
+
+  $scope.filename = PATTERNS.fileName;
 
   activate()
 
