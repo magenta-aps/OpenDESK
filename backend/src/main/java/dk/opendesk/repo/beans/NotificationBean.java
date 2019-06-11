@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.repo.beans;
 
@@ -458,7 +458,10 @@ public class NotificationBean {
      * @param nodeRef of the notification.
      */
     public void setNotificationRead (NodeRef nodeRef) {
-        nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
+        AuthenticationUtil.runAs(() -> {
+            nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
+            return true;
+        }, AuthenticationUtil.getSystemUserName());
     }
 
     /**
@@ -466,7 +469,10 @@ public class NotificationBean {
      * @param nodeRef of the notification.
      */
     public void setNotificationSeen (NodeRef nodeRef) {
-        nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
+        AuthenticationUtil.runAs(() -> {
+            nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
+            return true;
+        }, AuthenticationUtil.getSystemUserName());
     }
 
     /**
