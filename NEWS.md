@@ -6,3 +6,5 @@
 2. Please use the Markdown syntax.
 
 * Add feature descriptions here...
+
+* Fixed problem with notification changes (read and seen) being shown on My Documents list in Share (Redmine #28186) 
