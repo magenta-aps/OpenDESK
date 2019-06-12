@@ -13,3 +13,5 @@
   when the settings node is updated (from the update webscript).
   
 * Added configuration for notification limit to favourite sites/projects. (Redmine #28817)
+
+* Added admin webscript (/reloadEditors) to reload editor list. (Redmine #29976)

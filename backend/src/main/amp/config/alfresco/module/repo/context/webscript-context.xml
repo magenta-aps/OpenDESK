@@ -55,6 +55,11 @@
 		  parent="webscript">
 		<property name="editorBean" ref="editorBean"/>
 	</bean>
+	<bean id="webscript.editors.reloadEditors.get"
+		  class="dk.opendesk.webscripts.editors.ReloadEditors"
+		  parent="webscript">
+		<property name="editorBean" ref="editorBean"/>
+	</bean>
 
 
 	<!-- Email -->
