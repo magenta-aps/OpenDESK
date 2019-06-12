@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.repo.beans;
 
@@ -29,6 +29,8 @@ public class SettingsBean {
     private NodeService nodeService;
     private Repository repository;
     private FileFolderService fileFolderService;
+    private JSONObject publicSettings;
+    private JSONObject settings;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -41,26 +43,16 @@ public class SettingsBean {
         this.fileFolderService = fileFolderService;
     }
 
-    public JSONObject getSettings() throws FileNotFoundException, JSONException {
-        NodeRef settingsFolder = getSettingsFolder();
-        String settings = nodeService.getProperty(settingsFolder, OpenDeskModel.PROP_SETTINGS).toString();
-        return new JSONObject(settings);
+    public JSONObject getPublicSettings() throws FileNotFoundException, JSONException {
+        if(publicSettings == null)
+            loadPublicSettings();
+        return publicSettings;
     }
 
-    public JSONObject getPublicSettings() throws FileNotFoundException, JSONException {
-        List<String> keys = new ArrayList<>();
-        keys.add(OpenDeskModel.PUBLIC_SETTINGS);
-        // We also send editor settings to make editors work with nodes that are shared publicly
-        keys.add(OpenDeskModel.EDITOR_SETTINGS);
-
-        JSONObject settings = getSettings();
-        //Get properties that are public (Used before user is logged in)
-        JSONObject publicSettings = new JSONObject();
-        for(String key : keys)
-            if(settings.has(key))
-                publicSettings.put(key, settings.getJSONObject(key));
-
-        return publicSettings;
+    public JSONObject getSettings() throws FileNotFoundException, JSONException {
+        if(settings == null)
+            loadSettings();
+        return settings;
     }
 
     public NodeRef getSettingsFolder() throws FileNotFoundException {
@@ -68,8 +60,32 @@ public class SettingsBean {
         return fileFolderService.resolveNamePath(companyHome, OpenDeskModel.PATH_OD_SETTINGS).getNodeRef();
     }
 
-    public void updateSettings (Map<QName, Serializable> properties) throws FileNotFoundException {
+    private void loadPublicSettings() throws FileNotFoundException, JSONException {
+        List<String> keys = new ArrayList<>();
+        keys.add(OpenDeskModel.PUBLIC_SETTINGS);
+        // We also send editor settings to make editors work with nodes that are shared publicly
+        keys.add(OpenDeskModel.EDITOR_SETTINGS);
+
+        JSONObject settings = getSettings();
+        //Get properties that are public (Used before user is logged in)
+        JSONObject result = new JSONObject();
+        for(String key : keys)
+            if(settings.has(key))
+                result.put(key, settings.getJSONObject(key));
+
+        publicSettings = result;
+    }
+
+    private void loadSettings() throws FileNotFoundException, JSONException {
+        NodeRef settingsFolder = getSettingsFolder();
+        String settingsString = nodeService.getProperty(settingsFolder, OpenDeskModel.PROP_SETTINGS).toString();
+        settings = new JSONObject(settingsString);
+    }
+
+    public void updateSettings (Map<QName, Serializable> properties) throws FileNotFoundException, JSONException {
         NodeRef settingsFolder = getSettingsFolder();
         nodeService.setProperties(settingsFolder, properties);
+        loadSettings();
+        loadPublicSettings();
     }
 }

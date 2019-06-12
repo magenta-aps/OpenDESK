@@ -1024,6 +1024,7 @@
   "CONFIGURATION": {
     "ENABLE": "Tilkobling af",
     "enableESDH": "SBSYS",
+    "enableFavouriteSiteNotifications": "notifikationsbegrænsning til favoritgrupperum/-projekt",
     "enableProjects": "Projekter",
     "enableSites": "Grupperum",
     "enableChat": "Chat",

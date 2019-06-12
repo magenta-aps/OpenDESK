@@ -1051,6 +1051,7 @@
   "CONFIGURATION": {
     "ENABLE": "Enable",
     "enableESDH": "SBSYS",
+    "enableFavouriteSiteNotifications": "notification limitation to favourite sites/projects",
     "enableProjects": "Projects",
     "enableSites": "Sites",
     "enableChat": "Chat",

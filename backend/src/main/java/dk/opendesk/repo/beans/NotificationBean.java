@@ -12,6 +12,7 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.analysis.DateTimeAnalyser;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -43,6 +44,8 @@ public class NotificationBean {
     private SiteService siteService;
     private Properties globalProperties;
 
+    private SettingsBean settingsBean;
+
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
@@ -59,6 +62,10 @@ public class NotificationBean {
         this.siteService = siteService;
     }
     public void setGlobalProperties(Properties properties) { globalProperties = properties; }
+
+    public void setSettingsBean(SettingsBean settingsBean) {
+        this.settingsBean = settingsBean;
+    }
 
     /**
      * Counts number of child nodes of a user with a specific property value.
@@ -379,18 +386,25 @@ public class NotificationBean {
         createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifySiteContent(NodeRef nodeRef, SiteInfo site) throws JSONException {
+    public void notifySiteContent(NodeRef nodeRef, SiteInfo site) throws JSONException, FileNotFoundException {
         String siteShortName = site.getShortName();
         String siteName = getSiteName(siteShortName);
         JSONObject params = getNodeParams(nodeRef);
         params.put(OpenDeskModel.PARAM_SITE_NAME, siteName);
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_SITE_CONTENT);
         String preferenceFilter = "dk.magenta.sites." + siteShortName + ".documentLibrary.subscribe";
+        boolean requireSubscribe = false;
+
+        JSONObject settings = settingsBean.getSettings();
+        if(settings.has("enableFavouriteSiteNotifications") && settings.getBoolean("enableFavouriteSiteNotifications")) {
+            preferenceFilter = "org.alfresco.share.sites.favourites." + siteShortName;
+            requireSubscribe = true;
+        }
 
         // Send notifications to all members of this site
         Set<String> siteMembers = getSiteMembers(siteShortName);
         for(String userName : siteMembers)
-            createNotification(userName, params, preferenceFilter);
+            createNotification(userName, params, preferenceFilter, requireSubscribe);
     }
 
     public void notifySiteGroup(String authority, String siteShortName) throws JSONException {
