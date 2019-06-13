@@ -124,7 +124,9 @@ public class NotificationBean {
             return;
 
         // Then run as SystemUser
-        AuthenticationUtil.runAs(() -> {
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
             // TODO: create TruncationStrategy and extract the code block below into its own TruncationStrategyImpl
             // in order to avoid responsibility erosion in this class. However, we will not worry about this now,
@@ -153,10 +155,10 @@ public class NotificationBean {
                 if(requireSubscribe)
                 {
                     if (!"true".equals(preference))
-                        return false;
+                        return;
                 }
                 else if ("false".equals(preference))
-                    return false;
+                    return;
             }
 
             // Create notification
@@ -180,8 +182,11 @@ public class NotificationBean {
 
             // Add hidden aspect
             nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
-            return true;
-        }, AuthenticationUtil.getSystemUserName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
     }
 
     /**
@@ -472,10 +477,14 @@ public class NotificationBean {
      * @param nodeRef of the notification.
      */
     public void setNotificationRead (NodeRef nodeRef) {
-        AuthenticationUtil.runAs(() -> {
+        // Then run as SystemUser
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
             nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
-            return true;
-        }, AuthenticationUtil.getSystemUserName());
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
     }
 
     /**
@@ -483,10 +492,14 @@ public class NotificationBean {
      * @param nodeRef of the notification.
      */
     public void setNotificationSeen (NodeRef nodeRef) {
-        AuthenticationUtil.runAs(() -> {
+        // Then run as SystemUser
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
             nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
-            return true;
-        }, AuthenticationUtil.getSystemUserName());
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
     }
 
     /**
