@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.repo.beans;
 
@@ -273,10 +273,12 @@ public class NodeBean {
                 if(isLocked)
                     json.put("lockType", lockType);
 
-                String mimeType = json.getString("mimeType");
-                if(mimeType != null) {
-                    JSONObject editors = editorBean.getEditInfo(mimeType, canEdit, isLocked, lockType);
-                    json.put("editors", editors);
+                if(json.has("mimeType")) {
+                    String mimeType = json.getString("mimeType");
+                    if (mimeType != null) {
+                        JSONObject editors = editorBean.getEditInfo(mimeType, canEdit, isLocked, lockType);
+                        json.put("editors", editors);
+                    }
                 }
             }
 
