@@ -28,15 +28,15 @@
 									  md-on-remove="vm.removeMemberFromSite($chip, group.shortName)"
 									  md-on-add="vm.addMemberToSite($chip, group.shortName)">
 								<md-autocomplete md-selected-item="selectedProjGrpItem"
+												 md-input-minlength="3"
 												 md-search-text="vm.searchTextList[groupIndex]"
 												 md-items="pgitem in vm.searchPeople(vm.searchTextList[groupIndex])"
 												 md-require-match="true"
 								    md-item-text="pgitem.displayName" placeholder="{{'PROJECT.MEMBER' | translate}}">
 									<img class="od-avatar od-avatar-small" http-src="{{pgitem.avatar}}">
 									<span md-highlight-text="vm.searchTextList[groupIndex]" md-highlight-flags="gi">
-										{{ pgitem.displayName }}
+										{{ pgitem.displayFullName }}
 									</span>
-									<span ng-if="pgitem.userName" class="od-secondary">({{ pgitem.userName }})</span>
 								</md-autocomplete>
 								<md-chip-template>
 									<img class="od-avatar od-avatar-small" http-src="{{$chip.avatar}}">
