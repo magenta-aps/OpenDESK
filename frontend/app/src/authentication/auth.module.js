@@ -23,7 +23,8 @@ function config ($stateProvider) {
       }
     },
     params: {
-      authorizedRoles: []
+      authorizedRoles: [],
+      redirectUrl: null
     }
   })
 };
