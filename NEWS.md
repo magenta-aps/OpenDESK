@@ -16,6 +16,7 @@ Feature
 
 * Added admin webscript (/reloadEditors) to reload editor list. (Redmine #29976)
 
+* Security updates of frontend development packages (Redmine #29965)
 
 Bugfixes
 
