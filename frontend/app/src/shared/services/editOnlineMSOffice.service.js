@@ -145,7 +145,7 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, pe
     location.href = url
     setTimeout(function () {
       input.onblur = null
-      input.remove()
+//      input.remove()
       if (!protocolHandlerPresent)
         $mdToast.show(
           $mdToast.simple()
