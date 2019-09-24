@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 angular
   .module('openDeskApp.libreOffice')
@@ -16,7 +16,7 @@ function libreOfficeService ($http, $location, $sce) {
   }
 
   function getLibreOfficeUrl (nodeRef, permission) {
-    return getWopiUrl(nodeRef).then(function (response) {
+    return getWopiUrl(nodeRef, permission).then(function (response) {
       var alfrescoURL = $location.protocol() + '://' + $location.host() + '/alfresco'
       var shortRef = nodeRef.substring(nodeRef.lastIndexOf('/') + 1)
       var wopiFileURL = alfrescoURL + '/s/wopi/files/' + shortRef
@@ -28,8 +28,8 @@ function libreOfficeService ($http, $location, $sce) {
     })
   }
 
-  function getWopiUrl (nodeRef) {
-    return $http.get('/lool/token?nodeRef=' + nodeRef + '&action=edit')
+  function getWopiUrl (nodeRef, permission) {
+    return $http.get('/lool/token?nodeRef=' + nodeRef + '&action=' + permission)
       .then(function (response) {
         return response.data
       })

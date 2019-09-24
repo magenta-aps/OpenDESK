@@ -18,7 +18,7 @@ function LibreOfficePreviewController ($scope, libreOfficeService) {
   activate()
 
   function activate () {
-    libreOfficeService.getLibreOfficeUrl($scope.nodeRef, 'readonly')
+    libreOfficeService.getLibreOfficeUrl($scope.nodeRef, 'view')
       .then(function (response) {
         if (response) {
           vm.libreOfficeUrl = response
