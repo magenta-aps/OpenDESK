@@ -53,9 +53,12 @@ function editOnlineMSOfficeService (fileService, BROWSER_CONFIG, userService, pe
   function getOnlineEditUrlPathParts (doc, docMetadata) {
 
     alert("test");
+    console.log(docMetadata.serverURL);
+    console.log(doc.webdavUrl);
     return {
       start: docMetadata.serverURL,
 //      end: doc.webdavUrl.replace('webdav', 'aos')
+
       end: doc.webdavUrl.replace('webdav', 'webdav')
     }
   }
