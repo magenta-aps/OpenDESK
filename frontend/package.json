@@ -1,7 +1,7 @@
 {
   "name": "opendesk-ui",
   "private": true,
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "OpenDesk UI using Angular.js and Angular Material as a foundation.",
   "repository": "https://github.com/magenta-aps/OpenDESK",
   "license": "MIT",
@@ -39,7 +39,7 @@
     "sass-loader": "^7.0.3",
     "shelljs": "^0.8.2",
     "style-loader": "^0.21.0",
-    "uglifyjs-webpack-plugin": "^2.2.0",
+    "uglifyjs-webpack-plugin": "2.0.0",
     "webpack": "^4.16.2",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5",
