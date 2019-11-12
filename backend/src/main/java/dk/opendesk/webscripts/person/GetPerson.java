@@ -40,19 +40,20 @@ public class GetPerson extends OpenDeskWebScript {
             String userName = urlParams.get("userName");
             System.out.println("hvad er username" + userName.replace("getperson/",""));
 
-            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + userName.replace("getperson/",""));
+//            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + userName.replace("getperson/",""));
+//
+//            nodeService.removeProperty(nodeRef, org.alfresco.model.ContentModel.PROP_CONTENT);
 
-            nodeService.removeProperty(nodeRef, org.alfresco.model.ContentModel.PROP_CONTENT);
 
 
-
-//            objectResult = personBean.getPersonInfo(userName);
-//            if (objectResult == null) {
-//                notFound(res);
-//            }
+            objectResult = personBean.getPersonInfo(userName);
+            if (objectResult == null) {
+                notFound(res);
+            }
         } catch (Exception e) {
             error(res, e);
         }
         write(res);
     }
 }
+
