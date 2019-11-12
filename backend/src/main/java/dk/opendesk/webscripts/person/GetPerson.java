@@ -38,13 +38,6 @@ public class GetPerson extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String userName = urlParams.get("userName");
-            System.out.println("hvad er username" + userName.replace("getperson/",""));
-
-//            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + userName.replace("getperson/",""));
-//
-//            nodeService.removeProperty(nodeRef, org.alfresco.model.ContentModel.PROP_CONTENT);
-
-
 
             objectResult = personBean.getPersonInfo(userName);
             if (objectResult == null) {
