@@ -10,15 +10,24 @@ package dk.opendesk.webscripts.person;
 
 import dk.opendesk.repo.beans.PersonBean;
 import dk.opendesk.webscripts.OpenDeskWebScript;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
+import javax.swing.text.html.parser.ContentModel;
 import java.io.IOException;
 
 public class GetPerson extends OpenDeskWebScript {
 
     private PersonBean personBean;
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
+    private NodeService nodeService;
 
     public void setPersonBean(PersonBean personBean) {
         this.personBean = personBean;
@@ -29,10 +38,18 @@ public class GetPerson extends OpenDeskWebScript {
         super.execute(req, res);
         try {
             String userName = urlParams.get("userName");
-            objectResult = personBean.getPersonInfo(userName);
-            if (objectResult == null) {
-                notFound(res);
-            }
+            System.out.println("hvad er username" + userName.replace("getperson/",""));
+
+            NodeRef nodeRef = new NodeRef("workspace://SpacesStore/" + userName.replace("getperson/",""));
+
+            nodeService.removeProperty(nodeRef, org.alfresco.model.ContentModel.PROP_CONTENT);
+
+
+
+//            objectResult = personBean.getPersonInfo(userName);
+//            if (objectResult == null) {
+//                notFound(res);
+//            }
         } catch (Exception e) {
             error(res, e);
         }
