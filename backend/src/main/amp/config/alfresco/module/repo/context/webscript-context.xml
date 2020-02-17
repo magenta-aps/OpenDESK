@@ -266,6 +266,7 @@
 		  class="dk.opendesk.webscripts.person.GetPerson"
 		  parent="webscript">
 		<property name="personBean" ref="personBean"/>
+		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
 	<bean id="webscript.person.search.get"
