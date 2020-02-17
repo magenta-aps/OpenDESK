@@ -55,6 +55,11 @@
 		  parent="webscript">
 		<property name="editorBean" ref="editorBean"/>
 	</bean>
+	<bean id="webscript.editors.reloadEditors.get"
+		  class="dk.opendesk.webscripts.editors.ReloadEditors"
+		  parent="webscript">
+		<property name="editorBean" ref="editorBean"/>
+	</bean>
 
 
 	<!-- Email -->
@@ -261,6 +266,7 @@
 		  class="dk.opendesk.webscripts.person.GetPerson"
 		  parent="webscript">
 		<property name="personBean" ref="personBean"/>
+		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
 	<bean id="webscript.person.search.get"

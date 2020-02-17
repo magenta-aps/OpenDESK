@@ -23,6 +23,7 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
   vm.logout = logout
   vm.showForgotDialog = showForgotDialog
   vm.updateValidator = updateValidator
+  vm.redirectUrl = $stateParams.redirectUrl
 
   function login (credentials) {
     authService.login(credentials).then(function (response) {
@@ -31,7 +32,7 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
         // chatService.initialize()
         // chatService.login(credentials.username, credentials.password)
         vm.user = response
-        restoreLocation()
+        restoreLocation(vm.redirectUrl)
       }
 
       // If incorrect values
@@ -64,7 +65,7 @@ function AuthController ($state, $stateParams, authService, $mdDialog, sessionSe
       vm.form.password.$setValidity('loginFailure', true)
   }
 
-  function restoreLocation () {
+  function restoreLocation (retainedLocation) {
     var retainedLocation = sessionService.getRetainedLocation()
     if (!retainedLocation || retainedLocation === undefined)
       $state.go('dashboard')

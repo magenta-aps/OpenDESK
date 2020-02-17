@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.repo.behavior;
 
@@ -19,6 +19,7 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.discussion.DiscussionService;
 import org.alfresco.service.cmr.discussion.PostInfo;
 import org.alfresco.service.cmr.discussion.TopicInfo;
+import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -82,7 +83,7 @@ public class NotificationEventHandler {
         }
     }
 
-    public void onCreateContent(ChildAssociationRef parentChildAssocRef) throws JSONException {
+    public void onCreateContent(ChildAssociationRef parentChildAssocRef) throws JSONException, FileNotFoundException {
         // Check if node exists, might be moved, or created and deleted in same transaction.
         NodeRef nodeRef = parentChildAssocRef.getChildRef();
         if (nodeRef != null && nodeService.exists(nodeRef)) {

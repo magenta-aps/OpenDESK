@@ -126,7 +126,12 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
           // The user is not authenticated
           defer.reject('Please login')
           sessionService.retainCurrentLocation()
-          $state.go('login')
+          $state.go('login', {
+
+            // This is a hack - remove retainCurrentLocation function instead and that stuff instead...
+
+            redirectUrl: sessionService.getRetainedLocation()
+          })
         }
         return defer.promise
       }

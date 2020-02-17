@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.repo.beans;
 
@@ -12,6 +12,7 @@ import dk.opendesk.repo.model.OpenDeskModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.analysis.DateTimeAnalyser;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -43,6 +44,8 @@ public class NotificationBean {
     private SiteService siteService;
     private Properties globalProperties;
 
+    private SettingsBean settingsBean;
+
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
@@ -59,6 +62,10 @@ public class NotificationBean {
         this.siteService = siteService;
     }
     public void setGlobalProperties(Properties properties) { globalProperties = properties; }
+
+    public void setSettingsBean(SettingsBean settingsBean) {
+        this.settingsBean = settingsBean;
+    }
 
     /**
      * Counts number of child nodes of a user with a specific property value.
@@ -117,7 +124,9 @@ public class NotificationBean {
             return;
 
         // Then run as SystemUser
-        AuthenticationUtil.runAs(() -> {
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
 
             // TODO: create TruncationStrategy and extract the code block below into its own TruncationStrategyImpl
             // in order to avoid responsibility erosion in this class. However, we will not worry about this now,
@@ -146,10 +155,10 @@ public class NotificationBean {
                 if(requireSubscribe)
                 {
                     if (!"true".equals(preference))
-                        return false;
+                        return;
                 }
                 else if ("false".equals(preference))
-                    return false;
+                    return;
             }
 
             // Create notification
@@ -173,8 +182,11 @@ public class NotificationBean {
 
             // Add hidden aspect
             nodeService.addAspect(childAssocRef.getChildRef(), ContentModel.ASPECT_HIDDEN, null);
-            return true;
-        }, AuthenticationUtil.getSystemUserName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
     }
 
     /**
@@ -379,18 +391,25 @@ public class NotificationBean {
         createNotification(userName, params, preferenceFilter);
     }
 
-    public void notifySiteContent(NodeRef nodeRef, SiteInfo site) throws JSONException {
+    public void notifySiteContent(NodeRef nodeRef, SiteInfo site) throws JSONException, FileNotFoundException {
         String siteShortName = site.getShortName();
         String siteName = getSiteName(siteShortName);
         JSONObject params = getNodeParams(nodeRef);
         params.put(OpenDeskModel.PARAM_SITE_NAME, siteName);
         params.put(OpenDeskModel.PARAM_TYPE,  OpenDeskModel.NOTIFICATION_TYPE_SITE_CONTENT);
         String preferenceFilter = "dk.magenta.sites." + siteShortName + ".documentLibrary.subscribe";
+        boolean requireSubscribe = false;
+
+        JSONObject settings = settingsBean.getSettings();
+        if(settings.has("enableFavouriteSiteNotifications") && settings.getBoolean("enableFavouriteSiteNotifications")) {
+            preferenceFilter = "org.alfresco.share.sites.favourites." + siteShortName;
+            requireSubscribe = true;
+        }
 
         // Send notifications to all members of this site
         Set<String> siteMembers = getSiteMembers(siteShortName);
         for(String userName : siteMembers)
-            createNotification(userName, params, preferenceFilter);
+            createNotification(userName, params, preferenceFilter, requireSubscribe);
     }
 
     public void notifySiteGroup(String authority, String siteShortName) throws JSONException {
@@ -458,7 +477,14 @@ public class NotificationBean {
      * @param nodeRef of the notification.
      */
     public void setNotificationRead (NodeRef nodeRef) {
-        nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
+        // Then run as SystemUser
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
+            nodeService.setProperty(nodeRef, OpenDeskModel.PROP_NOTIFICATION_READ, true);
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
     }
 
     /**
@@ -466,7 +492,14 @@ public class NotificationBean {
      * @param nodeRef of the notification.
      */
     public void setNotificationSeen (NodeRef nodeRef) {
-        nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
+        // Then run as SystemUser
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
+            nodeService.setProperty(nodeRef,OpenDeskModel.PROP_NOTIFICATION_SEEN, true);
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
     }
 
     /**

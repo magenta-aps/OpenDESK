@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Reload List of Editors</shortname>
+    <description>Reloads the list of editors with info about them</description>
+    <url>/reloadEditors</url>
+    <format default="json">argument</format>
+    <authentication>admin</authentication>
+</webscript>

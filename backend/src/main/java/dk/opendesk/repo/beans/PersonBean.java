@@ -1,10 +1,10 @@
-// 
+//
 // Copyright (c) 2017-2018, Magenta ApS
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// 
+//
 
 package dk.opendesk.repo.beans;
 
@@ -177,6 +177,9 @@ public class PersonBean {
         String displayName = (firstName + " " + lastName).trim();
         json.put("displayName", displayName);
 
+        String displayFullName = displayName + " (" + userName + ")";
+        json.put("displayFullName", displayFullName);
+
         String email = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
         json.put("email", email);
 
@@ -317,6 +320,7 @@ public class PersonBean {
         List<QName> filterProps = new ArrayList<>();
         filterProps.add(ContentModel.PROP_FIRSTNAME);
         filterProps.add(ContentModel.PROP_LASTNAME);
+        filterProps.add(ContentModel.PROP_USERNAME);
 
         List<Pair<QName,Boolean>> sortProps = new ArrayList<>();
         sortProps.add(new Pair<>(ContentModel.PROP_FIRSTNAME, true));
