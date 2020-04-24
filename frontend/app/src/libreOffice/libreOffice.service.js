@@ -16,7 +16,7 @@ function libreOfficeService ($http, $location, $sce) {
   }
 
   function getLibreOfficeUrl (nodeRef, permission) {
-    return getWopiUrl(nodeRef).then(function (response) {
+    return getWopiUrl(nodeRef, permission).then(function (response) {
       var alfrescoURL = $location.protocol() + '://' + $location.host() + '/alfresco'
       var shortRef = nodeRef.substring(nodeRef.lastIndexOf('/') + 1)
       var wopiFileURL = alfrescoURL + '/s/wopi/files/' + shortRef
@@ -28,8 +28,16 @@ function libreOfficeService ($http, $location, $sce) {
     })
   }
 
-  function getWopiUrl (nodeRef) {
-    return $http.get('/lool/token?nodeRef=' + nodeRef + '&action=edit')
+  function getWopiUrl (nodeRef, permission) {
+    var action;
+    if (permission == "readonly") {
+      action = "view"
+    } else if (permission == "edit") {
+      action = "edit"
+    } else {
+      // no-op
+    }
+    return $http.get('/lool/token?nodeRef=' + nodeRef + '&action=' + action)
       .then(function (response) {
         return response.data
       })
