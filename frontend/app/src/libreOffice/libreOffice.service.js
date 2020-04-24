@@ -31,7 +31,7 @@ function libreOfficeService ($http, $location, $sce) {
   function getWopiUrl (nodeRef, permission) {
     var action;
     if (permission == "readonly") {
-      action = "read"
+      action = "view"
     } else if (permission == "edit") {
       action = "edit"
     } else {
