@@ -1,7 +1,7 @@
 {
   "name": "opendesk-ui",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "OpenDesk UI using Angular.js and Angular Material as a foundation.",
   "repository": "https://github.com/magenta-aps/OpenDESK",
   "license": "MIT",
