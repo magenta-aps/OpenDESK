@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>SSO Login Webscript</shortname>
-    <description>Returns current username</description>
-    <url>/authentication/ssologin</url>
-    <authentication>user</authentication>
-</webscript>
