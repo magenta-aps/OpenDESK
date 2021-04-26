@@ -17,24 +17,4 @@
 	limitations under the License.
 -->
 <beans>
-
-	<!-- Template -->
-    <bean id="webscript.template.document.get"
-          class="dk.opendesk.webscripts.template.GetDocumentTemplates"
-          parent="webscript">
-        <property name="templateBean" ref="templateBean"/>
-    </bean>
-
-    <bean id="webscript.template.folder.get"
-          class="dk.opendesk.webscripts.template.GetFolderTemplates"
-          parent="webscript">
-        <property name="templateBean" ref="templateBean"/>
-    </bean>
-
-    <bean id="webscript.template.node.post"
-          class="dk.opendesk.webscripts.template.CreateNode"
-          parent="webscript">
-        <property name="templateBean" ref="templateBean"/>
-    </bean>
-
 </beans>

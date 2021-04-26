@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Create Node from Template</shortname>
-    <description>Creates a Node from a Template</description>
-    <url>/template/{templateId}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

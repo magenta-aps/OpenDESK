@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Document Templates</shortname>
-    <description>Gets the Document Templates</description>
-    <url>/templates/document</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

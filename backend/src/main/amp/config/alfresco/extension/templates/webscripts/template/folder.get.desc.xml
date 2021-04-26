@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Folder Templates</shortname>
-    <description>Gets the Folder Templates</description>
-    <url>/templates/folder</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>
