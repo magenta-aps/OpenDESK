@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Update settings for OpenDesk frontend</shortname>
-    <description>Updates the settings for OpenDesk frontend</description>
-    <url>/settings</url>
-    <format default="json">argument</format>
-    <authentication>admin</authentication>
-</webscript>
