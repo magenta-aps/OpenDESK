@@ -18,20 +18,6 @@
 -->
 <beans>
 
-	<!-- Project Department Site -->
-	<bean id="webscript.pdSite.site.post"
-		  class="dk.opendesk.webscripts.pdSite.CreatePDSite"
-		  parent="webscript">
-		<property name="PDSiteBean" ref="pdSiteBean"/>
-	</bean>
-
-	<bean id="webscript.pdSite.site.put"
-		  class="dk.opendesk.webscripts.pdSite.UpdatePDSite"
-		  parent="webscript">
-		<property name="PDSiteBean" ref="pdSiteBean"/>
-	</bean>
-
-
 	<!-- Person -->
 	<bean id="webscript.person.external.post"
 		  class="dk.opendesk.webscripts.person.CreateExternalPerson"
