@@ -18,14 +18,6 @@
 -->
 <beans>
 
-	<!-- Editors -->
-	<bean id="webscript.editors.editors.get"
-		  class="dk.opendesk.webscripts.editors.GetEditors"
-		  parent="webscript">
-		<property name="editorBean" ref="editorBean"/>
-	</bean>
-
-
 	<!-- Email -->
 	<bean id="webscript.email.send.post"
 		  class="dk.opendesk.webscripts.email.SendEmail"
