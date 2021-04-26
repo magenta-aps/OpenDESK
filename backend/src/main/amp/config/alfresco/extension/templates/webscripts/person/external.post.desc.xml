@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Create External Person</shortname>
-    <description>Creates External Person</description>
-    <url>/person/external</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>
