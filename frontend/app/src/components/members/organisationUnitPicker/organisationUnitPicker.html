@@ -1,8 +1,0 @@
-<md-input-container ng-if="$ctrl.type == 'PD-Project'" class="org-input">
-  <label>{{'PROJECT.ORG_UNIT' | translate}}</label>
-  <md-select ng-model="$ctrl.selected" required>
-      <md-option ng-repeat="org in $ctrl.organizationalCenters | orderBy:'+displayName'" value="{{ org.shortName }}">
-          {{ org.displayName }}
-      </md-option>
-  </md-select>
-</md-input-container>

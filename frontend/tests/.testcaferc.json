@@ -1,9 +1,0 @@
-{
-    "browsers": [
-        "chrome",
-        "firefox"
-    ],
-    "screenshotPath": "_screenshots/",
-    "screenshotPathPattern": "${DATE}_${TIME}--test-${TEST_INDEX}--${USERAGENT}--${FILE_INDEX}.png",
-    "takeScreenshotsOnFails": true
-}
