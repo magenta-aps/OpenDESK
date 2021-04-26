@@ -18,26 +18,6 @@
 -->
 <beans>
 
-	<!-- NodePicker -->
-	<bean id="webscript.nodepicker.node.get"
-		  class="dk.opendesk.webscripts.nodepicker.GetNode"
-		  parent="webscript">
-		<property name="nodeBean" ref="nodeBean"/>
-	</bean>
-
-	<bean id="webscript.nodepicker.root.get"
-		  class="dk.opendesk.webscripts.nodepicker.GetRoot"
-		  parent="webscript">
-		<property name="nodeBean" ref="nodeBean"/>
-	</bean>
-
-	<bean id="webscript.nodepicker.rootnode.get"
-		  class="dk.opendesk.webscripts.nodepicker.GetRootNode"
-		  parent="webscript">
-		<property name="nodeBean" ref="nodeBean"/>
-	</bean>
-
-
 	<!-- Notification -->
 	<bean id="webscript.notification.notification.delete"
 		  class="dk.opendesk.webscripts.notification.DeleteNotification"

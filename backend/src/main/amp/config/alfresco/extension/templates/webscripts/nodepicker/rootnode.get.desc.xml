@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Node Picker Root Folder</shortname>
-    <description>Gets root folder info for node picker</description>
-    <url>/nodepicker/root/{rootName}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>
