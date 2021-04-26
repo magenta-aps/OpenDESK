@@ -1,20 +1,8 @@
 # OpenDESK
 
-OpenDESK is a collaboration web app that grant users easy access to an Alfresco repository and a range of 
-other services combined with chat and simple workflow tools.
-
-## Installation
-TODO...
-
-## Development
-
-Do the following to run the (backend) test suite:
-
-```
-$ cd /path/to/OpenDESK/backend
-$ rm -rf alf_data_dev
-$ mvn clean test
-```
+This is OpenDESK Lite. OpenDESK Lite is a stripped down version of OpenDESK containing
+only the old content model (which is needed in order for Solr6 to be able to index
+a repository the were previously using the OpenDESK content model).
 
 ## License
 Please see the license for this project in the `LICENSE` file found in the root of the project.
