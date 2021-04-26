@@ -17,15 +17,4 @@
     limitations under the License.
 -->
 <beans>
-
-    <bean id="dk.opendesk.repo.behavior.NotificationEventHandler"
-          class="dk.opendesk.repo.behavior.NotificationEventHandler"
-          init-method="registerEventHandlers">
-        <property name="discussionService" ref="DiscussionService"/>
-        <property name="nodeService" ref="NodeService"/>
-        <property name="notificationBean" ref="notificationBean"/>
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="siteService" ref="SiteService"/>
-    </bean>
-
 </beans>
