@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Site authorities</shortname>
-    <description>Gets Site authorities</description>
-    <url>/site/{siteShortName}/authorities</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

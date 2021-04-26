@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Site role</shortname>
-    <description>Gets the user's Site role</description>
-    <url>/site/{siteShortName}/role</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

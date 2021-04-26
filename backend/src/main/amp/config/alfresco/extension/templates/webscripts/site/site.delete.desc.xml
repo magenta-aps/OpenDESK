@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Delete Site</shortname>
-    <description>Deletes a Site</description>
-    <url>/site/{siteShortName}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

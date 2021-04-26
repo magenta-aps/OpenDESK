@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Site Templates</shortname>
-    <description>Gets the Site Templates</description>
-    <url>/site/templates</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Create Site Members PDF</shortname>
-    <description>Creates a Site Members PDF</description>
-    <url>/site/{siteShortName}/members-pdf</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

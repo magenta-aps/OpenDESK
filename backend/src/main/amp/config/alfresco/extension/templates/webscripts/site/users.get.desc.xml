@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Site users</shortname>
-    <description>Get Site users</description>
-    <url>/site/{siteShortName}/users</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>
