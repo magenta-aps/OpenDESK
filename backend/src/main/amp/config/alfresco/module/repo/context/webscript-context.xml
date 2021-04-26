@@ -18,38 +18,6 @@
 -->
 <beans>
 
-	<!-- Notification -->
-	<bean id="webscript.notification.notification.delete"
-		  class="dk.opendesk.webscripts.notification.DeleteNotification"
-		  parent="webscript">
-		<property name="notificationBean" ref="notificationBean"/>
-	</bean>
-
-	<bean id="webscript.notification.notificationRead.put"
-		  class="dk.opendesk.webscripts.notification.SetNotificationRead"
-		  parent="webscript">
-		<property name="notificationBean" ref="notificationBean"/>
-	</bean>
-
-	<bean id="webscript.notification.notifications.get"
-		  class="dk.opendesk.webscripts.notification.GetNotifications"
-		  parent="webscript">
-		<property name="notificationBean" ref="notificationBean"/>
-	</bean>
-
-	<bean id="webscript.notification.notificationSeen.put"
-		  class="dk.opendesk.webscripts.notification.SetNotificationSeen"
-		  parent="webscript">
-		<property name="notificationBean" ref="notificationBean"/>
-	</bean>
-
-	<bean id="webscript.notification.notificationsSeen.put"
-		  class="dk.opendesk.webscripts.notification.SetNotificationsSeen"
-		  parent="webscript">
-		<property name="notificationBean" ref="notificationBean"/>
-	</bean>
-
-
 	<!-- Project Department Site -->
 	<bean id="webscript.pdSite.site.post"
 		  class="dk.opendesk.webscripts.pdSite.CreatePDSite"
