@@ -18,14 +18,6 @@
 -->
 <beans>
 
-	<!-- Email -->
-	<bean id="webscript.email.send.post"
-		  class="dk.opendesk.webscripts.email.SendEmail"
-		  parent="webscript">
-		<property name="emailBean" ref="emailBean"/>
-	</bean>
-
-
 	<!-- Node -->
 	<bean id="webscript.node.breadcrumb.get"
 		  class="dk.opendesk.webscripts.node.GetBreadCrumb"
