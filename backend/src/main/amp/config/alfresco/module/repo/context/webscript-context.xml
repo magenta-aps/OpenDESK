@@ -18,14 +18,6 @@
 -->
 <beans>
 
-	<!-- Preference -->
-	<bean id="webscript.preference.preferences.get"
-		  class="dk.opendesk.webscripts.preference.GetPreferences"
-		  parent="webscript">
-		<property name="preferenceBean" ref="preferenceBean"/>
-	</bean>
-
-
 	<!-- Review -->
 	<bean id="webscript.review.review.get"
 		  class="dk.opendesk.webscripts.review.GetReview"
