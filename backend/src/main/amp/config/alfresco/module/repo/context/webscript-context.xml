@@ -18,14 +18,6 @@
 -->
 <beans>
 
-	<!-- SBSYS -->
-	<bean id="webscript.sbsys.fakesbsys.post"
-		  class="dk.opendesk.webscripts.sbsys.FakeSbsysDownload"
-		  parent="webscript">
-		<property name="fileFolderService" ref="FileFolderService"/>
-	</bean>
-
-
 	<!-- Settings -->
 	<bean id="webscript.settings.settings.get"
 		  class="dk.opendesk.webscripts.settings.GetSettings"
