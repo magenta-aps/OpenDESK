@@ -17,37 +17,6 @@
 	limitations under the License.
 -->
 <beans>
-	<!-- Authority -->
-	<bean id="webscript.authority.openDeskGroup.get"
-		  class="dk.opendesk.webscripts.authority.GetOpenDeskGroup"
-		  parent="webscript">
-		<property name="authorityBean" ref="authorityBean"/>
-	</bean>
-
-	<bean id="webscript.authority.openDeskGroups.get"
-		  class="dk.opendesk.webscripts.authority.GetOpenDeskGroups"
-		  parent="webscript">
-		<property name="authorityBean" ref="authorityBean"/>
-	</bean>
-
-	<bean id="webscript.authority.organizationalCenters.get"
-		  class="dk.opendesk.webscripts.authority.GetOrganizationalCenters"
-		  parent="webscript">
-		<property name="authorityBean" ref="authorityBean"/>
-	</bean>
-
-	<bean id="webscript.authority.projectOwners.get"
-		  class="dk.opendesk.webscripts.authority.GetProjectOwners"
-		  parent="webscript">
-		<property name="authorityBean" ref="authorityBean"/>
-	</bean>
-
-	<bean id="webscript.authority.search.get"
-		  class="dk.opendesk.webscripts.authority.SearchAuthority"
-		  parent="webscript">
-		<property name="authorityBean" ref="authorityBean"/>
-	</bean>
-
 
 	<!-- Editors -->
 	<bean id="webscript.editors.editors.get"
