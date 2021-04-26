@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Share node</shortname>
-    <description>Shares nodes</description>
-    <url>/node/{nodeId}/share/{userName}/{permission}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

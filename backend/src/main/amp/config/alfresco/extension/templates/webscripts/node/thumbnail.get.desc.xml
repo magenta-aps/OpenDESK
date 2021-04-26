@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Preview helper</shortname>
-    <description>creates a thumbnail for an archived node on the fly</description>
-    <url>/node/{nodeId}/thumbnail/{versionId}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

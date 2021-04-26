@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Node</shortname>
-    <description>Gets a node</description>
-    <url>/node/{nodeId}/next-available-name/{name}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

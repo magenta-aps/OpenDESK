@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Removes sharing of node</shortname>
-    <description>Removes sharing of node</description>
-    <url>/node/{nodeId}/share/{userName}/{permission}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

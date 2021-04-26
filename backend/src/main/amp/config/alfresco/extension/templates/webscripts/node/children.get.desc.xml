@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Node Children</shortname>
-    <description>Gets the children of a node</description>
-    <url>/node/{nodeId}/children</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

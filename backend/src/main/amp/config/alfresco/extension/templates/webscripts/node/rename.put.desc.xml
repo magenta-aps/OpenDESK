@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Rename Node</shortname>
-    <description>Renames Node</description>
-    <url>/node/{nodeId}/rename</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

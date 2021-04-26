@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Template Folders</shortname>
-    <description>Gets a list of Template Folders</description>
-    <url>/node/templateFolders</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Shared Nodes</shortname>
-    <description>Gets the shared nodes</description>
-    <url>/node/shared</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>

@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Get Site Node</shortname>
-    <description>Gets a site node</description>
-    <url>/node/site/{siteShortName}</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-</webscript>
