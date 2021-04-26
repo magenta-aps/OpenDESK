@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>openDESK</groupId>
     <artifactId>repo</artifactId>
-    <version>1.4.1</version>
+    <version>2.0.0</version>
     <name>OpenDesk Backend</name>
     <packaging>${packaging}</packaging>
     <description>Manages the lifecycle of the OpenDesk Backend</description>
@@ -70,7 +70,6 @@
             <groupId>${alfresco.groupId}</groupId>
             <artifactId>alfresco-repository</artifactId>
         </dependency>
-
         <dependency>
             <groupId>${alfresco.groupId}</groupId>
             <artifactId>alfresco-repository</artifactId>
@@ -84,67 +83,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>1.5.12</version>
-        </dependency>
-
-        <dependency>
-            <groupId>de.fmaul</groupId>
-            <artifactId>javascript-console-repo</artifactId>
-            <version>0.6</version>
-            <type>amp</type>
-        </dependency>
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Webscripts testing dependencies -->
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-repository</artifactId>
-            <version>${alfresco.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-remote-api</artifactId>
             <version>${alfresco.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-remote-api</artifactId>
-            <version>${alfresco.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.extensions.surf</groupId>
-            <artifactId>spring-webscripts</artifactId>
-            <version>5.1</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
-
-
-
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -164,8 +111,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
-
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -174,8 +119,6 @@
                         <target>1.8</target>
                     </configuration>
                 </plugin>
-
-
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
@@ -200,25 +143,7 @@
                             <excludes/>
                         </overlay>
 
-
                         <!-- Add / order your AMPs here -->
-
-
-
-
-                        <overlay>
-                            <groupId>org.codehaus.plexus</groupId>
-                            <artifactId>plexus-utils</artifactId>
-                            <type>amp</type>
-                        </overlay>
-
-                        <overlay>
-                            <groupId>de.fmaul</groupId>
-                            <artifactId>javascript-console-repo</artifactId>
-                            <type>amp</type>
-                        </overlay>
-
-
                     </overlays>
                 </configuration>
             </plugin>
@@ -256,18 +181,8 @@
 
                         </dependencies>
                     </plugin>
-
-
-
                 </plugins>
             </build>
         </profile>
-
-
-
-
     </profiles>
-
-
-
 </project>
